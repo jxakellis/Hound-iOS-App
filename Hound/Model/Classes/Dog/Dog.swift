@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegate {
+final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     
     // MARK: - NSCopying
     
@@ -20,8 +20,8 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         copy.dogName = self.dogName
         copy.dogIcon = self.dogIcon?.copy() as? UIImage
         copy.dogReminders = self.dogReminders.copy() as? DogReminderManager ?? DogReminderManager()
-        copy.dogLogs = self.dogLogs.copy() as? DogLogManager ?? DogLogManager(forDelegate: nil)
-        copy.dogLogs.delegate = self
+        copy.dogLogs = self.dogLogs.copy() as? DogLogManager ?? DogLogManager(forParentDog: nil)
+        copy.dogLogs.parentDog = copy
         copy.dogTriggers = self.dogTriggers.copy() as? DogTriggerManager ?? DogTriggerManager()
         copy.offlineModeComponents = self.offlineModeComponents.copy() as? OfflineModeComponents ?? OfflineModeComponents()
         
@@ -97,22 +97,6 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         return lhsDogId <= rhsDogId
     }
     
-    // MARK: - DogLogManagerDelegate
-    
-    func didAddLogs(forLogs logs: [Log]) {
-        logs.forEach { log in
-            var activatedTriggers = dogTriggers.matchingActivatedTriggers(forLog: log)
-            
-            activatedTriggers.forEach { activatedTrigger in
-                let executionDate = activatedTrigger.nextReminderDate(afterLog: log)
-                let reminderActionResultTypeId = activatedTrigger.reminderActionResultTypeId
-                
-            }
-        }
-        
-        // TODO TRIGGERS check log against triggers
-    }
-    
     // MARK: - Properties
     
     var dogId: Int?
@@ -127,7 +111,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
     private(set) var dogReminders: DogReminderManager = DogReminderManager()
     
     /// DogLogManager that handles all the logs for a dog. forDelegate is set to nil, as it is set in the init method
-    private(set) var dogLogs: DogLogManager = DogLogManager(forDelegate: nil)
+    private(set) var dogLogs: DogLogManager = DogLogManager(forParentDog: nil)
     
     /// DogTriggerManager that handles all the dogTriggers for a dog
     private(set) var dogTriggers: DogTriggerManager = DogTriggerManager()
@@ -151,7 +135,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
         self.dogIcon = DogIconManager.getIcon(forDogUUID: dogUUID)
         self.dogReminders = forDogReminders ?? dogReminders
         self.dogLogs = forDogLogs ?? dogLogs
-        self.dogLogs.delegate = self
+        self.dogLogs.parentDog = self
         self.dogTriggers = forDogTriggers ?? dogTriggers
         self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
     }
@@ -234,7 +218,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable, DogLogManagerDelegat
             }
             
             // forDelegate is set to nil, as it is set in the init method
-            return DogLogManager(fromLogBodies: logBodies, dogLogManagerToOverride: dogToOverride?.dogLogs, forDelegate: nil)
+            return DogLogManager(fromLogBodies: logBodies, dogLogManagerToOverride: dogToOverride?.dogLogs, forParentDog: nil)
         }()
         
         let dogTriggers: DogTriggerManager? = {

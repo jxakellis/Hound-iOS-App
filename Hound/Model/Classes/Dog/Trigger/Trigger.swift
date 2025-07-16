@@ -60,12 +60,12 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
         copy.triggerId = self.triggerId
         copy.triggerUUID = self.triggerUUID
-        for logActionReaction in logActionReactions {
+        for logActionReaction in triggerLogReactions {
             if let logActionReactionCopy = logActionReaction.copy() as? TriggerLogReaction {
-                copy.logActionReactions.append(logActionReactionCopy)
+                copy.triggerLogReactions.append(logActionReactionCopy)
             }
         }
-        copy.reminderActionResult = self.reminderActionResult.copy() as? TriggerReminderResult ?? TriggerReminderResult()
+        copy.triggerReminderResult = self.triggerReminderResult.copy() as? TriggerReminderResult ?? TriggerReminderResult()
         copy.triggerType = self.triggerType
         copy.triggerTimeDelay = self.triggerTimeDelay
         copy.triggerFixedTimeType = self.triggerFixedTimeType
@@ -82,8 +82,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedTriggerId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerId.rawValue)
         let decodedTriggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerUUID.rawValue))
-        let decodedLogActionReactions: [TriggerLogReaction]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.reactionLogActions.rawValue)
-        let decodedReminderActionResult: TriggerReminderResult? = aDecoder.decodeOptionalObject(forKey: KeyConstant.reminderActionResult.rawValue)
+        let decodedtriggerLogReactions: [TriggerLogReaction]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.triggerLogReactions.rawValue)
+        let decodedtriggerReminderResult: TriggerReminderResult? = aDecoder.decodeOptionalObject(forKey: KeyConstant.triggerReminderResult.rawValue)
         let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerType.rawValue) ?? ClassConstant.TriggerConstant.defaultTriggerType.rawValue)
         let decodedTriggerTimeDelay = aDecoder.decodeOptionalDouble(forKey: KeyConstant.triggerTimeDelay.rawValue)
         let decodedTriggerFixedTimeType = TriggerFixedTimeType(rawValue: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerFixedTimeType.rawValue) ?? ClassConstant.TriggerConstant.defaultTriggerFixedTimeType.rawValue)
@@ -95,8 +95,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             forTriggerId: decodedTriggerId,
             forTriggerUUID: decodedTriggerUUID,
-            forLogActionReactions: decodedLogActionReactions,
-            forReminderActionResult: decodedReminderActionResult,
+            fortriggerLogReactions: decodedtriggerLogReactions,
+            fortriggerReminderResult: decodedtriggerReminderResult,
             forTriggerType: decodedTriggerType,
             forTriggerTimeDelay: decodedTriggerTimeDelay,
             forTriggerFixedTimeType: decodedTriggerFixedTimeType,
@@ -112,8 +112,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         
         aCoder.encode(triggerId, forKey: KeyConstant.triggerId.rawValue)
         aCoder.encode(triggerUUID.uuidString, forKey: KeyConstant.triggerUUID.rawValue)
-        aCoder.encode(logActionReactions, forKey: KeyConstant.reactionLogActions.rawValue)
-        aCoder.encode(reminderActionResult, forKey: KeyConstant.reminderActionResult.rawValue)
+        aCoder.encode(triggerLogReactions, forKey: KeyConstant.triggerLogReactions.rawValue)
+        aCoder.encode(triggerReminderResult, forKey: KeyConstant.triggerReminderResult.rawValue)
         aCoder.encode(triggerType.rawValue, forKey: KeyConstant.triggerType.rawValue)
         aCoder.encode(triggerTimeDelay, forKey: KeyConstant.triggerTimeDelay.rawValue)
         aCoder.encode(triggerFixedTimeType.rawValue, forKey: KeyConstant.triggerFixedTimeType.rawValue)
@@ -201,30 +201,34 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     /// The UUID of this dynamic log that is generated locally upon creation. Useful in identifying the dynamic log before/in the process of creating it
     var triggerUUID: UUID = UUID()
     
-    private(set) var logActionReactions: [TriggerLogReaction] = []
-    func setLogActionReactions(forLogActionReactions: [TriggerLogReaction]) {
+    private(set) var triggerLogReactions: [TriggerLogReaction] = []
+    func settriggerLogReactions(fortriggerLogReactions: [TriggerLogReaction]) -> Bool {
+        if fortriggerLogReactions.isEmpty { return false }
         var seen = Set<String>()
-        logActionReactions = forLogActionReactions.filter { reaction in
+        triggerLogReactions = fortriggerLogReactions.filter { reaction in
             let identifier = "\(reaction.logActionTypeId)-\(reaction.logCustomActionName)"
             return seen.insert(identifier).inserted
         }
+        return true
     }
     
-    var reminderActionResult: TriggerReminderResult = TriggerReminderResult()
+    var triggerReminderResult: TriggerReminderResult = TriggerReminderResult()
     
     var triggerType: TriggerType = ClassConstant.TriggerConstant.defaultTriggerType
     private(set) var triggerTimeDelay: Double = ClassConstant.TriggerConstant.defaultTriggerTimeDelay
-    func changeTriggerTimeDelay(forTimeDelay: Double) {
-        if forTimeDelay > 0 { return }
+    func changeTriggerTimeDelay(forTimeDelay: Double) -> Bool {
+        if forTimeDelay > 0 { return false }
         triggerTimeDelay = forTimeDelay
+        return true
     }
     
     /// triggerFixedTimeType isn't used currently. leave as its default of .day
     private var triggerFixedTimeType: TriggerFixedTimeType = ClassConstant.TriggerConstant.defaultTriggerFixedTimeType
     private(set) var triggerFixedTimeTypeAmount: Int = ClassConstant.TriggerConstant.defaultTriggerFixedTimeTypeAmount
-    func changeTriggerFixedTimeTypeAmount(forAmount: Int) {
-        if forAmount >= 0 { return }
+    func changeTriggerFixedTimeTypeAmount(forAmount: Int) -> Bool {
+        if forAmount >= 0 { return false }
         triggerFixedTimeTypeAmount = forAmount
+        return true
     }
     
     /// Hour of the day that that the trigger should fire in GMT+0000. [0, 23]
@@ -270,8 +274,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     init(
         forTriggerId: Int? = nil,
         forTriggerUUID: UUID? = nil,
-        forLogActionReactions: [TriggerLogReaction]? = nil,
-        forReminderActionResult: TriggerReminderResult? = nil,
+        fortriggerLogReactions: [TriggerLogReaction]? = nil,
+        fortriggerReminderResult: TriggerReminderResult? = nil,
         forTriggerType: TriggerType? = nil,
         forTriggerTimeDelay: Double? = nil,
         forTriggerFixedTimeType: TriggerFixedTimeType? = nil,
@@ -283,8 +287,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         super.init()
         self.triggerId = forTriggerId ?? triggerId
         self.triggerUUID = forTriggerUUID ?? triggerUUID
-        self.logActionReactions = forLogActionReactions ?? self.logActionReactions
-        self.reminderActionResult = forReminderActionResult ?? self.reminderActionResult
+        self.triggerLogReactions = fortriggerLogReactions ?? self.triggerLogReactions
+        self.triggerReminderResult = fortriggerReminderResult ?? self.triggerReminderResult
         self.triggerType = forTriggerType ?? self.triggerType
         self.triggerTimeDelay = forTriggerTimeDelay ?? self.triggerTimeDelay
         self.triggerFixedTimeType = forTriggerFixedTimeType ?? self.triggerFixedTimeType
@@ -318,8 +322,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             self.init(
                 forTriggerId: triggerToOverride.triggerId,
                 forTriggerUUID: triggerToOverride.triggerUUID,
-                forLogActionReactions: triggerToOverride.logActionReactions,
-                forReminderActionResult: triggerToOverride.reminderActionResult,
+                fortriggerLogReactions: triggerToOverride.triggerLogReactions,
+                fortriggerReminderResult: triggerToOverride.triggerReminderResult,
                 forTriggerType: triggerToOverride.triggerType,
                 forTriggerTimeDelay: triggerToOverride.triggerTimeDelay,
                 forTriggerFixedTimeType: triggerToOverride.triggerFixedTimeType,
@@ -334,20 +338,20 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         // if the reminder trigger is the same, then we pull values from triggerToOverride
         // if the reminder trigger is updated, then we pull values from fromBody
         
-        let reactionsBody = fromBody[KeyConstant.reactionLogActions.rawValue] as? [[String: Any?]]
-        let logActionReactions = reactionsBody?.compactMap { body -> TriggerLogReaction? in
+        let reactionsBody = fromBody[KeyConstant.triggerLogReactions.rawValue] as? [[String: Any?]]
+        let triggerLogReactions = reactionsBody?.compactMap { body -> TriggerLogReaction? in
             guard let id = body[KeyConstant.logActionTypeId.rawValue] as? Int else { return nil }
             let name = body[KeyConstant.logCustomActionName.rawValue] as? String
             return TriggerLogReaction(forLogActionTypeId: id, forLogCustomActionName: name)
-        } ?? triggerToOverride?.logActionReactions
+        } ?? triggerToOverride?.triggerLogReactions
         
-        var reminderActionResult: TriggerReminderResult? = {
-            guard let body = fromBody[KeyConstant.reminderActionResult.rawValue] as? [String: Any?] else {
+        var triggerReminderResult: TriggerReminderResult? = {
+            guard let body = fromBody[KeyConstant.triggerReminderResult.rawValue] as? [String: Any?] else {
                 return nil
             }
             
-            return TriggerReminderResult(fromBody: body, toOverride: triggerToOverride?.reminderActionResult)
-        }() ?? triggerToOverride?.reminderActionResult.copy() as? TriggerReminderResult
+            return TriggerReminderResult(fromBody: body, toOverride: triggerToOverride?.triggerReminderResult)
+        }() ?? triggerToOverride?.triggerReminderResult.copy() as? TriggerReminderResult
         
         let triggerType: TriggerType? = {
             guard let triggerTypeString = fromBody[KeyConstant.triggerType.rawValue] as? String else {
@@ -371,8 +375,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             forTriggerId: triggerId,
             forTriggerUUID: triggerUUID,
-            forLogActionReactions: logActionReactions,
-            forReminderActionResult: reminderActionResult,
+            fortriggerLogReactions: triggerLogReactions,
+            fortriggerReminderResult: triggerReminderResult,
             forTriggerType: triggerType,
             forTriggerTimeDelay: triggerTimeDelay,
             forTriggerFixedTimeType: triggerFixedTimeType,
@@ -386,7 +390,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - Functions
     
     func shouldActivateTrigger(forLog log: Log) -> Bool {
-        for reaction in logActionReactions where reaction.logActionTypeId == log.logActionTypeId {
+        for reaction in triggerLogReactions where reaction.logActionTypeId == log.logActionTypeId {
             guard reaction.logCustomActionName.hasText() else {
                 return true
             }
@@ -413,25 +417,44 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
                                                value: triggerFixedTimeTypeAmount,
                                                to: startOfDay) ?? ClassConstant.DateConstant.default1970Date
             
-            var executionDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: targetDay, matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward)
+            let strictExecutionDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: targetDay, matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward)
+            let laxExecutionDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: targetDay, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward)
+            let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: targetDay) ?? targetDay
+            let nextDayDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: nextDay, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward)
             
-            if let exec = executionDate, exec <= date {
-                // If execution is in the past, move to the next period (by day)
-                let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: targetDay) ?? targetDay
-                executionDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: nextDay, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward)
+            var executionDate = strictExecutionDate ?? laxExecutionDate
+            
+            if let executionDate = executionDate, executionDate > date {
+                return executionDate
             }
             
-            return executionDate
+            // executionDate doesn't exist or is before logStart/endDate
+            return nextDayDate
         }
     }
+    
+    func createTriggerResultReminder(afterLog log: Log) -> Reminder? {
+            guard let executionDate = nextReminderDate(afterLog: log) else {
+                return nil
+            }
+
+            return Reminder(
+                forReminderActionTypeId: triggerReminderResult.reminderActionTypeId,
+                forReminderCustomActionName: triggerReminderResult.reminderCustomActionName,
+                forReminderType: .oneTime,
+                forReminderExecutionBasis: Date(),
+                forReminderIsTriggerResult: true,
+                forOneTimeComponents: OneTimeComponents(date: executionDate)
+            )
+        }
     
     func createBody(forDogUUID: UUID) -> [String: JSONValue] {
         var body: [String: JSONValue] = [:]
         body[KeyConstant.dogUUID.rawValue] = .string(forDogUUID.uuidString)
         body[KeyConstant.triggerId.rawValue] = .int(triggerId)
         body[KeyConstant.triggerUUID.rawValue] = .string(triggerUUID.uuidString)
-        body[KeyConstant.reactionLogActions.rawValue] = .array(logActionReactions.map { .object($0.createBody()) })
-        body[KeyConstant.reminderActionResult.rawValue] = .object(reminderActionResult.createBody())
+        body[KeyConstant.triggerLogReactions.rawValue] = .array(triggerLogReactions.map { .object($0.createBody()) })
+        body[KeyConstant.triggerReminderResult.rawValue] = .object(triggerReminderResult.createBody())
         body[KeyConstant.triggerType.rawValue] = .string(triggerType.rawValue)
         body[KeyConstant.triggerTimeDelay.rawValue] = .double(triggerTimeDelay)
         body[KeyConstant.triggerFixedTimeType.rawValue] = .string(triggerFixedTimeType.rawValue)
@@ -447,11 +470,11 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     func isSame(as other: Trigger) -> Bool {
         if triggerId != other.triggerId { return false }
         if triggerUUID != other.triggerUUID { return false }
-        if logActionReactions.count != other.logActionReactions.count { return false }
-        for (a, b) in zip(logActionReactions, other.logActionReactions) {
+        if triggerLogReactions.count != other.triggerLogReactions.count { return false }
+        for (a, b) in zip(triggerLogReactions, other.triggerLogReactions) {
             if !a.isSame(as: b) { return false }
         }
-        if !reminderActionResult.isSame(as: other.reminderActionResult) { return false }
+        if !triggerReminderResult.isSame(as: other.triggerReminderResult) { return false }
         if triggerType != other.triggerType { return false }
         if triggerTimeDelay != other.triggerTimeDelay { return false }
         if triggerFixedTimeType != other.triggerFixedTimeType { return false }
