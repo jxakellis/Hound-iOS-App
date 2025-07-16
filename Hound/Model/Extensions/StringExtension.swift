@@ -105,4 +105,8 @@ extension String {
 
         return string
     }
+    
+    func hasText() -> Bool {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+    }
 }

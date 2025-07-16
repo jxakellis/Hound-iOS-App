@@ -83,7 +83,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         let decodedTriggerId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerId.rawValue)
         let decodedTriggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerUUID.rawValue))
         let decodedLogActionReactions: [TriggerLogReaction]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.reactionLogActions.rawValue)
-        let decodedReminderActionResult = aDecoder.decodeOptionalObject(forKey: KeyConstant.reminderActionResult.rawValue)
+        let decodedReminderActionResult: TriggerReminderResult? = aDecoder.decodeOptionalObject(forKey: KeyConstant.reminderActionResult.rawValue)
         let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerType.rawValue) ?? ClassConstant.TriggerConstant.defaultTriggerType.rawValue)
         let decodedTriggerTimeDelay = aDecoder.decodeOptionalDouble(forKey: KeyConstant.triggerTimeDelay.rawValue)
         let decodedTriggerFixedTimeType = TriggerFixedTimeType(rawValue: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerFixedTimeType.rawValue) ?? ClassConstant.TriggerConstant.defaultTriggerFixedTimeType.rawValue)
@@ -113,7 +113,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(triggerId, forKey: KeyConstant.triggerId.rawValue)
         aCoder.encode(triggerUUID.uuidString, forKey: KeyConstant.triggerUUID.rawValue)
         aCoder.encode(logActionReactions, forKey: KeyConstant.reactionLogActions.rawValue)
-        aCoder.encode(reminderActionResultTypeId, forKey: KeyConstant.reminderActionResultTypeId.rawValue)
+        aCoder.encode(reminderActionResult, forKey: KeyConstant.reminderActionResult.rawValue)
         aCoder.encode(triggerType.rawValue, forKey: KeyConstant.triggerType.rawValue)
         aCoder.encode(triggerTimeDelay, forKey: KeyConstant.triggerTimeDelay.rawValue)
         aCoder.encode(triggerFixedTimeType.rawValue, forKey: KeyConstant.triggerFixedTimeType.rawValue)
@@ -205,7 +205,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     func setLogActionReactions(forLogActionReactions: [TriggerLogReaction]) {
         var seen = Set<String>()
         logActionReactions = forLogActionReactions.filter { reaction in
-            let identifier = "\(reaction.logActionTypeId)-\(reaction.logCustomActionName ?? "")"
+            let identifier = "\(reaction.logActionTypeId)-\(reaction.logCustomActionName)"
             return seen.insert(identifier).inserted
         }
     }
@@ -219,7 +219,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         triggerTimeDelay = forTimeDelay
     }
     
-    var triggerFixedTimeType: TriggerFixedTimeType = ClassConstant.TriggerConstant.defaultTriggerFixedTimeType
+    /// triggerFixedTimeType isn't used currently. leave as its default of .day
+    private var triggerFixedTimeType: TriggerFixedTimeType = ClassConstant.TriggerConstant.defaultTriggerFixedTimeType
     private(set) var triggerFixedTimeTypeAmount: Int = ClassConstant.TriggerConstant.defaultTriggerFixedTimeTypeAmount
     func changeTriggerFixedTimeTypeAmount(forAmount: Int) {
         if forAmount >= 0 { return }
@@ -386,12 +387,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
     func shouldActivateTrigger(forLog log: Log) -> Bool {
         for reaction in logActionReactions where reaction.logActionTypeId == log.logActionTypeId {
-            if let name = reaction.logCustomActionName {
-                if name == log.logCustomActionName { return true }
-            }
-            else {
+            guard reaction.logCustomActionName.hasText() else {
                 return true
             }
+            if reaction.logCustomActionName == log.logCustomActionName { return true }
         }
         
         return false
@@ -400,19 +399,29 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     func nextReminderDate(afterLog log: Log) -> Date? {
         let date = log.logEndDate ?? log.logStartDate
         
-        // TODO update this logic with smarter stuff from GPT
-        // TODO also if a time has already passed, e.g. same day at 9am and its already 10am, then ignore the trigger
         switch triggerType {
         case .timeDelay:
             return date.addingTimeInterval(triggerTimeDelay)
         case .fixedTime:
-            let delayedDay = Calendar.UTCCalendar.date(byAdding: triggerFixedTimeType.calendarComponent, value: triggerFixedTimeTypeAmount, to: date) ?? ClassConstant.DateConstant.default1970Date
-            var components = Calendar.UTCCalendar.dateComponents([.day, .hour, .minute], from: delayedDay)
-            components.hour = triggerFixedTimeUTCHour
-            components.minute = triggerFixedTimeUTCMinute
-            components.second = 0
+            // Compute the start of day in the user's current time zone so the
+            // "day" component aligns with local expectations.
+            let startOfDay = Calendar.current.startOfDay(for: date)
             
-            return Calendar.UTCCalendar.date(from: components)
+            // Advance by the configured amount of days/weeks/months using the
+            // same calendar to respect daylight saving changes.
+            let targetDay = Calendar.current.date(byAdding: triggerFixedTimeType.calendarComponent,
+                                               value: triggerFixedTimeTypeAmount,
+                                               to: startOfDay) ?? ClassConstant.DateConstant.default1970Date
+            
+            var executionDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: targetDay, matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward)
+            
+            if let exec = executionDate, exec <= date {
+                // If execution is in the past, move to the next period (by day)
+                let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: targetDay) ?? targetDay
+                executionDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: nextDay, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward)
+            }
+            
+            return executionDate
         }
     }
     

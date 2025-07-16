@@ -36,9 +36,8 @@ enum ClassConstant {
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
         static let maximumNumberOfLogs = 100000
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
-        static let maximumNumberOfReminders = 10
+        static let maximumNumberOfReminders = 25
         // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
-        // TODO TRIGGERS implement max num of triggers
         static let maximumNumberOfTriggers = 25
     }
 

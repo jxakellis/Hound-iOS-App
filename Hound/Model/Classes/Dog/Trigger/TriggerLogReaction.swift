@@ -39,13 +39,13 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
     // MARK: - Properties
 
     private(set) var logActionTypeId: Int = ClassConstant.LogConstant.defaultLogActionTypeId
-    private(set) var logCustomActionName: String?
+    private(set) var logCustomActionName: String = ""
     
     // MARK: - Main
 
     init(forLogActionTypeId: Int? = nil, forLogCustomActionName: String? = nil) {
         self.logActionTypeId = forLogActionTypeId ?? logActionTypeId
-        self.logCustomActionName = forLogCustomActionName ?? logCustomActionName
+        self.logCustomActionName = forLogCustomActionName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? logCustomActionName
         super.init()
     }
     

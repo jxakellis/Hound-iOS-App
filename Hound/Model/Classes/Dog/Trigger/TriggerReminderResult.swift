@@ -39,13 +39,13 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
     // MARK: - Properties
 
     private(set) var reminderActionTypeId: Int = ClassConstant.ReminderConstant.defaultReminderActionTypeId
-    private(set) var reminderCustomActionName: String?
+    private(set) var reminderCustomActionName: String = ""
     
     // MARK: - Main
 
     init(forReminderActionTypeId: Int? = nil, forReminderCustomActionName: String? = nil) {
         self.reminderActionTypeId = forReminderActionTypeId ?? reminderActionTypeId
-        self.reminderCustomActionName = forReminderCustomActionName ?? reminderCustomActionName
+        self.reminderCustomActionName = forReminderCustomActionName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? reminderCustomActionName
         super.init()
     }
     
