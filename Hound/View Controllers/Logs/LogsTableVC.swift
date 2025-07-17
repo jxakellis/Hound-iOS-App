@@ -62,6 +62,9 @@ final class LogsTableVC: HoundTableViewController {
     
     /// Track if we need to refresh data when view appears
     private var tableViewDataSourceHasBeenUpdated: Bool = false
+
+    /// Allows temporarily disabling table reloads when setDogManager is called.
+    private var allowReloadTable: Bool = true
     
     private weak var delegate: LogsTableVCDelegate?
     
@@ -167,6 +170,7 @@ final class LogsTableVC: HoundTableViewController {
         // Avoid recomputation if no logs
         logsForDogUUIDsGroupedByDate = dogManager.logsForDogUUIDsGroupedByDate(forFilter: logsFilter)
         tableView.isUserInteractionEnabled = !logsForDogUUIDsGroupedByDate.isEmpty
+        guard allowReloadTable else { return }
         tableView.reloadData()
     }
     
@@ -278,13 +282,33 @@ final class LogsTableVC: HoundTableViewController {
                 return
             }
             
-            // TODO ANIMATION make this change be animated
+            let previousLogs = self.logsForDogUUIDsGroupedByDate
+
             self.dogManager.findDog(forDogUUID: forDogUUID)?
                 .dogLogs.removeLog(forLogUUID: forLog.logUUID)
+
+            self.allowReloadTable = false
             self.setDogManager(
                 sender: Sender(origin: self, localized: self),
                 forDogManager: self.dogManager
             )
+            self.allowReloadTable = true
+
+            let newLogs = self.logsForDogUUIDsGroupedByDate
+            self.tableView.isUserInteractionEnabled = !newLogs.isEmpty
+
+            self.tableView.beginUpdates()
+            if previousLogs[indexPath.section].count == 1 {
+                self.tableView.deleteSections([indexPath.section], with: .automatic)
+            } else {
+                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+            self.tableView.endUpdates()
+
+            UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+                self.view.setNeedsLayout()
+                self.view.layoutIfNeeded()
+            }
         }
     }
     

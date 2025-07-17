@@ -288,9 +288,12 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
                             return
                         }
                         
-                        // TODO ANIMATIONS add reload animations
                         self.repeatableSetup()
-                        self.familyMembersTableView.reloadData()
+                        self.familyMembersTableView.deleteRows(at: [indexPath], with: .automatic)
+                        UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+                            self.view.setNeedsLayout()
+                            self.view.layoutIfNeeded()
+                        }
                     }
                 }
             }

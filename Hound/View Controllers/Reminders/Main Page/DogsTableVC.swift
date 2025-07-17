@@ -365,11 +365,24 @@ final class DogsTableVC: HoundTableViewController {
                     return
                 }
                 
-                self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.removeReminder(forReminderUUID: forReminder.reminderUUID)
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
-                // manually reload table as the self sender doesn't do that
-                // TODO ANIMATION this change removed a reminder, so we want to do a table view anmation on this
-                self.tableView.reloadData()
+                if let dogSection = self.dogManager.dogs.firstIndex(where: { $0.dogUUID == forDogUUID }),
+                   let reminderIndex = self.dogManager.dogs[dogSection].dogReminders.dogReminders.firstIndex(where: { $0.reminderUUID == forReminder.reminderUUID }) {
+                    let indexPath = IndexPath(row: reminderIndex + 1, section: dogSection)
+
+                    self.dogManager.dogs[dogSection].dogReminders.removeReminder(forReminderUUID: forReminder.reminderUUID)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+
+                    self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                    UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+                        self.view.setNeedsLayout()
+                        self.view.layoutIfNeeded()
+                    }
+                }
+                else {
+                    self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.removeReminder(forReminderUUID: forReminder.reminderUUID)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    self.tableView.reloadData()
+                }
                 
                 LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
