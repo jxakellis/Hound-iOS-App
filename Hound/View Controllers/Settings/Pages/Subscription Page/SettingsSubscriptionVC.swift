@@ -220,8 +220,9 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                 
                 // When we reload the tableView, cells are reusable.
                 self.lastSelectedCell = nil
-                // TODO ANIMATIONS add reload animations
-                self.tableView.reloadData()
+                UIView.transition(with: self.tableView, duration: VisualConstant.AnimationConstant.moveMultipleElements, options: .transitionCrossDissolve, animations: {
+                    self.tableView.reloadData()
+                })
             }
         }
     }
@@ -255,8 +256,9 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                 
                 PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successPurchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.successPurchasedSubscriptionSubtitle, forStyle: .success)
                 
-                // TODO ANIMATIONS add reload animations
-                self.tableView.reloadData()
+                UIView.transition(with: self.tableView, duration: VisualConstant.AnimationConstant.moveMultipleElements, options: .transitionCrossDissolve, animations: {
+                    self.tableView.reloadData()
+                })
             }
         }
         
