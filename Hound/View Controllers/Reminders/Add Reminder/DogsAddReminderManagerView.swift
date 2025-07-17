@@ -123,6 +123,18 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     private(set) var reminderActionTypeSelected: ReminderActionType?
     
     private var dropDownReminderAction: HoundDropDown?
+    /// Options for the reminder action drop down consisting of base types and their previous custom names
+    private var dropDownReminderActionOptions: [(ReminderActionType, String?)] {
+        var options: [(ReminderActionType, String?)] = []
+        for type in GlobalTypes.shared.reminderActionTypes {
+            options.append((type, nil))
+            let matching = LocalConfiguration.localPreviousReminderCustomActionNames.filter { $0.reminderActionTypeId == type.reminderActionTypeId }
+            for prev in matching {
+                options.append((type, prev.reminderCustomActionName))
+            }
+        }
+        return options
+    }
     private var dropDownSelectedIndexPath: IndexPath?
     
     /// Given the reminderToUpdate provided, construct a new reminder or updates the one provided with the settings selected inside this view and its subviews. If there are invalid settings (e.g. no weekdays), an error message is sent to the user and nil is returned. If the reminder is valid, a reminder is returned that is ready to be sent to the server.
@@ -229,9 +241,6 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         
         return initialReminder.isSame(asReminder: reminderToUpdate)
     }
-    
-    
-    // MARK: - Main
     
     // MARK: - Setup
     
@@ -386,20 +395,12 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             customCell.setCustomSelectedTableViewCell(forSelected: false)
         }
         
-        // inside of the predefined ReminderActionType
-        if indexPath.row < GlobalTypes.shared.reminderActionTypes.count {
-            customCell.label.text = GlobalTypes.shared.reminderActionTypes[indexPath.row].convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
-        }
-        // a user generated custom name
-        else {
-            let previousReminderCustomActionName = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - GlobalTypes.shared.reminderActionTypes.count]
-            let reminderActionType = ReminderActionType.find(forReminderActionTypeId: previousReminderCustomActionName.reminderActionTypeId)
-            customCell.label.text = reminderActionType.convertToReadableName(customActionName: previousReminderCustomActionName.reminderCustomActionName, includeMatchingEmoji: false)
-        }
+        let option = dropDownReminderActionOptions[indexPath.row]
+        customCell.label.text = option.0.convertToReadableName(customActionName: option.1, includeMatchingEmoji: option.1 == nil)
     }
     
     func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
-        GlobalTypes.shared.reminderActionTypes.count + LocalConfiguration.localPreviousReminderCustomActionNames.count
+        dropDownReminderActionOptions.count
     }
     
     func numberOfSections(dropDownUIViewIdentifier: String) -> Int {
@@ -415,19 +416,11 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         }
         dropDownSelectedIndexPath = indexPath
         
-        // inside of the predefined LogActionType
-        if indexPath.row < GlobalTypes.shared.reminderActionTypes.count {
-            reminderActionLabel.text = GlobalTypes.shared.reminderActionTypes[indexPath.row].convertToReadableName(customActionName: nil)
-            reminderActionTypeSelected = GlobalTypes.shared.reminderActionTypes[indexPath.row]
-        }
-        // a user generated custom name
-        else {
-            let previousReminderCustomActionName = LocalConfiguration.localPreviousReminderCustomActionNames[indexPath.row - GlobalTypes.shared.reminderActionTypes.count]
-            let previousReminderReminderActionType = ReminderActionType.find(forReminderActionTypeId: previousReminderCustomActionName.reminderActionTypeId)
-            
-            reminderActionLabel.text = previousReminderReminderActionType.convertToReadableName(customActionName: previousReminderCustomActionName.reminderCustomActionName)
-            reminderActionTypeSelected = previousReminderReminderActionType
-            reminderCustomActionNameTextField.text = previousReminderCustomActionName.reminderCustomActionName
+        let option = dropDownReminderActionOptions[indexPath.row]
+        reminderActionLabel.text = option.0.convertToReadableName(customActionName: option.1, includeMatchingEmoji: true)
+        reminderActionTypeSelected = option.0
+        if let custom = option.1 {
+            reminderCustomActionNameTextField.text = custom
         }
         
         dismissKeyboard()

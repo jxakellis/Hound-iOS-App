@@ -129,8 +129,6 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             return
         }
         
-        // TODO TRIGGERS if a user clicks on a trigger result reminder, tell them they can't edit it
-        
         // updating
         PresentationManager.beginFetchingInformationIndicator()
         // query for existing
@@ -157,30 +155,28 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
     
     /// If a trigger in DogsTableVC or Add Trigger were tapped, invokes this function. Opens up the same page but changes between creating new and editing existing mode.
-    func shouldOpenTriggerMenu(forDogUUID: UUID, forTrigger: Trigger?) {
+    func shouldOpenTriggerMenu(forDog: Dog, forTrigger: Trigger?) {
         guard let forTrigger = forTrigger else {
             // creating new
             // no need to query as nothing in server since creating
             let vc = DogsAddTriggerVC()
-            vc.setup(forDelegate: self, forTriggerToUpdateDogUUID: forDogUUID, forTriggerToUpdate: nil)
+            vc.setupWithServerPersistence(forDelegate: self, forDog: forDog, forTriggerToUpdate: nil)
             self.dogsAddTriggerViewController = vc
             PresentationManager.enqueueViewController(vc)
             return
         }
         
-        // TODO TRIGGERS if a user clicks on a trigger result reminder, tell them they can't edit it
-        
         // updating
         PresentationManager.beginFetchingInformationIndicator()
         // query for existing
-        TriggersRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forTrigger: forTrigger) { trigger, responseStatus, _ in
+        TriggersRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDog.dogUUID, forTrigger: forTrigger) { trigger, responseStatus, _ in
             PresentationManager.endFetchingInformationIndicator {
                 guard responseStatus != .failureResponse else {
                     return
                 }
                 guard let trigger = trigger else {
                     // If the response was successful but no trigger was returned, that means the trigger was deleted. Therefore, update the dogManager to indicate as such.
-                    let dogTriggers = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogTriggers
+                    let dogTriggers = self.dogManager.findDog(forDogUUID: forDog.dogUUID)?.dogTriggers
                     dogTriggers?.removeTrigger(forTriggerUUID: forTrigger.triggerUUID)
                     
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
@@ -188,7 +184,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                 }
                 
                 let vc = DogsAddTriggerVC()
-                vc.setup(forDelegate: self, forTriggerToUpdateDogUUID: forDogUUID, forTriggerToUpdate: trigger)
+                vc.setupWithServerPersistence(forDelegate: self, forDog: forDog, forTriggerToUpdate: trigger)
                 self.dogsAddTriggerViewController = vc
                 PresentationManager.enqueueViewController(vc)
             }
@@ -487,7 +483,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                     return
                 }
                 
-                self.shouldOpenTriggerMenu(forDogUUID: dog.dogUUID, forTrigger: nil)
+                self.shouldOpenTriggerMenu(forDog: dog, forTrigger: nil)
             }
         }
         

@@ -57,9 +57,10 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     // MARK: - Properties
     
     private weak var delegate: DogsAddTriggerVCDelegate?
+    /// This variable is not solely based upon the existance of self.dog. If it is true, then dog MUST be provided. However, dog can be provided and this can be false (e.g. DogsAddDogVC it editing a dog and opens this menu to add/edit a trigger. It doesn't want server persistence, but it does have a dog set).
     private var shouldPersistChangesToServer: Bool = false
+    private var dog: Dog?
     private var triggerToUpdate: Trigger?
-    private var dog: Dog = Dog()
     
     // MARK: - Main
     
@@ -80,11 +81,24 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddTriggerVCDelegate, shouldPersistChangesToServer: Bool, forDog: Dog, forTriggerToUpdate: Trigger?) {
+    /// Changes made by this view controller will not be persisted to the server, and will only be used locally. Dog is optional
+    func setupWithoutServerPersistence(forDelegate: DogsAddTriggerVCDelegate, forDog: Dog?, forTriggerToUpdate: Trigger?) {
         delegate = forDelegate
-        self.shouldPersistChangesToServer = shouldPersistChangesToServer
+        shouldPersistChangesToServer = false
         dog = forDog
         triggerToUpdate = forTriggerToUpdate
+        
+        editPageHeaderView.setTitle(forTriggerToUpdate == nil ? "Create Automation" : "Edit Automation")
+        managerView.setup(forDog: forDog, forTriggerToUpdate: forTriggerToUpdate)
+    }
+    
+    /// Changes made by this view controller will be persisted to the server. Dog is required
+    func setupWithServerPersistence(forDelegate: DogsAddTriggerVCDelegate, forDog: Dog, forTriggerToUpdate: Trigger?) {
+        delegate = forDelegate
+        shouldPersistChangesToServer = true
+        dog = forDog
+        triggerToUpdate = forTriggerToUpdate
+        
         editPageHeaderView.setTitle(forTriggerToUpdate == nil ? "Create Automation" : "Edit Automation")
         managerView.setup(forDog: forDog, forTriggerToUpdate: forTriggerToUpdate)
     }
@@ -94,7 +108,11 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     @objc private func didTouchUpInsideSaveTrigger(_ sender: Any) {
         guard let trigger = managerView.currentTrigger else { return }
         
-        guard shouldPersistChangesToServer else {
+        if shouldPersistChangesToServer && dog == nil {
+            HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideSaveTrigger:\t Dog must be set when persisting changes to server.")
+        }
+        
+        guard shouldPersistChangesToServer, let dog = dog else {
             if triggerToUpdate == nil {
                 delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, forTrigger: trigger)
             }
@@ -138,7 +156,11 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     @objc private func didTouchUpInsideDuplicateTrigger(_ sender: Any) {
         guard let duplicateTrigger = managerView.currentTrigger?.copy() as? Trigger else { return }
         
-        guard shouldPersistChangesToServer else {
+        if shouldPersistChangesToServer && dog == nil {
+            HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideDuplicateTrigger:\t Dog must be set when persisting changes to server.")
+        }
+        
+        guard shouldPersistChangesToServer, let dog = dog else {
             delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, forTrigger: duplicateTrigger)
             self.dismiss(animated: true)
             return
@@ -161,7 +183,12 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     
     @objc private func didTouchUpInsideRemoveTrigger(_ sender: Any) {
         guard let triggerToUpdate = triggerToUpdate else { return }
-        guard shouldPersistChangesToServer else {
+        
+        if shouldPersistChangesToServer && dog == nil {
+            HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideRemoveTrigger:\t Dog must be set when persisting changes to server.")
+        }
+        
+        guard shouldPersistChangesToServer, let dog = dog else {
             delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, forTriggerUUID: triggerToUpdate.triggerUUID)
             self.dismiss(animated: true)
             return
@@ -170,10 +197,10 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         let alert = UIAlertController(title: "Are you sure you want to delete this trigger?", message: nil, preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.view.isUserInteractionEnabled = false
-            TriggersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: self.dog.dogUUID, forTriggerUUIDs: [triggerToUpdate.triggerUUID]) { status, _ in
+            TriggersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forTriggerUUIDs: [triggerToUpdate.triggerUUID]) { status, _ in
                 self.view.isUserInteractionEnabled = true
                 guard status != .failureResponse else { return }
-                self.delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: self.dog.dogUUID, forTriggerUUID: triggerToUpdate.triggerUUID)
+                self.delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dog.dogUUID, forTriggerUUID: triggerToUpdate.triggerUUID)
                 self.dismiss(animated: true)
             }
         }

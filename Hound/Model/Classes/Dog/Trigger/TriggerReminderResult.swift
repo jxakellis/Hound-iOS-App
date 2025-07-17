@@ -42,7 +42,7 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
     private(set) var reminderCustomActionName: String = ""
     
     var readableName: String {
-        return ReminderActionType.find(forReminderActionTypeId: reminderActionTypeId).convertToReadableName(customActionName: reminderCustomActionName)
+        return ReminderActionType.find(forReminderActionTypeId: reminderActionTypeId).convertToReadableName(customActionName: reminderCustomActionName, includeMatchingEmoji: true)
     }
     
     // MARK: - Main

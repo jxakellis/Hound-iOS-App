@@ -11,7 +11,7 @@ import UIKit
 protocol DogsTableVCDelegate: AnyObject {
     func shouldOpenDogMenu(forDogUUID: UUID?)
     func shouldOpenReminderMenu(forDogUUID: UUID, forReminder: Reminder?)
-    func shouldOpenTriggerMenu(forDogUUID: UUID, forTrigger: Trigger?)
+    func shouldOpenTriggerMenu(forDog: Dog, forTrigger: Trigger?)
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
     func shouldUpdateAlphaForButtons(forAlpha: Double)
 }
@@ -158,7 +158,7 @@ final class DogsTableVC: HoundTableViewController {
     }
     
     private func willShowDogActionSheet(forCell cell: DogTVC, forIndexPath indexPath: IndexPath) {
-        guard let dogName = cell.dog?.dogName, let dogUUID = cell.dog?.dogUUID, let section = self.dogManager.dogs.firstIndex(where: { dog in
+        guard let dog = cell.dog, let dogName = cell.dog?.dogName, let dogUUID = cell.dog?.dogUUID, let section = self.dogManager.dogs.firstIndex(where: { dog in
             dog.dogUUID == dogUUID
         }) else { return }
         
@@ -170,7 +170,7 @@ final class DogsTableVC: HoundTableViewController {
             self.delegate?.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: nil)
         }
         let addTriggerAlertAction = UIAlertAction(title: "Add Automation", style: .default) { _ in
-            self.delegate?.shouldOpenTriggerMenu(forDogUUID: dogUUID, forTrigger: nil)
+            self.delegate?.shouldOpenTriggerMenu(forDog: dog, forTrigger: nil)
         }
         
         let editAlertAction = UIAlertAction(

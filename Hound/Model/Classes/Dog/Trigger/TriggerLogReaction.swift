@@ -42,7 +42,7 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
     private(set) var logCustomActionName: String = ""
     
     var readableName: String {
-        return LogActionType.find(forLogActionTypeId: logActionTypeId).convertToReadableName(customActionName: logCustomActionName)
+        return LogActionType.find(forLogActionTypeId: logActionTypeId).convertToReadableName(customActionName: logCustomActionName, includeMatchingEmoji: true)
     }
     
     // MARK: - Main

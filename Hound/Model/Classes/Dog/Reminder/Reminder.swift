@@ -53,8 +53,6 @@ enum ReminderType: String, CaseIterable {
 
 final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
-    // TODO TRIGGERS diable editting of reminder if its a isTriggerResult
-    
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {

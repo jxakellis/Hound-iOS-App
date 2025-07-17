@@ -10,6 +10,8 @@ import UIKit
 
 final class DogsReminderTVC: HoundTableViewCell {
     
+    // TODO TRIGGERS Add special display that a reminder is a trigger result
+    
     // MARK: - Elements
     
     let containerView: HoundView = {

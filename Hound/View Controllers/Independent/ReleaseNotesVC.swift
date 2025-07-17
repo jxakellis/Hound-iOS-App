@@ -77,7 +77,7 @@ final class ReleaseNotesVC: HoundScrollViewController {
         // 5. ability to search by filter text and filter by time range
         // 6. log end time is now "in x time" rather than "ago x time"
         // 7. this custom page itself
-        // 8. new app icoj
+        // 8. new app icon
         var builder = ReleaseNotesBuilder()
         builder.addFeature(
             title: "Automations",

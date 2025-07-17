@@ -16,14 +16,14 @@ enum TriggersRequest {
     private static func createTriggersBody(
         forDogUUID: UUID,
         forDogTriggers: [Trigger]
-    ) -> [String: [[String: CompatibleDataTypeForJSON?]]] {
-        var triggerBodies: [[String: CompatibleDataTypeForJSON?]] = []
+    ) -> [String: [[String: JSONValue]]] {
+        var triggerBodies: [[String: JSONValue]] = []
         for forTrigger in forDogTriggers {
             triggerBodies.append(
                 forTrigger.createBody(forDogUUID: forDogUUID)
             )
         }
-        let body: [String: [[String: CompatibleDataTypeForJSON?]]] = [
+        let body: [String: [[String: JSONValue]]] = [
             KeyConstant.dogTriggers.rawValue: triggerBodies
         ]
         return body
@@ -50,7 +50,7 @@ extension TriggersRequest {
             HoundError?
         ) -> Void
     ) -> Progress? {
-        let body: [String: CompatibleDataTypeForJSON?] =
+        let body: [String: JSONValue] =
         forTrigger.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(

@@ -359,7 +359,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             return TriggerLogReaction(forLogActionTypeId: id, forLogCustomActionName: name)
         } ?? triggerToOverride?.triggerLogReactions
         
-        var triggerReminderResult: TriggerReminderResult? = {
+        let triggerReminderResult: TriggerReminderResult? = {
             guard let body = fromBody[KeyConstant.triggerReminderResult.rawValue] as? [String: Any?] else {
                 return nil
             }
@@ -436,7 +436,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: targetDay) ?? targetDay
             let nextDayDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: nextDay, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward)
             
-            var executionDate = strictExecutionDate ?? laxExecutionDate
+            let executionDate = strictExecutionDate ?? laxExecutionDate
             
             if let executionDate = executionDate, executionDate > date {
                 return executionDate

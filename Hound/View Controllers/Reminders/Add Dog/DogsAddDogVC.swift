@@ -12,19 +12,7 @@ protocol DogsAddDogVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddDogRemindersViewDelegate, DogsAddDogTriggersViewDelegate, DogsAddTriggerVCDelegate {
-    func didAddTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
-        <#code#>
-    }
-    
-    func didUpdateTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
-        <#code#>
-    }
-    
-    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, forTriggerUUID: UUID) {
-        <#code#>
-    }
-    
+final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, DogsAddReminderVCDelegate, DogsAddTriggerVCDelegate, DogsAddDogRemindersViewDelegate, DogsAddDogTriggersViewDelegate {
     
     // MARK: - UIImagePickerControllerDelegate
     
@@ -79,7 +67,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     func shouldOpenAddTriggerVC(forTrigger: Trigger?) {
         let vc = DogsAddTriggerVC()
         /// DogsAddDogVC takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
-        vc.setup(forDelegate: self, forTriggerToUpdateDogUUID: nil, forTriggerToUpdate: forTrigger)
+        vc.setupWithoutServerPersistence(forDelegate: self, forDog: dogToUpdate, forTriggerToUpdate: forTrigger)
         PresentationManager.enqueueViewController(vc)
     }
     
@@ -95,6 +83,20 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID) {
         self.remindersView.didRemoveReminder(forReminderUUID: forReminderUUID)
+    }
+    
+    // MARK: - DogsAddTriggerVCDelegate
+    
+    func didAddTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
+        self.triggersView.didAddTrigger(forTrigger: forTrigger)
+    }
+    
+    func didUpdateTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
+        self.triggersView.didUpdateTrigger(forTrigger: forTrigger)
+    }
+    
+    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, forTriggerUUID: UUID) {
+        self.triggersView.didRemoveTrigger(forTriggerUUID: forTriggerUUID)
     }
     
     // MARK: - Elements

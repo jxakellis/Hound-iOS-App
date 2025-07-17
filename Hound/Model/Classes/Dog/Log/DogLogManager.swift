@@ -104,7 +104,9 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
                     }
                 }
             }
-            
+            else {
+                HoundLogger.general.error("DogLogManager.addLog\t: Dog is nil & invokeDogTriggers is true, cannot invoke dog triggers for log: \(forLog.logUUID) \(forLog.logActionTypeId) \(forLog.logCustomActionName)")
+            }
         }
         
         return generatedReminders

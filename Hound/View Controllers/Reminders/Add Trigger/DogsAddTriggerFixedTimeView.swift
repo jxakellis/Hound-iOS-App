@@ -107,17 +107,19 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
     private func updateDescriptionLabel() {
         // Reminder will go off on the same day as the matching log at
         // Reminder will go off 2 days after the matching log
-        var text = "Reminder will go off at \(timeOfDayPicker.date.formatted(date: .omitted, time: .shortened)) "
+        var text = "Reminder will go off "
         
         switch selectedIndex {
-        case 0: text += "on the same day as the log"
-        case 1: text += "the day after the log"
-        default: text += "\(selectedIndex) days after the log"
+        case 0: text += "on the same day as the log "
+        case 1: text += "the day after the log "
+        default: text += "\(selectedIndex) days after the log "
         }
+        
+        text += "at \(timeOfDayPicker.date.formatted(date: .omitted, time: .shortened))"
         
         var emphasizedText: String?
         if selectedIndex == 0 {
-            emphasizedText = ". If the time has already passed, reminder rolls over to the next day"
+            emphasizedText = ". If the time has passed, reminder rolls over to the next day"
         }
         let precalculatedDynamicTextColor = UIColor.label
         
@@ -125,13 +127,13 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
             // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
             let message = NSMutableAttributedString(
                 string: text,
-                attributes: [.font: VisualConstant.FontConstant.primaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                attributes: [.font: VisualConstant.FontConstant.secondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
             )
             
             if let emphasizedText = emphasizedText {
                 message.append(NSMutableAttributedString(
                     string: emphasizedText,
-                    attributes: [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
                 )
             }
             return message
@@ -208,7 +210,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
         ])
         
         NSLayoutConstraint.activate([
-            timeOfDayPicker.topAnchor.constraint(equalTo: dayOffsetLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            timeOfDayPicker.topAnchor.constraint(equalTo: dayOffsetLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             timeOfDayPicker.bottomAnchor.constraint(equalTo: bottomAnchor),
             timeOfDayPicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             timeOfDayPicker.trailingAnchor.constraint(equalTo: trailingAnchor),

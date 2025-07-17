@@ -15,6 +15,8 @@ protocol DogsAddDogReminderTVCDelegate: AnyObject {
 
 final class DogsAddDogReminderTVC: HoundTableViewCell {
     
+    // TODO TRIGGERS add special indicator that this is a reminder from an automation/trigger. the enabled and chevronImageView button should disappear
+    
     // MARK: - Elements
     
     let containerView: HoundView = {

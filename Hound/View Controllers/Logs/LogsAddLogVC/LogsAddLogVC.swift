@@ -438,6 +438,18 @@ final class LogsAddLogVC: HoundScrollViewController,
     // MARK: Log Action Drop Down
     
     private var dropDownLogAction: HoundDropDown?
+    /// Options for the log action drop down consisting of base types and their previous custom names
+    private var dropDownLogActionOptions: [(LogActionType, String?)] {
+        var options: [(LogActionType, String?)] = []
+        for type in GlobalTypes.shared.logActionTypes {
+            options.append((type, nil))
+            let matching = LocalConfiguration.localPreviousLogCustomActionNames.filter { $0.logActionTypeId == type.logActionTypeId }
+            for prev in matching {
+                options.append((type, prev.logCustomActionName))
+            }
+        }
+        return options
+    }
     /// The selected log action type
     private var logActionSelected: LogActionType? {
         didSet {
@@ -993,8 +1005,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                 case .parentDog:
                     return CGFloat(dogManager?.dogs.count ?? 0)
                 case .logActionType:
-                    return CGFloat(GlobalTypes.shared.logActionTypes.count)
-                    + CGFloat(LocalConfiguration.localPreviousLogCustomActionNames.count)
+                    return CGFloat(dropDownLogActionOptions.count)
                 case .logUnit:
                     guard let selected = logActionSelected else { return 0.0 }
                     return CGFloat(selected.associatedLogUnitTypes.count)
@@ -1023,26 +1034,17 @@ final class LogsAddLogVC: HoundScrollViewController,
             customCell.label.text = dog.dogName
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logActionType.rawValue {
-            // Predefined LogActionTypes
-            if indexPath.row < GlobalTypes.shared.logActionTypes.count {
-                customCell.label.text = GlobalTypes.shared.logActionTypes[indexPath.row]
-                    .convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
-                if let selected = logActionSelected,
-                   GlobalTypes.shared.logActionTypes.firstIndex(of: selected) == indexPath.row {
-                    customCell.setCustomSelectedTableViewCell(forSelected: true)
-                }
-                else {
-                    customCell.setCustomSelectedTableViewCell(forSelected: false)
-                }
+            let option = dropDownLogActionOptions[indexPath.row]
+            customCell.label.text = option.0.convertToReadableName(
+                customActionName: option.1,
+                includeMatchingEmoji: option.1 == nil
+            )
+            if option.1 == nil,
+               let selected = logActionSelected,
+               selected.logActionTypeId == option.0.logActionTypeId {
+                customCell.setCustomSelectedTableViewCell(forSelected: true)
             }
-            // User-generated custom names
             else {
-                let prev = LocalConfiguration.localPreviousLogCustomActionNames[
-                    indexPath.row - GlobalTypes.shared.logActionTypes.count
-                ]
-                customCell.label.text = LogActionType.find(
-                    forLogActionTypeId: prev.logActionTypeId
-                ).convertToReadableName(customActionName: prev.logCustomActionName)
                 customCell.setCustomSelectedTableViewCell(forSelected: false)
             }
         }
@@ -1083,7 +1085,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         case LogsAddLogDropDownTypes.parentDog.rawValue:
             return dogManager?.dogs.count ?? 0
         case LogsAddLogDropDownTypes.logActionType.rawValue:
-            return GlobalTypes.shared.logActionTypes.count + LocalConfiguration.localPreviousLogCustomActionNames.count
+            return dropDownLogActionOptions.count
         case LogsAddLogDropDownTypes.logUnit.rawValue:
             guard let selected = logActionSelected else { return 0 }
             return selected.associatedLogUnitTypes.count
@@ -1144,19 +1146,14 @@ final class LogsAddLogVC: HoundScrollViewController,
             
             cell.setCustomSelectedTableViewCell(forSelected: true)
             
-            if indexPath.row < GlobalTypes.shared.logActionTypes.count {
-                logActionSelected = GlobalTypes.shared.logActionTypes[indexPath.row]
-                if logActionSelected?.allowsCustom == true {
-                    // If custom log action is allowed, begin editing textField
-                    logCustomActionNameTextField.becomeFirstResponder()
-                }
+            let option = dropDownLogActionOptions[indexPath.row]
+            logActionSelected = option.0
+            if let custom = option.1 {
+                logCustomActionNameTextField.text = custom
             }
-            else {
-                let prev = LocalConfiguration.localPreviousLogCustomActionNames[
-                    indexPath.row - GlobalTypes.shared.logActionTypes.count
-                ]
-                logActionSelected = LogActionType.find(forLogActionTypeId: prev.logActionTypeId)
-                logCustomActionNameTextField.text = prev.logCustomActionName
+            else if logActionSelected?.allowsCustom == true {
+                // If custom log action is allowed, begin editing textField
+                logCustomActionNameTextField.becomeFirstResponder()
             }
             
             dropDownLogAction?.hideDropDown(animated: true)
