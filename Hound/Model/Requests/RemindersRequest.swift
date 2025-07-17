@@ -222,7 +222,7 @@ extension RemindersRequest {
                 reminderBodies.append(reminderBody)
             }
         
-            return [KeyConstant.dogReminders.rawValue: .array(reminderBodies.map { .object($0.compactMapValues { $0 }) } )]
+            return [KeyConstant.dogReminders.rawValue: .array(reminderBodies.map { .object($0.compactMapValues { $0 }) })]
         }()
         
         return RequestUtils.genericDeleteRequest(

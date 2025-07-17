@@ -77,6 +77,7 @@ enum RequestUtils {
         request.setValue(UIApplication.appVersion, forHTTPHeaderField: "houndheader-appversion")
         
         HoundLogger.apiRequest.notice("\(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Request for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
+        //        HoundLogger.apiRequest.debug("\tRequest Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? VisualConstant.TextConstant.unknownText)")
         
         // Create the task that will send the request
         let task = session.dataTask(with: request) { data, response, error in
@@ -100,7 +101,7 @@ enum RequestUtils {
     ) {
         // extract status code from URLResponse
         let responseStatusCode: Int? = (forURLResponse as? HTTPURLResponse)?.statusCode
-
+        
         // parse response from json
         let responseBody: JSONResponseBody? = {
             // if no data or if no status code, then request failed
@@ -113,6 +114,8 @@ enum RequestUtils {
             JSONSerialization.jsonObject(with: forData, options: .fragmentsAllowed) as? [String: [JSONResponseBody]]
             ?? JSONSerialization.jsonObject(with: forData, options: .fragmentsAllowed) as? JSONResponseBody
         }()
+        
+        //        HoundLogger.apiResponse.debug("\tResponse Body: \(responseBody)")
         
         guard forError == nil, let responseBody = responseBody, let responseStatusCode = responseStatusCode else {
             genericRequestNoResponse(
@@ -320,7 +323,7 @@ extension RequestUtils {
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let serializableBody = forBody.toAnyDictionary()
-                request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
+        request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
         
         return genericRequest(
             forRequest: request,
@@ -349,7 +352,7 @@ extension RequestUtils {
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let serializableBody = forBody.toAnyDictionary()
-                request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
+        request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
         
         return genericRequest(
             forRequest: request,
