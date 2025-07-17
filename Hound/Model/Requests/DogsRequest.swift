@@ -42,7 +42,7 @@ enum DogsRequest {
             return nil
         }
         
-        let body: [String: CompatibleDataTypeForJSON?] = [KeyConstant.dogUUID.rawValue: forDog.dogUUID.uuidString]
+        let body: JSONRequestBody = [KeyConstant.dogUUID.rawValue: .string(forDog.dogUUID.uuidString)]
         
         return RequestUtils.genericGetRequest(
             forErrorAlert: forErrorAlert,
@@ -234,7 +234,7 @@ enum DogsRequest {
         forDogUUID: UUID,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body: [String: CompatibleDataTypeForJSON] = [KeyConstant.dogUUID.rawValue: forDogUUID.uuidString]
+        let body: JSONRequestBody = [KeyConstant.dogUUID.rawValue: .string(forDogUUID.uuidString)]
         
         return RequestUtils.genericDeleteRequest(
             forErrorAlert: forErrorAlert,

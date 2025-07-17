@@ -214,7 +214,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from fromBody.
-    convenience init?(fromBody: [String: Any?], logToOverride: Log?) {
+    convenience init?(fromBody: JSONResponseBody, logToOverride: Log?) {
         // Don't pull logId or logIsDeleted from logToOverride. A valid fromBody needs to provide this itself
         let logId: Int? = fromBody[KeyConstant.logId.rawValue] as? Int
         let logUUID: UUID? = UUID.fromString(forUUIDString: fromBody[KeyConstant.logUUID.rawValue] as? String)
@@ -347,19 +347,18 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Returns an array literal of the logs's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody(forDogUUID: UUID) -> [String: CompatibleDataTypeForJSON?] {
-        var body: [String: CompatibleDataTypeForJSON?] = [:]
-        body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
-        body[KeyConstant.logId.rawValue] = logId
-        body[KeyConstant.logUUID.rawValue] = logUUID.uuidString
-        body[KeyConstant.logActionTypeId.rawValue] = logActionTypeId
-        body[KeyConstant.logCustomActionName.rawValue] = logCustomActionName
-        body[KeyConstant.logStartDate.rawValue] = logStartDate.ISO8601FormatWithFractionalSeconds()
-        body[KeyConstant.logEndDate.rawValue] = logEndDate?.ISO8601FormatWithFractionalSeconds()
-        body[KeyConstant.logNote.rawValue] = logNote
-        body[KeyConstant.logUnitTypeId.rawValue] = logUnitTypeId
-        body[KeyConstant.logNumberOfLogUnits.rawValue] = logNumberOfLogUnits
+    func createBody(forDogUUID: UUID) -> JSONRequestBody {
+        var body: JSONRequestBody = [:]
+        body[KeyConstant.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+        body[KeyConstant.logId.rawValue] = .int(logId)
+        body[KeyConstant.logUUID.rawValue] = .string(logUUID.uuidString)
+        body[KeyConstant.logActionTypeId.rawValue] = .int(logActionTypeId)
+        body[KeyConstant.logCustomActionName.rawValue] = .string(logCustomActionName)
+        body[KeyConstant.logStartDate.rawValue] = .string(logStartDate.ISO8601FormatWithFractionalSeconds())
+        body[KeyConstant.logEndDate.rawValue] = .string(logEndDate?.ISO8601FormatWithFractionalSeconds())
+        body[KeyConstant.logNote.rawValue] = .string(logNote)
+        body[KeyConstant.logUnitTypeId.rawValue] = .int(logUnitTypeId)
+        body[KeyConstant.logNumberOfLogUnits.rawValue] = .double(logNumberOfLogUnits)
         return body
-        
     }
 }

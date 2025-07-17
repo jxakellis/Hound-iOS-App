@@ -69,8 +69,9 @@ enum NotificationPermissionsManager {
                 UserConfiguration.isLoudNotificationEnabled = isGranted
 
                 // Contact the server about the updated values and, if there is no response or a bad response, revert the values to their previous values. localIsNotificationAuthorized purposefully excluded as server doesn't need to know that and its value is untrust worthy (user can modify the value without us knowing, unlike our custom variables).
-                let body: [String: CompatibleDataTypeForJSON?] = [
-                    KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled, KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled
+                let body: JSONRequestBody = [
+                    KeyConstant.userConfigurationIsNotificationEnabled.rawValue: .bool(UserConfiguration.isNotificationEnabled),
+                    KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: .bool(UserConfiguration.isLoudNotificationEnabled)
                 ]
 
                 UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
@@ -143,13 +144,13 @@ enum NotificationPermissionsManager {
                 // The isNotificationAuthorized, isNotificationEnabled, and isLoudNotificationEnabled have been potentially updated. Additionally, SettingsNotifsVC could be be the last view opened. Therefore, we need to inform SettingsNotifsVC of these changes so that it can update its switches.
                 SettingsNotifsVC.didSynchronizeNotificationAuthorization()
             }
-            var body: [String: CompatibleDataTypeForJSON?] = [:]
+            var body: JSONRequestBody = [:]
             // check for if values were changed, if there were then tell the server
             if UserConfiguration.isNotificationEnabled != beforeUpdateIsNotificationEnabled {
-                body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = UserConfiguration.isNotificationEnabled
+                body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = .bool(UserConfiguration.isNotificationEnabled)
             }
             if UserConfiguration.isLoudNotificationEnabled != beforeUpdateIsLoudNotificationEnabled {
-                body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] = UserConfiguration.isLoudNotificationEnabled
+                body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] = .bool(UserConfiguration.isLoudNotificationEnabled)
             }
 
             guard body.keys.isEmpty == false else {

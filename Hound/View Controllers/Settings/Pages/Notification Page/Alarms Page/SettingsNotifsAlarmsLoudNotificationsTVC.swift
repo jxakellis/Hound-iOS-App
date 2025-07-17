@@ -61,7 +61,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
         
         UserConfiguration.isLoudNotificationEnabled = isLoudNotificationEnabledSwitch.isOn
         
-        let body = [KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: UserConfiguration.isLoudNotificationEnabled]
+        let body: JSONRequestBody = [KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: .bool(UserConfiguration.isLoudNotificationEnabled)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {

@@ -313,7 +313,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Provide a dictionary literal of reminder trigger properties to instantiate reminder trigger. Optionally, provide a reminder trigger to override with new properties from fromBody.
-    convenience init?(fromBody: [String: Any?], triggerToOverride: Trigger?) {
+    convenience init?(fromBody: JSONResponseBody, triggerToOverride: Trigger?) {
         // Don't pull triggerId or triggerIsDeleted from triggerToOverride. A valid fromBody needs to provide this itself
         let triggerId = fromBody[KeyConstant.triggerId.rawValue] as? Int
         let triggerUUID = UUID.fromString(forUUIDString: fromBody[KeyConstant.triggerUUID.rawValue] as? String)
@@ -352,7 +352,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         // if the reminder trigger is the same, then we pull values from triggerToOverride
         // if the reminder trigger is updated, then we pull values from fromBody
         
-        let reactionsBody = fromBody[KeyConstant.triggerLogReactions.rawValue] as? [[String: Any?]]
+        let reactionsBody = fromBody[KeyConstant.triggerLogReactions.rawValue] as? [JSONResponseBody]
         let triggerLogReactions = reactionsBody?.compactMap { body -> TriggerLogReaction? in
             guard let id = body[KeyConstant.logActionTypeId.rawValue] as? Int else { return nil }
             let name = body[KeyConstant.logCustomActionName.rawValue] as? String
@@ -360,7 +360,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         } ?? triggerToOverride?.triggerLogReactions
         
         let triggerReminderResult: TriggerReminderResult? = {
-            guard let body = fromBody[KeyConstant.triggerReminderResult.rawValue] as? [String: Any?] else {
+            guard let body = fromBody[KeyConstant.triggerReminderResult.rawValue] as? JSONResponseBody else {
                 return nil
             }
             
@@ -462,8 +462,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             )
         }
     
-    func createBody(forDogUUID: UUID) -> [String: JSONValue] {
-        var body: [String: JSONValue] = [:]
+    func createBody(forDogUUID: UUID) -> JSONRequestBody {
+        var body: JSONRequestBody = [:]
         body[KeyConstant.dogUUID.rawValue] = .string(forDogUUID.uuidString)
         body[KeyConstant.triggerId.rawValue] = .int(triggerId)
         body[KeyConstant.triggerUUID.rawValue] = .string(triggerUUID.uuidString)

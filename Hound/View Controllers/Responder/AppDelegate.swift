@@ -92,7 +92,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
                 return
             }
 
-            let body: [String: CompatibleDataTypeForJSON?] = [KeyConstant.userNotificationToken.rawValue: token]
+            let body: JSONRequestBody = [KeyConstant.userNotificationToken.rawValue: .string(token)]
             UserRequest.update(
                 forErrorAlert: .automaticallyAlertForNone,
                 forBody: body

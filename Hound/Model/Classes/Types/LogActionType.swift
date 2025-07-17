@@ -138,7 +138,7 @@ final class LogActionType: NSObject, Comparable, NSCoding {
         super.init()
     }
     
-    convenience init?(fromBody: [String: Any?]) {
+    convenience init?(fromBody: JSONResponseBody) {
         guard
             let idVal = fromBody[KeyConstant.logActionTypeId.rawValue] as? Int,
             let internalVal = fromBody[KeyConstant.internalValue.rawValue] as? String,

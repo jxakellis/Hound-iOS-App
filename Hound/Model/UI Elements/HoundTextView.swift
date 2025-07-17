@@ -13,7 +13,7 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
     
     // MARK: - Properties
     

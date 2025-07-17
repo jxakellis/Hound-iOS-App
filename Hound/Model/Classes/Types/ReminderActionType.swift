@@ -115,7 +115,7 @@ final class ReminderActionType: NSObject, Comparable, NSCoding {
         super.init()
     }
     
-    convenience init?(fromBody: [String: Any?]) {
+    convenience init?(fromBody: JSONResponseBody) {
         guard
             let idVal = fromBody[KeyConstant.reminderActionTypeId.rawValue] as? Int,
             let internalVal = fromBody[KeyConstant.internalValue.rawValue] as? String,

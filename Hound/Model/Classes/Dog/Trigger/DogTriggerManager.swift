@@ -55,7 +55,7 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
     }
     
     convenience init(
-        fromTriggerBodies: [[String: Any?]],
+        fromTriggerBodies: [JSONResponseBody],
         dogTriggerManagerToOverride: DogTriggerManager?
     ) {
         self.init(forDogTriggers:

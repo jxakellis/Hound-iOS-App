@@ -12,7 +12,7 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
     
     // MARK: - Properties
     

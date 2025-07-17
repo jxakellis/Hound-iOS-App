@@ -234,7 +234,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
                 PresentationManager.beginFetchingInformationIndicator()
                 FamilyRequest.update(
                     forErrorAlert: .automaticallyAlertForNone,
-                    forBody: [KeyConstant.familyCode.rawValue: familyCode]
+                    forBody: [KeyConstant.familyCode.rawValue: .string(familyCode)]
                 ) { responseStatus, houndError in
                     PresentationManager.endFetchingInformationIndicator {
                         // Already in a family

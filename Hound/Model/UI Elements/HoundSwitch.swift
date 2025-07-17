@@ -12,7 +12,7 @@ final class HoundSwitch: UISwitch, HoundUIProtocol {
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
 
     // MARK: - Main
     

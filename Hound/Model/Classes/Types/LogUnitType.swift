@@ -107,7 +107,7 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
         super.init()
     }
     
-    convenience init?(fromBody: [String: Any?]) {
+    convenience init?(fromBody: JSONResponseBody) {
         guard
             let idVal = fromBody[KeyConstant.logUnitTypeId.rawValue] as? Int,
             let symbolVal = fromBody[KeyConstant.unitSymbol.rawValue] as? String,

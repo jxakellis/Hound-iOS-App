@@ -51,7 +51,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     
     /// initializes, sets dogs to []
     /// Provide an array of dictionary literal of dog properties to instantiate dogs. Provide a dogManager to have the dogs add themselves into, update themselves in, or delete themselves from.
-    convenience init?(fromDogBodies: [[String: Any?]], dogManagerToOverride: DogManager?) {
+    convenience init?(fromDogBodies: [JSONResponseBody], dogManagerToOverride: DogManager?) {
         self.init()
         self.addDogs(forDogs: dogManagerToOverride?.dogs ?? [])
         

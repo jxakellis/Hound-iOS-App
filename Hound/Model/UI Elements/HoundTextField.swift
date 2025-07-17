@@ -12,7 +12,7 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
 
     // MARK: - Properties
     

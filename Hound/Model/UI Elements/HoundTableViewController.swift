@@ -12,7 +12,7 @@ class HoundTableViewController: UITableViewController, HoundUIProtocol, HoundUIK
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
     
     // MARK: - HoundUIProtocol
     

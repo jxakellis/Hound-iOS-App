@@ -372,7 +372,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Provide a dictionary literal of reminder properties to instantiate reminder. Optionally, provide a reminder to override with new properties from fromBody.
-    convenience init?(fromBody: [String: Any?], reminderToOverride: Reminder?) {
+    convenience init?(fromBody: JSONResponseBody, reminderToOverride: Reminder?) {
         // Don't pull reminderId or reminderIsDeleted from reminderToOverride. A valid fromBody needs to provide this itself
         let reminderId: Int? = fromBody[KeyConstant.reminderId.rawValue] as? Int
         let reminderUUID: UUID? = UUID.fromString(forUUIDString: fromBody[KeyConstant.reminderUUID.rawValue] as? String)
@@ -746,68 +746,40 @@ extension Reminder {
     // MARK: - Request
     
     /// Returns an array literal of the reminders's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody(forDogUUID: UUID) -> [String: CompatibleDataTypeForJSON?] {
-        var body: [String: CompatibleDataTypeForJSON?] = [:]
-        body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
-        body[KeyConstant.reminderId.rawValue] = reminderId
-        body[KeyConstant.reminderUUID.rawValue] = reminderUUID.uuidString
-        body[KeyConstant.reminderActionTypeId.rawValue] = reminderActionTypeId
-        body[KeyConstant.reminderCustomActionName.rawValue] = reminderCustomActionName
-        body[KeyConstant.reminderType.rawValue] = reminderType.rawValue
-        body[KeyConstant.reminderExecutionBasis.rawValue] = reminderExecutionBasis.ISO8601FormatWithFractionalSeconds()
-        body[KeyConstant.reminderExecutionDate.rawValue] = reminderExecutionDate?.ISO8601FormatWithFractionalSeconds()
-        body[KeyConstant.reminderIsTriggerResult.rawValue] = reminderIsTriggerResult
-        body[KeyConstant.reminderIsEnabled.rawValue] = reminderIsEnabled
+    func createBody(forDogUUID: UUID) -> JSONRequestBody {
+        var body: JSONRequestBody = [:]
+        body[KeyConstant.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+        body[KeyConstant.reminderId.rawValue] = .int(reminderId)
+        body[KeyConstant.reminderUUID.rawValue] = .string(reminderUUID.uuidString)
+        body[KeyConstant.reminderActionTypeId.rawValue] = .int(reminderActionTypeId)
+        body[KeyConstant.reminderCustomActionName.rawValue] = .string(reminderCustomActionName)
+        body[KeyConstant.reminderType.rawValue] = .string(reminderType.rawValue)
+        body[KeyConstant.reminderExecutionBasis.rawValue] = .string(reminderExecutionBasis.ISO8601FormatWithFractionalSeconds())
+        body[KeyConstant.reminderExecutionDate.rawValue] = .string(reminderExecutionDate?.ISO8601FormatWithFractionalSeconds())
+        body[KeyConstant.reminderIsTriggerResult.rawValue] = .bool(reminderIsTriggerResult)
+        body[KeyConstant.reminderIsEnabled.rawValue] = .bool(reminderIsEnabled)
         
-        // snooze
-        body[KeyConstant.snoozeExecutionInterval.rawValue] = snoozeComponents.executionInterval
+        body[KeyConstant.snoozeExecutionInterval.rawValue] = .double(snoozeComponents.executionInterval)
         
-        // countdown
-        body[KeyConstant.countdownExecutionInterval.rawValue] = countdownComponents.executionInterval
+        body[KeyConstant.countdownExecutionInterval.rawValue] = .double(countdownComponents.executionInterval)
         
-        // weekly
-        body[KeyConstant.weeklyUTCHour.rawValue] = weeklyComponents.UTCHour
-        body[KeyConstant.weeklyUTCMinute.rawValue] = weeklyComponents.UTCMinute
-        body[KeyConstant.weeklySkippedDate.rawValue] = weeklyComponents.skippedDate?.ISO8601FormatWithFractionalSeconds()
+        body[KeyConstant.weeklyUTCHour.rawValue] = .int(weeklyComponents.UTCHour)
+        body[KeyConstant.weeklyUTCMinute.rawValue] = .int(weeklyComponents.UTCMinute)
+        body[KeyConstant.weeklySkippedDate.rawValue] = .string(weeklyComponents.skippedDate?.ISO8601FormatWithFractionalSeconds())
+        body[KeyConstant.weeklySunday.rawValue] = .bool(weeklyComponents.weekdays.contains(1))
+        body[KeyConstant.weeklyMonday.rawValue] = .bool(weeklyComponents.weekdays.contains(2))
+        body[KeyConstant.weeklyTuesday.rawValue] = .bool(weeklyComponents.weekdays.contains(3))
+        body[KeyConstant.weeklyWednesday.rawValue] = .bool(weeklyComponents.weekdays.contains(4))
+        body[KeyConstant.weeklyThursday.rawValue] = .bool(weeklyComponents.weekdays.contains(5))
+        body[KeyConstant.weeklyFriday.rawValue] = .bool(weeklyComponents.weekdays.contains(6))
+        body[KeyConstant.weeklySaturday.rawValue] = .bool(weeklyComponents.weekdays.contains(7))
         
-        body[KeyConstant.weeklySunday.rawValue] = false
-        body[KeyConstant.weeklyMonday.rawValue] = false
-        body[KeyConstant.weeklyTuesday.rawValue] = false
-        body[KeyConstant.weeklyWednesday.rawValue] = false
-        body[KeyConstant.weeklyThursday.rawValue] = false
-        body[KeyConstant.weeklyFriday.rawValue] = false
-        body[KeyConstant.weeklySaturday.rawValue] = false
+        body[KeyConstant.monthlyUTCDay.rawValue] = .int(monthlyComponents.UTCDay)
+        body[KeyConstant.monthlyUTCHour.rawValue] = .int(monthlyComponents.UTCHour)
+        body[KeyConstant.monthlyUTCMinute.rawValue] = .int(monthlyComponents.UTCMinute)
+        body[KeyConstant.monthlySkippedDate.rawValue] = .string(monthlyComponents.skippedDate?.ISO8601FormatWithFractionalSeconds())
         
-        for weekday in weeklyComponents.weekdays {
-            switch weekday {
-            case 1:
-                body[KeyConstant.weeklySunday.rawValue] = true
-            case 2:
-                body[KeyConstant.weeklyMonday.rawValue] = true
-            case 3:
-                body[KeyConstant.weeklyTuesday.rawValue] = true
-            case 4:
-                body[KeyConstant.weeklyWednesday.rawValue] = true
-            case 5:
-                body[KeyConstant.weeklyThursday.rawValue] = true
-            case 6:
-                body[KeyConstant.weeklyFriday.rawValue] = true
-            case 7:
-                body[KeyConstant.weeklySaturday.rawValue] = true
-            default:
-                continue
-            }
-        }
-        
-        // monthly
-        body[KeyConstant.monthlyUTCDay.rawValue] = monthlyComponents.UTCDay
-        body[KeyConstant.monthlyUTCHour.rawValue] = monthlyComponents.UTCHour
-        body[KeyConstant.monthlyUTCMinute.rawValue] = monthlyComponents.UTCMinute
-        body[KeyConstant.monthlySkippedDate.rawValue] = monthlyComponents.skippedDate?.ISO8601FormatWithFractionalSeconds()
-        
-        // one time
-        body[KeyConstant.oneTimeDate.rawValue] = oneTimeComponents.oneTimeDate.ISO8601FormatWithFractionalSeconds()
-        
+        body[KeyConstant.oneTimeDate.rawValue] = .string(oneTimeComponents.oneTimeDate.ISO8601FormatWithFractionalSeconds())
         return body
     }
 }

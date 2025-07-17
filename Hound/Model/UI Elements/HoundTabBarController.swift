@@ -12,7 +12,7 @@ class HoundTabBarController: UITabBarController, HoundUIProtocol, HoundUIKitProt
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
     
     // MARK: - HoundUIProtocol
     

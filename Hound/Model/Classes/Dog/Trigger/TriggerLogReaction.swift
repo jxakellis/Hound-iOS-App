@@ -53,7 +53,7 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
         super.init()
     }
     
-    convenience init(fromBody: [String: Any?], toOverride: TriggerLogReaction?) {
+    convenience init(fromBody: JSONResponseBody, toOverride: TriggerLogReaction?) {
         let logActionTypeId = fromBody[KeyConstant.logActionTypeId.rawValue] as? Int ?? toOverride?.logActionTypeId
         let logCustomActionName = fromBody[KeyConstant.logCustomActionName.rawValue] as? String ?? toOverride?.logCustomActionName
         
@@ -62,8 +62,8 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
     
     // MARK: - Functions
     
-    func createBody() -> [String: JSONValue] {
-        var body: [String: JSONValue] = [:]
+    func createBody() -> JSONRequestBody {
+        var body: JSONRequestBody = [:]
         body[KeyConstant.logActionTypeId.rawValue] = .int(logActionTypeId)
         body[KeyConstant.logCustomActionName.rawValue] = .string(logCustomActionName)
         return body

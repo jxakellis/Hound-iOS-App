@@ -300,7 +300,8 @@ final class LogsTableVC: HoundTableViewController {
             self.tableView.beginUpdates()
             if previousLogs[indexPath.section].count == 1 {
                 self.tableView.deleteSections([indexPath.section], with: .automatic)
-            } else {
+            }
+            else {
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
             }
             self.tableView.endUpdates()

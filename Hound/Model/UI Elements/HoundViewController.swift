@@ -12,7 +12,7 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
     
     // MARK: - HoundUIProtocol
     
@@ -113,7 +113,8 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
         guard sender.state == .recognized else { return }
         if let navController = navigationController {
             navController.popViewController(animated: true)
-        } else {
+        }
+        else {
             dismiss(animated: true)
         }
     }

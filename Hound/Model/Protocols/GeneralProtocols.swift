@@ -10,7 +10,7 @@ import Foundation
 
 protocol HoundUIProtocol {
     /// Open ended field to be used for extra information if needed in certain use cases
-    var properties: [String: CompatibleDataTypeForJSON?] { get set }
+    var properties: JSONRequestBody { get set }
 }
 
 protocol HoundUIKitProtocol {

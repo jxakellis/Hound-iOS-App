@@ -40,7 +40,7 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
 
         UserConfiguration.isReminderNotificationEnabled = isReminderNotificationEnabledSwitch.isOn
 
-        let body = [KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue: UserConfiguration.isReminderNotificationEnabled]
+        let body: JSONRequestBody = [KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue: .bool(UserConfiguration.isReminderNotificationEnabled)]
 
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {

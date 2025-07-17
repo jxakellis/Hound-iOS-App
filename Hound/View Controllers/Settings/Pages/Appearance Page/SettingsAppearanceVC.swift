@@ -108,7 +108,8 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         
         UserConfiguration.interfaceStyle = selectedOption.userInterfaceStyle
         
-        let body = [KeyConstant.userConfigurationInterfaceStyle.rawValue: selectedOption.userInterfaceStyle.rawValue]
+        let body: JSONRequestBody = [KeyConstant.userConfigurationInterfaceStyle.rawValue: .int(selectedOption.userInterfaceStyle.rawValue)]
+        
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
@@ -127,7 +128,8 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         
         UserConfiguration.measurementSystem = MeasurementSystem(rawValue: sender.selectedSegmentIndex) ?? UserConfiguration.measurementSystem
         
-        let body = [KeyConstant.userConfigurationMeasurementSystem.rawValue: sender.selectedSegmentIndex]
+        let body: JSONRequestBody = [KeyConstant.userConfigurationMeasurementSystem.rawValue: .int(UserConfiguration.measurementSystem.rawValue)]
+        
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error

@@ -35,7 +35,7 @@ enum FamilyRequest {
                 if responseStatus == .noResponse {
                     OfflineModeManager.shared.didGetNoResponse(forType: .familyRequestGet)
                 }
-                else if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                else if let result = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
                     FamilyInformation.setup(fromBody: result)
                 }
                 
@@ -78,7 +78,7 @@ enum FamilyRequest {
     @discardableResult static func update(
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forBody: [String: CompatibleDataTypeForJSON?],
+        forBody: JSONRequestBody,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         let attemptingToJoinFamily = forBody[KeyConstant.familyCode.rawValue] != nil
@@ -112,7 +112,7 @@ enum FamilyRequest {
     @discardableResult static func delete(
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forBody: [String: CompatibleDataTypeForJSON?] = [:],
+        forBody: JSONRequestBody = [:],
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         RequestUtils.genericDeleteRequest(

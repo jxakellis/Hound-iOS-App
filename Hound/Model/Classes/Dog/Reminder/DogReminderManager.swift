@@ -50,7 +50,7 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     }
     
     /// Provide an array of dictionary literal of reminder properties to instantiate dogReminders. Provide a reminderManager to have the dogReminders add themselves into, update themselves in, or delete themselves from.
-    convenience init(fromReminderBodies: [[String: Any?]], dogReminderManagerToOverride: DogReminderManager?) {
+    convenience init(fromReminderBodies: [JSONResponseBody], dogReminderManagerToOverride: DogReminderManager?) {
         self.init(forReminders: dogReminderManagerToOverride?.dogReminders ?? [])
         
         for fromBody in fromReminderBodies {

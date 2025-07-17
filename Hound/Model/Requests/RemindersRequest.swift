@@ -13,12 +13,12 @@ enum RemindersRequest {
     static var baseURL: URL { DogsRequest.baseURL.appendingPathComponent("/reminders") }
     
     /// Returns an array of reminder bodies under the key "reminders". E.g. { reminders : [{reminder1}, {reminder2}] }
-    private static func createRemindersBody(forDogUUID: UUID, forReminders: [Reminder]) -> [String: [[String: CompatibleDataTypeForJSON?]]] {
-        var reminderBodies: [[String: CompatibleDataTypeForJSON?]] = []
-        for forReminder in forReminders {
-            reminderBodies.append(forReminder.createBody(forDogUUID: forDogUUID))
-        }
-        let body: [String: [[String: CompatibleDataTypeForJSON?]]] = [KeyConstant.dogReminders.rawValue: reminderBodies]
+    private static func createBody(forDogUUID: UUID, forReminders: [Reminder]) -> JSONRequestBody {
+        let reminderBodies = forReminders.map { $0.createBody(forDogUUID: forDogUUID) }
+        
+        let body: JSONRequestBody = [KeyConstant.dogReminders.rawValue: .array(
+            reminderBodies.map { .object($0.compactMapValues { $0 }) }
+        )]
         return body
     }
     
@@ -39,7 +39,7 @@ extension RemindersRequest {
         forReminder: Reminder,
         completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body: [String: CompatibleDataTypeForJSON?] = forReminder.createBody(forDogUUID: forDogUUID)
+        let body: JSONRequestBody = forReminder.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
             forErrorAlert: forErrorAlert,
@@ -53,11 +53,11 @@ extension RemindersRequest {
                 }
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
-                let remindersBody: [[String: Any?]]? = {
-                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
+                let remindersBody: [JSONResponseBody]? = {
+                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [JSONResponseBody] {
                         return remindersBody
                     }
-                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
                         return [reminderBody]
                     }
                     else {
@@ -97,7 +97,7 @@ extension RemindersRequest {
             return nil
         }
         
-        let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
+        let body = createBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericPostRequest(
             forErrorAlert: forErrorAlert,
@@ -118,11 +118,11 @@ extension RemindersRequest {
                 }
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
-                let remindersBody: [[String: Any?]]? = {
-                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
+                let remindersBody: [JSONResponseBody]? = {
+                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [JSONResponseBody] {
                         return remindersBody
                     }
-                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
                         return [reminderBody]
                     }
                     else {
@@ -168,7 +168,7 @@ extension RemindersRequest {
             return nil
         }
         
-        let body = createRemindersBody(forDogUUID: forDogUUID, forReminders: forReminders)
+        let body = createBody(forDogUUID: forDogUUID, forReminders: forReminders)
         
         return RequestUtils.genericPutRequest(
             forErrorAlert: forErrorAlert,
@@ -212,19 +212,17 @@ extension RemindersRequest {
             return nil
         }
         
-        let body: [String: [[String: CompatibleDataTypeForJSON?]]] = {
-            var reminderBodies: [[String: CompatibleDataTypeForJSON?]] = []
+        let body: JSONRequestBody = {
+            var reminderBodies: [JSONRequestBody] = []
             
             for forReminderUUID in forReminderUUIDs {
-                var reminderBody: [String: CompatibleDataTypeForJSON?] = [:]
-                reminderBody[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
-                reminderBody[KeyConstant.reminderUUID.rawValue] = forReminderUUID.uuidString
+                var reminderBody: JSONRequestBody = [:]
+                reminderBody[KeyConstant.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+                reminderBody[KeyConstant.reminderUUID.rawValue] = .string(forReminderUUID.uuidString)
                 reminderBodies.append(reminderBody)
             }
         
-            return [
-                KeyConstant.dogReminders.rawValue: reminderBodies
-            ]
+            return [KeyConstant.dogReminders.rawValue: .array(reminderBodies.map { .object($0.compactMapValues { $0 }) } )]
         }()
         
         return RequestUtils.genericDeleteRequest(

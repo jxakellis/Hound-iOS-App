@@ -31,7 +31,7 @@ enum GlobalTypesRequest {
                     return
                 }
                 
-                if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                if let result = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
                     GlobalTypes.shared = GlobalTypes(fromBody: result)
                 }
                 

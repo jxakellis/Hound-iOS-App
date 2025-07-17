@@ -24,11 +24,10 @@ enum SurveyFeedbackRequest {
         userCancellationFeedback: String,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body: [String: CompatibleDataTypeForJSON?] = [
-            KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.cancelSubscription.rawValue,
-            KeyConstant.surveyFeedbackUserCancellationReason.rawValue: userCancellationReason?.internalValue,
-            KeyConstant.surveyFeedbackUserCancellationFeedback.rawValue: userCancellationFeedback
-        ]
+        var body: JSONRequestBody = [:]
+        body[KeyConstant.surveyFeedbackType.rawValue] = .string(SurveyFeedbackType.cancelSubscription.rawValue)
+        body[KeyConstant.surveyFeedbackUserCancellationReason.rawValue] = .string(userCancellationReason?.internalValue)
+        body[KeyConstant.surveyFeedbackUserCancellationFeedback.rawValue] = .string(userCancellationFeedback)
         
         return create(forErrorAlert: forErrorAlert, forSourceFunction: forSourceFunction, forBody: body, completionHandler: completionHandler)
     }
@@ -45,10 +44,10 @@ enum SurveyFeedbackRequest {
         appExperienceFeedback: String,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body: [String: CompatibleDataTypeForJSON?] = [
-            KeyConstant.surveyFeedbackType.rawValue: SurveyFeedbackType.appExperience.rawValue,
-            KeyConstant.surveyFeedbackAppExperienceNumberOfStars.rawValue: numberOfStars,
-            KeyConstant.surveyFeedbackAppExperienceFeedback.rawValue: appExperienceFeedback
+        let body: JSONRequestBody = [
+            KeyConstant.surveyFeedbackType.rawValue: .string(SurveyFeedbackType.appExperience.rawValue),
+            KeyConstant.surveyFeedbackAppExperienceNumberOfStars.rawValue: .int(numberOfStars),
+            KeyConstant.surveyFeedbackAppExperienceFeedback.rawValue: .string(appExperienceFeedback)
         ]
         
         return create(forErrorAlert: forErrorAlert, forSourceFunction: forSourceFunction, forBody: body) { responseStatus, houndError in
@@ -74,18 +73,19 @@ enum SurveyFeedbackRequest {
     @discardableResult private static func create(
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forBody: [String: CompatibleDataTypeForJSON?],
+        forBody: JSONRequestBody,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
        
         var forBodyWithDeviceMetrics = forBody
-        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricModel.rawValue] = UIDevice.current.model
-        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricSystemVersion.rawValue] = UIDevice.current.systemVersion
-        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricAppVersion.rawValue] = UIApplication.appVersion
-        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricLocale.rawValue] = Locale.current.identifier
+        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricModel.rawValue] = .string(UIDevice.current.model)
+        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricSystemVersion.rawValue] = .string(UIDevice.current.systemVersion)
+        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricAppVersion.rawValue] = .string(UIApplication.appVersion)
+        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricLocale.rawValue] = .string(Locale.current.identifier)
         
         // All of the previous body should be encapsulated inside a surveyFeedback body
-        let body: [String: [String: CompatibleDataTypeForJSON?]] = [ KeyConstant.surveyFeedback.rawValue: forBodyWithDeviceMetrics]
+        var body: JSONRequestBody = [:]
+        body[KeyConstant.surveyFeedback.rawValue] = .object(forBodyWithDeviceMetrics)
         
         return RequestUtils.genericPostRequest(
             forErrorAlert: forErrorAlert,

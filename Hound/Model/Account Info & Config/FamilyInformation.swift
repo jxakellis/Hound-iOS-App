@@ -100,7 +100,7 @@ final class FamilyInformation: UserDefaultPersistable {
     // MARK: - Main
     
     /// Sets the FamilyInformation values equal to all the values found in the fromBody. The key for the each fromBody value must match the name of the FamilyInformation property exactly in order to be used. The value must also be able to be converted into the proper data type.
-    static func setup(fromBody: [String: Any?]) {
+    static func setup(fromBody: JSONResponseBody) {
         if let familyHeadUserId = fromBody[KeyConstant.familyHeadUserId.rawValue] as? String {
             self.familyHeadUserId = familyHeadUserId
         }
@@ -110,7 +110,7 @@ final class FamilyInformation: UserDefaultPersistable {
         if let familyCode = fromBody[KeyConstant.familyCode.rawValue] as? String {
             self.familyCode = familyCode
         }
-        if let familyMembersBody = fromBody[KeyConstant.familyMembers.rawValue] as? [[String: Any?]] {
+        if let familyMembersBody = fromBody[KeyConstant.familyMembers.rawValue] as? [JSONResponseBody] {
             familyMembers.removeAll()
             // get individual bodies for members
             for familyMemberBody in familyMembersBody {
@@ -120,7 +120,7 @@ final class FamilyInformation: UserDefaultPersistable {
 
             familyMembers.sort(by: { $0 <= $1 })
         }
-        if let previousFamilyMembersBody = fromBody[KeyConstant.previousFamilyMembers.rawValue] as? [[String: Any?]] {
+        if let previousFamilyMembersBody = fromBody[KeyConstant.previousFamilyMembers.rawValue] as? [JSONResponseBody] {
             previousFamilyMembers.removeAll()
 
             // get individual bodies for previous family members
@@ -132,7 +132,7 @@ final class FamilyInformation: UserDefaultPersistable {
             previousFamilyMembers.sort(by: { $0 <= $1 })
 
         }
-        if let familyActiveSubscriptionBody = fromBody[KeyConstant.familyActiveSubscription.rawValue] as? [String: Any?] {
+        if let familyActiveSubscriptionBody = fromBody[KeyConstant.familyActiveSubscription.rawValue] as? JSONResponseBody {
             let familyActiveSubscription = Subscription(fromBody: familyActiveSubscriptionBody)
             addFamilySubscription(forSubscription: familyActiveSubscription)
         }

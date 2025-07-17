@@ -45,16 +45,11 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     
     static let reuseIdentifier = "DogsAddDogTriggerTVC"
     
-    private var triggerUUID: UUID?
-    
     // MARK: - Setup
     
     func setup(forTrigger: Trigger) {
-        triggerUUID = forTrigger.triggerUUID
-        
         triggerMainLabel.text = "Main"
         triggerSubLabel.text = "Sub"
-        
     }
     
     // MARK: - Setup Elements

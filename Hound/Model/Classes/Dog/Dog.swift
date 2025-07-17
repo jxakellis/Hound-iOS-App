@@ -154,7 +154,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from fromBody.
-    convenience init?(fromBody: [String: Any?], dogToOverride: Dog?) {
+    convenience init?(fromBody: JSONResponseBody, dogToOverride: Dog?) {
         // Don't pull dogId or dogIsDeleted from dogToOverride. A valid fromBody needs to provide this itself
         let dogId: Int? = fromBody[KeyConstant.dogId.rawValue] as? Int
         let dogUUID: UUID? = UUID.fromString(forUUIDString: fromBody[KeyConstant.dogUUID.rawValue] as? String)
@@ -205,7 +205,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         let dogName: String? = fromBody[KeyConstant.dogName.rawValue] as? String ?? dogToOverride?.dogName
         
         let dogReminders: DogReminderManager? = {
-            guard let reminderBodies = fromBody[KeyConstant.dogReminders.rawValue] as? [[String: Any?]] else {
+            guard let reminderBodies = fromBody[KeyConstant.dogReminders.rawValue] as? [JSONResponseBody] else {
                 return nil
             }
             
@@ -213,7 +213,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         }()
         
         let dogLogs: DogLogManager? = {
-            guard let logBodies = fromBody[KeyConstant.dogLogs.rawValue] as? [[String: Any?]] else {
+            guard let logBodies = fromBody[KeyConstant.dogLogs.rawValue] as? [JSONResponseBody] else {
                 return nil
             }
             
@@ -222,7 +222,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         }()
         
         let dogTriggers: DogTriggerManager? = {
-            guard let triggerBodies = fromBody[KeyConstant.dogTriggers.rawValue] as? [[String: Any?]] else {
+            guard let triggerBodies = fromBody[KeyConstant.dogTriggers.rawValue] as? [JSONResponseBody] else {
                 return nil
             }
             
@@ -293,11 +293,11 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Returns an array literal of the dog's properties (does not include nested properties, e.g. logs or reminders). This is suitable to be used as the JSON body for a HTTP request
-    func createBody() -> [String: CompatibleDataTypeForJSON?] {
-        var body: [String: CompatibleDataTypeForJSON?] = [:]
-        body[KeyConstant.dogId.rawValue] = dogId
-        body[KeyConstant.dogUUID.rawValue] = dogUUID.uuidString
-        body[KeyConstant.dogName.rawValue] = dogName
+    func createBody() -> JSONRequestBody {
+        var body: JSONRequestBody = [:]
+        body[KeyConstant.dogId.rawValue] = .int(dogId)
+        body[KeyConstant.dogUUID.rawValue] = .string(dogUUID.uuidString)
+        body[KeyConstant.dogName.rawValue] = .string(dogName)
         return body
     }
 }

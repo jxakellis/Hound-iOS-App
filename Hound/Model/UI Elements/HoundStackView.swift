@@ -12,7 +12,7 @@ class HoundStackView: UIStackView, HoundUIProtocol {
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
     
     // MARK: - Main
     

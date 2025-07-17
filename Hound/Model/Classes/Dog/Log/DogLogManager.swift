@@ -49,7 +49,7 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     }
     
     /// Provide an array of dictionary literal of log properties to instantiate dogLogs. Provide a logManager to have the dogLogs add themselves into, update themselves in, or delete themselves from.
-    convenience init(fromLogBodies: [[String: Any?]], dogLogManagerToOverride: DogLogManager?, forParentDog: Dog?) {
+    convenience init(fromLogBodies: [JSONResponseBody], dogLogManagerToOverride: DogLogManager?, forParentDog: Dog?) {
         self.init(forLogs: dogLogManagerToOverride?.dogLogs ?? [], forParentDog: forParentDog)
         
         for fromBody in fromLogBodies {

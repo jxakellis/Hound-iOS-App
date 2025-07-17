@@ -61,7 +61,7 @@ final class UserConfiguration: UserDefaultPersistable {
     // MARK: - Main
     
     /// If OfflineModeManager.shared.shouldUpdateUser is false, sets the UserConfiguration values equal to all the values found in the body.
-    static func setup(fromBody body: [String: Any?]) {
+    static func setup(fromBody body: JSONResponseBody) {
         // This is a unique edge case. If the user updated their UserConfiguration (while offline), then terminates Hound, then re-opens Hound, the first thing the app will do is a get request to the Hound server. This would overwrite the user's local changes. Therefore, don't overwrite these changes.
         guard OfflineModeManager.shared.shouldUpdateUser == false else { return }
         
@@ -108,7 +108,7 @@ final class UserConfiguration: UserDefaultPersistable {
             self.silentModeEndUTCMinute = silentModeEndUTCMinute
         }
     }
-
+    
     // MARK: - In-App Appearance Related
     
     private static var storedInterfaceStyle: UIUserInterfaceStyle = .unspecified
@@ -139,127 +139,127 @@ final class UserConfiguration: UserDefaultPersistable {
             return Locale.current.usesMetricSystem ? .metric : .imperial
         }
     }()
-
+    
     // MARK: - Alarm Timing Related
-
+    
     static var snoozeLength: Double = Double(60 * 5)
-
+    
     // MARK: - iOS Notification Related
-
+    
     /// This should be stored on the server as it is important to only send notifications to devices that can use them. This will always be overriden by the user upon reinstall if its state is different in that new install.
     static var isNotificationEnabled: Bool = false
-
+    
     /// Determines if the app should send the user loud notifications. Loud notification bypass most iPhone settings to play at max volume (Do Not Disturb, ringer off, volume off...)
     static var isLoudNotificationEnabled: Bool = false
-
+    
     /// Determines if the server should send the user notifications when a log is created (or other similar actions)
     static var isLogNotificationEnabled: Bool = true
-
+    
     /// Determines if the server should send the user notifications when a reminder's alarm triggers (or other similar actions)
     static var isReminderNotificationEnabled: Bool = true
-
+    
     /// Sound a notification will play
     static var notificationSound: NotificationSound = NotificationSound.radar
-
+    
     static var isSilentModeEnabled: Bool = false
-
+    
     /// Hour of the day, in UTC, that silent mode will start. During silent mode, no notifications will be sent to the user
     static var silentModeStartUTCHour: Int = {
         // We want hour 22 of the day in the users local timezone (10:__ PM)
         let defaultUTCHour = 22
         let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
-
+        
         // UTCHour + hoursFromUTC = localHour
         // UTCHour = localHour - hoursFromUTC
-
+        
         var localHour = defaultUTCHour - hoursFromUTC
         // localHour could be negative, so roll over into positive
         localHour += 24
         // Make sure localHour [0, 23]
         localHour = localHour % 24
-
+        
         return localHour
     }()
-
+    
     /// Hour of the day, in UTC, that silent mode will end. During silent mode, no notifications will be sent to the user
     static var silentModeEndUTCHour: Int = {
         // We want hour 5 of the day in the users local timezone (5:__ AM)
         let defaultUTCHour = 5
         let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
-
+        
         // UTCHour + hoursFromUTC = localHour
         // UTCHour = localHour - hoursFromUTC
-
+        
         var localHour = defaultUTCHour - hoursFromUTC
         // localHour could be negative, so roll over into positive
         localHour += 24
         // Make sure localHour [0, 23]
         localHour = localHour % 24
-
+        
         return localHour
     }()
-
+    
     static var silentModeStartUTCMinute: Int = {
         // We want minute 0 of the day in the users local timezone (_:?? AM)
         let defaultUTCMinute = 0
         let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
-
+        
         // UTCMinute + minuteFromUTC = localMinute
         // UTCMinute = localMinute - minuteFromUTC
-
+        
         var localMinute = defaultUTCMinute - minutesFromUTC
         // localMinute could be negative, so roll over into positive
         localMinute += 60
         // Make sure localMinute [0, 59]
         localMinute = localMinute % 60
-
+        
         return localMinute
     }()
-
+    
     static var silentModeEndUTCMinute: Int = {
         // We want minute 0 of the day in the users local timezone (_:?? AM)
         let defaultUTCMinute = 0
         let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
-
+        
         // UTCMinute + minuteFromUTC = localMinute
         // UTCMinute = localMinute - minuteFromUTC
-
+        
         var localMinute = defaultUTCMinute - minutesFromUTC
         // localMinute could be negative, so roll over into positive
         localMinute += 60
         // Make sure localMinute [0, 59]
         localMinute = localMinute % 60
-
+        
         return localMinute
     }()
 }
 
 extension UserConfiguration {
     // MARK: - Request
-
+    
     /// Returns an array literal of the user configurations's properties. This is suitable to be used as the JSON body for a HTTP request
-    static func createBody(addingOntoBody: [String: CompatibleDataTypeForJSON?]?) -> [String: CompatibleDataTypeForJSON?] {
-        var body: [String: CompatibleDataTypeForJSON?] = addingOntoBody ?? [:]
-
-        body[KeyConstant.userConfigurationInterfaceStyle.rawValue] = UserConfiguration.interfaceStyle.rawValue
-        body[KeyConstant.userConfigurationMeasurementSystem.rawValue] = UserConfiguration.measurementSystem.rawValue
-
-        body[KeyConstant.userConfigurationSnoozeLength.rawValue] = UserConfiguration.snoozeLength
-
-        body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = UserConfiguration.isNotificationEnabled
-        body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] = UserConfiguration.isLoudNotificationEnabled
-        body[KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue] = UserConfiguration.isLogNotificationEnabled
-        body[KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue] = UserConfiguration.isReminderNotificationEnabled
-        body[KeyConstant.userConfigurationNotificationSound.rawValue] = UserConfiguration.notificationSound.rawValue
-
-        body[KeyConstant.userConfigurationIsSilentModeEnabled.rawValue] = UserConfiguration.isSilentModeEnabled
-        body[KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue] = UserConfiguration.silentModeStartUTCHour
-        body[KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue] = UserConfiguration.silentModeEndUTCHour
-        body[KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue] = UserConfiguration.silentModeStartUTCMinute
-        body[KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue] = UserConfiguration.silentModeEndUTCMinute
+    static func createBody(addingOntoBody: JSONRequestBody?) -> JSONRequestBody {
+        var body: JSONRequestBody = addingOntoBody ?? [:]
+        
+        body[KeyConstant.userConfigurationInterfaceStyle.rawValue] = .int(UserConfiguration.interfaceStyle.rawValue)
+        body[KeyConstant.userConfigurationMeasurementSystem.rawValue] = .int(UserConfiguration.measurementSystem.rawValue)
+        
+        body[KeyConstant.userConfigurationSnoozeLength.rawValue] = .double(UserConfiguration.snoozeLength)
+        
+        body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = .bool(UserConfiguration.isNotificationEnabled)
+        body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] = .bool(UserConfiguration.isLoudNotificationEnabled)
+        body[KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue] = .bool(UserConfiguration.isLogNotificationEnabled)
+        body[KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue] = .bool(UserConfiguration.isReminderNotificationEnabled)
+        body[KeyConstant.userConfigurationNotificationSound.rawValue] = .string(UserConfiguration.notificationSound.rawValue)
+        
+        body[KeyConstant.userConfigurationIsSilentModeEnabled.rawValue] = .bool(UserConfiguration.isSilentModeEnabled)
+        body[KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue] = .int(UserConfiguration.silentModeStartUTCHour)
+        body[KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue] = .int(UserConfiguration.silentModeEndUTCHour)
+        body[KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue] = .int(UserConfiguration.silentModeStartUTCMinute)
+        body[KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue] = .int(UserConfiguration.silentModeEndUTCMinute)
         
         // userNotificationToken is synced through UserRequest.update. Therefore, include it in the UserConfiguration body with the rest of the information that is updated. This is especially important for offline mode, which, if it detects a noResponse in UserRequest.update, re-syncs all of the UserConfiguration.
-        body[KeyConstant.userNotificationToken.rawValue] = UserInformation.userNotificationToken
+        body[KeyConstant.userNotificationToken.rawValue] = .string(UserInformation.userNotificationToken)
         return body
     }
 }

@@ -12,7 +12,7 @@ class HoundScrollView: UIScrollView, HoundUIProtocol, HoundUIKitProtocol {
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
     
     // MARK: - HoundUIProtocol
     

@@ -274,7 +274,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         
         let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)", style: .destructive) { _ in
             // the user wants to kick the family member so query the server
-            let body = [KeyConstant.familyKickUserId.rawValue: familyMember.userId]
+            let body: JSONRequestBody = [KeyConstant.familyKickUserId.rawValue: .string(familyMember.userId)]
             PresentationManager.beginFetchingInformationIndicator()
             FamilyRequest.delete(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatusFamilyDelete, _ in
                 PresentationManager.endFetchingInformationIndicator {

@@ -12,7 +12,7 @@ class HoundImageView: UIImageView, HoundUIProtocol, HoundDynamicCorners {
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
     
     // MARK: - Properties
     

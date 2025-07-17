@@ -54,7 +54,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
                     self.synchronizeUseNotificationsDescriptionLabel()
                     self.delegate?.didToggleIsNotificationEnabled()
                     
-                    let body = [KeyConstant.userConfigurationIsNotificationEnabled.rawValue: UserConfiguration.isNotificationEnabled]
+                    let body: JSONRequestBody = [KeyConstant.userConfigurationIsNotificationEnabled.rawValue: .bool(UserConfiguration.isNotificationEnabled)]
                     
                     UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
                         guard responseStatus != .failureResponse else {

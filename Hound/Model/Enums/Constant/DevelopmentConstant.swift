@@ -22,7 +22,7 @@ enum DevelopmentConstant {
         HoundLogger.general.debug("DEBUG configuration for server")
         // Return true to connect to AWS EC2 instance
         // Return false to connect to local
-        return true
+        return false
 #else
         HoundLogger.general.debug("RELEASE configuration for server")
         // MARK: ALWAYS RETURN TRUE, WANT PROD SERVER FOR RELEASE

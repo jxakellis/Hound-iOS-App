@@ -133,13 +133,13 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
         super.init()
     }
     
-    convenience init?(fromBody: [String: Any?]) {
+    convenience init?(fromBody: JSONResponseBody) {
         guard
-            let logActionTypeArr = fromBody[KeyConstant.logActionType.rawValue] as? [[String: Any?]],
-            let reminderActionTypeArr = fromBody[KeyConstant.reminderActionType.rawValue] as? [[String: Any?]],
-            let mappingLogActionTypeReminderActionTypeArr = fromBody[KeyConstant.mappingLogActionTypeReminderActionType.rawValue] as? [[String: Any?]],
-            let logUnitTypesArr = fromBody[KeyConstant.logUnitType.rawValue] as? [[String: Any?]],
-            let mappingLogActionTypeLogUnitTypeArr = fromBody[KeyConstant.mappingLogActionTypeLogUnitType.rawValue] as? [[String: Any?]]
+            let logActionTypeArr = fromBody[KeyConstant.logActionType.rawValue] as? [JSONResponseBody],
+            let reminderActionTypeArr = fromBody[KeyConstant.reminderActionType.rawValue] as? [JSONResponseBody],
+            let mappingLogActionTypeReminderActionTypeArr = fromBody[KeyConstant.mappingLogActionTypeReminderActionType.rawValue] as? [JSONResponseBody],
+            let logUnitTypesArr = fromBody[KeyConstant.logUnitType.rawValue] as? [JSONResponseBody],
+            let mappingLogActionTypeLogUnitTypeArr = fromBody[KeyConstant.mappingLogActionTypeLogUnitType.rawValue] as? [JSONResponseBody]
         else {
             HoundLogger.general.error("GlobalTypes.init:\t Unable to decode types for GlobalTypes. fromBody is as follows \(fromBody)")
             return nil

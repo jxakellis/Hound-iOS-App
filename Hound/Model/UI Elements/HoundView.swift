@@ -12,7 +12,7 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol, HoundDynamicBorder
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
     
     // MARK: - HoundUIProtocol
     

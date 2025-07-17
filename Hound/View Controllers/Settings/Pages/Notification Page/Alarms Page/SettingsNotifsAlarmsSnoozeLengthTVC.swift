@@ -40,7 +40,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: HoundTableViewCell {
 
         UserConfiguration.snoozeLength = snoozeLengthDatePicker.countDownDuration
 
-        let body = [KeyConstant.userConfigurationSnoozeLength.rawValue: UserConfiguration.snoozeLength]
+        let body: JSONRequestBody = [KeyConstant.userConfigurationSnoozeLength.rawValue: .double(UserConfiguration.snoozeLength)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {

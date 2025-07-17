@@ -34,7 +34,7 @@ enum UserRequest {
                 if responseStatus == .noResponse {
                     OfflineModeManager.shared.didGetNoResponse(forType: .userRequestGet)
                 }
-                else if let result = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                else if let result = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
                     UserInformation.setup(fromBody: result)
                     UserConfiguration.setup(fromBody: result)
                 }
@@ -83,7 +83,7 @@ enum UserRequest {
     @discardableResult static func update(
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forBody: [String: CompatibleDataTypeForJSON?],
+        forBody: JSONRequestBody,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         RequestUtils.genericPutRequest(
@@ -111,7 +111,7 @@ enum UserRequest {
     @discardableResult static func delete(
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forBody: [String: CompatibleDataTypeForJSON?] = [:],
+        forBody: JSONRequestBody = [:],
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         RequestUtils.genericDeleteRequest(

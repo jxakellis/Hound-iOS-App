@@ -13,19 +13,15 @@ enum TriggersRequest {
     static var baseURL: URL { DogsRequest.baseURL.appendingPathComponent("/dogTriggers") }
     
     /// Returns an array of reminder trigger bodies under the key "dogTriggers".
-    private static func createTriggersBody(
+    private static func createBody(
         forDogUUID: UUID,
         forDogTriggers: [Trigger]
-    ) -> [String: [[String: JSONValue]]] {
-        var triggerBodies: [[String: JSONValue]] = []
-        for forTrigger in forDogTriggers {
-            triggerBodies.append(
-                forTrigger.createBody(forDogUUID: forDogUUID)
-            )
-        }
-        let body: [String: [[String: JSONValue]]] = [
-            KeyConstant.dogTriggers.rawValue: triggerBodies
-        ]
+    ) -> JSONRequestBody {
+        let triggerBodies = forDogTriggers.map { $0.createBody(forDogUUID: forDogUUID) }
+        
+        let body: JSONRequestBody = [KeyConstant.dogTriggers.rawValue: .array(
+            triggerBodies.map { .object($0.compactMapValues { $0 }) }
+        )]
         return body
     }
     
@@ -50,8 +46,7 @@ extension TriggersRequest {
             HoundError?
         ) -> Void
     ) -> Progress? {
-        let body: [String: JSONValue] =
-        forTrigger.createBody(forDogUUID: forDogUUID)
+        let body: JSONRequestBody = forTrigger.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
             forErrorAlert: forErrorAlert,
@@ -66,11 +61,11 @@ extension TriggersRequest {
             }
             
             // Either completed successfully or no response from the server, we can proceed as usual
-            let triggersBody: [[String: Any?]]? = {
-                if let array = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
+            let triggersBody: [JSONResponseBody]? = {
+                if let array = responseBody?[KeyConstant.result.rawValue] as? [JSONResponseBody] {
                     return array
                 }
-                else if let single = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                else if let single = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
                     return [single]
                 }
                 else {
@@ -127,7 +122,7 @@ extension TriggersRequest {
             return nil
         }
         
-        let body = createTriggersBody(
+        let body = createBody(
             forDogUUID: forDogUUID,
             forDogTriggers: forDogTriggers
         )
@@ -155,11 +150,11 @@ extension TriggersRequest {
             }
             
             // Either completed successfully or no response from the server, we can proceed as usual
-            let triggersBody: [[String: Any?]]? = {
-                if let array = responseBody?[KeyConstant.result.rawValue] as? [[String: Any?]] {
+            let triggersBody: [JSONResponseBody]? = {
+                if let array = responseBody?[KeyConstant.result.rawValue] as? [JSONResponseBody] {
                     return array
                 }
-                else if let single = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                else if let single = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
                     return [single]
                 }
                 else {
@@ -210,7 +205,7 @@ extension TriggersRequest {
             return nil
         }
         
-        let body = createTriggersBody(forDogUUID: forDogUUID, forDogTriggers: forDogTriggers)
+        let body = createBody(forDogUUID: forDogUUID, forDogTriggers: forDogTriggers)
         
         return RequestUtils.genericPutRequest(
             forErrorAlert: forErrorAlert,
@@ -258,15 +253,17 @@ extension TriggersRequest {
             return nil
         }
         
-        let body: [String: [[String: CompatibleDataTypeForJSON?]]] = {
-            var triggerBodies: [[String: CompatibleDataTypeForJSON?]] = []
+        let body: JSONRequestBody = {
+            var triggerBodies: [JSONRequestBody] = []
             for forUUID in forTriggerUUIDs {
-                var entry: [String: CompatibleDataTypeForJSON?] = [:]
-                entry[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
-                entry[KeyConstant.triggerUUID.rawValue] = forUUID.uuidString
+                var entry: JSONRequestBody = [:]
+                entry[KeyConstant.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+                entry[KeyConstant.triggerUUID.rawValue] = .string(forUUID.uuidString)
                 triggerBodies.append(entry)
             }
-            return [KeyConstant.dogTriggers.rawValue: triggerBodies]
+            return [KeyConstant.dogTriggers.rawValue: .array(
+                triggerBodies.map { .object($0.compactMapValues { $0 }) }
+            )]
         }()
         
         return RequestUtils.genericDeleteRequest(

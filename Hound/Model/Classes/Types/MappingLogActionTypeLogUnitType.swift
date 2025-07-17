@@ -67,7 +67,7 @@ final class MappingLogActionTypeLogUnitType: NSObject, Comparable, NSCoding {
         super.init()
     }
     
-    convenience init?(fromBody: [String: Any?]) {
+    convenience init?(fromBody: JSONResponseBody) {
         guard
             let mappingIdVal = fromBody[KeyConstant.mappingId.rawValue] as? Int,
             let logActionTypeIdVal = fromBody[KeyConstant.logActionTypeId.rawValue] as? Int,

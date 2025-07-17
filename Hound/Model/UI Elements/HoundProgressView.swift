@@ -12,7 +12,7 @@ final class HoundProgressView: UIProgressView, HoundUIProtocol {
     
     // MARK: - HoundUIProtocol
     
-    var properties: [String: CompatibleDataTypeForJSON?] = [:]
+    var properties: JSONRequestBody = [:]
 
     // MARK: - Main
     

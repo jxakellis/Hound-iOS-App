@@ -40,7 +40,7 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
         
         UserConfiguration.isLogNotificationEnabled = isLogNotificationEnabledSwitch.isOn
         
-        let body = [KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue: UserConfiguration.isLogNotificationEnabled]
+        let body: JSONRequestBody = [KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue: .bool(UserConfiguration.isLogNotificationEnabled)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {

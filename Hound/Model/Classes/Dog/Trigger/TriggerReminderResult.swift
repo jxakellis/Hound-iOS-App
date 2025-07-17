@@ -53,7 +53,7 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
         super.init()
     }
     
-    convenience init(fromBody: [String: Any?], toOverride: TriggerReminderResult?) {
+    convenience init(fromBody: JSONResponseBody, toOverride: TriggerReminderResult?) {
         let reminderActionTypeId = fromBody[KeyConstant.reminderActionTypeId.rawValue] as? Int ?? toOverride?.reminderActionTypeId
         let reminderCustomActionName = fromBody[KeyConstant.reminderCustomActionName.rawValue] as? String ?? toOverride?.reminderCustomActionName
         
@@ -62,8 +62,8 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
     
     // MARK: - Functions
     
-    func createBody() -> [String: JSONValue] {
-        var body: [String: JSONValue] = [:]
+    func createBody() -> JSONRequestBody {
+        var body: JSONRequestBody = [:]
         body[KeyConstant.reminderActionTypeId.rawValue] = .int(reminderActionTypeId)
         body[KeyConstant.reminderCustomActionName.rawValue] = .string(reminderCustomActionName)
         return body

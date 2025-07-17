@@ -50,7 +50,7 @@ enum RequestUtils {
         forRequest originalRequest: URLRequest,
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes,
-        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
+        completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         // If there is no internet connection, return noResponse and invoke OfflineModeManager to start attempting to re-sync data once a connection is restored
         // If sourceFunction is normal and OfflineModeManager is actively syncing, return noResponse as we want OfflineModeManager to finish syncing before trying to perform any more requests
@@ -62,7 +62,7 @@ enum RequestUtils {
                     houndError.alert()
                 }
                 
-                completionHandler(nil, .noResponse, houndError)
+                completionHandler(nil, ResponseStatus.noResponse, houndError)
                 
                 // We can't perform the request because there is no internet connection. Have offline sync manager start monitoring for when connectivity is restored. This has to be after completionHandler, otherwise there will be nothing to sync so OfflineModeManager won't monitor anything
                 OfflineModeManager.shared.startMonitoring()
@@ -93,7 +93,7 @@ enum RequestUtils {
     private static func genericRequestResponse(
         forRequest: URLRequest,
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void,
+        completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void,
         forData: Data?,
         forURLResponse: URLResponse?,
         forError: Error?
@@ -102,7 +102,7 @@ enum RequestUtils {
         let responseStatusCode: Int? = (forURLResponse as? HTTPURLResponse)?.statusCode
 
         // parse response from json
-        let responseBody: [String: Any?]? = {
+        let responseBody: JSONResponseBody? = {
             // if no data or if no status code, then request failed
             guard let forData = forData else {
                 return nil
@@ -110,8 +110,8 @@ enum RequestUtils {
             
             // try to serialize data as "result" form with array of info first, if that fails, revert to regular "message" and "error" format
             return try?
-            JSONSerialization.jsonObject(with: forData, options: .fragmentsAllowed) as? [String: [[String: Any?]]]
-            ?? JSONSerialization.jsonObject(with: forData, options: .fragmentsAllowed) as? [String: Any?]
+            JSONSerialization.jsonObject(with: forData, options: .fragmentsAllowed) as? [String: [JSONResponseBody]]
+            ?? JSONSerialization.jsonObject(with: forData, options: .fragmentsAllowed) as? JSONResponseBody
         }()
         
         guard forError == nil, let responseBody = responseBody, let responseStatusCode = responseStatusCode else {
@@ -146,8 +146,8 @@ enum RequestUtils {
     private static func genericRequestNoResponse(
         forRequest request: URLRequest,
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void,
-        forResponseBody responseBody: [String: Any?]?, forError error: Error?
+        completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void,
+        forResponseBody: JSONResponseBody?, forError error: Error?
     ) {
         // assume an error is no response as that implies request/response failure, meaning the end result of no response is the same
         HoundLogger.apiResponse.warning(
@@ -174,7 +174,7 @@ enum RequestUtils {
                 responseError.alert()
             }
             
-            completionHandler(responseBody, .noResponse, responseError)
+            completionHandler(forResponseBody, .noResponse, responseError)
             
             // We can't perform the request because there is no internet connection. Have offline sync manager start monitoring for when connectivity is restored. This has to be after completionHandler, otherwise there will be nothing to sync so OfflineModeManager won't monitor anything
             OfflineModeManager.shared.startMonitoring()
@@ -185,8 +185,8 @@ enum RequestUtils {
     private static func genericRequestFailureResponse(
         forRequest request: URLRequest,
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void,
-        forResponseBody responseBody: [String: Any?]
+        completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void,
+        forResponseBody responseBody: JSONResponseBody
     ) {
         // Our request went through but was invalid
         HoundLogger.apiResponse.warning(
@@ -258,8 +258,8 @@ enum RequestUtils {
     /// Handles a case of a success response from a data task query
     private static func genericRequestSuccessResponse(
         forRequest request: URLRequest,
-        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void,
-        forResponseBody responseBody: [String: Any?]
+        completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void,
+        forResponseBody responseBody: JSONResponseBody
     ) {
         // Our request was valid and successful
         HoundLogger.apiResponse.notice("Success \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
@@ -280,8 +280,8 @@ extension RequestUtils {
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes,
         forURL: URL,
-        forBody: [String: Any?],
-        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
+        forBody: JSONRequestBody,
+        completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
@@ -291,7 +291,8 @@ extension RequestUtils {
         request.httpMethod = "PATCH"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONSerialization.data(withJSONObject: forBody)
+        let serializableBody = forBody.toAnyDictionary()
+        request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
         
         return genericRequest(
             forRequest: request,
@@ -307,8 +308,8 @@ extension RequestUtils {
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes,
         forURL: URL,
-        forBody: [String: Any?],
-        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
+        forBody: JSONRequestBody,
+        completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
@@ -318,7 +319,8 @@ extension RequestUtils {
         request.httpMethod = "POST"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONSerialization.data(withJSONObject: forBody)
+        let serializableBody = forBody.toAnyDictionary()
+                request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
         
         return genericRequest(
             forRequest: request,
@@ -335,8 +337,8 @@ extension RequestUtils {
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes,
         forURL: URL,
-        forBody: [String: Any?],
-        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
+        forBody: JSONRequestBody,
+        completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
@@ -346,7 +348,8 @@ extension RequestUtils {
         request.httpMethod = "PUT"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONSerialization.data(withJSONObject: forBody)
+        let serializableBody = forBody.toAnyDictionary()
+                request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
         
         return genericRequest(
             forRequest: request,
@@ -363,8 +366,8 @@ extension RequestUtils {
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes,
         forURL: URL,
-        forBody: [String: Any?],
-        completionHandler: @escaping ([String: Any?]?, ResponseStatus, HoundError?) -> Void
+        forBody: JSONRequestBody,
+        completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
@@ -374,7 +377,8 @@ extension RequestUtils {
         request.httpMethod = "DELETE"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONSerialization.data(withJSONObject: forBody)
+        let serializableBody = forBody.toAnyDictionary()
+        request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
         
         return genericRequest(
             forRequest: request,

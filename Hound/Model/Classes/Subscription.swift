@@ -138,7 +138,7 @@ final class Subscription: NSObject, NSCoding {
     }
 
     /// Assume array of family properties
-    convenience init(fromBody body: [String: Any?]) {
+    convenience init(fromBody body: JSONResponseBody) {
         let transactionId: Int? = body[KeyConstant.transactionId.rawValue] as? Int
         let productId: String? = body[KeyConstant.productId.rawValue] as? String
         let purchaseDate: Date? = (body[KeyConstant.purchaseDate.rawValue] as? String)?.formatISO8601IntoDate()

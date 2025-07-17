@@ -105,7 +105,7 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
     }
 
     /// Assume array of family properties
-    convenience init(fromBody body: [String: Any?]) {
+    convenience init(fromBody body: JSONResponseBody) {
         let userId = body[KeyConstant.userId.rawValue] as? String
         let firstName = body[KeyConstant.userFirstName.rawValue] as? String
         let lastName = body[KeyConstant.userLastName.rawValue] as? String

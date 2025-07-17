@@ -23,7 +23,7 @@ enum LogsRequest {
         forLog: Log,
         completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body: [String: CompatibleDataTypeForJSON?] = forLog.createBody(forDogUUID: forDogUUID)
+        let body: JSONRequestBody = forLog.createBody(forDogUUID: forDogUUID)
         
         return RequestUtils.genericGetRequest(
             forErrorAlert: forErrorAlert,
@@ -42,7 +42,7 @@ enum LogsRequest {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
                     OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
                 }
-                else if let logBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any?] {
+                else if let logBody = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
                     // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
                     completionHandler(Log(fromBody: logBody, logToOverride: forLog.copy() as? Log), responseStatus, error)
                     return
@@ -147,9 +147,9 @@ enum LogsRequest {
         forLogUUID: UUID,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        var body: [String: CompatibleDataTypeForJSON?] = [:]
-        body[KeyConstant.dogUUID.rawValue] = forDogUUID.uuidString
-        body[KeyConstant.logUUID.rawValue] = forLogUUID.uuidString
+        var body: JSONRequestBody = [:]
+        body[KeyConstant.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+        body[KeyConstant.logUUID.rawValue] = .string(forLogUUID.uuidString)
         
         return RequestUtils.genericDeleteRequest(
             forErrorAlert: forErrorAlert,
