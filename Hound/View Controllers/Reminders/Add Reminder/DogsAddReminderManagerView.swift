@@ -396,7 +396,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         }
         
         let option = dropDownReminderActionOptions[indexPath.row]
-        customCell.label.text = option.0.convertToReadableName(customActionName: option.1, includeMatchingEmoji: option.1 == nil)
+        customCell.label.text = option.0.convertToReadableName(customActionName: option.1, includeMatchingEmoji: true)
     }
     
     func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {

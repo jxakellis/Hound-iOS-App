@@ -13,7 +13,7 @@ protocol LogsFilterDelegate: AnyObject {
 }
 
 // TODO BUG this view doesnt start scrolled in the correct position
-class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate
     
@@ -278,6 +278,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        self.enableSwipeBackToDismiss = true
         
         updateDynamicUIElements()
     }

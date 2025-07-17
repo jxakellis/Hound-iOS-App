@@ -14,7 +14,6 @@ protocol LogsVCDelegate: AnyObject {
 
 // UI VERIFIED 6/25/25
 final class LogsVC: HoundViewController,
-                    UIGestureRecognizerDelegate,
                     LogsTableVCDelegate,
                     LogsAddLogDelegate,
                     LogsFilterDelegate {

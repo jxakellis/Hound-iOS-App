@@ -12,7 +12,7 @@ protocol DogsVCDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelegate, DogsAddReminderVCDelegate, UIGestureRecognizerDelegate, DogsAddTriggerVCDelegate {
+final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelegate, DogsAddReminderVCDelegate, DogsAddTriggerVCDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
     

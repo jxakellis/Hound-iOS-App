@@ -8,9 +8,7 @@
 
 import UIKit
 
-class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol {
-    
-    // TODO FUTURE add property to allow view controller to be swiped back on to dismiss
+class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol, UIGestureRecognizerDelegate {
     
     // MARK: - HoundUIProtocol
     
@@ -60,6 +58,14 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
         }
     }
     
+    /// Toggle if the interactive swipe-to-go-back gesture dismisses the view controller.
+    /// Defaults to `false` so most views can't be dismissed via a swipe.
+    var enableSwipeBackToDismiss: Bool = false {
+        didSet { updateSwipeBackGesture() }
+    }
+    
+    private var customSwipeGesture: UIScreenEdgePanGestureRecognizer?
+    
     // MARK: - Main
     
     override func loadView() {
@@ -67,19 +73,49 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
         view.backgroundColor = UIColor.systemBackground
         setupGeneratedViews()
     }
-
+    
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         if eligibleForGlobalPresenter {
             PresentationManager.addGlobalPresenterToStack(self)
         }
     }
-
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if eligibleForGlobalPresenter {
             PresentationManager.removeGlobalPresenterFromStack(self)
         }
     }
-
+    
+    // MARK: - Functions
+    
+    private func updateSwipeBackGesture() {
+        guard isViewLoaded else { return }
+        
+        if let popGesture = navigationController?.interactivePopGestureRecognizer {
+            popGesture.isEnabled = enableSwipeBackToDismiss
+            customSwipeGesture?.isEnabled = false
+        }
+        else {
+            if customSwipeGesture == nil {
+                let gesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(didSwipeBack(_:)))
+                gesture.edges = .left
+                gesture.delegate = self
+                view.addGestureRecognizer(gesture)
+                customSwipeGesture = gesture
+            }
+            customSwipeGesture?.isEnabled = enableSwipeBackToDismiss
+        }
+    }
+    
+    @objc private func didSwipeBack(_ sender: UIScreenEdgePanGestureRecognizer) {
+        guard sender.state == .recognized else { return }
+        if let navController = navigationController {
+            navController.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
+        }
+    }
+    
 }

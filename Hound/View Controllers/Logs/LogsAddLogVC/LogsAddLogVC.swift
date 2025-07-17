@@ -624,6 +624,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        self.enableSwipeBackToDismiss = true
         
         // Set forDogUUIDsSelected = [] to invoke didSet and initialize label text appropriately
         forDogUUIDsSelected = []
@@ -1037,7 +1038,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             let option = dropDownLogActionOptions[indexPath.row]
             customCell.label.text = option.0.convertToReadableName(
                 customActionName: option.1,
-                includeMatchingEmoji: option.1 == nil
+                includeMatchingEmoji: true
             )
             if option.1 == nil,
                let selected = logActionSelected,
