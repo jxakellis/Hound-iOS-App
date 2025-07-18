@@ -84,14 +84,14 @@ final class DogsAddTriggerTimeDelayView: HoundView {
         
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: topAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
         NSLayoutConstraint.activate([
             countdownDatePicker.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
-            countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
+            countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             countdownDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
             countdownDatePicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
             countdownDatePicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)

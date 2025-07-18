@@ -86,6 +86,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     private var reminderCustomActionNameMaxHeight: GeneralLayoutConstraint!
     private lazy var reminderCustomActionNameTextField: HoundTextField = {
         let textField = HoundTextField(huggingPriority: 285, compressionResistancePriority: 285)
+        textField.font = VisualConstant.FontConstant.secondaryRegularLabel
         textField.delegate = self
         textField.applyStyle(.thinGrayBorder)
         textField.placeholder = " Add a custom name..."
@@ -217,6 +218,10 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         return trigger
     }
     
+    // MARK: - Main
+    
+    private var didSetupCustomSubviews: Bool = false
+    
     // MARK: - Setup
     
     func setup(forDog: Dog?, forTriggerToUpdate: Trigger?) {
@@ -266,15 +271,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         if let trigger = forTriggerToUpdate {
             selectedLogReactions = trigger.triggerLogReactions
             selectedReminderResult = trigger.triggerReminderResult
-            reminderResultLabel.text = selectedReminderResult?.readableName
-            reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
-            
-            if trigger.triggerType == .timeDelay {
-                segmentedControl.selectedSegmentIndex = SegmentedControlSection.timeDelay.rawValue
-            }
-            else {
-                segmentedControl.selectedSegmentIndex = SegmentedControlSection.fixedTime.rawValue
-            }
+            segmentedControl.selectedSegmentIndex = trigger.triggerType == .timeDelay ? SegmentedControlSection.timeDelay.rawValue : SegmentedControlSection.fixedTime.rawValue
         }
         else {
             segmentedControl.selectedSegmentIndex = SegmentedControlSection.timeDelay.rawValue
@@ -299,6 +296,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     private func updateDynamicUIElements() {
         logReactionsLabel.text = selectedLogReactions.map({ $0.readableName }).joined(separator: ", ")
+        reminderResultLabel.text = selectedReminderResult?.readableName
+        reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
         
         let allowsCustom = selectedReminderResult.map {
             ReminderActionType.find(forReminderActionTypeId: $0.reminderActionTypeId).allowsCustom
@@ -378,7 +377,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     /// Determine and show the next required dropdown in the log creation flow
     private func showNextRequiredDropDown(animated: Bool) {
-        if selectedLogReactions.isEmpty {
+        if selectedLogReactions.isEmpty && selectedReminderResult == nil {
             showDropDown(.logReactions, animated: animated)
         }
         else if selectedReminderResult == nil {
@@ -501,24 +500,41 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             }
         }
         else if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.reminderResult.rawValue {
+            let currentCell = dropDownReminderResult?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell
+            let beforeSelection = selectedReminderResult
+            
+            guard currentCell?.isCustomSelected == false else {
+                currentCell?.setCustomSelectedTableViewCell(forSelected: false)
+                dropDownSelectedReminderIndexPath = nil
+                selectedReminderResult = nil
+                updateDynamicUIElements()
+                return
+            }
+            
             if let previous = dropDownSelectedReminderIndexPath,
                let previousCell = dropDownReminderResult?.dropDownTableView?.cellForRow(at: previous) as? HoundDropDownTableViewCell {
                 previousCell.setCustomSelectedTableViewCell(forSelected: false)
             }
-            if let currentCell = dropDownReminderResult?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
-                currentCell.setCustomSelectedTableViewCell(forSelected: true)
-                reminderResultLabel.errorMessage = nil
-            }
-            dropDownSelectedReminderIndexPath = indexPath
             
+            currentCell?.setCustomSelectedTableViewCell(forSelected: true)
+            reminderResultLabel.errorMessage = nil
+            
+            dropDownSelectedReminderIndexPath = indexPath
             selectedReminderResult = availableReminderResults[indexPath.row]
-            reminderResultLabel.text = selectedReminderResult?.readableName
-            reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
+            
+            if let selectedReminderResult = selectedReminderResult, ReminderActionType.find(forReminderActionTypeId: selectedReminderResult.reminderActionTypeId).allowsCustom {
+                // If custom action is allowed, begin editing textField
+                reminderCustomActionNameTextField.text = selectedReminderResult.reminderCustomActionName
+                reminderCustomActionNameTextField.becomeFirstResponder()
+            }
             
             updateDynamicUIElements()
             
             dropDownReminderResult?.hideDropDown(animated: true)
-            showNextRequiredDropDown(animated: true)
+            if beforeSelection == nil && !reminderCustomActionNameTextField.isFirstResponder {
+                // First-time selection of reminder result, so open next dropdown
+                showNextRequiredDropDown(animated: true)
+            }
         }
     }
     
@@ -596,8 +612,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         NSLayoutConstraint.activate([
             triggerViewsStack.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             triggerViewsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            triggerViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            triggerViewsStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            triggerViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            triggerViewsStack.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 }

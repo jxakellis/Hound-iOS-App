@@ -46,7 +46,7 @@ extension UIView {
             let newLabel = HoundLabel()
             newLabel.font = VisualConstant.FontConstant.tertiaryRegularLabel
             newLabel.textColor = UIColor.systemRed
-            newLabel.numberOfLines = 0
+            newLabel.numberOfLines = 1
             newLabel.translatesAutoresizingMaskIntoConstraints = false
             objc_setAssociatedObject(self, &houndErrorLabelKey, newLabel, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             label = newLabel

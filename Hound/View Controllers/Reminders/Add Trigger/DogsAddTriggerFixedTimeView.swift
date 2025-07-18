@@ -27,6 +27,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
     
     private lazy var dayOffsetLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
+        label.font = VisualConstant.FontConstant.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select the day offset..."
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown))
@@ -198,15 +199,15 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
         // descriptionLabel
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: topAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
         ])
         
         // dayOffsetLabel
         NSLayoutConstraint.activate([
             dayOffsetLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            dayOffsetLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            dayOffsetLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            dayOffsetLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            dayOffsetLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             dayOffsetLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
             dayOffsetLabel.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight)
         ])
@@ -214,8 +215,8 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
         NSLayoutConstraint.activate([
             timeOfDayPicker.topAnchor.constraint(equalTo: dayOffsetLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             timeOfDayPicker.bottomAnchor.constraint(equalTo: bottomAnchor),
-            timeOfDayPicker.leadingAnchor.constraint(equalTo: leadingAnchor),
-            timeOfDayPicker.trailingAnchor.constraint(equalTo: trailingAnchor),
+            timeOfDayPicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            timeOfDayPicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             timeOfDayPicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
             timeOfDayPicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)
         ])
