@@ -6,6 +6,7 @@
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
+import SnapKit
 import UIKit
 
 final class DogsAddDogTriggerTVC: HoundTableViewCell {
@@ -19,16 +20,31 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
         return view
     }()
     
-    private let triggerMainLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
+    private let logReactionsLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.adjustsFontSizeToFitWidth = false
+        label.numberOfLines = 0
         return label
     }()
     
-    private let triggerSubLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+    private let reminderResultLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.adjustsFontSizeToFitWidth = false
+        label.numberOfLines = 0
         return label
+    }()
+    
+    private lazy var labelStack: HoundStackView = {
+        let stack = HoundStackView(huggingPriority: 290, compressionResistancePriority: 290)
+        stack.addArrangedSubview(logReactionsLabel)
+        stack.addArrangedSubview(reminderResultLabel)
+        stack.axis = .vertical
+        stack.distribution = .equalSpacing
+        stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+        stack.alignment = .leading
+        return stack
     }()
     
     private let chevronImageView: HoundImageView = {
@@ -48,8 +64,47 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     // MARK: - Setup
     
     func setup(forTrigger: Trigger) {
-        triggerMainLabel.text = "Main"
-        triggerSubLabel.text = "Sub"
+        let precalcLogTextColor = logReactionsLabel.textColor
+        logReactionsLabel.attributedTextClosure = {
+            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+            let message: NSMutableAttributedString = NSMutableAttributedString(
+                string: "Any ",
+                attributes: [.font: VisualConstant.FontConstant.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any])
+            message.append(
+                NSAttributedString(
+                    string: forTrigger.triggerLogReactions.map({ $0.readableName(includeMatchingEmoji: false) }).joined(separator: ", ", endingSeparator: " or "),
+                    attributes: [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
+                )
+            )
+            message.append(
+                NSAttributedString(
+                    string: " log",
+                    attributes: [.font: VisualConstant.FontConstant.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
+                )
+            )
+            return message
+        }
+        
+        let precalcReminderTextColor = reminderResultLabel.textColor
+        reminderResultLabel.attributedTextClosure = {
+            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+            let message: NSMutableAttributedString = NSMutableAttributedString(
+                string: "Creates ",
+                attributes: [.font: VisualConstant.FontConstant.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any])
+            message.append(
+                NSAttributedString(
+                    string: forTrigger.triggerReminderResult.readableName,
+                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
+                )
+            )
+            message.append(
+                NSAttributedString(
+                    string: " for \(forTrigger.readableTime())",
+                    attributes: [.font: VisualConstant.FontConstant.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
+                )
+            )
+            return message
+        }
     }
     
     // MARK: - Setup Elements
@@ -62,48 +117,37 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
         super.addSubViews()
         contentView.addSubview(containerView)
         
-        containerView.addSubview(triggerMainLabel)
-        containerView.addSubview(triggerSubLabel)
+        containerView.addSubview(labelStack)
         containerView.addSubview(chevronImageView)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
-        // containerView
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            // when table view is calculating the height of this view, it might assign a UIView-Encapsulated-Layout-Height which is invalid (too big or too small) for pageSheetHeaderView. This would cause a unresolvable constraints error, causing one of them to break. However, since this is temporary when it calculates the height, we can avoid this .defaultHigh constraint that temporarily turns off
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).withPriority(.defaultHigh),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
-        ])
+        containerView.snp.makeConstraints { make in
+            make.top.equalTo(contentView.snp.top)
+            // Use .high priority to avoid breaking during table view height estimation
+            make.bottom.equalTo(contentView.snp.bottom).priority(.high)
+            make.leading.equalTo(contentView.snp.leading).offset(ConstraintConstant.Spacing.absoluteHoriInset)
+            make.trailing.equalTo(contentView.snp.trailing).inset(ConstraintConstant.Spacing.absoluteHoriInset)
+        }
         
-        // triggerMainLabel
-        NSLayoutConstraint.activate([
-            triggerMainLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            triggerMainLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            triggerMainLabel.createHeightMultiplier(ConstraintConstant.Text.primaryHeaderLabelHeightMultipler, relativeToWidthOf: contentView),
-            triggerMainLabel.createMaxHeight(ConstraintConstant.Text.primaryHeaderLabelMaxHeight)
-        ])
+        labelStack.snp.makeConstraints { make in
+            make.top.equalTo(containerView.snp.top).offset(ConstraintConstant.Spacing.absoluteVertInset)
+            make.leading.equalTo(containerView.snp.leading).offset(ConstraintConstant.Spacing.contentIntraHori)
+            make.bottom.equalTo(containerView.snp.bottom).inset(ConstraintConstant.Spacing.absoluteVertInset)
+        }
         
-        // chevronImageView
-        NSLayoutConstraint.activate([
-            chevronImageView.leadingAnchor.constraint(equalTo: triggerMainLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            chevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            chevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevronImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
-            chevronImageView.createHeightMultiplier(ConstraintConstant.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
-            chevronImageView.createMaxHeight(ConstraintConstant.Button.chevronMaxHeight)
-        ])
-        
-        // triggerSubLabel
-        NSLayoutConstraint.activate([
-            triggerSubLabel.topAnchor.constraint(equalTo: triggerMainLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTightIntraVert),
-            triggerSubLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            triggerSubLabel.leadingAnchor.constraint(equalTo: triggerMainLabel.leadingAnchor),
-            triggerSubLabel.trailingAnchor.constraint(equalTo: triggerMainLabel.trailingAnchor)
-        ])
+        chevronImageView.snp.makeConstraints { make in
+            make.leading.equalTo(labelStack.snp.trailing).offset(ConstraintConstant.Spacing.contentIntraHori)
+            make.trailing.equalTo(containerView.snp.trailing).inset(ConstraintConstant.Spacing.absoluteHoriInset)
+            make.centerY.equalTo(containerView.snp.centerY)
+            make.height.equalTo(contentView.snp.width)
+                .multipliedBy(ConstraintConstant.Button.chevronHeightMultiplier)
+                .priority(.high)
+            make.height.lessThanOrEqualTo(ConstraintConstant.Button.chevronMaxHeight)
+            make.width.equalTo(chevronImageView.snp.height)
+                .multipliedBy(ConstraintConstant.Button.chevronAspectRatio)
+        }
     }
-
 }

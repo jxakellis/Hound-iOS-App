@@ -146,7 +146,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         var title: String {
             switch self {
             case .reminders: return "Reminders"
-            case .triggers: return "Triggers"
+            case .triggers: return "Automations"
             }
         }
 
@@ -167,6 +167,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         segmentedControl.backgroundColor = UIColor.systemGray4
         
         segmentedControl.selectedSegmentIndex = SegmentedControlSection.reminders.rawValue
+        segmentedControl.apportionsSegmentWidthsByContent = false
         
         segmentedControl.addTarget(self, action: #selector(didUpdateSegment), for: .valueChanged)
         return segmentedControl
@@ -534,6 +535,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         initialDogIcon = dogToUpdate?.dogIcon
         
         remindersView.setup(forDelegate: self, forDogReminders: dogToUpdate?.dogReminders)
+        triggersView.setup(forDelegate: self, forDogTriggers: dogToUpdate?.dogTriggers)
     }
     
     // MARK: - Setup Elements
@@ -562,7 +564,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         // dogIconButton
         NSLayoutConstraint.activate([
-            dogIconButton.topAnchor.constraint(equalTo: editPageHeaderView.bottomAnchor, constant: ConstraintConstant.Spacing.absoluteCircleHoriInset),
+            dogIconButton.topAnchor.constraint(equalTo: editPageHeaderView.bottomAnchor),
             dogIconButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteCircleHoriInset),
             dogIconButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
             dogIconButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight),

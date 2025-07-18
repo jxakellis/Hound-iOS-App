@@ -27,7 +27,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
         
         tableView.shouldAutomaticallyAdjustHeight = true
         tableView.emptyStateEnabled = true
-        tableView.emptyStateMessage = "No triggers yet..."
+        tableView.emptyStateMessage = "No automations yet..."
         
         return tableView
     }()
@@ -35,7 +35,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
     private lazy var addTriggerButton: HoundButton = {
         let button = HoundButton()
         
-        button.setTitle("Add Trigger", for: .normal)
+        button.setTitle("Add Automation", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = VisualConstant.FontConstant.wideButton
         

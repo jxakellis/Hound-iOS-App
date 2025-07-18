@@ -34,7 +34,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         let precalculatedDynamicTextColor = label.textColor
         
         label.attributedTextClosure = {
-            // NOTE: ANY NON-STATIC VARIABLES, WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS, MUST BE PRECALCULATED. This code is run everytime the UITraitCollection is updated. Therefore, all of this code is recalculated. If we have dynamic variable inside, the text, font, color... could change to something unexpected when the user simply updates their app to light/dark mode
+            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive).",
                 attributes: [.font: VisualConstant.FontConstant.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])

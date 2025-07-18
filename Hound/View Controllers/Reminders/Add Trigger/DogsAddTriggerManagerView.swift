@@ -295,7 +295,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     }
     
     private func updateDynamicUIElements() {
-        logReactionsLabel.text = selectedLogReactions.map({ $0.readableName }).joined(separator: ", ")
+        logReactionsLabel.text = selectedLogReactions.map({ $0.readableName(includeMatchingEmoji: false) }).joined(separator: ", ")
         reminderResultLabel.text = selectedReminderResult?.readableName
         reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
         
@@ -442,7 +442,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.logReactions.rawValue {
             let item = availableLogReactions[indexPath.row]
-            custom.label.text = item.readableName
+            custom.label.text = item.readableName(includeMatchingEmoji: true)
             let selected = selectedLogReactions.contains(item)
             custom.setCustomSelectedTableViewCell(forSelected: selected, animated: false)
         }

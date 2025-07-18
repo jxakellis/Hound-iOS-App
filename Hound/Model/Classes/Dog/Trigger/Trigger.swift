@@ -231,7 +231,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     var triggerType: TriggerType = ClassConstant.TriggerConstant.defaultTriggerType
     private(set) var triggerTimeDelay: Double = ClassConstant.TriggerConstant.defaultTriggerTimeDelay
     func changeTriggerTimeDelay(forTimeDelay: Double) -> Bool {
-        if forTimeDelay > 0 { return false }
+        guard forTimeDelay > 0 else { return false }
         triggerTimeDelay = forTimeDelay
         return true
     }
@@ -240,7 +240,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     private var triggerFixedTimeType: TriggerFixedTimeType = ClassConstant.TriggerConstant.defaultTriggerFixedTimeType
     private(set) var triggerFixedTimeTypeAmount: Int = ClassConstant.TriggerConstant.defaultTriggerFixedTimeTypeAmount
     func changeTriggerFixedTimeTypeAmount(forAmount: Int) -> Bool {
-        if forAmount >= 0 { return false }
+        guard forAmount >= 0 else { return false }
         triggerFixedTimeTypeAmount = forAmount
         return true
     }
@@ -402,6 +402,22 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     // MARK: - Functions
+    
+    func readableTime() -> String {
+        switch triggerType {
+        case .timeDelay:
+            return "\(triggerTimeDelay.readable(capitalizeWords: false, abreviateWords: true)) later"
+        case .fixedTime:
+            var text = ""
+            switch triggerFixedTimeTypeAmount {
+            case 0: text += "same day"
+            case 1: text += "next day"
+            default: text += "\(triggerFixedTimeTypeAmount) days later"
+            }
+            text += " @ \(nextReminderDate(afterDate: Date())?.formatted(date: .omitted, time: .shortened) ?? VisualConstant.TextConstant.unknownText)"
+            return text
+        }
+    }
     
     func shouldActivateTrigger(forLog log: Log) -> Bool {
         for reaction in triggerLogReactions where reaction.logActionTypeId == log.logActionTypeId {
