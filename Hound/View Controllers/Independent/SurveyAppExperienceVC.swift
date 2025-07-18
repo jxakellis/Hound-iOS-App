@@ -164,13 +164,13 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
             }
             
             guard let window = UIApplication.keyWindow?.windowScene else {
-                HoundLogger.general.error("SurveyAppExperienceVC.didTapSubmit:\t Window not established for user to rate Hound")
+                HoundLogger.general.error("SurveyAppExperienceVC.didTapSubmit: Window not established for user to rate Hound")
                 return
             }
             
             // Delay this call slightly so that current ui elements have time to complete
             DispatchQueue.main.async {
-                HoundLogger.general.notice("SurveyAppExperienceVC.didTapSubmit:\t Asking user to rate Hound")
+                HoundLogger.general.notice("SurveyAppExperienceVC.didTapSubmit: Asking user to rate Hound")
                 
                 if #available(iOS 16, *) {
                     AppStore.requestReview(in: window)

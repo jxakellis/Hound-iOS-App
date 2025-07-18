@@ -109,7 +109,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         guard let trigger = managerView.currentTrigger else { return }
         
         if shouldPersistChangesToServer && dog == nil {
-            HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideSaveTrigger:\t Dog must be set when persisting changes to server.")
+            HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideSaveTrigger: Dog must be set when persisting changes to server.")
         }
         
         guard shouldPersistChangesToServer, let dog = dog else {
@@ -157,7 +157,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         guard let duplicateTrigger = managerView.currentTrigger?.copy() as? Trigger else { return }
         
         if shouldPersistChangesToServer && dog == nil {
-            HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideDuplicateTrigger:\t Dog must be set when persisting changes to server.")
+            HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideDuplicateTrigger: Dog must be set when persisting changes to server.")
         }
         
         guard shouldPersistChangesToServer, let dog = dog else {
@@ -185,7 +185,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         guard let triggerToUpdate = triggerToUpdate else { return }
         
         if shouldPersistChangesToServer && dog == nil {
-            HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideRemoveTrigger:\t Dog must be set when persisting changes to server.")
+            HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideRemoveTrigger: Dog must be set when persisting changes to server.")
         }
         
         guard shouldPersistChangesToServer, let dog = dog else {
@@ -222,6 +222,10 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         PresentationManager.enqueueAlert(alert)
     }
     
+    @objc private func didTapScreen(sender: UITapGestureRecognizer) {
+        managerView.didTapScreen(sender: sender)
+    }
+    
     // MARK: - Setup Elements
     
     override func addSubViews() {
@@ -230,6 +234,14 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         view.addSubview(backButton)
         containerView.addSubview(editPageHeaderView)
         containerView.addSubview(managerView)
+        
+        let didTapScreenGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapScreen(sender:))
+        )
+        didTapScreenGesture.delegate = self
+        didTapScreenGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(didTapScreenGesture)
     }
     
     override func setupConstraints() {

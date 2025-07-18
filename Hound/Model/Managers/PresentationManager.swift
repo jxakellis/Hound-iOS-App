@@ -9,6 +9,7 @@
 //
 
 import NotificationBannerSwift
+import SnapKit
 import SwiftMessages
 import UIKit
 
@@ -25,8 +26,8 @@ enum PresentationManager {
     /// The UIViewController that is presented by PresentationManager
     private static var currentPresentedViewController: UIViewController? {
         didSet {
-            HoundLogger.general.notice("currentPresentedViewController:\t \(self.currentPresentedViewController?.self.description ?? "none") and its presented on \(lastFromGlobalPresenterStack?.description ?? "none")")
-            HoundLogger.general.notice("globalPresenterStack:\t \(globalPresenterStack)")
+            HoundLogger.general.notice("currentPresentedViewController: \(self.currentPresentedViewController?.self.description ?? "none") and its presented on \(lastFromGlobalPresenterStack?.description ?? "none")")
+            HoundLogger.general.notice("globalPresenterStack: \(globalPresenterStack)")
         }
     }
     
@@ -34,7 +35,7 @@ enum PresentationManager {
     private static let fetchingInformationAlertController: UIAlertController = {
         let fetchingInformationAlertController = UIAlertController(title: "Fetching Information...", message: nil, preferredStyle: .alert)
         fetchingInformationAlertController.view.translatesAutoresizingMaskIntoConstraints = false
-       
+        
         let fetchingActivityIndicator = UIActivityIndicatorView(style: .medium)
         fetchingActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
         fetchingActivityIndicator.startAnimating()
@@ -245,9 +246,40 @@ enum PresentationManager {
         }()
         
         guard let globalPresenter = PresentationManager.globalPresenterStack.last else {
-            HoundLogger.general.error("PresentationManager.enqueueBanner:\t Unable to present banner, globalPresenterStack is empty")
+            HoundLogger.general.error("PresentationManager.enqueueBanner: Unable to present banner, globalPresenterStack is empty")
             return
         }
+        
+        let topEdgeInset: CGFloat = {
+            let safeAreaTop = UIApplication.keyWindow?.safeAreaInsets.top ?? 0.0
+
+            // Dynamic Island if top inset is around 54pt (iPhone 14 Pro/15 Pro, etc.)
+            let hasDynamicIsland = safeAreaTop > 50.0
+            // Notch if top inset is 44pt or more (iPhone X and up)
+            let hasNotch = safeAreaTop >= 44.0
+
+            let isPortrait: Bool = {
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                    return windowScene.interfaceOrientation.isPortrait
+                }
+                return true
+            }()
+            let navBarHidden = globalPresenter.navigationController?.isNavigationBarHidden ?? true
+
+            if hasDynamicIsland && isPortrait && navBarHidden {
+                return 44.0
+            }
+            else if hasNotch && isPortrait && navBarHidden {
+                return 40.0
+            }
+            else {
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let height = windowScene.statusBarManager?.statusBarFrame.height {
+                    return height
+                }
+                return 20.0 // Default fallback
+            }
+        }()
         
         banner.show(
             // using default queuePosition: ,
@@ -256,7 +288,7 @@ enum PresentationManager {
             on: globalPresenter,
             // safeAreaInsets of globalPresenter could be flawed, e.g. if the globalPresenter is a pageSheet, then the safeAreaInsets will be zero. Try to find the safeAreaInsets of the entire window if possible, if not fall back to nearestNonPageSheetGlobalPresenter or eventually just accept the globalPresenter
             // If the globalPresenter's top safeAreaInset is not zero, that mean we have to adjust the banner for the safe area for the notch on the top of the screen. This means we need to artifically adjust the banner further down.
-            edgeInsets: UIEdgeInsets(top: globalPresenter.view.safeAreaInsets.top, left: 10.0, bottom: 10.0, right: 10.0),
+            edgeInsets: UIEdgeInsets(top: topEdgeInset, left: 10.0, bottom: 10.0, right: 10.0),
             cornerRadius: VisualConstant.LayerConstant.defaultCornerRadius,
             shadowColor: UIColor.label,
             shadowOpacity: 0.5,
@@ -289,7 +321,7 @@ enum PresentationManager {
     }
     
     // MARK: - Private Internal Queue
-
+    
     private static var viewControllerPresentationQueue: [UIViewController] = []
     
     private static func enqueue(_ forViewController: UIViewController) {
@@ -354,7 +386,7 @@ enum PresentationManager {
               globalPresenter.presentedViewController == nil,
               globalPresenter.viewIfLoaded?.window != nil else {
             
-            HoundLogger.general.debug("PresentationManager.presentNextViewController:\t Unable to presentNextViewController, trying again soon")
+            HoundLogger.general.debug("PresentationManager.presentNextViewController: Unable to presentNextViewController, trying again soon")
             HoundLogger.general.debug("\t\tglobalPresenter \(PresentationManager.globalPresenterStack.last.debugDescription)")
             HoundLogger.general.debug("\t\tglobalPresenter.isBeingPresented \(PresentationManager.globalPresenterStack.last?.isBeingPresented == true)")
             HoundLogger.general.debug("\t\tglobalPresenter.isBeingDismissed \(PresentationManager.globalPresenterStack.last?.isBeingDismissed == true)")

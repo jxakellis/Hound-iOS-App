@@ -35,6 +35,7 @@ final class DogsAddTriggerTimeDelayView: HoundView {
     }()
     
     @objc private func didUpdateCountdown(_ sender: Any) {
+        self.errorMessage = nil
         updateDescriptionLabel()
         delegate?.willDismissKeyboard()
     }

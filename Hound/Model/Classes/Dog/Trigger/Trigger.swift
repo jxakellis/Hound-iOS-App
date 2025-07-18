@@ -414,9 +414,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         return false
     }
     
-    func nextReminderDate(afterLog log: Log) -> Date? {
-        let date = log.logEndDate ?? log.logStartDate
-        
+    func nextReminderDate(afterDate date: Date) -> Date? {
         switch triggerType {
         case .timeDelay:
             return date.addingTimeInterval(triggerTimeDelay)
@@ -445,6 +443,12 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             // executionDate doesn't exist or is before logStart/endDate
             return nextDayDate
         }
+    }
+    
+    func nextReminderDate(afterLog log: Log) -> Date? {
+        let date = log.logEndDate ?? log.logStartDate
+        
+        return nextReminderDate(afterDate: date)
     }
     
     func createTriggerResultReminder(afterLog log: Log) -> Reminder? {

@@ -673,6 +673,34 @@ enum ErrorConstant {
                 forOnTap: nil)
         }
     }
+    
+    enum TriggerError {
+        static func reminderResultMissing() -> HoundError {
+                HoundError(
+                    forName: "TriggerError.reminderResultMissing",
+                    forDescription: "Choose a reminder to create",
+                    // "Choose a reminder to create when automation runs",
+                    forOnTap: nil)
+            }
+        static func logReactionMissing() -> HoundError {
+            HoundError(
+                forName: "TriggerError.logReactionMissing",
+                forDescription: "Choose at least one log type",
+                forOnTap: nil)
+        }
+        static func timeDelayInvalid() -> HoundError {
+                HoundError(
+                    forName: "TriggerError.timeDelayInvalid",
+                    forDescription: "The time delay you entered isn't valid. Try picking a different delay.",
+                    forOnTap: nil)
+            }
+        static func fixedTimeTypeAmountInvalid() -> HoundError {
+                HoundError(
+                    forName: "TriggerError.fixedTimeTypeAmountInvalid",
+                    forDescription: "The number of days for your automation is invalid. Please choose a valid amount.",
+                    forOnTap: nil)
+            }
+    }
 
     enum SignInWithAppleError {
         static func canceled() -> HoundError {

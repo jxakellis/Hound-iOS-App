@@ -102,7 +102,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     private(set) var isSyncInProgress: Bool = false {
         didSet {
             // When isSyncInProgress gets turned off, meaning the syncing has completed, then reset hasDisplayedOfflineModeBanner so that if offline mode is entered again, the banner will display again
-            if oldValue == true && isSyncInProgress == false {
+            if oldValue == true && isSyncInProgress == false && isSyncNeeded == false {
                 hasDisplayedOfflineModeBanner = false
             }
         }

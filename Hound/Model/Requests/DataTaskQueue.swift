@@ -19,7 +19,7 @@ private final class AppActiveTaskQueue {
                 task()
                 return
             }
-            HoundLogger.apiRequest.warning("AppActiveTaskQueue.performWhenActive:\t App is not active, queuing task to be performed when app becomes active")
+            HoundLogger.apiRequest.warning("AppActiveTaskQueue.performWhenActive: App is not active, queuing task to be performed when app becomes active")
             tasks.append(task)
             startObserving()
         }
@@ -27,7 +27,7 @@ private final class AppActiveTaskQueue {
 
     @objc private static func handleDidBecomeActive() {
         guard UIApplication.shared.applicationState == .active else { return }
-        HoundLogger.apiRequest.warning("AppActiveTaskQueue.handleDidBecomeActive:\t App is now active, executing \(tasks.count) tasks immediately")
+        HoundLogger.apiRequest.warning("AppActiveTaskQueue.handleDidBecomeActive: App is now active, executing \(tasks.count) tasks immediately")
         let queued = tasks
         tasks.removeAll()
         for task in queued {
@@ -114,7 +114,7 @@ enum DataTaskQueue {
             
             guard delayNeededToAvoidRateLimit <= 0.1 else {
                 isDelayInProgress = true
-                HoundLogger.apiRequest.warning("DataTaskQueue.startTask:\t Rate limit triggered, delaying next request by \(delayNeededToAvoidRateLimit) seconds for \(taskQueue.first?.originalRequest?.url?.description ?? "NO URL")")
+                HoundLogger.apiRequest.warning("DataTaskQueue.startTask: Rate limit triggered, delaying next request by \(delayNeededToAvoidRateLimit) seconds for \(taskQueue.first?.originalRequest?.url?.description ?? "NO URL")")
                 DispatchQueue.global().asyncAfter(deadline: .now() + delayNeededToAvoidRateLimit) {
                     self.isDelayInProgress = false
                     self.startTask()

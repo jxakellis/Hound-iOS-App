@@ -46,6 +46,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
     }()
     
     @objc private func didTapLabelForDropDown() {
+        self.errorMessage = nil
         // TODO destroy the drop down everytime as if the label above changes, then the forViewPositionReference changes so the current drop down has the wrong position
         delegate?.willDismissKeyboard()
         if dropDown == nil {
@@ -63,6 +64,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
     }
     
     @objc private func didUpdateTimeOfDay(_ sender: Any) {
+        self.errorMessage = nil
         updateDescriptionLabel()
         delegate?.willDismissKeyboard()
     }

@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIApplication {
-
+    
     /// Special keyWindow
     static var keyWindow: UIWindow? {
         // Get connected scenes
@@ -23,9 +23,9 @@ extension UIApplication {
         // Finally, keep only the key window
             .first(where: \.isKeyWindow)
     }
-
+    
     static var previousAppVersion: String?
-
+    
     static var appVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? oldestCompatibleAppVersion
     }

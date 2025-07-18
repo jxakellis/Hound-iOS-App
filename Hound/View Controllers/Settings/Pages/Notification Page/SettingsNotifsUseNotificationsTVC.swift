@@ -91,11 +91,11 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
                         self.delegate?.didToggleIsNotificationEnabled()
                     }
                 case .provisional:
-                    HoundLogger.general.fault("UNUserNotificationCenter.current().getNotificationSettings:\t .provisional")
+                    HoundLogger.general.fault("UNUserNotificationCenter.current().getNotificationSettings: .provisional")
                 case .ephemeral:
-                    HoundLogger.general.fault("UNUserNotificationCenter.current().getNotificationSettings:\t .ephemeral")
+                    HoundLogger.general.fault("UNUserNotificationCenter.current().getNotificationSettings: .ephemeral")
                 @unknown default:
-                    HoundLogger.general.fault("UNUserNotificationCenter.current().getNotificationSettings:\t @unknown notification authorization status")
+                    HoundLogger.general.fault("UNUserNotificationCenter.current().getNotificationSettings: @unknown notification authorization status")
                 }
             }
         }

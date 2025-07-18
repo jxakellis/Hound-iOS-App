@@ -49,7 +49,7 @@ class HoundError: Error {
 
     /// Alerts the user to this error. If the error is an appVersionOutdated error, presents a undismissable alert to update the app (bricking Hound until they update). Otherwise, presents a banner about the error
     func alert() {
-        HoundLogger.general.error("HoundError.alert():\t Alerting user for error: \(self.description)")
+        HoundLogger.general.error("HoundError.alert(): Alerting user for error: \(self.description)")
 
         guard name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
             let vc = AppVersionOutdatedVC()

@@ -19,7 +19,7 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol, HoundDynamicBorder
     private var didSetupGeneratedViews = false
     internal func setupGeneratedViews() {
         guard !didSetupGeneratedViews else {
-            HoundLogger.general.warning("SomeHoundView.setupGeneratedViews:\t Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
+            HoundLogger.general.warning("SomeHoundView.setupGeneratedViews: Attempting to re-invoke setupGeneratedViews for \(String(describing: type(of: self)))")
             return
         }
         didSetupGeneratedViews = true
@@ -30,7 +30,7 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol, HoundDynamicBorder
     private var didAddSubViews = false
     internal func addSubViews() {
         guard !didAddSubViews else {
-            HoundLogger.general.warning("SomeHoundView.addSubViews:\t Attempting to re-invoke addSubViews for \(String(describing: type(of: self)))")
+            HoundLogger.general.warning("SomeHoundView.addSubViews: Attempting to re-invoke addSubViews for \(String(describing: type(of: self)))")
             return
         }
         didAddSubViews = true
@@ -40,7 +40,7 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol, HoundDynamicBorder
     private var didSetupConstraints = false
     internal func setupConstraints() {
         guard !didSetupConstraints else {
-            HoundLogger.general.warning("SomeHoundView.setupConstraints:\t Attempting to re-invoke setupConstraints for \(String(describing: type(of: self)))")
+            HoundLogger.general.warning("SomeHoundView.setupConstraints: Attempting to re-invoke setupConstraints for \(String(describing: type(of: self)))")
             return
         }
         didSetupConstraints = true

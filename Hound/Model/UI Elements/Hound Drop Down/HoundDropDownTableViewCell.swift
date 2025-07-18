@@ -36,11 +36,20 @@ class HoundDropDownTableViewCell: HoundTableViewCell {
     }
 
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
-    func setCustomSelectedTableViewCell(forSelected selected: Bool) {
+    func setCustomSelectedTableViewCell(forSelected selected: Bool, animated: Bool = true) {
         // DO NOT INVOKE DEFAULT IMPLEMENTATION OF super.setSelected(selected, animated: animated)
         guard selected != isCustomSelected else { return }
 
         isCustomSelected = selected
+        
+        guard animated else {
+            UIView.performWithoutAnimation {
+                self.contentView.backgroundColor = selected ? UIColor.systemBlue : UIColor.systemBackground
+                self.label.textColor = selected ? UIColor.white : UIColor.label
+            }
+            return
+        }
+        
         UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {
             self.contentView.backgroundColor = selected ? UIColor.systemBlue : UIColor.systemBackground
             self.label.textColor = selected ? UIColor.white : UIColor.label
@@ -59,8 +68,8 @@ class HoundDropDownTableViewCell: HoundTableViewCell {
 
     override func setupConstraints() {
         super.setupConstraints()
-        leading = label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8)
-        trailing = label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
+        leading = label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori)
+        trailing = label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori)
         
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: contentView.topAnchor),

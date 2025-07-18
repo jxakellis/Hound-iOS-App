@@ -87,7 +87,7 @@ final class ReminderActionType: NSObject, Comparable, NSCoding {
         
         // all reminder actions should map to at least one log action type
         if results.count < 1 {
-            HoundLogger.general.warning("associatedLogActionTypes:\t Expected to find >= 1 LogActionType for ReminderActionType \(self.reminderActionTypeId), but found \(results.count).")
+            HoundLogger.general.warning("associatedLogActionTypes: Expected to find >= 1 LogActionType for ReminderActionType \(self.reminderActionTypeId), but found \(results.count).")
             return []
         }
         
