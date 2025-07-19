@@ -34,7 +34,6 @@ final class DogsAddReminderOneTimeView: HoundView {
     
     private let oneTimeDescriptionLabel: HoundLabel = {
         let label = HoundLabel()
-        label.text = "A single-use reminder sounds one alarm and then automatically deletes"
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
@@ -43,6 +42,7 @@ final class DogsAddReminderOneTimeView: HoundView {
     }()
     
     @objc private func didUpdateOneTimeDatePicker(_ sender: Any) {
+        updateDescriptionLabel()
         delegate?.willDismissKeyboard()
     }
     
@@ -59,6 +59,13 @@ final class DogsAddReminderOneTimeView: HoundView {
     func setup(forDelegate: DogsAddReminderOneTimeViewDelegate, forOneTimeDate: Date?) {
         delegate = forDelegate
         oneTimeDatePicker.date = forOneTimeDate ?? oneTimeDatePicker.date
+        updateDescriptionLabel()
+    }
+    
+    // MARK: - Functions
+    
+    private func updateDescriptionLabel() {
+        oneTimeDescriptionLabel.text = "Reminder will sound once on \(oneTimeDatePicker.date.formatted(date: .long, time: .shortened)) then automatically delete"
     }
     
     // MARK: - Setup Elements
@@ -81,7 +88,7 @@ final class DogsAddReminderOneTimeView: HoundView {
         
         // oneTimeDatePicker
         NSLayoutConstraint.activate([
-            oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             oneTimeDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             oneTimeDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             oneTimeDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),

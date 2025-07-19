@@ -96,7 +96,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     private lazy var searchTextField: HoundTextField = {
         let textField = HoundTextField(huggingPriority: 295, compressionResistancePriority: 295)
         textField.delegate = self
-        textField.placeholder = "Search notes, units, and more..."
+        textField.placeholder = " Search notes, units, and more..."
         textField.backgroundColor = UIColor.systemBackground
         textField.applyStyle(.thinGrayBorder)
         textField.addTarget(self, action: #selector(didChangeSearchText(_:)), for: .editingChanged)

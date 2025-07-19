@@ -219,7 +219,7 @@ final class DogsAddReminderWeeklyView: HoundView {
         
         // timeOfDayDatePicker
         NSLayoutConstraint.activate([
-            timeOfDayDatePicker.topAnchor.constraint(equalTo: weekdayStack.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            timeOfDayDatePicker.topAnchor.constraint(equalTo: weekdayStack.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             timeOfDayDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
             timeOfDayDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             timeOfDayDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),

@@ -29,12 +29,17 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     // MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if !(dogNameTextField.text ?? "").isEmpty {
+            dogNameTextField.errorMessage = nil
+        }
         self.dismissKeyboard()
         return false
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
+        if !string.isEmpty {
+            dogNameTextField.errorMessage = nil
+        }
         // attempt to read the range they are trying to change
         guard let currentText = textField.text, let stringRange = Range(range, in: currentText) else {
             return true
@@ -115,7 +120,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let textField = HoundTextField(huggingPriority: 290, compressionResistancePriority: 290)
         textField.delegate = self
         
-        textField.placeholder = "Enter your dog's name..."
+        textField.placeholder = " Enter your dog's name..."
         textField.backgroundColor = UIColor.systemBackground
         
         textField.applyStyle(.thinGrayBorder)
@@ -257,7 +262,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsVC.
     @objc private func didTouchUpInsideSaveDog(_ sender: Any) {
-        var dog = dogToUpdate ?? Dog()
+        let dog = dogToUpdate ?? Dog()
         guard dog.changeDogName(forDogName: dogNameTextField.text) else {
             dogNameTextField.errorMessage = ErrorConstant.DogError.dogNameMissing().description
             return

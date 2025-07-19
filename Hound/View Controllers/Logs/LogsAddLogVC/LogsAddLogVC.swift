@@ -679,7 +679,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         // Log Custom Action Name
         logCustomActionNameTextField.text = logToUpdate?.logCustomActionName
         initialLogCustomActionName = logCustomActionNameTextField.text
-        logCustomActionNameTextField.placeholder = "Add a custom name..."
+        logCustomActionNameTextField.placeholder = " Add a custom name..."
         logCustomActionNameTextField.delegate = uiDelegate
         
         // Log Unit

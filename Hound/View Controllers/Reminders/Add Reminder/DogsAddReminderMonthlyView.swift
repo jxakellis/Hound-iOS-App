@@ -18,7 +18,6 @@ final class DogsAddReminderMonthlyView: HoundView {
     
     private let monthlyDescriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.text = "A monthly reminder sounds an alarm consistently on the same day each month"
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
@@ -41,6 +40,7 @@ final class DogsAddReminderMonthlyView: HoundView {
     }()
     
     @objc private func didUpdateTimeOfDay(_ sender: Any) {
+        updateDescriptionLabel()
         delegate?.willDismissKeyboard()
     }
     
@@ -58,6 +58,18 @@ final class DogsAddReminderMonthlyView: HoundView {
     func setup(forDelegate: DogsAddReminderMonthlyViewDelegate, forTimeOfDay: Date?) {
         delegate = forDelegate
         timeOfDayDatePicker.date = forTimeOfDay ?? timeOfDayDatePicker.date
+        updateDescriptionLabel()
+    }
+    
+    // MARK: - Functions
+    
+    private func updateDescriptionLabel() {
+        // TODO TIMING implement new logic to utilize localization here
+        // TODO TIMING add disclaimer if time is 29, 30, or 31 (do we roll over? I forget how we handle that)
+        let day = Calendar.current.component(.day, from: timeOfDayDatePicker.date)
+        
+        // Reminder will go
+        monthlyDescriptionLabel.text = "Reminder will sound on the \(day)\(day.daySuffix()) of each month at \(timeOfDayDatePicker.date.formatted(date: .omitted, time: .shortened))"
     }
     
     // MARK: - Setup Elements
@@ -79,7 +91,7 @@ final class DogsAddReminderMonthlyView: HoundView {
         ])
         
         NSLayoutConstraint.activate([
-            timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             timeOfDayDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             timeOfDayDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             timeOfDayDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),

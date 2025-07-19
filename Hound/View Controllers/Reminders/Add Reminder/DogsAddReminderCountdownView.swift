@@ -30,7 +30,6 @@ final class DogsAddReminderCountdownView: HoundView {
     
     private let countdownDescriptionLabel: HoundLabel = {
         let label = HoundLabel()
-        label.text = "A recurring reminder sounds an alarm at countdown's end and then automatically restarts"
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = VisualConstant.FontConstant.secondaryRegularLabel
@@ -38,6 +37,7 @@ final class DogsAddReminderCountdownView: HoundView {
         return label
     }()
     @objc private func didUpdateCountdown(_ sender: Any) {
+        updateDescriptionLabel()
         delegate?.willDismissKeyboard()
     }
     
@@ -56,6 +56,13 @@ final class DogsAddReminderCountdownView: HoundView {
         delegate = forDelegate
         
         countdownDatePicker.countDownDuration = forCountdownDuration ?? countdownDatePicker.countDownDuration
+        updateDescriptionLabel()
+    }
+    
+    // MARK: - Functions
+    
+    private func updateDescriptionLabel() {
+        countdownDescriptionLabel.text = "Reminder will sound every \((currentCountdownDuration ?? 0).readable(capitalizeWords: false, abreviateWords: false)) then automatically restart"
     }
     
     // MARK: - Setup Elements
@@ -78,7 +85,7 @@ final class DogsAddReminderCountdownView: HoundView {
         
         // countdownDatePicker
         NSLayoutConstraint.activate([
-            countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
             countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             countdownDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),

@@ -53,7 +53,7 @@ extension UIView {
             if let superview = self.superview {
                 superview.addSubview(newLabel)
                 NSLayoutConstraint.activate([
-                    newLabel.topAnchor.constraint(equalTo: self.bottomAnchor, constant: ConstraintConstant.Spacing.contentTightIntraVert),
+                    newLabel.topAnchor.constraint(equalTo: self.bottomAnchor),
                     newLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                     newLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor)
                 ])
