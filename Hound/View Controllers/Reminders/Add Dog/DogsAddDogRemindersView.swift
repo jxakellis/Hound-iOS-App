@@ -185,9 +185,8 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
             
-            self.tableView.deleteSections([indexPath.section], with: .automatic)
+            self.tableView.deleteSections([indexPath.section], with: .fade)
             UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
-                // TODO does this still work in the subview or does parent need to do this as well?
                 self.setNeedsLayout()
                 self.layoutIfNeeded()
             }

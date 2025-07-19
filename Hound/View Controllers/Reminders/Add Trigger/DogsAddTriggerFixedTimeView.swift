@@ -12,7 +12,17 @@ protocol DogsAddTriggerFixedTimeViewDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
+enum DogsAddTriggerFixedTimeDropDownTypes: String {
+    case dayOffset = "DropDownDayOffset"
+}
+
+final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIGestureRecognizerDelegate {
+    
+    // MARK: - UIGestureRecognizerDelegate
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
     
     // MARK: - Elements
     
@@ -31,6 +41,9 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select the day offset..."
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown))
+        gesture.name = DogsAddTriggerFixedTimeDropDownTypes.dayOffset.rawValue
+        gesture.delegate = self
+        gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(gesture)
         return label
@@ -46,24 +59,6 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
         return datePicker
     }()
     
-    @objc private func didTapLabelForDropDown() {
-        self.errorMessage = nil
-        // TODO destroy the drop down everytime as if the label above changes, then the forViewPositionReference changes so the current drop down has the wrong position
-        delegate?.willDismissKeyboard()
-        if dropDown == nil {
-            let dd = HoundDropDown()
-            dd.setupDropDown(forHoundDropDownIdentifier: "DropDownOffset", forDataSource: self, forViewPositionReference: dayOffsetLabel.frame, forOffset: 2.5, forRowHeight: HoundDropDown.rowHeightForHoundLabel)
-            addSubview(dd)
-            dropDown = dd
-        }
-        if dropDown?.isDown == true {
-            dropDown?.hideDropDown(animated: true)
-        }
-        else {
-            dropDown?.showDropDown(numberOfRowsToShow: 6.5, animated: true)
-        }
-    }
-    
     @objc private func didUpdateTimeOfDay(_ sender: Any) {
         self.errorMessage = nil
         updateDescriptionLabel()
@@ -74,11 +69,12 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
     
     private weak var delegate: DogsAddTriggerFixedTimeViewDelegate?
     
-    private var dropDown: HoundDropDown?
-    private var selectedIndex: Int = 0
-    private let offsetOptions = [0, 1, 2, 3, 4, 5, 6, 7]
+    private var dropDownDayOffset: HoundDropDown?
+    private var selectedDropDownDayOffsetIndexPath: IndexPath?
+    private var selectedDayOffset: Int = 0
+    private let availableDayOffsets = [0, 1, 2, 3, 4, 5, 6, 7]
     
-    var currentOffset: Int { selectedIndex }
+    var currentOffset: Int { selectedDayOffset }
     var currentTimeOfDay: Date { timeOfDayPicker.date }
     
     // MARK: - Setup
@@ -86,8 +82,10 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
     func setup(forDelegate: DogsAddTriggerFixedTimeViewDelegate, forDaysOffset: Int?, forTimeOfDay: Date?) {
         delegate = forDelegate
         
-        selectedIndex = forDaysOffset ?? selectedIndex
-        dayOffsetLabel.text = textForOffset(selectedIndex)
+        let index = forDaysOffset ?? selectedDayOffset
+        selectedDayOffset = index
+        selectedDropDownDayOffsetIndexPath = IndexPath(row: index, section: 0)
+        dayOffsetLabel.text = textForOffset(index)
         
         timeOfDayPicker.date = forTimeOfDay ?? timeOfDayPicker.date
         
@@ -101,16 +99,16 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
         // Reminder will go off 2 days after the matching log
         var text = "Reminder will go off "
         
-        switch selectedIndex {
+        switch selectedDayOffset {
         case 0: text += "on the same day as the log "
         case 1: text += "the day after the log "
-        default: text += "\(selectedIndex) days after the log "
+        default: text += "\(selectedDayOffset) days after the log "
         }
         
         text += "at \(timeOfDayPicker.date.formatted(date: .omitted, time: .shortened))"
         
         var emphasizedText: String?
-        if selectedIndex == 0 {
+        if selectedDayOffset == 0 {
             emphasizedText = ". If the time has passed, reminder rolls over to the next day"
         }
         let precalculatedDynamicTextColor = UIColor.label
@@ -140,13 +138,107 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
         }
     }
     
+    // MARK: - Drop Down Handling
+    
+    @objc private func didTapScreen(sender: UITapGestureRecognizer) {
+        guard let senderView = sender.view else { return }
+        let point = sender.location(in: senderView)
+        guard let touched = senderView.hitTest(point, with: nil) else { return }
+        
+        // If a dropDownDayOffset exists, hide it unless tap is on its label or itself
+        if let dd = dropDownDayOffset, !touched.isDescendant(of: dayOffsetLabel) && !touched.isDescendant(of: dd) {
+            
+            dd.hideDropDown(animated: true)
+        }
+        
+        // Dismiss keyboard if tap was outside text inputs
+        dismissKeyboard()
+    }
+    
+    @objc private func didTapLabelForDropDown(sender: UITapGestureRecognizer) {
+        guard let name = sender.name,
+              let targetType = DogsAddTriggerFixedTimeDropDownTypes(rawValue: name) else { return }
+        
+        let targetDropDown = dropDown(forDropDownType: targetType)
+        
+        self.errorMessage = nil
+        
+        if (targetDropDown?.isDown ?? false) == false {
+            showDropDown(targetType, animated: true)
+        }
+        else {
+            targetDropDown?.hideDropDown(animated: true)
+        }
+    }
+    
+    /// For a given dropDownType, return the corresponding dropDownDayOffset UIView
+    private func dropDown(forDropDownType type: DogsAddTriggerFixedTimeDropDownTypes) -> HoundDropDown? {
+        switch type {
+        case .dayOffset: return dropDownDayOffset
+        }
+    }
+    
+    /// For a given dropDownType, return the label that triggers it
+    private func labelForDropDown(forDropDownType type: DogsAddTriggerFixedTimeDropDownTypes) -> HoundLabel {
+        switch type {
+        case .dayOffset: return dayOffsetLabel
+        }
+    }
+    
+    /// Show or hide the dropdown for the given type
+    private func showDropDown(_ type: DogsAddTriggerFixedTimeDropDownTypes, animated: Bool) {
+        let label = labelForDropDown(forDropDownType: type)
+        let superview = label.superview
+        let dropDowns = [dropDownDayOffset]
+        
+        // work around: ui element or error message couldve been added which is higher in the view than dropdown since dropdown last opened
+        // ensure that dropdowns are on top (and in correct order relative to other drop downs)
+        dropDowns.forEach { dropDownDayOffset in
+            dropDownDayOffset?.removeFromSuperview()
+        }
+        dropDowns.reversed().forEach { dropDownDayOffset in
+            if let dropDownDayOffset = dropDownDayOffset, let superview = superview {
+                superview.addSubview(dropDownDayOffset)
+            }
+        }
+        
+        var targetDropDown = dropDown(forDropDownType: type)
+        if targetDropDown == nil {
+            targetDropDown = HoundDropDown()
+            targetDropDown?.setupDropDown(
+                forHoundDropDownIdentifier: type.rawValue,
+                forDataSource: self,
+                forViewPositionReference: label.frame,
+                forOffset: 2.5,
+                forRowHeight: HoundDropDown.rowHeightForHoundLabel
+            )
+            switch type {
+            case .dayOffset: dropDownDayOffset = targetDropDown
+            }
+            if let superview = superview, let targetDropDown = targetDropDown {
+                superview.addSubview(targetDropDown)
+            }
+        }
+        
+        targetDropDown?.showDropDown(
+            numberOfRowsToShow: min(6.5, {
+                switch type {
+                case .dayOffset:
+                    return CGFloat(availableDayOffsets.count)
+                }
+            }()),
+            animated: animated
+        )
+    }
+    
     // MARK: - DropDown Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         guard let cell = cell as? HoundDropDownTableViewCell else { return }
         cell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
-        cell.label.text = textForOffset(offsetOptions[indexPath.row])
-        if indexPath.row == selectedIndex {
+        cell.label.text = textForOffset(availableDayOffsets[indexPath.row])
+        
+        if indexPath.row == selectedDayOffset {
             cell.setCustomSelectedTableViewCell(forSelected: true)
         }
         else {
@@ -156,23 +248,42 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
     }
     
     func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
-        return offsetOptions.count
+        switch dropDownUIViewIdentifier {
+        case DogsAddTriggerFixedTimeDropDownTypes.dayOffset.rawValue:
+            return availableDayOffsets.count
+        default:
+            return 0
+        }
     }
     
     func numberOfSections(dropDownUIViewIdentifier: String) -> Int {
+        // Each dropdown has a single section
         return 1
     }
     
-    // TODO BUG CANT SELECT THINGS IN DROP DOWN
-
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        dayOffsetLabel.text = textForOffset(offsetOptions[indexPath.row])
-        selectedIndex = indexPath.row
-        
-        dropDown?.hideDropDown(animated: true)
-        delegate?.willDismissKeyboard()
-        
-        updateDescriptionLabel()
+        // TODO BUG THIS ISNT GETTING INVOKED AND CANT SELECT ITEMS
+        print("selectItemInDropDown: \(indexPath) for \(dropDownUIViewIdentifier)")
+        switch dropDownUIViewIdentifier {
+        case DogsAddTriggerFixedTimeDropDownTypes.dayOffset.rawValue:
+            if let previousSelectedIndexPath = selectedDropDownDayOffsetIndexPath, let previousSelectedCell = dropDownDayOffset?.dropDownTableView?.cellForRow(at: previousSelectedIndexPath) as? HoundDropDownTableViewCell {
+                previousSelectedCell.setCustomSelectedTableViewCell(forSelected: false)
+            }
+            if let selectedCell = dropDownDayOffset?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
+                selectedCell.setCustomSelectedTableViewCell(forSelected: true)
+            }
+            selectedDropDownDayOffsetIndexPath = indexPath
+            let dayOffset = indexPath.row
+            selectedDayOffset = dayOffset
+            dayOffsetLabel.text = textForOffset(availableDayOffsets[dayOffset])
+            
+            dropDownDayOffset?.hideDropDown(animated: true)
+            delegate?.willDismissKeyboard()
+            
+            updateDescriptionLabel()
+        default:
+            return
+        }
     }
     
     // MARK: - Setup Elements
@@ -205,7 +316,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
         
         NSLayoutConstraint.activate([
             timeOfDayPicker.topAnchor.constraint(equalTo: dayOffsetLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            timeOfDayPicker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100.0),
+            timeOfDayPicker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -200.0),
             timeOfDayPicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             timeOfDayPicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             timeOfDayPicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),

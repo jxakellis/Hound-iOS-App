@@ -246,7 +246,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     }
     
     private func updateDynamicUIElements() {
-        logReactionsLabel.text = selectedLogReactions.map({ $0.readableName(includeMatchingEmoji: false) }).joined(separator: ", ")
+        logReactionsLabel.text = selectedLogReactions.map({ $0.readableName(includeMatchingEmoji: true) }).joined(separator: ", ")
         reminderResultLabel.text = selectedReminderResult?.readableName
         reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
         
