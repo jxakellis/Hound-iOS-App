@@ -142,24 +142,10 @@ final class DogsAddReminderWeeklyView: HoundView {
         timeOfDayDatePicker.date
     }
     
-    private var initialWeekdays: [Int] = []
-    private var initialTimeOfDayDate: Date?
-    var didUpdateInitialValues: Bool {
-        if currentWeekdays != initialWeekdays {
-            return true
-        }
-        if timeOfDayDatePicker.date != initialTimeOfDayDate {
-            return true
-        }
-        
-        return false
-    }
-    
     // MARK: - Setup
     
     func setup(forDelegate: DogsAddReminderWeeklyViewDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
         delegate = forDelegate
-        initialTimeOfDayDate = forTimeOfDay
         timeOfDayDatePicker.date = forTimeOfDay ?? timeOfDayDatePicker.date
         
         weekdayButtons.forEach { button in
@@ -176,8 +162,6 @@ final class DogsAddReminderWeeklyView: HoundView {
                 disableWeekdayButton(button)
             }
         }
-        initialWeekdays = forWeekdays ?? weekdayButtons.compactMap { button in valueForWeekdayButton(button) }
-        
     }
     
     // MARK: - Functions

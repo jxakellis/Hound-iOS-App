@@ -251,7 +251,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             return true
         }
         
-        return initialReminder.isSame(asReminder: reminderToUpdate)
+        return initialReminder.isSame(as: reminderToUpdate) == false
     }
     
     // MARK: - Setup

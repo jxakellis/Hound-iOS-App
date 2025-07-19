@@ -58,8 +58,8 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
     // MARK: - Compare
     
     /// Returns true if all stored properties are equivalent
-    func isSame(as components: CountdownComponents) -> Bool {
-        return executionInterval == components.executionInterval
+    func isSame(as other: CountdownComponents) -> Bool {
+        return executionInterval == other.executionInterval
     }
     
 }

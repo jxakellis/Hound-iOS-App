@@ -81,26 +81,15 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
     var currentOffset: Int { selectedIndex }
     var currentTimeOfDay: Date { timeOfDayPicker.date }
     
-    private var initialDaysOffset: Int = 0
-    private var initialTimeOfDay: Date?
-    
-    var didUpdateInitialValues: Bool {
-        if initialDaysOffset != selectedIndex { return true }
-        if let initDate = initialTimeOfDay, initDate != currentTimeOfDay { return true }
-        return false
-    }
-    
     // MARK: - Setup
     
     func setup(forDelegate: DogsAddTriggerFixedTimeViewDelegate, forDaysOffset: Int?, forTimeOfDay: Date?) {
         delegate = forDelegate
         
-        initialDaysOffset = forDaysOffset ?? initialDaysOffset
-        selectedIndex = forDaysOffset ?? initialDaysOffset
+        selectedIndex = forDaysOffset ?? selectedIndex
         dayOffsetLabel.text = textForOffset(selectedIndex)
         
         timeOfDayPicker.date = forTimeOfDay ?? timeOfDayPicker.date
-        initialTimeOfDay = forTimeOfDay ?? timeOfDayPicker.date
         
         updateDescriptionLabel()
     }

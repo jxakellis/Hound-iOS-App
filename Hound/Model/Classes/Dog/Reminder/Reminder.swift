@@ -689,54 +689,54 @@ extension Reminder {
     // MARK: - Compare
     
     /// Returns true if all the server synced properties for the reminder are the same. This includes all the base properties here (yes the reminderId too) and the reminder components for the corresponding reminderActionTypeId
-    func isSame(asReminder reminder: Reminder) -> Bool {
-        if reminderId != reminder.reminderId {
+    func isSame(as other: Reminder) -> Bool {
+        if reminderId != other.reminderId {
             return false
         }
-        else if reminderUUID != reminder.reminderUUID {
+        else if reminderUUID != other.reminderUUID {
             return false
         }
-        else if reminderActionTypeId != reminder.reminderActionTypeId {
+        else if reminderActionTypeId != other.reminderActionTypeId {
             return false
         }
-        else if reminderCustomActionName != reminder.reminderCustomActionName {
+        else if reminderCustomActionName != other.reminderCustomActionName {
             return false
         }
         // reminder types (countdown, weekly, monthly, one time)
-        else if reminderType != reminder.reminderType {
+        else if reminderType != other.reminderType {
             return false
         }
-        else if reminderExecutionBasis != reminder.reminderExecutionBasis {
+        else if reminderExecutionBasis != other.reminderExecutionBasis {
             return false
         }
-        else if reminderIsEnabled != reminder.reminderIsEnabled {
+        else if reminderIsEnabled != other.reminderIsEnabled {
             return false
         }
-        else if reminderIsTriggerResult != reminder.reminderIsTriggerResult {
+        else if reminderIsTriggerResult != other.reminderIsTriggerResult {
             return false
         }
         
         // known at this point that the reminderTypes are the same
         switch reminderType {
         case .countdown:
-            if countdownComponents.isSame(as: reminder.countdownComponents) == false {
+            if countdownComponents.isSame(as: other.countdownComponents) == false {
                 return false
             }
         case .weekly:
-            if weeklyComponents.isSame(as: reminder.weeklyComponents) == false {
+            if weeklyComponents.isSame(as: other.weeklyComponents) == false {
                 return false
             }
         case .monthly:
-            if monthlyComponents.isSame(as: reminder.monthlyComponents) == false {
+            if monthlyComponents.isSame(as: other.monthlyComponents) == false {
                 return false
             }
         case .oneTime:
-            if oneTimeComponents.isSame(as: reminder.oneTimeComponents) == false {
+            if oneTimeComponents.isSame(as: other.oneTimeComponents) == false {
                 return false
             }
         }
         
-        if snoozeComponents.executionInterval != reminder.snoozeComponents.executionInterval {
+        if snoozeComponents.executionInterval != other.snoozeComponents.executionInterval {
             return false
         }
         

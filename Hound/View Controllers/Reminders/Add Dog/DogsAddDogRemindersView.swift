@@ -87,7 +87,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
             }
             
             // if any of the corresponding reminders are different, then return true to indicate that a reminder has been updated
-            if initialReminder.isSame(asReminder: currentReminder) == false {
+            if initialReminder.isSame(as: currentReminder) == false {
                 return true
             }
         }

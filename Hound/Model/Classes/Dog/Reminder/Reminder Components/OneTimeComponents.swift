@@ -72,8 +72,8 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     // MARK: - Compare
     
     /// Returns true if the stored date matches another one-time component
-    func isSame(as components: OneTimeComponents) -> Bool {
-        return oneTimeDate == components.oneTimeDate
+    func isSame(as other: OneTimeComponents) -> Bool {
+        return oneTimeDate == other.oneTimeDate
     }
     
 }

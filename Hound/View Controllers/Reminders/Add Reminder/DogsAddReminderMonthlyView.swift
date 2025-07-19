@@ -53,21 +53,10 @@ final class DogsAddReminderMonthlyView: HoundView {
         timeOfDayDatePicker.date
     }
     
-    private var initialTimeOfDay: Date?
-    var didUpdateInitialValues: Bool {
-        if currentTimeOfDay != initialTimeOfDay {
-            return true
-        }
-        
-        return currentTimeOfDay != initialTimeOfDay
-    }
-    
     // MARK: - Setup
     
     func setup(forDelegate: DogsAddReminderMonthlyViewDelegate, forTimeOfDay: Date?) {
         delegate = forDelegate
-        initialTimeOfDay = forTimeOfDay
-        
         timeOfDayDatePicker.date = forTimeOfDay ?? timeOfDayDatePicker.date
     }
     

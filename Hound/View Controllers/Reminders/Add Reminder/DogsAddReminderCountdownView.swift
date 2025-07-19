@@ -50,20 +50,10 @@ final class DogsAddReminderCountdownView: HoundView {
         countdownDatePicker.countDownDuration
     }
     
-    private var initialCountdownDuration: Double?
-    var didUpdateInitialValues: Bool {
-        if countdownDatePicker.countDownDuration != initialCountdownDuration {
-            return true
-        }
-        
-        return false
-    }
-    
     // MARK: - Setup
     
     func setup(forDelegate: DogsAddReminderCountdownViewDelegate, forCountdownDuration: Double?) {
         delegate = forDelegate
-        initialCountdownDuration = forCountdownDuration
         
         countdownDatePicker.countDownDuration = forCountdownDuration ?? countdownDatePicker.countDownDuration
     }

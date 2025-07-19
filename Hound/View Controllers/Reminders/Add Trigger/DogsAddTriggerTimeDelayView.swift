@@ -48,16 +48,10 @@ final class DogsAddTriggerTimeDelayView: HoundView {
         countdownDatePicker.countDownDuration
     }
     
-    private var initialTimeDelay: Double?
-    var didUpdateInitialValues: Bool {
-        return countdownDatePicker.countDownDuration != initialTimeDelay
-    }
-    
     // MARK: - Setup
     
     func setup(forDelegate: DogsAddTriggerTimeDelayViewDelegate, forTimeDelay: Double?) {
         delegate = forDelegate
-        initialTimeDelay = forTimeDelay
         if let delay = forTimeDelay {
             countdownDatePicker.countDownDuration = delay
         }

@@ -293,7 +293,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
             }
             
             // If current reminder is different that its corresponding initial reminder, then its been updated
-            return currentReminder.isSame(asReminder: initialReminder) == false
+            return currentReminder.isSame(as: initialReminder) == false
         }
         
         updatedReminders.forEach { updatedReminder in

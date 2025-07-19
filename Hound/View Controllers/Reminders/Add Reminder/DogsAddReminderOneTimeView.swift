@@ -54,21 +54,10 @@ final class DogsAddReminderOneTimeView: HoundView {
         oneTimeDatePicker.date
     }
     
-    private var initialOneTimeDate: Date?
-    var didUpdateInitialValues: Bool {
-        if oneTimeDate != initialOneTimeDate {
-            return true
-        }
-        
-        return oneTimeDate != initialOneTimeDate
-    }
-    
     // MARK: - Setup
     
     func setup(forDelegate: DogsAddReminderOneTimeViewDelegate, forOneTimeDate: Date?) {
         delegate = forDelegate
-        initialOneTimeDate = forOneTimeDate
-        
         oneTimeDatePicker.date = forOneTimeDate ?? oneTimeDatePicker.date
     }
     
