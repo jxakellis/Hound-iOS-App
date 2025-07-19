@@ -53,6 +53,12 @@ enum TriggerFixedTimeType: String, CaseIterable {
 
 final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
+    // TODO TRIGGERS add "conditions"
+    // - verbage for dogsaddtriggerVC: "when this log is added" "that meets these conditions" "then create reminder
+    // - 1. manually created
+    // - 2. created by alarm
+    // need to add this to trigger object, UI to DogAddTriggerVC & triggertvc, add columns/stuff to server, and logic to shouldActivateTrigger
+    
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {

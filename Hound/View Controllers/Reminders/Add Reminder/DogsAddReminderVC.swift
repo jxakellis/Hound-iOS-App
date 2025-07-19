@@ -111,7 +111,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
     // MARK: - Functions
     
     @objc private func didTouchUpInsideSaveReminder(_ sender: Any) {
-        guard let reminder = dogsAddReminderManagerView.currentReminder else { return }
+        guard let reminder = dogsAddReminderManagerView.constructReminder(showErrorIfFailed: true) else { return }
         
         // Persist custom action name locally
         LocalConfiguration.addReminderCustomAction(
@@ -185,7 +185,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
     }
     
     @objc private func didTouchUpInsideDuplicateReminder(_ sender: Any) {
-        guard let duplicateReminder = dogsAddReminderManagerView.currentReminder?.duplicate() else { return }
+        guard let duplicateReminder = dogsAddReminderManagerView.constructReminder(showErrorIfFailed: true)?.duplicate() else { return }
         
         // If no dogUUID, notify delegate locally
         guard let reminderToUpdateDogUUID = reminderToUpdateDogUUID else {
@@ -234,7 +234,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
         }
         
         let actionName = dogsAddReminderManagerView
-            .reminderActionTypeSelected?
+            .selectedReminderAction?
             .convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName)
             ?? reminderToUpdate.reminderActionType.convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName)
         

@@ -257,19 +257,13 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsVC.
     @objc private func didTouchUpInsideSaveDog(_ sender: Any) {
-        // could be new dog or updated one
-        var dog: Dog!
-        do {
-            // try to initialize from a passed dog, if non exists, then we make a new one
-            dog = try dogToUpdate ?? Dog(forDogName: dogNameTextField.text)
-            try dog.changeDogName(forDogName: dogNameTextField.text)
-            // DogsRequest handles .addIcon and .removeIcon.
-            dog.dogIcon = dogIconButton.imageView?.image
-        }
-        catch {
-            (error as? HoundError)?.alert() ?? ErrorConstant.UnknownError.unknown().alert()
+        var dog = dogToUpdate ?? Dog()
+        guard dog.changeDogName(forDogName: dogNameTextField.text) else {
+            dogNameTextField.errorMessage = ErrorConstant.DogError.dogNameMissing().description
             return
         }
+        
+        dog.dogIcon = dogIconButton.imageView?.image
         
         saveDogButton.isLoading = true
         

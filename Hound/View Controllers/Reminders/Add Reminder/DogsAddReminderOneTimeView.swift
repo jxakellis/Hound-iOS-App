@@ -92,7 +92,7 @@ final class DogsAddReminderOneTimeView: HoundView {
         
         // oneTimeDatePicker
         NSLayoutConstraint.activate([
-            oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             oneTimeDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             oneTimeDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             oneTimeDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),

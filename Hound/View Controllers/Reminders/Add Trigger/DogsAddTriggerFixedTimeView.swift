@@ -216,7 +216,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource {
         
         NSLayoutConstraint.activate([
             timeOfDayPicker.topAnchor.constraint(equalTo: dayOffsetLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            timeOfDayPicker.bottomAnchor.constraint(equalTo: bottomAnchor),
+            timeOfDayPicker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100.0),
             timeOfDayPicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
             timeOfDayPicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
             timeOfDayPicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),

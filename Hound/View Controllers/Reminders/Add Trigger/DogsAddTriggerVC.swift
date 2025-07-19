@@ -106,7 +106,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     // MARK: - Functions
     
     @objc private func didTouchUpInsideSaveTrigger(_ sender: Any) {
-        guard let trigger = managerView.currentTrigger else { return }
+        guard let trigger = managerView.constructTrigger(showErrorIfFailed: true) else { return }
         
         if shouldPersistChangesToServer && dog == nil {
             HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideSaveTrigger: Dog must be set when persisting changes to server.")
@@ -154,7 +154,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     }
     
     @objc private func didTouchUpInsideDuplicateTrigger(_ sender: Any) {
-        guard let duplicateTrigger = managerView.currentTrigger?.copy() as? Trigger else { return }
+        guard let duplicateTrigger = managerView.constructTrigger(showErrorIfFailed: true)?.copy() as? Trigger else { return }
         
         if shouldPersistChangesToServer && dog == nil {
             HoundLogger.general.error("DogsAddTriggerVC.didTouchUpInsideDuplicateTrigger: Dog must be set when persisting changes to server.")
@@ -210,7 +210,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     }
     
     @objc private func didTouchUpInsideBack(_ sender: Any) {
-        guard managerView.currentTrigger != nil else {
+        guard managerView.didUpdateInitialValues else {
             self.dismiss(animated: true)
             return
         }

@@ -87,7 +87,7 @@ enum GenerationManager {
                     }
                     
                     completionTracker.completedTask()
-                    dog.dogLogs.addLog(forLog: log)
+                    dog.dogLogs.addLog(forLog: log, invokeDogTriggers: false)
                 }
             }
         }

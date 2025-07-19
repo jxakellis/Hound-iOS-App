@@ -88,7 +88,7 @@ final class DogsAddReminderCountdownView: HoundView {
         
         // countdownDatePicker
         NSLayoutConstraint.activate([
-            countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             countdownDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),

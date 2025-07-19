@@ -11,6 +11,7 @@ import UIKit
 final class DogsReminderTVC: HoundTableViewCell {
     
     // TODO TRIGGERS Add special display that a reminder is a trigger result
+    // TODO if the name is long enough (e.g. "Fresh Water") is smushed out the recurrance and time of day labels
     
     // MARK: - Elements
     

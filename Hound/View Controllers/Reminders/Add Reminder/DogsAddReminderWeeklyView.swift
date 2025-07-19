@@ -16,7 +16,7 @@ final class DogsAddReminderWeeklyView: HoundView {
     
     // MARK: - Elements
     
-    private lazy var weekdayStack: HoundStackView = {
+    lazy var weekdayStack: HoundStackView = {
         let stack = HoundStackView()
         weekdayButtons.forEach { button in
             stack.addArrangedSubview(button)
@@ -106,6 +106,9 @@ final class DogsAddReminderWeeklyView: HoundView {
             senderButton.isUserInteractionEnabled = true
         }
         
+        if let currentWeekdays = currentWeekdays, !currentWeekdays.isEmpty {
+            weekdayStack.errorMessage = nil
+        }
     }
     
     @objc private func didUpdateTimeOfDay(_ sender: Any) {
@@ -232,7 +235,7 @@ final class DogsAddReminderWeeklyView: HoundView {
         
         // timeOfDayDatePicker
         NSLayoutConstraint.activate([
-            timeOfDayDatePicker.topAnchor.constraint(equalTo: weekdayStack.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            timeOfDayDatePicker.topAnchor.constraint(equalTo: weekdayStack.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
             timeOfDayDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
             timeOfDayDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             timeOfDayDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),

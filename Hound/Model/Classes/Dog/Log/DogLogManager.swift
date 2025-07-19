@@ -45,7 +45,7 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     init(forLogs: [Log] = [], forParentDog: Dog?) {
         self.parentDog = forParentDog
         super.init()
-        addLogs(forLogs: forLogs)
+        addLogs(forLogs: forLogs, invokeDogTriggers: false)
     }
     
     /// Provide an array of dictionary literal of log properties to instantiate dogLogs. Provide a logManager to have the dogLogs add themselves into, update themselves in, or delete themselves from.
@@ -69,7 +69,7 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
             }
             
             if let log = Log(fromBody: fromBody, logToOverride: findLog(forLogUUID: logUUID)) {
-                addLog(forLog: log)
+                addLog(forLog: log, invokeDogTriggers: false)
             }
         }
     }
@@ -88,8 +88,9 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         dogLogs.append(forLog)
     }
     
+    /// Adds a log to the dogLogs array and sorts. If invokeDogTriggers is true, it will the dog to see if any triggers are activated (and if so, generate reminders from them and return those reminders)
     @discardableResult
-    func addLog(forLog: Log, invokeDogTriggers: Bool = true) -> [Reminder] {
+    func addLog(forLog: Log, invokeDogTriggers: Bool) -> [Reminder] {
         addLogWithoutSorting(forLog: forLog)
         
         dogLogs.sort(by: { $0 <= $1 })
@@ -112,8 +113,9 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         return generatedReminders
     }
     
+    /// Adds a log to the dogLogs array and sorts. If invokeDogTriggers is true, it will the dog to see if any triggers are activated (and if so, generate reminders from them and return those reminders)
     @discardableResult
-    func addLogs(forLogs: [Log], invokeDogTriggers: Bool = true) -> [Reminder] {
+    func addLogs(forLogs: [Log], invokeDogTriggers: Bool) -> [Reminder] {
         for forLog in forLogs {
             addLogWithoutSorting(forLog: forLog)
         }

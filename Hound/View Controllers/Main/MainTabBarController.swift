@@ -27,8 +27,8 @@ final class MainTabBarController: HoundTabBarController,
     
     // MARK: - ReminderAlarmManagerDelegate
     
-    func didAddLog(sender: Sender, forDogUUID: UUID, forLog log: Log) {
-        dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log)
+    func didAddLog(sender: Sender, forDogUUID: UUID, forLog log: Log, forInvokeDogTriggers: Bool) {
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: forInvokeDogTriggers)
         setDogManager(sender: sender, forDogManager: dogManager)
     }
     

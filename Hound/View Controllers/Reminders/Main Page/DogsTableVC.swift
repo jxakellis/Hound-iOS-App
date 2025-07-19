@@ -389,7 +389,7 @@ final class DogsTableVC: HoundTableViewController {
                         return
                     }
                     
-                    self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log)
+                    self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: forReminder.reminderIsTriggerResult == false)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                 }
             }
@@ -412,7 +412,7 @@ final class DogsTableVC: HoundTableViewController {
                         return
                     }
                     
-                    self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log)
+                    self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: forReminder.reminderIsTriggerResult == false)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                 }
             }

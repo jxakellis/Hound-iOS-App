@@ -17,6 +17,8 @@ final class LogsAddLogVC: HoundScrollViewController,
                           HoundDropDownDataSource {
     
     // TODO BUG this ui is borked
+    // TODO add headers to each field (similar to DogsAddTriggerVC). Header should contain the majority of the info (e.g. "What dog(s) did you take care of?") then the input field placeholder has simplier info (e.g. "Select dog(s)..."). If a field is optional, you can add that (e.g. "Add an end date... (optional))
+    // TODO change error messages to use .errorMessage property on labels instead of showing a banner
     
     // MARK: - LogsAddLogUIInteractionActionsDelegate
     
@@ -1298,7 +1300,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                 )
                 
                 self.dogManager?.findDog(forDogUUID: dogUUIDSelected)?
-                    .dogLogs.addLog(forLog: logToAdd)
+                    .dogLogs.addLog(forLog: logToAdd, invokeDogTriggers: true)
                 
                 completionTracker.completedTask()
             }
@@ -1346,7 +1348,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             )
             
             self.dogManager?.findDog(forDogUUID: dogUUIDToUpdate)?
-                .dogLogs.addLog(forLog: logToUpdate)
+                .dogLogs.addLog(forLog: logToUpdate, invokeDogTriggers: false)
             
             if let dm = self.dogManager {
                 self.delegate?.didUpdateDogManager(

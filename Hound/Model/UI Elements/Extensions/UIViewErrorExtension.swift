@@ -12,15 +12,14 @@ private var houndErrorLabelKey: UInt8 = 0
 
 // both
 private var originalBorderWidthKey: UInt8 = 1
+private var originalBorderColorKey: UInt8 = 2
 
 // hound stylable
-private var originalBorderUIColorKey: UInt8 = 2
 private var originalShouldRoundCornersKey: UInt8 = 3
 
 // non hound stylable
-private var originalBorderColorKey: UInt8 = 4
-private var originalCornerRadiusKey: UInt8 = 5
-private var originalCornerCurveKey: UInt8 = 6
+private var originalCornerRadiusKey: UInt8 = 4
+private var originalCornerCurveKey: UInt8 = 5
 
 extension UIView {
 
@@ -69,18 +68,18 @@ extension UIView {
         }
         
         if let styleable = self as? HoundBorderStylable {
-            if objc_getAssociatedObject(self, &originalBorderUIColorKey) == nil {
-                objc_setAssociatedObject(self, &originalBorderUIColorKey, styleable.borderColor, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            if objc_getAssociatedObject(self, &originalBorderColorKey) == nil {
+                objc_setAssociatedObject(self, &originalBorderColorKey, styleable.borderColor, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             }
             if objc_getAssociatedObject(self, &originalShouldRoundCornersKey) == nil {
                 objc_setAssociatedObject(self, &originalShouldRoundCornersKey, styleable.shouldRoundCorners, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             }
         }
         else {
-            if objc_getAssociatedObject(self, &originalBorderColorKey) == nil {
-                objc_setAssociatedObject(self, &originalBorderColorKey, layer.borderColor, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            if objc_getAssociatedObject(self, &originalBorderColorKey) == nil, let layerBorderColor = layer.borderColor {
+                // cannot encode CGColor
+                objc_setAssociatedObject(self, &originalBorderColorKey, UIColor(cgColor: layerBorderColor), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             }
-            
             if objc_getAssociatedObject(self, &originalCornerRadiusKey) == nil {
                 objc_setAssociatedObject(self, &originalCornerRadiusKey, layer.cornerRadius, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             }
@@ -109,13 +108,11 @@ extension UIView {
         // Restore original border
         if let styleable = self as? HoundBorderStylable {
             styleable.borderWidth = objc_getAssociatedObject(self, &originalBorderWidthKey) as? CGFloat ?? styleable.borderWidth
-            styleable.borderColor = objc_getAssociatedObject(self, &originalBorderUIColorKey) as? UIColor
+            styleable.borderColor = objc_getAssociatedObject(self, &originalBorderColorKey) as? UIColor
             styleable.shouldRoundCorners = objc_getAssociatedObject(self, &originalShouldRoundCornersKey) as? Bool ?? styleable.shouldRoundCorners
         }
         else {
-            if let color = objc_getAssociatedObject(self, &originalBorderColorKey) {
-                layer.borderColor = unsafeBitCast(color, to: CGColor.self)
-            }
+            layer.borderColor = (objc_getAssociatedObject(self, &originalBorderColorKey) as? UIColor)?.cgColor ?? layer.borderColor
             layer.borderWidth = objc_getAssociatedObject(self, &originalBorderWidthKey) as? CGFloat ?? layer.borderWidth
             layer.cornerRadius = objc_getAssociatedObject(self, &originalCornerRadiusKey) as? CGFloat ?? layer.cornerRadius
             layer.cornerCurve = objc_getAssociatedObject(self, &originalCornerCurveKey) as? CALayerCornerCurve ?? layer.cornerCurve
@@ -124,7 +121,7 @@ extension UIView {
         // Remove stored original border values
         objc_setAssociatedObject(self, &originalBorderColorKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(self, &originalBorderWidthKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        objc_setAssociatedObject(self, &originalBorderUIColorKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(self, &originalBorderColorKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(self, &originalShouldRoundCornersKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(self, &originalCornerRadiusKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(self, &originalCornerCurveKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)

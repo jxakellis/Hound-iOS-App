@@ -639,7 +639,7 @@ enum ErrorConstant {
         static func dogNameMissing() -> HoundError {
             HoundError(
                 forName: "DogError.dogNameMissing",
-                forDescription: "Your dog's name is blank! Try typing something in.",
+                forDescription: "Choose a name for your dog",
                 forOnTap: nil)
         }
     }
@@ -669,7 +669,7 @@ enum ErrorConstant {
         static func reminderActionMissing() -> HoundError {
             HoundError(
                 forName: "ReminderError.reminderActionMissing",
-                forDescription: "Your reminder has no action! Please try selecting one.",
+                forDescription: "Choose an action for your reminder",
                 forOnTap: nil)
         }
     }
@@ -691,13 +691,13 @@ enum ErrorConstant {
         static func timeDelayInvalid() -> HoundError {
                 HoundError(
                     forName: "TriggerError.timeDelayInvalid",
-                    forDescription: "The time delay you entered isn't valid. Try picking a different delay.",
+                    forDescription: "Choose a valid time delay",
                     forOnTap: nil)
             }
         static func fixedTimeTypeAmountInvalid() -> HoundError {
                 HoundError(
                     forName: "TriggerError.fixedTimeTypeAmountInvalid",
-                    forDescription: "The number of days for your automation is invalid. Please choose a valid amount.",
+                    forDescription: "Choose a valid amount of fixed time",
                     forOnTap: nil)
             }
     }
@@ -733,10 +733,10 @@ enum ErrorConstant {
     }
 
     enum WeeklyComponentsError {
-        static func weekdayArrayInvalid() -> HoundError {
+        static func weekdaysInvalid() -> HoundError {
             HoundError(
-                forName: "WeeklyComponentsError.weekdayArrayInvalid",
-                forDescription: "Please select at least one day of the week for your reminder. You can do this by tapping on the S, M, T, W, T, F, or S. \n\nA blue letter means that your reminder's alarm will sound that day and grey means it won't.",
+                forName: "WeeklyComponentsError.weekdaysInvalid",
+                forDescription: "Choose at least one day of week",
                 forOnTap: nil)
         }
     }

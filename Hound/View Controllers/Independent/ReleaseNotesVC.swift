@@ -26,11 +26,10 @@ struct ReleaseNotesBuilder {
         
         let message = NSMutableAttributedString()
         
-        message.append(NSAttributedString(string: "Version \(UIApplication.appVersion)", attributes: titleAttr))
         for item in items {
-            message.append(NSAttributedString(string: "\n\n"))
             message.append(NSAttributedString(string: "\u{2022} \(item.title)\n", attributes: titleAttr))
             message.append(NSAttributedString(string: item.description, attributes: descAttr))
+            message.append(NSAttributedString(string: "\n\n"))
         }
         return message
     }
@@ -42,7 +41,7 @@ final class ReleaseNotesVC: HoundScrollViewController {
     private let pageHeaderView: HoundPageSheetHeaderView = {
         let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
         view.useLeftTextAlignment = false
-        view.pageHeaderLabel.text = "Release Notes"
+        view.pageHeaderLabel.text = "What's New in v\(UIApplication.appVersion)"
         return view
     }()
 
@@ -69,7 +68,9 @@ final class ReleaseNotesVC: HoundScrollViewController {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        // TODO 3.5.0 UPDATE W/ NEW FEATURES
+        // TODO RELEASE NOTES make this page snazzier. see reference image from other app
+        
+        // TODO RELEASE NOTES 3.5.0 UPDATE W/ NEW FEATURES
         // 1. triggers
         // 2. redone ui for scalability / iPad
         // 3. skippable reminders

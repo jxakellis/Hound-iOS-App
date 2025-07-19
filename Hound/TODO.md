@@ -3,38 +3,54 @@
 ## 📋 General (Non–iOS Related)
 - **Create a Facebook page** and join relevant pet-care groups.  
 - **Redesign the website** for a more modern look and clearer messaging.  
-- **Design a new cover image** for the app’s landing page.
 
 ---
 
 ## 🚀 Now
 
-### Backend
-- **Batch updates for logs**  
-  - Convert `LogsRequest` into a batch updater (like `RemindersRequest`).  
+- Batch updates for logs
+  - Convert LogsRequest into a batch updater (like RemindersRequest).  
   - Update offline-mode manager to send log and reminder changes in batches per dog
-.
-### Reminders
-- **Per-reminder notification settings**  
-  Allow users to configure notification options per reminder and select which family members are notified.
+
+- Per-reminder notification settings
+    - Allow users to configure notification options per reminder and select which family members are notified.
+    - By default have all family members selected
+    - When a family member joins the family, add their userid as a recipient to all reminders
+    - When a family member leaves a fam, remove their userid from all reminders
 
 ---
 
 ## 🎯 Future
 
-### Marketing & Onboarding
-- **Referral program**  
-  “Give a Month, Get a Month”: users share a code; when a friend signs up and completes 30 days, both receive a free month. See how Monarch Money does it  
-- **Google Sign-In**  
-  Add “Sign in with Google” alongside Apple ID.
+- About Page
+    - Brief description of me and how hound came to be
+    - Picture or two
+    
+- Log favoriting
+    - Mimic feature from DogNote
+    - Have a heart in the bottom right of each log cell that can be tapped to favorite log
+    - if log is liked by any person, then this whole element has a rounded background added to it (similar to how we display log note/log unit). in this whole background highlight, there is the heart on the RHS (either selected or not), then on the LHS is the initials (in little bubbles/circle) of the people who liked it
+    - add ability to filter logs by favorites
+    
+- Referral program
+    - “Give a Month, Get a Month”: users share a code; when a friend signs up and completes 30 days, both receive a free month. See how Monarch Money does it  
+    - Build referral page that users can get a code to share with other users
+    - They can also track the progress of their rewards
+    - Only get reward if user actually buys subscription
+    
+- Google Sign-In
+    - Add “Sign in with Google” alongside Apple ID.
+    
+- 24-hour clock setting
+
+- haptics enabled/disabled setting
 
 ### Data & Global Types
 - **Auto-refresh missing GlobalTypes**  
   If the app encounters an unknown global type, force a refetch before failing.
 
-### Logs UX
-- **Calendar view**  
-  Visualize logs on a calendar grid in addition to the daily scroll.
+- Calendar view
+    - Visualize logs on a calendar grid in addition to the daily scroll.
 
 ### Metrics & Analytics
 - **Integrate SwiftMetrics** to track:  
@@ -43,7 +59,7 @@
   - Crash and performance data
 
 ### Time & Timezones
-- **24-hour clock option**  
+- ****  
 - **DST detection**  
   When timezone changes (DST start/end), prompt user to adjust reminders. Track per family to avoid repeat prompts.
 

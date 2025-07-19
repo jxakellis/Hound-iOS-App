@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ReminderAlarmManagerDelegate: AnyObject {
-    func didAddLog(sender: Sender, forDogUUID: UUID, forLog: Log)
+    func didAddLog(sender: Sender, forDogUUID: UUID, forLog: Log, forInvokeDogTriggers: Bool)
     func didAddReminder(sender: Sender, forDogUUID: UUID, forReminder: Reminder)
     func didRemoveReminder(sender: Sender, forDogUUID: UUID, forReminderUUID: UUID)
 }
@@ -244,7 +244,7 @@ final class ReminderAlarmManager {
                         return
                     }
 
-                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forLog: log)
+                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forLog: log, forInvokeDogTriggers: forReminder.reminderIsTriggerResult == false)
                 }
             }
         }
@@ -266,7 +266,7 @@ final class ReminderAlarmManager {
                         return
                     }
 
-                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forLog: log)
+                    delegate.didAddLog(sender: Sender(origin: self, localized: self), forDogUUID: forDogUUID, forLog: log, forInvokeDogTriggers: forReminder.reminderIsTriggerResult == false)
                 }
             }
         }

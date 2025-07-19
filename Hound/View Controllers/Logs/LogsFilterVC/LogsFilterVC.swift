@@ -12,7 +12,6 @@ protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(forLogsFilter: LogsFilter)
 }
 
-// TODO BUG this view doesnt start scrolled in the correct position
 class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate

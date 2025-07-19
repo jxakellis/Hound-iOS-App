@@ -169,6 +169,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     // MARK: - Properties
     
     private var dog: Dog?
+    private var initialTrigger: Trigger?
     private var triggerToUpdate: Trigger?
     
     private var dropDownLogReactions: HoundDropDown?
@@ -180,17 +181,39 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     private var availableReminderResults: [TriggerReminderResult] = []
     private var selectedReminderResult: TriggerReminderResult?
     
+    var didUpdateInitialValues: Bool {
+        guard let initialTrigger = initialTrigger else {
+            // creating new trigger right now, so return true
+            return true
+        }
+        
+        guard let triggerToUpdate = triggerToUpdate else {
+            // should never happen, if have initialTrigger, then should have triggerToUpdate
+            return true
+        }
+        
+        return initialTrigger.isSame(as: triggerToUpdate)
+    }
+    
+    // MARK: - Function
+    
     // Construct trigger based on current selections
-    var currentTrigger: Trigger? {
+    func constructTrigger(showErrorIfFailed: Bool) -> Trigger? {
         let trigger: Trigger = triggerToUpdate?.copy() as? Trigger ?? Trigger()
         
         guard trigger.setTriggerLogReactions(forTriggerLogReactions: selectedLogReactions) else {
-            logReactionsLabel.errorMessage = ErrorConstant.TriggerError.logReactionMissing().description
+            if showErrorIfFailed {
+                logReactionsLabel.errorMessage = ErrorConstant.TriggerError.logReactionMissing().description
+            }
+            
             return nil
         }
         
         guard let selectedReminderResult = selectedReminderResult else {
-            reminderResultLabel.errorMessage = ErrorConstant.TriggerError.reminderResultMissing().description
+            if showErrorIfFailed {
+                reminderResultLabel.errorMessage = ErrorConstant.TriggerError.reminderResultMissing().description
+            }
+            
             return nil
         }
         
@@ -201,7 +224,9 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         if segmentedControl.selectedSegmentIndex == SegmentedControlSection.timeDelay.rawValue {
             trigger.triggerType = .timeDelay
             if !trigger.changeTriggerTimeDelay(forTimeDelay: timeDelayView.currentTimeDelay ?? ClassConstant.TriggerConstant.defaultTriggerTimeDelay) {
-                timeDelayView.errorMessage = ErrorConstant.TriggerError.timeDelayInvalid().description
+                if showErrorIfFailed {
+                    timeDelayView.errorMessage = ErrorConstant.TriggerError.timeDelayInvalid().description
+                }
                 return nil
             }
         }
@@ -211,22 +236,53 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             trigger.changeTriggerFixedTimeUTCMinute(forDate: fixedTimeView.currentTimeOfDay)
             
             if !trigger.changeTriggerFixedTimeTypeAmount(forAmount: fixedTimeView.currentOffset) {
-                fixedTimeView.errorMessage = ErrorConstant.TriggerError.fixedTimeTypeAmountInvalid().description
+                if showErrorIfFailed {
+                    fixedTimeView.errorMessage = ErrorConstant.TriggerError.fixedTimeTypeAmountInvalid().description
+                }
                 return nil
             }
         }
         return trigger
     }
     
-    // MARK: - Main
+    private func updateDynamicUIElements() {
+        logReactionsLabel.text = selectedLogReactions.map({ $0.readableName(includeMatchingEmoji: false) }).joined(separator: ", ")
+        reminderResultLabel.text = selectedReminderResult?.readableName
+        reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
+        
+        let allowsCustom = selectedReminderResult.map {
+            ReminderActionType.find(forReminderActionTypeId: $0.reminderActionTypeId).allowsCustom
+        } ?? false
+        
+        reminderCustomActionNameTextField.isHidden = !allowsCustom
+        if allowsCustom {
+            reminderCustomActionNameHeightMultiplier.restore()
+            reminderCustomActionNameMaxHeight.restore()
+            reminderCustomActionNameTop.restore()
+        }
+        else {
+            reminderCustomActionNameHeightMultiplier.setMultiplier(0.0)
+            reminderCustomActionNameMaxHeight.constant = 0.0
+            reminderCustomActionNameTop.constant = 0.0
+        }
+        
+        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideSingleElement) {
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
+    }
     
-    private var didSetupCustomSubviews: Bool = false
+    @objc override func dismissKeyboard() {
+        super.dismissKeyboard()
+        endEditing(true)
+    }
     
     // MARK: - Setup
     
     func setup(forDog: Dog?, forTriggerToUpdate: Trigger?) {
         dog = forDog
         triggerToUpdate = forTriggerToUpdate
+        initialTrigger = forTriggerToUpdate?.copy() as? Trigger
         
         availableLogReactions = []
         let logs = dog?.dogLogs.dogLogs ?? []
@@ -292,38 +348,6 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         }
         
         updateDynamicUIElements()
-    }
-    
-    private func updateDynamicUIElements() {
-        logReactionsLabel.text = selectedLogReactions.map({ $0.readableName(includeMatchingEmoji: false) }).joined(separator: ", ")
-        reminderResultLabel.text = selectedReminderResult?.readableName
-        reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
-        
-        let allowsCustom = selectedReminderResult.map {
-            ReminderActionType.find(forReminderActionTypeId: $0.reminderActionTypeId).allowsCustom
-        } ?? false
-        
-        reminderCustomActionNameTextField.isHidden = !allowsCustom
-        if allowsCustom {
-            reminderCustomActionNameHeightMultiplier.restore()
-            reminderCustomActionNameMaxHeight.restore()
-            reminderCustomActionNameTop.restore()
-        }
-        else {
-            reminderCustomActionNameHeightMultiplier.setMultiplier(0.0)
-            reminderCustomActionNameMaxHeight.constant = 0.0
-            reminderCustomActionNameTop.constant = 0.0
-        }
-        
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideSingleElement) {
-            self.setNeedsLayout()
-            self.layoutIfNeeded()
-        }
-    }
-    
-    @objc override func dismissKeyboard() {
-        super.dismissKeyboard()
-        endEditing(true)
     }
     
     // MARK: - Drop Down Handling

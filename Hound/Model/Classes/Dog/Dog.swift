@@ -150,7 +150,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         forOfflineModeComponents: OfflineModeComponents? = nil
     ) throws {
         self.init(forDogId: forDogId, forDogUUID: forDogUUID, forDogReminders: forDogReminders, forDogLogs: forDogLogs, forDogTriggers: forDogTriggers, forOfflineModeComponents: forOfflineModeComponents)
-        try changeDogName(forDogName: forDogName)
+        changeDogName(forDogName: forDogName)
     }
     
     /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from fromBody.
@@ -258,12 +258,14 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     
     // MARK: - Function
     
-    func changeDogName(forDogName: String?) throws {
+    @discardableResult
+    func changeDogName(forDogName: String?) -> Bool {
         guard let forDogName = forDogName, forDogName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else {
-            throw ErrorConstant.DogError.dogNameMissing()
+            return false
         }
         
         dogName = String(forDogName.prefix(ClassConstant.DogConstant.dogNameCharacterLimit))
+        return true
     }
     
     /// For a given logActionType and logCustomActionName, finds all enabled reminders that match these two properties. We attempt to translate LogActionType into ReminderActionType, but that can possibly fail, as the mapping isn't 1:1 (some LogActionTypes have no corresponding ReminderActionType), therefore in that case we return nothing
