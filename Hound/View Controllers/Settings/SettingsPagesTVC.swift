@@ -96,7 +96,7 @@ final class SettingsPagesTVC: HoundTableViewCell {
     
     private let headerLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.textColor = UIColor.systemBackground
         return label
     }()

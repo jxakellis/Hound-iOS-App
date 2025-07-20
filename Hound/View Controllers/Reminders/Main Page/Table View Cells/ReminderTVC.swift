@@ -31,7 +31,7 @@ final class DogsReminderTVC: HoundTableViewCell {
     
     private let reminderActionTextLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 390, compressionResistancePriority: 390)
-        label.font = Constant.VisualFont.primaryHeaderLabel
+        label.font = Constant.Visual.Font.primaryHeaderLabel
         return label
     }()
     
@@ -46,13 +46,13 @@ final class DogsReminderTVC: HoundTableViewCell {
     private let recurranceLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 370, compressionResistancePriority: 370)
         label.textAlignment = .right
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         return label
     }()
     private let timeOfDayLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 370, compressionResistancePriority: 370)
         label.textAlignment = .right
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         return label
     }()
     
@@ -62,7 +62,7 @@ final class DogsReminderTVC: HoundTableViewCell {
     private let nextAlarmLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.backgroundColor = UIColor.secondarySystemBackground
-        label.font = Constant.VisualFont.tertiaryRegularLabel
+        label.font = Constant.Visual.Font.tertiaryRegularLabel
         
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
@@ -155,8 +155,8 @@ final class DogsReminderTVC: HoundTableViewCell {
         nextAlarmZeroHeightConstraint.isActive = false
         nextAlarmRelativeHeightConstraint.isActive = true
         
-        let nextAlarmHeaderFont = Constant.VisualFont.emphasizedTertiaryRegularLabel
-        let nextAlarmBodyFont = Constant.VisualFont.tertiaryRegularLabel
+        let nextAlarmHeaderFont = Constant.Visual.Font.emphasizedTertiaryRegularLabel
+        let nextAlarmBodyFont = Constant.Visual.Font.tertiaryRegularLabel
         
         guard Date().distance(to: executionDate) > 0 else {
             nextAlarmLabel.attributedTextClosure = {

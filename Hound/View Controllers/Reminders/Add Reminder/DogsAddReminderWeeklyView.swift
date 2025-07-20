@@ -95,8 +95,8 @@ final class DogsAddReminderWeeklyView: HoundView {
         guard let senderButton = sender as? HoundButton else { return }
         
         senderButton.isUserInteractionEnabled = false
-        UIView.animate(withDuration: Constant.VisualAnimation.selectSingleElement) {
-            if senderButton.tag == Constant.VisualViewTag.weekdayEnabled {
+        UIView.animate(withDuration: Constant.Visual.Animation.selectSingleElement) {
+            if senderButton.tag == Constant.Visual.ViewTag.weekdayEnabled {
                 self.disableWeekdayButton(senderButton)
             }
             else {
@@ -128,7 +128,7 @@ final class DogsAddReminderWeeklyView: HoundView {
         var days: [Int] = []
         
         weekdayButtons.forEach { button in
-            guard button.tag == Constant.VisualViewTag.weekdayEnabled else {
+            guard button.tag == Constant.Visual.ViewTag.weekdayEnabled else {
                 return
             }
             
@@ -172,11 +172,11 @@ final class DogsAddReminderWeeklyView: HoundView {
         button.addTarget(self, action: #selector(didToggleWeekdayButton), for: .touchUpInside)
     }
     private func enabledWeekdayButton(_ button: HoundButton) {
-        button.tag = Constant.VisualViewTag.weekdayEnabled
+        button.tag = Constant.Visual.ViewTag.weekdayEnabled
         button.tintColor = UIColor.systemBlue
     }
     private func disableWeekdayButton(_ button: HoundButton) {
-        button.tag = Constant.VisualViewTag.weekdayDisabled
+        button.tag = Constant.Visual.ViewTag.weekdayDisabled
         button.tintColor = UIColor.systemGray4
     }
     private func valueForWeekdayButton(_ button: HoundButton) -> Int {

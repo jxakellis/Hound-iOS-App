@@ -242,7 +242,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         if hasDisplayedOfflineModeBanner == false {
             hasDisplayedOfflineModeBanner = true
-            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.infoEnteredOfflineModeTitle, forSubtitle: Constant.VisualBannerText.infoEnteredOfflineModeSubtitle, forStyle: .info)
+            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.infoEnteredOfflineModeTitle, forSubtitle: Constant.Visual.BannerText.infoEnteredOfflineModeSubtitle, forStyle: .info)
         }
         
         guard isWaitingForInternetConnection == false && NetworkManager.shared.isConnected == true else {

@@ -133,7 +133,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.secondaryHeaderLabel
+        button.titleLabel?.font = Constant.Visual.Font.secondaryHeaderLabel
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -165,7 +165,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
             segmentedControl.insertSegment(withTitle: section.title, at: index, animated: false)
         }
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: Constant.VisualFont.emphasizedPrimaryRegularLabel,
+            .font: Constant.Visual.Font.emphasizedPrimaryRegularLabel,
             .foregroundColor: UIColor.systemBackground
         ]
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
@@ -513,6 +513,20 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         self.view.dismissKeyboardOnTap(delegate: self)
         
         DogIconManager.didSelectDogIconController.delegate = self
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let saveButtonTop = saveDogButton.convert(saveDogButton.bounds, to: view).minY
+        let backButtonTop = backButton.convert(backButton.bounds, to: view).minY
+        let buttonTop = min(saveButtonTop, backButtonTop)
+        
+        let distanceFromBottom = view.bounds.height - buttonTop
+        
+        let minInset = distanceFromBottom + Constant.Constraint.Spacing.absoluteVertInset
+        
+        scrollView.contentInset.bottom = max(scrollView.contentInset.bottom, minInset)
     }
     
     // MARK: - Setup

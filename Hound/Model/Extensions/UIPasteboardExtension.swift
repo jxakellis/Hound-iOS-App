@@ -13,6 +13,6 @@ extension UIPasteboard {
     func setPasteboard(forString string: String) {
         UIPasteboard.general.string = string
 
-        PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.copiedToClipboardTitle, forSubtitle: Constant.VisualBannerText.copiedToClipboardSubtitle, forStyle: .success)
+        PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.copiedToClipboardTitle, forSubtitle: Constant.Visual.BannerText.copiedToClipboardSubtitle, forStyle: .success)
     }
 }

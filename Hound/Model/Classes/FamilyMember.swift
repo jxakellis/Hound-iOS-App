@@ -98,7 +98,7 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
         internalLastName: String?
     ) {
         self.init(
-            forUserId: internalUserId ?? Constant.VisualText.unknownHash,
+            forUserId: internalUserId ?? Constant.Visual.Text.unknownHash,
             forFirstName: internalFirstName,
             forLastName: internalLastName
         )

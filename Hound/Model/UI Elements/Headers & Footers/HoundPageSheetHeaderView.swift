@@ -17,7 +17,7 @@ final class HoundPageSheetHeaderView: HoundView {
     let pageHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 500, compressionResistancePriority: 500)
         label.text = "Default Page Header"
-        label.font = Constant.VisualFont.primaryHeaderLabel
+        label.font = Constant.Visual.Font.primaryHeaderLabel
         label.numberOfLines = 0
         return label
     }()
@@ -40,7 +40,7 @@ final class HoundPageSheetHeaderView: HoundView {
     let pageDescriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 480, compressionResistancePriority: 480)
         label.text = "Default Page Description"
-        label.font = Constant.VisualFont.tertiaryHeaderLabel
+        label.font = Constant.Visual.Font.tertiaryHeaderLabel
         label.numberOfLines = 0
         return label
     }()

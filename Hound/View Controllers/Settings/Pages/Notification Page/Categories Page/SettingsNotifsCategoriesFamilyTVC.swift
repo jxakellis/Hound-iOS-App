@@ -15,7 +15,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Family"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
@@ -29,7 +29,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
     private let descriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         
         let precalculatedDynamicTextColor = label.textColor
@@ -38,7 +38,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
             let message = NSMutableAttributedString(
                 string: "Receive notifications about your Hound family. ",
                 attributes: [
-                    .font: Constant.VisualFont.secondaryColorDescLabel,
+                    .font: Constant.Visual.Font.secondaryColorDescLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any
                 ]
             )
@@ -46,7 +46,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
             message.append(NSAttributedString(
                 string: "This category cannot be turned off.",
                 attributes: [
-                    .font: Constant.VisualFont.emphasizedSecondaryColorDescLabel,
+                    .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any
                 ])
             )
@@ -54,7 +54,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
             message.append(NSAttributedString(
                 string: " Examples include: a user joining, leaving, or locking your family.",
                 attributes: [
-                    .font: Constant.VisualFont.secondaryColorDescLabel,
+                    .font: Constant.Visual.Font.secondaryColorDescLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any
                 ])
             )

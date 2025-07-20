@@ -43,7 +43,7 @@ extension UIView {
         var label = objc_getAssociatedObject(self, &houndErrorLabelKey) as? HoundLabel
         if label == nil {
             let newLabel = HoundLabel()
-            newLabel.font = Constant.VisualFont.tertiaryRegularLabel
+            newLabel.font = Constant.Visual.Font.tertiaryRegularLabel
             newLabel.textColor = UIColor.systemRed
             newLabel.numberOfLines = 0
             newLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -94,7 +94,7 @@ extension UIView {
         else {
             layer.borderColor = HoundBorderStyle.redBorder.borderColor.cgColor
             layer.borderWidth = HoundBorderStyle.redBorder.borderWidth
-            layer.cornerRadius = Constant.VisualLayer.defaultCornerRadius
+            layer.cornerRadius = Constant.Visual.Layer.defaultCornerRadius
             layer.cornerCurve = .continuous
         }
     }

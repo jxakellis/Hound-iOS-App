@@ -32,7 +32,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
         let button = HoundButton(huggingPriority: 230, compressionResistancePriority: 230)
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.circleButton
+        button.titleLabel?.font = Constant.Visual.Font.circleButton
         button.backgroundColor = UIColor.systemBackground
         button.applyStyle(.thinGrayBorder)
         return button
@@ -42,7 +42,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
         let button = HoundButton(huggingPriority: 290, compressionResistancePriority: 290)
         button.setTitle("Finish", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         button.backgroundColor = UIColor.systemBackground
          button.applyStyle(.labelBorder)
         return button

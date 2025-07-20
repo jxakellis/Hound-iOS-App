@@ -15,7 +15,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
     private let headerLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Sound"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
@@ -38,7 +38,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Changes the sound your alarms play. Tap on one of them to hear what it sounds like!"
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()

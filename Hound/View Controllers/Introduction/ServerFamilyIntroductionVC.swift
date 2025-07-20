@@ -93,7 +93,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         
         button.setTitle("Create", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -109,7 +109,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         label.text = "As the head of your own Hound family, you'll manage its members and any in-app purchases."
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.tertiaryColorDescLabel
+        label.font = Constant.Visual.Font.tertiaryColorDescLabel
         label.textColor = UIColor.tertiaryLabel
         return label
     }()
@@ -119,7 +119,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         
         button.setTitle("Join", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         

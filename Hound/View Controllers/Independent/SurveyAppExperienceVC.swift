@@ -30,7 +30,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
         
         // make sure the result is under logNoteCharacterLimit
-        return updatedText.count <= Constant.Class.FeedbackConstant.appExperienceSuggestionCharacterLimit
+        return updatedText.count <= Constant.Class.Feedback.appExperienceSuggestionCharacterLimit
     }
     
     // MARK: - Elements
@@ -109,7 +109,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         label.text = "What could we do to improve?"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         label.textColor = UIColor.systemBackground
         return label
     }()
@@ -119,7 +119,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         textView.backgroundColor = UIColor.systemBackground
         textView.textColor = UIColor.label
-        textView.font = Constant.VisualFont.primaryRegularLabel
+        textView.font = Constant.Visual.Font.primaryRegularLabel
         textView.placeholder = "Share any thoughts, suggestions, or issues..."
         
         textView.applyStyle(.labelBorder)
@@ -131,7 +131,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         button.setTitle("Submit", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -157,7 +157,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         self.dismiss(animated: true) {
             // After we successfully submit this survey and dismiss the view, thank the user
-            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.surveyFeedbackAppExperienceTitle, forSubtitle: Constant.VisualBannerText.surveyFeedbackAppExperienceSubtitle, forStyle: .success)
+            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.surveyFeedbackAppExperienceTitle, forSubtitle: Constant.Visual.BannerText.surveyFeedbackAppExperienceSubtitle, forStyle: .success)
             
             guard numStars >= 4 else {
                 return
@@ -206,7 +206,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
                 // The rating is being set to nil or the new rating is the same as the old rating, so clear all of the stars and the rating
                 storedIndexOfUserStarRating = nil
                 
-                UIView.animate(withDuration: Constant.VisualAnimation.selectSingleElement) {
+                UIView.animate(withDuration: Constant.Visual.Animation.selectSingleElement) {
                     // A star isn't selected so the user can't submit
                     self.submitButton.isEnabled = false
                     self.orderedStarButtons.forEach { starButton in
@@ -228,7 +228,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
                 return selectedStarButtons.contains(starButton) == false
             }
             
-            UIView.animate(withDuration: Constant.VisualAnimation.selectSingleElement) {
+            UIView.animate(withDuration: Constant.Visual.Animation.selectSingleElement) {
                 // A star is selected so the user can now submit
                 self.submitButton.isEnabled = true
                 selectedStarButtons.forEach { selectedStarButton in

@@ -17,7 +17,7 @@ class LimitTooLowViewController: BluePawVC {
         
         button.setTitle("Back", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         

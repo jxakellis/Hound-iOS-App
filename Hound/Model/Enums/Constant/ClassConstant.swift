@@ -52,7 +52,7 @@ public enum DogConstant {
 
 public enum LogConstant {
     static var defaultUserId: String {
-        UserInformation.userId ?? Constant.VisualText.unknownHash
+        UserInformation.userId ?? Constant.Visual.Text.unknownHash
     }
     static let defaultLogActionTypeId = 1
     static var defaultLogStartDate: Date { Date() }

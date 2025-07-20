@@ -144,7 +144,7 @@ public enum VisualConstant {
         static let unknownUUID: UUID = UUID(uuidString: "00000000-0000-4000-8000-000000000000")! // swiftlint:disable:this force_unwrapping
     }
 
-    enum ANIMATION {
+    enum Animation {
         static let moveMultipleElements = 0.3
         static let showMultipleElements = 0.3
         static let hideMultipleElements = 0.2

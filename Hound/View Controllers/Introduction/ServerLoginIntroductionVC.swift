@@ -74,7 +74,7 @@ final class ServerLoginIntroductionVC: HoundViewController,
     private let signInWithAppleDescriptionLabel: HoundLabel = {
         let label = HoundLabel()
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.tertiaryColorDescLabel
+        label.font = Constant.Visual.Font.tertiaryColorDescLabel
         label.textColor = UIColor.tertiaryLabel
         label.textAlignment = .center
         let mode = (UserInformation.userIdentifier == nil) ? "Up" : "In"

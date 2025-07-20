@@ -23,7 +23,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
         let button = HoundButton(huggingPriority: 270, compressionResistancePriority: 270)
         button.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         button.backgroundColor = UIColor.systemBlue
         button.shouldRoundCorners = true
         button.addTarget(self, action: #selector(didTouchUpInsideUpgrade), for: .touchUpInside)
@@ -34,7 +34,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
         let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         button.backgroundColor = UIColor.systemBackground
         button.applyStyle(.labelBorder)
         button.shouldDismissParentViewController = true
@@ -75,21 +75,21 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "No need to go it alone! Grow your Hound family to ",
                 attributes: [
-                    .font: Constant.VisualFont.primaryRegularLabel,
+                    .font: Constant.Visual.Font.primaryRegularLabel,
                     .foregroundColor: UIColor.secondaryLabel
                 ])
 
             message.append(NSAttributedString(
                 string: "six members",
                 attributes: [
-                    .font: Constant.VisualFont.emphasizedPrimaryRegularLabel,
+                    .font: Constant.Visual.Font.emphasizedPrimaryRegularLabel,
                     .foregroundColor: UIColor.secondaryLabel
                 ]))
 
             message.append(NSAttributedString(
                 string: " with Hound+. ",
                 attributes: [
-                    .font: Constant.VisualFont.primaryRegularLabel,
+                    .font: Constant.Visual.Font.primaryRegularLabel,
                     .foregroundColor: UIColor.secondaryLabel
                 ]))
 
@@ -97,7 +97,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
                 message.append(NSAttributedString(
                     string: "Try it out today with a one week free trial.",
                     attributes: [
-                        .font: Constant.VisualFont.primaryRegularLabel,
+                        .font: Constant.Visual.Font.primaryRegularLabel,
                         .foregroundColor: UIColor.secondaryLabel
                     ]))
             }

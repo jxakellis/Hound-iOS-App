@@ -38,14 +38,14 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     private let timeRangeLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.text = "Time Range"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
     private let timeRangeFromLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
         label.text = "From"
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         return label
     }()
     
@@ -67,7 +67,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     private let timeRangeToLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.text = "to"
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         return label
     }()
     
@@ -89,7 +89,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     private let searchLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Search Text"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
@@ -107,13 +107,13 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     private let dogsLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Dogs"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
     private lazy var filterDogsLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select a dog (or dogs)..."
         
@@ -130,13 +130,13 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     private let logActionsLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Actions"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
     private lazy var filterLogActionsLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an action (or actions)..."
         
@@ -153,13 +153,13 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     private let familyMembersLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Family Members"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
     private lazy var filterFamilyMembersLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 240, compressionResistancePriority: 240)
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select a family member (or members)..."
         
@@ -178,7 +178,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         
         button.setTitle("Clear", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -196,7 +196,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         
         button.setTitle("Apply", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBlue
         
@@ -312,7 +312,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             filterDogsLabel.text = {
                 if filter.filteredDogsUUIDs.count == 1, let dogUUID = filter.filteredDogsUUIDs.first {
                     // The user only has one dog selected to filter by
-                    return filter.dogManager.findDog(forDogUUID: dogUUID)?.dogName ?? Constant.VisualText.unknownName
+                    return filter.dogManager.findDog(forDogUUID: dogUUID)?.dogName ?? Constant.Visual.Text.unknownName
                 }
                 else if filter.filteredDogsUUIDs.count > 1 && filter.filteredDogsUUIDs.count < filter.availableDogs.count {
                     // The user has multiple, but not all, dogs selected to filter by
@@ -352,7 +352,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             filterFamilyMembersLabel.text = {
                 if filter.filteredFamilyMemberUserIds.count == 1, let userId = filter.filteredFamilyMemberUserIds.first {
                     // The user only has one family member selected to filter by
-                    return FamilyInformation.findFamilyMember(forUserId: userId)?.displayFullName ?? Constant.VisualText.unknownName
+                    return FamilyInformation.findFamilyMember(forUserId: userId)?.displayFullName ?? Constant.Visual.Text.unknownName
                 }
                 else if filter.filteredFamilyMemberUserIds.count > 1 && filter.filteredFamilyMemberUserIds.count < filter.availableFamilyMembers.count {
                     // The user has multiple, but not all, family members selected to filter by
@@ -542,7 +542,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             let familyMember = filter.availableFamilyMembers[indexPath.row]
             
             customCell.setCustomSelectedTableViewCell(forSelected: filter.filteredFamilyMemberUserIds.contains(familyMember.userId))
-            customCell.label.text = familyMember.displayFullName ?? Constant.VisualText.unknownName
+            customCell.label.text = familyMember.displayFullName ?? Constant.Visual.Text.unknownName
         }
     }
     

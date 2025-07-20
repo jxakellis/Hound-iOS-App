@@ -46,7 +46,7 @@ extension UIView {
             self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         }
         
-        self.layer.cornerRadius = Constant.VisualLayer.defaultCornerRadius
+        self.layer.cornerRadius = Constant.Visual.Layer.defaultCornerRadius
         self.layer.cornerCurve = .continuous
     }
     
@@ -65,7 +65,7 @@ extension UIView {
             self.layer.maskedCorners.insert([.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner])
         }
         
-        self.layer.cornerRadius = Constant.VisualLayer.defaultCornerRadius
+        self.layer.cornerRadius = Constant.Visual.Layer.defaultCornerRadius
         self.layer.cornerCurve = .continuous
     }
     

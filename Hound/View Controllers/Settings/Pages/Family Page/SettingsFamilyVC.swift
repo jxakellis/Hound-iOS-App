@@ -20,14 +20,14 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     
     private let familyCodeHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
     private let familyCodeDescriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         
         let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
@@ -37,14 +37,14 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive).",
-                attributes: [.font: Constant.VisualFont.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
             
             // Add a disclaimer for the user that they
             if activeSubscriptionNumberOfFamilyMembers <= 1 {
                 message.append(
                     NSAttributedString(
                         string: " Currently, your Hound plan is for individual use only. To add family members, try out a free trial of Hound+!",
-                        attributes: [.font: Constant.VisualFont.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                        attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
                     )
                 )
             }
@@ -60,7 +60,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         
         button.setTitle("Invite to Family", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -78,7 +78,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     private let membersHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Members"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
@@ -96,7 +96,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         
         button.setTitle("Leave Family", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -109,7 +109,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         let label = HoundLabel(huggingPriority: 220, compressionResistancePriority: 220)
         label.text = "Family members can freely join or leave families. The head can only leave by deleting the family, which requires all other members to leave first (or be kicked)."
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -251,12 +251,12 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         : tableView.dequeueReusableCell(withIdentifier: SettingsFamilyMemberTVC.reuseIdentifier, for: indexPath)
         
         if let cell = cell as? SettingsFamilyHeadTVC {
-            cell.setup(forDisplayFullName: familyMember.displayFullName ?? Constant.VisualText.unknownName)
+            cell.setup(forDisplayFullName: familyMember.displayFullName ?? Constant.Visual.Text.unknownName)
             cell.containerView.roundCorners(setCorners: .all)
         }
         
         if let cell = cell as? SettingsFamilyMemberTVC {
-            cell.setup(forDisplayFullName: familyMember.displayFullName ?? Constant.VisualText.unknownName)
+            cell.setup(forDisplayFullName: familyMember.displayFullName ?? Constant.Visual.Text.unknownName)
             cell.containerView.roundCorners(setCorners: .none)
         }
         
@@ -270,9 +270,9 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         
         // construct the alert controller which will confirm if the user wants to kick the family member
         let familyMember = FamilyInformation.familyMembers[indexPath.row]
-        let kickFamilyMemberAlertController = UIAlertController(title: "Do you want to kick \(familyMember.displayFullName ?? Constant.VisualText.unknownName) from your family?", message: nil, preferredStyle: .alert)
+        let kickFamilyMemberAlertController = UIAlertController(title: "Do you want to kick \(familyMember.displayFullName ?? Constant.Visual.Text.unknownName) from your family?", message: nil, preferredStyle: .alert)
         
-        let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName ?? Constant.VisualText.unknownName)", style: .destructive) { _ in
+        let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName ?? Constant.Visual.Text.unknownName)", style: .destructive) { _ in
             // the user wants to kick the family member so query the server
             let body: JSONRequestBody = [Constant.Key.familyKickUserId.rawValue: .string(familyMember.userId)]
             PresentationManager.beginFetchingInformationIndicator()
@@ -290,7 +290,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
                         
                         self.repeatableSetup()
                         self.familyMembersTableView.deleteRows(at: [indexPath], with: .automatic)
-                        UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
+                        UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
                             self.view.setNeedsLayout()
                             self.view.layoutIfNeeded()
                         }

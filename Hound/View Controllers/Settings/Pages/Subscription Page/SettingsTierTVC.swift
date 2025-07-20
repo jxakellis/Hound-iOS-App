@@ -20,7 +20,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
     private let containerView: HoundView = {
         let view = HoundView()
         view.shouldRoundCorners = true
-        view.staticCornerRadius = Constant.VisualLayer.defaultCornerRadius
+        view.staticCornerRadius = Constant.Visual.Layer.defaultCornerRadius
         view.backgroundColor = UIColor.systemBackground
         return view
     }()
@@ -36,7 +36,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.backgroundColor = UIColor.systemGreen
-        label.font = Constant.VisualFont.emphasizedPrimaryRegularLabel
+        label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
         label.textColor = UIColor.systemBackground
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
@@ -55,14 +55,14 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
     
     private let totalPriceLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
-        label.font = Constant.VisualFont.tertiaryHeaderLabel
+        label.font = Constant.Visual.Font.tertiaryHeaderLabel
         return label
     }()
 
     private let monthlyPriceLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.weakSecondaryRegularLabel
+        label.font = Constant.Visual.Font.weakSecondaryRegularLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -111,7 +111,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         // this must come first as savePercentLabel.text changes
         self.setupPriceLabels()
 
-        UIView.animate(withDuration: isAnimated ? Constant.VisualAnimation.selectSingleElement : 0.0) {
+        UIView.animate(withDuration: isAnimated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
             self.savePercentLabel.isHidden = !self.isCustomSelected && self.savePercentLabel.text != nil
 
@@ -122,8 +122,8 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
     /// Attempts to set the attributedText for totalPriceLabel and monthlyPriceLabel given the current product, productFullPrice, and isCustomSelected
     private func setupPriceLabels() {
         guard let product = product, let monthlySubscriptionPrice = product.monthlySubscriptionPrice, let unit = product.subscriptionPeriod?.unit, let numberOfUnits = product.subscriptionPeriod?.numberOfUnits else {
-            totalPriceLabel.text = Constant.VisualText.unknownText
-            monthlyPriceLabel.text = Constant.VisualText.unknownText
+            totalPriceLabel.text = Constant.Visual.Text.unknownText
+            monthlyPriceLabel.text = Constant.Visual.Text.unknownText
             return
         }
 
@@ -141,16 +141,16 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         // To explain the difference between discounted and full price, take for example "6 months - $59.99  $119.99". $120 is the "full" price if you used a $20 1 month subscription for 6 months and $60 is our "discounted" price for buying the 6 month subscription
         // If the cell isn't selected, all of the text is the tertiary label color
         let discountedTotalPriceTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: Constant.VisualFont.tertiaryHeaderLabel,
+            .font: Constant.Visual.Font.tertiaryHeaderLabel,
             .foregroundColor: isCustomSelected ? UIColor.label : UIColor.tertiaryLabel
         ]
         let fullTotalPricePrimaryTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: Constant.VisualFont.tertiaryHeaderLabel,
+            .font: Constant.Visual.Font.tertiaryHeaderLabel,
             .foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel,
             .strikethroughStyle: NSUnderlineStyle.single.rawValue
         ]
         let monthlyPriceTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: Constant.VisualFont.weakSecondaryRegularLabel,
+            .font: Constant.Visual.Font.weakSecondaryRegularLabel,
             .foregroundColor: isCustomSelected ? UIColor.secondaryLabel : UIColor.tertiaryLabel
         ]
 

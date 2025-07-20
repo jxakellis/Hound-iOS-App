@@ -81,6 +81,8 @@ final class DogsTableVC: HoundTableViewController {
         // allow for refreshing of the information from the server
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
+        
+        self.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
     }
     
     private var viewIsBeingViewed: Bool = false
@@ -140,12 +142,12 @@ final class DogsTableVC: HoundTableViewController {
                 }
                 
                 if responseStatus == .successResponse {
-                    PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.successRefreshRemindersTitle, forSubtitle: Constant.VisualBannerText.successRefreshRemindersSubtitle, forStyle: .success)
+                    PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.successRefreshRemindersTitle, forSubtitle: Constant.Visual.BannerText.successRefreshRemindersSubtitle, forStyle: .success)
                 }
                 else {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
                         // If OfflineModeManager has displayed its banner that indicates its turning on, then we are safe to display this banner. Otherwise, we would run the risk of both of these banners displaying if its the first time enterin offline mode.
-                        PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.infoRefreshOnHoldTitle, forSubtitle: Constant.VisualBannerText.infoRefreshOnHoldSubtitle, forStyle: .info)
+                        PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.infoRefreshOnHoldTitle, forSubtitle: Constant.Visual.BannerText.infoRefreshOnHoldSubtitle, forStyle: .info)
                     }
                 }
                 
@@ -373,7 +375,7 @@ final class DogsTableVC: HoundTableViewController {
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
 
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                    UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
+                    UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
                         self.view.setNeedsLayout()
                         self.view.layoutIfNeeded()
                     }
@@ -590,7 +592,7 @@ final class DogsTableVC: HoundTableViewController {
                     self.dogManager.removeDog(forDogUUID: dog.dogUUID)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     self.tableView.deleteSections([indexPath.section], with: .automatic)
-                    UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
+                    UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
                         self.view.setNeedsLayout()
                         self.view.layoutIfNeeded()
                     }

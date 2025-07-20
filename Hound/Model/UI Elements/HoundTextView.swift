@@ -17,8 +17,8 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
     
     // MARK: - Properties
     
-    var staticCornerRadius: CGFloat? = Constant.VisualLayer.defaultCornerRadius
-    /// If true, self.layer.cornerRadius = Constant.VisualLayer.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
+    var staticCornerRadius: CGFloat? = Constant.Visual.Layer.defaultCornerRadius
+    /// If true, self.layer.cornerRadius = Constant.Visual.Layer.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
             updateCornerRounding()
@@ -152,7 +152,7 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
         self.textAlignment = .natural
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
-        self.font = self.font ?? Constant.VisualFont.primaryRegularLabel
+        self.font = self.font ?? Constant.Visual.Font.primaryRegularLabel
         self.isScrollEnabled = false
         
         placeholderLabel.font = self.font

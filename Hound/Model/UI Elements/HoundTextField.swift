@@ -16,8 +16,8 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
 
     // MARK: - Properties
     
-    var staticCornerRadius: CGFloat? = Constant.VisualLayer.defaultCornerRadius
-    /// If true, self.layer.cornerRadius = Constant.VisualLayer.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
+    var staticCornerRadius: CGFloat? = Constant.Visual.Layer.defaultCornerRadius
+    /// If true, self.layer.cornerRadius = Constant.Visual.Layer.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
             updateCornerRounding()
@@ -106,7 +106,7 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
         self.clearsOnBeginEditing = true
         
         self.minimumFontSize = 15
-        self.font = Constant.VisualFont.primaryRegularLabel
+        self.font = Constant.Visual.Font.primaryRegularLabel
         
         HoundSizeDebugView.install(on: self)
         

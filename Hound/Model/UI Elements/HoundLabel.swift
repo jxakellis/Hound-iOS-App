@@ -16,7 +16,7 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     
     // MARK: - Properties
     
-    var staticCornerRadius: CGFloat? = Constant.VisualLayer.defaultCornerRadius
+    var staticCornerRadius: CGFloat? = Constant.Visual.Layer.defaultCornerRadius
     /// If true, the corners of the view are rounded, depending upon the value of isRoundingToCircle. If false, cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
@@ -259,7 +259,7 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         self.adjustsFontSizeToFitWidth = true
         self.translatesAutoresizingMaskIntoConstraints = false
         self.minimumScaleFactor = 0.825
-        self.font = Constant.VisualFont.primaryRegularLabel
+        self.font = Constant.Visual.Font.primaryRegularLabel
         
         HoundSizeDebugView.install(on: self)
         

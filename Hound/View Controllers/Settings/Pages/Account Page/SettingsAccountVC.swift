@@ -25,14 +25,14 @@ final class SettingsAccountVC: HoundScrollViewController {
     private let userNameHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.text = "Name"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
     private let userNameLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -40,14 +40,14 @@ final class SettingsAccountVC: HoundScrollViewController {
     private let userEmailHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.text = "Email"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
     private let userEmailLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -71,14 +71,14 @@ final class SettingsAccountVC: HoundScrollViewController {
     private let userIdHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Support ID"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
     private let userIdLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -98,7 +98,7 @@ final class SettingsAccountVC: HoundScrollViewController {
        
         button.setTitle("Redownload Data", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -113,7 +113,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.text = "Deletes local storage of all dogs, reminders, logs, and automations to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side."
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         
         return label
@@ -124,7 +124,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         
         button.setTitle("Sign Out", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -140,7 +140,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         
         button.setTitle("Delete Account", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemRed
         
@@ -176,12 +176,12 @@ final class SettingsAccountVC: HoundScrollViewController {
                 }
                 
                 if responseStatus == .successResponse {
-                    PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.successRedownloadDataTitle, forSubtitle: Constant.VisualBannerText.successRedownloadDataSubtitle, forStyle: .success)
+                    PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.successRedownloadDataTitle, forSubtitle: Constant.Visual.BannerText.successRedownloadDataSubtitle, forStyle: .success)
                 }
                 else {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
                         // If OfflineModeManager has displayed its banner that indicates its turning on, then we are safe to display this banner. Otherwise, we would run the risk of both of these banners displaying if its the first time enterin offline mode.
-                        PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.infoRedownloadOnHoldTitle, forSubtitle: Constant.VisualBannerText.infoRedownloadOnHoldSubtitle, forStyle: .info)
+                        PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.infoRedownloadOnHoldTitle, forSubtitle: Constant.Visual.BannerText.infoRedownloadOnHoldSubtitle, forStyle: .info)
                     }
                 }
                 
@@ -257,10 +257,10 @@ final class SettingsAccountVC: HoundScrollViewController {
        
         userNameLabel.text = UserInformation.displayFullName
         
-        userEmailLabel.text = UserInformation.userEmail ?? Constant.VisualText.unknownEmail
+        userEmailLabel.text = UserInformation.userEmail ?? Constant.Visual.Text.unknownEmail
         copyUserEmailButton.isEnabled = UserInformation.userEmail != nil
         
-        userIdLabel.text = UserInformation.userId ?? Constant.VisualText.unknownUserId
+        userIdLabel.text = UserInformation.userId ?? Constant.Visual.Text.unknownUserId
         copyUserIdButton.isEnabled = UserInformation.userId != nil
     }
     

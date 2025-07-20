@@ -16,7 +16,7 @@ final class HoundEditPageHeaderView: HoundView {
         let label = HoundLabel(huggingPriority: 500, compressionResistancePriority: 500)
         label.textAlignment = .center
         label.text = "Default Edit Page Header"
-        label.font = Constant.VisualFont.primaryHeaderLabel
+        label.font = Constant.Visual.Font.primaryHeaderLabel
         label.textColor = UIColor.systemBlue
         label.numberOfLines = 0
         return label

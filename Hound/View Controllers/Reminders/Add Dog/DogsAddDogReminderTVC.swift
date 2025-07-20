@@ -29,13 +29,13 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     private let reminderActionLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = Constant.VisualFont.emphasizedPrimaryRegularLabel
+        label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
         return label
     }()
     
     private let reminderDisplayableIntervalLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         return label
     }()
     

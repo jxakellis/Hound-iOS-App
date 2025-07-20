@@ -15,7 +15,7 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Log"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
@@ -30,7 +30,7 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.text = "Receive notifications about your family's logs. Examples include: a user creating a log."
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()

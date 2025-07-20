@@ -20,7 +20,7 @@ final class DogsAddTriggerTimeDelayView: HoundView {
         let datePicker = HoundDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
         datePicker.datePickerMode = .countDownTimer
         datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
-        datePicker.countDownDuration = Constant.Class.TriggerConstant.defaultTriggerTimeDelay
+        datePicker.countDownDuration = Constant.Class.Trigger.defaultTriggerTimeDelay
         datePicker.addTarget(self, action: #selector(didUpdateCountdown), for: .valueChanged)
         return datePicker
     }()
@@ -29,7 +29,7 @@ final class DogsAddTriggerTimeDelayView: HoundView {
         let label = HoundLabel()
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         label.textColor = UIColor.label
         return label
     }()

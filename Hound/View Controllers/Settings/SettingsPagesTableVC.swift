@@ -44,14 +44,14 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
+        self.enableDummyHeaderView = true
+        
         self.tableView.register(SettingsPagesTVC.self, forCellReuseIdentifier: SettingsPagesTVC.reuseIdentifier)
-        self.tableView.onlyScrollIfBigger()
+        self.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // MARK: Introduction Page
         
         if LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == Constant.Class.Subscription.defaultSubscription.productId {
             let vc = FamilyUpgradeIntroductionVC()

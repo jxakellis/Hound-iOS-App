@@ -53,7 +53,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     private let interfaceStyleHeaderLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Theme"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
@@ -65,7 +65,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
             segmentedControl.insertSegment(withTitle: option.title, at: index, animated: false)
         }
         
-        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
         
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
         segmentedControl.backgroundColor = UIColor.systemGray4
@@ -77,7 +77,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     private let measurementHeaderLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Measurement System"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
@@ -89,7 +89,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
             segmentedControl.insertSegment(withTitle: ms.readableMeasurementSystem(), at: index, animated: false)
         }
         
-        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
         
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
         segmentedControl.backgroundColor = UIColor.systemGray4

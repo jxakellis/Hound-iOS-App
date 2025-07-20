@@ -15,7 +15,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Snooze"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
@@ -30,7 +30,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "If you snooze an alarm, this is the length of time until it sounds again."
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()

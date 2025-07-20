@@ -30,14 +30,14 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         label.textColor = UIColor.label
         return label
     }()
     
     private lazy var dayOffsetLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select the day offset..."
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown))
@@ -117,13 +117,13 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message = NSMutableAttributedString(
                 string: text,
-                attributes: [.font: Constant.VisualFont.secondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                attributes: [.font: Constant.Visual.Font.secondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
             )
             
             if let emphasizedText = emphasizedText {
                 message.append(NSMutableAttributedString(
                     string: emphasizedText,
-                    attributes: [.font: Constant.VisualFont.emphasizedSecondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
                 )
             }
             return message
@@ -316,7 +316,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
         
         NSLayoutConstraint.activate([
             timeOfDayPicker.topAnchor.constraint(equalTo: dayOffsetLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            timeOfDayPicker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -200.0),
+            timeOfDayPicker.bottomAnchor.constraint(equalTo: bottomAnchor),
             timeOfDayPicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             timeOfDayPicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             timeOfDayPicker.createHeightMultiplier(Constant.Constraint.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),

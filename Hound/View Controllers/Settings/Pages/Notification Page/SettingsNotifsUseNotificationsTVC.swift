@@ -19,7 +19,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Use Notifications"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
@@ -35,7 +35,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 240, compressionResistancePriority: 240)
         label.text = "Notifications help you stay up to date about the status of your dogs, reminders, and Hound family. "
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -78,7 +78,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
                     // Attempt to re-direct the user to their iPhone's settings for Hound, so they can enable notifications
                     guard let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) else {
                         // If we can't redirect the user, then just user a generic pop-up
-                        PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.notificationsDisabledTitle, forSubtitle: Constant.VisualBannerText.notificationsDisabledSubtitle, forStyle: .danger)
+                        PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.notificationsDisabledTitle, forSubtitle: Constant.Visual.BannerText.notificationsDisabledSubtitle, forStyle: .danger)
                         return
                     }
                     
@@ -151,13 +151,13 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message = NSMutableAttributedString(
                 string: precalculatedDynamicNotificationsText,
-                attributes: [.font: Constant.VisualFont.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
             )
             
             if precaulculatedDynamicIsNotificationsEnabled {
                 message.append(NSMutableAttributedString(
                     string: "You can't modify the settings below until you enable notifications.",
-                    attributes: [.font: Constant.VisualFont.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
                 )
             }
             

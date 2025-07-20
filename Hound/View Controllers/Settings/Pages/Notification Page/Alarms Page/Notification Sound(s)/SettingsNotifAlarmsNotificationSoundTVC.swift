@@ -16,7 +16,7 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
         let label = HoundLabel()
         label.contentMode = .left
         label.text = "Notification Sound"
-        label.font = Constant.VisualFont.weakSecondaryRegularLabel
+        label.font = Constant.Visual.Font.weakSecondaryRegularLabel
         return label
     }()
 
@@ -42,7 +42,7 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
 
         isCustomSelected = selected
 
-        UIView.animate(withDuration: animated ? Constant.VisualAnimation.selectSingleElement : 0.0) {
+        UIView.animate(withDuration: animated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
             self.contentView.backgroundColor = selected ? UIColor.systemBlue : UIColor.systemBackground
             self.notificationSoundLabel.textColor = selected ? UIColor.systemBackground : UIColor.label
         }

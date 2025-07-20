@@ -22,7 +22,7 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     
     private let logReactionsLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.adjustsFontSizeToFitWidth = false
         label.numberOfLines = 0
         return label
@@ -30,7 +30,7 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     
     private let reminderResultLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         label.adjustsFontSizeToFitWidth = false
         label.numberOfLines = 0
         return label
@@ -69,17 +69,17 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "Any ",
-                attributes: [.font: Constant.VisualFont.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any])
+                attributes: [.font: Constant.Visual.Font.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any])
             message.append(
                 NSAttributedString(
                     string: forTrigger.triggerLogReactions.map({ $0.readableName(includeMatchingEmoji: false) }).joined(separator: ", ", endingSeparator: " or "),
-                    attributes: [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
+                    attributes: [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
                 )
             )
             message.append(
                 NSAttributedString(
                     string: " log",
-                    attributes: [.font: Constant.VisualFont.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
+                    attributes: [.font: Constant.Visual.Font.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
                 )
             )
             return message
@@ -90,17 +90,17 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "Creates ",
-                attributes: [.font: Constant.VisualFont.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any])
+                attributes: [.font: Constant.Visual.Font.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any])
             message.append(
                 NSAttributedString(
                     string: forTrigger.triggerReminderResult.readableName,
-                    attributes: [.font: Constant.VisualFont.emphasizedSecondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
+                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
                 )
             )
             message.append(
                 NSAttributedString(
                     string: " for \(forTrigger.readableTime())",
-                    attributes: [.font: Constant.VisualFont.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
+                    attributes: [.font: Constant.Visual.Font.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
                 )
             )
             return message

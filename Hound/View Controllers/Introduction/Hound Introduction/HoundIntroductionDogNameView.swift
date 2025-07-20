@@ -58,7 +58,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
     private let continueButton: HoundButton = {
         let button = HoundButton(huggingPriority: 290, compressionResistancePriority: 290)
         button.isEnabled = false
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.backgroundColor = UIColor.systemBackground

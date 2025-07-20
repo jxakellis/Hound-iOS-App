@@ -63,7 +63,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     
     private lazy var reminderActionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an action..."
         
@@ -104,7 +104,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             segmentedControl.insertSegment(withTitle: option.readableName, at: index, animated: false)
         }
         
-        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
         
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
         segmentedControl.backgroundColor = UIColor.systemGray4
@@ -343,7 +343,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             reminderCustomActionNameTop.restore()
         }
         
-        UIView.animate(withDuration: Constant.VisualAnimation.showOrHideSingleElement) {
+        UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
             self.setNeedsLayout()
             self.layoutIfNeeded()
         }

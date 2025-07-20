@@ -32,14 +32,14 @@ final class LogTVC: HoundTableViewCell {
     /// Label for the dog’s name
     private let dogNameLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
-        label.font = Constant.VisualFont.emphasizedPrimaryRegularLabel
+        label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
         return label
     }()
     
     /// Label describing the log action (without emoji)
     private lazy var logActionTextLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 330, compressionResistancePriority: 330)
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         return label
     }()
     
@@ -55,7 +55,7 @@ final class LogTVC: HoundTableViewCell {
     private let logStartToEndDateLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.textAlignment = .right
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         return label
     }()
     
@@ -63,7 +63,7 @@ final class LogTVC: HoundTableViewCell {
     private let logDurationLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.textAlignment = .right
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         return label
     }()
     
@@ -85,7 +85,7 @@ final class LogTVC: HoundTableViewCell {
     private let logUnitLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.backgroundColor = UIColor.secondarySystemBackground
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
         return label
@@ -95,7 +95,7 @@ final class LogTVC: HoundTableViewCell {
     private let logNoteLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.backgroundColor = UIColor.secondarySystemBackground
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
         return label

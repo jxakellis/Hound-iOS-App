@@ -135,7 +135,7 @@ final class UserInformation: UserDefaultPersistable {
 
         // check to see if anything is blank
         if trimmedFirstName.isEmpty && trimmedLastName.isEmpty {
-            return Constant.VisualText.unknownName
+            return Constant.Visual.Text.unknownName
         }
         // we know one of OR both of the trimmedFirstName and trimmedLast name are != nil &&.isEmpty == false
         else if trimmedFirstName.isEmpty {

@@ -33,7 +33,7 @@ enum ExportActivityViewManager {
         /*
          // Make sure that the family is unlocked so new
         guard FamilyInformation.familyIsLocked == false else {
-            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.invalidLockedFamilyShareTitle, forSubtitle: Constant.VisualBannerText.invalidLockedFamilyShareSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.invalidLockedFamilyShareTitle, forSubtitle: Constant.Visual.BannerText.invalidLockedFamilyShareSubtitle, forStyle: .danger)
             return
         }
          */
@@ -85,18 +85,18 @@ enum ExportActivityViewManager {
             var familyMemberFullName = userIdToFamilyMemberFullName[log.userId]
             if familyMemberFullName == nil {
                 // if we don't have familyMemberFullName stored in the dictionary for quick reference, store it
-                familyMemberFullName = FamilyInformation.findFamilyMember(forUserId: log.userId)?.displayFullName ?? Constant.VisualText.unknownName
+                familyMemberFullName = FamilyInformation.findFamilyMember(forUserId: log.userId)?.displayFullName ?? Constant.Visual.Text.unknownName
                 userIdToFamilyMemberFullName[log.userId] = familyMemberFullName
             }
 
             var dogName = dogUUIDToDogNames[dogUUID]
             if dogName == nil {
                 // if we don't have dogName stored in the dictionary for quick reference, store it
-                dogName = DogManager.globalDogManager?.findDog(forDogUUID: dogUUID)?.dogName ?? Constant.VisualText.unknownName
+                dogName = DogManager.globalDogManager?.findDog(forDogUUID: dogUUID)?.dogName ?? Constant.Visual.Text.unknownName
                 dogUUIDToDogNames[dogUUID] = dogName
             }
 
-           // neither should be nil as in the odd case we can't locate either, we just put in Constant.VisualText.unknownName in its place
+           // neither should be nil as in the odd case we can't locate either, we just put in Constant.Visual.Text.unknownName in its place
             guard let dogName = dogName, let familyMemberFullName = familyMemberFullName else {
                 continue
             }

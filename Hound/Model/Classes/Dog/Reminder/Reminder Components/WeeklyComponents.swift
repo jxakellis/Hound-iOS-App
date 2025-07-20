@@ -210,7 +210,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
         let futureExecutionDates = futureExecutionDates(forReminderExecutionBasis: reminderExecutionBasis)
         
         // Default to the first item in the array, as it is most likely the closest to the present
-        var soonestFutureExecutionDate: Date = futureExecutionDates.first ?? Constant.Class.DateConstant.default1970Date
+        var soonestFutureExecutionDate: Date = futureExecutionDates.first ?? Constant.Class.Date.default1970Date
         
         // Find any dates that are closer to the present that the current soonestFutureExecutionDate. If a date is closer to the present that soonestFutureExecutionDate, set soonestFutureExecutionDate to its value
         for futureExecutionDate in futureExecutionDates where reminderExecutionBasis.distance(to: futureExecutionDate) < reminderExecutionBasis.distance(to: soonestFutureExecutionDate) {
@@ -227,7 +227,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
         
         guard weekdays.count > 1 else {
             // only 1 day of week so simply subtract a week
-            return Calendar.UTCCalendar.date(byAdding: .day, value: -7, to: nextExecutionDate) ?? Constant.Class.DateConstant.default1970Date
+            return Calendar.UTCCalendar.date(byAdding: .day, value: -7, to: nextExecutionDate) ?? Constant.Class.Date.default1970Date
         }
         
         let futureExecutionDates = futureExecutionDates(forReminderExecutionBasis: reminderExecutionBasis)
@@ -236,11 +236,11 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
         
         // Take every date and shift it back a week
         for futureExecutionDate in futureExecutionDates {
-            pastExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: -7, to: futureExecutionDate) ?? Constant.Class.DateConstant.default1970Date)
+            pastExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: -7, to: futureExecutionDate) ?? Constant.Class.Date.default1970Date)
         }
         
         // Choose date that is likely to be the closest to the present
-        var soonestExecutionDate: Date = pastExecutionDates.first ?? Constant.Class.DateConstant.default1970Date
+        var soonestExecutionDate: Date = pastExecutionDates.first ?? Constant.Class.Date.default1970Date
         
         // Find date that are before the nextExecutionDate while also being closer to nextExecutionDate that soonestExecutionDate
         for pastExecutionDate in pastExecutionDates where
@@ -270,15 +270,15 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
             // iterate throguh all weekdays
             for weekday in weekdays {
                 // Add the target weekday to reminderExecutionBasis
-                var futureExecutionDate = Calendar.UTCCalendar.date(bySetting: .weekday, value: weekday, of: reminderExecutionBasis) ?? Constant.Class.DateConstant.default1970Date
+                var futureExecutionDate = Calendar.UTCCalendar.date(bySetting: .weekday, value: weekday, of: reminderExecutionBasis) ?? Constant.Class.Date.default1970Date
                 
                 // Iterate the futureExecutionDate forward until the first result that matches UTCHour and UTCMinute is found
-                futureExecutionDate = Calendar.UTCCalendar.date(bySettingHour: UTCHour, minute: UTCMinute, second: 0, of: futureExecutionDate, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward) ?? Constant.Class.DateConstant.default1970Date
+                futureExecutionDate = Calendar.UTCCalendar.date(bySettingHour: UTCHour, minute: UTCMinute, second: 0, of: futureExecutionDate, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward) ?? Constant.Class.Date.default1970Date
                 
                 // Make sure futureExecutionDate is after reminderExecutionBasis
                 // Correction for setting components to the same day. e.g. if its 11:00Am friday and you apply 8:30AM Friday to the current date, then it is in the past, this gets around this by making it 8:30AM Next Friday
                 if reminderExecutionBasis.distance(to: futureExecutionDate) < 0 {
-                    futureExecutionDate = Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: futureExecutionDate) ?? Constant.Class.DateConstant.default1970Date
+                    futureExecutionDate = Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: futureExecutionDate) ?? Constant.Class.Date.default1970Date
                 }
                 
                 futureExecutionDates.append(futureExecutionDate)
@@ -290,12 +290,12 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
         if futureExecutionDates.count <= 1 {
             if let futureExecutionDate = futureExecutionDates.first {
                 // Only one weekday is active. Take the execution date for that single weekday and add a duplicate, but a week in the future
-                futureExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: futureExecutionDate) ?? Constant.Class.DateConstant.default1970Date)
+                futureExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: futureExecutionDate) ?? Constant.Class.Date.default1970Date)
             }
             else {
                 // No weekdays active. Shouldn't happen. Handle by adding 1 week and 2 weeks to reminderExecutionBasis
-                futureExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: reminderExecutionBasis) ?? Constant.Class.DateConstant.default1970Date)
-                futureExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: 14, to: reminderExecutionBasis) ?? Constant.Class.DateConstant.default1970Date)
+                futureExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: reminderExecutionBasis) ?? Constant.Class.Date.default1970Date)
+                futureExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: 14, to: reminderExecutionBasis) ?? Constant.Class.Date.default1970Date)
             }
         }
         
@@ -311,7 +311,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
         
         guard weekdays.count > 1 else {
             // If only 1 day of week selected so simply add 1 week.
-            return Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: nextExecutionDate) ?? Constant.Class.DateConstant.default1970Date
+            return Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: nextExecutionDate) ?? Constant.Class.Date.default1970Date
         }
         
         // If there are multiple dates to be sorted through to find the date that is closer in time to traditionalNextTimeOfDay but still in the future
@@ -320,7 +320,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
         // Find the futureExecutionDate that is after nextExecutionDate
         var soonestFutureExecutionDate: Date = futureExecutionDates.first(where: { futureExecutionDate in
             nextExecutionDate.distance(to: futureExecutionDate) > 0
-        }) ?? Constant.Class.DateConstant.default1970Date
+        }) ?? Constant.Class.Date.default1970Date
         
         // Attempt to find futureExecutionDates that are further in the future than nextExecutionDate while being closer to nextExecutionDate than soonestFutureExecutionDate. Doing this will give us the first executionDate that is directly after nextExecutionDate
         for futureExecutionDate in futureExecutionDates where

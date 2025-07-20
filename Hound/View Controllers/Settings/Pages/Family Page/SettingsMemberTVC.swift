@@ -20,7 +20,7 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
     
     private let displayFullNameLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = Constant.VisualFont.emphasizedSecondaryHeaderLabel
+        label.font = Constant.Visual.Font.emphasizedSecondaryHeaderLabel
         return label
     }()
     

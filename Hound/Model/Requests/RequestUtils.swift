@@ -76,8 +76,8 @@ enum RequestUtils {
         }
         request.setValue(UIApplication.appVersion, forHTTPHeaderField: "houndheader-appversion")
         
-        HoundLogger.apiRequest.notice("\(request.httpMethod ?? Constant.VisualText.unknownText) Request for \(request.url?.description ?? Constant.VisualText.unknownText)")
-        //        HoundLogger.apiRequest.debug("\tRequest Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? Constant.VisualText.unknownText)")
+        HoundLogger.apiRequest.notice("\(request.httpMethod ?? Constant.Visual.Text.unknownText) Request for \(request.url?.description ?? Constant.Visual.Text.unknownText)")
+        //        HoundLogger.apiRequest.debug("\tRequest Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? Constant.Visual.Text.unknownText)")
         
         // Create the task that will send the request
         let task = session.dataTask(with: request) { data, response, error in
@@ -154,7 +154,7 @@ enum RequestUtils {
     ) {
         // assume an error is no response as that implies request/response failure, meaning the end result of no response is the same
         HoundLogger.apiResponse.warning(
-            "No \(request.httpMethod ?? Constant.VisualText.unknownText) Response for \(request.url?.description ?? Constant.VisualText.unknownText)\nData Task Error: \(error?.localizedDescription ?? Constant.VisualText.unknownText)")
+            "No \(request.httpMethod ?? Constant.Visual.Text.unknownText) Response for \(request.url?.description ?? Constant.Visual.Text.unknownText)\nData Task Error: \(error?.localizedDescription ?? Constant.Visual.Text.unknownText)")
         
         let responseError: HoundError = {
             switch request.httpMethod {
@@ -193,7 +193,7 @@ enum RequestUtils {
     ) {
         // Our request went through but was invalid
         HoundLogger.apiResponse.warning(
-            "Failure \(request.httpMethod ?? Constant.VisualText.unknownText) Response for \(request.url?.description ?? Constant.VisualText.unknownText)\n Message: \(responseBody[Constant.Key.message.rawValue] as? String ?? Constant.VisualText.unknownText)\n Code: \(responseBody[Constant.Key.code.rawValue] as? String ?? Constant.VisualText.unknownText)\n Type:\(responseBody[Constant.Key.name.rawValue] as? String ?? Constant.VisualText.unknownText)")
+            "Failure \(request.httpMethod ?? Constant.Visual.Text.unknownText) Response for \(request.url?.description ?? Constant.Visual.Text.unknownText)\n Message: \(responseBody[Constant.Key.message.rawValue] as? String ?? Constant.Visual.Text.unknownText)\n Code: \(responseBody[Constant.Key.code.rawValue] as? String ?? Constant.Visual.Text.unknownText)\n Type:\(responseBody[Constant.Key.name.rawValue] as? String ?? Constant.Visual.Text.unknownText)")
         
         let responseErrorCode: String? = responseBody[Constant.Key.code.rawValue] as? String
         let requestId: Int = responseBody[Constant.Key.requestId.rawValue] as? Int ?? -1
@@ -265,7 +265,7 @@ enum RequestUtils {
         forResponseBody responseBody: JSONResponseBody
     ) {
         // Our request was valid and successful
-        HoundLogger.apiResponse.notice("Success \(request.httpMethod ?? Constant.VisualText.unknownText) Response for \(request.url?.description ?? Constant.VisualText.unknownText)")
+        HoundLogger.apiResponse.notice("Success \(request.httpMethod ?? Constant.Visual.Text.unknownText) Response for \(request.url?.description ?? Constant.Visual.Text.unknownText)")
         
         // Any completionHandlers or UI element changes must be done on the main thread
         DispatchQueue.main.async {

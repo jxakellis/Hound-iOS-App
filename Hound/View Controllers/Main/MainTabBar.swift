@@ -14,7 +14,7 @@ final class MainTabBar: UITabBar {
     // MARK: - Properties
 
     private var shapeLayer: CALayer?
-    private let radii: Double = Constant.VisualLayer.imageCoveringViewCornerRadius
+    private let radii: Double = Constant.Visual.Layer.imageCoveringViewCornerRadius
 
     // MARK: - Main
 
@@ -25,7 +25,7 @@ final class MainTabBar: UITabBar {
     override func layoutSubviews() {
         super.layoutSubviews()
         self.isTranslucent = true
-        self.layer.cornerRadius = Constant.VisualLayer.imageCoveringViewCornerRadius
+        self.layer.cornerRadius = Constant.Visual.Layer.imageCoveringViewCornerRadius
         self.layer.cornerCurve = .continuous
     }
 

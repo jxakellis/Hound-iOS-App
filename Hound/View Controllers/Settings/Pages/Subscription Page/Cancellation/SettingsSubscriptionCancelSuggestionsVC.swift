@@ -26,7 +26,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         let currentText = textView.text ?? ""
         guard let stringRange = Range(range, in: currentText) else { return false }
         let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
-        return updatedText.count <= Constant.Class.FeedbackConstant.subscriptionCancellationSuggestionCharacterLimit
+        return updatedText.count <= Constant.Class.Feedback.subscriptionCancellationSuggestionCharacterLimit
     }
     
     // MARK: - Elements
@@ -55,7 +55,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         textView.backgroundColor = UIColor.systemBackground
         textView.textColor = UIColor.label
         
-        textView.font = Constant.VisualFont.primaryRegularLabel
+        textView.font = Constant.Visual.Font.primaryRegularLabel
         
         textView.applyStyle(.labelBorder)
         
@@ -69,7 +69,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         
         button.setTitle("Cancel Subscription", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -82,8 +82,8 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
             // Only allow if user is a family head
             guard UserInformation.isUserFamilyHead else {
                 PresentationManager.enqueueBanner(
-                    forTitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionTitle,
-                    forSubtitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionSubtitle,
+                    forTitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionTitle,
+                    forSubtitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionSubtitle,
                     forStyle: .danger
                 )
                 return

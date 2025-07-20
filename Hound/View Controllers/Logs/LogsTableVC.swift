@@ -101,6 +101,7 @@ final class LogsTableVC: HoundTableViewController {
         self.tableView.register(LogTVC.self, forCellReuseIdentifier: LogTVC.reuseIdentifier)
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
+        self.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -141,8 +142,8 @@ final class LogsTableVC: HoundTableViewController {
                 
                 if responseStatus == .successResponse {
                     PresentationManager.enqueueBanner(
-                        forTitle: Constant.VisualBannerText.successRefreshLogsTitle,
-                        forSubtitle: Constant.VisualBannerText.successRefreshLogsSubtitle,
+                        forTitle: Constant.Visual.BannerText.successRefreshLogsTitle,
+                        forSubtitle: Constant.Visual.BannerText.successRefreshLogsSubtitle,
                         forStyle: .success
                     )
                 }
@@ -150,8 +151,8 @@ final class LogsTableVC: HoundTableViewController {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
                         // Only show if offline banner already shown
                         PresentationManager.enqueueBanner(
-                            forTitle: Constant.VisualBannerText.infoRefreshOnHoldTitle,
-                            forSubtitle: Constant.VisualBannerText.infoRefreshOnHoldSubtitle,
+                            forTitle: Constant.Visual.BannerText.infoRefreshOnHoldTitle,
+                            forSubtitle: Constant.Visual.BannerText.infoRefreshOnHoldSubtitle,
                             forStyle: .info
                         )
                     }
@@ -306,7 +307,7 @@ final class LogsTableVC: HoundTableViewController {
             }
             self.tableView.endUpdates()
 
-            UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
+            UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
                 self.view.setNeedsLayout()
                 self.view.layoutIfNeeded()
             }

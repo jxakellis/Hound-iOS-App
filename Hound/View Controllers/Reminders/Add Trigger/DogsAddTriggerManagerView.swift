@@ -31,14 +31,14 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     private let logReactionsHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 305, compressionResistancePriority: 305)
-        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
+        label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = .label
         label.text = "When This Log is Added"
         return label
     }()
     private lazy var logReactionsLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select log type(s)..."
         label.adjustsFontSizeToFitWidth = false
@@ -57,14 +57,14 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     private let reminderResultHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 295, compressionResistancePriority: 295)
-        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
+        label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = .label
         label.text = "Then Create Reminder"
         return label
     }()
     private lazy var reminderResultLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
-        label.font = Constant.VisualFont.secondaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select reminder action..."
         label.adjustsFontSizeToFitWidth = false
@@ -86,7 +86,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     private var reminderCustomActionNameMaxHeight: GeneralLayoutConstraint!
     private lazy var reminderCustomActionNameTextField: HoundTextField = {
         let textField = HoundTextField(huggingPriority: 285, compressionResistancePriority: 285)
-        textField.font = Constant.VisualFont.secondaryRegularLabel
+        textField.font = Constant.Visual.Font.secondaryRegularLabel
         textField.delegate = self
         textField.applyStyle(.thinGrayBorder)
         textField.placeholder = " Enter a custom name..."
@@ -114,7 +114,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             segmentedControl.insertSegment(withTitle: section.title, at: index, animated: false)
         }
         
-        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
         segmentedControl.backgroundColor = UIColor.systemGray4
         
@@ -223,7 +223,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         if segmentedControl.selectedSegmentIndex == SegmentedControlSection.timeDelay.rawValue {
             trigger.triggerType = .timeDelay
-            if !trigger.changeTriggerTimeDelay(forTimeDelay: timeDelayView.currentTimeDelay ?? Constant.Class.TriggerConstant.defaultTriggerTimeDelay) {
+            if !trigger.changeTriggerTimeDelay(forTimeDelay: timeDelayView.currentTimeDelay ?? Constant.Class.Trigger.defaultTriggerTimeDelay) {
                 if showErrorIfFailed {
                     timeDelayView.errorMessage = Constant.Error.TriggerError.timeDelayInvalid().description
                 }
@@ -266,7 +266,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             reminderCustomActionNameTop.constant = 0.0
         }
         
-        UIView.animate(withDuration: Constant.VisualAnimation.showOrHideSingleElement) {
+        UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
             self.setNeedsLayout()
             self.layoutIfNeeded()
         }

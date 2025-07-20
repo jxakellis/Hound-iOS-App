@@ -19,7 +19,7 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
     private let containerView: HoundView = {
         let view = HoundView()
         view.backgroundColor = UIColor.systemBackground
-        view.layer.cornerRadius = Constant.VisualLayer.defaultCornerRadius
+        view.layer.cornerRadius = Constant.Visual.Layer.defaultCornerRadius
         view.layer.cornerCurve = .continuous
         return view
     }()
@@ -73,7 +73,7 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
         
         delegate?.didSetCustomIsSelected(forCell: self, forIsCustomSelected: isCustomSelected)
         
-        UIView.animate(withDuration: isAnimated ? Constant.VisualAnimation.selectSingleElement : 0.0) {
+        UIView.animate(withDuration: isAnimated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
             self.checkmarkButton.isHidden = !self.isCustomSelected
             
             self.containerView.applyStyle(self.isCustomSelected ? .greenSelectionBorder : .labelBorder)
@@ -85,13 +85,13 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
     /// Attempts to set the attributedText for cancellationReasonLabel given the cancellationReason and isCustomSelected
     private func setupCancellationLabel() {
         guard let cancellationReason = cancellationReason else {
-            cancellationReasonLabel.text = Constant.VisualText.unknownText
+            cancellationReasonLabel.text = Constant.Visual.Text.unknownText
             return
         }
         
         // If the cell isn't selected, all of the text is the tertiary label color
         let cancellationReasonTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: Constant.VisualFont.emphasizedPrimaryRegularLabel,
+            .font: Constant.Visual.Font.emphasizedPrimaryRegularLabel,
             .foregroundColor: UIColor.label
         ]
         

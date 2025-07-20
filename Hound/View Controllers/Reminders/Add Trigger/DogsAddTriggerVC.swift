@@ -79,6 +79,20 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         self.eligibleForGlobalPresenter = true
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let saveButtonTop = saveButton.convert(saveButton.bounds, to: view).minY
+        let backButtonTop = backButton.convert(backButton.bounds, to: view).minY
+        let buttonTop = min(saveButtonTop, backButtonTop)
+        
+        let distanceFromBottom = view.bounds.height - buttonTop
+        
+        let minInset = distanceFromBottom + Constant.Constraint.Spacing.absoluteVertInset
+        
+        scrollView.contentInset.bottom = max(scrollView.contentInset.bottom, minInset)
+    }
+    
     // MARK: - Setup
     
     /// Changes made by this view controller will not be persisted to the server, and will only be used locally. Dog is optional

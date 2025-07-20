@@ -38,7 +38,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
         
         button.setTitle("Go to Login Page", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -48,10 +48,10 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     }()
     
     @objc private func didTapTroubleshootLogin(_ sender: Any) {
-        if troubleshootLoginButton.tag == Constant.VisualViewTag.serverSyncViewControllerRetryLogin {
+        if troubleshootLoginButton.tag == Constant.Visual.ViewTag.serverSyncViewControllerRetryLogin {
             self.repeatableSetup()
         }
-        else if troubleshootLoginButton.tag == Constant.VisualViewTag.serverSyncViewControllerGoToLoginPage {
+        else if troubleshootLoginButton.tag == Constant.Visual.ViewTag.serverSyncViewControllerGoToLoginPage {
             let vc = ServerLoginIntroductionVC()
             PresentationManager.enqueueViewController(vc)
         }
@@ -128,13 +128,13 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     
     /// If we recieved a failure response from a request, redirect the user to the login page in an attempt to recover
     private func failureResponseForRequest() {
-        troubleshootLoginButton.tag = Constant.VisualViewTag.serverSyncViewControllerGoToLoginPage
+        troubleshootLoginButton.tag = Constant.Visual.ViewTag.serverSyncViewControllerGoToLoginPage
         troubleshootLoginButton.setTitle("Go to Login Page", for: .normal)
         troubleshootLoginButton.isHidden = false
     }
     
     private func noResponseForRequest() {
-        troubleshootLoginButton.tag = Constant.VisualViewTag.serverSyncViewControllerRetryLogin
+        troubleshootLoginButton.tag = Constant.Visual.ViewTag.serverSyncViewControllerRetryLogin
         troubleshootLoginButton.setTitle("Retry Login", for: .normal)
         troubleshootLoginButton.isHidden = false
     }

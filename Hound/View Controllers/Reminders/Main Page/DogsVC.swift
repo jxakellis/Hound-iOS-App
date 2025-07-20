@@ -212,7 +212,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         label.text = "No dogs recorded! Try creating one..."
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.primaryHeaderLabel
+        label.font = Constant.Visual.Font.primaryHeaderLabel
         label.textColor = UIColor.systemBlue
         return label
     }()
@@ -246,7 +246,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private lazy var createNewDogLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Create New Dog"
-        label.font = Constant.VisualFont.emphasizedPrimaryRegularLabel
+        label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
         label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
         
@@ -275,7 +275,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private lazy var createNewReminderLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Create New Reminder"
-        label.font = Constant.VisualFont.emphasizedPrimaryRegularLabel
+        label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
         label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
         
@@ -304,7 +304,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private lazy var createNewTriggerLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Create New Automation"
-        label.font = Constant.VisualFont.emphasizedPrimaryRegularLabel
+        label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
         label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
         
@@ -469,7 +469,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                 let numNonTriggerReminders = dog.dogReminders.dogReminders.count(where: { $0.reminderIsTriggerResult == false })
                 
                 guard numNonTriggerReminders < Constant.Class.Dog.maximumNumberOfReminders else {
-                    PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noAddMoreRemindersTitle, forSubtitle: Constant.VisualBannerText.noAddMoreRemindersSubtitle, forStyle: .warning)
+                    PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.noAddMoreRemindersTitle, forSubtitle: Constant.Visual.BannerText.noAddMoreRemindersSubtitle, forStyle: .warning)
                     return
                 }
                 
@@ -479,7 +479,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                 let numTriggers = dog.dogTriggers.dogTriggers.count
                 
                 guard numTriggers < Constant.Class.Dog.maximumNumberOfTriggers else {
-                    PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noAddMoreTriggersTitle, forSubtitle: Constant.VisualBannerText.noAddMoreTriggersSubtitle, forStyle: .warning)
+                    PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.noAddMoreTriggersTitle, forSubtitle: Constant.Visual.BannerText.noAddMoreTriggersSubtitle, forStyle: .warning)
                     return
                 }
                 
@@ -503,12 +503,12 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
     
     private func openCreateNewMenu() {
-        UIView.animate(withDuration: Constant.VisualAnimation.showMultipleElements) {
+        UIView.animate(withDuration: Constant.Visual.Animation.showMultipleElements) {
             self.createNewMenuButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
             self.createNewMenuButton.tintColor = UIColor.systemRed
             
             self.screenDimmer.alpha = 0.5
-            self.tabBarController?.tabBar.alpha = 0.05
+//            self.tabBarController?.tabBar.alpha = 0.05
             
             self.createNewStackOffScreenConstraint.isActive = false
             self.createNewStackVisibleConstraint.isActive = true
@@ -518,12 +518,12 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
     
     @objc private func closeCreateNewMenu() {
-        UIView.animate(withDuration: Constant.VisualAnimation.hideMultipleElements) {
+        UIView.animate(withDuration: Constant.Visual.Animation.hideMultipleElements) {
             self.createNewMenuButton.transform = .identity
             self.createNewMenuButton.tintColor = UIColor.systemBlue
             
             self.screenDimmer.alpha = 0
-            self.tabBarController?.tabBar.alpha = 1
+//            self.tabBarController?.tabBar.alpha = 1
             
             self.createNewStackVisibleConstraint.isActive = false
             self.createNewStackOffScreenConstraint.isActive = true

@@ -14,7 +14,7 @@ class HoundDropDownTableViewCell: HoundTableViewCell {
 
     let label: HoundLabel = {
         let label = HoundLabel()
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         return label
     }()
 
@@ -50,7 +50,7 @@ class HoundDropDownTableViewCell: HoundTableViewCell {
             return
         }
         
-        UIView.animate(withDuration: Constant.VisualAnimation.selectSingleElement) {
+        UIView.animate(withDuration: Constant.Visual.Animation.selectSingleElement) {
             self.contentView.backgroundColor = selected ? UIColor.systemBlue : UIColor.systemBackground
             self.label.textColor = selected ? UIColor.white : UIColor.label
         }

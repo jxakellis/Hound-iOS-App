@@ -16,7 +16,7 @@ class HoundImageView: UIImageView, HoundUIProtocol, HoundDynamicCorners {
     
     // MARK: - Properties
     
-    var staticCornerRadius: CGFloat? = Constant.VisualLayer.defaultCornerRadius
+    var staticCornerRadius: CGFloat? = Constant.Visual.Layer.defaultCornerRadius
     /// If true, self.layer.cornerRadius = self.bounds.height / 2 is applied upon bounds change. Otherwise, self.layer.cornerRadius = 0 is applied upon bounds change.
     var shouldRoundCorners: Bool = false {
         didSet {

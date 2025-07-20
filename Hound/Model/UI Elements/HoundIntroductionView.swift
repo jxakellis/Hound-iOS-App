@@ -23,7 +23,7 @@ final class HoundIntroductionView: HoundView {
     let whiteBackgroundView: HoundView = {
         let view = HoundView(huggingPriority: 290, compressionResistancePriority: 290)
         view.backgroundColor = UIColor.systemBackground
-        view.layer.cornerRadius = Constant.VisualLayer.imageCoveringViewCornerRadius
+        view.layer.cornerRadius = Constant.Visual.Layer.imageCoveringViewCornerRadius
         view.layer.cornerCurve = .continuous
         return view
     }()
@@ -31,7 +31,7 @@ final class HoundIntroductionView: HoundView {
     let pageHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.textAlignment = .center
-        label.font = Constant.VisualFont.primaryHeaderLabel
+        label.font = Constant.Visual.Font.primaryHeaderLabel
         return label
     }()
     
@@ -39,7 +39,7 @@ final class HoundIntroductionView: HoundView {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()

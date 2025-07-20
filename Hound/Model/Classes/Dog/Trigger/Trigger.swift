@@ -90,9 +90,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         let decodedTriggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerUUID.rawValue))
         let decodedtriggerLogReactions: [TriggerLogReaction]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerLogReactions.rawValue)
         let decodedtriggerReminderResult: TriggerReminderResult? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerReminderResult.rawValue)
-        let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerType.rawValue) ?? Constant.Class.TriggerConstant.defaultTriggerType.rawValue)
+        let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerType.rawValue) ?? Constant.Class.Trigger.defaultTriggerType.rawValue)
         let decodedTriggerTimeDelay = aDecoder.decodeOptionalDouble(forKey: Constant.Key.triggerTimeDelay.rawValue)
-        let decodedTriggerFixedTimeType = TriggerFixedTimeType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerFixedTimeType.rawValue) ?? Constant.Class.TriggerConstant.defaultTriggerFixedTimeType.rawValue)
+        let decodedTriggerFixedTimeType = TriggerFixedTimeType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerFixedTimeType.rawValue) ?? Constant.Class.Trigger.defaultTriggerFixedTimeType.rawValue)
         let decodedTriggerFixedTimeTypeAmount = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeTypeAmount.rawValue)
         let decodedTriggerFixedTimeUTCHour = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeUTCHour.rawValue)
         let decodedTriggerFixedTimeUTCMinute = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeUTCMinute.rawValue)
@@ -234,8 +234,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
     var triggerReminderResult: TriggerReminderResult = TriggerReminderResult()
     
-    var triggerType: TriggerType = Constant.Class.TriggerConstant.defaultTriggerType
-    private(set) var triggerTimeDelay: Double = Constant.Class.TriggerConstant.defaultTriggerTimeDelay
+    var triggerType: TriggerType = Constant.Class.Trigger.defaultTriggerType
+    private(set) var triggerTimeDelay: Double = Constant.Class.Trigger.defaultTriggerTimeDelay
     func changeTriggerTimeDelay(forTimeDelay: Double) -> Bool {
         guard forTimeDelay > 0 else { return false }
         triggerTimeDelay = forTimeDelay
@@ -243,8 +243,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// triggerFixedTimeType isn't used currently. leave as its default of .day
-    private var triggerFixedTimeType: TriggerFixedTimeType = Constant.Class.TriggerConstant.defaultTriggerFixedTimeType
-    private(set) var triggerFixedTimeTypeAmount: Int = Constant.Class.TriggerConstant.defaultTriggerFixedTimeTypeAmount
+    private var triggerFixedTimeType: TriggerFixedTimeType = Constant.Class.Trigger.defaultTriggerFixedTimeType
+    private(set) var triggerFixedTimeTypeAmount: Int = Constant.Class.Trigger.defaultTriggerFixedTimeTypeAmount
     func changeTriggerFixedTimeTypeAmount(forAmount: Int) -> Bool {
         guard forAmount >= 0 else { return false }
         triggerFixedTimeTypeAmount = forAmount
@@ -420,7 +420,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             case 1: text += "next day"
             default: text += "\(triggerFixedTimeTypeAmount) days later"
             }
-            text += " @ \(nextReminderDate(afterDate: Date())?.formatted(date: .omitted, time: .shortened) ?? Constant.VisualText.unknownText)"
+            text += " @ \(nextReminderDate(afterDate: Date())?.formatted(date: .omitted, time: .shortened) ?? Constant.Visual.Text.unknownText)"
             return text
         }
     }
@@ -449,7 +449,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             // same calendar to respect daylight saving changes.
             let targetDay = Calendar.current.date(byAdding: triggerFixedTimeType.calendarComponent,
                                                value: triggerFixedTimeTypeAmount,
-                                               to: startOfDay) ?? Constant.Class.DateConstant.default1970Date
+                                               to: startOfDay) ?? Constant.Class.Date.default1970Date
             
             let strictExecutionDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: targetDay, matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward)
             let laxExecutionDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: targetDay, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward)

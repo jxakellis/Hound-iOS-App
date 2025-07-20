@@ -37,7 +37,7 @@ final class DogTVC: HoundTableViewCell {
     
     private let dogNameLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = Constant.VisualFont.megaHeaderLabel
+        label.font = Constant.Visual.Font.megaHeaderLabel
         label.textColor = UIColor.systemBackground
         return label
     }()
@@ -59,7 +59,7 @@ final class DogTVC: HoundTableViewCell {
     private let dogTriggersLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.backgroundColor = UIColor.systemBackground
-        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
+        label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = UIColor.label
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil

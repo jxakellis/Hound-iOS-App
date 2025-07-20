@@ -58,7 +58,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         label.text = "Grow your family with up to six members"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         label.textColor = UIColor.secondarySystemBackground
         return label
     }()
@@ -96,7 +96,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     private let freeTrialScaledLabel: HoundLabel = {
         let label = HoundLabel()
         label.textAlignment = .center
-        label.font = Constant.VisualFont.primaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.textColor = UIColor.systemBackground
         
         label.isHidden = userPurchasedProductFrom20965379
@@ -106,7 +106,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
             let message = NSMutableAttributedString(
                 string: "Start with a 1 week free trial",
                 attributes: [
-                    .font: UIFont.italicSystemFont(ofSize: Constant.VisualFont.primaryRegularLabel.pointSize),
+                    .font: UIFont.italicSystemFont(ofSize: Constant.Visual.Font.primaryRegularLabel.pointSize),
                     .foregroundColor: UIColor.systemBackground
                 ]
             )
@@ -122,7 +122,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -139,7 +139,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         button.isHidden = !UserInformation.isUserFamilyHead
         
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: Constant.VisualFont.primaryRegularLabel,
+            .font: Constant.Visual.Font.primaryRegularLabel,
             .foregroundColor: UIColor.systemBackground,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
@@ -156,7 +156,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         button.isHidden = !UserInformation.isUserFamilyHead
         
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: Constant.VisualFont.primaryRegularLabel,
+            .font: Constant.Visual.Font.primaryRegularLabel,
             .foregroundColor: UIColor.systemBackground,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
@@ -181,7 +181,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         let label = HoundLabel()
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondarySystemBackground
         
         label.text = "Subscriptions can only be purchased by the family head"
@@ -202,7 +202,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     @objc private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
-            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionTitle, forSubtitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionTitle, forSubtitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
             return
         }
         
@@ -216,11 +216,11 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                     return
                 }
                 
-                PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.successRestoreTransactionsTitle, forSubtitle: Constant.VisualBannerText.successRestoreTransactionsSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.successRestoreTransactionsTitle, forSubtitle: Constant.Visual.BannerText.successRestoreTransactionsSubtitle, forStyle: .success)
                 
                 // When we reload the tableView, cells are reusable.
                 self.lastSelectedCell = nil
-                UIView.transition(with: self.tableView, duration: Constant.VisualAnimation.moveMultipleElements, options: .transitionCrossDissolve, animations: {
+                UIView.transition(with: self.tableView, duration: Constant.Visual.Animation.moveMultipleElements, options: .transitionCrossDissolve, animations: {
                     self.tableView.reloadData()
                 })
             }
@@ -230,7 +230,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     @objc private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
-            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionTitle, forSubtitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionTitle, forSubtitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
             return
         }
         
@@ -254,9 +254,9 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                     return
                 }
                 
-                PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.successPurchasedSubscriptionTitle, forSubtitle: Constant.VisualBannerText.successPurchasedSubscriptionSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.successPurchasedSubscriptionTitle, forSubtitle: Constant.Visual.BannerText.successPurchasedSubscriptionSubtitle, forStyle: .success)
                 
-                UIView.transition(with: self.tableView, duration: Constant.VisualAnimation.moveMultipleElements, options: .transitionCrossDissolve, animations: {
+                UIView.transition(with: self.tableView, duration: Constant.Visual.Animation.moveMultipleElements, options: .transitionCrossDissolve, animations: {
                     self.tableView.reloadData()
                 })
             }

@@ -43,7 +43,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         
         button.setTitle("Add Reminder", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -58,7 +58,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         let numNonTriggerReminders = dogReminders.dogReminders.count(where: { $0.reminderIsTriggerResult == false })
         
         guard numNonTriggerReminders < Constant.Class.Dog.maximumNumberOfReminders else {
-            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noAddMoreRemindersTitle, forSubtitle: Constant.VisualBannerText.noAddMoreRemindersSubtitle, forStyle: .warning)
+            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.noAddMoreRemindersTitle, forSubtitle: Constant.Visual.BannerText.noAddMoreRemindersSubtitle, forStyle: .warning)
             return
         }
         
@@ -168,7 +168,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         let reminder = dogReminders.dogReminders[indexPath.section]
         
         guard reminder.reminderIsTriggerResult == false else {
-            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noEditTriggerResultRemindersTitle, forSubtitle: Constant.VisualBannerText.noEditTriggerResultRemindersSubtitle, forStyle: .warning)
+            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.noEditTriggerResultRemindersTitle, forSubtitle: Constant.Visual.BannerText.noEditTriggerResultRemindersSubtitle, forStyle: .warning)
             return
         }
         
@@ -186,7 +186,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
             self.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
             
             self.tableView.deleteSections([indexPath.section], with: .fade)
-            UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
+            UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
                 self.setNeedsLayout()
                 self.layoutIfNeeded()
             }

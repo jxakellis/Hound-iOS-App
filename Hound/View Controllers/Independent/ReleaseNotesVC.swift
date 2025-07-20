@@ -21,8 +21,8 @@ struct ReleaseNotesBuilder {
     }
 
     func buildAttributedString() -> NSAttributedString {
-        let titleAttr: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel]
-        let descAttr: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.primaryRegularLabel]
+        let titleAttr: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel]
+        let descAttr: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.primaryRegularLabel]
         
         let message = NSMutableAttributedString()
         

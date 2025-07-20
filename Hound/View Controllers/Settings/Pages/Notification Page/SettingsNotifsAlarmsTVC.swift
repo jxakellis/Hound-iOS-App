@@ -12,7 +12,7 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Configure Alarms"
-        label.font = Constant.VisualFont.secondaryHeaderLabel
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
@@ -20,7 +20,7 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "By default, your reminder alarms will repeatedly ring, play the 'Radar' sound effect, and snooze for five minutes"
         label.numberOfLines = 0
-        label.font = Constant.VisualFont.secondaryColorDescLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()

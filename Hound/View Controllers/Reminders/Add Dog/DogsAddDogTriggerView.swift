@@ -37,7 +37,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
         
         button.setTitle("Add Automation", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = Constant.VisualFont.wideButton
+        button.titleLabel?.font = Constant.Visual.Font.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -50,7 +50,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
     
     @objc func didTouchUpInsideAddTrigger() {
         guard dogTriggers.dogTriggers.count < Constant.Class.Dog.maximumNumberOfTriggers else {
-            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noAddMoreTriggersTitle, forSubtitle: Constant.VisualBannerText.noAddMoreTriggersSubtitle, forStyle: .warning)
+            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.noAddMoreTriggersTitle, forSubtitle: Constant.Visual.BannerText.noAddMoreTriggersSubtitle, forStyle: .warning)
             return
         }
         
@@ -61,8 +61,8 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
     
     private weak var delegate: DogsAddDogTriggersViewDelegate?
     /// dogTriggers is either a copy of dogToUpdate's triggers or a DogTriggerManager initialized to a default array of triggers. This is purposeful so that either, if you dont have a dogToUpdate, you can still create triggers, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
-    private(set) var dogTriggers: DogTriggerManager = DogTriggerManager(forDogTriggers: Constant.Class.TriggerConstant.defaultTriggers)
-    private(set) var initialTriggers: DogTriggerManager = DogTriggerManager(forDogTriggers: Constant.Class.TriggerConstant.defaultTriggers)
+    private(set) var dogTriggers: DogTriggerManager = DogTriggerManager(forDogTriggers: Constant.Class.Trigger.defaultTriggers)
+    private(set) var initialTriggers: DogTriggerManager = DogTriggerManager(forDogTriggers: Constant.Class.Trigger.defaultTriggers)
     
     var didUpdateInitialValues: Bool {
         // if current triggers has more triggers than initial triggers, the loop below won't catch it, as the loop below just looks to see if each initial trigger is still present in current triggers.
@@ -173,7 +173,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
             self.dogTriggers.removeTrigger(forTriggerUUID: trigger.triggerUUID)
             
             self.tableView.deleteSections([indexPath.section], with: .fade)
-            UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
+            UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
                 self.setNeedsLayout()
                 self.layoutIfNeeded()
             }
