@@ -18,7 +18,6 @@ final class LogsAddLogVC: HoundScrollViewController,
                           HoundDropDownDataSource {
     
     // TODO BUG this ui is borked
-    // TODO add headers to each field (similar to DogsAddTriggerVC). Header should contain the majority of the info (e.g. "What dog(s) did you take care of?") then the input field placeholder has simplier info (e.g. "Select dog(s)..."). If a field is optional, you can add that (e.g. "Add an end date... (optional))
     // TODO change error messages to use .errorMessage property on labels instead of showing a banner
     
     // MARK: - LogsAddLogUIInteractionActionsDelegate
@@ -155,8 +154,8 @@ final class LogsAddLogVC: HoundScrollViewController,
     }()
     private lazy var logCustomActionNameStack: HoundStackView = {
         let stack = HoundStackView()
-        stack.addArrangedSubview(logActionHeaderLabel)
-        stack.addArrangedSubview(logActionLabel)
+        stack.addArrangedSubview(logCustomActionNameHeaderLabel)
+        stack.addArrangedSubview(logCustomActionNameTextField)
         stack.axis = .vertical
         stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
         return stack
@@ -340,7 +339,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var logNoteStack: HoundStackView = {
         let stack = HoundStackView()
         stack.addArrangedSubview(logNoteHeaderLabel)
-        stack.addArrangedSubview(logNoteStack)
+        stack.addArrangedSubview(logNoteTextView)
         stack.axis = .vertical
         stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
         return stack
@@ -438,17 +437,21 @@ final class LogsAddLogVC: HoundScrollViewController,
     }
     
     @objc private func didTouchUpInsideSaveLog(_ sender: Any) {
-        // TODO ERRORs add error messages
         guard selectedDogUUIDs.count >= 1 else {
-            ErrorConstant.LogError.parentDogMissing().alert()
+            parentDogLabel.errorMessage = ErrorConstant.LogError.parentDogMissing().description
             return
         }
         guard let selectedLogAction = selectedLogAction else {
-            ErrorConstant.LogError.logActionMissing().alert()
+            logActionLabel.errorMessage = ErrorConstant.LogError.logActionMissing().description
             return
         }
         guard let selectedLogStartDate = selectedLogStartDate else {
-            ErrorConstant.LogError.logStartDateMissing().alert()
+            if !logActionLabel.isHidden {
+                logActionLabel.errorMessage = ErrorConstant.LogError.logStartDateMissing().description
+            }
+            if !logStartDateLabel.isHidden {
+                logStartDateLabel.errorMessage = ErrorConstant.LogError.logStartDateMissing().description
+            }
             return
         }
         
@@ -553,6 +556,9 @@ final class LogsAddLogVC: HoundScrollViewController,
     private var dropDownParentDog: HoundDropDown?
     private var selectedDogUUIDs: [UUID] = [] {
         didSet {
+            if selectedDogUUIDs.count > 1 {
+                parentDogLabel.errorMessage = nil
+            }
             parentDogLabel.text = {
                 guard !selectedDogUUIDs.isEmpty else {
                     // If no parent dog selected, leave text blank so placeholder displays
@@ -585,8 +591,9 @@ final class LogsAddLogVC: HoundScrollViewController,
     /// The selected log action type
     private var selectedLogAction: LogActionType? {
         didSet {
-            updateDynamicUIElements()
-            
+            if selectedLogAction != nil {
+                logActionLabel.errorMessage = nil
+            }
             // READ ME BEFORE CHANGING CODE BELOW: this is for the label for the logActionType dropdown,
             // so we only want the names to be the defaults. I.e. if our log is "Custom" with "someCustomActionName",
             // the logActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
@@ -602,6 +609,8 @@ final class LogsAddLogVC: HoundScrollViewController,
             else {
                 selectedLogUnitType = nil
             }
+            
+            updateDynamicUIElements()
         }
     }
     
@@ -616,6 +625,8 @@ final class LogsAddLogVC: HoundScrollViewController,
                 logStartDateLabel.text = nil
                 return
             }
+            logStartDateLabel.errorMessage = nil
+            logStartDatePicker.errorMessage = nil
             
             let dateFormatter = DateFormatter()
             if Calendar.current.isDateInToday(start) {
@@ -1393,7 +1404,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         }
     }
     private func remakeCustomActionNameConstraints() {
-        logCustomActionNameTextField.snp.makeConstraints { make in
+        logCustomActionNameTextField.snp.remakeConstraints { make in
             if !logCustomActionNameTextField.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
                 make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)
@@ -1423,21 +1434,21 @@ final class LogsAddLogVC: HoundScrollViewController,
         }
 
         logEndDatePicker.snp.remakeConstraints { make in
-            if !logStartDatePicker.isHidden {
+            if !logEndDatePicker.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.datePickerHeightMultiplier).priority(.high)
                 make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.datePickerMaxHeight)
             }
         }
     }
     private func remakeLogUnitConstraints() {
-        logNumberOfLogUnitsTextField.snp.makeConstraints { make in
+        logNumberOfLogUnitsTextField.snp.remakeConstraints { make in
             make.width.equalTo(logUnitLabel.snp.width).multipliedBy(1.0 / 3.0)
             if !logNumberOfLogUnitsTextField.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
                 make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)
             }
         }
-        logUnitLabel.snp.makeConstraints { make in
+        logUnitLabel.snp.remakeConstraints { make in
             if !logUnitLabel.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
                 make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)

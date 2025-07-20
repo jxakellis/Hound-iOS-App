@@ -648,19 +648,19 @@ enum ErrorConstant {
         static func parentDogMissing() -> HoundError {
             HoundError(
                 forName: "LogError.parentDogMissing",
-                forDescription: "Your log needs a corresponding dog! Please try selecting at least one.",
+                forDescription: "Choose at least one dog",
                 forOnTap: nil)
         }
         static func logActionMissing() -> HoundError {
             HoundError(
                 forName: "LogError.logActionMissing",
-                forDescription: "Your log has no action! Please try selecting one.",
+                forDescription: "Choose an action",
                 forOnTap: nil)
         }
         static func logStartDateMissing() -> HoundError {
             HoundError(
                 forName: "LogError.logStartDateMissing",
-                forDescription: "Your log has no start date! Please try selecting one.",
+                forDescription: "Choose a start date",
                 forOnTap: nil)
         }
     }
