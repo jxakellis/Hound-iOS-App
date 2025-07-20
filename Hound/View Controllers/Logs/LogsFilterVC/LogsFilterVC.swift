@@ -604,14 +604,14 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
             }
         }
         else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue, let selectedCell = dropDownFilterLogActions?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
-            let logActionSelected = filter.availableLogActions[indexPath.row]
+            let selectedLogAction = filter.availableLogActions[indexPath.row]
             let beforeSelectNumberOfLogActionsSelected = filter.availableLogActions.count
             
             if selectedCell.isCustomSelected == true {
-                filter.remove(forLogActionTypeId: logActionSelected.logActionTypeId)
+                filter.remove(forLogActionTypeId: selectedLogAction.logActionTypeId)
             }
             else {
-                filter.add(forLogActionTypeId: logActionSelected.logActionTypeId)
+                filter.add(forLogActionTypeId: selectedLogAction.logActionTypeId)
             }
             
             selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
