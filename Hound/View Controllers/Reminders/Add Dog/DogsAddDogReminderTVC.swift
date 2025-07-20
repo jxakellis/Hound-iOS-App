@@ -29,13 +29,13 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     private let reminderActionLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedPrimaryRegularLabel
         return label
     }()
     
     private let reminderDisplayableIntervalLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.font = Constant.VisualFont.secondaryRegularLabel
         return label
     }()
     
@@ -45,7 +45,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         stack.addArrangedSubview(reminderDisplayableIntervalLabel)
         stack.axis = .vertical
         stack.distribution = .equalSpacing
-        stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
         stack.alignment = .leading
         return stack
     }()
@@ -74,7 +74,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         stack.axis = .horizontal
         stack.distribution = .fill
         stack.alignment = .center
-        stack.spacing = ConstraintConstant.Spacing.absoluteHoriInset
+        stack.spacing = Constant.Constraint.Spacing.absoluteHoriInset
         return stack
     }()
     
@@ -85,7 +85,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         stack.axis = .horizontal
         stack.distribution = .fill
         stack.alignment = .center
-        stack.spacing = ConstraintConstant.Spacing.contentIntraHori
+        stack.spacing = Constant.Constraint.Spacing.contentIntraHori
         return stack
     }()
     
@@ -171,24 +171,24 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
             make.top.equalTo(contentView.snp.top)
             // Use .high priority to avoid breaking during table view height estimation
             make.bottom.equalTo(contentView.snp.bottom).priority(.high)
-            make.leading.equalTo(contentView.snp.leading).offset(ConstraintConstant.Spacing.absoluteHoriInset)
-            make.trailing.equalTo(contentView.snp.trailing).inset(ConstraintConstant.Spacing.absoluteHoriInset)
+            make.leading.equalTo(contentView.snp.leading).offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.trailing.equalTo(contentView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
         
         finalStack.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.top).offset(ConstraintConstant.Spacing.absoluteVertInset)
-            make.bottom.equalTo(containerView.snp.bottom).inset(ConstraintConstant.Spacing.absoluteVertInset)
-            make.leading.equalTo(containerView.snp.leading).offset(ConstraintConstant.Spacing.contentIntraHori)
-            make.trailing.equalTo(containerView.snp.trailing).inset(ConstraintConstant.Spacing.absoluteHoriInset)
+            make.top.equalTo(containerView.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)
+            make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset)
+            make.leading.equalTo(containerView.snp.leading).offset(Constant.Constraint.Spacing.contentIntraHori)
+            make.trailing.equalTo(containerView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
         
         chevronImageView.snp.makeConstraints { make in
             make.height.equalTo(contentView.snp.width)
-                .multipliedBy(ConstraintConstant.Button.chevronHeightMultiplier)
+                .multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier)
                 .priority(.high)
-            make.height.lessThanOrEqualTo(ConstraintConstant.Button.chevronMaxHeight)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
             make.width.equalTo(chevronImageView.snp.height)
-                .multipliedBy(ConstraintConstant.Button.chevronAspectRatio)
+                .multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
         }
     }
 

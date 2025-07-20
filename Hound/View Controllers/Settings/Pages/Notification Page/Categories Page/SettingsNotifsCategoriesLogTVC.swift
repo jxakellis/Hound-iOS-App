@@ -15,7 +15,7 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Log"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
@@ -30,7 +30,7 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.text = "Receive notifications about your family's logs. Examples include: a user creating a log."
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -40,7 +40,7 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
         
         UserConfiguration.isLogNotificationEnabled = isLogNotificationEnabledSwitch.isOn
         
-        let body: JSONRequestBody = [KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue: .bool(UserConfiguration.isLogNotificationEnabled)]
+        let body: JSONRequestBody = [Constant.Key.userConfigurationIsLogNotificationEnabled.rawValue: .bool(UserConfiguration.isLogNotificationEnabled)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
@@ -100,25 +100,25 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
 
         // isLogNotificationEnabledSwitch
         NSLayoutConstraint.activate([
             isLogNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
-            isLogNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            isLogNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset * 2.0)
+            isLogNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            isLogNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
 
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 

@@ -20,7 +20,7 @@ final class DogsAddReminderOneTimeView: HoundView {
         let datePicker = HoundDatePicker(huggingPriority: 240, compressionResistancePriority: 260)
         datePicker.datePickerMode = .dateAndTime
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
+        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
         
         datePicker.date = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * datePicker.minuteInterval), roundingMethod: .up)
         
@@ -36,7 +36,7 @@ final class DogsAddReminderOneTimeView: HoundView {
         let label = HoundLabel()
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.font = Constant.VisualFont.secondaryRegularLabel
         label.textColor = UIColor.label
         return label
     }()
@@ -88,12 +88,12 @@ final class DogsAddReminderOneTimeView: HoundView {
         
         // oneTimeDatePicker
         NSLayoutConstraint.activate([
-            oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
             oneTimeDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             oneTimeDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             oneTimeDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
-            oneTimeDatePicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
-            oneTimeDatePicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)
+            oneTimeDatePicker.createHeightMultiplier(Constant.Constraint.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
+            oneTimeDatePicker.createMaxHeight(Constant.Constraint.Input.megaDatePickerMaxHeight)
         ])
     }
     

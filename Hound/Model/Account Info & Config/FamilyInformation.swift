@@ -14,27 +14,27 @@ final class FamilyInformation: UserDefaultPersistable {
     // MARK: - UserDefaultPersistable
     
     static func persist(toUserDefaults: UserDefaults) {
-        toUserDefaults.set(familyHeadUserId, forKey: KeyConstant.familyHeadUserId.rawValue)
-        toUserDefaults.set(familyCode, forKey: KeyConstant.familyCode.rawValue)
-        toUserDefaults.set(familyIsLocked, forKey: KeyConstant.familyIsLocked.rawValue)
+        toUserDefaults.set(familyHeadUserId, forKey: Constant.Key.familyHeadUserId.rawValue)
+        toUserDefaults.set(familyCode, forKey: Constant.Key.familyCode.rawValue)
+        toUserDefaults.set(familyIsLocked, forKey: Constant.Key.familyIsLocked.rawValue)
         
         if let dataPreviousFamilyMembers = try? NSKeyedArchiver.archivedData(withRootObject: previousFamilyMembers, requiringSecureCoding: false) {
-            toUserDefaults.set(dataPreviousFamilyMembers, forKey: KeyConstant.previousFamilyMembers.rawValue)
+            toUserDefaults.set(dataPreviousFamilyMembers, forKey: Constant.Key.previousFamilyMembers.rawValue)
         }
         if let dataFamilyMembers = try? NSKeyedArchiver.archivedData(withRootObject: familyMembers, requiringSecureCoding: false) {
-            toUserDefaults.set(dataFamilyMembers, forKey: KeyConstant.familyMembers.rawValue)
+            toUserDefaults.set(dataFamilyMembers, forKey: Constant.Key.familyMembers.rawValue)
         }
         if let dataActiveFamilySubscription = try? NSKeyedArchiver.archivedData(withRootObject: familyActiveSubscription, requiringSecureCoding: false) {
-            toUserDefaults.set(dataActiveFamilySubscription, forKey: KeyConstant.familyActiveSubscription.rawValue)
+            toUserDefaults.set(dataActiveFamilySubscription, forKey: Constant.Key.familyActiveSubscription.rawValue)
         }
     }
     
     static func load(fromUserDefaults: UserDefaults) {
-        FamilyInformation.familyHeadUserId = fromUserDefaults.value(forKey: KeyConstant.familyHeadUserId.rawValue) as? String
-        FamilyInformation.familyCode = fromUserDefaults.value(forKey: KeyConstant.familyCode.rawValue) as? String
-        FamilyInformation.familyIsLocked = fromUserDefaults.value(forKey: KeyConstant.familyIsLocked.rawValue) as? Bool ?? FamilyInformation.familyIsLocked
+        FamilyInformation.familyHeadUserId = fromUserDefaults.value(forKey: Constant.Key.familyHeadUserId.rawValue) as? String
+        FamilyInformation.familyCode = fromUserDefaults.value(forKey: Constant.Key.familyCode.rawValue) as? String
+        FamilyInformation.familyIsLocked = fromUserDefaults.value(forKey: Constant.Key.familyIsLocked.rawValue) as? Bool ?? FamilyInformation.familyIsLocked
        
-        if let dataPreviousFamilyMembers: Data = UserDefaults.standard.data(forKey: KeyConstant.previousFamilyMembers.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataPreviousFamilyMembers) {
+        if let dataPreviousFamilyMembers: Data = UserDefaults.standard.data(forKey: Constant.Key.previousFamilyMembers.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataPreviousFamilyMembers) {
             unarchiver.requiresSecureCoding = false
             
             if let previousFamilyMembers = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [FamilyMember] {
@@ -48,7 +48,7 @@ final class FamilyInformation: UserDefaultPersistable {
             HoundLogger.general.error("FamilyInformation.load: Failed to construct dataPreviousFamilyMembers or construct unarchiver for dataPreviousFamilyMembers")
         }
         
-        if let dataFamilyMembers: Data = UserDefaults.standard.data(forKey: KeyConstant.familyMembers.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataFamilyMembers) {
+        if let dataFamilyMembers: Data = UserDefaults.standard.data(forKey: Constant.Key.familyMembers.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataFamilyMembers) {
             unarchiver.requiresSecureCoding = false
             
             if let familyMembers = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [FamilyMember] {
@@ -62,7 +62,7 @@ final class FamilyInformation: UserDefaultPersistable {
             HoundLogger.general.error("FamilyInformation.load: Failed to construct dataFamilyMembers or construct unarchiver for dataFamilyMembers")
         }
         
-        if let dataFamilyActiveSubscription: Data = UserDefaults.standard.data(forKey: KeyConstant.familyActiveSubscription.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataFamilyActiveSubscription) {
+        if let dataFamilyActiveSubscription: Data = UserDefaults.standard.data(forKey: Constant.Key.familyActiveSubscription.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataFamilyActiveSubscription) {
             unarchiver.requiresSecureCoding = false
             
             if let familyActiveSubscription = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? Subscription {
@@ -101,16 +101,16 @@ final class FamilyInformation: UserDefaultPersistable {
     
     /// Sets the FamilyInformation values equal to all the values found in the fromBody. The key for the each fromBody value must match the name of the FamilyInformation property exactly in order to be used. The value must also be able to be converted into the proper data type.
     static func setup(fromBody: JSONResponseBody) {
-        if let familyHeadUserId = fromBody[KeyConstant.familyHeadUserId.rawValue] as? String {
+        if let familyHeadUserId = fromBody[Constant.Key.familyHeadUserId.rawValue] as? String {
             self.familyHeadUserId = familyHeadUserId
         }
-        if let familyIsLocked = fromBody[KeyConstant.familyIsLocked.rawValue] as? Bool {
+        if let familyIsLocked = fromBody[Constant.Key.familyIsLocked.rawValue] as? Bool {
             self.familyIsLocked = familyIsLocked
         }
-        if let familyCode = fromBody[KeyConstant.familyCode.rawValue] as? String {
+        if let familyCode = fromBody[Constant.Key.familyCode.rawValue] as? String {
             self.familyCode = familyCode
         }
-        if let familyMembersBody = fromBody[KeyConstant.familyMembers.rawValue] as? [JSONResponseBody] {
+        if let familyMembersBody = fromBody[Constant.Key.familyMembers.rawValue] as? [JSONResponseBody] {
             familyMembers.removeAll()
             // get individual bodies for members
             for familyMemberBody in familyMembersBody {
@@ -120,7 +120,7 @@ final class FamilyInformation: UserDefaultPersistable {
 
             familyMembers.sort(by: { $0 <= $1 })
         }
-        if let previousFamilyMembersBody = fromBody[KeyConstant.previousFamilyMembers.rawValue] as? [JSONResponseBody] {
+        if let previousFamilyMembersBody = fromBody[Constant.Key.previousFamilyMembers.rawValue] as? [JSONResponseBody] {
             previousFamilyMembers.removeAll()
 
             // get individual bodies for previous family members
@@ -132,7 +132,7 @@ final class FamilyInformation: UserDefaultPersistable {
             previousFamilyMembers.sort(by: { $0 <= $1 })
 
         }
-        if let familyActiveSubscriptionBody = fromBody[KeyConstant.familyActiveSubscription.rawValue] as? JSONResponseBody {
+        if let familyActiveSubscriptionBody = fromBody[Constant.Key.familyActiveSubscription.rawValue] as? JSONResponseBody {
             let familyActiveSubscription = Subscription(fromBody: familyActiveSubscriptionBody)
             addFamilySubscription(forSubscription: familyActiveSubscription)
         }
@@ -145,7 +145,7 @@ final class FamilyInformation: UserDefaultPersistable {
             subscription.isActive
         }
 
-        return potentialSubscription ?? ClassConstant.SubscriptionConstant.defaultSubscription
+        return potentialSubscription ?? Constant.Class.Subscription.defaultSubscription
     }
     
     // MARK: - Functions

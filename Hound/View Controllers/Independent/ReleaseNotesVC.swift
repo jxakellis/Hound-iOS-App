@@ -21,8 +21,8 @@ struct ReleaseNotesBuilder {
     }
 
     func buildAttributedString() -> NSAttributedString {
-        let titleAttr: [NSAttributedString.Key: Any] = [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel]
-        let descAttr: [NSAttributedString.Key: Any] = [.font: VisualConstant.FontConstant.primaryRegularLabel]
+        let titleAttr: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel]
+        let descAttr: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.primaryRegularLabel]
         
         let message = NSMutableAttributedString()
         
@@ -130,10 +130,10 @@ final class ReleaseNotesVC: HoundScrollViewController {
         ])
 
         NSLayoutConstraint.activate([
-            notesLabel.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            notesLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            notesLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            notesLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            notesLabel.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            notesLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            notesLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            notesLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 }

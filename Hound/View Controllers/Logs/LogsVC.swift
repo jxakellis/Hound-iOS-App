@@ -108,7 +108,7 @@ final class LogsVC: HoundViewController,
         label.isHidden = true
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         label.textColor = UIColor.systemBlue
         return label
     }()
@@ -309,44 +309,44 @@ final class LogsVC: HoundViewController,
         
         // addLogButton
         NSLayoutConstraint.activate([
-            addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
-            addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
+            addLogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
+            addLogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
             addLogButton.createSquareAspectRatio(),
-            addLogButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            addLogButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
+            addLogButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
+            addLogButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight)
         ])
         
         // exportLogsButton
         NSLayoutConstraint.activate([
-            exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
-            exportLogsButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-            exportLogsButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
+            exportLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            exportLogsButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
+            exportLogsButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
+            exportLogsButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight),
             exportLogsButton.createSquareAspectRatio()
         ])
         
         // filterLogsButton
         NSLayoutConstraint.activate([
-            filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentTightIntraHori),
-            filterLogsButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-            filterLogsButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
+            filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -Constant.Constraint.Spacing.contentTightIntraHori),
+            filterLogsButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
+            filterLogsButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight),
             filterLogsButton.createSquareAspectRatio()
         ])
         
         // clearFilterButton
         NSLayoutConstraint.activate([
-            clearFilterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            clearFilterButton.trailingAnchor.constraint(equalTo: filterLogsButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentTightIntraHori),
-            clearFilterButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-            clearFilterButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
+            clearFilterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            clearFilterButton.trailingAnchor.constraint(equalTo: filterLogsButton.leadingAnchor, constant: -Constant.Constraint.Spacing.contentTightIntraHori),
+            clearFilterButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
+            clearFilterButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight),
             clearFilterButton.createSquareAspectRatio()
         ])
         
         // noLogsRecordedLabel
         NSLayoutConstraint.activate([
-            noLogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            noLogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            noLogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            noLogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             noLogsRecordedLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
     }

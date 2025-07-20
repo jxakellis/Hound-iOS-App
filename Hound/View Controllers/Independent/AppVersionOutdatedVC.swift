@@ -17,7 +17,7 @@ class AppVersionOutdatedVC: BluePawVC {
         
         button.setTitle("Open App Store", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -62,11 +62,11 @@ class AppVersionOutdatedVC: BluePawVC {
         
         // openAppStoreButton
         NSLayoutConstraint.activate([
-            openAppStoreButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            openAppStoreButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             openAppStoreButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             openAppStoreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            openAppStoreButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            openAppStoreButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            openAppStoreButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            openAppStoreButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
     }
 

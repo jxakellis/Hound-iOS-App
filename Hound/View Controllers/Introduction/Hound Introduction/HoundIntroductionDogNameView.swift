@@ -33,7 +33,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
             return true
         }
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-        return updatedText.count <= ClassConstant.DogConstant.dogNameCharacterLimit
+        return updatedText.count <= Constant.Class.Dog.dogNameCharacterLimit
     }
 
     // MARK: - UIGestureRecognizerDelegate
@@ -58,7 +58,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
     private let continueButton: HoundButton = {
         let button = HoundButton(huggingPriority: 290, compressionResistancePriority: 290)
         button.isEnabled = false
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.backgroundColor = UIColor.systemBackground
@@ -77,7 +77,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
             return nil
         }
         let trimmedText = dogNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        return trimmedText.isEmpty ? ClassConstant.DogConstant.defaultDogName : trimmedText
+        return trimmedText.isEmpty ? Constant.Class.Dog.defaultDogName : trimmedText
     }
 
     private var dogManager: DogManager?
@@ -102,7 +102,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
         else {
             introductionView.pageHeaderLabel.text = "What Is Your Dog’s Name?"
             introductionView.pageDescriptionLabel.text = "We will generate a basic dog for you"
-            dogNameTextField.placeholder = ClassConstant.DogConstant.defaultDogName
+            dogNameTextField.placeholder = Constant.Class.Dog.defaultDogName
             dismissKeyboardOnTap(delegate: self)
         }
     }
@@ -129,7 +129,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
 
         mainStack = UIStackView(arrangedSubviews: [dogNameTextField, continueButton])
         mainStack.axis = .vertical
-        mainStack.spacing = ConstraintConstant.Spacing.contentSectionVert
+        mainStack.spacing = Constant.Constraint.Spacing.contentSectionVert
         mainStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(mainStack)
@@ -153,8 +153,8 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
             
             dogNameTextField.heightAnchor.constraint(equalTo: continueButton.heightAnchor),
 
-            continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: self),
-            continueButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            continueButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: self),
+            continueButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
     }
 }

@@ -32,7 +32,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
         let button = HoundButton(huggingPriority: 230, compressionResistancePriority: 230)
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.circleButton
+        button.titleLabel?.font = Constant.VisualFont.circleButton
         button.backgroundColor = UIColor.systemBackground
         button.applyStyle(.thinGrayBorder)
         return button
@@ -42,7 +42,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
         let button = HoundButton(huggingPriority: 290, compressionResistancePriority: 290)
         button.setTitle("Finish", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         button.backgroundColor = UIColor.systemBackground
          button.applyStyle(.labelBorder)
         return button
@@ -98,7 +98,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
 
         mainStack = UIStackView(arrangedSubviews: [dogIconButton, finishButton])
         mainStack.axis = .vertical
-        mainStack.spacing = ConstraintConstant.Spacing.contentSectionVert
+        mainStack.spacing = Constant.Constraint.Spacing.contentSectionVert
         mainStack.alignment = .center
         mainStack.translatesAutoresizingMaskIntoConstraints = false
 
@@ -123,13 +123,13 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
             mainStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
             dogIconButton.createSquareAspectRatio(),
-            dogIconButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier * 1.25, relativeToWidthOf: self),
-            dogIconButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight * 1.25),
+            dogIconButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier * 1.25, relativeToWidthOf: self),
+            dogIconButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight * 1.25),
 
             finishButton.leadingAnchor.constraint(equalTo: mainStack.leadingAnchor),
             finishButton.trailingAnchor.constraint(equalTo: mainStack.trailingAnchor),
-            finishButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: self),
-            finishButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            finishButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: self),
+            finishButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
     }
 }

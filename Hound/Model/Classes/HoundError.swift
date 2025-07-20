@@ -51,19 +51,19 @@ class HoundError: Error {
     func alert() {
         HoundLogger.general.error("HoundError.alert(): Alerting user for error: \(self.description)")
 
-        guard name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
+        guard name != Constant.Error.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
             let vc = AppVersionOutdatedVC()
             PresentationManager.enqueueViewController(vc)
             return
         }
         
-        guard name != ErrorConstant.FamilyResponseError.limitFamilyMemberExceeded(forRequestId: -1, forResponseId: -1).name else {
+        guard name != Constant.Error.FamilyResponseError.limitFamilyMemberExceeded(forRequestId: -1, forResponseId: -1).name else {
             let vc = LimitExceededViewController()
             PresentationManager.enqueueViewController(vc)
             return
         }
 
-        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.errorAlertTitle, forSubtitle: description, forStyle: .danger) {
+        PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.errorAlertTitle, forSubtitle: description, forStyle: .danger) {
             self.onTap()
         }
     }

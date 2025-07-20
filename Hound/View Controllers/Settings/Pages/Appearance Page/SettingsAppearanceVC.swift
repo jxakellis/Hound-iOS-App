@@ -53,7 +53,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     private let interfaceStyleHeaderLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Theme"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
@@ -65,7 +65,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
             segmentedControl.insertSegment(withTitle: option.title, at: index, animated: false)
         }
         
-        let attributes: [NSAttributedString.Key: Any] = [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
         
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
         segmentedControl.backgroundColor = UIColor.systemGray4
@@ -77,7 +77,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     private let measurementHeaderLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Measurement System"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
@@ -89,7 +89,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
             segmentedControl.insertSegment(withTitle: ms.readableMeasurementSystem(), at: index, animated: false)
         }
         
-        let attributes: [NSAttributedString.Key: Any] = [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
         
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
         segmentedControl.backgroundColor = UIColor.systemGray4
@@ -108,7 +108,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         
         UserConfiguration.interfaceStyle = selectedOption.userInterfaceStyle
         
-        let body: JSONRequestBody = [KeyConstant.userConfigurationInterfaceStyle.rawValue: .int(selectedOption.userInterfaceStyle.rawValue)]
+        let body: JSONRequestBody = [Constant.Key.userConfigurationInterfaceStyle.rawValue: .int(selectedOption.userInterfaceStyle.rawValue)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
@@ -128,7 +128,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         
         UserConfiguration.measurementSystem = MeasurementSystem(rawValue: sender.selectedSegmentIndex) ?? UserConfiguration.measurementSystem
         
-        let body: JSONRequestBody = [KeyConstant.userConfigurationMeasurementSystem.rawValue: .int(UserConfiguration.measurementSystem.rawValue)]
+        let body: JSONRequestBody = [Constant.Key.userConfigurationMeasurementSystem.rawValue: .int(UserConfiguration.measurementSystem.rawValue)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
@@ -189,35 +189,35 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         
         // interfaceStyleHeaderLabel
         NSLayoutConstraint.activate([
-            interfaceStyleHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            interfaceStyleHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            interfaceStyleHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            interfaceStyleHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            interfaceStyleHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            interfaceStyleHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // interfaceStyleSegmentedControl
         NSLayoutConstraint.activate([
-            interfaceStyleSegmentedControl.topAnchor.constraint(equalTo: interfaceStyleHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            interfaceStyleSegmentedControl.topAnchor.constraint(equalTo: interfaceStyleHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
             interfaceStyleSegmentedControl.leadingAnchor.constraint(equalTo: interfaceStyleHeaderLabel.leadingAnchor),
-            interfaceStyleSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            interfaceStyleSegmentedControl.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
-            interfaceStyleSegmentedControl.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight)
+            interfaceStyleSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            interfaceStyleSegmentedControl.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
+            interfaceStyleSegmentedControl.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight)
         ])
         
         // measurementHeaderLabel
         NSLayoutConstraint.activate([
-            measurementHeaderLabel.topAnchor.constraint(equalTo: interfaceStyleSegmentedControl.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            measurementHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            measurementHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            measurementHeaderLabel.topAnchor.constraint(equalTo: interfaceStyleSegmentedControl.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            measurementHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            measurementHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // measurementSystemSegmentedControl
         NSLayoutConstraint.activate([
-            measurementSystemSegmentedControl.topAnchor.constraint(equalTo: measurementHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            measurementSystemSegmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            measurementSystemSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            measurementSystemSegmentedControl.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
-            measurementSystemSegmentedControl.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight),
-            measurementSystemSegmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            measurementSystemSegmentedControl.topAnchor.constraint(equalTo: measurementHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            measurementSystemSegmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            measurementSystemSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            measurementSystemSegmentedControl.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
+            measurementSystemSegmentedControl.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight),
+            measurementSystemSegmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
     

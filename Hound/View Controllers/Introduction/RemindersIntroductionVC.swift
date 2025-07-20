@@ -23,7 +23,7 @@ final class RemindersIntroductionVC: HoundViewController {
 
         button.setTitle("Set Up Reminders", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         button.backgroundColor = UIColor.systemBlue
         button.shouldRoundCorners = true
         button.addTarget(self, action: #selector(didTouchUpInsideSetUpReminders), for: .touchUpInside)
@@ -36,7 +36,7 @@ final class RemindersIntroductionVC: HoundViewController {
 
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         button.backgroundColor = UIColor.systemBackground
         button.applyStyle(.labelBorder)
         button.addTarget(self, action: #selector(didTouchUpInsideMaybeLater), for: .touchUpInside)
@@ -97,7 +97,7 @@ final class RemindersIntroductionVC: HoundViewController {
                 return
             }
 
-            let reminders = ClassConstant.ReminderConstant.defaultReminders
+            let reminders = Constant.Class.Reminder.defaultReminders
             PresentationManager.beginFetchingInformationIndicator()
             RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: reminders) { responseStatus, _ in
                 PresentationManager.endFetchingInformationIndicator {
@@ -137,7 +137,7 @@ final class RemindersIntroductionVC: HoundViewController {
 
         buttonStack = UIStackView(arrangedSubviews: [setUpRemindersButton, maybeLaterButton])
         buttonStack.axis = .vertical
-        buttonStack.spacing = ConstraintConstant.Spacing.contentSectionVert
+        buttonStack.spacing = Constant.Constraint.Spacing.contentSectionVert
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(buttonStack)
@@ -157,8 +157,8 @@ final class RemindersIntroductionVC: HoundViewController {
             buttonStack.leadingAnchor.constraint(equalTo: introductionView.contentView.leadingAnchor),
             buttonStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
-            setUpRemindersButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            setUpRemindersButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
+            setUpRemindersButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            setUpRemindersButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight),
 
             maybeLaterButton.heightAnchor.constraint(equalTo: setUpRemindersButton.heightAnchor)
         ])

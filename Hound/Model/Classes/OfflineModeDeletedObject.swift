@@ -13,7 +13,7 @@ class OfflineModeDeletedObject: NSObject, NSCoding {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
+        let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
         self.init(
             deletedDate: decodedDeletedDate ?? Date()
         )
@@ -22,7 +22,7 @@ class OfflineModeDeletedObject: NSObject, NSCoding {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(deletedDate, forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
+        aCoder.encode(deletedDate, forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
     }
     
     // MARK: - Equatable
@@ -69,10 +69,10 @@ final class OfflineModeDeletedDog: OfflineModeDeletedObject {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.dogUUID.rawValue))
-        let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
+        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
+        let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
         self.init(
-            dogUUID: decodedDogUUID ?? VisualConstant.TextConstant.unknownUUID,
+            dogUUID: decodedDogUUID ?? Constant.VisualText.unknownUUID,
             deletedDate: decodedDeletedDate ?? Date()
         )
     }
@@ -80,8 +80,8 @@ final class OfflineModeDeletedDog: OfflineModeDeletedObject {
     override func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
-        aCoder.encode(deletedDate, forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
+        aCoder.encode(dogUUID.uuidString, forKey: Constant.Key.dogUUID.rawValue)
+        aCoder.encode(deletedDate, forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
     }
     
     // MARK: - Equatable
@@ -111,12 +111,12 @@ final class OfflineModeDeletedReminder: OfflineModeDeletedObject {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.dogUUID.rawValue))
-        let decodedReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.reminderUUID.rawValue))
-        let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
+        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
+        let decodedReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.reminderUUID.rawValue))
+        let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
         self.init(
-            dogUUID: decodedDogUUID ?? VisualConstant.TextConstant.unknownUUID,
-            reminderUUID: decodedReminderUUID ?? VisualConstant.TextConstant.unknownUUID,
+            dogUUID: decodedDogUUID ?? Constant.VisualText.unknownUUID,
+            reminderUUID: decodedReminderUUID ?? Constant.VisualText.unknownUUID,
             deletedDate: decodedDeletedDate ?? Date()
         )
     }
@@ -124,9 +124,9 @@ final class OfflineModeDeletedReminder: OfflineModeDeletedObject {
     override func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
-        aCoder.encode(reminderUUID.uuidString, forKey: KeyConstant.reminderUUID.rawValue)
-        aCoder.encode(deletedDate, forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
+        aCoder.encode(dogUUID.uuidString, forKey: Constant.Key.dogUUID.rawValue)
+        aCoder.encode(reminderUUID.uuidString, forKey: Constant.Key.reminderUUID.rawValue)
+        aCoder.encode(deletedDate, forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
     }
     
     // MARK: - Equatable
@@ -158,12 +158,12 @@ final class OfflineModeDeletedLog: OfflineModeDeletedObject {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.dogUUID.rawValue))
-        let decodedLogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.logUUID.rawValue))
-        let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
+        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
+        let decodedLogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.logUUID.rawValue))
+        let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
         self.init(
-            dogUUID: decodedDogUUID ?? VisualConstant.TextConstant.unknownUUID,
-            logUUID: decodedLogUUID ?? VisualConstant.TextConstant.unknownUUID,
+            dogUUID: decodedDogUUID ?? Constant.VisualText.unknownUUID,
+            logUUID: decodedLogUUID ?? Constant.VisualText.unknownUUID,
             deletedDate: decodedDeletedDate ?? Date()
         )
     }
@@ -171,9 +171,9 @@ final class OfflineModeDeletedLog: OfflineModeDeletedObject {
     override func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
-        aCoder.encode(logUUID.uuidString, forKey: KeyConstant.logUUID.rawValue)
-        aCoder.encode(deletedDate, forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
+        aCoder.encode(dogUUID.uuidString, forKey: Constant.Key.dogUUID.rawValue)
+        aCoder.encode(logUUID.uuidString, forKey: Constant.Key.logUUID.rawValue)
+        aCoder.encode(deletedDate, forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
     }
     
     // MARK: - Equatable
@@ -205,12 +205,12 @@ final class OfflineModeDeletedTrigger: OfflineModeDeletedObject {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.dogUUID.rawValue))
-        let decodedTriggerUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerUUID.rawValue))
-        let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
+        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
+        let decodedTriggerUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerUUID.rawValue))
+        let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
         self.init(
-            dogUUID: decodedDogUUID ?? VisualConstant.TextConstant.unknownUUID,
-            triggerUUID: decodedTriggerUUID ?? VisualConstant.TextConstant.unknownUUID,
+            dogUUID: decodedDogUUID ?? Constant.VisualText.unknownUUID,
+            triggerUUID: decodedTriggerUUID ?? Constant.VisualText.unknownUUID,
             deletedDate: decodedDeletedDate ?? Date()
         )
     }
@@ -218,9 +218,9 @@ final class OfflineModeDeletedTrigger: OfflineModeDeletedObject {
     override func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
-        aCoder.encode(triggerUUID.uuidString, forKey: KeyConstant.triggerUUID.rawValue)
-        aCoder.encode(deletedDate, forKey: KeyConstant.offlineModeDeletedObjectDeletedDate.rawValue)
+        aCoder.encode(dogUUID.uuidString, forKey: Constant.Key.dogUUID.rawValue)
+        aCoder.encode(triggerUUID.uuidString, forKey: Constant.Key.triggerUUID.rawValue)
+        aCoder.encode(deletedDate, forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
     }
     
     // MARK: - Equatable

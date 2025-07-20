@@ -30,14 +30,14 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.font = Constant.VisualFont.secondaryRegularLabel
         label.textColor = UIColor.label
         return label
     }()
     
     private lazy var dayOffsetLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
-        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.font = Constant.VisualFont.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select the day offset..."
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown))
@@ -52,7 +52,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
     private lazy var timeOfDayPicker: HoundDatePicker = {
         let datePicker = HoundDatePicker(huggingPriority: 250, compressionResistancePriority: 250)
         datePicker.datePickerMode = .time
-        datePicker.minuteInterval = DevelopmentConstant.triggerMinuteInterval
+        datePicker.minuteInterval = Constant.Development.triggerMinuteInterval
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.date = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * datePicker.minuteInterval), roundingMethod: .up)
         datePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
@@ -117,13 +117,13 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message = NSMutableAttributedString(
                 string: text,
-                attributes: [.font: VisualConstant.FontConstant.secondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                attributes: [.font: Constant.VisualFont.secondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
             )
             
             if let emphasizedText = emphasizedText {
                 message.append(NSMutableAttributedString(
                     string: emphasizedText,
-                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                    attributes: [.font: Constant.VisualFont.emphasizedSecondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
                 )
             }
             return message
@@ -301,26 +301,26 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
         // descriptionLabel
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: topAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // dayOffsetLabel
         NSLayoutConstraint.activate([
-            dayOffsetLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            dayOffsetLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            dayOffsetLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            dayOffsetLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
-            dayOffsetLabel.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight)
+            dayOffsetLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            dayOffsetLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            dayOffsetLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            dayOffsetLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
+            dayOffsetLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
         ])
         
         NSLayoutConstraint.activate([
-            timeOfDayPicker.topAnchor.constraint(equalTo: dayOffsetLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            timeOfDayPicker.topAnchor.constraint(equalTo: dayOffsetLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
             timeOfDayPicker.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -200.0),
-            timeOfDayPicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            timeOfDayPicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            timeOfDayPicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
-            timeOfDayPicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)
+            timeOfDayPicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            timeOfDayPicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            timeOfDayPicker.createHeightMultiplier(Constant.Constraint.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
+            timeOfDayPicker.createMaxHeight(Constant.Constraint.Input.megaDatePickerMaxHeight)
         ])
         
     }

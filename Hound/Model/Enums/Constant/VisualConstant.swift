@@ -1,5 +1,5 @@
 //
-//  View Tag ClassConstant.swift
+//  View Tag Constant.Class.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 4/6/22.
@@ -8,10 +8,9 @@
 
 import UIKit
 
-enum VisualConstant {
-    // MARK: - Visual
+public enum VisualConstant {
 
-    enum ViewTagConstant {
+    enum ViewTag {
         // reserve lower bound of tag for potential use within app. tags will never reach anywhere near the upper bound of this reserved range but it costs nothing to reserve some tags.
 
         static let weekdayEnabled = 1000000004
@@ -20,7 +19,7 @@ enum VisualConstant {
         static let serverSyncViewControllerGoToLoginPage = 1000000007
     }
 
-    enum FontConstant {
+    enum Font {
         // MARK: Header Labels
         static let megaHeaderLabel = UIFont.systemFont(ofSize: 47.5, weight: .bold)
         
@@ -58,12 +57,12 @@ enum VisualConstant {
         static let badgeLabel = UIFont.systemFont(ofSize: 12.5, weight: .bold)
     }
 
-    enum LayerConstant {
+    enum Layer {
         static let defaultCornerRadius = 10.0
         static let imageCoveringViewCornerRadius = 27.5
     }
 
-    enum BannerTextConstant {
+    enum BannerText {
         // MARK: - .success (banner style)
         
         static let successPurchasedSubscriptionTitle = "Welcome to Hound+"
@@ -129,14 +128,14 @@ enum VisualConstant {
         static let noEditTriggerResultRemindersTitle = "Heads Up!"
         static let noEditTriggerResultRemindersSubtitle = "Reminders created by automations can't be editted"
         
-        static let noAddMoreRemindersTitle = "Heads up! Maximum of \(ClassConstant.DogConstant.maximumNumberOfReminders) reminder\(ClassConstant.DogConstant.maximumNumberOfReminders == 1 ? "" : "s") per dog 🛑"
+        static let noAddMoreRemindersTitle = "Heads up! Maximum of \(Constant.Class.Dog.maximumNumberOfReminders) reminder\(Constant.Class.Dog.maximumNumberOfReminders == 1 ? "" : "s") per dog 🛑"
         static let noAddMoreRemindersSubtitle: String = "Please remove an existing reminder before trying to add a new one. NOTE: Reminders created by automations do not count towards this limit."
         
-        static let noAddMoreTriggersTitle = "Heads up! Maximum of \(ClassConstant.DogConstant.maximumNumberOfTriggers) automations\(ClassConstant.DogConstant.maximumNumberOfTriggers == 1 ? "" : "s") per dog 🛑"
+        static let noAddMoreTriggersTitle = "Heads up! Maximum of \(Constant.Class.Dog.maximumNumberOfTriggers) automations\(Constant.Class.Dog.maximumNumberOfTriggers == 1 ? "" : "s") per dog 🛑"
         static let noAddMoreTriggersSubtitle: String = "Please remove an existing trigger before trying to add a new one."
     }
 
-    enum TextConstant {
+    enum Text {
         static let unknownText = "Unknown ⚠️"
         static let unknownName = "Missing Name"
         static let unknownEmail = "Missing Email"
@@ -145,7 +144,7 @@ enum VisualConstant {
         static let unknownUUID: UUID = UUID(uuidString: "00000000-0000-4000-8000-000000000000")! // swiftlint:disable:this force_unwrapping
     }
 
-    enum AnimationConstant {
+    enum ANIMATION {
         static let moveMultipleElements = 0.3
         static let showMultipleElements = 0.3
         static let hideMultipleElements = 0.2

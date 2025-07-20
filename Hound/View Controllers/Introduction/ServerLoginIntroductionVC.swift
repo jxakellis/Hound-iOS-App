@@ -25,7 +25,7 @@ final class ServerLoginIntroductionVC: HoundViewController,
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
-            ErrorConstant.SignInWithAppleError.other().alert()
+            Constant.Error.SignInWithAppleError.other().alert()
             return
         }
         
@@ -47,9 +47,9 @@ final class ServerLoginIntroductionVC: HoundViewController,
             // The user cancelled Apple sign–in; no alert needed
             break
         case .unknown:
-            ErrorConstant.SignInWithAppleError.notSignedIn().alert()
+            Constant.Error.SignInWithAppleError.notSignedIn().alert()
         default:
-            ErrorConstant.SignInWithAppleError.other().alert()
+            Constant.Error.SignInWithAppleError.other().alert()
         }
     }
     
@@ -74,7 +74,7 @@ final class ServerLoginIntroductionVC: HoundViewController,
     private let signInWithAppleDescriptionLabel: HoundLabel = {
         let label = HoundLabel()
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.tertiaryColorDescLabel
+        label.font = Constant.VisualFont.tertiaryColorDescLabel
         label.textColor = UIColor.tertiaryLabel
         label.textAlignment = .center
         let mode = (UserInformation.userIdentifier == nil) ? "Up" : "In"
@@ -145,12 +145,12 @@ final class ServerLoginIntroductionVC: HoundViewController,
                     PresentationManager.endFetchingInformationIndicator {
                         guard responseStatus != .failureResponse else {
                             // Show error from GET if it failed:
-                            (houndErrorGet ?? ErrorConstant.GeneralResponseError.getFailureResponse(forRequestId: -1, forResponseId: -1)).alert()
+                            (houndErrorGet ?? Constant.Error.GeneralResponseError.getFailureResponse(forRequestId: -1, forResponseId: -1)).alert()
                             return
                         }
                         // If GET succeeded, but userId is still missing, that’s unexpected:
                         guard UserInformation.userId != nil else {
-                            (houndErrorGet ?? ErrorConstant.GeneralResponseError.getNoResponse()).alert()
+                            (houndErrorGet ?? Constant.Error.GeneralResponseError.getNoResponse()).alert()
                             return
                         }
                         self.dismiss(animated: true, completion: nil)
@@ -161,7 +161,7 @@ final class ServerLoginIntroductionVC: HoundViewController,
             
             // On successful create (or no‐response but userId set):
             guard UserInformation.userId != nil else {
-                (houndErrorCreate ?? ErrorConstant.GeneralResponseError.getNoResponse()).alert()
+                (houndErrorCreate ?? Constant.Error.GeneralResponseError.getNoResponse()).alert()
                 return
             }
             
@@ -209,8 +209,8 @@ final class ServerLoginIntroductionVC: HoundViewController,
         // signInWithAppleButton
         NSLayoutConstraint.activate([
             signInWithAppleButton.widthAnchor.constraint(equalTo: introductionView.contentView.widthAnchor),
-            signInWithAppleButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            signInWithAppleButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            signInWithAppleButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            signInWithAppleButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
         
         // signInWithAppleDescriptionLabel

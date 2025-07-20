@@ -35,7 +35,7 @@ enum ResponseStatus {
 
 /// abstractions used by other endpoint classes to make their request to the server, not used anywhere else in hound so therefore internal to endpoints and api requests.
 enum RequestUtils {
-    static var baseURL: URL { URL(string: DevelopmentConstant.url) ?? URL(fileURLWithPath: "foo") }
+    static var baseURL: URL { URL(string: Constant.Development.url) ?? URL(fileURLWithPath: "foo") }
     
     private static let session = URLSession(configuration: {
         let sessionConfig = URLSessionConfiguration.default
@@ -57,7 +57,7 @@ enum RequestUtils {
         guard (NetworkManager.shared.isConnected) && (forSourceFunction != .normal || OfflineModeManager.shared.isSyncInProgress == false) else {
             // Any completionHandlers or UI element changes must be done on the main thread
             DispatchQueue.main.async {
-                let houndError = ErrorConstant.GeneralRequestError.noInternetConnection()
+                let houndError = Constant.Error.GeneralRequestError.noInternetConnection()
                 if forErrorAlert == .automaticallyAlertForAll {
                     houndError.alert()
                 }
@@ -76,8 +76,8 @@ enum RequestUtils {
         }
         request.setValue(UIApplication.appVersion, forHTTPHeaderField: "houndheader-appversion")
         
-        HoundLogger.apiRequest.notice("\(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Request for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
-        //        HoundLogger.apiRequest.debug("\tRequest Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? VisualConstant.TextConstant.unknownText)")
+        HoundLogger.apiRequest.notice("\(request.httpMethod ?? Constant.VisualText.unknownText) Request for \(request.url?.description ?? Constant.VisualText.unknownText)")
+        //        HoundLogger.apiRequest.debug("\tRequest Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? Constant.VisualText.unknownText)")
         
         // Create the task that will send the request
         let task = session.dataTask(with: request) { data, response, error in
@@ -154,20 +154,20 @@ enum RequestUtils {
     ) {
         // assume an error is no response as that implies request/response failure, meaning the end result of no response is the same
         HoundLogger.apiResponse.warning(
-            "No \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\nData Task Error: \(error?.localizedDescription ?? VisualConstant.TextConstant.unknownText)")
+            "No \(request.httpMethod ?? Constant.VisualText.unknownText) Response for \(request.url?.description ?? Constant.VisualText.unknownText)\nData Task Error: \(error?.localizedDescription ?? Constant.VisualText.unknownText)")
         
         let responseError: HoundError = {
             switch request.httpMethod {
             case "PATCH":
-                return ErrorConstant.GeneralResponseError.getNoResponse()
+                return Constant.Error.GeneralResponseError.getNoResponse()
             case "POST":
-                return ErrorConstant.GeneralResponseError.postNoResponse()
+                return Constant.Error.GeneralResponseError.postNoResponse()
             case "PUT":
-                return ErrorConstant.GeneralResponseError.putNoResponse()
+                return Constant.Error.GeneralResponseError.putNoResponse()
             case "DELETE":
-                return ErrorConstant.GeneralResponseError.deleteNoResponse()
+                return Constant.Error.GeneralResponseError.deleteNoResponse()
             default:
-                return ErrorConstant.GeneralResponseError.getNoResponse()
+                return Constant.Error.GeneralResponseError.getNoResponse()
             }
         }()
         
@@ -193,37 +193,37 @@ enum RequestUtils {
     ) {
         // Our request went through but was invalid
         HoundLogger.apiResponse.warning(
-            "Failure \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)\n Message: \(responseBody[KeyConstant.message.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Code: \(responseBody[KeyConstant.code.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)\n Type:\(responseBody[KeyConstant.name.rawValue] as? String ?? VisualConstant.TextConstant.unknownText)")
+            "Failure \(request.httpMethod ?? Constant.VisualText.unknownText) Response for \(request.url?.description ?? Constant.VisualText.unknownText)\n Message: \(responseBody[Constant.Key.message.rawValue] as? String ?? Constant.VisualText.unknownText)\n Code: \(responseBody[Constant.Key.code.rawValue] as? String ?? Constant.VisualText.unknownText)\n Type:\(responseBody[Constant.Key.name.rawValue] as? String ?? Constant.VisualText.unknownText)")
         
-        let responseErrorCode: String? = responseBody[KeyConstant.code.rawValue] as? String
-        let requestId: Int = responseBody[KeyConstant.requestId.rawValue] as? Int ?? -1
-        let responseId: Int = responseBody[KeyConstant.responseId.rawValue] as? Int ?? -1
+        let responseErrorCode: String? = responseBody[Constant.Key.code.rawValue] as? String
+        let requestId: Int = responseBody[Constant.Key.requestId.rawValue] as? Int ?? -1
+        let responseId: Int = responseBody[Constant.Key.responseId.rawValue] as? Int ?? -1
         
         let responseError: HoundError = {
             // attempt to construct an error from responseErrorCode
-            if let responseErrorCode = responseErrorCode, let error = ErrorConstant.serverError(forErrorCode: responseErrorCode, forRequestId: requestId, forResponseId: responseId) {
+            if let responseErrorCode = responseErrorCode, let error = Constant.Error.serverError(forErrorCode: responseErrorCode, forRequestId: requestId, forResponseId: responseId) {
                 return error
             }
             
             // could not construct an error, use a default error message based upon the http method
             switch request.httpMethod {
             case "PATCH":
-                return ErrorConstant.GeneralResponseError.getFailureResponse(forRequestId: requestId, forResponseId: responseId)
+                return Constant.Error.GeneralResponseError.getFailureResponse(forRequestId: requestId, forResponseId: responseId)
             case "POST":
-                return ErrorConstant.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId)
+                return Constant.Error.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId)
             case "PUT":
-                return ErrorConstant.GeneralResponseError.putFailureResponse(forRequestId: requestId, forResponseId: responseId)
+                return Constant.Error.GeneralResponseError.putFailureResponse(forRequestId: requestId, forResponseId: responseId)
             case "DELETE":
-                return ErrorConstant.GeneralResponseError.deleteFailureResponse(forRequestId: requestId, forResponseId: responseId)
+                return Constant.Error.GeneralResponseError.deleteFailureResponse(forRequestId: requestId, forResponseId: responseId)
             default:
-                return ErrorConstant.GeneralResponseError.getFailureResponse(forRequestId: requestId, forResponseId: responseId)
+                return Constant.Error.GeneralResponseError.getFailureResponse(forRequestId: requestId, forResponseId: responseId)
             }
         }()
         
         // Any completionHandlers or UI element changes must be done on the main thread
         DispatchQueue.main.async {
             
-            guard responseError.name != ErrorConstant.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
+            guard responseError.name != Constant.Error.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
                 // If the user's app is outdated, it no longer works for hound. Therefore, prevent them from doing anything until they update.
                 // Ignore forErrorAlert
                 responseError.alert()
@@ -235,22 +235,22 @@ enum RequestUtils {
             }
             
             // if the error happened to be about the user's account or family disappearing or them losing access, then revert them to the login page
-            if responseError.name == ErrorConstant.PermissionResponseError.noUser(forRequestId: -1, forResponseId: -1).name {
+            if responseError.name == Constant.Error.PermissionResponseError.noUser(forRequestId: -1, forResponseId: -1).name {
                 PersistenceManager.clearStorageToReloginToAccount()
                 PresentationManager.lastFromGlobalPresenterStack?.dismissToViewController(ofClass: ServerSyncVC.self, completionHandler: nil)
             }
-            else if responseError.name == ErrorConstant.PermissionResponseError.noFamily(forRequestId: -1, forResponseId: -1).name {
+            else if responseError.name == Constant.Error.PermissionResponseError.noFamily(forRequestId: -1, forResponseId: -1).name {
                 PersistenceManager.clearStorageToRejoinFamily()
                 PresentationManager.lastFromGlobalPresenterStack?.dismissToViewController(ofClass: ServerSyncVC.self, completionHandler: nil)
             }
             // if the error happens to be because a dog, log, or reminder was deleted, then invoke a low level refresh to update the user's data.
-            else if responseError.name == ErrorConstant.FamilyResponseError.deletedDog(forRequestId: -1, forResponseId: -1).name ||
-                        responseError.name == ErrorConstant.FamilyResponseError.deletedLog(forRequestId: -1, forResponseId: -1).name ||
-                        responseError.name == ErrorConstant.FamilyResponseError.deletedReminder(forRequestId: -1, forResponseId: -1).name ||
-                        responseError.name == ErrorConstant.FamilyResponseError.deletedTrigger(forRequestId: -1, forResponseId: -1).name {
+            else if responseError.name == Constant.Error.FamilyResponseError.deletedDog(forRequestId: -1, forResponseId: -1).name ||
+                        responseError.name == Constant.Error.FamilyResponseError.deletedLog(forRequestId: -1, forResponseId: -1).name ||
+                        responseError.name == Constant.Error.FamilyResponseError.deletedReminder(forRequestId: -1, forResponseId: -1).name ||
+                        responseError.name == Constant.Error.FamilyResponseError.deletedTrigger(forRequestId: -1, forResponseId: -1).name {
                 MainTabBarController.shouldSilentlyRefreshDogManager = true
             }
-            else if responseError.name == ErrorConstant.GeneralResponseError.rateLimitExceeded(forRequestId: -1, forResponseId: -1).name {
+            else if responseError.name == Constant.Error.GeneralResponseError.rateLimitExceeded(forRequestId: -1, forResponseId: -1).name {
                 DataTaskQueue.lastDateRateLimitReceived = Date()
             }
             
@@ -265,7 +265,7 @@ enum RequestUtils {
         forResponseBody responseBody: JSONResponseBody
     ) {
         // Our request was valid and successful
-        HoundLogger.apiResponse.notice("Success \(request.httpMethod ?? VisualConstant.TextConstant.unknownText) Response for \(request.url?.description ?? VisualConstant.TextConstant.unknownText)")
+        HoundLogger.apiResponse.notice("Success \(request.httpMethod ?? Constant.VisualText.unknownText) Response for \(request.url?.description ?? Constant.VisualText.unknownText)")
         
         // Any completionHandlers or UI element changes must be done on the main thread
         DispatchQueue.main.async {

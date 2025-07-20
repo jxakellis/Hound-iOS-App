@@ -13,7 +13,7 @@ enum ExportActivityViewManager {
     /// Verifys that the family has space for a new family member and is unlocked. If conditions are passed, meaning the family can have a new user join, constructs an activityViewController with the information to share (i.e. the familyCode and short description of Hound) then presents it on forViewController
     static func shareFamilyCode(forFamilyCode familyCode: String) {
         guard let globalPresenter = PresentationManager.lastFromGlobalPresenterStack else {
-            ErrorConstant.ExportError.shareFamilyCode().alert()
+            Constant.Error.ExportError.shareFamilyCode().alert()
             return
         }
 
@@ -33,7 +33,7 @@ enum ExportActivityViewManager {
         /*
          // Make sure that the family is unlocked so new
         guard FamilyInformation.familyIsLocked == false else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.invalidLockedFamilyShareTitle, forSubtitle: VisualConstant.BannerTextConstant.invalidLockedFamilyShareSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.invalidLockedFamilyShareTitle, forSubtitle: Constant.VisualBannerText.invalidLockedFamilyShareSubtitle, forStyle: .danger)
             return
         }
          */
@@ -48,7 +48,7 @@ enum ExportActivityViewManager {
 
         guard let globalPresenter = PresentationManager.lastFromGlobalPresenterStack else {
             PresentationManager.endFetchingInformationIndicator {
-                ErrorConstant.ExportError.exportLogs().alert()
+                Constant.Error.ExportError.exportLogs().alert()
             }
             return
         }
@@ -56,7 +56,7 @@ enum ExportActivityViewManager {
         // Attempt to get a url to the user's document directory
         guard let documentsDirectoryURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
             PresentationManager.endFetchingInformationIndicator {
-                ErrorConstant.ExportError.exportLogs().alert()
+                Constant.Error.ExportError.exportLogs().alert()
             }
             return
         }
@@ -85,18 +85,18 @@ enum ExportActivityViewManager {
             var familyMemberFullName = userIdToFamilyMemberFullName[log.userId]
             if familyMemberFullName == nil {
                 // if we don't have familyMemberFullName stored in the dictionary for quick reference, store it
-                familyMemberFullName = FamilyInformation.findFamilyMember(forUserId: log.userId)?.displayFullName ?? VisualConstant.TextConstant.unknownName
+                familyMemberFullName = FamilyInformation.findFamilyMember(forUserId: log.userId)?.displayFullName ?? Constant.VisualText.unknownName
                 userIdToFamilyMemberFullName[log.userId] = familyMemberFullName
             }
 
             var dogName = dogUUIDToDogNames[dogUUID]
             if dogName == nil {
                 // if we don't have dogName stored in the dictionary for quick reference, store it
-                dogName = DogManager.globalDogManager?.findDog(forDogUUID: dogUUID)?.dogName ?? VisualConstant.TextConstant.unknownName
+                dogName = DogManager.globalDogManager?.findDog(forDogUUID: dogUUID)?.dogName ?? Constant.VisualText.unknownName
                 dogUUIDToDogNames[dogUUID] = dogName
             }
 
-           // neither should be nil as in the odd case we can't locate either, we just put in VisualConstant.TextConstant.unknownName in its place
+           // neither should be nil as in the odd case we can't locate either, we just put in Constant.VisualText.unknownName in its place
             guard let dogName = dogName, let familyMemberFullName = familyMemberFullName else {
                 continue
             }
@@ -141,7 +141,7 @@ enum ExportActivityViewManager {
 
         guard (try? logsString.write(to: houndExportedLogsURL, atomically: true, encoding: .utf8)) != nil else {
             PresentationManager.endFetchingInformationIndicator {
-                ErrorConstant.ExportError.exportLogs().alert()
+                Constant.Error.ExportError.exportLogs().alert()
             }
             return
         }

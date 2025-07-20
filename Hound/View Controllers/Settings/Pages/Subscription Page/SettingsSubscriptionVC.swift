@@ -58,7 +58,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         label.text = "Grow your family with up to six members"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         label.textColor = UIColor.secondarySystemBackground
         return label
     }()
@@ -96,7 +96,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     private let freeTrialScaledLabel: HoundLabel = {
         let label = HoundLabel()
         label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.font = Constant.VisualFont.primaryRegularLabel
         label.textColor = UIColor.systemBackground
         
         label.isHidden = userPurchasedProductFrom20965379
@@ -106,7 +106,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
             let message = NSMutableAttributedString(
                 string: "Start with a 1 week free trial",
                 attributes: [
-                    .font: UIFont.italicSystemFont(ofSize: VisualConstant.FontConstant.primaryRegularLabel.pointSize),
+                    .font: UIFont.italicSystemFont(ofSize: Constant.VisualFont.primaryRegularLabel.pointSize),
                     .foregroundColor: UIColor.systemBackground
                 ]
             )
@@ -122,7 +122,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -139,7 +139,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         button.isHidden = !UserInformation.isUserFamilyHead
         
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: VisualConstant.FontConstant.primaryRegularLabel,
+            .font: Constant.VisualFont.primaryRegularLabel,
             .foregroundColor: UIColor.systemBackground,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
@@ -156,7 +156,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         button.isHidden = !UserInformation.isUserFamilyHead
         
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: VisualConstant.FontConstant.primaryRegularLabel,
+            .font: Constant.VisualFont.primaryRegularLabel,
             .foregroundColor: UIColor.systemBackground,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
@@ -172,7 +172,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
-        stackView.spacing = ConstraintConstant.Spacing.contentIntraHori
+        stackView.spacing = Constant.Constraint.Spacing.contentIntraHori
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -181,7 +181,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         let label = HoundLabel()
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondarySystemBackground
         
         label.text = "Subscriptions can only be purchased by the family head"
@@ -202,7 +202,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     @objc private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionTitle, forSubtitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
             return
         }
         
@@ -216,11 +216,11 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                     return
                 }
                 
-                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successRestoreTransactionsTitle, forSubtitle: VisualConstant.BannerTextConstant.successRestoreTransactionsSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.successRestoreTransactionsTitle, forSubtitle: Constant.VisualBannerText.successRestoreTransactionsSubtitle, forStyle: .success)
                 
                 // When we reload the tableView, cells are reusable.
                 self.lastSelectedCell = nil
-                UIView.transition(with: self.tableView, duration: VisualConstant.AnimationConstant.moveMultipleElements, options: .transitionCrossDissolve, animations: {
+                UIView.transition(with: self.tableView, duration: Constant.VisualAnimation.moveMultipleElements, options: .transitionCrossDissolve, animations: {
                     self.tableView.reloadData()
                 })
             }
@@ -230,7 +230,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     @objc private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionTitle, forSubtitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionTitle, forSubtitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
             return
         }
         
@@ -254,9 +254,9 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                     return
                 }
                 
-                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successPurchasedSubscriptionTitle, forSubtitle: VisualConstant.BannerTextConstant.successPurchasedSubscriptionSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.successPurchasedSubscriptionTitle, forSubtitle: Constant.VisualBannerText.successPurchasedSubscriptionSubtitle, forStyle: .success)
                 
-                UIView.transition(with: self.tableView, duration: VisualConstant.AnimationConstant.moveMultipleElements, options: .transitionCrossDissolve, animations: {
+                UIView.transition(with: self.tableView, duration: Constant.VisualAnimation.moveMultipleElements, options: .transitionCrossDissolve, animations: {
                     self.tableView.reloadData()
                 })
             }
@@ -274,7 +274,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     // if we don't have a value stored, then that means the value is false. A Bool (true) is only stored for this key in the case that a user purchases a product from subscription group 20965379
     private static var userPurchasedProductFrom20965379: Bool {
         let keychain = KeychainSwift()
-        return keychain.getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
+        return keychain.getBool(Constant.Key.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
     }
     
     // MARK: - Main
@@ -358,7 +358,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         // Only add spacing if NOT the last section
         let lastSection = InAppPurchaseManager.subscriptionProducts.count - 1
-        return section == lastSection ? 0 : ConstraintConstant.Spacing.contentTallIntraVert
+        return section == lastSection ? 0 : Constant.Constraint.Spacing.contentTallIntraVert
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -458,34 +458,34 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
 
         // backButton
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
-            backButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-            backButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight),
+            backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
+            backButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
+            backButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight),
             backButton.createSquareAspectRatio()
         ])
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
             headerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            headerLabel.trailingAnchor.constraint(lessThanOrEqualTo: backButton.leadingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori)
+            headerLabel.trailingAnchor.constraint(lessThanOrEqualTo: backButton.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori)
         ])
 
         // pawWithHands
         NSLayoutConstraint.activate([
-            houndPaw.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            houndPaw.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             houndPaw.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            houndPaw.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
-            houndPaw.createMaxHeight(ConstraintConstant.Text.pawMaxHeight),
+            houndPaw.createHeightMultiplier(Constant.Constraint.Text.pawHeightMultiplier, relativeToWidthOf: view),
+            houndPaw.createMaxHeight(Constant.Constraint.Text.pawMaxHeight),
             houndPaw.createSquareAspectRatio()
         ])
 
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: houndPaw.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            descriptionLabel.topAnchor.constraint(equalTo: houndPaw.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
 
         // freeTrialScaledLabel
@@ -494,56 +494,56 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
             NSLayoutConstraint.activate([
                 freeTrialScaledLabel.heightAnchor.constraint(equalToConstant: 0),
                 freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 0),
-                freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-                freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+                freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+                freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
             ])
         }
         else {
             NSLayoutConstraint.activate([
-                freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-                freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-                freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+                freeTrialScaledLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+                freeTrialScaledLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+                freeTrialScaledLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
             ])
         }
 
         // tableView
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: freeTrialScaledLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            tableView.topAnchor.constraint(equalTo: freeTrialScaledLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
 
         // continueButton
         NSLayoutConstraint.activate([
-            continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            continueButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            continueButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            continueButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            continueButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            continueButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
         
         // redeemRestoreButtonStack
         if restoreButton.isHidden && redeemButton.isHidden {
             NSLayoutConstraint.activate([
                 redeemRestoreButtonStack.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 0),
-                redeemRestoreButtonStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-                redeemRestoreButtonStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+                redeemRestoreButtonStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+                redeemRestoreButtonStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
             ])
         }
         else {
             NSLayoutConstraint.activate([
-                redeemRestoreButtonStack.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-                redeemRestoreButtonStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-                redeemRestoreButtonStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+                redeemRestoreButtonStack.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+                redeemRestoreButtonStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+                redeemRestoreButtonStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
             ])
         }
 
         // subscriptionDisclaimerLabel
         NSLayoutConstraint.activate([
-            subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemRestoreButtonStack.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            subscriptionDisclaimerLabel.topAnchor.constraint(equalTo: redeemRestoreButtonStack.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             subscriptionDisclaimerLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            subscriptionDisclaimerLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            subscriptionDisclaimerLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            subscriptionDisclaimerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 

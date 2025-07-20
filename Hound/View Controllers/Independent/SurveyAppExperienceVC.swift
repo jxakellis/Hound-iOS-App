@@ -30,7 +30,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
         
         // make sure the result is under logNoteCharacterLimit
-        return updatedText.count <= ClassConstant.FeedbackConstant.appExperienceSuggestionCharacterLimit
+        return updatedText.count <= Constant.Class.FeedbackConstant.appExperienceSuggestionCharacterLimit
     }
     
     // MARK: - Elements
@@ -109,7 +109,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         label.text = "What could we do to improve?"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         label.textColor = UIColor.systemBackground
         return label
     }()
@@ -119,7 +119,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         textView.backgroundColor = UIColor.systemBackground
         textView.textColor = UIColor.label
-        textView.font = VisualConstant.FontConstant.primaryRegularLabel
+        textView.font = Constant.VisualFont.primaryRegularLabel
         textView.placeholder = "Share any thoughts, suggestions, or issues..."
         
         textView.applyStyle(.labelBorder)
@@ -131,7 +131,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         button.setTitle("Submit", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -157,7 +157,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         self.dismiss(animated: true) {
             // After we successfully submit this survey and dismiss the view, thank the user
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.surveyFeedbackAppExperienceTitle, forSubtitle: VisualConstant.BannerTextConstant.surveyFeedbackAppExperienceSubtitle, forStyle: .success)
+            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.surveyFeedbackAppExperienceTitle, forSubtitle: Constant.VisualBannerText.surveyFeedbackAppExperienceSubtitle, forStyle: .success)
             
             guard numStars >= 4 else {
                 return
@@ -206,7 +206,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
                 // The rating is being set to nil or the new rating is the same as the old rating, so clear all of the stars and the rating
                 storedIndexOfUserStarRating = nil
                 
-                UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {
+                UIView.animate(withDuration: Constant.VisualAnimation.selectSingleElement) {
                     // A star isn't selected so the user can't submit
                     self.submitButton.isEnabled = false
                     self.orderedStarButtons.forEach { starButton in
@@ -228,7 +228,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
                 return selectedStarButtons.contains(starButton) == false
             }
             
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {
+            UIView.animate(withDuration: Constant.VisualAnimation.selectSingleElement) {
                 // A star is selected so the user can now submit
                 self.submitButton.isEnabled = true
                 selectedStarButtons.forEach { selectedStarButton in
@@ -301,44 +301,44 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         // starsStackView
         NSLayoutConstraint.activate([
-            starsStackView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            starsStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset * 2.0),
-            starsStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset * 2.0)
+            starsStackView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            starsStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset * 2.0),
+            starsStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
         
         // Make all stars equal size and square
         for starButton in orderedStarButtons {
             NSLayoutConstraint.activate([
-                starButton.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier * 1.5, relativeToWidthOf: view),
-                starButton.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight * 1.5),
+                starButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier * 1.5, relativeToWidthOf: view),
+                starButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight * 1.5),
                 starButton.createSquareAspectRatio()
             ])
         }
         
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: starsStackView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            descriptionLabel.topAnchor.constraint(equalTo: starsStackView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // suggestionTextView
         NSLayoutConstraint.activate([
-            suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            suggestionTextView.createHeightMultiplier(ConstraintConstant.Input.textViewHeightMultiplier, relativeToWidthOf: view),
-            suggestionTextView.createMaxHeight(ConstraintConstant.Input.textViewMaxHeight)
+            suggestionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            suggestionTextView.createHeightMultiplier(Constant.Constraint.Input.textViewHeightMultiplier, relativeToWidthOf: view),
+            suggestionTextView.createMaxHeight(Constant.Constraint.Input.textViewMaxHeight)
         ])
         
         // submitButton
         NSLayoutConstraint.activate([
-            submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            submitButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            submitButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            submitButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            submitButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
-            submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            submitButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            submitButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            submitButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            submitButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            submitButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight),
+            submitButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 }

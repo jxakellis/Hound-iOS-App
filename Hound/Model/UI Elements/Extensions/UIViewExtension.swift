@@ -46,7 +46,7 @@ extension UIView {
             self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         }
         
-        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.cornerRadius = Constant.VisualLayer.defaultCornerRadius
         self.layer.cornerCurve = .continuous
     }
     
@@ -65,7 +65,7 @@ extension UIView {
             self.layer.maskedCorners.insert([.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner])
         }
         
-        self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        self.layer.cornerRadius = Constant.VisualLayer.defaultCornerRadius
         self.layer.cornerCurve = .continuous
     }
     
@@ -82,8 +82,8 @@ extension UIView {
     
     func createAbsHoriInset(_ relativeTo: UIView) -> [NSLayoutConstraint] {
         return [
-            self.leadingAnchor.constraint(equalTo: relativeTo.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            self.trailingAnchor.constraint(equalTo: relativeTo.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            self.leadingAnchor.constraint(equalTo: relativeTo.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            self.trailingAnchor.constraint(equalTo: relativeTo.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ]
     }
     func createHeightMultiplier(_ multiplier: CGFloat, relativeToWidthOf: UIView) -> NSLayoutConstraint {

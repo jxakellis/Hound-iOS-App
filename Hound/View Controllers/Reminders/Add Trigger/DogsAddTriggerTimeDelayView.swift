@@ -19,8 +19,8 @@ final class DogsAddTriggerTimeDelayView: HoundView {
     private lazy var countdownDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
         datePicker.datePickerMode = .countDownTimer
-        datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
-        datePicker.countDownDuration = ClassConstant.TriggerConstant.defaultTriggerTimeDelay
+        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
+        datePicker.countDownDuration = Constant.Class.TriggerConstant.defaultTriggerTimeDelay
         datePicker.addTarget(self, action: #selector(didUpdateCountdown), for: .valueChanged)
         return datePicker
     }()
@@ -29,7 +29,7 @@ final class DogsAddTriggerTimeDelayView: HoundView {
         let label = HoundLabel()
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.font = Constant.VisualFont.secondaryRegularLabel
         label.textColor = UIColor.label
         return label
     }()
@@ -78,17 +78,17 @@ final class DogsAddTriggerTimeDelayView: HoundView {
         
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: topAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         NSLayoutConstraint.activate([
-            countdownDatePicker.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            countdownDatePicker.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             countdownDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
-            countdownDatePicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
-            countdownDatePicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)
+            countdownDatePicker.createHeightMultiplier(Constant.Constraint.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
+            countdownDatePicker.createMaxHeight(Constant.Constraint.Input.megaDatePickerMaxHeight)
         ])
     }
 }

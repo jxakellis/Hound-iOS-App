@@ -20,14 +20,14 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     
     private let familyCodeHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
     private let familyCodeDescriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         
         let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
@@ -37,14 +37,14 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive).",
-                attributes: [.font: VisualConstant.FontConstant.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                attributes: [.font: Constant.VisualFont.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
             
             // Add a disclaimer for the user that they
             if activeSubscriptionNumberOfFamilyMembers <= 1 {
                 message.append(
                     NSAttributedString(
                         string: " Currently, your Hound plan is for individual use only. To add family members, try out a free trial of Hound+!",
-                        attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                        attributes: [.font: Constant.VisualFont.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
                     )
                 )
             }
@@ -60,7 +60,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         
         button.setTitle("Invite to Family", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -78,7 +78,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     private let membersHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Members"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
@@ -96,7 +96,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         
         button.setTitle("Leave Family", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -109,7 +109,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         let label = HoundLabel(huggingPriority: 220, compressionResistancePriority: 220)
         label.text = "Family members can freely join or leave families. The head can only leave by deleting the family, which requires all other members to leave first (or be kicked)."
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -251,12 +251,12 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         : tableView.dequeueReusableCell(withIdentifier: SettingsFamilyMemberTVC.reuseIdentifier, for: indexPath)
         
         if let cell = cell as? SettingsFamilyHeadTVC {
-            cell.setup(forDisplayFullName: familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)
+            cell.setup(forDisplayFullName: familyMember.displayFullName ?? Constant.VisualText.unknownName)
             cell.containerView.roundCorners(setCorners: .all)
         }
         
         if let cell = cell as? SettingsFamilyMemberTVC {
-            cell.setup(forDisplayFullName: familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)
+            cell.setup(forDisplayFullName: familyMember.displayFullName ?? Constant.VisualText.unknownName)
             cell.containerView.roundCorners(setCorners: .none)
         }
         
@@ -270,11 +270,11 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         
         // construct the alert controller which will confirm if the user wants to kick the family member
         let familyMember = FamilyInformation.familyMembers[indexPath.row]
-        let kickFamilyMemberAlertController = UIAlertController(title: "Do you want to kick \(familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName) from your family?", message: nil, preferredStyle: .alert)
+        let kickFamilyMemberAlertController = UIAlertController(title: "Do you want to kick \(familyMember.displayFullName ?? Constant.VisualText.unknownName) from your family?", message: nil, preferredStyle: .alert)
         
-        let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName ?? VisualConstant.TextConstant.unknownName)", style: .destructive) { _ in
+        let kickAlertAction = UIAlertAction(title: "Kick \(familyMember.displayFullName ?? Constant.VisualText.unknownName)", style: .destructive) { _ in
             // the user wants to kick the family member so query the server
-            let body: JSONRequestBody = [KeyConstant.familyKickUserId.rawValue: .string(familyMember.userId)]
+            let body: JSONRequestBody = [Constant.Key.familyKickUserId.rawValue: .string(familyMember.userId)]
             PresentationManager.beginFetchingInformationIndicator()
             FamilyRequest.delete(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatusFamilyDelete, _ in
                 PresentationManager.endFetchingInformationIndicator {
@@ -290,7 +290,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
                         
                         self.repeatableSetup()
                         self.familyMembersTableView.deleteRows(at: [indexPath], with: .automatic)
-                        UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+                        UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
                             self.view.setNeedsLayout()
                             self.view.layoutIfNeeded()
                         }
@@ -341,59 +341,59 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         
         // familyCodeHeaderLabel
         NSLayoutConstraint.activate([
-            familyCodeHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            familyCodeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            familyCodeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            familyCodeHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            familyCodeHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+            familyCodeHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            familyCodeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            familyCodeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            familyCodeHeaderLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            familyCodeHeaderLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // familyCodeDescriptionLabel
         NSLayoutConstraint.activate([
-            familyCodeDescriptionLabel.topAnchor.constraint(equalTo: familyCodeHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            familyCodeDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            familyCodeDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            familyCodeDescriptionLabel.topAnchor.constraint(equalTo: familyCodeHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            familyCodeDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            familyCodeDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // shareFamilyButton
         NSLayoutConstraint.activate([
-            shareFamilyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            shareFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            shareFamilyButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            shareFamilyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
+            shareFamilyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            shareFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            shareFamilyButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            shareFamilyButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight),
             shareFamilyButton.topAnchor.constraint(equalTo: familyCodeDescriptionLabel.bottomAnchor, constant: 25.0)
         ])
         
         // membersHeaderLabel
         NSLayoutConstraint.activate([
-            membersHeaderLabel.topAnchor.constraint(equalTo: shareFamilyButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            membersHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            membersHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            membersHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            membersHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+            membersHeaderLabel.topAnchor.constraint(equalTo: shareFamilyButton.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            membersHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            membersHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            membersHeaderLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            membersHeaderLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // familyMembersTableView
         NSLayoutConstraint.activate([
-            familyMembersTableView.topAnchor.constraint(equalTo: membersHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            familyMembersTableView.topAnchor.constraint(equalTo: membersHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            familyMembersTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            familyMembersTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // leaveFamilyButton
         NSLayoutConstraint.activate([
-            leaveFamilyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            leaveFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            leaveFamilyButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            leaveFamilyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
-            leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
+            leaveFamilyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            leaveFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            leaveFamilyButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            leaveFamilyButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight),
+            leaveFamilyButton.topAnchor.constraint(equalTo: familyMembersTableView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert)
         ])
         
         NSLayoutConstraint.activate([
-            leaveFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            leaveFamilyDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            leaveFamilyDescriptionLabel.topAnchor.constraint(equalTo: leaveFamilyButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            leaveFamilyDescriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            leaveFamilyDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            leaveFamilyDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            leaveFamilyDescriptionLabel.topAnchor.constraint(equalTo: leaveFamilyButton.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            leaveFamilyDescriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
     

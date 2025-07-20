@@ -31,14 +31,14 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     private let logReactionsHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 305, compressionResistancePriority: 305)
-        label.font = VisualConstant.FontConstant.emphasizedSecondaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = .label
         label.text = "When This Log is Added"
         return label
     }()
     private lazy var logReactionsLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.font = Constant.VisualFont.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select log type(s)..."
         label.adjustsFontSizeToFitWidth = false
@@ -57,14 +57,14 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     private let reminderResultHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 295, compressionResistancePriority: 295)
-        label.font = VisualConstant.FontConstant.emphasizedSecondaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = .label
         label.text = "Then Create Reminder"
         return label
     }()
     private lazy var reminderResultLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
-        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.font = Constant.VisualFont.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select reminder action..."
         label.adjustsFontSizeToFitWidth = false
@@ -86,10 +86,10 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     private var reminderCustomActionNameMaxHeight: GeneralLayoutConstraint!
     private lazy var reminderCustomActionNameTextField: HoundTextField = {
         let textField = HoundTextField(huggingPriority: 285, compressionResistancePriority: 285)
-        textField.font = VisualConstant.FontConstant.secondaryRegularLabel
+        textField.font = Constant.VisualFont.secondaryRegularLabel
         textField.delegate = self
         textField.applyStyle(.thinGrayBorder)
-        textField.placeholder = " Add a custom name..."
+        textField.placeholder = " Enter a custom name..."
         return textField
     }()
     
@@ -114,7 +114,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             segmentedControl.insertSegment(withTitle: section.title, at: index, animated: false)
         }
         
-        let attributes: [NSAttributedString.Key: Any] = [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
         segmentedControl.backgroundColor = UIColor.systemGray4
         
@@ -149,7 +149,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     private lazy var triggerViewsStack: HoundStackView = {
         let stack = HoundStackView(arrangedSubviews: [timeDelayView, fixedTimeView])
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
         return stack
     }()
     
@@ -203,7 +203,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         guard trigger.setTriggerLogReactions(forTriggerLogReactions: selectedLogReactions) else {
             if showErrorIfFailed {
-                logReactionsLabel.errorMessage = ErrorConstant.TriggerError.logReactionMissing().description
+                logReactionsLabel.errorMessage = Constant.Error.TriggerError.logReactionMissing().description
             }
             
             return nil
@@ -211,7 +211,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         guard let selectedReminderResult = selectedReminderResult else {
             if showErrorIfFailed {
-                reminderResultLabel.errorMessage = ErrorConstant.TriggerError.reminderResultMissing().description
+                reminderResultLabel.errorMessage = Constant.Error.TriggerError.reminderResultMissing().description
             }
             
             return nil
@@ -223,9 +223,9 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         if segmentedControl.selectedSegmentIndex == SegmentedControlSection.timeDelay.rawValue {
             trigger.triggerType = .timeDelay
-            if !trigger.changeTriggerTimeDelay(forTimeDelay: timeDelayView.currentTimeDelay ?? ClassConstant.TriggerConstant.defaultTriggerTimeDelay) {
+            if !trigger.changeTriggerTimeDelay(forTimeDelay: timeDelayView.currentTimeDelay ?? Constant.Class.TriggerConstant.defaultTriggerTimeDelay) {
                 if showErrorIfFailed {
-                    timeDelayView.errorMessage = ErrorConstant.TriggerError.timeDelayInvalid().description
+                    timeDelayView.errorMessage = Constant.Error.TriggerError.timeDelayInvalid().description
                 }
                 return nil
             }
@@ -237,7 +237,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             
             if !trigger.changeTriggerFixedTimeTypeAmount(forAmount: fixedTimeView.currentOffset) {
                 if showErrorIfFailed {
-                    fixedTimeView.errorMessage = ErrorConstant.TriggerError.fixedTimeTypeAmountInvalid().description
+                    fixedTimeView.errorMessage = Constant.Error.TriggerError.fixedTimeTypeAmountInvalid().description
                 }
                 return nil
             }
@@ -266,7 +266,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             reminderCustomActionNameTop.constant = 0.0
         }
         
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideSingleElement) {
+        UIView.animate(withDuration: Constant.VisualAnimation.showOrHideSingleElement) {
             self.setNeedsLayout()
             self.layoutIfNeeded()
         }
@@ -587,55 +587,55 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         super.setupConstraints()
         
         NSLayoutConstraint.activate([
-            logReactionsHeaderLabel.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            logReactionsHeaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            logReactionsHeaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            logReactionsHeaderLabel.topAnchor.constraint(equalTo: topAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            logReactionsHeaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            logReactionsHeaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         NSLayoutConstraint.activate([
-            logReactionsLabel.topAnchor.constraint(equalTo: logReactionsHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
-            logReactionsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            logReactionsLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            logReactionsLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
-            logReactionsLabel.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight)
+            logReactionsLabel.topAnchor.constraint(equalTo: logReactionsHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTightIntraHori),
+            logReactionsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            logReactionsLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            logReactionsLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
+            logReactionsLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
         ])
         
         NSLayoutConstraint.activate([
-            reminderResultHeaderLabel.topAnchor.constraint(equalTo: logReactionsLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            reminderResultHeaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            reminderResultHeaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            reminderResultHeaderLabel.topAnchor.constraint(equalTo: logReactionsLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            reminderResultHeaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            reminderResultHeaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         NSLayoutConstraint.activate([
-            reminderResultLabel.topAnchor.constraint(equalTo: reminderResultHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
-            reminderResultLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            reminderResultLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            reminderResultLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
-            reminderResultLabel.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight)
+            reminderResultLabel.topAnchor.constraint(equalTo: reminderResultHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTightIntraHori),
+            reminderResultLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            reminderResultLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            reminderResultLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
+            reminderResultLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
         ])
         
-        reminderCustomActionNameTop = GeneralLayoutConstraint(reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderResultLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert))
-        reminderCustomActionNameHeightMultiplier = GeneralLayoutConstraint(reminderCustomActionNameTextField.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self))
-        reminderCustomActionNameMaxHeight = GeneralLayoutConstraint(reminderCustomActionNameTextField.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight))
+        reminderCustomActionNameTop = GeneralLayoutConstraint(reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderResultLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert))
+        reminderCustomActionNameHeightMultiplier = GeneralLayoutConstraint(reminderCustomActionNameTextField.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self))
+        reminderCustomActionNameMaxHeight = GeneralLayoutConstraint(reminderCustomActionNameTextField.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight))
         NSLayoutConstraint.activate([
             reminderCustomActionNameTop.constraint,
-            reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             reminderCustomActionNameHeightMultiplier.constraint,
             reminderCustomActionNameMaxHeight.constraint
         ])
         
         NSLayoutConstraint.activate([
-            segmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            segmentedControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
-            segmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
-            segmentedControl.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: self),
-            segmentedControl.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight)
+            segmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            segmentedControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset / 2.0),
+            segmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset / 2.0),
+            segmentedControl.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: self),
+            segmentedControl.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight)
         ])
         
         NSLayoutConstraint.activate([
-            triggerViewsStack.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            triggerViewsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
+            triggerViewsStack.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            triggerViewsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
             triggerViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor),
             triggerViewsStack.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])

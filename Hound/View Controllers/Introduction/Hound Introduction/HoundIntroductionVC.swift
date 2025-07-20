@@ -63,7 +63,7 @@ final class HoundIntroductionVC: HoundViewController,
         self.dogNameInput = dogName
         
         // Configure the dogIconPage for the next step
-        let defaultName = dogManager.dogs.first?.dogName ?? ClassConstant.DogConstant.defaultDogName
+        let defaultName = dogManager.dogs.first?.dogName ?? Constant.Class.Dog.defaultDogName
         let nameToUse = dogName ?? defaultName
         dogIconPage.setup(forDelegate: self, forDogName: nameToUse)
         
@@ -94,7 +94,7 @@ final class HoundIntroductionVC: HoundViewController,
         }
         else {
             // No dogs exist yet: create a new Dog object and send request
-            let newDog = (try? Dog(forDogName: dogNameInput ?? ClassConstant.DogConstant.defaultDogName))
+            let newDog = (try? Dog(forDogName: dogNameInput ?? Constant.Class.Dog.defaultDogName))
             ?? Dog()
             newDog.dogIcon = dogIconInput
             

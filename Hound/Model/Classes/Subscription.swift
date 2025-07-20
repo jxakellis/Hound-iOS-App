@@ -26,14 +26,14 @@ final class Subscription: NSObject, NSCoding {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedTransactionId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.transactionId.rawValue)
-        let decodedProductId = aDecoder.decodeOptionalString(forKey: KeyConstant.productId.rawValue)
-        let decodedPurchaseDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.purchaseDate.rawValue)
-        let decodedExpiresDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.expiresDate.rawValue)
-        let decodedNumberOfFamilyMembers = aDecoder.decodeOptionalInteger(forKey: KeyConstant.numberOfFamilyMembers.rawValue)
-        let decodedIsActive = aDecoder.decodeOptionalBool(forKey: KeyConstant.isActive.rawValue)
-        let decodedAutoRenewStatus = aDecoder.decodeOptionalBool(forKey: KeyConstant.autoRenewStatus.rawValue)
-        let decodedAutoRenewProductId = aDecoder.decodeOptionalString(forKey: KeyConstant.autoRenewProductId.rawValue)
+        let decodedTransactionId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.transactionId.rawValue)
+        let decodedProductId = aDecoder.decodeOptionalString(forKey: Constant.Key.productId.rawValue)
+        let decodedPurchaseDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.purchaseDate.rawValue)
+        let decodedExpiresDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.expiresDate.rawValue)
+        let decodedNumberOfFamilyMembers = aDecoder.decodeOptionalInteger(forKey: Constant.Key.numberOfFamilyMembers.rawValue)
+        let decodedIsActive = aDecoder.decodeOptionalBool(forKey: Constant.Key.isActive.rawValue)
+        let decodedAutoRenewStatus = aDecoder.decodeOptionalBool(forKey: Constant.Key.autoRenewStatus.rawValue)
+        let decodedAutoRenewProductId = aDecoder.decodeOptionalString(forKey: Constant.Key.autoRenewProductId.rawValue)
 
         self.init(
             internalTransactionId: decodedTransactionId,
@@ -51,19 +51,19 @@ final class Subscription: NSObject, NSCoding {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
 
         if let transactionId = transactionId {
-            aCoder.encode(transactionId, forKey: KeyConstant.transactionId.rawValue)
+            aCoder.encode(transactionId, forKey: Constant.Key.transactionId.rawValue)
         }
-        aCoder.encode(productId, forKey: KeyConstant.productId.rawValue)
+        aCoder.encode(productId, forKey: Constant.Key.productId.rawValue)
         if let purchaseDate = purchaseDate {
-            aCoder.encode(purchaseDate, forKey: KeyConstant.purchaseDate.rawValue)
+            aCoder.encode(purchaseDate, forKey: Constant.Key.purchaseDate.rawValue)
         }
         if let expiresDate = expiresDate {
-            aCoder.encode(expiresDate, forKey: KeyConstant.expiresDate.rawValue)
+            aCoder.encode(expiresDate, forKey: Constant.Key.expiresDate.rawValue)
         }
-        aCoder.encode(numberOfFamilyMembers, forKey: KeyConstant.numberOfFamilyMembers.rawValue)
-        aCoder.encode(isActive, forKey: KeyConstant.isActive.rawValue)
-        aCoder.encode(autoRenewStatus, forKey: KeyConstant.autoRenewStatus.rawValue)
-        aCoder.encode(autoRenewProductId, forKey: KeyConstant.autoRenewProductId.rawValue)
+        aCoder.encode(numberOfFamilyMembers, forKey: Constant.Key.numberOfFamilyMembers.rawValue)
+        aCoder.encode(isActive, forKey: Constant.Key.isActive.rawValue)
+        aCoder.encode(autoRenewStatus, forKey: Constant.Key.autoRenewStatus.rawValue)
+        aCoder.encode(autoRenewProductId, forKey: Constant.Key.autoRenewProductId.rawValue)
     }
     
     // MARK: - Properties
@@ -127,26 +127,26 @@ final class Subscription: NSObject, NSCoding {
     ) {
         self.init(
             forTransactionId: internalTransactionId,
-            forProductId: internalProductId ?? ClassConstant.SubscriptionConstant.defaultProductId,
+            forProductId: internalProductId ?? Constant.Class.Subscription.defaultProductId,
             forPurchaseDate: internalPurchaseDate,
             forExpiresDate: internalExpiresDate,
-            forNumberOfFamilyMembers: internalNumberOfFamilyMembers ?? ClassConstant.SubscriptionConstant.defaultSubscriptionNumberOfFamilyMembers,
+            forNumberOfFamilyMembers: internalNumberOfFamilyMembers ?? Constant.Class.Subscription.defaultSubscriptionNumberOfFamilyMembers,
             forIsActive: internalIsActive ?? false,
             forAutoRenewStatus: internalAutoRenewStatus ?? true,
-            forAutoRenewProductId: internalAutoRenewProductId ?? internalProductId ?? ClassConstant.SubscriptionConstant.defaultProductId
+            forAutoRenewProductId: internalAutoRenewProductId ?? internalProductId ?? Constant.Class.Subscription.defaultProductId
         )
     }
 
     /// Assume array of family properties
     convenience init(fromBody body: JSONResponseBody) {
-        let transactionId: Int? = body[KeyConstant.transactionId.rawValue] as? Int
-        let productId: String? = body[KeyConstant.productId.rawValue] as? String
-        let purchaseDate: Date? = (body[KeyConstant.purchaseDate.rawValue] as? String)?.formatISO8601IntoDate()
-        let expiresDate: Date? = (body[KeyConstant.expiresDate.rawValue] as? String)?.formatISO8601IntoDate()
-        let numberOfFamilyMembers = body[KeyConstant.numberOfFamilyMembers.rawValue] as? Int
-        let isActive = body[KeyConstant.isActive.rawValue] as? Bool
-        let autoRenewStatus = body[KeyConstant.autoRenewStatus.rawValue] as? Bool
-        let autoRenewProductId = body[KeyConstant.autoRenewProductId.rawValue] as? String
+        let transactionId: Int? = body[Constant.Key.transactionId.rawValue] as? Int
+        let productId: String? = body[Constant.Key.productId.rawValue] as? String
+        let purchaseDate: Date? = (body[Constant.Key.purchaseDate.rawValue] as? String)?.formatISO8601IntoDate()
+        let expiresDate: Date? = (body[Constant.Key.expiresDate.rawValue] as? String)?.formatISO8601IntoDate()
+        let numberOfFamilyMembers = body[Constant.Key.numberOfFamilyMembers.rawValue] as? Int
+        let isActive = body[Constant.Key.isActive.rawValue] as? Bool
+        let autoRenewStatus = body[Constant.Key.autoRenewStatus.rawValue] as? Bool
+        let autoRenewProductId = body[Constant.Key.autoRenewProductId.rawValue] as? String
 
         self.init(
             internalTransactionId: transactionId,

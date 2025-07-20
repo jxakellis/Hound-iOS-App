@@ -38,7 +38,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
         
         button.setTitle("Go to Login Page", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -48,10 +48,10 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     }()
     
     @objc private func didTapTroubleshootLogin(_ sender: Any) {
-        if troubleshootLoginButton.tag == VisualConstant.ViewTagConstant.serverSyncViewControllerRetryLogin {
+        if troubleshootLoginButton.tag == Constant.VisualViewTag.serverSyncViewControllerRetryLogin {
             self.repeatableSetup()
         }
-        else if troubleshootLoginButton.tag == VisualConstant.ViewTagConstant.serverSyncViewControllerGoToLoginPage {
+        else if troubleshootLoginButton.tag == Constant.VisualViewTag.serverSyncViewControllerGoToLoginPage {
             let vc = ServerLoginIntroductionVC()
             PresentationManager.enqueueViewController(vc)
         }
@@ -128,13 +128,13 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     
     /// If we recieved a failure response from a request, redirect the user to the login page in an attempt to recover
     private func failureResponseForRequest() {
-        troubleshootLoginButton.tag = VisualConstant.ViewTagConstant.serverSyncViewControllerGoToLoginPage
+        troubleshootLoginButton.tag = Constant.VisualViewTag.serverSyncViewControllerGoToLoginPage
         troubleshootLoginButton.setTitle("Go to Login Page", for: .normal)
         troubleshootLoginButton.isHidden = false
     }
     
     private func noResponseForRequest() {
-        troubleshootLoginButton.tag = VisualConstant.ViewTagConstant.serverSyncViewControllerRetryLogin
+        troubleshootLoginButton.tag = Constant.VisualViewTag.serverSyncViewControllerRetryLogin
         troubleshootLoginButton.setTitle("Retry Login", for: .normal)
         troubleshootLoginButton.isHidden = false
     }
@@ -341,26 +341,26 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
         NSLayoutConstraint.activate([
             houndPaw.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             houndPaw.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            houndPaw.createHeightMultiplier(ConstraintConstant.Text.pawHeightMultiplier, relativeToWidthOf: view),
-            houndPaw.createMaxHeight(ConstraintConstant.Text.pawMaxHeight),
+            houndPaw.createHeightMultiplier(Constant.Constraint.Text.pawHeightMultiplier, relativeToWidthOf: view),
+            houndPaw.createMaxHeight(Constant.Constraint.Text.pawMaxHeight),
             houndPaw.createSquareAspectRatio()
         ])
         
         // getRequestsProgressView
         NSLayoutConstraint.activate([
             getRequestsProgressView.topAnchor.constraint(equalTo: houndPaw.bottomAnchor, constant: 35),
-            getRequestsProgressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            getRequestsProgressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            getRequestsProgressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            getRequestsProgressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             getRequestsProgressView.heightAnchor.constraint(equalTo: troubleshootLoginButton.heightAnchor, multiplier: 0.1)
         ])
         
         // troubleshootLoginButton
         NSLayoutConstraint.activate([
             troubleshootLoginButton.topAnchor.constraint(equalTo: getRequestsProgressView.bottomAnchor, constant: 35),
-            troubleshootLoginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            troubleshootLoginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            troubleshootLoginButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            troubleshootLoginButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            troubleshootLoginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            troubleshootLoginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            troubleshootLoginButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            troubleshootLoginButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
     }
 

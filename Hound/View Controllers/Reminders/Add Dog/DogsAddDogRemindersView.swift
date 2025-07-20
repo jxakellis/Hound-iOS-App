@@ -43,7 +43,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         
         button.setTitle("Add Reminder", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -57,8 +57,8 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
     @objc func didTouchUpInsideAddReminder() {
         let numNonTriggerReminders = dogReminders.dogReminders.count(where: { $0.reminderIsTriggerResult == false })
         
-        guard numNonTriggerReminders < ClassConstant.DogConstant.maximumNumberOfReminders else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noAddMoreRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.noAddMoreRemindersSubtitle, forStyle: .warning)
+        guard numNonTriggerReminders < Constant.Class.Dog.maximumNumberOfReminders else {
+            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noAddMoreRemindersTitle, forSubtitle: Constant.VisualBannerText.noAddMoreRemindersSubtitle, forStyle: .warning)
             return
         }
         
@@ -69,8 +69,8 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
     
     private weak var delegate: DogsAddDogRemindersViewDelegate?
     /// dogReminders is either a copy of dogToUpdate's reminders or a DogReminderManager initialized to a default array of reminders. This is purposeful so that either, if you dont have a dogToUpdate, you can still create reminders, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
-    private(set) var dogReminders: DogReminderManager = DogReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
-    private(set) var initialReminders: DogReminderManager = DogReminderManager(forReminders: ClassConstant.ReminderConstant.defaultReminders)
+    private(set) var dogReminders: DogReminderManager = DogReminderManager(forReminders: Constant.Class.Reminder.defaultReminders)
+    private(set) var initialReminders: DogReminderManager = DogReminderManager(forReminders: Constant.Class.Reminder.defaultReminders)
     
     var didUpdateInitialValues: Bool {
         // if current reminders has more reminders than initial reminders, the loop below won't catch it, as the loop below just looks to see if each initial reminder is still present in current reminders.
@@ -139,7 +139,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         // Only add spacing if NOT the last section
         let lastSection = dogReminders.dogReminders.count - 1
-        return section == lastSection ? 0 : ConstraintConstant.Spacing.contentTallIntraVert
+        return section == lastSection ? 0 : Constant.Constraint.Spacing.contentTallIntraVert
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -168,7 +168,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         let reminder = dogReminders.dogReminders[indexPath.section]
         
         guard reminder.reminderIsTriggerResult == false else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noEditTriggerResultRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.noEditTriggerResultRemindersSubtitle, forStyle: .warning)
+            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noEditTriggerResultRemindersTitle, forSubtitle: Constant.VisualBannerText.noEditTriggerResultRemindersSubtitle, forStyle: .warning)
             return
         }
         
@@ -186,7 +186,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
             self.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
             
             self.tableView.deleteSections([indexPath.section], with: .fade)
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+            UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
                 self.setNeedsLayout()
                 self.layoutIfNeeded()
             }
@@ -220,12 +220,12 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         ])
 
         NSLayoutConstraint.activate([
-            addReminderButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            addReminderButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             addReminderButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-            addReminderButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            addReminderButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            addReminderButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: self),
-            addReminderButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            addReminderButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            addReminderButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            addReminderButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: self),
+            addReminderButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
     }
 }

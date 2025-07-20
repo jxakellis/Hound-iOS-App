@@ -44,7 +44,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
         
         // make sure the result is under reminderCustomActionNameCharacterLimit
-        return updatedText.count <= ClassConstant.ReminderConstant.reminderCustomActionNameCharacterLimit
+        return updatedText.count <= Constant.Class.Reminder.reminderCustomActionNameCharacterLimit
     }
     
     // MARK: - Elements
@@ -57,13 +57,13 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     private lazy var reminderViewsStack: HoundStackView = {
         let stack = HoundStackView(arrangedSubviews: [onceView, countdownView, weeklyView, monthlyView])
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
         return stack
     }()
     
     private lazy var reminderActionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.font = Constant.VisualFont.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an action..."
         
@@ -85,14 +85,14 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         textField.delegate = self
         
         textField.applyStyle(.thinGrayBorder)
-        textField.placeholder = " Add a custom name..."
+        textField.placeholder = " Enter a custom name..."
         
         return textField
     }()
     
     private let reminderIsEnabledSwitch: HoundSwitch = {
         let uiSwitch = HoundSwitch(huggingPriority: 310, compressionResistancePriority: 310)
-        uiSwitch.isOn = ClassConstant.ReminderConstant.defaultReminderIsEnabled
+        uiSwitch.isOn = Constant.Class.Reminder.defaultReminderIsEnabled
         return uiSwitch
     }()
     
@@ -104,7 +104,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             segmentedControl.insertSegment(withTitle: option.readableName, at: index, animated: false)
         }
         
-        let attributes: [NSAttributedString.Key: Any] = [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
         
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
         segmentedControl.backgroundColor = UIColor.systemGray4
@@ -145,7 +145,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     func constructReminder(showErrorIfFailed: Bool) -> Reminder? {
         guard let selectedReminderAction = selectedReminderAction else {
             if showErrorIfFailed {
-                reminderActionLabel.errorMessage = ErrorConstant.ReminderError.reminderActionMissing().description
+                reminderActionLabel.errorMessage = Constant.Error.ReminderError.reminderActionMissing().description
             }
             return nil
         }
@@ -172,7 +172,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         case ReminderType.weekly.segmentedControlIndex:
             guard let weekdays = weeklyView.currentWeekdays else {
                 if showErrorIfFailed {
-                    weeklyView.weekdayStack.errorMessage = ErrorConstant.WeeklyComponentsError.weekdaysInvalid().description
+                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeeklyComponentsError.weekdaysInvalid().description
                 }
                 
                 return nil
@@ -182,7 +182,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             
             guard reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays) else {
                 if showErrorIfFailed {
-                    weeklyView.weekdayStack.errorMessage = ErrorConstant.WeeklyComponentsError.weekdaysInvalid().description
+                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeeklyComponentsError.weekdaysInvalid().description
                 }
                 return nil
             }
@@ -343,7 +343,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             reminderCustomActionNameTop.restore()
         }
         
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideSingleElement) {
+        UIView.animate(withDuration: Constant.VisualAnimation.showOrHideSingleElement) {
             self.setNeedsLayout()
             self.layoutIfNeeded()
         }
@@ -530,46 +530,46 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         
         // reminderActionLabel
         NSLayoutConstraint.activate([
-            reminderActionLabel.topAnchor.constraint(equalTo: topAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            reminderActionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            reminderActionLabel.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
-            reminderActionLabel.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight)
+            reminderActionLabel.topAnchor.constraint(equalTo: topAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            reminderActionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            reminderActionLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
+            reminderActionLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
         ])
         
         // reminderIsEnabledSwitch
         NSLayoutConstraint.activate([
-            reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            reminderIsEnabledSwitch.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset * 2.0),
+            reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            reminderIsEnabledSwitch.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0),
             reminderIsEnabledSwitch.centerYAnchor.constraint(equalTo: reminderActionLabel.centerYAnchor)
         ])
         
         // reminderCustomActionNameTextField
-        reminderCustomActionNameTop = GeneralLayoutConstraint(reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert))
-        reminderCustomActionNameHeightMultiplier = GeneralLayoutConstraint(reminderCustomActionNameTextField.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: self))
-        reminderCustomActionNameMaxHeight = GeneralLayoutConstraint(reminderCustomActionNameTextField.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight))
+        reminderCustomActionNameTop = GeneralLayoutConstraint(reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert))
+        reminderCustomActionNameHeightMultiplier = GeneralLayoutConstraint(reminderCustomActionNameTextField.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self))
+        reminderCustomActionNameMaxHeight = GeneralLayoutConstraint(reminderCustomActionNameTextField.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight))
         NSLayoutConstraint.activate([
             reminderCustomActionNameTop.constraint,
-            reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             reminderCustomActionNameHeightMultiplier.constraint,
             reminderCustomActionNameMaxHeight.constraint
         ])
         
         // reminderTypeSegmentedControl
         NSLayoutConstraint.activate([
-            reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            reminderTypeSegmentedControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
-            reminderTypeSegmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
-            reminderTypeSegmentedControl.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: self),
-            reminderTypeSegmentedControl.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight)
+            reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            reminderTypeSegmentedControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset / 2.0),
+            reminderTypeSegmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset / 2.0),
+            reminderTypeSegmentedControl.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: self),
+            reminderTypeSegmentedControl.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight)
         ])
         
         // reminderViewsStack
         NSLayoutConstraint.activate([
-            reminderViewsStack.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            reminderViewsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            reminderViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            reminderViewsStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            reminderViewsStack.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            reminderViewsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            reminderViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            reminderViewsStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
     }
     

@@ -140,12 +140,12 @@ final class DogsTableVC: HoundTableViewController {
                 }
                 
                 if responseStatus == .successResponse {
-                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successRefreshRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.successRefreshRemindersSubtitle, forStyle: .success)
+                    PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.successRefreshRemindersTitle, forSubtitle: Constant.VisualBannerText.successRefreshRemindersSubtitle, forStyle: .success)
                 }
                 else {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
                         // If OfflineModeManager has displayed its banner that indicates its turning on, then we are safe to display this banner. Otherwise, we would run the risk of both of these banners displaying if its the first time enterin offline mode.
-                        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldTitle, forSubtitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldSubtitle, forStyle: .info)
+                        PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.infoRefreshOnHoldTitle, forSubtitle: Constant.VisualBannerText.infoRefreshOnHoldSubtitle, forStyle: .info)
                     }
                 }
                 
@@ -373,7 +373,7 @@ final class DogsTableVC: HoundTableViewController {
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
 
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                    UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+                    UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
                         self.view.setNeedsLayout()
                         self.view.layoutIfNeeded()
                     }
@@ -511,7 +511,7 @@ final class DogsTableVC: HoundTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return ConstraintConstant.Spacing.contentTallIntraVert
+        return Constant.Constraint.Spacing.contentTallIntraVert
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -590,7 +590,7 @@ final class DogsTableVC: HoundTableViewController {
                     self.dogManager.removeDog(forDogUUID: dog.dogUUID)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     self.tableView.deleteSections([indexPath.section], with: .automatic)
-                    UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+                    UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
                         self.view.setNeedsLayout()
                         self.view.layoutIfNeeded()
                     }

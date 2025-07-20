@@ -49,8 +49,8 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol, HoundDynamicBorder
     
     // MARK: - Properties
 
-    var staticCornerRadius: CGFloat? = VisualConstant.LayerConstant.defaultCornerRadius
-    /// If true, self.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
+    var staticCornerRadius: CGFloat? = Constant.VisualLayer.defaultCornerRadius
+    /// If true, self.layer.cornerRadius = Constant.VisualLayer.defaultCornerRadius. Otherwise, self.layer.cornerRadius = 0.
     var shouldRoundCorners: Bool = false {
         didSet {
             updateCornerRounding()

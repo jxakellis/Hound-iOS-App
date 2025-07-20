@@ -15,7 +15,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Snooze"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
@@ -30,7 +30,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "If you snooze an alarm, this is the length of time until it sounds again."
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -40,7 +40,7 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: HoundTableViewCell {
 
         UserConfiguration.snoozeLength = snoozeLengthDatePicker.countDownDuration
 
-        let body: JSONRequestBody = [KeyConstant.userConfigurationSnoozeLength.rawValue: .double(UserConfiguration.snoozeLength)]
+        let body: JSONRequestBody = [Constant.Key.userConfigurationSnoozeLength.rawValue: .double(UserConfiguration.snoozeLength)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
@@ -104,28 +104,28 @@ final class SettingsNotifsAlarmsSnoozeLengthTVC: HoundTableViewCell {
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
 
         // snoozeLengthDatePicker
         NSLayoutConstraint.activate([
-            snoozeLengthDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            snoozeLengthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            snoozeLengthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            snoozeLengthDatePicker.createHeightMultiplier(ConstraintConstant.Input.datePickerHeightMultiplier, relativeToWidthOf: contentView),
-            snoozeLengthDatePicker.createMaxHeight(ConstraintConstant.Input.datePickerMaxHeight)
+            snoozeLengthDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            snoozeLengthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            snoozeLengthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            snoozeLengthDatePicker.createHeightMultiplier(Constant.Constraint.Input.datePickerHeightMultiplier, relativeToWidthOf: contentView),
+            snoozeLengthDatePicker.createMaxHeight(Constant.Constraint.Input.datePickerMaxHeight)
         ])
 
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: snoozeLengthDatePicker.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            descriptionLabel.topAnchor.constraint(equalTo: snoozeLengthDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 

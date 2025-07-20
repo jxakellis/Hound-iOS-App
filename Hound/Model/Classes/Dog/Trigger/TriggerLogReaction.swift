@@ -24,21 +24,21 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
 
     required convenience init?(coder aDecoder: NSCoder) {
-        guard let decodedLogActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logActionTypeId.rawValue) else {
+        guard let decodedLogActionTypeId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logActionTypeId.rawValue) else {
             return nil
         }
-        let decodedCustomName = aDecoder.decodeOptionalString(forKey: KeyConstant.logCustomActionName.rawValue)
+        let decodedCustomName = aDecoder.decodeOptionalString(forKey: Constant.Key.logCustomActionName.rawValue)
         self.init(forLogActionTypeId: decodedLogActionTypeId, forLogCustomActionName: decodedCustomName)
     }
 
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(logActionTypeId, forKey: KeyConstant.logActionTypeId.rawValue)
-        aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
+        aCoder.encode(logActionTypeId, forKey: Constant.Key.logActionTypeId.rawValue)
+        aCoder.encode(logCustomActionName, forKey: Constant.Key.logCustomActionName.rawValue)
     }
     
     // MARK: - Properties
 
-    private(set) var logActionTypeId: Int = ClassConstant.LogConstant.defaultLogActionTypeId
+    private(set) var logActionTypeId: Int = Constant.Class.Log.defaultLogActionTypeId
     private(set) var logCustomActionName: String = ""
     
     // MARK: - Main
@@ -50,8 +50,8 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
     }
     
     convenience init(fromBody: JSONResponseBody, toOverride: TriggerLogReaction?) {
-        let logActionTypeId = fromBody[KeyConstant.logActionTypeId.rawValue] as? Int ?? toOverride?.logActionTypeId
-        let logCustomActionName = fromBody[KeyConstant.logCustomActionName.rawValue] as? String ?? toOverride?.logCustomActionName
+        let logActionTypeId = fromBody[Constant.Key.logActionTypeId.rawValue] as? Int ?? toOverride?.logActionTypeId
+        let logCustomActionName = fromBody[Constant.Key.logCustomActionName.rawValue] as? String ?? toOverride?.logCustomActionName
         
         self.init(forLogActionTypeId: logActionTypeId, forLogCustomActionName: logCustomActionName)
     }
@@ -64,8 +64,8 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
     
     func createBody() -> JSONRequestBody {
         var body: JSONRequestBody = [:]
-        body[KeyConstant.logActionTypeId.rawValue] = .int(logActionTypeId)
-        body[KeyConstant.logCustomActionName.rawValue] = .string(logCustomActionName)
+        body[Constant.Key.logActionTypeId.rawValue] = .int(logActionTypeId)
+        body[Constant.Key.logCustomActionName.rawValue] = .string(logCustomActionName)
         return body
         
     }

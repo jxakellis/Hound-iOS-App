@@ -15,7 +15,7 @@ class HoundTableHeaderFooterView: HoundHeaderFooterView {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel()
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.emphasizedSecondaryHeaderLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryHeaderLabel
         return label
     }()
     
@@ -35,11 +35,11 @@ class HoundTableHeaderFooterView: HoundHeaderFooterView {
     override func setupConstraints() {
         super.setupConstraints()
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
             // when table view is calculating the height of this view, it might assign a UIView-Encapsulated-Layout-Height which is invalid (too big or too small) for pageSheetHeaderView. This would cause a unresolvable constraints error, causing one of them to break. However, since this is temporary when it calculates the height, we can avoid this .defaultHigh constraint that temporarily turns off
-            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset).withPriority(.defaultHigh),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset).withPriority(.defaultHigh),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
     }
 }

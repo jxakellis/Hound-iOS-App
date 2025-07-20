@@ -53,7 +53,7 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
         
         // MARK: Introduction Page
         
-        if LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == ClassConstant.SubscriptionConstant.defaultSubscription.productId {
+        if LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == Constant.Class.Subscription.defaultSubscription.productId {
             let vc = FamilyUpgradeIntroductionVC()
             vc.setup(forDelegate: self)
             PresentationManager.enqueueViewController(vc)

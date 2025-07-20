@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum DevelopmentConstant {
+public enum DevelopmentConstant {
     static let isProduction: Bool = {
 #if DEBUG
         return false

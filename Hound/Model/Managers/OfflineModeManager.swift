@@ -18,12 +18,12 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     static func persist(toUserDefaults: UserDefaults) {
         if let dataShared = try? NSKeyedArchiver.archivedData(withRootObject: shared, requiringSecureCoding: false) {
-            toUserDefaults.set(dataShared, forKey: KeyConstant.offlineModeManagerShared.rawValue)
+            toUserDefaults.set(dataShared, forKey: Constant.Key.offlineModeManagerShared.rawValue)
         }
     }
     
     static func load(fromUserDefaults: UserDefaults) {
-        if let dataShared: Data = UserDefaults.standard.data(forKey: KeyConstant.offlineModeManagerShared.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataShared) {
+        if let dataShared: Data = UserDefaults.standard.data(forKey: Constant.Key.offlineModeManagerShared.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataShared) {
             unarchiver.requiresSecureCoding = false
             if let shared = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? OfflineModeManager {
                 OfflineModeManager.shared = shared
@@ -34,11 +34,11 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
-        shouldUpdateUser = aDecoder.decodeOptionalBool(forKey: KeyConstant.offlineModeManagerShouldUpdateUser.rawValue) ?? shouldUpdateUser
-        shouldGetUser = aDecoder.decodeOptionalBool(forKey: KeyConstant.offlineModeManagerShouldGetUser.rawValue) ?? shouldGetUser
-        shouldGetFamily = aDecoder.decodeOptionalBool(forKey: KeyConstant.offlineModeManagerShouldGetFamily.rawValue) ?? shouldGetFamily
-        shouldGetDogManager = aDecoder.decodeOptionalBool(forKey: KeyConstant.offlineModeManagerShouldGetDogManager.rawValue) ?? shouldGetDogManager
-        offlineModeDeletedObjects = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeManagerOfflineModeDeletedObjects.rawValue) ?? offlineModeDeletedObjects
+        shouldUpdateUser = aDecoder.decodeOptionalBool(forKey: Constant.Key.offlineModeManagerShouldUpdateUser.rawValue) ?? shouldUpdateUser
+        shouldGetUser = aDecoder.decodeOptionalBool(forKey: Constant.Key.offlineModeManagerShouldGetUser.rawValue) ?? shouldGetUser
+        shouldGetFamily = aDecoder.decodeOptionalBool(forKey: Constant.Key.offlineModeManagerShouldGetFamily.rawValue) ?? shouldGetFamily
+        shouldGetDogManager = aDecoder.decodeOptionalBool(forKey: Constant.Key.offlineModeManagerShouldGetDogManager.rawValue) ?? shouldGetDogManager
+        offlineModeDeletedObjects = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeManagerOfflineModeDeletedObjects.rawValue) ?? offlineModeDeletedObjects
         // isWaitingForInternetConnection is false when the object is created; changed when startMonitoring is invoked
         // isSyncInProgress is false when the object is created; changed when startMonitoring is invoked
         // hasDisplayedOfflineModeBanner is false when the object is created; changed when we enter offline mode
@@ -47,11 +47,11 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(shouldUpdateUser, forKey: KeyConstant.offlineModeManagerShouldUpdateUser.rawValue)
-        aCoder.encode(shouldGetUser, forKey: KeyConstant.offlineModeManagerShouldGetUser.rawValue)
-        aCoder.encode(shouldGetFamily, forKey: KeyConstant.offlineModeManagerShouldGetFamily.rawValue)
-        aCoder.encode(shouldGetDogManager, forKey: KeyConstant.offlineModeManagerShouldGetDogManager.rawValue)
-        aCoder.encode(offlineModeDeletedObjects, forKey: KeyConstant.offlineModeManagerOfflineModeDeletedObjects.rawValue)
+        aCoder.encode(shouldUpdateUser, forKey: Constant.Key.offlineModeManagerShouldUpdateUser.rawValue)
+        aCoder.encode(shouldGetUser, forKey: Constant.Key.offlineModeManagerShouldGetUser.rawValue)
+        aCoder.encode(shouldGetFamily, forKey: Constant.Key.offlineModeManagerShouldGetFamily.rawValue)
+        aCoder.encode(shouldGetDogManager, forKey: Constant.Key.offlineModeManagerShouldGetDogManager.rawValue)
+        aCoder.encode(offlineModeDeletedObjects, forKey: Constant.Key.offlineModeManagerOfflineModeDeletedObjects.rawValue)
         // isWaitingForInternetConnection is false when the object is created; changed when startMonitoring is invoked
         // isSyncInProgress is false when the object is created; changed when startMonitoring is invoked
     }
@@ -242,7 +242,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         if hasDisplayedOfflineModeBanner == false {
             hasDisplayedOfflineModeBanner = true
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoEnteredOfflineModeTitle, forSubtitle: VisualConstant.BannerTextConstant.infoEnteredOfflineModeSubtitle, forStyle: .info)
+            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.infoEnteredOfflineModeTitle, forSubtitle: Constant.VisualBannerText.infoEnteredOfflineModeSubtitle, forStyle: .info)
         }
         
         guard isWaitingForInternetConnection == false && NetworkManager.shared.isConnected == true else {

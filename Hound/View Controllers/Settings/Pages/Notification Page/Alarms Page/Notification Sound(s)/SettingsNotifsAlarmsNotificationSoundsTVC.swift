@@ -15,7 +15,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
     private let headerLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Alarm Sound"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
@@ -38,7 +38,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Changes the sound your alarms play. Tap on one of them to hear what it sounds like!"
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -146,7 +146,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         AudioManager.playAudio(forAudioPath: "\(UserConfiguration.notificationSound.rawValue.lowercased())")
         
         // contact server to attempt to persist change
-        let body: JSONRequestBody = [KeyConstant.userConfigurationNotificationSound.rawValue: .string(UserConfiguration.notificationSound.rawValue)]
+        let body: JSONRequestBody = [Constant.Key.userConfigurationNotificationSound.rawValue: .string(UserConfiguration.notificationSound.rawValue)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
@@ -175,26 +175,26 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
         
         // tableView
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            tableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            descriptionLabel.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 

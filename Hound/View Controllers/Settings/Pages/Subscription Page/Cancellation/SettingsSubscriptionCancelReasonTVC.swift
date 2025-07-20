@@ -19,7 +19,7 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
     private let containerView: HoundView = {
         let view = HoundView()
         view.backgroundColor = UIColor.systemBackground
-        view.layer.cornerRadius = VisualConstant.LayerConstant.defaultCornerRadius
+        view.layer.cornerRadius = Constant.VisualLayer.defaultCornerRadius
         view.layer.cornerCurve = .continuous
         return view
     }()
@@ -73,7 +73,7 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
         
         delegate?.didSetCustomIsSelected(forCell: self, forIsCustomSelected: isCustomSelected)
         
-        UIView.animate(withDuration: isAnimated ? VisualConstant.AnimationConstant.selectSingleElement : 0.0) {
+        UIView.animate(withDuration: isAnimated ? Constant.VisualAnimation.selectSingleElement : 0.0) {
             self.checkmarkButton.isHidden = !self.isCustomSelected
             
             self.containerView.applyStyle(self.isCustomSelected ? .greenSelectionBorder : .labelBorder)
@@ -85,13 +85,13 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
     /// Attempts to set the attributedText for cancellationReasonLabel given the cancellationReason and isCustomSelected
     private func setupCancellationLabel() {
         guard let cancellationReason = cancellationReason else {
-            cancellationReasonLabel.text = VisualConstant.TextConstant.unknownText
+            cancellationReasonLabel.text = Constant.VisualText.unknownText
             return
         }
         
         // If the cell isn't selected, all of the text is the tertiary label color
         let cancellationReasonTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel,
+            .font: Constant.VisualFont.emphasizedPrimaryRegularLabel,
             .foregroundColor: UIColor.label
         ]
         
@@ -131,17 +131,17 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
 
         // cancellationReasonLabel
         NSLayoutConstraint.activate([
-            cancellationReasonLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            cancellationReasonLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            cancellationReasonLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori)
+            cancellationReasonLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            cancellationReasonLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            cancellationReasonLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori)
         ])
         
         // checkmarkButton
         NSLayoutConstraint.activate([
-            checkmarkButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset / 2.0),
-            checkmarkButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -(ConstraintConstant.Spacing.absoluteVertInset / 2.0)),
-            checkmarkButton.leadingAnchor.constraint(greaterThanOrEqualTo: cancellationReasonLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            checkmarkButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.contentIntraHori),
+            checkmarkButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset / 2.0),
+            checkmarkButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -(Constant.Constraint.Spacing.absoluteVertInset / 2.0)),
+            checkmarkButton.leadingAnchor.constraint(greaterThanOrEqualTo: cancellationReasonLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            checkmarkButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
             checkmarkButton.createSquareAspectRatio()
         ])
     }

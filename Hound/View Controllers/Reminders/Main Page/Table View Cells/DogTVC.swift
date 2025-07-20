@@ -37,7 +37,7 @@ final class DogTVC: HoundTableViewCell {
     
     private let dogNameLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = VisualConstant.FontConstant.megaHeaderLabel
+        label.font = Constant.VisualFont.megaHeaderLabel
         label.textColor = UIColor.systemBackground
         return label
     }()
@@ -59,7 +59,7 @@ final class DogTVC: HoundTableViewCell {
     private let dogTriggersLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.backgroundColor = UIColor.systemBackground
-        label.font = VisualConstant.FontConstant.emphasizedSecondaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = UIColor.label
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
@@ -89,7 +89,7 @@ final class DogTVC: HoundTableViewCell {
     private func handleDogTriggersLabel() {
         guard dogTriggersLabel.text != nil && dogTriggersLabel.text?.isEmpty == false else {
             dogTriggersLabel.isHidden = true
-            dogNameToDogTriggersConstraint.constant = ConstraintConstant.Spacing.absoluteVertInset * 1.5
+            dogNameToDogTriggersConstraint.constant = Constant.Constraint.Spacing.absoluteVertInset * 1.5
             dogTriggersBottomConstraint.constant = 0
             dogTriggersRelativeHeightConstraint.isActive = false
             dogTriggersZeroHeightConstraint.isActive = true
@@ -121,8 +121,8 @@ final class DogTVC: HoundTableViewCell {
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             // when table view is calculating the height of this view, it might assign a UIView-Encapsulated-Layout-Height which is invalid (too big or too small) for pageSheetHeaderView. This would cause a unresolvable constraints error, causing one of them to break. However, since this is temporary when it calculates the height, we can avoid this .defaultHigh constraint that temporarily turns off
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).withPriority(.defaultHigh),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // containerExtraBackgroundView
@@ -135,33 +135,33 @@ final class DogTVC: HoundTableViewCell {
         
         // houndPaw
         NSLayoutConstraint.activate([
-            houndPaw.topAnchor.constraint(equalTo: dogNameLabel.topAnchor, constant: -ConstraintConstant.Spacing.contentTightIntraHori),
-            houndPaw.bottomAnchor.constraint(equalTo: dogNameLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
-            houndPaw.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori * 1.2),
+            houndPaw.topAnchor.constraint(equalTo: dogNameLabel.topAnchor, constant: -Constant.Constraint.Spacing.contentTightIntraHori),
+            houndPaw.bottomAnchor.constraint(equalTo: dogNameLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTightIntraHori),
+            houndPaw.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori * 1.2),
             houndPaw.createSquareAspectRatio()
         ])
         
         // reminderActionTextLabel
         NSLayoutConstraint.activate([
-            dogNameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset * 1.5),
-            dogNameLabel.leadingAnchor.constraint(equalTo: houndPaw.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori * 1.2),
-            dogNameLabel.createHeightMultiplier(ConstraintConstant.Text.megaHeaderLabelHeightMultipler, relativeToWidthOf: contentView),
-            dogNameLabel.createMaxHeight(ConstraintConstant.Text.megaHeaderLabelMaxHeight)
+            dogNameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset * 1.5),
+            dogNameLabel.leadingAnchor.constraint(equalTo: houndPaw.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori * 1.2),
+            dogNameLabel.createHeightMultiplier(Constant.Constraint.Text.megaHeaderLabelHeightMultipler, relativeToWidthOf: contentView),
+            dogNameLabel.createMaxHeight(Constant.Constraint.Text.megaHeaderLabelMaxHeight)
         ])
         
         // chevronImageView
         NSLayoutConstraint.activate([
-            chevronImageView.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            chevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            chevronImageView.leadingAnchor.constraint(equalTo: dogNameLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            chevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             chevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevronImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
-            chevronImageView.createHeightMultiplier(ConstraintConstant.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
-            chevronImageView.createMaxHeight(ConstraintConstant.Button.chevronMaxHeight)
+            chevronImageView.createAspectRatio(Constant.Constraint.Button.chevronAspectRatio),
+            chevronImageView.createHeightMultiplier(Constant.Constraint.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
+            chevronImageView.createMaxHeight(Constant.Constraint.Button.chevronMaxHeight)
         ])
         
         // dogTriggersLabel
-        dogNameToDogTriggersConstraint = GeneralLayoutConstraint(dogNameLabel.bottomAnchor.constraint(equalTo: dogTriggersLabel.topAnchor, constant: -ConstraintConstant.Spacing.contentIntraVert))
-        dogTriggersBottomConstraint = GeneralLayoutConstraint(dogTriggersLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset))
+        dogNameToDogTriggersConstraint = GeneralLayoutConstraint(dogNameLabel.bottomAnchor.constraint(equalTo: dogTriggersLabel.topAnchor, constant: -Constant.Constraint.Spacing.contentIntraVert))
+        dogTriggersBottomConstraint = GeneralLayoutConstraint(dogTriggersLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset))
         dogTriggersRelativeHeightConstraint = dogTriggersLabel.heightAnchor.constraint(equalTo: dogNameLabel.heightAnchor, multiplier: 1.0 / 2.25)
         dogTriggersZeroHeightConstraint = dogTriggersLabel.heightAnchor.constraint(equalToConstant: 0)
         

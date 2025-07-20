@@ -19,8 +19,8 @@ final class DogsAddReminderCountdownView: HoundView {
     private lazy var countdownDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
         datePicker.datePickerMode = .countDownTimer
-        datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
-        datePicker.countDownDuration = ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
+        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
+        datePicker.countDownDuration = Constant.Class.ReminderComponent.defaultCountdownExecutionInterval
         
         datePicker.addTarget(self, action: #selector(didUpdateCountdown), for: .editingChanged)
         datePicker.addTarget(self, action: #selector(didUpdateCountdown), for: .valueChanged)
@@ -32,7 +32,7 @@ final class DogsAddReminderCountdownView: HoundView {
         let label = HoundLabel()
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.font = Constant.VisualFont.secondaryRegularLabel
         label.textColor = UIColor.label
         return label
     }()
@@ -85,12 +85,12 @@ final class DogsAddReminderCountdownView: HoundView {
         
         // countdownDatePicker
         NSLayoutConstraint.activate([
-            countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
             countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             countdownDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
-            countdownDatePicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
-            countdownDatePicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)
+            countdownDatePicker.createHeightMultiplier(Constant.Constraint.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
+            countdownDatePicker.createMaxHeight(Constant.Constraint.Input.megaDatePickerMaxHeight)
         ])
     }
     

@@ -96,7 +96,7 @@ final class SettingsPagesTVC: HoundTableViewCell {
     
     private let headerLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.font = Constant.VisualFont.primaryRegularLabel
         label.textColor = UIColor.systemBackground
         return label
     }()
@@ -145,14 +145,14 @@ final class SettingsPagesTVC: HoundTableViewCell {
         
         let pageImageViewInset: CGFloat = 5.0
         // pageImageView inset relative to headerLabel inset
-        let pageViewRelativeVertInset = -ConstraintConstant.Spacing.absoluteVertInset + pageImageViewInset
+        let pageViewRelativeVertInset = -Constant.Constraint.Spacing.absoluteVertInset + pageImageViewInset
 
         // containerView
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
 
         // pageImageView
@@ -165,21 +165,21 @@ final class SettingsPagesTVC: HoundTableViewCell {
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            headerLabel.leadingAnchor.constraint(equalTo: pageImageView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            headerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: pageImageView.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
         
         // chevronImageView
         NSLayoutConstraint.activate([
-            chevronImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            chevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            chevronImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            chevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             chevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevronImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
-            chevronImageView.createHeightMultiplier(ConstraintConstant.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
-            chevronImageView.createMaxHeight(ConstraintConstant.Button.chevronMaxHeight)
+            chevronImageView.createAspectRatio(Constant.Constraint.Button.chevronAspectRatio),
+            chevronImageView.createHeightMultiplier(Constant.Constraint.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
+            chevronImageView.createMaxHeight(Constant.Constraint.Button.chevronMaxHeight)
         ])
     }
 

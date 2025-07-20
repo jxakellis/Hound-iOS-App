@@ -25,14 +25,14 @@ final class SettingsAccountVC: HoundScrollViewController {
     private let userNameHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.text = "Name"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
     private let userNameLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -40,14 +40,14 @@ final class SettingsAccountVC: HoundScrollViewController {
     private let userEmailHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.text = "Email"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
     private let userEmailLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -71,14 +71,14 @@ final class SettingsAccountVC: HoundScrollViewController {
     private let userIdHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Support ID"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
     private let userIdLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -98,7 +98,7 @@ final class SettingsAccountVC: HoundScrollViewController {
        
         button.setTitle("Redownload Data", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -113,7 +113,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.text = "Deletes local storage of all dogs, reminders, logs, and automations to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side."
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         
         return label
@@ -124,7 +124,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         
         button.setTitle("Sign Out", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -140,7 +140,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         
         button.setTitle("Delete Account", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemRed
         
@@ -176,12 +176,12 @@ final class SettingsAccountVC: HoundScrollViewController {
                 }
                 
                 if responseStatus == .successResponse {
-                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.successRedownloadDataTitle, forSubtitle: VisualConstant.BannerTextConstant.successRedownloadDataSubtitle, forStyle: .success)
+                    PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.successRedownloadDataTitle, forSubtitle: Constant.VisualBannerText.successRedownloadDataSubtitle, forStyle: .success)
                 }
                 else {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
                         // If OfflineModeManager has displayed its banner that indicates its turning on, then we are safe to display this banner. Otherwise, we would run the risk of both of these banners displaying if its the first time enterin offline mode.
-                        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.infoRedownloadOnHoldTitle, forSubtitle: VisualConstant.BannerTextConstant.infoRedownloadOnHoldSubtitle, forStyle: .info)
+                        PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.infoRedownloadOnHoldTitle, forSubtitle: Constant.VisualBannerText.infoRedownloadOnHoldSubtitle, forStyle: .info)
                     }
                 }
                 
@@ -257,10 +257,10 @@ final class SettingsAccountVC: HoundScrollViewController {
        
         userNameLabel.text = UserInformation.displayFullName
         
-        userEmailLabel.text = UserInformation.userEmail ?? VisualConstant.TextConstant.unknownEmail
+        userEmailLabel.text = UserInformation.userEmail ?? Constant.VisualText.unknownEmail
         copyUserEmailButton.isEnabled = UserInformation.userEmail != nil
         
-        userIdLabel.text = UserInformation.userId ?? VisualConstant.TextConstant.unknownUserId
+        userIdLabel.text = UserInformation.userId ?? Constant.VisualText.unknownUserId
         copyUserIdButton.isEnabled = UserInformation.userId != nil
     }
     
@@ -307,101 +307,101 @@ final class SettingsAccountVC: HoundScrollViewController {
         
         // userNameHeaderLabel
         NSLayoutConstraint.activate([
-            userNameHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            userNameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            userNameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            userNameHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            userNameHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+            userNameHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            userNameHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            userNameHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            userNameHeaderLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            userNameHeaderLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // userNameLabel
         NSLayoutConstraint.activate([
-            userNameLabel.topAnchor.constraint(equalTo: userNameHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            userNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            userNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            userNameLabel.topAnchor.constraint(equalTo: userNameHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            userNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            userNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // userEmailHeaderLabel
         NSLayoutConstraint.activate([
-            userEmailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            userEmailHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            userEmailHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            userEmailHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+            userEmailHeaderLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            userEmailHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            userEmailHeaderLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            userEmailHeaderLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // copyUserEmailButton
         NSLayoutConstraint.activate([
             copyUserEmailButton.centerYAnchor.constraint(equalTo: userEmailHeaderLabel.centerYAnchor),
-            copyUserEmailButton.leadingAnchor.constraint(equalTo: userEmailHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2.0 * ConstraintConstant.Spacing.absoluteHoriInset),
+            copyUserEmailButton.leadingAnchor.constraint(equalTo: userEmailHeaderLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            copyUserEmailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2.0 * Constant.Constraint.Spacing.absoluteHoriInset),
             copyUserEmailButton.heightAnchor.constraint(equalTo: userEmailHeaderLabel.heightAnchor, multiplier: 1.5),
             copyUserEmailButton.createSquareAspectRatio()
         ])
         
         // userEmailLabel
         NSLayoutConstraint.activate([
-            userEmailLabel.topAnchor.constraint(equalTo: userEmailHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            userEmailLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            userEmailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            userEmailLabel.topAnchor.constraint(equalTo: userEmailHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            userEmailLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            userEmailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // userIdHeaderLabel
         NSLayoutConstraint.activate([
-            userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            userIdHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            userIdHeaderLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            userIdHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+            userIdHeaderLabel.topAnchor.constraint(equalTo: userEmailLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            userIdHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            userIdHeaderLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            userIdHeaderLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // copyUserIdButton
         NSLayoutConstraint.activate([
             copyUserIdButton.centerYAnchor.constraint(equalTo: userIdHeaderLabel.centerYAnchor),
-            copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2.0 * ConstraintConstant.Spacing.absoluteHoriInset),
+            copyUserIdButton.leadingAnchor.constraint(equalTo: userIdHeaderLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            copyUserIdButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2.0 * Constant.Constraint.Spacing.absoluteHoriInset),
             copyUserIdButton.heightAnchor.constraint(equalTo: userIdHeaderLabel.heightAnchor, multiplier: 1.5),
             copyUserIdButton.createSquareAspectRatio()
         ])
         
         // userIdLabel
         NSLayoutConstraint.activate([
-            userIdLabel.topAnchor.constraint(equalTo: userIdHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            userIdLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            userIdLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            userIdLabel.topAnchor.constraint(equalTo: userIdHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            userIdLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            userIdLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // redownloadDataButton
         NSLayoutConstraint.activate([
-            redownloadDataButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            redownloadDataButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            redownloadDataButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            redownloadDataButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
-            redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert)
+            redownloadDataButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            redownloadDataButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            redownloadDataButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            redownloadDataButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight),
+            redownloadDataButton.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert)
         ])
         
         // redownloadDataDescriptionLabel
         NSLayoutConstraint.activate([
-            redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            redownloadDataDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            redownloadDataDescriptionLabel.topAnchor.constraint(equalTo: redownloadDataButton.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            redownloadDataDescriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            redownloadDataDescriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // signOutButton
         NSLayoutConstraint.activate([
-            signOutButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            signOutButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            signOutButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            signOutButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            signOutButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            signOutButton.topAnchor.constraint(equalTo: redownloadDataDescriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            signOutButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            signOutButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            signOutButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            signOutButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
         
         // deleteAccountButton
         NSLayoutConstraint.activate([
-            deleteAccountButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            deleteAccountButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            deleteAccountButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            deleteAccountButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            deleteAccountButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            deleteAccountButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            deleteAccountButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            deleteAccountButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            deleteAccountButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            deleteAccountButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            deleteAccountButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
         
     }

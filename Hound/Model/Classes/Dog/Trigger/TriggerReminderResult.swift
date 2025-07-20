@@ -24,21 +24,21 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
 
     required convenience init?(coder aDecoder: NSCoder) {
-        guard let decodedReminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.reminderActionTypeId.rawValue) else {
+        guard let decodedReminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.reminderActionTypeId.rawValue) else {
             return nil
         }
-        let decodedCustomName = aDecoder.decodeOptionalString(forKey: KeyConstant.reminderCustomActionName.rawValue)
+        let decodedCustomName = aDecoder.decodeOptionalString(forKey: Constant.Key.reminderCustomActionName.rawValue)
         self.init(forReminderActionTypeId: decodedReminderActionTypeId, forReminderCustomActionName: decodedCustomName)
     }
 
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(reminderActionTypeId, forKey: KeyConstant.reminderActionTypeId.rawValue)
-        aCoder.encode(reminderCustomActionName, forKey: KeyConstant.reminderCustomActionName.rawValue)
+        aCoder.encode(reminderActionTypeId, forKey: Constant.Key.reminderActionTypeId.rawValue)
+        aCoder.encode(reminderCustomActionName, forKey: Constant.Key.reminderCustomActionName.rawValue)
     }
     
     // MARK: - Properties
 
-    private(set) var reminderActionTypeId: Int = ClassConstant.ReminderConstant.defaultReminderActionTypeId
+    private(set) var reminderActionTypeId: Int = Constant.Class.Reminder.defaultReminderActionTypeId
     private(set) var reminderCustomActionName: String = ""
     
     var readableName: String {
@@ -54,8 +54,8 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
     }
     
     convenience init(fromBody: JSONResponseBody, toOverride: TriggerReminderResult?) {
-        let reminderActionTypeId = fromBody[KeyConstant.reminderActionTypeId.rawValue] as? Int ?? toOverride?.reminderActionTypeId
-        let reminderCustomActionName = fromBody[KeyConstant.reminderCustomActionName.rawValue] as? String ?? toOverride?.reminderCustomActionName
+        let reminderActionTypeId = fromBody[Constant.Key.reminderActionTypeId.rawValue] as? Int ?? toOverride?.reminderActionTypeId
+        let reminderCustomActionName = fromBody[Constant.Key.reminderCustomActionName.rawValue] as? String ?? toOverride?.reminderCustomActionName
         
         self.init(forReminderActionTypeId: reminderActionTypeId, forReminderCustomActionName: reminderCustomActionName)
     }
@@ -64,8 +64,8 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
     
     func createBody() -> JSONRequestBody {
         var body: JSONRequestBody = [:]
-        body[KeyConstant.reminderActionTypeId.rawValue] = .int(reminderActionTypeId)
-        body[KeyConstant.reminderCustomActionName.rawValue] = .string(reminderCustomActionName)
+        body[Constant.Key.reminderActionTypeId.rawValue] = .int(reminderActionTypeId)
+        body[Constant.Key.reminderCustomActionName.rawValue] = .string(reminderCustomActionName)
         return body
         
     }

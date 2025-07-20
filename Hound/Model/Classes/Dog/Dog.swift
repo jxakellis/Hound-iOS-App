@@ -31,13 +31,13 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogId: Int? = aDecoder.decodeOptionalInteger(forKey: KeyConstant.dogId.rawValue)
-        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.dogUUID.rawValue))
-        let decodedDogName: String? = aDecoder.decodeOptionalString(forKey: KeyConstant.dogName.rawValue)
-        let decodedDogReminders: DogReminderManager? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogReminders.rawValue)
-        let decodedDogLogs: DogLogManager? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogLogs.rawValue)
-        let decodedDogTriggers: DogTriggerManager? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogTriggers.rawValue)
-        let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
+        let decodedDogId: Int? = aDecoder.decodeOptionalInteger(forKey: Constant.Key.dogId.rawValue)
+        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
+        let decodedDogName: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.dogName.rawValue)
+        let decodedDogReminders: DogReminderManager? = aDecoder.decodeOptionalObject(forKey: Constant.Key.dogReminders.rawValue)
+        let decodedDogLogs: DogLogManager? = aDecoder.decodeOptionalObject(forKey: Constant.Key.dogLogs.rawValue)
+        let decodedDogTriggers: DogTriggerManager? = aDecoder.decodeOptionalObject(forKey: Constant.Key.dogTriggers.rawValue)
+        let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
         do {
             try self.init(
                 forDogId: decodedDogId,
@@ -66,14 +66,14 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
         if let dogId = dogId {
-            aCoder.encode(dogId, forKey: KeyConstant.dogId.rawValue)
+            aCoder.encode(dogId, forKey: Constant.Key.dogId.rawValue)
         }
-        aCoder.encode(dogUUID.uuidString, forKey: KeyConstant.dogUUID.rawValue)
-        aCoder.encode(dogName, forKey: KeyConstant.dogName.rawValue)
-        aCoder.encode(dogReminders, forKey: KeyConstant.dogReminders.rawValue)
-        aCoder.encode(dogLogs, forKey: KeyConstant.dogLogs.rawValue)
-        aCoder.encode(dogTriggers, forKey: KeyConstant.dogTriggers.rawValue)
-        aCoder.encode(offlineModeComponents, forKey: KeyConstant.offlineModeComponents.rawValue)
+        aCoder.encode(dogUUID.uuidString, forKey: Constant.Key.dogUUID.rawValue)
+        aCoder.encode(dogName, forKey: Constant.Key.dogName.rawValue)
+        aCoder.encode(dogReminders, forKey: Constant.Key.dogReminders.rawValue)
+        aCoder.encode(dogLogs, forKey: Constant.Key.dogLogs.rawValue)
+        aCoder.encode(dogTriggers, forKey: Constant.Key.dogTriggers.rawValue)
+        aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
     }
     
     // MARK: - Comparable
@@ -105,7 +105,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     
     var dogIcon: UIImage?
     
-    private(set) var dogName: String = ClassConstant.DogConstant.defaultDogName
+    private(set) var dogName: String = Constant.Class.Dog.defaultDogName
     
     /// DogReminderManager that handles all specified reminders for a dog, e.g. being taken to the outside every time interval or being fed.
     private(set) var dogReminders: DogReminderManager = DogReminderManager()
@@ -156,10 +156,10 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     /// Provide a dictionary literal of dog properties to instantiate dog. Optionally, provide a dog to override with new properties from fromBody.
     convenience init?(fromBody: JSONResponseBody, dogToOverride: Dog?) {
         // Don't pull dogId or dogIsDeleted from dogToOverride. A valid fromBody needs to provide this itself
-        let dogId: Int? = fromBody[KeyConstant.dogId.rawValue] as? Int
-        let dogUUID: UUID? = UUID.fromString(forUUIDString: fromBody[KeyConstant.dogUUID.rawValue] as? String)
-        let dogLastModified: Date? = (fromBody[KeyConstant.dogLastModified.rawValue] as? String)?.formatISO8601IntoDate()
-        let dogIsDeleted: Bool? = fromBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
+        let dogId: Int? = fromBody[Constant.Key.dogId.rawValue] as? Int
+        let dogUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.dogUUID.rawValue] as? String)
+        let dogLastModified: Date? = (fromBody[Constant.Key.dogLastModified.rawValue] as? String)?.formatISO8601IntoDate()
+        let dogIsDeleted: Bool? = fromBody[Constant.Key.dogIsDeleted.rawValue] as? Bool
         
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
         guard let dogId = dogId, let dogUUID = dogUUID, let dogLastModified = dogLastModified, let dogIsDeleted = dogIsDeleted else {
@@ -202,10 +202,10 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         
         // if the dog is the same, then we pull values from dogToOverride
         // if the dog is updated, then we pull values from fromBody
-        let dogName: String? = fromBody[KeyConstant.dogName.rawValue] as? String ?? dogToOverride?.dogName
+        let dogName: String? = fromBody[Constant.Key.dogName.rawValue] as? String ?? dogToOverride?.dogName
         
         let dogReminders: DogReminderManager? = {
-            guard let reminderBodies = fromBody[KeyConstant.dogReminders.rawValue] as? [JSONResponseBody] else {
+            guard let reminderBodies = fromBody[Constant.Key.dogReminders.rawValue] as? [JSONResponseBody] else {
                 return nil
             }
             
@@ -213,7 +213,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         }()
         
         let dogLogs: DogLogManager? = {
-            guard let logBodies = fromBody[KeyConstant.dogLogs.rawValue] as? [JSONResponseBody] else {
+            guard let logBodies = fromBody[Constant.Key.dogLogs.rawValue] as? [JSONResponseBody] else {
                 return nil
             }
             
@@ -222,7 +222,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         }()
         
         let dogTriggers: DogTriggerManager? = {
-            guard let triggerBodies = fromBody[KeyConstant.dogTriggers.rawValue] as? [JSONResponseBody] else {
+            guard let triggerBodies = fromBody[Constant.Key.dogTriggers.rawValue] as? [JSONResponseBody] else {
                 return nil
             }
             
@@ -264,7 +264,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
             return false
         }
         
-        dogName = String(forDogName.prefix(ClassConstant.DogConstant.dogNameCharacterLimit))
+        dogName = String(forDogName.prefix(Constant.Class.Dog.dogNameCharacterLimit))
         return true
     }
     
@@ -297,9 +297,9 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     /// Returns an array literal of the dog's properties (does not include nested properties, e.g. logs or reminders). This is suitable to be used as the JSON body for a HTTP request
     func createBody() -> JSONRequestBody {
         var body: JSONRequestBody = [:]
-        body[KeyConstant.dogId.rawValue] = .int(dogId)
-        body[KeyConstant.dogUUID.rawValue] = .string(dogUUID.uuidString)
-        body[KeyConstant.dogName.rawValue] = .string(dogName)
+        body[Constant.Key.dogId.rawValue] = .int(dogId)
+        body[Constant.Key.dogUUID.rawValue] = .string(dogUUID.uuidString)
+        body[Constant.Key.dogName.rawValue] = .string(dogName)
         return body
     }
 }

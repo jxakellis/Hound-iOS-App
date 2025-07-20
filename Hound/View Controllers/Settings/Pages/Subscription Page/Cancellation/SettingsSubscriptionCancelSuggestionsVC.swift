@@ -26,7 +26,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         let currentText = textView.text ?? ""
         guard let stringRange = Range(range, in: currentText) else { return false }
         let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
-        return updatedText.count <= ClassConstant.FeedbackConstant.subscriptionCancellationSuggestionCharacterLimit
+        return updatedText.count <= Constant.Class.FeedbackConstant.subscriptionCancellationSuggestionCharacterLimit
     }
     
     // MARK: - Elements
@@ -55,7 +55,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         textView.backgroundColor = UIColor.systemBackground
         textView.textColor = UIColor.label
         
-        textView.font = VisualConstant.FontConstant.primaryRegularLabel
+        textView.font = Constant.VisualFont.primaryRegularLabel
         
         textView.applyStyle(.labelBorder)
         
@@ -69,7 +69,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         
         button.setTitle("Cancel Subscription", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -82,8 +82,8 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
             // Only allow if user is a family head
             guard UserInformation.isUserFamilyHead else {
                 PresentationManager.enqueueBanner(
-                    forTitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionTitle,
-                    forSubtitle: VisualConstant.BannerTextConstant.notFamilyHeadInvalidPermissionSubtitle,
+                    forTitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionTitle,
+                    forSubtitle: Constant.VisualBannerText.notFamilyHeadInvalidPermissionSubtitle,
                     forStyle: .danger
                 )
                 return
@@ -160,21 +160,21 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         
         // suggestionTextView
         NSLayoutConstraint.activate([
-            suggestionTextView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            suggestionTextView.createHeightMultiplier(ConstraintConstant.Input.textViewHeightMultiplier, relativeToWidthOf: containerView),
-            suggestionTextView.createMaxHeight(ConstraintConstant.Input.textViewMaxHeight)
+            suggestionTextView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            suggestionTextView.createHeightMultiplier(Constant.Constraint.Input.textViewHeightMultiplier, relativeToWidthOf: containerView),
+            suggestionTextView.createMaxHeight(Constant.Constraint.Input.textViewMaxHeight)
         ])
         
         // continueButton
         NSLayoutConstraint.activate([
-            continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            continueButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: containerView),
-            continueButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            continueButton.topAnchor.constraint(equalTo: suggestionTextView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            continueButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            continueButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: containerView),
+            continueButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
     }
 }

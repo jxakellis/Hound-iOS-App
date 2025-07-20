@@ -20,7 +20,7 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
     
     private let displayFullNameLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
-        label.font = VisualConstant.FontConstant.emphasizedSecondaryHeaderLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryHeaderLabel
         return label
     }()
     
@@ -101,9 +101,9 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
         
         // iconView
         NSLayoutConstraint.activate([
-            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            iconView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            iconView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            iconView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             iconView.widthAnchor.constraint(equalTo: iconView.heightAnchor),
             iconView.heightAnchor.constraint(equalToConstant: iconSize)
         ])
@@ -112,19 +112,19 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
         NSLayoutConstraint.activate([
             displayFullNameLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor),
             displayFullNameLabel.heightAnchor.constraint(equalTo: iconView.heightAnchor),
-            displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori)
+            displayFullNameLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori)
         ])
         
         // chevronImageView
-        chevronLeadingConstraint = GeneralLayoutConstraint(chevronImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori))
-        chevronTrailingConstraint = GeneralLayoutConstraint(containerView.trailingAnchor.constraint(equalTo: chevronImageView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori))
+        chevronLeadingConstraint = GeneralLayoutConstraint(chevronImageView.leadingAnchor.constraint(equalTo: displayFullNameLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori))
+        chevronTrailingConstraint = GeneralLayoutConstraint(containerView.trailingAnchor.constraint(equalTo: chevronImageView.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori))
         NSLayoutConstraint.activate([
             chevronLeadingConstraint.constraint,
             chevronTrailingConstraint.constraint,
             chevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevronImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
-            chevronImageView.createHeightMultiplier(ConstraintConstant.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
-            chevronImageView.createMaxHeight(ConstraintConstant.Button.chevronMaxHeight)
+            chevronImageView.createAspectRatio(Constant.Constraint.Button.chevronAspectRatio),
+            chevronImageView.createHeightMultiplier(Constant.Constraint.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
+            chevronImageView.createMaxHeight(Constant.Constraint.Button.chevronMaxHeight)
         ])
     }
 

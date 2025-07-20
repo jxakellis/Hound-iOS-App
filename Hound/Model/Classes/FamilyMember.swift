@@ -13,9 +13,9 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedUserId = aDecoder.decodeOptionalString(forKey: KeyConstant.userId.rawValue)
-        let decodedUserFirstName = aDecoder.decodeOptionalString(forKey: KeyConstant.userFirstName.rawValue)
-        let decodedUserLastName = aDecoder.decodeOptionalString(forKey: KeyConstant.userLastName.rawValue)
+        let decodedUserId = aDecoder.decodeOptionalString(forKey: Constant.Key.userId.rawValue)
+        let decodedUserFirstName = aDecoder.decodeOptionalString(forKey: Constant.Key.userFirstName.rawValue)
+        let decodedUserLastName = aDecoder.decodeOptionalString(forKey: Constant.Key.userLastName.rawValue)
 
         self.init(
             internalUserId: decodedUserId,
@@ -27,12 +27,12 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(userId, forKey: KeyConstant.userId.rawValue)
+        aCoder.encode(userId, forKey: Constant.Key.userId.rawValue)
         if let firstName = firstName {
-            aCoder.encode(firstName, forKey: KeyConstant.userFirstName.rawValue)
+            aCoder.encode(firstName, forKey: Constant.Key.userFirstName.rawValue)
         }
         if let lastName = lastName {
-            aCoder.encode(lastName, forKey: KeyConstant.userLastName.rawValue)
+            aCoder.encode(lastName, forKey: Constant.Key.userLastName.rawValue)
         }
     }
     
@@ -98,7 +98,7 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
         internalLastName: String?
     ) {
         self.init(
-            forUserId: internalUserId ?? VisualConstant.TextConstant.unknownHash,
+            forUserId: internalUserId ?? Constant.VisualText.unknownHash,
             forFirstName: internalFirstName,
             forLastName: internalLastName
         )
@@ -106,9 +106,9 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
 
     /// Assume array of family properties
     convenience init(fromBody body: JSONResponseBody) {
-        let userId = body[KeyConstant.userId.rawValue] as? String
-        let firstName = body[KeyConstant.userFirstName.rawValue] as? String
-        let lastName = body[KeyConstant.userLastName.rawValue] as? String
+        let userId = body[Constant.Key.userId.rawValue] as? String
+        let firstName = body[Constant.Key.userFirstName.rawValue] as? String
+        let lastName = body[Constant.Key.userLastName.rawValue] as? String
         self.init(
             internalUserId: userId,
             internalFirstName: firstName,

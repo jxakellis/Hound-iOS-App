@@ -141,8 +141,8 @@ final class LogsTableVC: HoundTableViewController {
                 
                 if responseStatus == .successResponse {
                     PresentationManager.enqueueBanner(
-                        forTitle: VisualConstant.BannerTextConstant.successRefreshLogsTitle,
-                        forSubtitle: VisualConstant.BannerTextConstant.successRefreshLogsSubtitle,
+                        forTitle: Constant.VisualBannerText.successRefreshLogsTitle,
+                        forSubtitle: Constant.VisualBannerText.successRefreshLogsSubtitle,
                         forStyle: .success
                     )
                 }
@@ -150,8 +150,8 @@ final class LogsTableVC: HoundTableViewController {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
                         // Only show if offline banner already shown
                         PresentationManager.enqueueBanner(
-                            forTitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldTitle,
-                            forSubtitle: VisualConstant.BannerTextConstant.infoRefreshOnHoldSubtitle,
+                            forTitle: Constant.VisualBannerText.infoRefreshOnHoldTitle,
+                            forSubtitle: Constant.VisualBannerText.infoRefreshOnHoldSubtitle,
                             forStyle: .info
                         )
                     }
@@ -306,7 +306,7 @@ final class LogsTableVC: HoundTableViewController {
             }
             self.tableView.endUpdates()
 
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+            UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
                 self.view.setNeedsLayout()
                 self.view.layoutIfNeeded()
             }

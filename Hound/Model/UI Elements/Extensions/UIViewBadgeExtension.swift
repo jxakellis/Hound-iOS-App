@@ -65,7 +65,7 @@ extension UIView {
         let label = HoundBadgeLabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.badgeLabel
+        label.font = Constant.VisualFont.badgeLabel
         
         label.backgroundColor = UIColor.houndYellow
         

@@ -14,7 +14,7 @@ class HoundDropDownTableViewCell: HoundTableViewCell {
 
     let label: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.font = Constant.VisualFont.primaryRegularLabel
         return label
     }()
 
@@ -50,7 +50,7 @@ class HoundDropDownTableViewCell: HoundTableViewCell {
             return
         }
         
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {
+        UIView.animate(withDuration: Constant.VisualAnimation.selectSingleElement) {
             self.contentView.backgroundColor = selected ? UIColor.systemBlue : UIColor.systemBackground
             self.label.textColor = selected ? UIColor.white : UIColor.label
         }
@@ -68,8 +68,8 @@ class HoundDropDownTableViewCell: HoundTableViewCell {
 
     override func setupConstraints() {
         super.setupConstraints()
-        leading = label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori)
-        trailing = label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori)
+        leading = label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori)
+        trailing = label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori)
         
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: contentView.topAnchor),

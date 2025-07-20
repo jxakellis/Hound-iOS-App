@@ -23,7 +23,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
         let button = HoundButton(huggingPriority: 270, compressionResistancePriority: 270)
         button.setTitle(self.userPurchasedProductFromSubscriptionGroup20965379 ? "Upgrade" : "Start Free Trial", for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         button.backgroundColor = UIColor.systemBlue
         button.shouldRoundCorners = true
         button.addTarget(self, action: #selector(didTouchUpInsideUpgrade), for: .touchUpInside)
@@ -34,7 +34,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
         let button = HoundButton(huggingPriority: 260, compressionResistancePriority: 260)
         button.setTitle("Maybe Later", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         button.backgroundColor = UIColor.systemBackground
         button.applyStyle(.labelBorder)
         button.shouldDismissParentViewController = true
@@ -49,7 +49,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
     private weak var delegate: FamilyUpgradeIntroductionVCDelegate?
 
     private var userPurchasedProductFromSubscriptionGroup20965379: Bool {
-        KeychainSwift().getBool(KeyConstant.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
+        KeychainSwift().getBool(Constant.Key.userPurchasedProductFromSubscriptionGroup20965379.rawValue) ?? false
     }
 
     // MARK: - Main
@@ -75,21 +75,21 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "No need to go it alone! Grow your Hound family to ",
                 attributes: [
-                    .font: VisualConstant.FontConstant.primaryRegularLabel,
+                    .font: Constant.VisualFont.primaryRegularLabel,
                     .foregroundColor: UIColor.secondaryLabel
                 ])
 
             message.append(NSAttributedString(
                 string: "six members",
                 attributes: [
-                    .font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel,
+                    .font: Constant.VisualFont.emphasizedPrimaryRegularLabel,
                     .foregroundColor: UIColor.secondaryLabel
                 ]))
 
             message.append(NSAttributedString(
                 string: " with Hound+. ",
                 attributes: [
-                    .font: VisualConstant.FontConstant.primaryRegularLabel,
+                    .font: Constant.VisualFont.primaryRegularLabel,
                     .foregroundColor: UIColor.secondaryLabel
                 ]))
 
@@ -97,7 +97,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
                 message.append(NSAttributedString(
                     string: "Try it out today with a one week free trial.",
                     attributes: [
-                        .font: VisualConstant.FontConstant.primaryRegularLabel,
+                        .font: Constant.VisualFont.primaryRegularLabel,
                         .foregroundColor: UIColor.secondaryLabel
                     ]))
             }
@@ -138,7 +138,7 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
 
         buttonStack = UIStackView(arrangedSubviews: [upgradeButton, maybeLaterButton])
         buttonStack.axis = .vertical
-        buttonStack.spacing = ConstraintConstant.Spacing.contentSectionVert
+        buttonStack.spacing = Constant.Constraint.Spacing.contentSectionVert
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
 
         introductionView.contentView.addSubview(buttonStack)
@@ -158,8 +158,8 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
             buttonStack.leadingAnchor.constraint(equalTo: introductionView.contentView.leadingAnchor),
             buttonStack.trailingAnchor.constraint(equalTo: introductionView.contentView.trailingAnchor),
 
-            upgradeButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            upgradeButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight),
+            upgradeButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            upgradeButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight),
 
             maybeLaterButton.heightAnchor.constraint(equalTo: upgradeButton.heightAnchor)
         ])

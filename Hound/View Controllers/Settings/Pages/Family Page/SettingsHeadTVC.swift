@@ -30,7 +30,7 @@ final class SettingsFamilyHeadTVC: HoundTableViewCell {
     
     private let displayFullNameLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         label.textColor = UIColor.systemBackground
         return label
     }()

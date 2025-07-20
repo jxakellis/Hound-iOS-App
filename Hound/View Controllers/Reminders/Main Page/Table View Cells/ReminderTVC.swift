@@ -31,7 +31,7 @@ final class DogsReminderTVC: HoundTableViewCell {
     
     private let reminderActionTextLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 390, compressionResistancePriority: 390)
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
+        label.font = Constant.VisualFont.primaryHeaderLabel
         return label
     }()
     
@@ -46,13 +46,13 @@ final class DogsReminderTVC: HoundTableViewCell {
     private let recurranceLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 370, compressionResistancePriority: 370)
         label.textAlignment = .right
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.font = Constant.VisualFont.primaryRegularLabel
         return label
     }()
     private let timeOfDayLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 370, compressionResistancePriority: 370)
         label.textAlignment = .right
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.font = Constant.VisualFont.primaryRegularLabel
         return label
     }()
     
@@ -62,7 +62,7 @@ final class DogsReminderTVC: HoundTableViewCell {
     private let nextAlarmLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.backgroundColor = UIColor.secondarySystemBackground
-        label.font = VisualConstant.FontConstant.tertiaryRegularLabel
+        label.font = Constant.VisualFont.tertiaryRegularLabel
         
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
@@ -155,8 +155,8 @@ final class DogsReminderTVC: HoundTableViewCell {
         nextAlarmZeroHeightConstraint.isActive = false
         nextAlarmRelativeHeightConstraint.isActive = true
         
-        let nextAlarmHeaderFont = VisualConstant.FontConstant.emphasizedTertiaryRegularLabel
-        let nextAlarmBodyFont = VisualConstant.FontConstant.tertiaryRegularLabel
+        let nextAlarmHeaderFont = Constant.VisualFont.emphasizedTertiaryRegularLabel
+        let nextAlarmBodyFont = Constant.VisualFont.tertiaryRegularLabel
         
         guard Date().distance(to: executionDate) > 0 else {
             nextAlarmLabel.attributedTextClosure = {
@@ -208,45 +208,45 @@ final class DogsReminderTVC: HoundTableViewCell {
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             // when table view is calculating the height of this view, it might assign a UIView-Encapsulated-Layout-Height which is invalid (too big or too small) for pageSheetHeaderView. This would cause a unresolvable constraints error, causing one of them to break. However, since this is temporary when it calculates the height, we can avoid this .defaultHigh constraint that temporarily turns off
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).withPriority(.defaultHigh),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // reminderActionIconLabel
         NSLayoutConstraint.activate([
-            reminderActionIconLabel.topAnchor.constraint(equalTo: reminderActionTextLabel.topAnchor, constant: -ConstraintConstant.Spacing.contentTightIntraHori),
-            reminderActionIconLabel.bottomAnchor.constraint(equalTo: reminderActionTextLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
-            reminderActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
+            reminderActionIconLabel.topAnchor.constraint(equalTo: reminderActionTextLabel.topAnchor, constant: -Constant.Constraint.Spacing.contentTightIntraHori),
+            reminderActionIconLabel.bottomAnchor.constraint(equalTo: reminderActionTextLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTightIntraHori),
+            reminderActionIconLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             reminderActionIconLabel.createSquareAspectRatio()
         ])
         
         // reminderActionTextLabel
         NSLayoutConstraint.activate([
-            reminderActionTextLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            reminderActionTextLabel.leadingAnchor.constraint(equalTo: reminderActionIconLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            reminderActionTextLabel.createHeightMultiplier(ConstraintConstant.Text.primaryHeaderLabelHeightMultipler, relativeToWidthOf: contentView),
-            reminderActionTextLabel.createMaxHeight(ConstraintConstant.Text.primaryHeaderLabelMaxHeight)
+            reminderActionTextLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            reminderActionTextLabel.leadingAnchor.constraint(equalTo: reminderActionIconLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            reminderActionTextLabel.createHeightMultiplier(Constant.Constraint.Text.primaryHeaderLabelHeightMultipler, relativeToWidthOf: contentView),
+            reminderActionTextLabel.createMaxHeight(Constant.Constraint.Text.primaryHeaderLabelMaxHeight)
         ])
         
         // recurrandAndTimeOfDayStack
         NSLayoutConstraint.activate([
-            recurrandAndTimeOfDayStack.leadingAnchor.constraint(equalTo: reminderActionTextLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentTightIntraHori),
+            recurrandAndTimeOfDayStack.leadingAnchor.constraint(equalTo: reminderActionTextLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentTightIntraHori),
             recurrandAndTimeOfDayStack.topAnchor.constraint(equalTo: reminderActionTextLabel.topAnchor),
             recurrandAndTimeOfDayStack.bottomAnchor.constraint(equalTo: reminderActionTextLabel.bottomAnchor)
         ])
         
         // chevronImageView
         NSLayoutConstraint.activate([
-            chevronImageView.leadingAnchor.constraint(equalTo: recurrandAndTimeOfDayStack.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            chevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            chevronImageView.leadingAnchor.constraint(equalTo: recurrandAndTimeOfDayStack.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            chevronImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             chevronImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            chevronImageView.createAspectRatio(ConstraintConstant.Button.chevronAspectRatio),
-            chevronImageView.createHeightMultiplier(ConstraintConstant.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
-            chevronImageView.createMaxHeight(ConstraintConstant.Button.chevronMaxHeight)
+            chevronImageView.createAspectRatio(Constant.Constraint.Button.chevronAspectRatio),
+            chevronImageView.createHeightMultiplier(Constant.Constraint.Button.chevronHeightMultiplier, relativeToWidthOf: contentView),
+            chevronImageView.createMaxHeight(Constant.Constraint.Button.chevronMaxHeight)
         ])
         
         // nextAlarmLabel
-        reminderTextToNextAlarmConstraint = GeneralLayoutConstraint(reminderActionTextLabel.bottomAnchor.constraint(equalTo: nextAlarmLabel.topAnchor, constant: -ConstraintConstant.Spacing.contentIntraVert))
+        reminderTextToNextAlarmConstraint = GeneralLayoutConstraint(reminderActionTextLabel.bottomAnchor.constraint(equalTo: nextAlarmLabel.topAnchor, constant: -Constant.Constraint.Spacing.contentIntraVert))
         nextAlarmRelativeHeightConstraint = nextAlarmLabel.heightAnchor.constraint(equalTo: recurranceLabel.heightAnchor)
         nextAlarmZeroHeightConstraint = nextAlarmLabel.heightAnchor.constraint(equalToConstant: 0)
         
@@ -254,7 +254,7 @@ final class DogsReminderTVC: HoundTableViewCell {
             reminderTextToNextAlarmConstraint.constraint,
             nextAlarmRelativeHeightConstraint,
             // don't active nextAlarmZeroHeightConstraint
-            nextAlarmLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.contentIntraVert),
+            nextAlarmLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.contentIntraVert),
             nextAlarmLabel.leadingAnchor.constraint(equalTo: reminderActionTextLabel.leadingAnchor),
             nextAlarmLabel.trailingAnchor.constraint(equalTo: recurrandAndTimeOfDayStack.trailingAnchor)
         ])

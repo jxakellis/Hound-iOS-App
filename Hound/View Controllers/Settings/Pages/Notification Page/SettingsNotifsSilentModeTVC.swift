@@ -15,7 +15,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 300)
         label.text = "Silent Hours"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
@@ -47,7 +47,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
     private let timeRangeToLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "to"
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.font = Constant.VisualFont.primaryRegularLabel
         return label
     }()
     
@@ -55,7 +55,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.text = "Configure a time range where you won't recieve notifications (including alarms)."
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -65,7 +65,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         
         UserConfiguration.isSilentModeEnabled = isSilentModeEnabledSwitch.isOn
         
-        let body: JSONRequestBody = [KeyConstant.userConfigurationIsSilentModeEnabled.rawValue: .bool(UserConfiguration.isSilentModeEnabled)]
+        let body: JSONRequestBody = [Constant.Key.userConfigurationIsSilentModeEnabled.rawValue: .bool(UserConfiguration.isSilentModeEnabled)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
@@ -84,8 +84,8 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         UserConfiguration.silentModeStartUTCHour = Calendar.UTCCalendar.component(.hour, from: silentModeStartHoursDatePicker.date)
         UserConfiguration.silentModeStartUTCMinute = Calendar.UTCCalendar.component(.minute, from: silentModeStartHoursDatePicker.date)
         
-        let body: JSONRequestBody = [KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue: .int(UserConfiguration.silentModeStartUTCHour),
-                                     KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue: .int(UserConfiguration.silentModeStartUTCMinute)]
+        let body: JSONRequestBody = [Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue: .int(UserConfiguration.silentModeStartUTCHour),
+                                     Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue: .int(UserConfiguration.silentModeStartUTCMinute)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
@@ -105,8 +105,8 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         UserConfiguration.silentModeEndUTCHour = Calendar.UTCCalendar.component(.hour, from: silentModeEndHoursDatePicker.date)
         UserConfiguration.silentModeEndUTCMinute = Calendar.UTCCalendar.component(.minute, from: silentModeEndHoursDatePicker.date)
         
-        let body: JSONRequestBody = [KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue: .int(UserConfiguration.silentModeEndUTCHour),
-                                     KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue: .int(UserConfiguration.silentModeEndUTCMinute)]
+        let body: JSONRequestBody = [Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue: .int(UserConfiguration.silentModeEndUTCHour),
+                                     Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue: .int(UserConfiguration.silentModeEndUTCMinute)]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
@@ -184,39 +184,39 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
         
         // isNotificationEnabledSwitch
         NSLayoutConstraint.activate([
             isSilentModeEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
-            isSilentModeEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            isSilentModeEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset * 2.0)
+            isSilentModeEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            isSilentModeEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
         
         // silentModeStartHoursDatePicker
         NSLayoutConstraint.activate([
-            silentModeStartHoursDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            silentModeStartHoursDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            silentModeStartHoursDatePicker.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: contentView),
-            silentModeStartHoursDatePicker.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight),
+            silentModeStartHoursDatePicker.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            silentModeStartHoursDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            silentModeStartHoursDatePicker.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: contentView),
+            silentModeStartHoursDatePicker.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight),
             silentModeStartHoursDatePicker.createAspectRatio(2.75)
         ])
         
         // timeRangeToLabel
         NSLayoutConstraint.activate([
-            timeRangeToLabel.leadingAnchor.constraint(equalTo: silentModeStartHoursDatePicker.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
+            timeRangeToLabel.leadingAnchor.constraint(equalTo: silentModeStartHoursDatePicker.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
             timeRangeToLabel.centerYAnchor.constraint(equalTo: silentModeStartHoursDatePicker.centerYAnchor),
             timeRangeToLabel.heightAnchor.constraint(equalTo: silentModeStartHoursDatePicker.heightAnchor)
         ])
         
         // silentModeStartHoursDatePicker
         NSLayoutConstraint.activate([
-            silentModeEndHoursDatePicker.leadingAnchor.constraint(equalTo: timeRangeToLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            silentModeEndHoursDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            silentModeEndHoursDatePicker.leadingAnchor.constraint(equalTo: timeRangeToLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            silentModeEndHoursDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             silentModeEndHoursDatePicker.centerYAnchor.constraint(equalTo: silentModeStartHoursDatePicker.centerYAnchor),
             silentModeEndHoursDatePicker.heightAnchor.constraint(equalTo: silentModeStartHoursDatePicker.heightAnchor),
             silentModeEndHoursDatePicker.widthAnchor.constraint(equalTo: silentModeStartHoursDatePicker.widthAnchor)
@@ -224,10 +224,10 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: silentModeStartHoursDatePicker.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            descriptionLabel.topAnchor.constraint(equalTo: silentModeStartHoursDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 

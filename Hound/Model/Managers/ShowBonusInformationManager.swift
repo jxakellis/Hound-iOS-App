@@ -25,7 +25,7 @@ enum ShowBonusInformationManager {
         // sudo apt-get install --only-upgrade ca-certificates
         // sudo update-ca-certificates
         
-        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.houndUpdatedTitle, forSubtitle: VisualConstant.BannerTextConstant.houndUpdatedSubtitle, forStyle: .info) {
+        PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.houndUpdatedTitle, forSubtitle: Constant.VisualBannerText.houndUpdatedSubtitle, forStyle: .info) {
             let releaseNotesVC = ReleaseNotesVC()
             PresentationManager.enqueueViewController(releaseNotesVC)
         }

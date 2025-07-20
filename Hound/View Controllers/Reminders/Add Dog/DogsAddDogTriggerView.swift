@@ -37,7 +37,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
         
         button.setTitle("Add Automation", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -49,8 +49,8 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
     }()
     
     @objc func didTouchUpInsideAddTrigger() {
-        guard dogTriggers.dogTriggers.count < ClassConstant.DogConstant.maximumNumberOfTriggers else {
-            PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noAddMoreTriggersTitle, forSubtitle: VisualConstant.BannerTextConstant.noAddMoreTriggersSubtitle, forStyle: .warning)
+        guard dogTriggers.dogTriggers.count < Constant.Class.Dog.maximumNumberOfTriggers else {
+            PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noAddMoreTriggersTitle, forSubtitle: Constant.VisualBannerText.noAddMoreTriggersSubtitle, forStyle: .warning)
             return
         }
         
@@ -61,8 +61,8 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
     
     private weak var delegate: DogsAddDogTriggersViewDelegate?
     /// dogTriggers is either a copy of dogToUpdate's triggers or a DogTriggerManager initialized to a default array of triggers. This is purposeful so that either, if you dont have a dogToUpdate, you can still create triggers, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
-    private(set) var dogTriggers: DogTriggerManager = DogTriggerManager(forDogTriggers: ClassConstant.TriggerConstant.defaultTriggers)
-    private(set) var initialTriggers: DogTriggerManager = DogTriggerManager(forDogTriggers: ClassConstant.TriggerConstant.defaultTriggers)
+    private(set) var dogTriggers: DogTriggerManager = DogTriggerManager(forDogTriggers: Constant.Class.TriggerConstant.defaultTriggers)
+    private(set) var initialTriggers: DogTriggerManager = DogTriggerManager(forDogTriggers: Constant.Class.TriggerConstant.defaultTriggers)
     
     var didUpdateInitialValues: Bool {
         // if current triggers has more triggers than initial triggers, the loop below won't catch it, as the loop below just looks to see if each initial trigger is still present in current triggers.
@@ -131,7 +131,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         // Only add spacing if NOT the last section
         let lastSection = dogTriggers.dogTriggers.count - 1
-        return section == lastSection ? 0 : ConstraintConstant.Spacing.contentTallIntraVert
+        return section == lastSection ? 0 : Constant.Constraint.Spacing.contentTallIntraVert
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -173,7 +173,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
             self.dogTriggers.removeTrigger(forTriggerUUID: trigger.triggerUUID)
             
             self.tableView.deleteSections([indexPath.section], with: .fade)
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.moveMultipleElements) {
+            UIView.animate(withDuration: Constant.VisualAnimation.moveMultipleElements) {
                 self.setNeedsLayout()
                 self.layoutIfNeeded()
             }
@@ -207,12 +207,12 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
         ])
 
         NSLayoutConstraint.activate([
-            addTriggerButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
+            addTriggerButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             addTriggerButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-            addTriggerButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            addTriggerButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            addTriggerButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: self),
-            addTriggerButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            addTriggerButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            addTriggerButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            addTriggerButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: self),
+            addTriggerButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
     }
 }

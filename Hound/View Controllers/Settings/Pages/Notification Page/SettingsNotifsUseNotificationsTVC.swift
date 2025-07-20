@@ -19,7 +19,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Use Notifications"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
@@ -35,7 +35,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 240, compressionResistancePriority: 240)
         label.text = "Notifications help you stay up to date about the status of your dogs, reminders, and Hound family. "
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -54,7 +54,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
                     self.synchronizeUseNotificationsDescriptionLabel()
                     self.delegate?.didToggleIsNotificationEnabled()
                     
-                    let body: JSONRequestBody = [KeyConstant.userConfigurationIsNotificationEnabled.rawValue: .bool(UserConfiguration.isNotificationEnabled)]
+                    let body: JSONRequestBody = [Constant.Key.userConfigurationIsNotificationEnabled.rawValue: .bool(UserConfiguration.isNotificationEnabled)]
                     
                     UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
                         guard responseStatus != .failureResponse else {
@@ -78,7 +78,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
                     // Attempt to re-direct the user to their iPhone's settings for Hound, so they can enable notifications
                     guard let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) else {
                         // If we can't redirect the user, then just user a generic pop-up
-                        PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.notificationsDisabledTitle, forSubtitle: VisualConstant.BannerTextConstant.notificationsDisabledSubtitle, forStyle: .danger)
+                        PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.notificationsDisabledTitle, forSubtitle: Constant.VisualBannerText.notificationsDisabledSubtitle, forStyle: .danger)
                         return
                     }
                     
@@ -151,13 +151,13 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message = NSMutableAttributedString(
                 string: precalculatedDynamicNotificationsText,
-                attributes: [.font: VisualConstant.FontConstant.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                attributes: [.font: Constant.VisualFont.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
             )
             
             if precaulculatedDynamicIsNotificationsEnabled {
                 message.append(NSMutableAttributedString(
                     string: "You can't modify the settings below until you enable notifications.",
-                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                    attributes: [.font: Constant.VisualFont.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
                 )
             }
             
@@ -185,25 +185,25 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
 
         // isNotificationEnabledSwitch
         NSLayoutConstraint.activate([
             isNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
-            isNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset * 2.0)
+            isNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            isNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
 
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 

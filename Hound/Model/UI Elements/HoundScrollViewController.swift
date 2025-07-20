@@ -12,7 +12,7 @@ class HoundScrollViewController: HoundViewController {
     
     // MARK: - Elements
     
-    private let scrollView: HoundScrollView = {
+    let scrollView: HoundScrollView = {
         let scrollView = HoundScrollView()
         scrollView.onlyScrollIfBigger()
         // Disable automatic adjustments so contentInset.top can be manually
@@ -23,15 +23,13 @@ class HoundScrollViewController: HoundViewController {
     
     let containerView: HoundView = HoundView()
     
-    // MARK: - Lifecycle
+    // MARK: - Main
     
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
         setupConstraints()
     }
-    
-    // MARK: - Safe Area Update
     
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
@@ -40,6 +38,23 @@ class HoundScrollViewController: HoundViewController {
         // Reset the content offset so the top of the content is aligned exactly with the safe area top when the view first appears.
         // This avoids the scroll view appearing already scrolled down due to system adjustments when the inset is changed.
         scrollView.contentOffset.y = -view.safeAreaInsets.top
+    }
+    
+    // MARK: - Functions
+    
+    /// Scrolls the scroll view to make the given view visible (plus vertical padding) if it is not already sufficiently visible.
+    func scrollDescendantViewToVisibleIfNeeded(_ targetView: UIView, verticalPadding: CGFloat = Constant.Constraint.Spacing.absoluteVertInset) {
+        // 1. Convert the target view's frame to the scrollView's coordinate system
+        let targetRect = containerView.convert(targetView.frame, from: targetView.superview)
+        let paddedRect = targetRect.insetBy(dx: 0, dy: -verticalPadding)
+        
+        // 2. Get the currently visible rect of the scrollView (in scrollView coordinates)
+        let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+        
+        // 3. Only scroll if not already fully visible (with padding)
+        if !visibleRect.contains(paddedRect) {
+            scrollView.scrollRectToVisible(paddedRect, animated: true)
+        }
     }
     // MARK: - Setup
     

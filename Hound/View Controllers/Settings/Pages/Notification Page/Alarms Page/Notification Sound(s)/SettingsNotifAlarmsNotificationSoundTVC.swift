@@ -16,7 +16,7 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
         let label = HoundLabel()
         label.contentMode = .left
         label.text = "Notification Sound"
-        label.font = VisualConstant.FontConstant.weakSecondaryRegularLabel
+        label.font = Constant.VisualFont.weakSecondaryRegularLabel
         return label
     }()
 
@@ -42,7 +42,7 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
 
         isCustomSelected = selected
 
-        UIView.animate(withDuration: animated ? VisualConstant.AnimationConstant.selectSingleElement : 0.0) {
+        UIView.animate(withDuration: animated ? Constant.VisualAnimation.selectSingleElement : 0.0) {
             self.contentView.backgroundColor = selected ? UIColor.systemBlue : UIColor.systemBackground
             self.notificationSoundLabel.textColor = selected ? UIColor.systemBackground : UIColor.label
         }
@@ -65,10 +65,10 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
 
         // notificationSoundLabel
         NSLayoutConstraint.activate([
-            notificationSoundLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            notificationSoundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            notificationSoundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            notificationSoundLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            notificationSoundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            notificationSoundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 

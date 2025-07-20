@@ -22,7 +22,7 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     
     private let logReactionsLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.font = Constant.VisualFont.primaryRegularLabel
         label.adjustsFontSizeToFitWidth = false
         label.numberOfLines = 0
         return label
@@ -30,7 +30,7 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     
     private let reminderResultLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.font = Constant.VisualFont.secondaryRegularLabel
         label.adjustsFontSizeToFitWidth = false
         label.numberOfLines = 0
         return label
@@ -42,7 +42,7 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
         stack.addArrangedSubview(reminderResultLabel)
         stack.axis = .vertical
         stack.distribution = .equalSpacing
-        stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
         stack.alignment = .leading
         return stack
     }()
@@ -69,17 +69,17 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "Any ",
-                attributes: [.font: VisualConstant.FontConstant.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any])
+                attributes: [.font: Constant.VisualFont.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any])
             message.append(
                 NSAttributedString(
                     string: forTrigger.triggerLogReactions.map({ $0.readableName(includeMatchingEmoji: false) }).joined(separator: ", ", endingSeparator: " or "),
-                    attributes: [.font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
+                    attributes: [.font: Constant.VisualFont.emphasizedPrimaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
                 )
             )
             message.append(
                 NSAttributedString(
                     string: " log",
-                    attributes: [.font: VisualConstant.FontConstant.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
+                    attributes: [.font: Constant.VisualFont.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
                 )
             )
             return message
@@ -90,17 +90,17 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "Creates ",
-                attributes: [.font: VisualConstant.FontConstant.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any])
+                attributes: [.font: Constant.VisualFont.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any])
             message.append(
                 NSAttributedString(
                     string: forTrigger.triggerReminderResult.readableName,
-                    attributes: [.font: VisualConstant.FontConstant.emphasizedSecondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
+                    attributes: [.font: Constant.VisualFont.emphasizedSecondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
                 )
             )
             message.append(
                 NSAttributedString(
                     string: " for \(forTrigger.readableTime())",
-                    attributes: [.font: VisualConstant.FontConstant.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
+                    attributes: [.font: Constant.VisualFont.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
                 )
             )
             return message
@@ -128,26 +128,26 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
             make.top.equalTo(contentView.snp.top)
             // Use .high priority to avoid breaking during table view height estimation
             make.bottom.equalTo(contentView.snp.bottom).priority(.high)
-            make.leading.equalTo(contentView.snp.leading).offset(ConstraintConstant.Spacing.absoluteHoriInset)
-            make.trailing.equalTo(contentView.snp.trailing).inset(ConstraintConstant.Spacing.absoluteHoriInset)
+            make.leading.equalTo(contentView.snp.leading).offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.trailing.equalTo(contentView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
         
         labelStack.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.top).offset(ConstraintConstant.Spacing.absoluteVertInset)
-            make.leading.equalTo(containerView.snp.leading).offset(ConstraintConstant.Spacing.contentIntraHori)
-            make.bottom.equalTo(containerView.snp.bottom).inset(ConstraintConstant.Spacing.absoluteVertInset)
+            make.top.equalTo(containerView.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)
+            make.leading.equalTo(containerView.snp.leading).offset(Constant.Constraint.Spacing.contentIntraHori)
+            make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset)
         }
         
         chevronImageView.snp.makeConstraints { make in
-            make.leading.equalTo(labelStack.snp.trailing).offset(ConstraintConstant.Spacing.contentIntraHori)
-            make.trailing.equalTo(containerView.snp.trailing).inset(ConstraintConstant.Spacing.absoluteHoriInset)
+            make.leading.equalTo(labelStack.snp.trailing).offset(Constant.Constraint.Spacing.contentIntraHori)
+            make.trailing.equalTo(containerView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
             make.centerY.equalTo(containerView.snp.centerY)
             make.height.equalTo(contentView.snp.width)
-                .multipliedBy(ConstraintConstant.Button.chevronHeightMultiplier)
+                .multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier)
                 .priority(.high)
-            make.height.lessThanOrEqualTo(ConstraintConstant.Button.chevronMaxHeight)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
             make.width.equalTo(chevronImageView.snp.height)
-                .multipliedBy(ConstraintConstant.Button.chevronAspectRatio)
+                .multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
         }
     }
 }

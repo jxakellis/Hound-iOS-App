@@ -15,7 +15,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Family"
-        label.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        label.font = Constant.VisualFont.secondaryHeaderLabel
         return label
     }()
     
@@ -29,7 +29,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
     private let descriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryColorDescLabel
+        label.font = Constant.VisualFont.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         
         let precalculatedDynamicTextColor = label.textColor
@@ -38,7 +38,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
             let message = NSMutableAttributedString(
                 string: "Receive notifications about your Hound family. ",
                 attributes: [
-                    .font: VisualConstant.FontConstant.secondaryColorDescLabel,
+                    .font: Constant.VisualFont.secondaryColorDescLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any
                 ]
             )
@@ -46,7 +46,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
             message.append(NSAttributedString(
                 string: "This category cannot be turned off.",
                 attributes: [
-                    .font: VisualConstant.FontConstant.emphasizedSecondaryColorDescLabel,
+                    .font: Constant.VisualFont.emphasizedSecondaryColorDescLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any
                 ])
             )
@@ -54,7 +54,7 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
             message.append(NSAttributedString(
                 string: " Examples include: a user joining, leaving, or locking your family.",
                 attributes: [
-                    .font: VisualConstant.FontConstant.secondaryColorDescLabel,
+                    .font: Constant.VisualFont.secondaryColorDescLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any
                 ])
             )
@@ -87,25 +87,25 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
 
         // headerLabel
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: ConstraintConstant.Spacing.absoluteVertInset),
-            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            headerLabel.createMaxHeight(ConstraintConstant.Text.sectionLabelMaxHeight),
-            headerLabel.createHeightMultiplier(ConstraintConstant.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
 
         // alwaysOnSwitch
         NSLayoutConstraint.activate([
             alwaysOnSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
-            alwaysOnSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: ConstraintConstant.Spacing.contentIntraHori),
-            alwaysOnSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset * 2.0)
+            alwaysOnSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            alwaysOnSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
 
         // descriptionLabel
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 

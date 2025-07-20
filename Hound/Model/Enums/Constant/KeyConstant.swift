@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum KeyConstant: String {
+public enum KeyConstant: String {
 
     // MARK: API Response Body
 

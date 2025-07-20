@@ -20,7 +20,7 @@ final class DogsAddReminderMonthlyView: HoundView {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.secondaryRegularLabel
+        label.font = Constant.VisualFont.secondaryRegularLabel
         label.textColor = UIColor.label
         
         return label
@@ -30,7 +30,7 @@ final class DogsAddReminderMonthlyView: HoundView {
         let datePicker = HoundDatePicker(huggingPriority: 260, compressionResistancePriority: 260)
         datePicker.datePickerMode = .dateAndTime
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
+        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
         
         datePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
         
@@ -91,12 +91,12 @@ final class DogsAddReminderMonthlyView: HoundView {
         ])
         
         NSLayoutConstraint.activate([
-            timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
+            timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
             timeOfDayDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             timeOfDayDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             timeOfDayDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
-            timeOfDayDatePicker.createHeightMultiplier(ConstraintConstant.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
-            timeOfDayDatePicker.createMaxHeight(ConstraintConstant.Input.megaDatePickerMaxHeight)
+            timeOfDayDatePicker.createHeightMultiplier(Constant.Constraint.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
+            timeOfDayDatePicker.createMaxHeight(Constant.Constraint.Input.megaDatePickerMaxHeight)
         ])
         
     }

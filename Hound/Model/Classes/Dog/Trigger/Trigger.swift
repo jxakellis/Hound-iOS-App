@@ -86,17 +86,17 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedTriggerId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerId.rawValue)
-        let decodedTriggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerUUID.rawValue))
-        let decodedtriggerLogReactions: [TriggerLogReaction]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.triggerLogReactions.rawValue)
-        let decodedtriggerReminderResult: TriggerReminderResult? = aDecoder.decodeOptionalObject(forKey: KeyConstant.triggerReminderResult.rawValue)
-        let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerType.rawValue) ?? ClassConstant.TriggerConstant.defaultTriggerType.rawValue)
-        let decodedTriggerTimeDelay = aDecoder.decodeOptionalDouble(forKey: KeyConstant.triggerTimeDelay.rawValue)
-        let decodedTriggerFixedTimeType = TriggerFixedTimeType(rawValue: aDecoder.decodeOptionalString(forKey: KeyConstant.triggerFixedTimeType.rawValue) ?? ClassConstant.TriggerConstant.defaultTriggerFixedTimeType.rawValue)
-        let decodedTriggerFixedTimeTypeAmount = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerFixedTimeTypeAmount.rawValue)
-        let decodedTriggerFixedTimeUTCHour = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerFixedTimeUTCHour.rawValue)
-        let decodedTriggerFixedTimeUTCMinute = aDecoder.decodeOptionalInteger(forKey: KeyConstant.triggerFixedTimeUTCMinute.rawValue)
-        let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponents.rawValue)
+        let decodedTriggerId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerId.rawValue)
+        let decodedTriggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerUUID.rawValue))
+        let decodedtriggerLogReactions: [TriggerLogReaction]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerLogReactions.rawValue)
+        let decodedtriggerReminderResult: TriggerReminderResult? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerReminderResult.rawValue)
+        let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerType.rawValue) ?? Constant.Class.TriggerConstant.defaultTriggerType.rawValue)
+        let decodedTriggerTimeDelay = aDecoder.decodeOptionalDouble(forKey: Constant.Key.triggerTimeDelay.rawValue)
+        let decodedTriggerFixedTimeType = TriggerFixedTimeType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerFixedTimeType.rawValue) ?? Constant.Class.TriggerConstant.defaultTriggerFixedTimeType.rawValue)
+        let decodedTriggerFixedTimeTypeAmount = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeTypeAmount.rawValue)
+        let decodedTriggerFixedTimeUTCHour = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeUTCHour.rawValue)
+        let decodedTriggerFixedTimeUTCMinute = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeUTCMinute.rawValue)
+        let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
         
         self.init(
             forTriggerId: decodedTriggerId,
@@ -116,17 +116,17 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(triggerId, forKey: KeyConstant.triggerId.rawValue)
-        aCoder.encode(triggerUUID.uuidString, forKey: KeyConstant.triggerUUID.rawValue)
-        aCoder.encode(triggerLogReactions, forKey: KeyConstant.triggerLogReactions.rawValue)
-        aCoder.encode(triggerReminderResult, forKey: KeyConstant.triggerReminderResult.rawValue)
-        aCoder.encode(triggerType.rawValue, forKey: KeyConstant.triggerType.rawValue)
-        aCoder.encode(triggerTimeDelay, forKey: KeyConstant.triggerTimeDelay.rawValue)
-        aCoder.encode(triggerFixedTimeType.rawValue, forKey: KeyConstant.triggerFixedTimeType.rawValue)
-        aCoder.encode(triggerFixedTimeTypeAmount, forKey: KeyConstant.triggerFixedTimeTypeAmount.rawValue)
-        aCoder.encode(triggerFixedTimeUTCHour, forKey: KeyConstant.triggerFixedTimeUTCHour.rawValue)
-        aCoder.encode(triggerFixedTimeUTCMinute, forKey: KeyConstant.triggerFixedTimeUTCMinute.rawValue)
-        aCoder.encode(offlineModeComponents, forKey: KeyConstant.offlineModeComponents.rawValue)
+        aCoder.encode(triggerId, forKey: Constant.Key.triggerId.rawValue)
+        aCoder.encode(triggerUUID.uuidString, forKey: Constant.Key.triggerUUID.rawValue)
+        aCoder.encode(triggerLogReactions, forKey: Constant.Key.triggerLogReactions.rawValue)
+        aCoder.encode(triggerReminderResult, forKey: Constant.Key.triggerReminderResult.rawValue)
+        aCoder.encode(triggerType.rawValue, forKey: Constant.Key.triggerType.rawValue)
+        aCoder.encode(triggerTimeDelay, forKey: Constant.Key.triggerTimeDelay.rawValue)
+        aCoder.encode(triggerFixedTimeType.rawValue, forKey: Constant.Key.triggerFixedTimeType.rawValue)
+        aCoder.encode(triggerFixedTimeTypeAmount, forKey: Constant.Key.triggerFixedTimeTypeAmount.rawValue)
+        aCoder.encode(triggerFixedTimeUTCHour, forKey: Constant.Key.triggerFixedTimeUTCHour.rawValue)
+        aCoder.encode(triggerFixedTimeUTCMinute, forKey: Constant.Key.triggerFixedTimeUTCMinute.rawValue)
+        aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
     }
     
     // MARK: - Comparable
@@ -234,8 +234,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
     var triggerReminderResult: TriggerReminderResult = TriggerReminderResult()
     
-    var triggerType: TriggerType = ClassConstant.TriggerConstant.defaultTriggerType
-    private(set) var triggerTimeDelay: Double = ClassConstant.TriggerConstant.defaultTriggerTimeDelay
+    var triggerType: TriggerType = Constant.Class.TriggerConstant.defaultTriggerType
+    private(set) var triggerTimeDelay: Double = Constant.Class.TriggerConstant.defaultTriggerTimeDelay
     func changeTriggerTimeDelay(forTimeDelay: Double) -> Bool {
         guard forTimeDelay > 0 else { return false }
         triggerTimeDelay = forTimeDelay
@@ -243,8 +243,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// triggerFixedTimeType isn't used currently. leave as its default of .day
-    private var triggerFixedTimeType: TriggerFixedTimeType = ClassConstant.TriggerConstant.defaultTriggerFixedTimeType
-    private(set) var triggerFixedTimeTypeAmount: Int = ClassConstant.TriggerConstant.defaultTriggerFixedTimeTypeAmount
+    private var triggerFixedTimeType: TriggerFixedTimeType = Constant.Class.TriggerConstant.defaultTriggerFixedTimeType
+    private(set) var triggerFixedTimeTypeAmount: Int = Constant.Class.TriggerConstant.defaultTriggerFixedTimeTypeAmount
     func changeTriggerFixedTimeTypeAmount(forAmount: Int) -> Bool {
         guard forAmount >= 0 else { return false }
         triggerFixedTimeTypeAmount = forAmount
@@ -252,7 +252,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Hour of the day that that the trigger should fire in GMT+0000. [0, 23]
-    private(set) var triggerFixedTimeUTCHour: Int = ClassConstant.ReminderComponentConstant.defaultUTCHour
+    private(set) var triggerFixedTimeUTCHour: Int = Constant.Class.ReminderComponent.defaultUTCHour
     /// UTCHour but converted to the hour in the user's timezone
     var triggerFixedTimeLocalHour: Int {
         let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
@@ -270,7 +270,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Minute of the day that that the reminder should fire in GMT+0000. [0, 59]
-    private(set) var triggerFixedTimeUTCMinute: Int = ClassConstant.ReminderComponentConstant.defaultUTCMinute
+    private(set) var triggerFixedTimeUTCMinute: Int = Constant.Class.ReminderComponent.defaultUTCMinute
     /// UTCMinute but converted to the minute in the user's timezone
     var triggerFixedTimeLocalMinute: Int {
         let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
@@ -321,11 +321,11 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     /// Provide a dictionary literal of reminder trigger properties to instantiate reminder trigger. Optionally, provide a reminder trigger to override with new properties from fromBody.
     convenience init?(fromBody: JSONResponseBody, triggerToOverride: Trigger?) {
         // Don't pull triggerId or triggerIsDeleted from triggerToOverride. A valid fromBody needs to provide this itself
-        let triggerId = fromBody[KeyConstant.triggerId.rawValue] as? Int
-        let triggerUUID = UUID.fromString(forUUIDString: fromBody[KeyConstant.triggerUUID.rawValue] as? String)
+        let triggerId = fromBody[Constant.Key.triggerId.rawValue] as? Int
+        let triggerUUID = UUID.fromString(forUUIDString: fromBody[Constant.Key.triggerUUID.rawValue] as? String)
         // TODO TRIGGERS make sure last modified and deleted are properly implemented on server side functions
-        let triggerLastModified = (fromBody[KeyConstant.triggerLastModified.rawValue] as? String)?.formatISO8601IntoDate()
-        let reminderIsDeleted = fromBody[KeyConstant.triggerIsDeleted.rawValue] as? Bool
+        let triggerLastModified = (fromBody[Constant.Key.triggerLastModified.rawValue] as? String)?.formatISO8601IntoDate()
+        let reminderIsDeleted = fromBody[Constant.Key.triggerIsDeleted.rawValue] as? Bool
         
         // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
         guard let triggerId = triggerId, let triggerUUID = triggerUUID, let triggerLastModified = triggerLastModified, let reminderIsDeleted = reminderIsDeleted else {
@@ -358,15 +358,15 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         // if the reminder trigger is the same, then we pull values from triggerToOverride
         // if the reminder trigger is updated, then we pull values from fromBody
         
-        let reactionsBody = fromBody[KeyConstant.triggerLogReactions.rawValue] as? [JSONResponseBody]
+        let reactionsBody = fromBody[Constant.Key.triggerLogReactions.rawValue] as? [JSONResponseBody]
         let triggerLogReactions = reactionsBody?.compactMap { body -> TriggerLogReaction? in
-            guard let id = body[KeyConstant.logActionTypeId.rawValue] as? Int else { return nil }
-            let name = body[KeyConstant.logCustomActionName.rawValue] as? String
+            guard let id = body[Constant.Key.logActionTypeId.rawValue] as? Int else { return nil }
+            let name = body[Constant.Key.logCustomActionName.rawValue] as? String
             return TriggerLogReaction(forLogActionTypeId: id, forLogCustomActionName: name)
         } ?? triggerToOverride?.triggerLogReactions
         
         let triggerReminderResult: TriggerReminderResult? = {
-            guard let body = fromBody[KeyConstant.triggerReminderResult.rawValue] as? JSONResponseBody else {
+            guard let body = fromBody[Constant.Key.triggerReminderResult.rawValue] as? JSONResponseBody else {
                 return nil
             }
             
@@ -374,23 +374,23 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         }() ?? triggerToOverride?.triggerReminderResult.copy() as? TriggerReminderResult
         
         let triggerType: TriggerType? = {
-            guard let triggerTypeString = fromBody[KeyConstant.triggerType.rawValue] as? String else {
+            guard let triggerTypeString = fromBody[Constant.Key.triggerType.rawValue] as? String else {
                 return nil
             }
             return TriggerType(rawValue: triggerTypeString)
         }() ?? triggerToOverride?.triggerType
-        let triggerTimeDelay = fromBody[KeyConstant.triggerTimeDelay.rawValue] as? Double ?? triggerToOverride?.triggerTimeDelay
+        let triggerTimeDelay = fromBody[Constant.Key.triggerTimeDelay.rawValue] as? Double ?? triggerToOverride?.triggerTimeDelay
         
         let triggerFixedTimeType: TriggerFixedTimeType? = {
-            guard let triggerFixedTimeTypeString = fromBody[KeyConstant.triggerFixedTimeType.rawValue] as? String else {
+            guard let triggerFixedTimeTypeString = fromBody[Constant.Key.triggerFixedTimeType.rawValue] as? String else {
                 return nil
             }
             return TriggerFixedTimeType(rawValue: triggerFixedTimeTypeString)
         }() ?? triggerToOverride?.triggerFixedTimeType
         
-        let triggerFixedTimeTypeAmount = fromBody[KeyConstant.triggerFixedTimeTypeAmount.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeTypeAmount
-        let triggerFixedTimeUTCHour = fromBody[KeyConstant.triggerFixedTimeUTCHour.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeUTCHour
-        let triggerFixedTimeUTCMinute = fromBody[KeyConstant.triggerFixedTimeUTCMinute.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeUTCMinute
+        let triggerFixedTimeTypeAmount = fromBody[Constant.Key.triggerFixedTimeTypeAmount.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeTypeAmount
+        let triggerFixedTimeUTCHour = fromBody[Constant.Key.triggerFixedTimeUTCHour.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeUTCHour
+        let triggerFixedTimeUTCMinute = fromBody[Constant.Key.triggerFixedTimeUTCMinute.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeUTCMinute
         
         self.init(
             forTriggerId: triggerId,
@@ -420,7 +420,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             case 1: text += "next day"
             default: text += "\(triggerFixedTimeTypeAmount) days later"
             }
-            text += " @ \(nextReminderDate(afterDate: Date())?.formatted(date: .omitted, time: .shortened) ?? VisualConstant.TextConstant.unknownText)"
+            text += " @ \(nextReminderDate(afterDate: Date())?.formatted(date: .omitted, time: .shortened) ?? Constant.VisualText.unknownText)"
             return text
         }
     }
@@ -449,7 +449,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             // same calendar to respect daylight saving changes.
             let targetDay = Calendar.current.date(byAdding: triggerFixedTimeType.calendarComponent,
                                                value: triggerFixedTimeTypeAmount,
-                                               to: startOfDay) ?? ClassConstant.DateConstant.default1970Date
+                                               to: startOfDay) ?? Constant.Class.DateConstant.default1970Date
             
             let strictExecutionDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: targetDay, matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward)
             let laxExecutionDate = Calendar.current.date(bySettingHour: triggerFixedTimeLocalHour, minute: triggerFixedTimeLocalMinute, second: 0, of: targetDay, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward)
@@ -490,17 +490,17 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
     func createBody(forDogUUID: UUID) -> JSONRequestBody {
         var body: JSONRequestBody = [:]
-        body[KeyConstant.dogUUID.rawValue] = .string(forDogUUID.uuidString)
-        body[KeyConstant.triggerId.rawValue] = .int(triggerId)
-        body[KeyConstant.triggerUUID.rawValue] = .string(triggerUUID.uuidString)
-        body[KeyConstant.triggerLogReactions.rawValue] = .array(triggerLogReactions.map { .object($0.createBody()) })
-        body[KeyConstant.triggerReminderResult.rawValue] = .object(triggerReminderResult.createBody())
-        body[KeyConstant.triggerType.rawValue] = .string(triggerType.rawValue)
-        body[KeyConstant.triggerTimeDelay.rawValue] = .double(triggerTimeDelay)
-        body[KeyConstant.triggerFixedTimeType.rawValue] = .string(triggerFixedTimeType.rawValue)
-        body[KeyConstant.triggerFixedTimeTypeAmount.rawValue] = .int(triggerFixedTimeTypeAmount)
-        body[KeyConstant.triggerFixedTimeUTCHour.rawValue] = .int(triggerFixedTimeUTCHour)
-        body[KeyConstant.triggerFixedTimeUTCMinute.rawValue] = .int(triggerFixedTimeUTCMinute)
+        body[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+        body[Constant.Key.triggerId.rawValue] = .int(triggerId)
+        body[Constant.Key.triggerUUID.rawValue] = .string(triggerUUID.uuidString)
+        body[Constant.Key.triggerLogReactions.rawValue] = .array(triggerLogReactions.map { .object($0.createBody()) })
+        body[Constant.Key.triggerReminderResult.rawValue] = .object(triggerReminderResult.createBody())
+        body[Constant.Key.triggerType.rawValue] = .string(triggerType.rawValue)
+        body[Constant.Key.triggerTimeDelay.rawValue] = .double(triggerTimeDelay)
+        body[Constant.Key.triggerFixedTimeType.rawValue] = .string(triggerFixedTimeType.rawValue)
+        body[Constant.Key.triggerFixedTimeTypeAmount.rawValue] = .int(triggerFixedTimeTypeAmount)
+        body[Constant.Key.triggerFixedTimeUTCHour.rawValue] = .int(triggerFixedTimeUTCHour)
+        body[Constant.Key.triggerFixedTimeUTCMinute.rawValue] = .int(triggerFixedTimeUTCMinute)
         return body
     }
     

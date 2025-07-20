@@ -23,7 +23,7 @@ final class HoundIntroductionView: HoundView {
     let whiteBackgroundView: HoundView = {
         let view = HoundView(huggingPriority: 290, compressionResistancePriority: 290)
         view.backgroundColor = UIColor.systemBackground
-        view.layer.cornerRadius = VisualConstant.LayerConstant.imageCoveringViewCornerRadius
+        view.layer.cornerRadius = Constant.VisualLayer.imageCoveringViewCornerRadius
         view.layer.cornerCurve = .continuous
         return view
     }()
@@ -31,7 +31,7 @@ final class HoundIntroductionView: HoundView {
     let pageHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.textAlignment = .center
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
+        label.font = Constant.VisualFont.primaryHeaderLabel
         return label
     }()
     
@@ -39,7 +39,7 @@ final class HoundIntroductionView: HoundView {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryRegularLabel
+        label.font = Constant.VisualFont.primaryRegularLabel
         label.textColor = UIColor.secondaryLabel
         return label
     }()
@@ -90,25 +90,25 @@ final class HoundIntroductionView: HoundView {
         // pageHeaderLabel
         NSLayoutConstraint.activate([
             pageHeaderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: overlap),
-            pageHeaderLabel.leadingAnchor.constraint(equalTo: whiteBackgroundView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            pageHeaderLabel.trailingAnchor.constraint(equalTo: whiteBackgroundView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            pageHeaderLabel.createMaxHeight(ConstraintConstant.Text.primaryHeaderLabelMaxHeight),
-            pageHeaderLabel.createHeightMultiplier(ConstraintConstant.Text.primaryHeaderLabelHeightMultipler, relativeToWidthOf: self)
+            pageHeaderLabel.leadingAnchor.constraint(equalTo: whiteBackgroundView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            pageHeaderLabel.trailingAnchor.constraint(equalTo: whiteBackgroundView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            pageHeaderLabel.createMaxHeight(Constant.Constraint.Text.primaryHeaderLabelMaxHeight),
+            pageHeaderLabel.createHeightMultiplier(Constant.Constraint.Text.primaryHeaderLabelHeightMultipler, relativeToWidthOf: self)
         ])
         
         // pageDescriptionLabel
         NSLayoutConstraint.activate([
-            pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentIntraVert),
-            pageDescriptionLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            pageDescriptionLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            pageDescriptionLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            pageDescriptionLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // contentView
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: pageDescriptionLabel.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-            contentView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            contentView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            contentView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset)
+            contentView.topAnchor.constraint(equalTo: pageDescriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            contentView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            contentView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            contentView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
 }

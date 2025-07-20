@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum ErrorConstant {
+public enum ErrorConstant {
 
     static func serverError(forErrorCode errorCode: String, forRequestId requestId: Int, forResponseId responseId: Int) -> HoundServerError? {
         // TODO FUTURE Make these errors more dynamic. If an error cannot be matched, construct a custom message. This should pull all available info from the error returned by the server.
@@ -123,7 +123,7 @@ enum ErrorConstant {
         static func noInternetConnection() -> HoundError {
             HoundError(
                 forName: "GeneralRequestError.noInternetConnection",
-                forDescription: "Your device doesn't appear to be connected to the internet. \(ErrorConstant.verifyInternetConnection)",
+                forDescription: "Your device doesn't appear to be connected to the internet. \(Constant.Error.verifyInternetConnection)",
                 forOnTap: nil)
         }
     }
@@ -132,13 +132,13 @@ enum ErrorConstant {
         static func familyCodeBlank() -> HoundError {
             HoundError(
                 forName: "FamilyRequestError.familyCodeBlank",
-                forDescription: "Your family code is blank! \(ErrorConstant.enterValidCode)",
+                forDescription: "Your family code is blank! \(Constant.Error.enterValidCode)",
                 forOnTap: nil)
         }
         static func familyCodeInvalid() -> HoundError {
             HoundError(
                 forName: "FamilyRequestError.familyCodeInvalid",
-                forDescription: "Your family code's format is invalid! \(ErrorConstant.enterValidCode)",
+                forDescription: "Your family code's format is invalid! \(Constant.Error.enterValidCode)",
                 forOnTap: nil)
         }
     }
@@ -159,7 +159,7 @@ enum ErrorConstant {
         static func appleServerFailed(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "GeneralResponseError.appleServerFailed",
-                forDescription: "Hound was unable to contact Apple's iTunes server and complete your request. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "Hound was unable to contact Apple's iTunes server and complete your request. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -179,7 +179,7 @@ enum ErrorConstant {
         static func getFailureResponse(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "GeneralResponseError.getFailureResponse",
-                forDescription: "We experienced an issue while retrieving your data Hound's server. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "We experienced an issue while retrieving your data Hound's server. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -190,7 +190,7 @@ enum ErrorConstant {
         static func getNoResponse() -> HoundError {
             HoundError(
                 forName: "GeneralResponseError.getNoResponse",
-                forDescription: "We were unable to reach Hound's server and retrieve your data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)",
+                forDescription: "We were unable to reach Hound's server and retrieve your data. \(Constant.Error.verifyInternetConnection) \(Constant.Error.potentialHoundServerOutage)",
                 forOnTap: nil)
         }
 
@@ -198,7 +198,7 @@ enum ErrorConstant {
         static func postFailureResponse(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "GeneralResponseError.postFailureResponse",
-                forDescription: "Hound's server experienced an issue in saving your new data. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "Hound's server experienced an issue in saving your new data. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -208,7 +208,7 @@ enum ErrorConstant {
         static func postNoResponse() -> HoundError {
             HoundError(
                 forName: "GeneralResponseError.postNoResponse",
-                forDescription: "We were unable to reach Hound's server and save your new data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)",
+                forDescription: "We were unable to reach Hound's server and save your new data. \(Constant.Error.verifyInternetConnection) \(Constant.Error.potentialHoundServerOutage)",
                 forOnTap: nil)
         }
 
@@ -216,7 +216,7 @@ enum ErrorConstant {
         static func putFailureResponse(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "GeneralResponseError.putFailureResponse",
-                forDescription: "Hound's server experienced an issue in updating your data. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "Hound's server experienced an issue in updating your data. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -226,7 +226,7 @@ enum ErrorConstant {
         static func putNoResponse() -> HoundError {
             HoundError(
                 forName: "GeneralResponseError.putNoResponse",
-                forDescription: "We were unable to reach Hound's server and update your data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)",
+                forDescription: "We were unable to reach Hound's server and update your data. \(Constant.Error.verifyInternetConnection) \(Constant.Error.potentialHoundServerOutage)",
                 forOnTap: nil)
         }
 
@@ -234,7 +234,7 @@ enum ErrorConstant {
         static func deleteFailureResponse(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "GeneralResponseError.deleteFailureResponse",
-                forDescription: "Hound's server experienced an issue in deleting your data. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "Hound's server experienced an issue in deleting your data. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -244,7 +244,7 @@ enum ErrorConstant {
         static func deleteNoResponse() -> HoundError {
             HoundError(
                 forName: "GeneralResponseError.deleteNoResponse",
-                forDescription: "We were unable to reach Hound's server to delete your data. \(ErrorConstant.verifyInternetConnection) \(ErrorConstant.potentialHoundServerOutage)",
+                forDescription: "We were unable to reach Hound's server to delete your data. \(Constant.Error.verifyInternetConnection) \(Constant.Error.potentialHoundServerOutage)",
                 forOnTap: nil)
         }
     }
@@ -253,7 +253,7 @@ enum ErrorConstant {
         static func noUser(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "PermissionResponseError.noUser",
-                forDescription: "You are attempting to access a user that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "You are attempting to access a user that doesn't exist or you don't have permission to. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -262,7 +262,7 @@ enum ErrorConstant {
         static func noFamily(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "PermissionResponseError.noFamily",
-                forDescription: "You are attempting to access a family that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "You are attempting to access a family that doesn't exist or you don't have permission to. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -271,7 +271,7 @@ enum ErrorConstant {
         static func noDog(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "PermissionResponseError.noDog",
-                forDescription: "You are attempting to access a dog that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "You are attempting to access a dog that doesn't exist or you don't have permission to. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -280,7 +280,7 @@ enum ErrorConstant {
         static func noLog(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "PermissionResponseError.noLog",
-                forDescription: "You are attempting to access a log that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "You are attempting to access a log that doesn't exist or you don't have permission to. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -289,7 +289,7 @@ enum ErrorConstant {
         static func noReminder(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "PermissionResponseError.noReminder",
-                forDescription: "You are attempting to access a reminder that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "You are attempting to access a reminder that doesn't exist or you don't have permission to. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -298,7 +298,7 @@ enum ErrorConstant {
         static func noTrigger(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "PermissionResponseError.noTrigger",
-                forDescription: "You are attempting to access a trigger that doesn't exist or you don't have permission to. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "You are attempting to access a trigger that doesn't exist or you don't have permission to. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -308,7 +308,7 @@ enum ErrorConstant {
         static func invalidFamily(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "PermissionResponseError.invalidFamily",
-                forDescription: "You are attempting to perform an action that only the family head can perform. Please contact the family head and have them complete this action. \(ErrorConstant.contactHoundSupport)",
+                forDescription: "You are attempting to perform an action that only the family head can perform. Please contact the family head and have them complete this action. \(Constant.Error.contactHoundSupport)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -333,11 +333,11 @@ enum ErrorConstant {
             // spell out the number of dogs the family can have
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
-            let dogLimitSpelledOut = formatter.string(from: ClassConstant.DogConstant.maximumNumberOfDogs as NSNumber) ?? "negative one"
+            let dogLimitSpelledOut = formatter.string(from: Constant.Class.Dog.maximumNumberOfDogs as NSNumber) ?? "negative one"
 
             return HoundServerError(
                 forName: "FamilyResponseError.limitDogTooLow",
-                forDescription: "Your family can only have \(dogLimitSpelledOut) dog\(ClassConstant.DogConstant.maximumNumberOfDogs == 1 ? "" : "s")! Please remove an existing dog before trying to add a new one.",
+                forDescription: "Your family can only have \(dogLimitSpelledOut) dog\(Constant.Class.Dog.maximumNumberOfDogs == 1 ? "" : "s")! Please remove an existing dog before trying to add a new one.",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -347,11 +347,11 @@ enum ErrorConstant {
             // spell out the number of logs a dog can have
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
-            let logLimitSpelledOut = formatter.string(from: ClassConstant.DogConstant.maximumNumberOfLogs as NSNumber) ?? "negative one"
+            let logLimitSpelledOut = formatter.string(from: Constant.Class.Dog.maximumNumberOfLogs as NSNumber) ?? "negative one"
 
             return HoundServerError(
                 forName: "FamilyResponseError.limitLogTooLow",
-                forDescription: "Your dog can only have \(logLimitSpelledOut) log\(ClassConstant.DogConstant.maximumNumberOfLogs == 1 ? "" : "s")! Please remove an existing log before trying to add a new one.",
+                forDescription: "Your dog can only have \(logLimitSpelledOut) log\(Constant.Class.Dog.maximumNumberOfLogs == 1 ? "" : "s")! Please remove an existing log before trying to add a new one.",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -361,11 +361,11 @@ enum ErrorConstant {
             // spell out the number of logs a dog can have
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
-            let reminderLimitSpelledOut = formatter.string(from: ClassConstant.DogConstant.maximumNumberOfReminders as NSNumber) ?? "negative one"
+            let reminderLimitSpelledOut = formatter.string(from: Constant.Class.Dog.maximumNumberOfReminders as NSNumber) ?? "negative one"
 
             return HoundServerError(
                 forName: "FamilyResponseError.limitReminderTooLow",
-                forDescription: "Your dog can only have \(reminderLimitSpelledOut) reminder\(ClassConstant.DogConstant.maximumNumberOfReminders == 1 ? "" : "s")! Please remove an existing reminder before trying to add a new one.",
+                forDescription: "Your dog can only have \(reminderLimitSpelledOut) reminder\(Constant.Class.Dog.maximumNumberOfReminders == 1 ? "" : "s")! Please remove an existing reminder before trying to add a new one.",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -375,11 +375,11 @@ enum ErrorConstant {
             // spell out the number of logs a dog can have
             let formatter = NumberFormatter()
             formatter.numberStyle = .spellOut
-            let triggerLimitSpelledOut = formatter.string(from: ClassConstant.DogConstant.maximumNumberOfTriggers as NSNumber) ?? "negative one"
+            let triggerLimitSpelledOut = formatter.string(from: Constant.Class.Dog.maximumNumberOfTriggers as NSNumber) ?? "negative one"
 
             return HoundServerError(
                 forName: "FamilyResponseError.limitTriggerTooLow",
-                forDescription: "Your dog can only have \(triggerLimitSpelledOut) trigger\(ClassConstant.DogConstant.maximumNumberOfTriggers == 1 ? "" : "s")! Please remove an existing trigger before trying to add a new one.",
+                forDescription: "Your dog can only have \(triggerLimitSpelledOut) trigger\(Constant.Class.Dog.maximumNumberOfTriggers == 1 ? "" : "s")! Please remove an existing trigger before trying to add a new one.",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -469,7 +469,7 @@ enum ErrorConstant {
         static func joinFamilyCodeInvalid(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "FamilyResponseError.joinFamilyCodeInvalid",
-                forDescription: "The family code you input isn't linked to any family. \(ErrorConstant.enterValidCode)",
+                forDescription: "The family code you input isn't linked to any family. \(Constant.Error.enterValidCode)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -489,7 +489,7 @@ enum ErrorConstant {
         static func  joinInFamilyAlready(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "FamilyResponseError.joinInFamilyAlready",
-                forDescription: "You are already in a family. Please leave your existing family before attempting to join a new one. \(ErrorConstant.contactHoundSupport)",
+                forDescription: "You are already in a family. Please leave your existing family before attempting to join a new one. \(Constant.Error.contactHoundSupport)",
                 forOnTap: nil,
                 forRequestId: forRequestId,
                 forResponseId: forResponseId
@@ -500,7 +500,7 @@ enum ErrorConstant {
         static func  leaveSubscriptionActive(forRequestId: Int, forResponseId: Int) -> HoundServerError {
             HoundServerError(
                 forName: "FamilyResponseError.leaveSubscriptionActive",
-                forDescription: "You are unable to delete your current family due having an active, auto-renewing subscription. To continue, tap this banner to cancel your subscription. \(ErrorConstant.contactHoundSupport)",
+                forDescription: "You are unable to delete your current family due having an active, auto-renewing subscription. To continue, tap this banner to cancel your subscription. \(Constant.Error.contactHoundSupport)",
                 forOnTap: {
                     // If the user taps the banner, that means they want to cancel their Hound subscription. The only way to cancel a subscription is with Apple's manage subscriptions page.
                     InAppPurchaseManager.showManageSubscriptions()
@@ -515,7 +515,7 @@ enum ErrorConstant {
             if UserInformation.isUserFamilyHead {
                 description.append("Please remove all existing family members before attempting to leave. ")
             }
-            description.append("\(ErrorConstant.contactHoundSupport)")
+            description.append("\(Constant.Error.contactHoundSupport)")
 
             return HoundServerError(
                 forName: "FamilyResponseError.leaveStillFamilyMembers",
@@ -534,21 +534,21 @@ enum ErrorConstant {
         static func productRequestInProgress() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.productRequestInProgress",
-                forDescription: "There is a in-app purchase product request currently in progress. You are unable to initiate another in-app purchase product request until the first one has finished processing. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "There is a in-app purchase product request currently in progress. You are unable to initiate another in-app purchase product request until the first one has finished processing. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil)
         }
         /// The app cannot request App Store about available IAP products for some reason.
         static func productRequestFailed() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.productRequestFailed",
-                forDescription: "Your in-app purchase product request has failed. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "Your in-app purchase product request has failed. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil)
         }
         /// No in-app purchase products were returned by the App Store because none was found.
         static func productRequestNotFound() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.productRequestNotFound",
-                forDescription: "Your in-app purchase product request did not return any results. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "Your in-app purchase product request did not return any results. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil)
         }
 
@@ -565,7 +565,7 @@ enum ErrorConstant {
         static func purchasePermission() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.purchasePermission",
-                forDescription: "You are attempting to perform an action that only the family head can perform. Please contact the family head and have them complete this action. \(ErrorConstant.contactHoundSupport)",
+                forDescription: "You are attempting to perform an action that only the family head can perform. Please contact the family head and have them complete this action. \(Constant.Error.contactHoundSupport)",
                 forOnTap: nil)
         }
 
@@ -573,7 +573,7 @@ enum ErrorConstant {
         static func purchaseInProgress() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.purchaseInProgress",
-                forDescription: "There is an in-app purchase currently in progress. You are unable to initiate another in-app purchase until the first one has finished processing. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "There is an in-app purchase currently in progress. You are unable to initiate another in-app purchase until the first one has finished processing. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil)
         }
 
@@ -589,7 +589,7 @@ enum ErrorConstant {
         static func purchaseFailed() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.purchaseFailed",
-                forDescription: "Your in-app purchase has failed. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "Your in-app purchase has failed. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil)
         }
 
@@ -597,7 +597,7 @@ enum ErrorConstant {
         static func purchaseUnknown() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.purchaseUnknown",
-                forDescription: "Your in-app purchase has experienced an unknown error. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "Your in-app purchase has experienced an unknown error. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil)
         }
 
@@ -607,7 +607,7 @@ enum ErrorConstant {
         static func restorePermission() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.restorePermission",
-                forDescription: "You are attempting to perform an action that only the family head can perform. Please contact the family head and have them complete this action. \(ErrorConstant.contactHoundSupport)",
+                forDescription: "You are attempting to perform an action that only the family head can perform. Please contact the family head and have them complete this action. \(Constant.Error.contactHoundSupport)",
                 forOnTap: nil)
         }
 
@@ -615,14 +615,14 @@ enum ErrorConstant {
         static func restoreInProgress() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.restoreInProgress",
-                forDescription: "There is an in-app purchase restoration currently in progress. You are unable to initiate another in-app purchase restoration until the first one has finished processing. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "There is an in-app purchase restoration currently in progress. You are unable to initiate another in-app purchase restoration until the first one has finished processing. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil)
         }
 
         static func restoreFailed() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.restoreFailed",
-                forDescription: "Your in-app purchase restoration has failed. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "Your in-app purchase restoration has failed. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil)
         }
 
@@ -630,7 +630,7 @@ enum ErrorConstant {
         static func backgroundPurchaseInProgress() -> HoundError {
             HoundError(
                 forName: "InAppPurchaseError.backgroundPurchaseInProgress",
-                forDescription: "There is a transaction currently being processed in the background. This is likely due to a subscription renewal. Please wait a moment for this to finish processing. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "There is a transaction currently being processed in the background. This is likely due to a subscription renewal. Please wait a moment for this to finish processing. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil)
         }
     }
@@ -706,7 +706,7 @@ enum ErrorConstant {
         static func canceled() -> HoundError {
             HoundError(
                 forName: "SignInWithAppleError.canceled",
-                forDescription: "The 'Sign In With Apple' page was prematurely canceled. \(ErrorConstant.restartHoundAndRetry)",
+                forDescription: "The 'Sign In With Apple' page was prematurely canceled. \(Constant.Error.restartHoundAndRetry)",
                 forOnTap: nil)
         }
         static func notSignedIn() -> HoundError {
@@ -727,7 +727,7 @@ enum ErrorConstant {
         static func unknown() -> HoundError {
             HoundError(
                 forName: "UnknownError.unknown",
-                forDescription: "Hound has experienced an unknown error. \(ErrorConstant.contactHoundSupport)",
+                forDescription: "Hound has experienced an unknown error. \(Constant.Error.contactHoundSupport)",
                 forOnTap: nil)
         }
     }

@@ -225,7 +225,7 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
     private func updateLoadingState() {
         if isLoading {
             guard loadingIndicator == nil else { return }
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {
+            UIView.animate(withDuration: Constant.VisualAnimation.selectSingleElement) {
                 self.beforeLoadingUserInteractionEnabled = self.isUserInteractionEnabled
                 self.isUserInteractionEnabled = false
                 self.beforeLoadingTintColor = self.tintColor
@@ -262,7 +262,7 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
         }
         else {
             guard let indicator = loadingIndicator else { return }
-            UIView.animate(withDuration: VisualConstant.AnimationConstant.selectSingleElement) {
+            UIView.animate(withDuration: Constant.VisualAnimation.selectSingleElement) {
                 indicator.stopAnimating()
                 indicator.removeFromSuperview()
                 self.loadingIndicator = nil

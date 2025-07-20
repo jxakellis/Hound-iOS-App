@@ -14,23 +14,158 @@ protocol LogsAddLogDelegate: AnyObject {
 }
 
 final class LogsAddLogVC: HoundScrollViewController,
-                          LogsAddLogUIInteractionActionsDelegate,
+                          UIGestureRecognizerDelegate,
+                          UITextFieldDelegate,
+                          UITextViewDelegate,
                           HoundDropDownDataSource {
+    
+    
     
     // TODO BUG this ui is borked
     // TODO change error messages to use .errorMessage property on labels instead of showing a banner
     
-    // MARK: - LogsAddLogUIInteractionActionsDelegate
+    // MARK: - UIGestureRecognizerDelegate
     
-    func logCustomActionNameTextFieldDidReturn() {
-        showNextRequiredDropDown(animated: true)
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
-    @objc func didUpdateLogNumberOfLogUnits() {
-        // When the user enters a number into log units, it could update the plurality of the logUnitLabel
-        // (e.g. no number but "pills" then the user enters 1 so "pills" should become "pill").
-        // So by setting selectedLogUnitType it updates logUnitLabel.
-        updateDynamicUIElements()
+    // MARK: - UITextFieldDelegate
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.isEqual(logCustomActionNameTextField) {
+            showNextRequiredDropDown(animated: true)
+        }
+        dismissKeyboard()
+        return false
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField.isEqual(logCustomActionNameTextField) {
+            return processLogCustomActionNameTextField(shouldChangeCharactersIn: range, replacementString: string)
+        }
+        else if textField.isEqual(logNumberOfLogUnitsTextField) {
+            return processLogNumberOfLogUnitsTextField(shouldChangeCharactersIn: range, replacementString: string)
+        }
+        
+        return false
+    }
+    
+    private func processLogCustomActionNameTextField(shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let currentText = logCustomActionNameTextField.text, let stringRange = Range(range, in: currentText) else {
+            return true
+        }
+        
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+        
+        return updatedText.count <= Constant.Class.Log.logCustomActionNameCharacterLimit
+    }
+    
+    private func processLogNumberOfLogUnitsTextField(shouldChangeCharactersIn newRange: NSRange, replacementString newString: String) -> Bool {
+        guard let previousText = logNumberOfLogUnitsTextField.text, let newStringRange = Range(newRange, in: previousText) else {
+            return true
+        }
+
+        var updatedText = previousText.replacingCharacters(in: newStringRange, with: newString)
+
+        // The user can delete whatever they want. We only want to check when they add a character
+        guard updatedText.count > previousText.count else {
+            return true
+        }
+        
+        // when a user inputs number of logs, it should not have a grouping separator, e.g. 12,345.67 should just be 12345.67
+        updatedText = updatedText.replacingOccurrences(of: Locale.current.groupingSeparator ?? ",", with: "")
+
+        // number of logs units is a decimal so it can only contain 0-9 and a period (also technically a , for countries that use that instead of a .)
+        let decimalSeparator: Character = Locale.current.decimalSeparator?.first ?? "."
+        
+        var acceptableCharacters = "0123456789"
+        acceptableCharacters.append(decimalSeparator)
+        
+        var containsInvalidCharacter = false
+        updatedText.forEach { character in
+            if acceptableCharacters.firstIndex(of: character) == nil {
+                containsInvalidCharacter = true
+            }
+        }
+        guard containsInvalidCharacter == false else {
+            return false
+        }
+
+        // MARK: Verify period/command count
+        let occurancesOfDecimalSeparator = {
+            var count = 0
+            updatedText.forEach { char in
+                if char == decimalSeparator {
+                    count += 1
+                }
+            }
+            return count
+        }()
+        
+        if occurancesOfDecimalSeparator > 1 {
+            // If updated text has more than one period/comma, it will be an invalid decimal number
+            return false
+        }
+        
+        // MARK: Verify number of digits after period or comma
+        // "123.456"
+        if let componentBeforeDecimalSeparator = updatedText.split(separator: decimalSeparator)[safe: 0] {
+            // "123"
+            // We only want to allow five numbers before the decimal place
+            if componentBeforeDecimalSeparator.count > 5 {
+                return false
+            }
+        }
+        if let componentAfterDecimalSeparator = updatedText.split(separator: decimalSeparator)[safe: 1] {
+            // "456"
+            // We only want to allow two decimals after the decimal place
+            if componentAfterDecimalSeparator.count > 2 {
+                return false
+            }
+        }
+        
+        // At the end of the function, update the text field's text to the updated text
+        logNumberOfLogUnitsTextField.text = updatedText
+        // Return false because we manually set the text field's text
+        return false
+    }
+    
+    // MARK: - UITextViewDelegate
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        actionsDelegate?.logNoteDidBeginEditing()
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        // Don't allow the user to add a new line. If they do, we interpret that as the user hitting the done button.
+        guard text != "\n" else {
+            dismissKeyboard()
+            return false
+        }
+        
+        let currentText = textView.text ?? ""
+        
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        
+        return updatedText.count <= Constant.Class.Log.logNoteCharacterLimit
+    }
+    
+    // if extra space is added, removes it and ends editing, makes done button function like done instead of adding new line
+    func textViewDidChange(_ textView: UITextView) {
+        if textView.text.contains("\n") {
+            textView.text = textView.text.trimmingCharacters(in: .newlines)
+            dismissKeyboard()
+        }
+    }
+    
+    // MARK: - LogsAddLogUIInteractionActionsDelegate
+    
+    func logNoteDidBeginEditing() {
+        let convertedFrame = containerView.convert(logNoteTextView.frame, from: logNoteTextView.superview)
+        scrollView.scrollRectToVisible(convertedFrame.insetBy(dx: 0, dy: Constant.Constraint.Spacing.absoluteVertInset), animated: true)
     }
     
     // MARK: - Elements
@@ -50,16 +185,20 @@ final class LogsAddLogVC: HoundScrollViewController,
     // MARK: familyMemberLabel
     private lazy var familyMemberHeaderLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = .label
-        label.text = "Log created by"
+        label.text = "Logged by"
+        // add a fake placeholder so that text is properly inset
+        label.placeholder = ""
         return label
     }()
-    private let familyMemberLabel: HoundLabel = {
+    private lazy var familyMemberLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 285, compressionResistancePriority: 285)
         label.applyStyle(.thinGrayBorder)
         // only for showing family member, not actually editable
         label.isEnabled = false
+        // add a fake placeholder so that text is properly inset
+        label.placeholder = ""
         return label
     }()
     private lazy var familyMemberStack: HoundStackView = {
@@ -67,14 +206,14 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(familyMemberHeaderLabel)
         stack.addArrangedSubview(familyMemberLabel)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
     }()
     
     // MARK: parentDogLabel
     private lazy var parentDogHeaderLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = .label
         // label.text set in setup
         return label
@@ -82,6 +221,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var parentDogLabel: HoundLabel = {
         let label = HoundLabel()
         label.applyStyle(.thinGrayBorder)
+        label.placeholder = "Select a dog (or dogs)..."
         
         let gesture = UITapGestureRecognizer(
             target: self,
@@ -100,21 +240,22 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(parentDogHeaderLabel)
         stack.addArrangedSubview(parentDogLabel)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
     }()
     
     // MARK: logActionLabel
     private lazy var logActionHeaderLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = .label
-        label.text = "What action did you do?"
+        label.text = "What action did you perform?"
         return label
     }()
     private lazy var logActionLabel: HoundLabel = {
         let label = HoundLabel()
         label.applyStyle(.thinGrayBorder)
+        label.placeholder = "Select an action..."
         
         let gesture = UITapGestureRecognizer(
             target: self,
@@ -133,16 +274,16 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(logActionHeaderLabel)
         stack.addArrangedSubview(logActionLabel)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
     }()
     
     // MARK: logCustomActionNameTextField
     private lazy var logCustomActionNameHeaderLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = .label
-        label.text = "What was this action called?"
+        label.text = "What would you like to call this action?"
         return label
     }()
     private lazy var logCustomActionNameTextField: HoundTextField = {
@@ -157,22 +298,22 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(logCustomActionNameHeaderLabel)
         stack.addArrangedSubview(logCustomActionNameTextField)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
     }()
     
     // MARK: logStartDate
     private lazy var logStartDateHeaderLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = .label
-        label.text = "When did this happen?"
+        label.text = "When did it happen?"
         return label
     }()
     private lazy var logStartDateLabel: HoundLabel = {
         let label = HoundLabel()
         label.applyStyle(.thinGrayBorder)
-        label.placeholder = "Add a start date..."
+        label.placeholder = "Select a start date..."
         
         let gesture = UITapGestureRecognizer(
             target: self,
@@ -189,8 +330,10 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var logStartDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker()
         datePicker.datePickerMode = .dateAndTime
-        datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
+        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
         datePicker.preferredDatePickerStyle = .wheels
+        // only opened by quick select meny
+        datePicker.isHidden = true
         
         datePicker.addTarget(self, action: #selector(didUpdateLogStartDate), for: .valueChanged)
         
@@ -201,7 +344,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(logStartDateLabel)
         stack.addArrangedSubview(logStartDatePicker)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
     }()
     private lazy var logStartDateStack: HoundStackView = {
@@ -209,22 +352,22 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(logStartDateHeaderLabel)
         stack.addArrangedSubview(nestedLogStartDateStack)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
     }()
     
     // MARK: logEndDate
     private lazy var logEndDateHeaderLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = .label
-        label.text = "When did this end?"
+        label.text = "When did it end?"
         return label
     }()
     private lazy var logEndDateLabel: HoundLabel = {
         let label = HoundLabel()
         label.applyStyle(.thinGrayBorder)
-        label.placeholder = "Add an end date... (optional)"
+        label.placeholder = "Select an end date... (optional)"
         
         let gesture = UITapGestureRecognizer(
             target: self,
@@ -241,8 +384,10 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var logEndDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker()
         datePicker.datePickerMode = .dateAndTime
-        datePicker.minuteInterval = DevelopmentConstant.reminderMinuteInterval
+        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
         datePicker.preferredDatePickerStyle = .wheels
+        // only opened by quick select meny
+        datePicker.isHidden = true
         
         datePicker.addTarget(self, action: #selector(didUpdateLogEndDate), for: .valueChanged)
         
@@ -253,7 +398,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(logEndDateLabel)
         stack.addArrangedSubview(logEndDatePicker)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
     }()
     private lazy var logEndDateStack: HoundStackView = {
@@ -261,16 +406,16 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(logEndDateHeaderLabel)
         stack.addArrangedSubview(nestedLogEndDateStack)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
     }()
     
     // MARK: logUnit
     private lazy var logUnitHeaderLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = .label
-        label.text = "How many units was this?"
+        label.text = "How many units?"
         return label
     }()
     private lazy var logNumberOfLogUnitsTextField: HoundTextField = {
@@ -289,7 +434,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var logUnitLabel: HoundLabel = {
         let label = HoundLabel()
         label.applyStyle(.thinGrayBorder)
-        label.placeholder = "Add a unit... (optional)"
+        label.placeholder = "Select a unit... (optional)"
         
         let gesture = UITapGestureRecognizer(
             target: self,
@@ -308,7 +453,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(logNumberOfLogUnitsTextField)
         stack.addArrangedSubview(logUnitLabel)
         stack.axis = .horizontal
-        stack.spacing = ConstraintConstant.Spacing.contentIntraHori
+        stack.spacing = Constant.Constraint.Spacing.contentIntraHori
         return stack
     }()
     private lazy var logUnitStack: HoundStackView = {
@@ -316,16 +461,16 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(logUnitHeaderLabel)
         stack.addArrangedSubview(nestedLogUnitStack)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
     }()
     
     // MARK: logNote
     private lazy var logNoteHeaderLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedSecondaryRegularLabel
         label.textColor = .label
-        label.text = "Anything extra?"
+        label.text = "Anything else?"
         return label
     }()
     private lazy var logNoteTextView: HoundTextView = {
@@ -333,7 +478,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         textView.delegate = uiDelegate
         textView.textColor = UIColor.label
         textView.applyStyle(.thinGrayBorder)
-        textView.placeholder = "Add some notes... (optional)"
+        textView.placeholder = "Add any notes... (optional)"
         return textView
     }()
     private lazy var logNoteStack: HoundStackView = {
@@ -341,7 +486,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(logNoteHeaderLabel)
         stack.addArrangedSubview(logNoteTextView)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentTightIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
     }()
     
@@ -356,7 +501,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         stack.addArrangedSubview(logUnitStack)
         stack.addArrangedSubview(logNoteStack)
         stack.axis = .vertical
-        stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentTallIntraVert
         return stack
     }()
     
@@ -438,19 +583,18 @@ final class LogsAddLogVC: HoundScrollViewController,
     
     @objc private func didTouchUpInsideSaveLog(_ sender: Any) {
         guard selectedDogUUIDs.count >= 1 else {
-            parentDogLabel.errorMessage = ErrorConstant.LogError.parentDogMissing().description
+            parentDogLabel.errorMessage = Constant.Error.LogError.parentDogMissing().description
             return
         }
         guard let selectedLogAction = selectedLogAction else {
-            logActionLabel.errorMessage = ErrorConstant.LogError.logActionMissing().description
+            if !logActionLabel.isHidden {
+                logActionLabel.errorMessage = Constant.Error.LogError.logStartDateMissing().description
+            }
             return
         }
         guard let selectedLogStartDate = selectedLogStartDate else {
-            if !logActionLabel.isHidden {
-                logActionLabel.errorMessage = ErrorConstant.LogError.logStartDateMissing().description
-            }
             if !logStartDateLabel.isHidden {
-                logStartDateLabel.errorMessage = ErrorConstant.LogError.logStartDateMissing().description
+                logStartDateLabel.errorMessage = Constant.Error.LogError.logStartDateMissing().description
             }
             return
         }
@@ -519,8 +663,9 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var uiDelegate: LogsAddLogUIInteractionDelegate = {
         let delegate = LogsAddLogUIInteractionDelegate()
         delegate.actionsDelegate = self
-        delegate.logCustomActionNameTextField = self.logCustomActionNameTextField
-        delegate.logNumberOfLogUnitsTextField = self.logNumberOfLogUnitsTextField
+        // cannot set in init for uiDelegate, as otherwise the lazy loader for that and logCustomActionNameTextField infinitely call each other
+        // delegate.logCustomActionNameTextField = self.logCustomActionNameTextField
+        // delegate.logNumberOfLogUnitsTextField = self.logNumberOfLogUnitsTextField
         return delegate
     }()
     
@@ -556,7 +701,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     private var dropDownParentDog: HoundDropDown?
     private var selectedDogUUIDs: [UUID] = [] {
         didSet {
-            if selectedDogUUIDs.count > 1 {
+            if !selectedDogUUIDs.isEmpty {
                 parentDogLabel.errorMessage = nil
             }
             parentDogLabel.text = {
@@ -598,6 +743,10 @@ final class LogsAddLogVC: HoundScrollViewController,
             // so we only want the names to be the defaults. I.e. if our log is "Custom" with "someCustomActionName",
             // the logActionLabel should only show "Custom" and then the logCustomActionNameTextField should be "someCustomActionName".
             logActionLabel.text = selectedLogAction?.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
+            
+            logCustomActionNameStack.isHidden = !(selectedLogAction?.allowsCustom ?? false)
+            logUnitLabel.isEnabled = selectedLogAction != nil
+            logNumberOfLogUnitsTextField.isEnabled = selectedLogAction != nil
             
             // If log action changed to something where the current logUnit is no longer valid, clear selectedLogUnitType
             if let selected = selectedLogAction {
@@ -729,25 +878,26 @@ final class LogsAddLogVC: HoundScrollViewController,
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         self.enableSwipeBackToDismiss = true
+        
+        // cannot set in init for uiDelegate, as otherwise the lazy loader for that and logCustomActionNameTextField infinitely call each other
+        uiDelegate.logCustomActionNameTextField = logCustomActionNameTextField
+        uiDelegate.logNumberOfLogUnitsTextField = logNumberOfLogUnitsTextField
     }
     
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//
-//        // Get the minimum top edge of both buttons (handles if either is higher)
-//        let saveButtonTop = saveLogButton.convert(saveLogButton.bounds, to: view).minY
-//        let backButtonTop = backButton.convert(backButton.bounds, to: view).minY
-//        let buttonTop = min(saveButtonTop, backButtonTop)
-//        
-//        // Find distance from bottom of view to top edge of highest button
-//        let distanceFromBottom = view.bounds.height - buttonTop
-//
-//        // Optionally add a little padding (e.g., 16 for comfort)
-//        let minInset = distanceFromBottom + 16
-//
-//        // Only increase the inset if needed (so you don't shrink it below other requirements)
-//        scrollView.contentInset.bottom = max(scrollView.contentInset.bottom, minInset)
-//    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // TODO SPACING for pages with save/back buttons in bottom left/right, add this code to them so content can scroll
+        let saveButtonTop = saveLogButton.convert(saveLogButton.bounds, to: view).minY
+        let backButtonTop = backButton.convert(backButton.bounds, to: view).minY
+        let buttonTop = min(saveButtonTop, backButtonTop)
+        
+        let distanceFromBottom = view.bounds.height - buttonTop
+
+        let minInset = distanceFromBottom + Constant.Constraint.Spacing.absoluteVertInset
+
+        scrollView.contentInset.bottom = max(scrollView.contentInset.bottom, minInset)
+    }
     
     // MARK: - Setup
     
@@ -793,10 +943,11 @@ final class LogsAddLogVC: HoundScrollViewController,
         
         parentDogHeaderLabel.text = logToUpdate != nil ? "Dog taken care of"
         : dogManager.dogs.count <= 1
-        ? "What dog did you take care of?"
-        : "What dog(s) did you take care of?"
+        ? "Which dog did you take care of?"
+        : "Which dog(s) did you take care of?"
         
         familyMemberLabel.text = FamilyInformation.findFamilyMember(forUserId: logToUpdate?.userId)?.displayFullName
+        familyMemberStack.isHidden = logToUpdate == nil
         
         selectedLogAction = logToUpdate?.logActionType
         initialLogActionType = logToUpdate?.logActionType
@@ -867,13 +1018,12 @@ final class LogsAddLogVC: HoundScrollViewController,
     
     private func updateDynamicUIElements() {
         remakeFamilyMemberConstraints()
-        remakeStartDateConstraints()
         remakeCustomActionNameConstraints()
         remakeStartDateConstraints()
         remakeEndDateConstraints()
         remakeLogUnitConstraints()
         
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.showOrHideSingleElement) {
+        UIView.animate(withDuration: Constant.VisualAnimation.showOrHideSingleElement) {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
@@ -972,13 +1122,17 @@ final class LogsAddLogVC: HoundScrollViewController,
         var targetDropDown = dropDown(forDropDownType: type)
         let label = labelForDropDown(forDropDownType: type)
         
-        if targetDropDown == nil {
+        // cannot insert dropdown inside of a stack, so need basic view
+        let rootView = containerView
+        let referenceFrame = label.superview?.convert(label.frame, to: rootView) ?? label.frame
+        
+//        if targetDropDown == nil {
             targetDropDown = HoundDropDown()
             if let targetDropDown = targetDropDown {
                 targetDropDown.setupDropDown(
                     forHoundDropDownIdentifier: type.rawValue,
                     forDataSource: self,
-                    forViewPositionReference: label.frame,
+                    forViewPositionReference: referenceFrame,
                     forOffset: 2.5,
                     forRowHeight: HoundDropDown.rowHeightForHoundLabel
                 )
@@ -999,22 +1153,21 @@ final class LogsAddLogVC: HoundScrollViewController,
                     dropDownLogEndDate,
                     dropDownLogUnit
                 ]
-                if let superview = label.superview,
-                   let index = ordered.firstIndex(of: targetDropDown) {
+                if let index = ordered.firstIndex(of: targetDropDown) {
                     var inserted = false
                     for i in (0..<index).reversed() {
                         if let higher = ordered[i] {
-                            superview.insertSubview(targetDropDown, belowSubview: higher)
+                            rootView.insertSubview(targetDropDown, belowSubview: higher)
                             inserted = true
                             break
                         }
                     }
                     if !inserted {
-                        superview.addSubview(targetDropDown)
+                        rootView.addSubview(targetDropDown)
                     }
                 }
             }
-        }
+//        }
         
         // Dynamically show the dropdown
         targetDropDown?.showDropDown(
@@ -1397,61 +1550,61 @@ final class LogsAddLogVC: HoundScrollViewController,
     
     private func remakeFamilyMemberConstraints() {
         familyMemberLabel.snp.remakeConstraints { make in
-            if !familyMemberLabel.isHidden {
-                make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)
+            if !familyMemberLabel.isHidden && !familyMemberStack.isHidden {
+                make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
     }
     private func remakeCustomActionNameConstraints() {
         logCustomActionNameTextField.snp.remakeConstraints { make in
-            if !logCustomActionNameTextField.isHidden {
-                make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)
+            if !logCustomActionNameTextField.isHidden && !logCustomActionNameStack.isHidden {
+                make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
     }
     private func remakeStartDateConstraints() {
         logStartDateLabel.snp.remakeConstraints { make in
-            if !logStartDateLabel.isHidden {
-                make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)
+            if !logStartDateLabel.isHidden && !logStartDateStack.isHidden {
+                make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
         logStartDatePicker.snp.remakeConstraints { make in
-            if !logStartDatePicker.isHidden {
-                make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.datePickerHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.datePickerMaxHeight)
+            if !logStartDatePicker.isHidden && !logStartDateStack.isHidden {
+                make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.datePickerHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.datePickerMaxHeight)
             }
         }
     }
     private func remakeEndDateConstraints() {
         logEndDateLabel.snp.remakeConstraints { make in
-            if !logEndDateLabel.isHidden {
-                make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)
+            if !logEndDateLabel.isHidden && !logEndDateStack.isHidden {
+                make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
 
         logEndDatePicker.snp.remakeConstraints { make in
-            if !logEndDatePicker.isHidden {
-                make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.datePickerHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.datePickerMaxHeight)
+            if !logEndDatePicker.isHidden && !logEndDateStack.isHidden {
+                make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.datePickerHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.datePickerMaxHeight)
             }
         }
     }
     private func remakeLogUnitConstraints() {
         logNumberOfLogUnitsTextField.snp.remakeConstraints { make in
             make.width.equalTo(logUnitLabel.snp.width).multipliedBy(1.0 / 3.0)
-            if !logNumberOfLogUnitsTextField.isHidden {
-                make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)
+            if !logNumberOfLogUnitsTextField.isHidden && !logUnitStack.isHidden {
+                make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
         logUnitLabel.snp.remakeConstraints { make in
-            if !logUnitLabel.isHidden {
-                make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)
+            if !logUnitLabel.isHidden && !logUnitStack.isHidden {
+                make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
     }
@@ -1466,22 +1619,22 @@ final class LogsAddLogVC: HoundScrollViewController,
         }
         
         stackView.snp.makeConstraints { make in
-            make.top.equalTo(editPageHeaderView.snp.bottom).offset(ConstraintConstant.Spacing.contentTallIntraVert)
+            make.top.equalTo(editPageHeaderView.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
             make.bottom.equalTo(containerView.snp.bottom)
-            make.leading.equalTo(containerView.snp.leading).offset(ConstraintConstant.Spacing.absoluteHoriInset)
-            make.trailing.equalTo(containerView.snp.trailing).inset(ConstraintConstant.Spacing.absoluteHoriInset)
+            make.leading.equalTo(containerView.snp.leading).offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.trailing.equalTo(containerView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
         
         parentDogLabel.snp.makeConstraints { make in
-            make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)
+            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
         }
         
         remakeFamilyMemberConstraints()
         
         logActionLabel.snp.makeConstraints { make in
-            make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textFieldMaxHeight)
+            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
         }
         
         remakeCustomActionNameConstraints()
@@ -1493,23 +1646,23 @@ final class LogsAddLogVC: HoundScrollViewController,
         remakeLogUnitConstraints()
         
         logNoteTextView.snp.makeConstraints { make in
-            make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textViewHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Input.textViewMaxHeight)
+            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textViewHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textViewMaxHeight)
         }
         
         saveLogButton.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(ConstraintConstant.Spacing.absoluteVertInset)
-            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).inset(ConstraintConstant.Spacing.absoluteCircleHoriInset)
-            make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Button.circleHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Button.circleMaxHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset)
+            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).inset(Constant.Constraint.Spacing.absoluteCircleHoriInset)
+            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Button.circleHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Button.circleMaxHeight)
             make.width.equalTo(saveLogButton.snp.height)
         }
 
         backButton.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(ConstraintConstant.Spacing.absoluteVertInset)
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstraintConstant.Spacing.absoluteCircleHoriInset)
-            make.height.equalTo(view.snp.width).multipliedBy(ConstraintConstant.Button.circleHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(ConstraintConstant.Button.circleMaxHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset)
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(Constant.Constraint.Spacing.absoluteCircleHoriInset)
+            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Button.circleHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Button.circleMaxHeight)
             make.width.equalTo(backButton.snp.height)
         }
         

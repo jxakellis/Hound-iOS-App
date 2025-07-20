@@ -212,7 +212,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         label.text = "No dogs recorded! Try creating one..."
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.primaryHeaderLabel
+        label.font = Constant.VisualFont.primaryHeaderLabel
         label.textColor = UIColor.systemBlue
         return label
     }()
@@ -246,7 +246,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private lazy var createNewDogLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Create New Dog"
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedPrimaryRegularLabel
         label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
         
@@ -275,7 +275,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private lazy var createNewReminderLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Create New Reminder"
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedPrimaryRegularLabel
         label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
         
@@ -304,7 +304,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private lazy var createNewTriggerLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Create New Automation"
-        label.font = VisualConstant.FontConstant.emphasizedPrimaryRegularLabel
+        label.font = Constant.VisualFont.emphasizedPrimaryRegularLabel
         label.textColor = UIColor.systemBackground
         label.isUserInteractionEnabled = true
         
@@ -342,14 +342,14 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             substack.axis = .horizontal
             substack.distribution = .fill
             substack.alignment = .center
-            substack.spacing = ConstraintConstant.Spacing.contentIntraHori
+            substack.spacing = Constant.Constraint.Spacing.contentIntraHori
             return substack
         }
         let stack = HoundStackView(arrangedSubviews: substacks)
         stack.axis = .vertical
         stack.distribution = .equalSpacing
         stack.alignment = .trailing
-        stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
         return stack
     }()
     
@@ -468,8 +468,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             if forAction == .reminder {
                 let numNonTriggerReminders = dog.dogReminders.dogReminders.count(where: { $0.reminderIsTriggerResult == false })
                 
-                guard numNonTriggerReminders < ClassConstant.DogConstant.maximumNumberOfReminders else {
-                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noAddMoreRemindersTitle, forSubtitle: VisualConstant.BannerTextConstant.noAddMoreRemindersSubtitle, forStyle: .warning)
+                guard numNonTriggerReminders < Constant.Class.Dog.maximumNumberOfReminders else {
+                    PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noAddMoreRemindersTitle, forSubtitle: Constant.VisualBannerText.noAddMoreRemindersSubtitle, forStyle: .warning)
                     return
                 }
                 
@@ -478,8 +478,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             else {
                 let numTriggers = dog.dogTriggers.dogTriggers.count
                 
-                guard numTriggers < ClassConstant.DogConstant.maximumNumberOfTriggers else {
-                    PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noAddMoreTriggersTitle, forSubtitle: VisualConstant.BannerTextConstant.noAddMoreTriggersSubtitle, forStyle: .warning)
+                guard numTriggers < Constant.Class.Dog.maximumNumberOfTriggers else {
+                    PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noAddMoreTriggersTitle, forSubtitle: Constant.VisualBannerText.noAddMoreTriggersSubtitle, forStyle: .warning)
                     return
                 }
                 
@@ -503,7 +503,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
     
     private func openCreateNewMenu() {
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.showMultipleElements) {
+        UIView.animate(withDuration: Constant.VisualAnimation.showMultipleElements) {
             self.createNewMenuButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
             self.createNewMenuButton.tintColor = UIColor.systemRed
             
@@ -518,7 +518,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
     
     @objc private func closeCreateNewMenu() {
-        UIView.animate(withDuration: VisualConstant.AnimationConstant.hideMultipleElements) {
+        UIView.animate(withDuration: Constant.VisualAnimation.hideMultipleElements) {
             self.createNewMenuButton.transform = .identity
             self.createNewMenuButton.tintColor = UIColor.systemBlue
             
@@ -559,8 +559,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         for (_, button) in createNewLabelsAndButtons {
             NSLayoutConstraint.activate([
                 button.createSquareAspectRatio(),
-                button.createHeightMultiplier(ConstraintConstant.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-                button.createMaxHeight(ConstraintConstant.Button.miniCircleMaxHeight)
+                button.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
+                button.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight)
             ])
         }
         
@@ -570,7 +570,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         createNewStackVisibleConstraint.isActive = false
         createNewStackOffScreenConstraint.isActive = true
         NSLayoutConstraint.activate([
-            createNewLabelsAndButtonsStackView.bottomAnchor.constraint(equalTo: createNewMenuButton.topAnchor, constant: -ConstraintConstant.Spacing.contentIntraVert)
+            createNewLabelsAndButtonsStackView.bottomAnchor.constraint(equalTo: createNewMenuButton.topAnchor, constant: -Constant.Constraint.Spacing.contentIntraVert)
         ])
         
         // logsTableViewController.view
@@ -583,11 +583,11 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         // createNewMenuButton
         NSLayoutConstraint.activate([
-            createNewMenuButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            createNewMenuButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
+            createNewMenuButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            createNewMenuButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
             createNewMenuButton.createSquareAspectRatio(),
-            createNewMenuButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            createNewMenuButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight)
+            createNewMenuButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
+            createNewMenuButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight)
         ])
         
         // screenDimmer
@@ -600,8 +600,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         // noLogsRecordedLabel
         NSLayoutConstraint.activate([
-            noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            noDogsRecordedLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            noDogsRecordedLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             noDogsRecordedLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
     }

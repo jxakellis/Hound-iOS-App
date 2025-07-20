@@ -1,5 +1,5 @@
 //
-//  ConstraintConstant.swift
+//  Constant.Constraint.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 6/17/25.
@@ -11,7 +11,7 @@ import Foundation
 let maxScaleFactor = 1.3
 let screenWidth = 414.0
 
-enum ConstraintConstant {
+public enum ConstraintConstant {
     enum Spacing {
         // MARK: Inset of All Content Elements From Bounding View
         static let absoluteHoriInset: CGFloat = 20.0
@@ -29,8 +29,8 @@ enum ConstraintConstant {
     }
     enum Text {
         // MARK: Header Label & Spacing
-        static let megaHeaderLabelHeightMultipler: CGFloat = Self.primaryHeaderLabelHeightMultipler * (VisualConstant.FontConstant.megaHeaderLabel.pointSize / VisualConstant.FontConstant.primaryHeaderLabel.pointSize)
-        static let megaHeaderLabelMaxHeight: CGFloat = Self.primaryHeaderLabelMaxHeight * (VisualConstant.FontConstant.megaHeaderLabel.pointSize / VisualConstant.FontConstant.primaryHeaderLabel.pointSize)
+        static let megaHeaderLabelHeightMultipler: CGFloat = Self.primaryHeaderLabelHeightMultipler * (Constant.VisualFont.megaHeaderLabel.pointSize / Constant.VisualFont.primaryHeaderLabel.pointSize)
+        static let megaHeaderLabelMaxHeight: CGFloat = Self.primaryHeaderLabelMaxHeight * (Constant.VisualFont.megaHeaderLabel.pointSize / Constant.VisualFont.primaryHeaderLabel.pointSize)
         
         static let primaryHeaderLabelHeightMultipler: CGFloat = 40.0 / screenWidth
         static let primaryHeaderLabelMaxHeight: CGFloat = Self.primaryHeaderLabelHeightMultipler * screenWidth * maxScaleFactor

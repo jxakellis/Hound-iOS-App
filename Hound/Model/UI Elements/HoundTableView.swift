@@ -27,7 +27,7 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
     /// Minimum height for the empty state (when using automatic height adjustment).
     var minimumEmptyStateHeight: CGFloat = 60.0
 
-    var staticCornerRadius: CGFloat? = VisualConstant.LayerConstant.defaultCornerRadius
+    var staticCornerRadius: CGFloat? = Constant.VisualLayer.defaultCornerRadius
     var shouldRoundCorners: Bool = false {
         didSet {
             updateCornerRounding()

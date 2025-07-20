@@ -93,7 +93,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         
         button.setTitle("Create", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -109,7 +109,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         label.text = "As the head of your own Hound family, you'll manage its members and any in-app purchases."
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = VisualConstant.FontConstant.tertiaryColorDescLabel
+        label.font = Constant.VisualFont.tertiaryColorDescLabel
         label.textColor = UIColor.tertiaryLabel
         return label
     }()
@@ -119,7 +119,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         
         button.setTitle("Join", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -182,7 +182,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         FamilyRequest.create(forErrorAlert: .automaticallyAlertForNone) { responseStatus, houndError in
             PresentationManager.endFetchingInformationIndicator {
                 // The user is already in a family so can't create a new one
-                if houndError?.name == ErrorConstant.FamilyResponseError.joinInFamilyAlready(forRequestId: -1, forResponseId: -1).name {
+                if houndError?.name == Constant.Error.FamilyResponseError.joinInFamilyAlready(forRequestId: -1, forResponseId: -1).name {
                     self.dismiss(animated: true, completion: nil)
                     return
                 }
@@ -223,27 +223,27 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
             
             // Code is empty
             if familyCode.isEmpty {
-                ErrorConstant.FamilyRequestError.familyCodeBlank().alert()
+                Constant.Error.FamilyRequestError.familyCodeBlank().alert()
             }
             // Code isn't long enough
             else if familyCode.count != self.familyCodeWithoutDashLength {
-                ErrorConstant.FamilyRequestError.familyCodeInvalid().alert()
+                Constant.Error.FamilyRequestError.familyCodeInvalid().alert()
             }
             // Client-side code is OK
             else {
                 PresentationManager.beginFetchingInformationIndicator()
                 FamilyRequest.update(
                     forErrorAlert: .automaticallyAlertForNone,
-                    forBody: [KeyConstant.familyCode.rawValue: .string(familyCode)]
+                    forBody: [Constant.Key.familyCode.rawValue: .string(familyCode)]
                 ) { responseStatus, houndError in
                     PresentationManager.endFetchingInformationIndicator {
                         // Already in a family
-                        if houndError?.name == ErrorConstant.FamilyResponseError.joinInFamilyAlready(forRequestId: -1, forResponseId: -1).name {
+                        if houndError?.name == Constant.Error.FamilyResponseError.joinInFamilyAlready(forRequestId: -1, forResponseId: -1).name {
                             self.dismiss(animated: true, completion: nil)
                             return
                         }
                         // Family limit too low
-                        if houndError?.name == ErrorConstant.FamilyResponseError.limitFamilyMemberTooLow(forRequestId: -1, forResponseId: -1).name {
+                        if houndError?.name == Constant.Error.FamilyResponseError.limitFamilyMemberTooLow(forRequestId: -1, forResponseId: -1).name {
                             let vc = LimitTooLowViewController()
                             PresentationManager.enqueueViewController(vc)
                             return
@@ -285,7 +285,7 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         createStack.axis = .vertical
         createStack.alignment = .center
         createStack.distribution = .fill
-        createStack.spacing = ConstraintConstant.Spacing.contentIntraVert
+        createStack.spacing = Constant.Constraint.Spacing.contentIntraVert
         createStack.translatesAutoresizingMaskIntoConstraints = false
         
         mainStack = UIStackView(arrangedSubviews: [createStack, joinFamilyButton])
@@ -320,8 +320,8 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         // createFamilyButton
         NSLayoutConstraint.activate([
             createFamilyButton.widthAnchor.constraint(equalTo: mainStack.widthAnchor),
-            createFamilyButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            createFamilyButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            createFamilyButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            createFamilyButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
         
         // subDescriptionLabel

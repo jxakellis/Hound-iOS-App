@@ -42,7 +42,7 @@ enum DogIconManager {
                 PresentationManager.enqueueViewController(imagePickerController)
             }
             else {
-                PresentationManager.enqueueBanner(forTitle: VisualConstant.BannerTextConstant.noCameraTitle, forSubtitle: nil, forStyle: .danger)
+                PresentationManager.enqueueBanner(forTitle: Constant.VisualBannerText.noCameraTitle, forSubtitle: nil, forStyle: .danger)
             }
         }))
 

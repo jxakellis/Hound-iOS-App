@@ -49,7 +49,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
         
         // make sure the result is under dogNameCharacterLimit
-        return updatedText.count <= ClassConstant.DogConstant.dogNameCharacterLimit
+        return updatedText.count <= Constant.Class.Dog.dogNameCharacterLimit
     }
     
     // MARK: - UIGestureRecognizerDelegate
@@ -133,7 +133,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.secondaryHeaderLabel
+        button.titleLabel?.font = Constant.VisualFont.secondaryHeaderLabel
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -165,7 +165,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
             segmentedControl.insertSegment(withTitle: section.title, at: index, animated: false)
         }
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: VisualConstant.FontConstant.emphasizedPrimaryRegularLabel,
+            .font: Constant.VisualFont.emphasizedPrimaryRegularLabel,
             .foregroundColor: UIColor.systemBackground
         ]
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
@@ -193,7 +193,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         private lazy var tableViewsStack: HoundStackView = {
             let stack = HoundStackView(arrangedSubviews: [remindersView, triggersView])
             stack.axis = .vertical
-            stack.spacing = ConstraintConstant.Spacing.contentIntraVert
+            stack.spacing = Constant.Constraint.Spacing.contentIntraVert
             return stack
         }()
     
@@ -264,7 +264,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     @objc private func didTouchUpInsideSaveDog(_ sender: Any) {
         let dog = dogToUpdate ?? Dog()
         guard dog.changeDogName(forDogName: dogNameTextField.text) else {
-            dogNameTextField.errorMessage = ErrorConstant.DogError.dogNameMissing().description
+            dogNameTextField.errorMessage = Constant.Error.DogError.dogNameMissing().description
             return
         }
         
@@ -564,53 +564,53 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         // dogIconButton
         NSLayoutConstraint.activate([
             dogIconButton.topAnchor.constraint(equalTo: editPageHeaderView.bottomAnchor),
-            dogIconButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteCircleHoriInset),
-            dogIconButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            dogIconButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight),
+            dogIconButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteCircleHoriInset),
+            dogIconButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
+            dogIconButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
             dogIconButton.createSquareAspectRatio()
         ])
         
         // dogNameTextField
         NSLayoutConstraint.activate([
-            dogNameTextField.leadingAnchor.constraint(equalTo: dogIconButton.trailingAnchor, constant: ConstraintConstant.Spacing.absoluteCircleHoriInset),
-            dogNameTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
+            dogNameTextField.leadingAnchor.constraint(equalTo: dogIconButton.trailingAnchor, constant: Constant.Constraint.Spacing.absoluteCircleHoriInset),
+            dogNameTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             dogNameTextField.centerYAnchor.constraint(equalTo: dogIconButton.centerYAnchor),
-            dogNameTextField.createHeightMultiplier(ConstraintConstant.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
-            dogNameTextField.createMaxHeight(ConstraintConstant.Input.textFieldMaxHeight)
+            dogNameTextField.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
+            dogNameTextField.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
         ])
         
         // segmentedControl
         NSLayoutConstraint.activate([
-            segmentedControl.topAnchor.constraint(equalTo: dogIconButton.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-                        segmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
-                        segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset / 2.0),
-                        segmentedControl.createHeightMultiplier(ConstraintConstant.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
-                        segmentedControl.createMaxHeight(ConstraintConstant.Input.segmentedMaxHeight)
+            segmentedControl.topAnchor.constraint(equalTo: dogIconButton.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+                        segmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset / 2.0),
+                        segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset / 2.0),
+                        segmentedControl.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
+                        segmentedControl.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight)
         ])
         
         // tableViewsStack
         NSLayoutConstraint.activate([
-            tableViewsStack.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: ConstraintConstant.Spacing.contentTallIntraVert),
-                        tableViewsStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
+            tableViewsStack.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+                        tableViewsStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
                         tableViewsStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                         tableViewsStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
 
         // saveLogButton
         NSLayoutConstraint.activate([
-            saveDogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            saveDogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteCircleHoriInset),
-            saveDogButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            saveDogButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight),
+            saveDogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            saveDogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
+            saveDogButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
+            saveDogButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
             saveDogButton.createSquareAspectRatio()
         ])
         
         // backButton
         NSLayoutConstraint.activate([
-            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteCircleHoriInset),
-            backButton.createHeightMultiplier(ConstraintConstant.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            backButton.createMaxHeight(ConstraintConstant.Button.circleMaxHeight),
+            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteCircleHoriInset),
+            backButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
+            backButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
             backButton.createSquareAspectRatio()
         ])
     }

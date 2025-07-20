@@ -68,7 +68,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
         
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = VisualConstant.FontConstant.wideButton
+        button.titleLabel?.font = Constant.VisualFont.wideButton
         
         button.backgroundColor = UIColor.systemBackground
         
@@ -129,7 +129,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         // Only add spacing if NOT the last section
         let lastSection = SubscriptionCancellationReason.allCases.count - 1
-        return section == lastSection ? 0 : ConstraintConstant.Spacing.contentIntraVert
+        return section == lastSection ? 0 : Constant.Constraint.Spacing.contentIntraVert
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -214,19 +214,19 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
         
         // tableView
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset)
+            tableView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // continueButton constraints
         NSLayoutConstraint.activate([
-            continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: ConstraintConstant.Spacing.contentSectionVert),
-            continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -ConstraintConstant.Spacing.absoluteVertInset),
-            continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: ConstraintConstant.Spacing.absoluteHoriInset),
-            continueButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -ConstraintConstant.Spacing.absoluteHoriInset),
-            continueButton.createHeightMultiplier(ConstraintConstant.Button.wideHeightMultiplier, relativeToWidthOf: containerView),
-            continueButton.createMaxHeight(ConstraintConstant.Button.wideMaxHeight)
+            continueButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            continueButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            continueButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            continueButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            continueButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: containerView),
+            continueButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
         
     }

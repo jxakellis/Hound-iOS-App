@@ -24,19 +24,19 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     // MARK: - NSCoding
     
     required init?(coder aDecoder: NSCoder) {
-        UTCDay = aDecoder.decodeOptionalInteger(forKey: KeyConstant.monthlyUTCDay.rawValue) ?? UTCDay
-        UTCHour = aDecoder.decodeOptionalInteger(forKey: KeyConstant.monthlyUTCHour.rawValue) ?? UTCHour
-        UTCMinute = aDecoder.decodeOptionalInteger(forKey: KeyConstant.monthlyUTCMinute.rawValue) ?? UTCMinute
-        skippedDate = aDecoder.decodeOptionalObject(forKey: KeyConstant.monthlySkippedDate.rawValue)
+        UTCDay = aDecoder.decodeOptionalInteger(forKey: Constant.Key.monthlyUTCDay.rawValue) ?? UTCDay
+        UTCHour = aDecoder.decodeOptionalInteger(forKey: Constant.Key.monthlyUTCHour.rawValue) ?? UTCHour
+        UTCMinute = aDecoder.decodeOptionalInteger(forKey: Constant.Key.monthlyUTCMinute.rawValue) ?? UTCMinute
+        skippedDate = aDecoder.decodeOptionalObject(forKey: Constant.Key.monthlySkippedDate.rawValue)
     }
     
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
-        aCoder.encode(UTCDay, forKey: KeyConstant.monthlyUTCDay.rawValue)
-        aCoder.encode(UTCHour, forKey: KeyConstant.monthlyUTCHour.rawValue)
-        aCoder.encode(UTCMinute, forKey: KeyConstant.monthlyUTCMinute.rawValue)
+        aCoder.encode(UTCDay, forKey: Constant.Key.monthlyUTCDay.rawValue)
+        aCoder.encode(UTCHour, forKey: Constant.Key.monthlyUTCHour.rawValue)
+        aCoder.encode(UTCMinute, forKey: Constant.Key.monthlyUTCMinute.rawValue)
         if let skippedDate = skippedDate {
-            aCoder.encode(skippedDate, forKey: KeyConstant.monthlySkippedDate.rawValue)
+            aCoder.encode(skippedDate, forKey: Constant.Key.monthlySkippedDate.rawValue)
         }
     }
     
@@ -55,14 +55,14 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     }
     
     /// Hour of the day that that the reminder should fire in GMT+0000. [1, 31]
-    private(set) var UTCDay: Int = ClassConstant.ReminderComponentConstant.defaultUTCDay
+    private(set) var UTCDay: Int = Constant.Class.ReminderComponent.defaultUTCDay
     /// Throws if not within the range of [1,31]
     func changeUTCDay(forDate: Date) {
         UTCDay = Calendar.UTCCalendar.component(.day, from: forDate)
     }
     
     /// Hour of the day that that the reminder should fire in GMT+0000. [0, 23]
-    private(set) var UTCHour: Int = ClassConstant.ReminderComponentConstant.defaultUTCHour
+    private(set) var UTCHour: Int = Constant.Class.ReminderComponent.defaultUTCHour
     /// UTCHour but converted to the hour in the user's timezone
     var localHour: Int {
         let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
@@ -79,7 +79,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     }
     
     /// Minute of the day that that the reminder should fire in GMT+0000. [0, 59]
-    private(set) var UTCMinute: Int = ClassConstant.ReminderComponentConstant.defaultUTCMinute
+    private(set) var UTCMinute: Int = Constant.Class.ReminderComponent.defaultUTCMinute
     /// UTCMinute but converted to the minute in the user's timezone
     var localMinute: Int {
         let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
@@ -123,14 +123,14 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     /// This find the next execution date that takes place after the reminderExecutionBasis. It purposelly not factoring in isSkipping.
     func notSkippingExecutionDate(forReminderExecutionBasis reminderExecutionBasis: Date) -> Date {
         // there will only be two future executions dates for a day, so we take the first one is the one.
-        return futureExecutionDates(forReminderExecutionBasis: reminderExecutionBasis).first ?? ClassConstant.DateConstant.default1970Date
+        return futureExecutionDates(forReminderExecutionBasis: reminderExecutionBasis).first ?? Constant.Class.DateConstant.default1970Date
     }
     
     func previousExecutionDate(forReminderExecutionBasis reminderExecutionBasis: Date) -> Date {
         let nextExecutionDate = notSkippingExecutionDate(forReminderExecutionBasis: reminderExecutionBasis)
         
         return fallShortCorrection(forDate:
-                                    Calendar.UTCCalendar.date(byAdding: .month, value: -1, to: nextExecutionDate) ?? ClassConstant.DateConstant.default1970Date
+                                    Calendar.UTCCalendar.date(byAdding: .month, value: -1, to: nextExecutionDate) ?? Constant.Class.DateConstant.default1970Date
         )
     }
     
@@ -162,7 +162,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
         }()
         
         // We have the correct day to set the date to, now we can change it.
-        return Calendar.UTCCalendar.date(bySetting: .day, value: targetDayOfMonth, of: date) ?? ClassConstant.DateConstant.default1970Date
+        return Calendar.UTCCalendar.date(bySetting: .day, value: targetDayOfMonth, of: date) ?? Constant.Class.DateConstant.default1970Date
         
     }
     
@@ -173,7 +173,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
         
         // finds number of days in the calculated date's month, used for roll over calculations
         guard let numberOfDaysInMonth = Calendar.UTCCalendar.range(of: .day, in: .month, for: futureExecutionDate)?.count else {
-            return [ClassConstant.DateConstant.default1970Date, ClassConstant.DateConstant.default1970Date]
+            return [Constant.Class.DateConstant.default1970Date, Constant.Class.DateConstant.default1970Date]
         }
         
         // We want to make sure that the day of month we are using isn't greater that the number of days in the target month. If it is, then we could accidentily roll over into the next month. For example, without this functionality, setting the day of Feburary to 31 would cause the date to roll into the next month. But, targetDayOfMonth limits the set to 28/29
@@ -181,23 +181,23 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
         let targetDayOfMonth: Int = UTCDay <= numberOfDaysInMonth ? UTCDay : numberOfDaysInMonth
         
         // Set futureExecutionDate to the proper day of month
-        futureExecutionDate = Calendar.UTCCalendar.date(bySetting: .day, value: targetDayOfMonth, of: futureExecutionDate) ?? ClassConstant.DateConstant.default1970Date
+        futureExecutionDate = Calendar.UTCCalendar.date(bySetting: .day, value: targetDayOfMonth, of: futureExecutionDate) ?? Constant.Class.DateConstant.default1970Date
         
         // Set futureExecutionDate to the proper day of week
-        futureExecutionDate = Calendar.UTCCalendar.date(bySettingHour: UTCHour, minute: UTCMinute, second: 0, of: futureExecutionDate, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward) ?? ClassConstant.DateConstant.default1970Date
+        futureExecutionDate = Calendar.UTCCalendar.date(bySettingHour: UTCHour, minute: UTCMinute, second: 0, of: futureExecutionDate, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward) ?? Constant.Class.DateConstant.default1970Date
         
         // We are looking for future dates, not past. Correct dates in past to make them in the future
         
         if reminderExecutionBasis.distance(to: futureExecutionDate) < 0 {
             // Correct for falling short when we add a month
-            futureExecutionDate = fallShortCorrection(forDate: Calendar.UTCCalendar.date(byAdding: .month, value: 1, to: futureExecutionDate) ?? ClassConstant.DateConstant.default1970Date)
+            futureExecutionDate = fallShortCorrection(forDate: Calendar.UTCCalendar.date(byAdding: .month, value: 1, to: futureExecutionDate) ?? Constant.Class.DateConstant.default1970Date)
         }
         var futureExecutionDates = [futureExecutionDate]
         
         // futureExecutionDates should have at least two dates
         futureExecutionDates.append(
             fallShortCorrection(forDate:
-                                    Calendar.UTCCalendar.date(byAdding: .month, value: 1, to: futureExecutionDate) ?? ClassConstant.DateConstant.default1970Date
+                                    Calendar.UTCCalendar.date(byAdding: .month, value: 1, to: futureExecutionDate) ?? Constant.Class.DateConstant.default1970Date
                                )
         )
         
@@ -214,7 +214,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
         let futureExecutionDates = futureExecutionDates(forReminderExecutionBasis: reminderExecutionBasis)
         var soonestFutureExecutionDate: Date = futureExecutionDates.first(where: { futureExecutionDate in
             nextExecutionDate.distance(to: futureExecutionDate) > 0
-        }) ?? ClassConstant.DateConstant.default1970Date
+        }) ?? Constant.Class.DateConstant.default1970Date
         
         // Attempt to find futureExecutionDates that are further in the future than nextExecutionDate while being closer to nextExecutionDate than soonestFutureExecutionDate
         for futureExecutionDate in futureExecutionDates where

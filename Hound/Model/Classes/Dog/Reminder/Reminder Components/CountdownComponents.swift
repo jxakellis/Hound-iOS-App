@@ -21,12 +21,12 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedExecutionInterval: Double? = aDecoder.decodeOptionalDouble(forKey: KeyConstant.countdownExecutionInterval.rawValue)
+        let decodedExecutionInterval: Double? = aDecoder.decodeOptionalDouble(forKey: Constant.Key.countdownExecutionInterval.rawValue)
         self.init(forExecutionInterval: decodedExecutionInterval)
     }
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(executionInterval, forKey: KeyConstant.countdownExecutionInterval.rawValue)
+        aCoder.encode(executionInterval, forKey: Constant.Key.countdownExecutionInterval.rawValue)
     }
     
     // MARK: - Properties
@@ -51,7 +51,7 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
     init(
         forExecutionInterval: Double? = nil
     ) {
-        self.executionInterval = forExecutionInterval ?? ClassConstant.ReminderComponentConstant.defaultCountdownExecutionInterval
+        self.executionInterval = forExecutionInterval ?? Constant.Class.ReminderComponent.defaultCountdownExecutionInterval
         super.init()
     }
     
