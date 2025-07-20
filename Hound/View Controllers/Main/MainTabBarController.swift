@@ -28,8 +28,21 @@ final class MainTabBarController: HoundTabBarController,
     // MARK: - ReminderAlarmManagerDelegate
     
     func didAddLog(sender: Sender, forDogUUID: UUID, forLog log: Log, forInvokeDogTriggers: Bool) {
-        dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: forInvokeDogTriggers)
+        let triggerReminders = dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: forInvokeDogTriggers)
         setDogManager(sender: sender, forDogManager: dogManager)
+        
+        guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {
+            return
+        }
+        
+        // silently try to create trigger reminders
+        RemindersRequest.create(forErrorAlert: .automaticallyAlertForNone, forDogUUID: forDogUUID, forReminders: triggerReminders) { responseStatus, _ in
+            guard responseStatus != .failureResponse else {
+                return
+            }
+            self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminders(forReminders: triggerReminders)
+            self.setDogManager(sender: sender, forDogManager: self.dogManager)
+        }
     }
     
     func didRemoveReminder(sender: Sender, forDogUUID: UUID, forReminderUUID: UUID) {

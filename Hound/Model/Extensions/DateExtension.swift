@@ -12,7 +12,6 @@ enum HoundDateFormat {
     case formatStyle(date: Date.FormatStyle.DateStyle, time: Date.FormatStyle.TimeStyle)
     case formatterStyle(date: DateFormatter.Style, time: DateFormatter.Style)
     case template(String)
-    case custom(String)
 
     /// Returns a formatted string for the supplied date based on the style.
     func string(from date: Date) -> String {
@@ -27,10 +26,6 @@ enum HoundDateFormat {
         case let .template(template):
             let formatter = DateFormatter()
             formatter.setLocalizedDateFormatFromTemplate(template)
-            return formatter.string(from: date)
-        case let .custom(format):
-            let formatter = DateFormatter()
-            formatter.dateFormat = format
             return formatter.string(from: date)
         }
     }

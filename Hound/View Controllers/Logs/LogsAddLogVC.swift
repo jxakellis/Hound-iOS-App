@@ -1421,6 +1421,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             forLogCustomActionName: logCustomActionNameTextField.text
         )
         
+        var triggerRemindersByDogUUID: [UUID: [Reminder]] = [:]
         let completionTracker = CompletionTracker(
             numberOfTasks: selectedDogUUIDs.count + matchingReminders.count
         ) {
@@ -1430,6 +1431,26 @@ final class LogsAddLogVC: HoundScrollViewController,
                 forDogManager: self.dogManager
             )
         } completedAllTasksCompletionHandler: {
+            // create all the triggers silently in the background
+            for (dogUUID, reminders) in triggerRemindersByDogUUID {
+                guard let dog = self.dogManager.findDog(forDogUUID: dogUUID) else {
+                    return
+                }
+                
+                // silently try to create trigger reminders
+                RemindersRequest.create(
+                    forErrorAlert: .automaticallyAlertForNone,
+                    forDogUUID: dogUUID,
+                    forReminders: reminders
+                ) { responseStatus, _ in
+                    guard responseStatus != .failureResponse else {
+                        return
+                    }
+                    dog.dogReminders.addReminders(forReminders: reminders)
+                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                }
+            }
+            
             // When everything completes, close the page
             self.saveLogButton.isLoading = false
             self.dismiss(animated: true) {
@@ -1487,8 +1508,16 @@ final class LogsAddLogVC: HoundScrollViewController,
                     forLogCustomActionName: logToAdd.logCustomActionName
                 )
                 
-                self.dogManager.findDog(forDogUUID: selectedDogUUID)?
+                let reminders = self.dogManager.findDog(forDogUUID: selectedDogUUID)?
                     .dogLogs.addLog(forLog: logToAdd, invokeDogTriggers: true)
+                if let reminders = reminders, !reminders.isEmpty {
+                    if triggerRemindersByDogUUID[selectedDogUUID] != nil {
+                        triggerRemindersByDogUUID[selectedDogUUID]! += reminders // swiftlint:disable:this force_unwrapping
+                    }
+                    else {
+                        triggerRemindersByDogUUID[selectedDogUUID] = reminders
+                    }
+                }
                 
                 completionTracker.completedTask()
             }
