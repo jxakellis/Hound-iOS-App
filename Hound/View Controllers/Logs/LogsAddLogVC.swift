@@ -776,19 +776,18 @@ final class LogsAddLogVC: HoundScrollViewController,
             logStartDateLabel.errorMessage = nil
             logStartDatePicker.errorMessage = nil
             
-            let dateFormatter = DateFormatter()
+            let format: String
             if Calendar.current.isDateInToday(start) {
                 // If the start date is today, show only time
-                dateFormatter.setLocalizedDateFormatFromTemplate("hma") // 7:53 AM
+                format = "hma" // 7:53 AM
             }
             else {
                 // If start date is not today, show month/day and possibly year
                 let yearOfStart = Calendar.current.component(.year, from: start)
                 let currentYear = Calendar.current.component(.year, from: Date())
-                let format = (yearOfStart == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"
-                dateFormatter.setLocalizedDateFormatFromTemplate(format)
+                format = (yearOfStart == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"
             }
-            logStartDateLabel.text = dateFormatter.string(from: start)
+            logStartDateLabel.text = start.houndFormatted(.template(format))
         }
     }
     private var isShowingLogStartDatePicker = false {
@@ -823,19 +822,18 @@ final class LogsAddLogVC: HoundScrollViewController,
                 return
             }
             
-            let dateFormatter = DateFormatter()
+            let format: String
             if Calendar.current.isDateInToday(end) {
-                // If end date is today, show only time
-                dateFormatter.setLocalizedDateFormatFromTemplate("hma")
+                // If the end date is today, show only time
+                format = "hma" // 7:53 AM
             }
             else {
                 // If end date is not today, show month/day and possibly year
                 let yearOfEnd = Calendar.current.component(.year, from: end)
                 let currentYear = Calendar.current.component(.year, from: Date())
-                let format = (yearOfEnd == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"
-                dateFormatter.setLocalizedDateFormatFromTemplate(format)
+                format = (yearOfEnd == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"
             }
-            logEndDateLabel.text = dateFormatter.string(from: end)
+            logEndDateLabel.text = end.houndFormatted(.template(format))
         }
     }
     private var isShowingLogEndDatePicker = false {
@@ -882,7 +880,6 @@ final class LogsAddLogVC: HoundScrollViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // TODO SPACING for pages with save/back buttons in bottom left/right, add this code to them so content can scroll
         let saveButtonTop = saveLogButton.convert(saveLogButton.bounds, to: view).minY
         let backButtonTop = backButton.convert(backButton.bounds, to: view).minY
         let buttonTop = min(saveButtonTop, backButtonTop)

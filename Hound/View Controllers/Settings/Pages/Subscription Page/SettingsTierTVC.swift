@@ -220,20 +220,19 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
             let expiresYear = Calendar.current.component(.year, from: expiresDate)
             let currentYear = Calendar.current.component(.year, from: Date())
             
-            let dateFormatter = DateFormatter()
             // January 25 OR January 25, 2023
-            dateFormatter.setLocalizedDateFormatFromTemplate(expiresYear == currentYear ? "MMMMd" : "MMMMdyyyy")
+            let template = expiresYear == currentYear ? "MMMMd" : "MMMMdyyyy"
 
             guard FamilyInformation.familyActiveSubscription.productId == product.productIdentifier else {
                 // This cell isn't the active subscription, however it is set to renew
                 if FamilyInformation.familyActiveSubscription.autoRenewStatus == true && FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier {
-                    return ", renewing \(dateFormatter.string(from: expiresDate))"
+                    return ", renewing \(expiresDate.houndFormatted(.template(template)))"
                 }
                 return ""
             }
             // This cell is the active subscription with an expiresDate. It could be renewing or expiring on the expiresDate
 
-            return ", \(FamilyInformation.familyActiveSubscription.autoRenewStatus == true && FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(dateFormatter.string(from: expiresDate))"
+            return ", \(FamilyInformation.familyActiveSubscription.autoRenewStatus == true && FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(expiresDate.houndFormatted(.template(template)))"
         }()
 
         let precalculatedDynamicMonthlyPriceText = "\(roundedMonthlyPriceWithCurrencySymbol) / month\(activeSubscriptionExpirationText)"

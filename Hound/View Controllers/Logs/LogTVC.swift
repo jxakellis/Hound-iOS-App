@@ -116,23 +116,23 @@ final class LogTVC: HoundTableViewCell {
         
         logActionTextLabel.text = log.logActionType.convertToReadableName(customActionName: log.logCustomActionName, includeMatchingEmoji: false)
         
-        let logStartDateFormatter = DateFormatter()
-        logStartDateFormatter.setLocalizedDateFormatFromTemplate("hma") // e.g., “7:53 AM”
-        logStartToEndDateLabel.text = logStartDateFormatter.string(from: log.logStartDate)
+        // e.g., “7:53 AM”
+        logStartToEndDateLabel.text = log.logStartDate.houndFormatted(.template("hma"))
         
         if let logEndDate = log.logEndDate {
-            let logEndDateFormatter = DateFormatter()
+            let format: String
             if log.logStartDate.distance(to: logEndDate) < 60 * 60 * 24 {
                 // Same day: no need for date information
-                logEndDateFormatter.setLocalizedDateFormatFromTemplate("hma")
+                format = "hma"
             }
             else {
                 // Different day: show month + day (and year if not current)
                 let logEndYear = Calendar.current.component(.year, from: logEndDate)
                 let currentYear = Calendar.current.component(.year, from: Date())
-                logEndDateFormatter.setLocalizedDateFormatFromTemplate(logEndYear == currentYear ? "MMMd" : "MMMdyy")
+                format = logEndYear == currentYear ? "MMMd" : "MMMdyy"
             }
-            logStartToEndDateLabel.text = logStartToEndDateLabel.text?.appending(" - \(logEndDateFormatter.string(from: logEndDate))")
+            let endString = logEndDate.houndFormatted(.template(format))
+            logStartToEndDateLabel.text = logStartToEndDateLabel.text?.appending(" - \(endString)")
         }
         
         logDurationLabel.text = {

@@ -24,15 +24,10 @@ struct HoundLogger {
         self.category = category
     }
     
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        formatter.locale = Locale.current
-        return formatter
-    }()
+    private static let timeFormat: HoundDateFormat = .custom("HH:mm:ss")
     
     private func formattedMessage(_ message: String) -> String {
-        let time = Self.dateFormatter.string(from: Date())
+        let time = Date().houndFormatted(Self.timeFormat)
         return "\(time) [\(category)] \(message)"
     }
     

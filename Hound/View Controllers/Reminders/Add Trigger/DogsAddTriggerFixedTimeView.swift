@@ -105,7 +105,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
         default: text += "\(selectedDayOffset) days after the log "
         }
         
-        text += "at \(timeOfDayPicker.date.formatted(date: .omitted, time: .shortened))"
+        text += "at \(timeOfDayPicker.date.houndFormatted(.formatStyle(date: .omitted, time: .shortened)))"
         
         var emphasizedText: String?
         if selectedDayOffset == 0 {

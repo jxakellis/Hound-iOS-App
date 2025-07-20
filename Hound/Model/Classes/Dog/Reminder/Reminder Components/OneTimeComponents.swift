@@ -36,19 +36,14 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
         let dateYear = Calendar.current.component(.year, from: oneTimeDate)
         let currentYear = Calendar.current.component(.year, from: Date())
         
-        let dateFormatter = DateFormatter()
         // January 25 OR January 25, 2023
-        dateFormatter.setLocalizedDateFormatFromTemplate(dateYear == currentYear ? "MMMMd" : "MMMMdyyyy")
-        
-        return dateFormatter.string(from: oneTimeDate)
+        let template = dateYear == currentYear ? "MMMMd" : "MMMMdyyyy"
+        return oneTimeDate.houndFormatted(.template(template))
     }
     
     var readableTimeOfDayInterval: String {
-        let dateFormatter = DateFormatter()
         // 7:53 AM
-        dateFormatter.setLocalizedDateFormatFromTemplate("hma")
-        
-        return dateFormatter.string(from: oneTimeDate)
+        return oneTimeDate.houndFormatted(.template("hma"))
     }
     
     var readableInterval: String {

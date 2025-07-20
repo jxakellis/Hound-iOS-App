@@ -323,7 +323,6 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         // Don't pull triggerId or triggerIsDeleted from triggerToOverride. A valid fromBody needs to provide this itself
         let triggerId = fromBody[Constant.Key.triggerId.rawValue] as? Int
         let triggerUUID = UUID.fromString(forUUIDString: fromBody[Constant.Key.triggerUUID.rawValue] as? String)
-        // TODO TRIGGERS make sure last modified and deleted are properly implemented on server side functions
         let triggerLastModified = (fromBody[Constant.Key.triggerLastModified.rawValue] as? String)?.formatISO8601IntoDate()
         let reminderIsDeleted = fromBody[Constant.Key.triggerIsDeleted.rawValue] as? Bool
         
@@ -420,7 +419,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             case 1: text += "next day"
             default: text += "\(triggerFixedTimeTypeAmount) days later"
             }
-            text += " @ \(nextReminderDate(afterDate: Date())?.formatted(date: .omitted, time: .shortened) ?? Constant.Visual.Text.unknownText)"
+            text += " @ \(nextReminderDate(afterDate: Date())?.houndFormatted(.formatStyle(date: .omitted, time: .shortened)) ?? Constant.Visual.Text.unknownText)"
             return text
         }
     }

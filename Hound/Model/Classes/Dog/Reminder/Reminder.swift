@@ -137,16 +137,6 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - Comparable
     
     static func < (lhs: Reminder, rhs: Reminder) -> Bool {
-        // if one reminder is a trigger result and the other isn't, trigger should come second
-        switch (lhs.reminderIsTriggerResult, rhs.reminderIsTriggerResult) {
-        case (true, false):
-            return false
-        case (false, true):
-            return true
-        default:
-            break
-        }
-        
         guard lhs.reminderType == rhs.reminderType else {
             // lhs and rhs are known to be different styles
             switch lhs.reminderType {

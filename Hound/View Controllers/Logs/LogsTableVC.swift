@@ -214,11 +214,9 @@ final class LogsTableVC: HoundTableViewController {
             headerView.setTitle("Tomorrow")
         }
         else {
-            let dateFormatter = DateFormatter()
             // Wednesday, January 25 or Wednesday, January 25 2023
-            dateFormatter.setLocalizedDateFormatFromTemplate( dateYear == currentYear ? "EEEEMMMMd" : "EEEEMMMMdyyyy")
-            
-            headerView.setTitle(dateFormatter.string(from: date))
+            let template = dateYear == currentYear ? "EEEEMMMMd" : "EEEEMMMMdyyyy"
+            headerView.setTitle(date.houndFormatted(.template(template)))
         }
         
         return headerView

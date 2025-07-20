@@ -103,17 +103,16 @@ enum ExportActivityViewManager {
 
             let logActionType = log.logActionType.convertToReadableName(customActionName: log.logCustomActionName)
 
-            let dateFormatter = DateFormatter()
             // January 25, 2023 at 7:53 AM
-            dateFormatter.setLocalizedDateFormatFromTemplate("MMMMdyyyyhma")
-            let logStartDate = dateFormatter.string(from: log.logStartDate)
+            let format = HoundDateFormat.template("MMMMdyyyyhma")
+            let logStartDate = log.logStartDate.houndFormatted(format)
             
             let logEndDate = {
                 guard let logEndDate = log.logEndDate else {
                     return ""
                 }
                 
-                return dateFormatter.string(from: logEndDate)
+                return logEndDate.houndFormatted(format)
             }()
             
             let logUnit = {

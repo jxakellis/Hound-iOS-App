@@ -16,8 +16,6 @@ protocol DogsAddDogReminderTVCDelegate: AnyObject {
 
 final class DogsAddDogReminderTVC: HoundTableViewCell {
     
-    // TODO TRIGGERS add special indicator that this is a reminder from an automation/trigger. the enabled and chevronImageView button should disappear
-    
     // MARK: - Elements
     
     let containerView: HoundView = {
@@ -27,6 +25,13 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return view
     }()
     
+    private let triggerResultIndicatorImageView: HoundImageView = {
+        let imageView = HoundImageView()
+        imageView.image = UIImage(systemName: "sparkles")
+        imageView.tintColor = UIColor.systemBlue
+        return imageView
+    }()
+        
     private let reminderActionLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
@@ -80,6 +85,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     private lazy var finalStack: HoundStackView = {
         let stack = HoundStackView()
+        stack.addArrangedSubview(triggerResultIndicatorImageView)
         stack.addArrangedSubview(labelStack)
         stack.addArrangedSubview(chevronSwitchStack)
         stack.axis = .horizontal
@@ -110,10 +116,8 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         reminderIsEnabledSwitch.isOn = forReminder.reminderIsEnabled
         reminderUUID = forReminder.reminderUUID
         
-        if forReminder.reminderIsTriggerResult {
-            reminderIsEnabledSwitch.isHidden = true
-            chevronImageView.isHidden = true
-        }
+        triggerResultIndicatorImageView.isHidden = !forReminder.reminderIsTriggerResult
+        chevronSwitchStack.isHidden = forReminder.reminderIsTriggerResult
         
         let precalculatedReminderActionName = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName, includeMatchingEmoji: true)
         let precalculatedReminderActionFont = self.reminderActionLabel.font ?? UIFont()
@@ -180,6 +184,14 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
             make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset)
             make.leading.equalTo(containerView.snp.leading).offset(Constant.Constraint.Spacing.contentIntraHori)
             make.trailing.equalTo(containerView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
+        
+        triggerResultIndicatorImageView.snp.makeConstraints { make in
+            make.height.equalTo(contentView.snp.width)
+                .multipliedBy(Constant.Constraint.Button.miniCircleHeightMultiplier / 1.5)
+                .priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.miniCircleMaxHeight / 1.5)
+            make.width.equalTo(triggerResultIndicatorImageView.snp.height)
         }
         
         chevronImageView.snp.makeConstraints { make in
