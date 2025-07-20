@@ -295,6 +295,14 @@ final class LogsTableVC: HoundTableViewController {
 
             let newLogs = self.logsForDogUUIDsGroupedByDate
             self.tableView.isUserInteractionEnabled = !newLogs.isEmpty
+            
+            if previousLogs[indexPath.section].count > 1 && indexPath.row == previousLogs[indexPath.section].count - 1 {
+                // there is an above log and it needs its corners counred since its the new bottom
+                let aboveLogCell = self.tableView.cellForRow(at: IndexPath(row: indexPath.row - 1, section: indexPath.section)) as? LogTVC
+                UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
+                    aboveLogCell?.containerView.roundCorners(addCorners: .bottom)
+                }
+            }
 
             self.tableView.beginUpdates()
             if previousLogs[indexPath.section].count == 1 {

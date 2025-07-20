@@ -361,7 +361,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
             shareFamilyButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             shareFamilyButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
             shareFamilyButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight),
-            shareFamilyButton.topAnchor.constraint(equalTo: familyCodeDescriptionLabel.bottomAnchor, constant: 25.0)
+            shareFamilyButton.topAnchor.constraint(equalTo: familyCodeDescriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert)
         ])
         
         // membersHeaderLabel

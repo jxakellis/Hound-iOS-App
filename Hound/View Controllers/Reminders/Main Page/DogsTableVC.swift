@@ -245,6 +245,14 @@ final class DogsTableVC: HoundTableViewController {
                         return
                     }
                     
+                    let numReminders = self.dogManager.dogs[indexPath.section].dogReminders.dogReminders.count
+                    if numReminders > 1 && indexPath.row == numReminders {
+                       // there is a reminder above its its the new bottom, so it needs its corners rounded
+                        let aboveReminderCell = self.tableView.cellForRow(at: IndexPath(row: indexPath.row - 1, section: indexPath.section)) as? DogsReminderTVC
+                        UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
+                            aboveReminderCell?.containerView.roundCorners(setCorners: .bottom)
+                        }
+                    }
                     dog.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
@@ -371,14 +379,22 @@ final class DogsTableVC: HoundTableViewController {
                    let reminderIndex = self.dogManager.dogs[dogSection].dogReminders.dogReminders.firstIndex(where: { $0.reminderUUID == forReminder.reminderUUID }) {
                     let indexPath = IndexPath(row: reminderIndex + 1, section: dogSection)
 
+                    let numReminders = self.dogManager.dogs[indexPath.section].dogReminders.dogReminders.count
+                    if numReminders > 1 && indexPath.row == numReminders {
+                       // there is a reminder above its its the new bottom, so it needs its corners rounded
+                        let aboveReminderCell = self.tableView.cellForRow(at: IndexPath(row: indexPath.row - 1, section: indexPath.section)) as? DogsReminderTVC
+                        UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
+                            aboveReminderCell?.containerView.roundCorners(setCorners: .bottom)
+                        }
+                    }
                     self.dogManager.dogs[dogSection].dogReminders.removeReminder(forReminderUUID: forReminder.reminderUUID)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
 
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                    UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
-                        self.view.setNeedsLayout()
-                        self.view.layoutIfNeeded()
-                    }
+//                    UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
+//                        self.view.setNeedsLayout()
+//                        self.view.layoutIfNeeded()
+//                    }
                 }
                 else {
                     self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.removeReminder(forReminderUUID: forReminder.reminderUUID)
@@ -640,10 +656,17 @@ final class DogsTableVC: HoundTableViewController {
                         return
                     }
                     
+                    let numReminders = self.dogManager.dogs[indexPath.section].dogReminders.dogReminders.count
+                    if numReminders > 1 && indexPath.row == numReminders {
+                        // there is a reminder above its its the new bottom, so it needs its corners rounded
+                        let aboveReminderCell = tableView.cellForRow(at: IndexPath(row: indexPath.row - 1, section: indexPath.section)) as? DogsReminderTVC
+                        UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
+                            aboveReminderCell?.containerView.roundCorners(setCorners: .bottom)
+                        }
+                    }
                     dog.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                    
                 }
                 
             }
