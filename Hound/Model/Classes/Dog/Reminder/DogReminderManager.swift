@@ -24,13 +24,13 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
     
     required init?(coder aDecoder: NSCoder) {
-        dogReminders = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogReminders.rawValue) ?? dogReminders
+        dogReminders = aDecoder.decodeOptionalObject(forKey: Constant.Key.dogReminders.rawValue) ?? dogReminders
     }
     
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(dogReminders, forKey: KeyConstant.dogReminders.rawValue)
+        aCoder.encode(dogReminders, forKey: Constant.Key.dogReminders.rawValue)
     }
     
     // MARK: - Properties
@@ -55,9 +55,9 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
         
         for fromBody in fromReminderBodies {
             // Don't pull properties from reminderToOverride. A valid fromBody needs to provide this itself
-            let reminderId = fromBody[KeyConstant.reminderId.rawValue] as? Int
-            let reminderUUID = UUID.fromString(forUUIDString: fromBody[KeyConstant.reminderUUID.rawValue] as? String)
-            let reminderIsDeleted = fromBody[KeyConstant.reminderIsDeleted.rawValue] as? Bool
+            let reminderId = fromBody[Constant.Key.reminderId.rawValue] as? Int
+            let reminderUUID = UUID.fromString(forUUIDString: fromBody[Constant.Key.reminderUUID.rawValue] as? String)
+            let reminderIsDeleted = fromBody[Constant.Key.reminderIsDeleted.rawValue] as? Bool
             
             guard reminderId != nil, let reminderUUID = reminderUUID, let reminderIsDeleted = reminderIsDeleted else {
                 // couldn't construct essential components to intrepret reminder

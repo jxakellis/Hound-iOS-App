@@ -21,13 +21,13 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     // MARK: - NSCoding
     
     required init?(coder aDecoder: NSCoder) {
-        oneTimeDate = aDecoder.decodeOptionalObject(forKey: KeyConstant.oneTimeDate.rawValue) ?? oneTimeDate
+        oneTimeDate = aDecoder.decodeOptionalObject(forKey: Constant.Key.oneTimeDate.rawValue) ?? oneTimeDate
     }
     
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeInteger, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(oneTimeDate, forKey: KeyConstant.oneTimeDate.rawValue)
+        aCoder.encode(oneTimeDate, forKey: Constant.Key.oneTimeDate.rawValue)
     }
     
     // MARK: - Properties

@@ -14,11 +14,11 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
     
     required convenience init?(coder aDecoder: NSCoder) {
         guard
-            let logActionTypes: [LogActionType] = aDecoder.decodeOptionalObject(forKey: KeyConstant.logActionType.rawValue),
-            let reminderActionTypes: [ReminderActionType] = aDecoder.decodeOptionalObject(forKey: KeyConstant.reminderActionType.rawValue),
-            let mappingLogActionTypeReminderActionType: [MappingLogActionTypeReminderActionType] = aDecoder.decodeOptionalObject(forKey: KeyConstant.mappingLogActionTypeReminderActionType.rawValue),
-            let logUnitTypes: [LogUnitType] = aDecoder.decodeOptionalObject(forKey: KeyConstant.logUnitType.rawValue),
-            let mappingLogActionTypeLogUnitType: [MappingLogActionTypeLogUnitType] = aDecoder.decodeOptionalObject(forKey: KeyConstant.mappingLogActionTypeLogUnitType.rawValue)
+            let logActionTypes: [LogActionType] = aDecoder.decodeOptionalObject(forKey: Constant.Key.logActionType.rawValue),
+            let reminderActionTypes: [ReminderActionType] = aDecoder.decodeOptionalObject(forKey: Constant.Key.reminderActionType.rawValue),
+            let mappingLogActionTypeReminderActionType: [MappingLogActionTypeReminderActionType] = aDecoder.decodeOptionalObject(forKey: Constant.Key.mappingLogActionTypeReminderActionType.rawValue),
+            let logUnitTypes: [LogUnitType] = aDecoder.decodeOptionalObject(forKey: Constant.Key.logUnitType.rawValue),
+            let mappingLogActionTypeLogUnitType: [MappingLogActionTypeLogUnitType] = aDecoder.decodeOptionalObject(forKey: Constant.Key.mappingLogActionTypeLogUnitType.rawValue)
         else {
             return nil
         }
@@ -34,11 +34,11 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(logActionTypes, forKey: KeyConstant.logActionType.rawValue)
-        aCoder.encode(reminderActionTypes, forKey: KeyConstant.reminderActionType.rawValue)
-        aCoder.encode(mappingLogActionTypeReminderActionType, forKey: KeyConstant.mappingLogActionTypeReminderActionType.rawValue)
-        aCoder.encode(logUnitTypes, forKey: KeyConstant.logUnitType.rawValue)
-        aCoder.encode(mappingLogActionTypeLogUnitType, forKey: KeyConstant.mappingLogActionTypeLogUnitType.rawValue)
+        aCoder.encode(logActionTypes, forKey: Constant.Key.logActionType.rawValue)
+        aCoder.encode(reminderActionTypes, forKey: Constant.Key.reminderActionType.rawValue)
+        aCoder.encode(mappingLogActionTypeReminderActionType, forKey: Constant.Key.mappingLogActionTypeReminderActionType.rawValue)
+        aCoder.encode(logUnitTypes, forKey: Constant.Key.logUnitType.rawValue)
+        aCoder.encode(mappingLogActionTypeLogUnitType, forKey: Constant.Key.mappingLogActionTypeLogUnitType.rawValue)
     }
     
     // MARK: - UserDefaultPersistable
@@ -52,7 +52,7 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
         
         do {
             let dataGlobalTypes = try NSKeyedArchiver.archivedData(withRootObject: globalTypes, requiringSecureCoding: false)
-            toUserDefaults.set(dataGlobalTypes, forKey: KeyConstant.globalTypes.rawValue)
+            toUserDefaults.set(dataGlobalTypes, forKey: Constant.Key.globalTypes.rawValue)
         }
         catch {
             HoundLogger.general.error("GlobalTypes.persist: Failed to persist globalTypes with NSKeyedArchiver: \(error)")
@@ -61,7 +61,7 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
     
     /// Load all of the LocalConfiguration variables and the globalGlobalTypes from the specified UserDefaults
     static func load(fromUserDefaults: UserDefaults) {
-        guard let dataGlobalTypes = fromUserDefaults.data(forKey: KeyConstant.globalTypes.rawValue) else {
+        guard let dataGlobalTypes = fromUserDefaults.data(forKey: Constant.Key.globalTypes.rawValue) else {
             HoundLogger.general.error("GlobalTypes.load: No data found for globalTypes in UserDefaults")
             GlobalTypes.shared = nil
             return
@@ -77,8 +77,8 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
                 GlobalTypes.shared = nil
                 // clear dogManager and previousDogManagerSynchronization as if those try to init without global types, the app will crash
                 // client needs to fetch global types from server
-                UserDefaults.standard.set(nil, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
-                UserDefaults.standard.set(nil, forKey: KeyConstant.dogManager.rawValue)
+                UserDefaults.standard.set(nil, forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
+                UserDefaults.standard.set(nil, forKey: Constant.Key.dogManager.rawValue)
             }
         }
         catch {
@@ -86,8 +86,8 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
             GlobalTypes.shared = nil
             // clear dogManager and previousDogManagerSynchronization as if those try to init without global types, the app will crash
             // client needs to fetch global types from server
-            UserDefaults.standard.set(nil, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
-            UserDefaults.standard.set(nil, forKey: KeyConstant.dogManager.rawValue)
+            UserDefaults.standard.set(nil, forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
+            UserDefaults.standard.set(nil, forKey: Constant.Key.dogManager.rawValue)
         }
     }
     
@@ -135,11 +135,11 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
     
     convenience init?(fromBody: JSONResponseBody) {
         guard
-            let logActionTypeArr = fromBody[KeyConstant.logActionType.rawValue] as? [JSONResponseBody],
-            let reminderActionTypeArr = fromBody[KeyConstant.reminderActionType.rawValue] as? [JSONResponseBody],
-            let mappingLogActionTypeReminderActionTypeArr = fromBody[KeyConstant.mappingLogActionTypeReminderActionType.rawValue] as? [JSONResponseBody],
-            let logUnitTypesArr = fromBody[KeyConstant.logUnitType.rawValue] as? [JSONResponseBody],
-            let mappingLogActionTypeLogUnitTypeArr = fromBody[KeyConstant.mappingLogActionTypeLogUnitType.rawValue] as? [JSONResponseBody]
+            let logActionTypeArr = fromBody[Constant.Key.logActionType.rawValue] as? [JSONResponseBody],
+            let reminderActionTypeArr = fromBody[Constant.Key.reminderActionType.rawValue] as? [JSONResponseBody],
+            let mappingLogActionTypeReminderActionTypeArr = fromBody[Constant.Key.mappingLogActionTypeReminderActionType.rawValue] as? [JSONResponseBody],
+            let logUnitTypesArr = fromBody[Constant.Key.logUnitType.rawValue] as? [JSONResponseBody],
+            let mappingLogActionTypeLogUnitTypeArr = fromBody[Constant.Key.mappingLogActionTypeLogUnitType.rawValue] as? [JSONResponseBody]
         else {
             HoundLogger.general.error("GlobalTypes.init: Unable to decode types for GlobalTypes. fromBody is as follows \(fromBody)")
             return nil

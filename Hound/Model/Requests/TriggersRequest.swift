@@ -19,7 +19,7 @@ enum TriggersRequest {
     ) -> JSONRequestBody {
         let triggerBodies = forDogTriggers.map { $0.createBody(forDogUUID: forDogUUID) }
         
-        let body: JSONRequestBody = [KeyConstant.dogTriggers.rawValue: .array(
+        let body: JSONRequestBody = [Constant.Key.dogTriggers.rawValue: .array(
             triggerBodies.map { .object($0.compactMapValues { $0 }) }
         )]
         return body
@@ -62,10 +62,10 @@ extension TriggersRequest {
             
             // Either completed successfully or no response from the server, we can proceed as usual
             let triggersBody: [JSONResponseBody]? = {
-                if let array = responseBody?[KeyConstant.result.rawValue] as? [JSONResponseBody] {
+                if let array = responseBody?[Constant.Key.result.rawValue] as? [JSONResponseBody] {
                     return array
                 }
-                else if let single = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
+                else if let single = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
                     return [single]
                 }
                 else {
@@ -151,10 +151,10 @@ extension TriggersRequest {
             
             // Either completed successfully or no response from the server, we can proceed as usual
             let triggersBody: [JSONResponseBody]? = {
-                if let array = responseBody?[KeyConstant.result.rawValue] as? [JSONResponseBody] {
+                if let array = responseBody?[Constant.Key.result.rawValue] as? [JSONResponseBody] {
                     return array
                 }
-                else if let single = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
+                else if let single = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
                     return [single]
                 }
                 else {
@@ -174,8 +174,8 @@ extension TriggersRequest {
             else if let bodies = triggersBody {
                 // For each body, get the UUID and id. We use the uuid to locate the reminder so we can assign it its id
                 bodies.forEach { body in
-                    guard let id = body[KeyConstant.triggerId.rawValue] as? Int,
-                          let uuidString = body[KeyConstant.triggerUUID.rawValue] as? String,
+                    guard let id = body[Constant.Key.triggerId.rawValue] as? Int,
+                          let uuidString = body[Constant.Key.triggerUUID.rawValue] as? String,
                           let uuid = UUID.fromString(forUUIDString: uuidString)
                     else {
                         return
@@ -257,11 +257,11 @@ extension TriggersRequest {
             var triggerBodies: [JSONRequestBody] = []
             for forUUID in forTriggerUUIDs {
                 var entry: JSONRequestBody = [:]
-                entry[KeyConstant.dogUUID.rawValue] = .string(forDogUUID.uuidString)
-                entry[KeyConstant.triggerUUID.rawValue] = .string(forUUID.uuidString)
+                entry[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+                entry[Constant.Key.triggerUUID.rawValue] = .string(forUUID.uuidString)
                 triggerBodies.append(entry)
             }
-            return [KeyConstant.dogTriggers.rawValue: .array(
+            return [Constant.Key.dogTriggers.rawValue: .array(
                 triggerBodies.map { .object($0.compactMapValues { $0 }) }
             )]
         }()

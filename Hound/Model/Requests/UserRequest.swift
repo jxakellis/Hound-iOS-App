@@ -34,7 +34,7 @@ enum UserRequest {
                 if responseStatus == .noResponse {
                     OfflineModeManager.shared.didGetNoResponse(forType: .userRequestGet)
                 }
-                else if let result = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
+                else if let result = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
                     UserInformation.setup(fromBody: result)
                     UserConfiguration.setup(fromBody: result)
                 }
@@ -61,7 +61,7 @@ enum UserRequest {
 
             switch responseStatus {
             case .successResponse:
-                if let userId = responseBody?[KeyConstant.result.rawValue] as? String {
+                if let userId = responseBody?[Constant.Key.result.rawValue] as? String {
                     UserInformation.userId = userId
                     completionHandler(.successResponse, error)
                 }

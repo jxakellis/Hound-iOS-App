@@ -16,7 +16,7 @@ enum RemindersRequest {
     private static func createBody(forDogUUID: UUID, forReminders: [Reminder]) -> JSONRequestBody {
         let reminderBodies = forReminders.map { $0.createBody(forDogUUID: forDogUUID) }
         
-        let body: JSONRequestBody = [KeyConstant.dogReminders.rawValue: .array(
+        let body: JSONRequestBody = [Constant.Key.dogReminders.rawValue: .array(
             reminderBodies.map { .object($0.compactMapValues { $0 }) }
         )]
         return body
@@ -54,10 +54,10 @@ extension RemindersRequest {
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
                 let remindersBody: [JSONResponseBody]? = {
-                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [JSONResponseBody] {
+                    if let remindersBody = responseBody?[Constant.Key.result.rawValue] as? [JSONResponseBody] {
                         return remindersBody
                     }
-                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
+                    else if let reminderBody = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
                         return [reminderBody]
                     }
                     else {
@@ -119,10 +119,10 @@ extension RemindersRequest {
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
                 let remindersBody: [JSONResponseBody]? = {
-                    if let remindersBody = responseBody?[KeyConstant.result.rawValue] as? [JSONResponseBody] {
+                    if let remindersBody = responseBody?[Constant.Key.result.rawValue] as? [JSONResponseBody] {
                         return remindersBody
                     }
-                    else if let reminderBody = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
+                    else if let reminderBody = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
                         return [reminderBody]
                     }
                     else {
@@ -139,7 +139,7 @@ extension RemindersRequest {
                 else if let remindersBody = remindersBody {
                     remindersBody.forEach { reminderBody in
                         // For each reminderBody, get the reminderUUID and reminderId. We use the reminderUUID to locate the reminder so we can assign it its reminderId
-                        guard let reminderId = reminderBody[KeyConstant.reminderId.rawValue] as? Int, let reminderUUID = UUID.fromString(forUUIDString: reminderBody[KeyConstant.reminderUUID.rawValue] as? String) else {
+                        guard let reminderId = reminderBody[Constant.Key.reminderId.rawValue] as? Int, let reminderUUID = UUID.fromString(forUUIDString: reminderBody[Constant.Key.reminderUUID.rawValue] as? String) else {
                             return
                         }
                         
@@ -217,12 +217,12 @@ extension RemindersRequest {
             
             for forReminderUUID in forReminderUUIDs {
                 var reminderBody: JSONRequestBody = [:]
-                reminderBody[KeyConstant.dogUUID.rawValue] = .string(forDogUUID.uuidString)
-                reminderBody[KeyConstant.reminderUUID.rawValue] = .string(forReminderUUID.uuidString)
+                reminderBody[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+                reminderBody[Constant.Key.reminderUUID.rawValue] = .string(forReminderUUID.uuidString)
                 reminderBodies.append(reminderBody)
             }
         
-            return [KeyConstant.dogReminders.rawValue: .array(reminderBodies.map { .object($0.compactMapValues { $0 }) })]
+            return [Constant.Key.dogReminders.rawValue: .array(reminderBodies.map { .object($0.compactMapValues { $0 }) })]
         }()
         
         return RequestUtils.genericDeleteRequest(

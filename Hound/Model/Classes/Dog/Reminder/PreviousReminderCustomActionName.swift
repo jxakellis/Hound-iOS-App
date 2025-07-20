@@ -14,8 +14,8 @@ class PreviousReminderCustomActionName: NSObject, NSCoding {
 
     required convenience init?(coder aDecoder: NSCoder) {
         guard
-            let decodedReminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.reminderActionTypeId.rawValue),
-            let decodedReminderCustomActionName = aDecoder.decodeOptionalString(forKey: KeyConstant.reminderCustomActionName.rawValue)
+            let decodedReminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.reminderActionTypeId.rawValue),
+            let decodedReminderCustomActionName = aDecoder.decodeOptionalString(forKey: Constant.Key.reminderCustomActionName.rawValue)
         else {
             return nil
         }
@@ -25,8 +25,8 @@ class PreviousReminderCustomActionName: NSObject, NSCoding {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(reminderActionTypeId, forKey: KeyConstant.reminderActionTypeId.rawValue)
-        aCoder.encode(reminderCustomActionName, forKey: KeyConstant.reminderCustomActionName.rawValue)
+        aCoder.encode(reminderActionTypeId, forKey: Constant.Key.reminderActionTypeId.rawValue)
+        aCoder.encode(reminderCustomActionName, forKey: Constant.Key.reminderCustomActionName.rawValue)
     }
 
     // MARK: - Properties

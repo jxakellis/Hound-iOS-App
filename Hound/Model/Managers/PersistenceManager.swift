@@ -19,16 +19,16 @@ enum PersistenceManager {
         
         // MARK: Save App State Values
         
-        UIApplication.previousAppVersion = UserDefaults.standard.object(forKey: KeyConstant.localAppVersion.rawValue) as? String
+        UIApplication.previousAppVersion = UserDefaults.standard.object(forKey: Constant.Key.localAppVersion.rawValue) as? String
         
         // If the previousAppVersion is less than the oldestCompatibleAppVersion, the user's data is no longer compatible and therefore should be redownloaded.
         if UIApplication.isPreviousAppVersionCompatible == false {
             // Clear out this stored data so the user can redownload from the server
-            UserDefaults.standard.set(nil, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
-            UserDefaults.standard.set(nil, forKey: KeyConstant.dogManager.rawValue)
+            UserDefaults.standard.set(nil, forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
+            UserDefaults.standard.set(nil, forKey: Constant.Key.dogManager.rawValue)
         }
         
-        UserDefaults.standard.set(UIApplication.appVersion, forKey: KeyConstant.localAppVersion.rawValue)
+        UserDefaults.standard.set(UIApplication.appVersion, forKey: Constant.Key.localAppVersion.rawValue)
         
         UserDefaults.standard.set(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
         
@@ -111,7 +111,7 @@ enum PersistenceManager {
     
     /// It is important to persist this value to memory immediately. Apple keeps track of when we ask the user for a rate review and we must keep accurate track. But, if Hound crashes before we can save an updated value of localPreviousDatesUserReviewRequested, then our value and Apple's true value is mismatched.
     static func persistRateReviewRequestedDates() {
-        UserDefaults.standard.set(LocalConfiguration.localPreviousDatesUserReviewRequested, forKey: KeyConstant.localPreviousDatesUserReviewRequested.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localPreviousDatesUserReviewRequested, forKey: Constant.Key.localPreviousDatesUserReviewRequested.rawValue)
     }
     
     /// Removes values stored in the keychain and UserDefaults for userIdentifier and userId. Additionally, invokes clearStorageToRejoinFamily().
@@ -121,18 +121,18 @@ enum PersistenceManager {
         
         // Clear userIdentifier out of storage so user is forced to login page again
         UserInformation.userIdentifier = nil
-        keychain.delete(KeyConstant.userIdentifier.rawValue)
-        UserDefaults.standard.removeObject(forKey: KeyConstant.userIdentifier.rawValue)
+        keychain.delete(Constant.Key.userIdentifier.rawValue)
+        UserDefaults.standard.removeObject(forKey: Constant.Key.userIdentifier.rawValue)
         
         UserInformation.userId = nil
-        keychain.delete(KeyConstant.userId.rawValue)
-        UserDefaults.standard.removeObject(forKey: KeyConstant.userId.rawValue)
+        keychain.delete(Constant.Key.userId.rawValue)
+        UserDefaults.standard.removeObject(forKey: Constant.Key.userId.rawValue)
         
         UserInformation.userAppAccountToken = nil
-        UserDefaults.standard.removeObject(forKey: KeyConstant.userAppAccountToken.rawValue)
+        UserDefaults.standard.removeObject(forKey: Constant.Key.userAppAccountToken.rawValue)
         
         UserInformation.userNotificationToken = nil
-        UserDefaults.standard.removeObject(forKey: KeyConstant.userNotificationToken.rawValue)
+        UserDefaults.standard.removeObject(forKey: Constant.Key.userNotificationToken.rawValue)
         
         clearStorageToRejoinFamily()
     }
@@ -144,25 +144,25 @@ enum PersistenceManager {
         // MARK: User Information
         
         UserInformation.familyId = nil
-        UserDefaults.standard.removeObject(forKey: KeyConstant.familyId.rawValue)
+        UserDefaults.standard.removeObject(forKey: Constant.Key.familyId.rawValue)
         
         // MARK: Local Configuration
         LocalConfiguration.localHasCompletedHoundIntroductionViewController = false
-        UserDefaults.standard.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: Constant.Key.localHasCompletedHoundIntroductionViewController.rawValue)
         
         LocalConfiguration.localHasCompletedRemindersIntroductionViewController = false
-        UserDefaults.standard.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: Constant.Key.localHasCompletedRemindersIntroductionViewController.rawValue)
         
         LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController = false
-        UserDefaults.standard.set(LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController, forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController, forKey: Constant.Key.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
         
         LocalConfiguration.previousDogManagerSynchronization = nil
-        UserDefaults.standard.set(LocalConfiguration.previousDogManagerSynchronization, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
+        UserDefaults.standard.set(LocalConfiguration.previousDogManagerSynchronization, forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
         
         // MARK: Data
         
         DogManager.globalDogManager = nil
-        UserDefaults.standard.removeObject(forKey: KeyConstant.dogManager.rawValue)
+        UserDefaults.standard.removeObject(forKey: Constant.Key.dogManager.rawValue)
     }
     
 }

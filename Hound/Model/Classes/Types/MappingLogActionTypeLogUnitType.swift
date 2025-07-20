@@ -27,9 +27,9 @@ final class MappingLogActionTypeLogUnitType: NSObject, Comparable, NSCoding {
     
     required convenience init?(coder aDecoder: NSCoder) {
         guard
-            let mappingId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.mappingId.rawValue),
-            let logActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logActionTypeId.rawValue),
-            let logUnitTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logUnitTypeId.rawValue)
+            let mappingId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.mappingId.rawValue),
+            let logActionTypeId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logActionTypeId.rawValue),
+            let logUnitTypeId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logUnitTypeId.rawValue)
         else {
             return nil
         }
@@ -43,9 +43,9 @@ final class MappingLogActionTypeLogUnitType: NSObject, Comparable, NSCoding {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(mappingId, forKey: KeyConstant.mappingId.rawValue)
-        aCoder.encode(logActionTypeId, forKey: KeyConstant.logActionTypeId.rawValue)
-        aCoder.encode(logUnitTypeId, forKey: KeyConstant.logUnitTypeId.rawValue)
+        aCoder.encode(mappingId, forKey: Constant.Key.mappingId.rawValue)
+        aCoder.encode(logActionTypeId, forKey: Constant.Key.logActionTypeId.rawValue)
+        aCoder.encode(logUnitTypeId, forKey: Constant.Key.logUnitTypeId.rawValue)
     }
     
     // MARK: - Properties
@@ -69,9 +69,9 @@ final class MappingLogActionTypeLogUnitType: NSObject, Comparable, NSCoding {
     
     convenience init?(fromBody: JSONResponseBody) {
         guard
-            let mappingIdVal = fromBody[KeyConstant.mappingId.rawValue] as? Int,
-            let logActionTypeIdVal = fromBody[KeyConstant.logActionTypeId.rawValue] as? Int,
-            let logUnitTypeIdVal = fromBody[KeyConstant.logUnitTypeId.rawValue] as? Int
+            let mappingIdVal = fromBody[Constant.Key.mappingId.rawValue] as? Int,
+            let logActionTypeIdVal = fromBody[Constant.Key.logActionTypeId.rawValue] as? Int,
+            let logUnitTypeIdVal = fromBody[Constant.Key.logUnitTypeId.rawValue] as? Int
         else {
             return nil
         }

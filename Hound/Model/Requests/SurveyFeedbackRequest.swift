@@ -25,9 +25,9 @@ enum SurveyFeedbackRequest {
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         var body: JSONRequestBody = [:]
-        body[KeyConstant.surveyFeedbackType.rawValue] = .string(SurveyFeedbackType.cancelSubscription.rawValue)
-        body[KeyConstant.surveyFeedbackUserCancellationReason.rawValue] = .string(userCancellationReason?.internalValue)
-        body[KeyConstant.surveyFeedbackUserCancellationFeedback.rawValue] = .string(userCancellationFeedback)
+        body[Constant.Key.surveyFeedbackType.rawValue] = .string(SurveyFeedbackType.cancelSubscription.rawValue)
+        body[Constant.Key.surveyFeedbackUserCancellationReason.rawValue] = .string(userCancellationReason?.internalValue)
+        body[Constant.Key.surveyFeedbackUserCancellationFeedback.rawValue] = .string(userCancellationFeedback)
         
         return create(forErrorAlert: forErrorAlert, forSourceFunction: forSourceFunction, forBody: body, completionHandler: completionHandler)
     }
@@ -45,9 +45,9 @@ enum SurveyFeedbackRequest {
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         let body: JSONRequestBody = [
-            KeyConstant.surveyFeedbackType.rawValue: .string(SurveyFeedbackType.appExperience.rawValue),
-            KeyConstant.surveyFeedbackAppExperienceNumberOfStars.rawValue: .int(numberOfStars),
-            KeyConstant.surveyFeedbackAppExperienceFeedback.rawValue: .string(appExperienceFeedback)
+            Constant.Key.surveyFeedbackType.rawValue: .string(SurveyFeedbackType.appExperience.rawValue),
+            Constant.Key.surveyFeedbackAppExperienceNumberOfStars.rawValue: .int(numberOfStars),
+            Constant.Key.surveyFeedbackAppExperienceFeedback.rawValue: .string(appExperienceFeedback)
         ]
         
         return create(forErrorAlert: forErrorAlert, forSourceFunction: forSourceFunction, forBody: body) { responseStatus, houndError in
@@ -78,14 +78,14 @@ enum SurveyFeedbackRequest {
     ) -> Progress? {
        
         var forBodyWithDeviceMetrics = forBody
-        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricModel.rawValue] = .string(UIDevice.current.model)
-        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricSystemVersion.rawValue] = .string(UIDevice.current.systemVersion)
-        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricAppVersion.rawValue] = .string(UIApplication.appVersion)
-        forBodyWithDeviceMetrics[KeyConstant.surveyFeedbackDeviceMetricLocale.rawValue] = .string(Locale.current.identifier)
+        forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricModel.rawValue] = .string(UIDevice.current.model)
+        forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricSystemVersion.rawValue] = .string(UIDevice.current.systemVersion)
+        forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricAppVersion.rawValue] = .string(UIApplication.appVersion)
+        forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricLocale.rawValue] = .string(Locale.current.identifier)
         
         // All of the previous body should be encapsulated inside a surveyFeedback body
         var body: JSONRequestBody = [:]
-        body[KeyConstant.surveyFeedback.rawValue] = .object(forBodyWithDeviceMetrics)
+        body[Constant.Key.surveyFeedback.rawValue] = .object(forBodyWithDeviceMetrics)
         
         return RequestUtils.genericPostRequest(
             forErrorAlert: forErrorAlert,

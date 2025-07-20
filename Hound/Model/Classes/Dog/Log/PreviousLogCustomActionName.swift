@@ -14,8 +14,8 @@ class PreviousLogCustomActionName: NSObject, NSCoding {
     
     required convenience init?(coder aDecoder: NSCoder) {
         guard
-            let decodedLogActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logActionTypeId.rawValue),
-            let decodedLogCustomActionName = aDecoder.decodeOptionalString(forKey: KeyConstant.logCustomActionName.rawValue)
+            let decodedLogActionTypeId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logActionTypeId.rawValue),
+            let decodedLogCustomActionName = aDecoder.decodeOptionalString(forKey: Constant.Key.logCustomActionName.rawValue)
         else {
             return nil
         }
@@ -25,8 +25,8 @@ class PreviousLogCustomActionName: NSObject, NSCoding {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(logActionTypeId, forKey: KeyConstant.logActionTypeId.rawValue)
-        aCoder.encode(logCustomActionName, forKey: KeyConstant.logCustomActionName.rawValue)
+        aCoder.encode(logActionTypeId, forKey: Constant.Key.logActionTypeId.rawValue)
+        aCoder.encode(logCustomActionName, forKey: Constant.Key.logCustomActionName.rawValue)
     }
     
     // MARK: - Properties

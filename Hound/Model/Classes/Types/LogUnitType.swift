@@ -30,15 +30,15 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
     
     required convenience init?(coder aDecoder: NSCoder) {
         guard
-            let logUnitTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logUnitTypeId.rawValue),
-            let unitSymbol = aDecoder.decodeOptionalString(forKey: KeyConstant.unitSymbol.rawValue),
-            let readableValue = aDecoder.decodeOptionalString(forKey: KeyConstant.readableValue.rawValue),
-            let isImperial = aDecoder.decodeOptionalBool(forKey: KeyConstant.isImperial.rawValue),
-            let isMetric = aDecoder.decodeOptionalBool(forKey: KeyConstant.isMetric.rawValue),
-            let isUnitMass = aDecoder.decodeOptionalBool(forKey: KeyConstant.isUnitMass.rawValue),
-            let isUnitVolume = aDecoder.decodeOptionalBool(forKey: KeyConstant.isUnitVolume.rawValue),
-            let isUnitLength = aDecoder.decodeOptionalBool(forKey: KeyConstant.isUnitLength.rawValue),
-            let sortOrder = aDecoder.decodeOptionalInteger(forKey: KeyConstant.sortOrder.rawValue)
+            let logUnitTypeId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logUnitTypeId.rawValue),
+            let unitSymbol = aDecoder.decodeOptionalString(forKey: Constant.Key.unitSymbol.rawValue),
+            let readableValue = aDecoder.decodeOptionalString(forKey: Constant.Key.readableValue.rawValue),
+            let isImperial = aDecoder.decodeOptionalBool(forKey: Constant.Key.isImperial.rawValue),
+            let isMetric = aDecoder.decodeOptionalBool(forKey: Constant.Key.isMetric.rawValue),
+            let isUnitMass = aDecoder.decodeOptionalBool(forKey: Constant.Key.isUnitMass.rawValue),
+            let isUnitVolume = aDecoder.decodeOptionalBool(forKey: Constant.Key.isUnitVolume.rawValue),
+            let isUnitLength = aDecoder.decodeOptionalBool(forKey: Constant.Key.isUnitLength.rawValue),
+            let sortOrder = aDecoder.decodeOptionalInteger(forKey: Constant.Key.sortOrder.rawValue)
         else {
             return nil
         }
@@ -59,15 +59,15 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(logUnitTypeId, forKey: KeyConstant.logUnitTypeId.rawValue)
-        aCoder.encode(unitSymbol, forKey: KeyConstant.unitSymbol.rawValue)
-        aCoder.encode(readableValue, forKey: KeyConstant.readableValue.rawValue)
-        aCoder.encode(isImperial, forKey: KeyConstant.isImperial.rawValue)
-        aCoder.encode(isMetric, forKey: KeyConstant.isMetric.rawValue)
-        aCoder.encode(isUnitMass, forKey: KeyConstant.isUnitMass.rawValue)
-        aCoder.encode(isUnitVolume, forKey: KeyConstant.isUnitVolume.rawValue)
-        aCoder.encode(isUnitLength, forKey: KeyConstant.isUnitLength.rawValue)
-        aCoder.encode(sortOrder, forKey: KeyConstant.sortOrder.rawValue)
+        aCoder.encode(logUnitTypeId, forKey: Constant.Key.logUnitTypeId.rawValue)
+        aCoder.encode(unitSymbol, forKey: Constant.Key.unitSymbol.rawValue)
+        aCoder.encode(readableValue, forKey: Constant.Key.readableValue.rawValue)
+        aCoder.encode(isImperial, forKey: Constant.Key.isImperial.rawValue)
+        aCoder.encode(isMetric, forKey: Constant.Key.isMetric.rawValue)
+        aCoder.encode(isUnitMass, forKey: Constant.Key.isUnitMass.rawValue)
+        aCoder.encode(isUnitVolume, forKey: Constant.Key.isUnitVolume.rawValue)
+        aCoder.encode(isUnitLength, forKey: Constant.Key.isUnitLength.rawValue)
+        aCoder.encode(sortOrder, forKey: Constant.Key.sortOrder.rawValue)
     }
     
     // MARK: - Properties
@@ -109,15 +109,15 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
     
     convenience init?(fromBody: JSONResponseBody) {
         guard
-            let idVal = fromBody[KeyConstant.logUnitTypeId.rawValue] as? Int,
-            let symbolVal = fromBody[KeyConstant.unitSymbol.rawValue] as? String,
-            let readableVal = fromBody[KeyConstant.readableValue.rawValue] as? String,
-            let isImperialVal = fromBody[KeyConstant.isImperial.rawValue] as? Bool,
-            let isMetricVal = fromBody[KeyConstant.isMetric.rawValue] as? Bool,
-            let isMassVal = fromBody[KeyConstant.isUnitMass.rawValue] as? Bool,
-            let isVolumeVal = fromBody[KeyConstant.isUnitVolume.rawValue] as? Bool,
-            let isLengthVal = fromBody[KeyConstant.isUnitLength.rawValue] as? Bool,
-            let sortOrderVal = fromBody[KeyConstant.sortOrder.rawValue] as? Int
+            let idVal = fromBody[Constant.Key.logUnitTypeId.rawValue] as? Int,
+            let symbolVal = fromBody[Constant.Key.unitSymbol.rawValue] as? String,
+            let readableVal = fromBody[Constant.Key.readableValue.rawValue] as? String,
+            let isImperialVal = fromBody[Constant.Key.isImperial.rawValue] as? Bool,
+            let isMetricVal = fromBody[Constant.Key.isMetric.rawValue] as? Bool,
+            let isMassVal = fromBody[Constant.Key.isUnitMass.rawValue] as? Bool,
+            let isVolumeVal = fromBody[Constant.Key.isUnitVolume.rawValue] as? Bool,
+            let isLengthVal = fromBody[Constant.Key.isUnitLength.rawValue] as? Bool,
+            let sortOrderVal = fromBody[Constant.Key.sortOrder.rawValue] as? Int
         else {
             return nil
         }

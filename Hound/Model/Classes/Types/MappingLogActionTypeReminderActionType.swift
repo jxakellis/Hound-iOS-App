@@ -27,9 +27,9 @@ final class MappingLogActionTypeReminderActionType: NSObject, Comparable, NSCodi
     
     required convenience init?(coder aDecoder: NSCoder) {
         guard
-            let mappingId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.mappingId.rawValue),
-            let logActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.logActionTypeId.rawValue),
-            let reminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.reminderActionTypeId.rawValue)
+            let mappingId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.mappingId.rawValue),
+            let logActionTypeId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logActionTypeId.rawValue),
+            let reminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.reminderActionTypeId.rawValue)
         else {
             return nil
         }
@@ -43,9 +43,9 @@ final class MappingLogActionTypeReminderActionType: NSObject, Comparable, NSCodi
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(mappingId, forKey: KeyConstant.mappingId.rawValue)
-        aCoder.encode(logActionTypeId, forKey: KeyConstant.logActionTypeId.rawValue)
-        aCoder.encode(reminderActionTypeId, forKey: KeyConstant.reminderActionTypeId.rawValue)
+        aCoder.encode(mappingId, forKey: Constant.Key.mappingId.rawValue)
+        aCoder.encode(logActionTypeId, forKey: Constant.Key.logActionTypeId.rawValue)
+        aCoder.encode(reminderActionTypeId, forKey: Constant.Key.reminderActionTypeId.rawValue)
     }
     
     // MARK: - Properties
@@ -69,9 +69,9 @@ final class MappingLogActionTypeReminderActionType: NSObject, Comparable, NSCodi
     
     convenience init?(fromBody: JSONResponseBody) {
         guard
-            let mappingIdVal = fromBody[KeyConstant.mappingId.rawValue] as? Int,
-            let logActionTypeIdVal = fromBody[KeyConstant.logActionTypeId.rawValue] as? Int,
-            let reminderActionTypeIdVal = fromBody[KeyConstant.reminderActionTypeId.rawValue] as? Int
+            let mappingIdVal = fromBody[Constant.Key.mappingId.rawValue] as? Int,
+            let logActionTypeIdVal = fromBody[Constant.Key.logActionTypeId.rawValue] as? Int,
+            let reminderActionTypeIdVal = fromBody[Constant.Key.reminderActionTypeId.rawValue] as? Int
         else {
             return nil
         }

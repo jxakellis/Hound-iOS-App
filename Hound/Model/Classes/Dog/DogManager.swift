@@ -25,14 +25,14 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
     
     required init?(coder aDecoder: NSCoder) {
-        let decodedDogs: [Dog]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogs.rawValue)
+        let decodedDogs: [Dog]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.dogs.rawValue)
         dogs = decodedDogs ?? dogs
     }
     
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(dogs, forKey: KeyConstant.dogs.rawValue)
+        aCoder.encode(dogs, forKey: Constant.Key.dogs.rawValue)
     }
     
     // MARK: - Properties
@@ -57,9 +57,9 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         
         for fromBody in fromDogBodies {
             // Don't pull these properties from overrideDog. A valid fromBody needs to provide this itself
-            let dogId: Int? = fromBody[KeyConstant.dogId.rawValue] as? Int
-            let dogUUID: UUID? = UUID.fromString(forUUIDString: fromBody[KeyConstant.dogUUID.rawValue] as? String)
-            let dogIsDeleted: Bool? = fromBody[KeyConstant.dogIsDeleted.rawValue] as? Bool
+            let dogId: Int? = fromBody[Constant.Key.dogId.rawValue] as? Int
+            let dogUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.dogUUID.rawValue] as? String)
+            let dogIsDeleted: Bool? = fromBody[Constant.Key.dogIsDeleted.rawValue] as? Bool
             
             guard dogId != nil, let dogUUID = dogUUID, let dogIsDeleted = dogIsDeleted else {
                 // couldn't construct essential components to intrepret dog

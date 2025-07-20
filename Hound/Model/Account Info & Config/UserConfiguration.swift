@@ -14,48 +14,48 @@ final class UserConfiguration: UserDefaultPersistable {
     // MARK: - UserDefaultPersistable
     
     static func persist(toUserDefaults: UserDefaults) {
-        toUserDefaults.set(UserConfiguration.interfaceStyle.rawValue, forKey: KeyConstant.userConfigurationInterfaceStyle.rawValue)
-        toUserDefaults.set(UserConfiguration.measurementSystem.rawValue, forKey: KeyConstant.userConfigurationMeasurementSystem.rawValue)
+        toUserDefaults.set(UserConfiguration.interfaceStyle.rawValue, forKey: Constant.Key.userConfigurationInterfaceStyle.rawValue)
+        toUserDefaults.set(UserConfiguration.measurementSystem.rawValue, forKey: Constant.Key.userConfigurationMeasurementSystem.rawValue)
         
-        toUserDefaults.set(UserConfiguration.notificationSound.rawValue, forKey: KeyConstant.userConfigurationNotificationSound.rawValue)
+        toUserDefaults.set(UserConfiguration.notificationSound.rawValue, forKey: Constant.Key.userConfigurationNotificationSound.rawValue)
         
-        toUserDefaults.set(UserConfiguration.isNotificationEnabled, forKey: KeyConstant.userConfigurationIsNotificationEnabled.rawValue)
-        toUserDefaults.set(UserConfiguration.isLoudNotificationEnabled, forKey: KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue)
-        toUserDefaults.set(UserConfiguration.isLogNotificationEnabled, forKey: KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue)
-        toUserDefaults.set(UserConfiguration.isReminderNotificationEnabled, forKey: KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.isNotificationEnabled, forKey: Constant.Key.userConfigurationIsNotificationEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.isLoudNotificationEnabled, forKey: Constant.Key.userConfigurationIsLoudNotificationEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.isLogNotificationEnabled, forKey: Constant.Key.userConfigurationIsLogNotificationEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.isReminderNotificationEnabled, forKey: Constant.Key.userConfigurationIsReminderNotificationEnabled.rawValue)
         
-        toUserDefaults.set(UserConfiguration.isSilentModeEnabled, forKey: KeyConstant.userConfigurationIsSilentModeEnabled.rawValue)
-        toUserDefaults.set(UserConfiguration.silentModeStartUTCHour, forKey: KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue)
-        toUserDefaults.set(UserConfiguration.silentModeEndUTCHour, forKey: KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue)
-        toUserDefaults.set(UserConfiguration.silentModeStartUTCMinute, forKey: KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue)
-        toUserDefaults.set(UserConfiguration.silentModeEndUTCMinute, forKey: KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue)
+        toUserDefaults.set(UserConfiguration.isSilentModeEnabled, forKey: Constant.Key.userConfigurationIsSilentModeEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeStartUTCHour, forKey: Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeEndUTCHour, forKey: Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeStartUTCMinute, forKey: Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeEndUTCMinute, forKey: Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue)
     }
     
     static func load(fromUserDefaults: UserDefaults) {
         // NOTE: User Configuration is stored on the Hound server and retrieved synced. However, if the user is in offline mode, they will need these values. Therefore, use local storage as a second backup for these values
         
-        if let interfaceStyleInt = fromUserDefaults.value(forKey: KeyConstant.userConfigurationInterfaceStyle.rawValue) as? Int {
+        if let interfaceStyleInt = fromUserDefaults.value(forKey: Constant.Key.userConfigurationInterfaceStyle.rawValue) as? Int {
             UserConfiguration.interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) ?? UserConfiguration.interfaceStyle
         }
-        if let measurementSystemInt = fromUserDefaults.value(forKey: KeyConstant.userConfigurationMeasurementSystem.rawValue) as? Int {
+        if let measurementSystemInt = fromUserDefaults.value(forKey: Constant.Key.userConfigurationMeasurementSystem.rawValue) as? Int {
             UserConfiguration.measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) ?? UserConfiguration.measurementSystem
         }
         
-        UserConfiguration.snoozeLength = fromUserDefaults.value(forKey: KeyConstant.userConfigurationSnoozeLength.rawValue) as? Double ?? UserConfiguration.snoozeLength
+        UserConfiguration.snoozeLength = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSnoozeLength.rawValue) as? Double ?? UserConfiguration.snoozeLength
         
-        UserConfiguration.isNotificationEnabled = fromUserDefaults.value(forKey: KeyConstant.userConfigurationIsNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isNotificationEnabled
-        UserConfiguration.isLoudNotificationEnabled = fromUserDefaults.value(forKey: KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isLoudNotificationEnabled
-        UserConfiguration.isLogNotificationEnabled = fromUserDefaults.value(forKey: KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isLogNotificationEnabled
-        UserConfiguration.isReminderNotificationEnabled = fromUserDefaults.value(forKey: KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isReminderNotificationEnabled
-        if let notificationSoundString = fromUserDefaults.value(forKey: KeyConstant.userConfigurationNotificationSound.rawValue) as? String {
+        UserConfiguration.isNotificationEnabled = fromUserDefaults.value(forKey: Constant.Key.userConfigurationIsNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isNotificationEnabled
+        UserConfiguration.isLoudNotificationEnabled = fromUserDefaults.value(forKey: Constant.Key.userConfigurationIsLoudNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isLoudNotificationEnabled
+        UserConfiguration.isLogNotificationEnabled = fromUserDefaults.value(forKey: Constant.Key.userConfigurationIsLogNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isLogNotificationEnabled
+        UserConfiguration.isReminderNotificationEnabled = fromUserDefaults.value(forKey: Constant.Key.userConfigurationIsReminderNotificationEnabled.rawValue) as? Bool ?? UserConfiguration.isReminderNotificationEnabled
+        if let notificationSoundString = fromUserDefaults.value(forKey: Constant.Key.userConfigurationNotificationSound.rawValue) as? String {
             UserConfiguration.notificationSound = NotificationSound(rawValue: notificationSoundString) ?? UserConfiguration.notificationSound
         }
         
-        UserConfiguration.isSilentModeEnabled = fromUserDefaults.value(forKey: KeyConstant.userConfigurationIsSilentModeEnabled.rawValue) as? Bool ?? UserConfiguration.isSilentModeEnabled
-        UserConfiguration.silentModeStartUTCHour = fromUserDefaults.value(forKey: KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue) as? Int ?? UserConfiguration.silentModeStartUTCHour
-        UserConfiguration.silentModeEndUTCHour = fromUserDefaults.value(forKey: KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue) as? Int ?? UserConfiguration.silentModeEndUTCHour
-        UserConfiguration.silentModeStartUTCMinute = fromUserDefaults.value(forKey: KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue) as? Int ?? UserConfiguration.silentModeStartUTCMinute
-        UserConfiguration.silentModeEndUTCMinute = fromUserDefaults.value(forKey: KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue) as? Int ?? UserConfiguration.silentModeEndUTCMinute
+        UserConfiguration.isSilentModeEnabled = fromUserDefaults.value(forKey: Constant.Key.userConfigurationIsSilentModeEnabled.rawValue) as? Bool ?? UserConfiguration.isSilentModeEnabled
+        UserConfiguration.silentModeStartUTCHour = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue) as? Int ?? UserConfiguration.silentModeStartUTCHour
+        UserConfiguration.silentModeEndUTCHour = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue) as? Int ?? UserConfiguration.silentModeEndUTCHour
+        UserConfiguration.silentModeStartUTCMinute = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue) as? Int ?? UserConfiguration.silentModeStartUTCMinute
+        UserConfiguration.silentModeEndUTCMinute = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue) as? Int ?? UserConfiguration.silentModeEndUTCMinute
     }
     
     // MARK: - Main
@@ -65,46 +65,46 @@ final class UserConfiguration: UserDefaultPersistable {
         // This is a unique edge case. If the user updated their UserConfiguration (while offline), then terminates Hound, then re-opens Hound, the first thing the app will do is a get request to the Hound server. This would overwrite the user's local changes. Therefore, don't overwrite these changes.
         guard OfflineModeManager.shared.shouldUpdateUser == false else { return }
         
-        if let interfaceStyleInt = body[KeyConstant.userConfigurationInterfaceStyle.rawValue] as? Int, let interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) {
+        if let interfaceStyleInt = body[Constant.Key.userConfigurationInterfaceStyle.rawValue] as? Int, let interfaceStyle = UIUserInterfaceStyle(rawValue: interfaceStyleInt) {
             self.interfaceStyle = interfaceStyle
         }
-        if let measurementSystemInt = body[KeyConstant.userConfigurationMeasurementSystem.rawValue] as? Int, let measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) {
+        if let measurementSystemInt = body[Constant.Key.userConfigurationMeasurementSystem.rawValue] as? Int, let measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) {
             self.measurementSystem = measurementSystem
         }
         
-        if let snoozeLength = body[KeyConstant.userConfigurationSnoozeLength.rawValue] as? Double {
+        if let snoozeLength = body[Constant.Key.userConfigurationSnoozeLength.rawValue] as? Double {
             self.snoozeLength = snoozeLength
         }
         
-        if let isNotificationEnabled = body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] as? Bool {
+        if let isNotificationEnabled = body[Constant.Key.userConfigurationIsNotificationEnabled.rawValue] as? Bool {
             self.isNotificationEnabled = isNotificationEnabled
         }
-        if let isLoudNotificationEnabled = body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] as? Bool {
+        if let isLoudNotificationEnabled = body[Constant.Key.userConfigurationIsLoudNotificationEnabled.rawValue] as? Bool {
             self.isLoudNotificationEnabled = isLoudNotificationEnabled
         }
-        if let isLogNotificationEnabled = body[KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue] as? Bool {
+        if let isLogNotificationEnabled = body[Constant.Key.userConfigurationIsLogNotificationEnabled.rawValue] as? Bool {
             self.isLogNotificationEnabled = isLogNotificationEnabled
         }
-        if let isReminderNotificationEnabled = body[KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue] as? Bool {
+        if let isReminderNotificationEnabled = body[Constant.Key.userConfigurationIsReminderNotificationEnabled.rawValue] as? Bool {
             self.isReminderNotificationEnabled = isReminderNotificationEnabled
         }
-        if let notificationSoundString = body[KeyConstant.userConfigurationNotificationSound.rawValue] as? String, let notificationSound = NotificationSound(rawValue: notificationSoundString) {
+        if let notificationSoundString = body[Constant.Key.userConfigurationNotificationSound.rawValue] as? String, let notificationSound = NotificationSound(rawValue: notificationSoundString) {
             self.notificationSound = notificationSound
         }
         
-        if let isSilentModeEnabled = body[KeyConstant.userConfigurationIsSilentModeEnabled.rawValue] as? Bool {
+        if let isSilentModeEnabled = body[Constant.Key.userConfigurationIsSilentModeEnabled.rawValue] as? Bool {
             self.isSilentModeEnabled = isSilentModeEnabled
         }
-        if let silentModeStartUTCHour = body[KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue] as? Int {
+        if let silentModeStartUTCHour = body[Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue] as? Int {
             self.silentModeStartUTCHour = silentModeStartUTCHour
         }
-        if let silentModeEndUTCHour = body[KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue] as? Int {
+        if let silentModeEndUTCHour = body[Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue] as? Int {
             self.silentModeEndUTCHour = silentModeEndUTCHour
         }
-        if let silentModeStartUTCMinute = body[KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue] as? Int {
+        if let silentModeStartUTCMinute = body[Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue] as? Int {
             self.silentModeStartUTCMinute = silentModeStartUTCMinute
         }
-        if let silentModeEndUTCMinute = body[KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue] as? Int {
+        if let silentModeEndUTCMinute = body[Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue] as? Int {
             self.silentModeEndUTCMinute = silentModeEndUTCMinute
         }
     }
@@ -241,25 +241,25 @@ extension UserConfiguration {
     static func createBody(addingOntoBody: JSONRequestBody?) -> JSONRequestBody {
         var body: JSONRequestBody = addingOntoBody ?? [:]
         
-        body[KeyConstant.userConfigurationInterfaceStyle.rawValue] = .int(UserConfiguration.interfaceStyle.rawValue)
-        body[KeyConstant.userConfigurationMeasurementSystem.rawValue] = .int(UserConfiguration.measurementSystem.rawValue)
+        body[Constant.Key.userConfigurationInterfaceStyle.rawValue] = .int(UserConfiguration.interfaceStyle.rawValue)
+        body[Constant.Key.userConfigurationMeasurementSystem.rawValue] = .int(UserConfiguration.measurementSystem.rawValue)
         
-        body[KeyConstant.userConfigurationSnoozeLength.rawValue] = .double(UserConfiguration.snoozeLength)
+        body[Constant.Key.userConfigurationSnoozeLength.rawValue] = .double(UserConfiguration.snoozeLength)
         
-        body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = .bool(UserConfiguration.isNotificationEnabled)
-        body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] = .bool(UserConfiguration.isLoudNotificationEnabled)
-        body[KeyConstant.userConfigurationIsLogNotificationEnabled.rawValue] = .bool(UserConfiguration.isLogNotificationEnabled)
-        body[KeyConstant.userConfigurationIsReminderNotificationEnabled.rawValue] = .bool(UserConfiguration.isReminderNotificationEnabled)
-        body[KeyConstant.userConfigurationNotificationSound.rawValue] = .string(UserConfiguration.notificationSound.rawValue)
+        body[Constant.Key.userConfigurationIsNotificationEnabled.rawValue] = .bool(UserConfiguration.isNotificationEnabled)
+        body[Constant.Key.userConfigurationIsLoudNotificationEnabled.rawValue] = .bool(UserConfiguration.isLoudNotificationEnabled)
+        body[Constant.Key.userConfigurationIsLogNotificationEnabled.rawValue] = .bool(UserConfiguration.isLogNotificationEnabled)
+        body[Constant.Key.userConfigurationIsReminderNotificationEnabled.rawValue] = .bool(UserConfiguration.isReminderNotificationEnabled)
+        body[Constant.Key.userConfigurationNotificationSound.rawValue] = .string(UserConfiguration.notificationSound.rawValue)
         
-        body[KeyConstant.userConfigurationIsSilentModeEnabled.rawValue] = .bool(UserConfiguration.isSilentModeEnabled)
-        body[KeyConstant.userConfigurationSilentModeStartUTCHour.rawValue] = .int(UserConfiguration.silentModeStartUTCHour)
-        body[KeyConstant.userConfigurationSilentModeEndUTCHour.rawValue] = .int(UserConfiguration.silentModeEndUTCHour)
-        body[KeyConstant.userConfigurationSilentModeStartUTCMinute.rawValue] = .int(UserConfiguration.silentModeStartUTCMinute)
-        body[KeyConstant.userConfigurationSilentModeEndUTCMinute.rawValue] = .int(UserConfiguration.silentModeEndUTCMinute)
+        body[Constant.Key.userConfigurationIsSilentModeEnabled.rawValue] = .bool(UserConfiguration.isSilentModeEnabled)
+        body[Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue] = .int(UserConfiguration.silentModeStartUTCHour)
+        body[Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue] = .int(UserConfiguration.silentModeEndUTCHour)
+        body[Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue] = .int(UserConfiguration.silentModeStartUTCMinute)
+        body[Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue] = .int(UserConfiguration.silentModeEndUTCMinute)
         
         // userNotificationToken is synced through UserRequest.update. Therefore, include it in the UserConfiguration body with the rest of the information that is updated. This is especially important for offline mode, which, if it detects a noResponse in UserRequest.update, re-syncs all of the UserConfiguration.
-        body[KeyConstant.userNotificationToken.rawValue] = .string(UserInformation.userNotificationToken)
+        body[Constant.Key.userNotificationToken.rawValue] = .string(UserInformation.userNotificationToken)
         return body
     }
 }

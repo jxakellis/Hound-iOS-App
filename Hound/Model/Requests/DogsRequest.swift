@@ -32,7 +32,7 @@ enum DogsRequest {
             // if we have a previousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
             components.queryItems?.append(
                 URLQueryItem(
-                    name: KeyConstant.previousDogManagerSynchronization.rawValue,
+                    name: Constant.Key.previousDogManagerSynchronization.rawValue,
                     value: previousDogManagerSynchronization.ISO8601FormatWithFractionalSeconds()
                 ))
         }
@@ -42,7 +42,7 @@ enum DogsRequest {
             return nil
         }
         
-        let body: JSONRequestBody = [KeyConstant.dogUUID.rawValue: .string(forDog.dogUUID.uuidString)]
+        let body: JSONRequestBody = [Constant.Key.dogUUID.rawValue: .string(forDog.dogUUID.uuidString)]
         
         return RequestUtils.genericGetRequest(
             forErrorAlert: forErrorAlert,
@@ -61,7 +61,7 @@ enum DogsRequest {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
                     OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
                 }
-                else if let newDogBody = responseBody?[KeyConstant.result.rawValue] as? [String: Any] {
+                else if let newDogBody = responseBody?[Constant.Key.result.rawValue] as? [String: Any] {
                     // If we got a dogBody, use it. This can only happen if responseStatus != .noResponse.
                     completionHandler(Dog(fromBody: newDogBody, dogToOverride: forDog.copy() as? Dog), responseStatus, error)
                     return
@@ -92,7 +92,7 @@ enum DogsRequest {
             // if we have a previousDogManagerSynchronization that isn't equal to 1970 (the default value), then provide it as that means we have a custom value.
             components.queryItems?.append(
                 URLQueryItem(
-                    name: KeyConstant.previousDogManagerSynchronization.rawValue,
+                    name: Constant.Key.previousDogManagerSynchronization.rawValue,
                     value: previousDogManagerSynchronization.ISO8601FormatWithFractionalSeconds()
                 ))
         }
@@ -122,7 +122,7 @@ enum DogsRequest {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
                     OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
                 }
-                else if let dogBodies = responseBody?[KeyConstant.result.rawValue] as? [[String: Any]] {
+                else if let dogBodies = responseBody?[Constant.Key.result.rawValue] as? [[String: Any]] {
                     // If we got dogBodies, use them. This can only happen if responseStatus != .noResponse.
                     LocalConfiguration.previousDogManagerSynchronization = previousDogManagerSynchronization
                     
@@ -173,7 +173,7 @@ enum DogsRequest {
                     // If we got no response, then mark the dog to be updated later
                     forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
                 }
-                else if let dogId = responseBody?[KeyConstant.result.rawValue] as? Int {
+                else if let dogId = responseBody?[Constant.Key.result.rawValue] as? Int {
                     // If we got a dogId, use it. This can only happen if responseStatus != .noResponse.
                     forDog.dogId = dogId
                 }
@@ -234,7 +234,7 @@ enum DogsRequest {
         forDogUUID: UUID,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body: JSONRequestBody = [KeyConstant.dogUUID.rawValue: .string(forDogUUID.uuidString)]
+        let body: JSONRequestBody = [Constant.Key.dogUUID.rawValue: .string(forDogUUID.uuidString)]
         
         return RequestUtils.genericDeleteRequest(
             forErrorAlert: forErrorAlert,

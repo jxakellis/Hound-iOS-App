@@ -30,13 +30,13 @@ final class ReminderActionType: NSObject, Comparable, NSCoding {
     
     required convenience init?(coder aDecoder: NSCoder) {
         guard
-            let decodedReminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: KeyConstant.reminderActionTypeId.rawValue),
-            let decodedInternalValue = aDecoder.decodeOptionalString(forKey: KeyConstant.internalValue.rawValue),
-            let decodedReadableValue = aDecoder.decodeOptionalString(forKey: KeyConstant.readableValue.rawValue),
-            let decodedEmoji = aDecoder.decodeOptionalString(forKey: KeyConstant.emoji.rawValue),
-            let decodedSortOrder = aDecoder.decodeOptionalInteger(forKey: KeyConstant.sortOrder.rawValue),
-            let decodedIsDefault = aDecoder.decodeOptionalBool(forKey: KeyConstant.isDefault.rawValue),
-            let decodedAllowsCustom = aDecoder.decodeOptionalBool(forKey: KeyConstant.allowsCustom.rawValue)
+            let decodedReminderActionTypeId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.reminderActionTypeId.rawValue),
+            let decodedInternalValue = aDecoder.decodeOptionalString(forKey: Constant.Key.internalValue.rawValue),
+            let decodedReadableValue = aDecoder.decodeOptionalString(forKey: Constant.Key.readableValue.rawValue),
+            let decodedEmoji = aDecoder.decodeOptionalString(forKey: Constant.Key.emoji.rawValue),
+            let decodedSortOrder = aDecoder.decodeOptionalInteger(forKey: Constant.Key.sortOrder.rawValue),
+            let decodedIsDefault = aDecoder.decodeOptionalBool(forKey: Constant.Key.isDefault.rawValue),
+            let decodedAllowsCustom = aDecoder.decodeOptionalBool(forKey: Constant.Key.allowsCustom.rawValue)
         else {
             return nil
         }
@@ -55,13 +55,13 @@ final class ReminderActionType: NSObject, Comparable, NSCoding {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(reminderActionTypeId, forKey: KeyConstant.reminderActionTypeId.rawValue)
-        aCoder.encode(internalValue, forKey: KeyConstant.internalValue.rawValue)
-        aCoder.encode(readableValue, forKey: KeyConstant.readableValue.rawValue)
-        aCoder.encode(emoji, forKey: KeyConstant.emoji.rawValue)
-        aCoder.encode(sortOrder, forKey: KeyConstant.sortOrder.rawValue)
-        aCoder.encode(isDefault, forKey: KeyConstant.isDefault.rawValue)
-        aCoder.encode(allowsCustom, forKey: KeyConstant.allowsCustom.rawValue)
+        aCoder.encode(reminderActionTypeId, forKey: Constant.Key.reminderActionTypeId.rawValue)
+        aCoder.encode(internalValue, forKey: Constant.Key.internalValue.rawValue)
+        aCoder.encode(readableValue, forKey: Constant.Key.readableValue.rawValue)
+        aCoder.encode(emoji, forKey: Constant.Key.emoji.rawValue)
+        aCoder.encode(sortOrder, forKey: Constant.Key.sortOrder.rawValue)
+        aCoder.encode(isDefault, forKey: Constant.Key.isDefault.rawValue)
+        aCoder.encode(allowsCustom, forKey: Constant.Key.allowsCustom.rawValue)
     }
     
     // MARK: - Properties
@@ -117,13 +117,13 @@ final class ReminderActionType: NSObject, Comparable, NSCoding {
     
     convenience init?(fromBody: JSONResponseBody) {
         guard
-            let idVal = fromBody[KeyConstant.reminderActionTypeId.rawValue] as? Int,
-            let internalVal = fromBody[KeyConstant.internalValue.rawValue] as? String,
-            let readableVal = fromBody[KeyConstant.readableValue.rawValue] as? String,
-            let emojiVal = fromBody[KeyConstant.emoji.rawValue] as? String,
-            let sortOrderVal = fromBody[KeyConstant.sortOrder.rawValue] as? Int,
-            let isDefaultVal = fromBody[KeyConstant.isDefault.rawValue] as? Bool,
-            let allowsCustomVal = fromBody[KeyConstant.allowsCustom.rawValue] as? Bool
+            let idVal = fromBody[Constant.Key.reminderActionTypeId.rawValue] as? Int,
+            let internalVal = fromBody[Constant.Key.internalValue.rawValue] as? String,
+            let readableVal = fromBody[Constant.Key.readableValue.rawValue] as? String,
+            let emojiVal = fromBody[Constant.Key.emoji.rawValue] as? String,
+            let sortOrderVal = fromBody[Constant.Key.sortOrder.rawValue] as? Int,
+            let isDefaultVal = fromBody[Constant.Key.isDefault.rawValue] as? Bool,
+            let allowsCustomVal = fromBody[Constant.Key.allowsCustom.rawValue] as? Bool
         else {
             return nil
         }

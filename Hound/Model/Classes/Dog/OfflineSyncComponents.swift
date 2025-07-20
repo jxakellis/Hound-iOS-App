@@ -22,8 +22,8 @@ final class OfflineModeComponents: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedInitialAttemptedSyncDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponentsInitialAttemptedSyncDate.rawValue)
-        let decodedInitialCreationDate: Date? = aDecoder.decodeOptionalObject(forKey: KeyConstant.offlineModeComponentsInitialCreationDate.rawValue)
+        let decodedInitialAttemptedSyncDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponentsInitialAttemptedSyncDate.rawValue)
+        let decodedInitialCreationDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponentsInitialCreationDate.rawValue)
         
         self.init(
             forInitialAttemptedSyncDate: decodedInitialAttemptedSyncDate,
@@ -34,8 +34,8 @@ final class OfflineModeComponents: NSObject, NSCoding, NSCopying {
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(initialAttemptedSyncDate, forKey: KeyConstant.offlineModeComponentsInitialAttemptedSyncDate.rawValue)
-        aCoder.encode(initialCreationDate, forKey: KeyConstant.offlineModeComponentsInitialCreationDate.rawValue)
+        aCoder.encode(initialAttemptedSyncDate, forKey: Constant.Key.offlineModeComponentsInitialAttemptedSyncDate.rawValue)
+        aCoder.encode(initialCreationDate, forKey: Constant.Key.offlineModeComponentsInitialCreationDate.rawValue)
     }
     
     // MARK: - Properties

@@ -70,8 +70,8 @@ enum NotificationPermissionsManager {
 
                 // Contact the server about the updated values and, if there is no response or a bad response, revert the values to their previous values. localIsNotificationAuthorized purposefully excluded as server doesn't need to know that and its value is untrust worthy (user can modify the value without us knowing, unlike our custom variables).
                 let body: JSONRequestBody = [
-                    KeyConstant.userConfigurationIsNotificationEnabled.rawValue: .bool(UserConfiguration.isNotificationEnabled),
-                    KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue: .bool(UserConfiguration.isLoudNotificationEnabled)
+                    Constant.Key.userConfigurationIsNotificationEnabled.rawValue: .bool(UserConfiguration.isNotificationEnabled),
+                    Constant.Key.userConfigurationIsLoudNotificationEnabled.rawValue: .bool(UserConfiguration.isLoudNotificationEnabled)
                 ]
 
                 UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
@@ -147,10 +147,10 @@ enum NotificationPermissionsManager {
             var body: JSONRequestBody = [:]
             // check for if values were changed, if there were then tell the server
             if UserConfiguration.isNotificationEnabled != beforeUpdateIsNotificationEnabled {
-                body[KeyConstant.userConfigurationIsNotificationEnabled.rawValue] = .bool(UserConfiguration.isNotificationEnabled)
+                body[Constant.Key.userConfigurationIsNotificationEnabled.rawValue] = .bool(UserConfiguration.isNotificationEnabled)
             }
             if UserConfiguration.isLoudNotificationEnabled != beforeUpdateIsLoudNotificationEnabled {
-                body[KeyConstant.userConfigurationIsLoudNotificationEnabled.rawValue] = .bool(UserConfiguration.isLoudNotificationEnabled)
+                body[Constant.Key.userConfigurationIsLoudNotificationEnabled.rawValue] = .bool(UserConfiguration.isLoudNotificationEnabled)
             }
 
             guard body.keys.isEmpty == false else {

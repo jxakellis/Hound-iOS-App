@@ -16,30 +16,30 @@ final class LocalConfiguration: UserDefaultPersistable {
     
     /// Persists all of the LocalConfiguration variables and the globalDogManager to the specified UserDefaults
     static func persist(toUserDefaults: UserDefaults) {
-        toUserDefaults.set(LocalConfiguration.previousDogManagerSynchronization, forKey: KeyConstant.previousDogManagerSynchronization.rawValue)
+        toUserDefaults.set(LocalConfiguration.previousDogManagerSynchronization, forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
         
         if let dogManager = DogManager.globalDogManager, let dataDogManager = try? NSKeyedArchiver.archivedData(withRootObject: dogManager, requiringSecureCoding: false) {
-            toUserDefaults.set(dataDogManager, forKey: KeyConstant.dogManager.rawValue)
+            toUserDefaults.set(dataDogManager, forKey: Constant.Key.dogManager.rawValue)
         }
         
         if let dataLocalPreviousLogCustomActionNames = try? NSKeyedArchiver.archivedData(withRootObject: LocalConfiguration.localPreviousLogCustomActionNames, requiringSecureCoding: false) {
-            toUserDefaults.set(dataLocalPreviousLogCustomActionNames, forKey: KeyConstant.localPreviousLogCustomActionNames.rawValue)
+            toUserDefaults.set(dataLocalPreviousLogCustomActionNames, forKey: Constant.Key.localPreviousLogCustomActionNames.rawValue)
         }
         if let dataLocalPreviousReminderCustomActionNames = try? NSKeyedArchiver.archivedData(withRootObject: LocalConfiguration.localPreviousReminderCustomActionNames, requiringSecureCoding: false) {
-            toUserDefaults.set(dataLocalPreviousReminderCustomActionNames, forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue)
+            toUserDefaults.set(dataLocalPreviousReminderCustomActionNames, forKey: Constant.Key.localPreviousReminderCustomActionNames.rawValue)
         }
         
-        toUserDefaults.set(LocalConfiguration.localIsNotificationAuthorized, forKey: KeyConstant.localIsNotificationAuthorized.rawValue)
+        toUserDefaults.set(LocalConfiguration.localIsNotificationAuthorized, forKey: Constant.Key.localIsNotificationAuthorized.rawValue)
         
-        toUserDefaults.set(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested, forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.rawValue)
+        toUserDefaults.set(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested, forKey: Constant.Key.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.rawValue)
         
-        toUserDefaults.set(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted, forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.rawValue)
+        toUserDefaults.set(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted, forKey: Constant.Key.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.rawValue)
         
-        toUserDefaults.set(LocalConfiguration.localAppVersionsWithReleaseNotesShown, forKey: KeyConstant.localAppVersionsWithReleaseNotesShown.rawValue)
+        toUserDefaults.set(LocalConfiguration.localAppVersionsWithReleaseNotesShown, forKey: Constant.Key.localAppVersionsWithReleaseNotesShown.rawValue)
         
-        toUserDefaults.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue)
-        toUserDefaults.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue)
-        toUserDefaults.set(LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController, forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
+        toUserDefaults.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: Constant.Key.localHasCompletedHoundIntroductionViewController.rawValue)
+        toUserDefaults.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: Constant.Key.localHasCompletedRemindersIntroductionViewController.rawValue)
+        toUserDefaults.set(LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController, forKey: Constant.Key.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
         
         // Don't persist value. This is purposefully reset everytime the app reopens
         LocalConfiguration.localDateWhenAppLastEnteredBackground = Date()
@@ -47,9 +47,9 @@ final class LocalConfiguration: UserDefaultPersistable {
     
     /// Load all of the LocalConfiguration variables and the globalDogManager from the specified UserDefaults
     static func load(fromUserDefaults: UserDefaults) {
-        LocalConfiguration.previousDogManagerSynchronization = fromUserDefaults.value(forKey: KeyConstant.previousDogManagerSynchronization.rawValue) as? Date ?? LocalConfiguration.previousDogManagerSynchronization
+        LocalConfiguration.previousDogManagerSynchronization = fromUserDefaults.value(forKey: Constant.Key.previousDogManagerSynchronization.rawValue) as? Date ?? LocalConfiguration.previousDogManagerSynchronization
         
-        if let dataDogManager: Data = UserDefaults.standard.data(forKey: KeyConstant.dogManager.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataDogManager) {
+        if let dataDogManager: Data = UserDefaults.standard.data(forKey: Constant.Key.dogManager.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataDogManager) {
             unarchiver.requiresSecureCoding = false
             
             if let dogManager = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? DogManager {
@@ -69,52 +69,52 @@ final class LocalConfiguration: UserDefaultPersistable {
             LocalConfiguration.previousDogManagerSynchronization = nil
         }
         
-        if let dataLocalPreviousLogCustomActionNames: Data = fromUserDefaults.data(forKey: KeyConstant.localPreviousLogCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousLogCustomActionNames) {
+        if let dataLocalPreviousLogCustomActionNames: Data = fromUserDefaults.data(forKey: Constant.Key.localPreviousLogCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousLogCustomActionNames) {
             unarchiver.requiresSecureCoding = false
             
             LocalConfiguration.localPreviousLogCustomActionNames = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [PreviousLogCustomActionName] ?? LocalConfiguration.localPreviousLogCustomActionNames
         }
         
-        if let dataLocalPreviousReminderCustomActionNames: Data = fromUserDefaults.data(forKey: KeyConstant.localPreviousReminderCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousReminderCustomActionNames) {
+        if let dataLocalPreviousReminderCustomActionNames: Data = fromUserDefaults.data(forKey: Constant.Key.localPreviousReminderCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousReminderCustomActionNames) {
             unarchiver.requiresSecureCoding = false
             
             LocalConfiguration.localPreviousReminderCustomActionNames = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [PreviousReminderCustomActionName] ?? LocalConfiguration.localPreviousReminderCustomActionNames
         }
         
         LocalConfiguration.localIsNotificationAuthorized =
-        fromUserDefaults.value(forKey: KeyConstant.localIsNotificationAuthorized.rawValue) as? Bool
+        fromUserDefaults.value(forKey: Constant.Key.localIsNotificationAuthorized.rawValue) as? Bool
         ?? LocalConfiguration.localIsNotificationAuthorized
         
         LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested =
-        fromUserDefaults.value(forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.rawValue) as? [Date]
+        fromUserDefaults.value(forKey: Constant.Key.localPreviousDatesUserSurveyFeedbackAppExperienceRequested.rawValue) as? [Date]
         ?? LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceRequested
         
         LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted =
-        fromUserDefaults.value(forKey: KeyConstant.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.rawValue) as? [Date]
+        fromUserDefaults.value(forKey: Constant.Key.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.rawValue) as? [Date]
         ?? LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted
         
         LocalConfiguration.localPreviousDatesUserReviewRequested =
-        fromUserDefaults.value(forKey: KeyConstant.localPreviousDatesUserReviewRequested.rawValue) as? [Date] ?? LocalConfiguration.localPreviousDatesUserReviewRequested
+        fromUserDefaults.value(forKey: Constant.Key.localPreviousDatesUserReviewRequested.rawValue) as? [Date] ?? LocalConfiguration.localPreviousDatesUserReviewRequested
         
         LocalConfiguration.localAppVersionsWithReleaseNotesShown =
-        fromUserDefaults.value(forKey: KeyConstant.localAppVersionsWithReleaseNotesShown.rawValue) as? [String]
+        fromUserDefaults.value(forKey: Constant.Key.localAppVersionsWithReleaseNotesShown.rawValue) as? [String]
         ?? LocalConfiguration.localAppVersionsWithReleaseNotesShown
         
         LocalConfiguration.localHasCompletedHoundIntroductionViewController =
-        fromUserDefaults.value(forKey: KeyConstant.localHasCompletedHoundIntroductionViewController.rawValue) as? Bool
+        fromUserDefaults.value(forKey: Constant.Key.localHasCompletedHoundIntroductionViewController.rawValue) as? Bool
         ?? LocalConfiguration.localHasCompletedHoundIntroductionViewController
         
         LocalConfiguration.localHasCompletedRemindersIntroductionViewController =
-        fromUserDefaults.value(forKey: KeyConstant.localHasCompletedRemindersIntroductionViewController.rawValue) as? Bool
+        fromUserDefaults.value(forKey: Constant.Key.localHasCompletedRemindersIntroductionViewController.rawValue) as? Bool
         ?? LocalConfiguration.localHasCompletedRemindersIntroductionViewController
         
         // Before 3.5.0 "localHasCompletedFamilyUpgradeIntroductionViewController" was "localHasCompletedSettingsFamilyIntroductionViewController"
         if let legacyValue = fromUserDefaults.value(forKey: "localHasCompletedSettingsFamilyIntroductionViewController") as? Bool {
-            fromUserDefaults.set(legacyValue, forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
+            fromUserDefaults.set(legacyValue, forKey: Constant.Key.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
             fromUserDefaults.removeObject(forKey: "localHasCompletedSettingsFamilyIntroductionViewController")
         }
         LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController =
-        fromUserDefaults.value(forKey: KeyConstant.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue) as? Bool ?? LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController
+        fromUserDefaults.value(forKey: Constant.Key.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue) as? Bool ?? LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController
     }
     
     // MARK: Sync Related

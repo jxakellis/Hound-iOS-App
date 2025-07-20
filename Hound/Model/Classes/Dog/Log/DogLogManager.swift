@@ -24,14 +24,14 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
     
     required init?(coder aDecoder: NSCoder) {
-        let decodedDogLogs: [Log]? = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogLogs.rawValue)
+        let decodedDogLogs: [Log]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.dogLogs.rawValue)
         dogLogs = decodedDogLogs ?? dogLogs
     }
     
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(dogLogs, forKey: KeyConstant.dogLogs.rawValue)
+        aCoder.encode(dogLogs, forKey: Constant.Key.dogLogs.rawValue)
     }
     
     // MARK: - Properties
@@ -54,9 +54,9 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         
         for fromBody in fromLogBodies {
             // Don't pull logId or logIsDeleted from logToOverride. A valid fromBody needs to provide this itself
-            let logId: Int? = fromBody[KeyConstant.logId.rawValue] as? Int
-            let logUUID: UUID? = UUID.fromString(forUUIDString: fromBody[KeyConstant.logUUID.rawValue] as? String)
-            let logIsDeleted: Bool? = fromBody[KeyConstant.logIsDeleted.rawValue] as? Bool
+            let logId: Int? = fromBody[Constant.Key.logId.rawValue] as? Int
+            let logUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.logUUID.rawValue] as? String)
+            let logIsDeleted: Bool? = fromBody[Constant.Key.logIsDeleted.rawValue] as? Bool
             
             guard logId != nil, let logUUID = logUUID, let logIsDeleted = logIsDeleted else {
                 // couldn't construct essential components to intrepret log

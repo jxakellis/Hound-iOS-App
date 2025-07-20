@@ -35,7 +35,7 @@ enum FamilyRequest {
                 if responseStatus == .noResponse {
                     OfflineModeManager.shared.didGetNoResponse(forType: .familyRequestGet)
                 }
-                else if let result = responseBody?[KeyConstant.result.rawValue] as? JSONResponseBody {
+                else if let result = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
                     FamilyInformation.setup(fromBody: result)
                 }
                 
@@ -81,7 +81,7 @@ enum FamilyRequest {
         forBody: JSONRequestBody,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let attemptingToJoinFamily = forBody[KeyConstant.familyCode.rawValue] != nil
+        let attemptingToJoinFamily = forBody[Constant.Key.familyCode.rawValue] != nil
         
         return RequestUtils.genericPutRequest(
             forErrorAlert: forErrorAlert,
