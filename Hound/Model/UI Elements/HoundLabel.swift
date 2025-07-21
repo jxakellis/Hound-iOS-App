@@ -48,6 +48,8 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     /// leading and trailing edge. When reading `text` this padding is removed
     /// so consumers do not need to handle it.
     var shouldInsetText: Bool = false {
+        didSet {
+            if oldValue != shouldInsetText {
                 self.text = self.text
                 self.placeholder = placeholder
             }
