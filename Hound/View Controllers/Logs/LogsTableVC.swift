@@ -99,9 +99,10 @@ final class LogsTableVC: HoundTableViewController {
         super.viewDidLoad()
         self.enableDummyHeaderView = true
         self.tableView.register(LogTVC.self, forCellReuseIdentifier: LogTVC.reuseIdentifier)
+        self.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
+        
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
-        self.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
     }
     
     override func viewWillAppear(_ animated: Bool) {

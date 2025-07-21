@@ -37,7 +37,7 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
     var enableDummyHeaderView: Bool = false {
         didSet {
             if enableDummyHeaderView {
-                let dummyHeaderHeight: CGFloat = 100.0
+                let dummyHeaderHeight: CGFloat = 125.0
                 let dummyHeader = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: dummyHeaderHeight))
                 self.tableHeaderView = dummyHeader
                 self.contentInset = UIEdgeInsets(top: -dummyHeaderHeight, left: 0, bottom: 0, right: 0)
