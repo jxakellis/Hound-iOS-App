@@ -157,12 +157,9 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
             make.leading.equalTo(labelStack.snp.trailing).offset(Constant.Constraint.Spacing.contentIntraHori)
             make.trailing.equalTo(containerView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
             make.centerY.equalTo(containerView.snp.centerY)
-            make.height.equalTo(contentView.snp.width)
-                .multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier)
-                .priority(.high)
+            make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
-            make.width.equalTo(chevronImageView.snp.height)
-                .multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
+            make.width.equalTo(chevronImageView.snp.height).multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
         }
     }
 }

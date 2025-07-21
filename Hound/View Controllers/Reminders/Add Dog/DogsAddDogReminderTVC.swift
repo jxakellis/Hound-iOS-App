@@ -38,7 +38,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return label
     }()
     
-    private let reminderDisplayableIntervalLabel: HoundLabel = {
+    private let intervalLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.secondaryRegularLabel
         return label
@@ -47,7 +47,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     private lazy var labelStack: HoundStackView = {
         let stack = HoundStackView(huggingPriority: 290, compressionResistancePriority: 290)
         stack.addArrangedSubview(reminderActionLabel)
-        stack.addArrangedSubview(reminderDisplayableIntervalLabel)
+        stack.addArrangedSubview(intervalLabel)
         stack.axis = .vertical
         stack.distribution = .equalSpacing
         stack.spacing = Constant.Constraint.Spacing.contentIntraVert
@@ -119,10 +119,9 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         triggerResultIndicatorImageView.isHidden = !forReminder.reminderIsTriggerResult
         chevronSwitchStack.isHidden = forReminder.reminderIsTriggerResult
         
-        let precalculatedReminderActionName = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName, includeMatchingEmoji: true)
-        let precalculatedReminderActionFont = self.reminderActionLabel.font ?? UIFont()
+        reminderActionLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName, includeMatchingEmoji: true)
         
-        let precalculatedReminderDisplayInterval = {
+        intervalLabel.text = {
             switch forReminder.reminderType {
             case .countdown:
                 return forReminder.countdownComponents.readableInterval
@@ -134,24 +133,6 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
                 return forReminder.oneTimeComponents.readableInterval
             }
         }()
-        let precalculatedReminderDisplayIntervalFont = self.reminderDisplayableIntervalLabel.font ?? UIFont()
-        
-        reminderActionLabel.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
-            
-            return NSMutableAttributedString(
-                string: precalculatedReminderActionName,
-                attributes: [.font: precalculatedReminderActionFont]
-            )
-        }
-        
-        reminderDisplayableIntervalLabel.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
-            
-            return NSAttributedString(
-                string: precalculatedReminderDisplayInterval,
-                attributes: [.font: precalculatedReminderDisplayIntervalFont])
-        }
         
     }
     
@@ -187,20 +168,15 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         }
         
         triggerResultIndicatorImageView.snp.makeConstraints { make in
-            make.height.equalTo(contentView.snp.width)
-                .multipliedBy(Constant.Constraint.Button.miniCircleHeightMultiplier / 1.5)
-                .priority(.high)
+            make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.miniCircleHeightMultiplier / 1.5).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Button.miniCircleMaxHeight / 1.5)
             make.width.equalTo(triggerResultIndicatorImageView.snp.height)
         }
         
         chevronImageView.snp.makeConstraints { make in
-            make.height.equalTo(contentView.snp.width)
-                .multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier)
-                .priority(.high)
+            make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
-            make.width.equalTo(chevronImageView.snp.height)
-                .multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
+            make.width.equalTo(chevronImageView.snp.height).multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
         }
     }
 
