@@ -1612,7 +1612,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         familyMemberLabel.snp.remakeConstraints { make in
             if !familyMemberLabel.isHidden && !familyMemberStack.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
     }
@@ -1620,7 +1620,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         logCustomActionNameTextField.snp.remakeConstraints { make in
             if !logCustomActionNameTextField.isHidden && !logCustomActionNameStack.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
     }
@@ -1628,13 +1628,13 @@ final class LogsAddLogVC: HoundScrollViewController,
         logStartDateLabel.snp.remakeConstraints { make in
             if !logStartDateLabel.isHidden && !logStartDateStack.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
         logStartDatePicker.snp.remakeConstraints { make in
             if !logStartDatePicker.isHidden && !logStartDateStack.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.datePickerHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.datePickerMaxHeight)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.datePickerMaxHeight)
             }
         }
     }
@@ -1642,14 +1642,14 @@ final class LogsAddLogVC: HoundScrollViewController,
         logEndDateLabel.snp.remakeConstraints { make in
             if !logEndDateLabel.isHidden && !logEndDateStack.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
         
         logEndDatePicker.snp.remakeConstraints { make in
             if !logEndDatePicker.isHidden && !logEndDateStack.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.datePickerHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.datePickerMaxHeight)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.datePickerMaxHeight)
             }
         }
     }
@@ -1658,13 +1658,13 @@ final class LogsAddLogVC: HoundScrollViewController,
             make.width.equalTo(logUnitLabel.snp.width).multipliedBy(1.0 / 3.0)
             if !logNumberOfLogUnitsTextField.isHidden && !logUnitStack.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
         logUnitLabel.snp.remakeConstraints { make in
             if !logUnitLabel.isHidden && !logUnitStack.isHidden {
                 make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
     }
@@ -1687,14 +1687,14 @@ final class LogsAddLogVC: HoundScrollViewController,
         
         parentDogLabel.snp.makeConstraints { make in
             make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         
         remakeFamilyMemberConstraints()
         
         logActionLabel.snp.makeConstraints { make in
             make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         
         remakeCustomActionNameConstraints()
@@ -1707,7 +1707,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         
         logNoteTextView.snp.makeConstraints { make in
             make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textViewHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textViewMaxHeight)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textViewMaxHeight)
         }
         
         saveLogButton.snp.makeConstraints { make in

@@ -679,7 +679,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         reminderCustomActionNameTextField.snp.remakeConstraints { make in
             if !reminderCustomActionNameTextField.isHidden {
                 make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-                make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
             }
         }
     }
@@ -694,7 +694,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         }
         logReactionsLabel.snp.makeConstraints { make in
             make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         
         conditionsStack.snp.makeConstraints { make in
@@ -711,7 +711,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         }
         reminderResultLabel.snp.makeConstraints { make in
             make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         remakeCustomActionNameConstraints()
         
@@ -720,7 +720,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
             make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
             make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.segmentedHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(Constant.Constraint.Input.segmentedMaxHeight)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         
         triggerViewsStack.snp.makeConstraints { make in

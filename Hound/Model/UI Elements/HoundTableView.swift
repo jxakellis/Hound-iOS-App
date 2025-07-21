@@ -238,6 +238,8 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
         
         if emptyStateView == nil {
             let label = HoundLabel()
+            // this label will get resized like crazy when the table view is resized, but we dont really care so disable the message
+            label.debugCheckForOversizedFrame = false
             label.textAlignment = .center
             label.numberOfLines = 0
             label.text = emptyStateMessage

@@ -150,6 +150,8 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     /// current font size.
     private static let backgroundLabelStrokeWidthScale: CGFloat = 0.8
     
+    var debugCheckForOversizedFrame: Bool = true
+    
     // MARK: - Override Properties
     
     override var bounds: CGRect {
@@ -267,7 +269,9 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        checkForOversizedFrame()
+        if debugCheckForOversizedFrame {
+            checkForOversizedFrame()
+        }
     }
     
     override func didMoveToSuperview() {
