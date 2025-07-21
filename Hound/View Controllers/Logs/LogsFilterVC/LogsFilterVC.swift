@@ -96,7 +96,8 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     private lazy var searchTextField: HoundTextField = {
         let textField = HoundTextField(huggingPriority: 295, compressionResistancePriority: 295)
         textField.delegate = self
-        textField.placeholder = " Search notes, units, and more..."
+        textField.placeholder = "Search notes, units, and more..."
+        textField.shouldInsetText = true
         textField.backgroundColor = UIColor.systemBackground
         textField.applyStyle(.thinGrayBorder)
         textField.addTarget(self, action: #selector(didChangeSearchText(_:)), for: .editingChanged)
@@ -116,6 +117,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select a dog (or dogs)..."
+        label.shouldInsetText = true
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
         gesture.name = LogsFilterDropDownTypes.filterDogs.rawValue
@@ -139,6 +141,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an action (or actions)..."
+        label.shouldInsetText = true
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
         gesture.name = LogsFilterDropDownTypes.filterLogActions.rawValue
@@ -162,6 +165,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select a family member (or members)..."
+        label.shouldInsetText = true
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
         gesture.name = LogsFilterDropDownTypes.filterFamilyMembers.rawValue

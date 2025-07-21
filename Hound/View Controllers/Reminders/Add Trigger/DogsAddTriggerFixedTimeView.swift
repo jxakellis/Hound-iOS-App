@@ -40,6 +40,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
         label.font = Constant.Visual.Font.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select the day offset..."
+        label.shouldInsetText = true
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown))
         gesture.name = DogsAddTriggerFixedTimeDropDownTypes.dayOffset.rawValue
         gesture.delegate = self
@@ -262,8 +263,6 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
     }
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        // TODO BUG THIS ISNT GETTING INVOKED AND CANT SELECT ITEMS
-        print("selectItemInDropDown: \(indexPath) for \(dropDownUIViewIdentifier)")
         switch dropDownUIViewIdentifier {
         case DogsAddTriggerFixedTimeDropDownTypes.dayOffset.rawValue:
             if let previousSelectedIndexPath = selectedDropDownDayOffsetIndexPath, let previousSelectedCell = dropDownDayOffset?.dropDownTableView?.cellForRow(at: previousSelectedIndexPath) as? HoundDropDownTableViewCell {

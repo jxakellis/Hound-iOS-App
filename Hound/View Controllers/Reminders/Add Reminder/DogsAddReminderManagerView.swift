@@ -66,6 +66,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an action..."
+        label.shouldInsetText = true
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
         gesture.name = DogsAddReminderDropDownTypes.reminderAction.rawValue
@@ -85,7 +86,8 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         textField.delegate = self
         
         textField.applyStyle(.thinGrayBorder)
-        textField.placeholder = " Add a custom name... (optional)"
+        textField.placeholder = "Add a custom name... (optional)"
+        textField.shouldInsetText = true
         
         return textField
     }()

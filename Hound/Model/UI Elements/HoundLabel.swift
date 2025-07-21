@@ -41,17 +41,31 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         }
     }
     
-    private let placeholderLabelSpacing: String = "  "
+    private let insetSpacing: String = "  "
     private var placeholderLabel: UILabel?
+
+    /// If true, the label's text will be inset with two spaces on both the
+    /// leading and trailing edge. When reading `text` this padding is removed
+    /// so consumers do not need to handle it.
+    var shouldInsetText: Bool = false {
+                self.text = self.text
+                self.placeholder = placeholder
+            }
+        }
+    }
+    private var placeholderHasInsetApplied: Bool = false
     /// placeholder is a second HoundLabel that is added as a subview to this HoundLabel. It acts as temporary inlaid text until an actual value is input
     var placeholder: String? {
         get {
-            var placeholderText: String?
+            var placeholderText: String? = placeholderLabel?.text
             
-            if let placeholderLabel = placeholderLabel {
-                var withRemovedPadding = placeholderLabel.text
-                withRemovedPadding?.removeFirst(2)
-                placeholderText = withRemovedPadding
+            if placeholderHasInsetApplied {
+                if placeholderText?.hasPrefix(insetSpacing) == true {
+                    placeholderText?.removeFirst(2)
+                }
+                if placeholderText?.hasSuffix(insetSpacing) == true {
+                    placeholderText?.removeLast(2)
+                }
             }
             
             return placeholderText
@@ -60,17 +74,20 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             guard let placeholderLabel = placeholderLabel else {
                 // We do not have a placeholderLabel yet
                 if let newValue = newValue {
-                    // Because this is our first time making a placeholderLabel, text doesn't have the two space padding on the front of it. We do this step first because if we set self.placeholderLabel to something that isn't nil, the special logic for text starts (which removes the first two characters).
-                    if let text = self.text {
-                        self.text = placeholderLabelSpacing.appending(text)
-                    }
-                    
                     // We have placeholder text, so make a placeholderLabel
                     let placeholderLabel = UILabel()
-                    
-                    placeholderLabel.text = placeholderLabelSpacing.appending(newValue)
+                    var value = newValue
+
+                    if shouldInsetText && !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        placeholderHasInsetApplied = true
+                        value = insetSpacing + value + insetSpacing
+                    }
+                    else {
+                        placeholderHasInsetApplied = false
+                    }
+                    placeholderLabel.text = value
                     placeholderLabel.sizeToFit()
-                    
+
                     placeholderLabel.font = self.font
                     placeholderLabel.textColor = UIColor.placeholderText
                     self.placeholderLabel = placeholderLabel
@@ -86,10 +103,20 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             
             // We have a placeholderLabel, update it's text
             if let newValue = newValue {
-                // add two space offset to placeholder label.
-                placeholderLabel.text = placeholderLabelSpacing.appending(newValue)
+                var value = newValue
+
+                if shouldInsetText && !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    placeholderHasInsetApplied = true
+                    value = insetSpacing + value + insetSpacing
+                }
+                else {
+                    placeholderHasInsetApplied = false
+                }
+                
+                placeholderLabel.text = value
             }
             else {
+                placeholderHasInsetApplied = false
                 placeholderLabel.text = nil
             }
             
@@ -132,19 +159,34 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         }
     }
     
+    private var hasInsetApplied: Bool = false
     override var text: String? {
         get {
             var text = super.text
-            if placeholder != nil {
-                text?.removeFirst(2)
+            if hasInsetApplied {
+                if text?.hasPrefix(insetSpacing) == true {
+                    text?.removeFirst(2)
+                }
+                if text?.hasSuffix(insetSpacing) == true {
+                    text?.removeLast(2)
+                }
             }
             return text
         }
         set {
             if let newValue = newValue {
-                super.text = placeholder != nil ? placeholderLabelSpacing.appending(newValue) : newValue
+                var value = newValue
+                if shouldInsetText && !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    hasInsetApplied = true
+                    value = insetSpacing + value + insetSpacing
+                }
+                else {
+                    hasInsetApplied = false
+                }
+                super.text = value
             }
             else {
+                hasInsetApplied = false
                 super.text = nil
             }
             

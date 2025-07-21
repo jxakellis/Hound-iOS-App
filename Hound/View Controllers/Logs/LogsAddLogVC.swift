@@ -194,8 +194,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = .label
         label.text = "Logged by"
-        // add a fake placeholder so that text is properly inset
-        label.placeholder = ""
+        label.shouldInsetText = true
         return label
     }()
     private lazy var familyMemberLabel: HoundLabel = {
@@ -203,8 +202,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.applyStyle(.thinGrayBorder)
         // only for showing family member, not actually editable
         label.isEnabled = false
-        // add a fake placeholder so that text is properly inset
-        label.placeholder = ""
+        label.shouldInsetText = true
         return label
     }()
     private lazy var familyMemberStack: HoundStackView = {
@@ -228,7 +226,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         let label = HoundLabel()
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select a dog (or dogs)..."
-        
+        label.shouldInsetText = true
         let gesture = UITapGestureRecognizer(
             target: self,
             action: #selector(didTapLabelForDropDown(sender:))
@@ -262,6 +260,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         let label = HoundLabel()
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an action..."
+        label.shouldInsetText = true
         
         let gesture = UITapGestureRecognizer(
             target: self,
@@ -296,7 +295,8 @@ final class LogsAddLogVC: HoundScrollViewController,
         let textField = HoundTextField()
         textField.delegate = self
         textField.applyStyle(.thinGrayBorder)
-        textField.placeholder = " Add a custom name... (optional)"
+        textField.placeholder = "Add a custom name... (optional)"
+        textField.shouldInsetText = true
         return textField
     }()
     private lazy var logCustomActionNameStack: HoundStackView = {
@@ -320,6 +320,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         let label = HoundLabel()
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select a start date..."
+        label.shouldInsetText = true
         
         let gesture = UITapGestureRecognizer(
             target: self,
@@ -372,6 +373,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         let label = HoundLabel()
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an end date... (optional)"
+        label.shouldInsetText = true
         
         let gesture = UITapGestureRecognizer(
             target: self,
@@ -424,7 +426,8 @@ final class LogsAddLogVC: HoundScrollViewController,
         let textField = HoundTextField()
         textField.delegate = self
         textField.applyStyle(.thinGrayBorder)
-        textField.placeholder = " 0" + (Locale.current.decimalSeparator ?? ".") + "0"
+        textField.placeholder = "0" + (Locale.current.decimalSeparator ?? ".") + "0"
+        textField.shouldInsetText = true
         
         textField.textAlignment = .center
         textField.keyboardType = .decimalPad
@@ -437,6 +440,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         let label = HoundLabel()
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select a unit... (optional)"
+        label.shouldInsetText = true
         
         let gesture = UITapGestureRecognizer(
             target: self,

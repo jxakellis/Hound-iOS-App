@@ -42,6 +42,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         label.font = Constant.Visual.Font.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select log type(s)..."
+        label.shouldInsetText = true
         label.adjustsFontSizeToFitWidth = false
         
         let gesture = UITapGestureRecognizer(
@@ -136,6 +137,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         label.font = Constant.Visual.Font.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select reminder action..."
+        label.shouldInsetText = true
         label.adjustsFontSizeToFitWidth = false
         
         let gesture = UITapGestureRecognizer(
@@ -154,7 +156,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         textField.font = Constant.Visual.Font.secondaryRegularLabel
         textField.delegate = self
         textField.applyStyle(.thinGrayBorder)
-        textField.placeholder = " Add a custom name... (optional)"
+        textField.placeholder = "Add a custom name... (optional)"
+        textField.shouldInsetText = true
         return textField
     }()
     private lazy var reminderResultStack: HoundStackView = {
@@ -207,6 +210,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         view.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.timeDelay.rawValue
         
         let timeDelayTap = UITapGestureRecognizer(target: self, action: #selector(didInteractWithTimeDelayView))
+        timeDelayTap.delegate = self
+                timeDelayTap.cancelsTouchesInView = false
         view.addGestureRecognizer(timeDelayTap)
         view.isUserInteractionEnabled = true
         
@@ -218,6 +223,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         view.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.fixedTime.rawValue
         
         let fixedTimeTap = UITapGestureRecognizer(target: self, action: #selector(didInteractWithFixedTimeView))
+        fixedTimeTap.delegate = self
+        fixedTimeTap.cancelsTouchesInView = false
         view.addGestureRecognizer(fixedTimeTap)
         view.isUserInteractionEnabled = true
         

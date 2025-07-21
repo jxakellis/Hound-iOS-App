@@ -120,7 +120,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let textField = HoundTextField(huggingPriority: 290, compressionResistancePriority: 290)
         textField.delegate = self
         
-        textField.placeholder = " Enter your dog's name..."
+        textField.placeholder = "Enter your dog's name..."
+        textField.shouldInsetText = true
         textField.backgroundColor = UIColor.systemBackground
         
         textField.applyStyle(.thinGrayBorder)
@@ -619,8 +620,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         editPageHeaderView.setTitle(dogToUpdate == nil ? "Create Dog" : "Edit Dog")
         
-        dogNameTextField.text = dogToUpdate?.dogName ?? ""
-        initialDogName = dogToUpdate?.dogName ?? ""
+        dogNameTextField.text = dogToUpdate?.dogName
+        initialDogName = dogToUpdate?.dogName
         
         if let dogIcon = dogToUpdate?.dogIcon {
             dogIconButton.setTitle(nil, for: .normal)
