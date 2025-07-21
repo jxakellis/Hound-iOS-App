@@ -11,7 +11,6 @@ import UIKit
 public enum ErrorConstant {
 
     static func serverError(forErrorCode errorCode: String, forRequestId requestId: Int, forResponseId responseId: Int) -> HoundServerError? {
-        // TODO FUTURE Make these errors more dynamic. If an error cannot be matched, construct a custom message. This should pull all available info from the error returned by the server.
         // MARK: - GENERAL
         if errorCode == "ER_GENERAL_APP_VERSION_OUTDATED" {
             return GeneralResponseError.appVersionOutdated(forRequestId: requestId, forResponseId: responseId)

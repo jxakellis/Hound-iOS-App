@@ -45,12 +45,14 @@
 
 - haptics enabled/disabled setting
 
-### Data & Global Types
-- **Auto-refresh missing GlobalTypes**  
-  If the app encounters an unknown global type, force a refetch before failing.
+- dynamic error messages
+    - if an error cannot be matched to one defined in Constant.Error / ErrorConstant, then create a custom one. This should pull all available info from the error returned by the server.
 
 - Calendar view
     - Visualize logs on a calendar grid in addition to the daily scroll.
+    
+- GlobalTypes refresh
+    - if the app encounters an unknown global type, return default type (so app doesnt crash) then clear dogmanager/everything from memory. revert to server sync page and literally redownload everything
 
 ### Metrics & Analytics
 - **Integrate SwiftMetrics** to track:  
@@ -112,15 +114,7 @@
 
 - **Siri Shortcuts & Widgets**  
   Quick “Log a Walk” or “Log Water” shortcuts; Home Screen widget showing today’s reminders.  
-- **Apple Watch Companion**  
-  “Log Now” buttons and haptic reminders on your wrist.  
 - **HealthKit Integration**  
   Import weight trends or export pet health data alongside HealthKit.  
-- **Data Export & Import**  
-  CSV/JSON export of logs and reminders; bulk import from other apps.  
-- **Localization & Accessibility**  
-  Translate into top languages and add VoiceOver labels for all UI elements.  
-- **iCloud Backup & Restore**  
-  Backup settings, profiles, and logs; provide an easy restore flow.  
 - **Community Features**  
   Optional in-app feed to share pet moments; family chat or notes section.

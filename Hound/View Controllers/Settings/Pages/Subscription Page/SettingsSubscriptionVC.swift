@@ -86,6 +86,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         tableView.shouldAutomaticallyAdjustHeight = true
         tableView.emptyStateEnabled = true
         tableView.emptyStateMessage = "No subscriptions available..."
+        tableView.emptyStateMessageColor = .systemBackground
         
         // allow the save x% label for a TVC to go outside cell bound
         tableView.clipsToBounds = false

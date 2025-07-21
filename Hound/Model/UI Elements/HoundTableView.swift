@@ -22,8 +22,7 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
     var emptyStateEnabled: Bool = false
     /// Message string to show if table is empty and no custom view is set.
     var emptyStateMessage: String = "No content available..."
-    /// Attributed message to override the plain string.
-    var emptyStateAttributedMessage: NSAttributedString?
+    var emptyStateMessageColor: UIColor = UIColor.label
     /// Minimum height for the empty state (when using automatic height adjustment).
     var minimumEmptyStateHeight: CGFloat = 60.0
 
@@ -241,13 +240,8 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
             let label = HoundLabel()
             label.textAlignment = .center
             label.numberOfLines = 0
-            if let attributed = emptyStateAttributedMessage {
-                label.attributedText = attributed
-            }
-            else {
-                label.text = emptyStateMessage
-            }
-            label.textColor = UIColor.secondaryLabel
+            label.text = emptyStateMessage
+            label.textColor = emptyStateMessageColor
             
             setEmptyStateView(label)
         }
