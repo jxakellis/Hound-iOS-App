@@ -363,7 +363,7 @@ final class DogsTableVC: HoundTableViewController {
     
     /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log.
     private func userPreemptivelyLoggedReminder(forDogUUID: UUID, forReminder: Reminder, forLogActionType: LogActionType) {
-        let log = Log(forLogActionTypeId: forLogActionType.logActionTypeId, forLogCustomActionName: forReminder.reminderCustomActionName, forLogStartDate: Date())
+        let log = Log(forLogActionTypeId: forLogActionType.logActionTypeId, forLogCustomActionName: forReminder.reminderCustomActionName, forLogStartDate: Date(), forCreatedByReminderUUID: nil)
         
         // special case. Once a oneTime reminder executes/ is skipped, it must be delete. Therefore there are special server queries.
         if forReminder.reminderType == .oneTime {

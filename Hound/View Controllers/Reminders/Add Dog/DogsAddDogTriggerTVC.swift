@@ -23,7 +23,6 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     private let logReactionsLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.primaryRegularLabel
-        label.adjustsFontSizeToFitWidth = false
         label.numberOfLines = 0
         return label
     }()
@@ -31,7 +30,6 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     private let reminderResultLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.secondaryRegularLabel
-        label.adjustsFontSizeToFitWidth = false
         label.numberOfLines = 0
         return label
     }()
@@ -49,7 +47,7 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     
     private let chevronImageView: HoundImageView = {
         let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
-
+        
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")
         imageView.tintColor = UIColor.systemGray4
@@ -67,29 +65,46 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
         let precalcLogTextColor = logReactionsLabel.textColor
         logReactionsLabel.attributedTextClosure = {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
-            let message: NSMutableAttributedString = NSMutableAttributedString(
-                string: "Any ",
-                attributes: [.font: Constant.Visual.Font.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any])
-            message.append(
-                NSAttributedString(
-                    string: forTrigger.triggerLogReactions.map({ $0.readableName(includeMatchingEmoji: false) }).joined(separator: ", ", endingSeparator: " or "),
-                    attributes: [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
-                )
-            )
-            message.append(
-                NSAttributedString(
-                    string: " log",
-                    attributes: [.font: Constant.Visual.Font.primaryRegularLabel, .foregroundColor: precalcLogTextColor as Any]
-                )
-            )
-            return message
+            let logs = forTrigger.triggerLogReactions.map { $0.readableName(includeMatchingEmoji: true) }
+            let logNames = logs.joined(separator: ", ", endingSeparator: " or ")
+            
+            // Build the appropriate phrase depending on trigger conditions.
+            let text: String
+            if forTrigger.triggerManualCondition && forTrigger.triggerAlarmCreatedCondition {
+                text = "Whenever a \(logNames) log is added"
+            }
+            else if forTrigger.triggerManualCondition {
+                text = "Whenever someone adds a \(logNames) log"
+            }
+            else if forTrigger.triggerAlarmCreatedCondition {
+                text = "Whenever an alarm adds a \(logNames) log"
+            }
+            else {
+                text = "Whenever a \(logNames) log is added"
+            }
+            
+            // Find ranges for emphasis styling (log names)
+            let attributed = NSMutableAttributedString(string: text, attributes: [
+                .font: Constant.Visual.Font.primaryRegularLabel,
+                .foregroundColor: precalcLogTextColor as Any
+            ])
+            
+            // Find and emphasize log names within the text
+            if let range = attributed.string.range(of: logNames) {
+                let nsRange = NSRange(range, in: attributed.string)
+                attributed.addAttributes([
+                    .font: Constant.Visual.Font.emphasizedPrimaryRegularLabel,
+                    .foregroundColor: precalcLogTextColor as Any
+                ], range: nsRange)
+            }
+            return attributed
         }
         
         let precalcReminderTextColor = reminderResultLabel.textColor
         reminderResultLabel.attributedTextClosure = {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message: NSMutableAttributedString = NSMutableAttributedString(
-                string: "Creates ",
+                string: "Create ",
                 attributes: [.font: Constant.Visual.Font.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any])
             message.append(
                 NSAttributedString(

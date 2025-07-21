@@ -66,7 +66,8 @@ enum GenerationManager {
                 forLogEndDate: logEndDate,
                 forLogNote: logNote,
                 forLogUnitTypeId: logUnitType?.logUnitTypeId,
-                forLogNumberOfUnits: logNumberOfUnits
+                forLogNumberOfUnits: logNumberOfUnits,
+                forCreatedByReminderUUID: nil
             )
             
             let dog = toDogManager.dogs.randomElement()

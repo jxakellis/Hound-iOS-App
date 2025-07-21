@@ -25,6 +25,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         copy.storedLogNote = self.logNote
         copy.logUnitTypeId = self.logUnitTypeId
         copy.logNumberOfLogUnits = self.logNumberOfLogUnits
+        copy.logCreatedByReminderUUID = self.logCreatedByReminderUUID
         copy.offlineModeComponents = self.offlineModeComponents.copy() as? OfflineModeComponents ?? OfflineModeComponents()
         
         return copy
@@ -43,6 +44,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         let decodedLogNote: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.logNote.rawValue)
         let decodedLogUnitTypeId: Int? = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logUnitTypeId.rawValue)
         let decodedLogNumberOfLogUnits: Double? = aDecoder.decodeOptionalDouble(forKey: Constant.Key.logNumberOfLogUnits.rawValue)
+        let decodedLogCreatedByReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalObject(forKey: Constant.Key.logCreatedByReminderUUID.rawValue))
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
         
         self.init(
@@ -56,6 +58,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forLogNote: decodedLogNote,
             forLogUnitTypeId: decodedLogUnitTypeId,
             forLogNumberOfUnits: decodedLogNumberOfLogUnits,
+            forCreatedByReminderUUID: decodedLogCreatedByReminderUUID,
             forOfflineModeComponents: decodedOfflineModeComponents
         )
     }
@@ -80,6 +83,9 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         }
         if let logNumberOfLogUnits = logNumberOfLogUnits {
             aCoder.encode(logNumberOfLogUnits, forKey: Constant.Key.logNumberOfLogUnits.rawValue)
+        }
+        if let logCreatedByReminderUUID = logCreatedByReminderUUID {
+            aCoder.encode(logCreatedByReminderUUID.uuidString, forKey: Constant.Key.logCreatedByReminderUUID.rawValue)
         }
         aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
     }
@@ -182,6 +188,8 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     
     private(set) var logNumberOfLogUnits: Double?
     
+    private(set) var logCreatedByReminderUUID: UUID?
+    
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
     private(set) var offlineModeComponents: OfflineModeComponents = OfflineModeComponents()
     
@@ -198,6 +206,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         forLogNote: String? = nil,
         forLogUnitTypeId: Int? = nil,
         forLogNumberOfUnits: Double? = nil,
+        forCreatedByReminderUUID: UUID? = nil,
         forOfflineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
@@ -207,9 +216,10 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         self.logActionTypeId = forLogActionTypeId ?? logActionTypeId
         self.logCustomActionName = forLogCustomActionName ?? logCustomActionName
         self.logStartDate = forLogStartDate ?? logStartDate
-        self.logEndDate = forLogEndDate
+        self.logEndDate = forLogEndDate ?? logEndDate
         self.logNote = forLogNote ?? logNote
         self.changeLogUnit(forLogUnitTypeId: forLogUnitTypeId, forLogNumberOfLogUnits: forLogNumberOfUnits)
+        self.logCreatedByReminderUUID = forCreatedByReminderUUID ?? logCreatedByReminderUUID
         self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
     }
     
@@ -244,6 +254,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
                 forLogNote: logToOverride.logNote,
                 forLogUnitTypeId: logToOverride.logUnitTypeId,
                 forLogNumberOfUnits: logToOverride.logNumberOfLogUnits,
+                forCreatedByReminderUUID: logToOverride.logCreatedByReminderUUID,
                 forOfflineModeComponents: logToOverride.offlineModeComponents
             )
             return
@@ -276,6 +287,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         let logUnitTypeId: Int? = fromBody[Constant.Key.logUnitTypeId.rawValue] as? Int ?? logToOverride?.logUnitTypeId
         
         let logNumberOfLogUnits: Double? = fromBody[Constant.Key.logNumberOfLogUnits.rawValue] as? Double ?? logToOverride?.logNumberOfLogUnits
+        let logCreatedByReminderUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.logCreatedByReminderUUID.rawValue] as? String) ?? logToOverride?.logCreatedByReminderUUID
         
         self.init(
             forLogId: logId,
@@ -288,6 +300,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forLogNote: logNote,
             forLogUnitTypeId: logUnitTypeId,
             forLogNumberOfUnits: logNumberOfLogUnits,
+            forCreatedByReminderUUID: logCreatedByReminderUUID,
             // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
             forOfflineModeComponents: nil
         )
@@ -359,6 +372,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         body[Constant.Key.logNote.rawValue] = .string(logNote)
         body[Constant.Key.logUnitTypeId.rawValue] = .int(logUnitTypeId)
         body[Constant.Key.logNumberOfLogUnits.rawValue] = .double(logNumberOfLogUnits)
+        body[Constant.Key.logCreatedByReminderUUID.rawValue] = .string(logCreatedByReminderUUID?.uuidString)
         return body
     }
 }

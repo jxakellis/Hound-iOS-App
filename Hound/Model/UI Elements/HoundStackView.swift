@@ -72,4 +72,12 @@ class HoundStackView: UIStackView, HoundUIProtocol {
         
         HoundSizeDebugView.install(on: self)
     }
+    
+    static func inputFieldStack(_ header: UIView) -> HoundStackView {
+        let stack = HoundStackView()
+        stack.addArrangedSubview(header)
+        stack.axis = .vertical
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
+        return stack
+    }
 }

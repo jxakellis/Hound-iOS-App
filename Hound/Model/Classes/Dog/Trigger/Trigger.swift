@@ -53,12 +53,6 @@ enum TriggerFixedTimeType: String, CaseIterable {
 
 final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
-    // TODO TRIGGERS add "conditions"
-    // - verbage for dogsaddtriggerVC: "when this log is added" "that meets these conditions" "then create reminder
-    // - 1. manually created
-    // - 2. created by alarm
-    // need to add this to trigger object, UI to DogAddTriggerVC & triggertvc, add columns/stuff to server, and logic to shouldActivateTrigger
-    
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {
@@ -78,6 +72,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         copy.triggerFixedTimeTypeAmount = self.triggerFixedTimeTypeAmount
         copy.triggerFixedTimeUTCHour = self.triggerFixedTimeUTCHour
         copy.triggerFixedTimeUTCMinute = self.triggerFixedTimeUTCMinute
+        copy.triggerManualCondition = self.triggerManualCondition
+        copy.triggerAlarmCreatedCondition = self.triggerAlarmCreatedCondition
         copy.offlineModeComponents = self.offlineModeComponents.copy() as? OfflineModeComponents ?? OfflineModeComponents()
         
         return copy
@@ -96,6 +92,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         let decodedTriggerFixedTimeTypeAmount = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeTypeAmount.rawValue)
         let decodedTriggerFixedTimeUTCHour = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeUTCHour.rawValue)
         let decodedTriggerFixedTimeUTCMinute = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeUTCMinute.rawValue)
+        let decodedTriggerManualCondition = aDecoder.decodeOptionalBool(forKey: Constant.Key.triggerManualCondition.rawValue) ?? Constant.Class.Trigger.defaultTriggerManualCondition
+        let decodedTriggerAlarmCreatedCondition = aDecoder.decodeOptionalBool(forKey: Constant.Key.triggerAlarmCreatedCondition.rawValue) ?? Constant.Class.Trigger.defaultTriggerAlarmCreatedCondition
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
         
         self.init(
@@ -109,6 +107,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             forTriggerFixedTimeTypeAmount: decodedTriggerFixedTimeTypeAmount,
             forTriggerFixedTimeUTCHour: decodedTriggerFixedTimeUTCHour,
             forTriggerFixedTimeUTCMinute: decodedTriggerFixedTimeUTCMinute,
+            forTriggerManualCondition: decodedTriggerManualCondition,
+            forTriggerAlarmCreatedCondition: decodedTriggerAlarmCreatedCondition,
             forOfflineModeComponents: decodedOfflineModeComponents
         )
     }
@@ -126,6 +126,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(triggerFixedTimeTypeAmount, forKey: Constant.Key.triggerFixedTimeTypeAmount.rawValue)
         aCoder.encode(triggerFixedTimeUTCHour, forKey: Constant.Key.triggerFixedTimeUTCHour.rawValue)
         aCoder.encode(triggerFixedTimeUTCMinute, forKey: Constant.Key.triggerFixedTimeUTCMinute.rawValue)
+        aCoder.encode(triggerManualCondition, forKey: Constant.Key.triggerManualCondition.rawValue)
+        aCoder.encode(triggerAlarmCreatedCondition, forKey: Constant.Key.triggerAlarmCreatedCondition.rawValue)
         aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
     }
     
@@ -286,6 +288,11 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         triggerFixedTimeUTCMinute = Calendar.UTCCalendar.component(.minute, from: forDate)
     }
     
+    /// If true, the trigger will be activated by logs that were manually created by the user (no reminder/alarm)
+    var triggerManualCondition: Bool = Constant.Class.Trigger.defaultTriggerManualCondition
+    /// If true, the trigger will be activated by logs that were automatically created by an alarm
+    var triggerAlarmCreatedCondition: Bool = Constant.Class.Trigger.defaultTriggerAlarmCreatedCondition
+    
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
     private(set) var offlineModeComponents: OfflineModeComponents = OfflineModeComponents()
     
@@ -302,6 +309,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         forTriggerFixedTimeTypeAmount: Int? = nil,
         forTriggerFixedTimeUTCHour: Int? = nil,
         forTriggerFixedTimeUTCMinute: Int? = nil,
+        forTriggerManualCondition: Bool? = nil,
+        forTriggerAlarmCreatedCondition: Bool? = nil,
         forOfflineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
@@ -315,6 +324,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         self.triggerFixedTimeTypeAmount = forTriggerFixedTimeTypeAmount ?? self.triggerFixedTimeTypeAmount
         self.triggerFixedTimeUTCHour = forTriggerFixedTimeUTCHour ?? self.triggerFixedTimeUTCHour
         self.triggerFixedTimeUTCMinute = forTriggerFixedTimeUTCMinute ?? self.triggerFixedTimeUTCMinute
+        self.triggerManualCondition = forTriggerManualCondition ?? self.triggerManualCondition
+        self.triggerAlarmCreatedCondition = forTriggerAlarmCreatedCondition ?? self.triggerAlarmCreatedCondition
         self.offlineModeComponents = forOfflineModeComponents ?? self.offlineModeComponents
     }
     
@@ -349,6 +360,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
                 forTriggerFixedTimeTypeAmount: triggerToOverride.triggerFixedTimeTypeAmount,
                 forTriggerFixedTimeUTCHour: triggerToOverride.triggerFixedTimeUTCHour,
                 forTriggerFixedTimeUTCMinute: triggerToOverride.triggerFixedTimeUTCMinute,
+                forTriggerManualCondition: triggerToOverride.triggerManualCondition,
+                forTriggerAlarmCreatedCondition: triggerToOverride.triggerAlarmCreatedCondition,
                 forOfflineModeComponents: triggerToOverride.offlineModeComponents
             )
             return
@@ -390,6 +403,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         let triggerFixedTimeTypeAmount = fromBody[Constant.Key.triggerFixedTimeTypeAmount.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeTypeAmount
         let triggerFixedTimeUTCHour = fromBody[Constant.Key.triggerFixedTimeUTCHour.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeUTCHour
         let triggerFixedTimeUTCMinute = fromBody[Constant.Key.triggerFixedTimeUTCMinute.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeUTCMinute
+        let triggerManualCondition = fromBody[Constant.Key.triggerManualCondition.rawValue] as? Bool ?? triggerToOverride?.triggerManualCondition
+        let triggerAlarmCreatedCondition = fromBody[Constant.Key.triggerAlarmCreatedCondition.rawValue] as? Bool ?? triggerToOverride?.triggerAlarmCreatedCondition
         
         self.init(
             forTriggerId: triggerId,
@@ -402,6 +417,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             forTriggerFixedTimeTypeAmount: triggerFixedTimeTypeAmount,
             forTriggerFixedTimeUTCHour: triggerFixedTimeUTCHour,
             forTriggerFixedTimeUTCMinute: triggerFixedTimeUTCMinute,
+            forTriggerManualCondition: triggerManualCondition,
+            forTriggerAlarmCreatedCondition: triggerAlarmCreatedCondition,
             forOfflineModeComponents: nil
         )
     }
@@ -425,6 +442,13 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     func shouldActivateTrigger(forLog log: Log) -> Bool {
+        if triggerManualCondition == false && log.logCreatedByReminderUUID == nil {
+            return false
+        }
+        if triggerAlarmCreatedCondition == false && log.logCreatedByReminderUUID != nil {
+            return false
+        }
+        
         for reaction in triggerLogReactions where reaction.logActionTypeId == log.logActionTypeId {
             guard reaction.logCustomActionName.hasText() else {
                 return true
@@ -500,6 +524,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         body[Constant.Key.triggerFixedTimeTypeAmount.rawValue] = .int(triggerFixedTimeTypeAmount)
         body[Constant.Key.triggerFixedTimeUTCHour.rawValue] = .int(triggerFixedTimeUTCHour)
         body[Constant.Key.triggerFixedTimeUTCMinute.rawValue] = .int(triggerFixedTimeUTCMinute)
+        body[Constant.Key.triggerManualCondition.rawValue] = .bool(triggerManualCondition)
+        body[Constant.Key.triggerAlarmCreatedCondition.rawValue] = .bool(triggerAlarmCreatedCondition)
         return body
     }
     
@@ -510,7 +536,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         if triggerId != other.triggerId { return false }
         if triggerUUID != other.triggerUUID { return false }
         if triggerLogReactions.count != other.triggerLogReactions.count { return false }
-        for (a, b) in zip(triggerLogReactions, other.triggerLogReactions) where a.isSame(as: b) == false {
+        for (a, b) in zip(triggerLogReactions, other.triggerLogReactions) where !a.isSame(as: b) {
             return false
         }
         if !triggerReminderResult.isSame(as: other.triggerReminderResult) { return false }
@@ -520,6 +546,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         if triggerFixedTimeTypeAmount != other.triggerFixedTimeTypeAmount { return false }
         if triggerFixedTimeUTCHour != other.triggerFixedTimeUTCHour { return false }
         if triggerFixedTimeUTCMinute != other.triggerFixedTimeUTCMinute { return false }
+        if triggerManualCondition != other.triggerManualCondition { return false }
+        if triggerAlarmCreatedCondition != other.triggerAlarmCreatedCondition { return false }
         return true
     }
 }

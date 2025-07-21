@@ -297,7 +297,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
             }
             
             // If current reminder is different that its corresponding initial reminder, then its been updated
-            return currentReminder.isSame(as: initialReminder) == false
+            return !currentReminder.isSame(as: initialReminder)
         }
         let updatedTriggers = currentTriggers.filter { currentTrigger in
             guard currentTrigger.triggerId != nil else {
@@ -306,7 +306,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
             guard let initialTrigger = initialTriggers.first(where: { $0.triggerUUID == currentTrigger.triggerUUID }) else {
                 return false
             }
-            return currentTrigger.isSame(as: initialTrigger) == false
+            return !currentTrigger.isSame(as: initialTrigger)
         }
         
         updatedReminders.forEach { updatedReminder in

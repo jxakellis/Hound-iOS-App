@@ -222,7 +222,7 @@ final class ReminderAlarmManager {
 
     /// User responded to the reminder's alarm that popped up on their screen. They selected to 'Log' the reminder. Therefore we reset the timing data and add a log.
     private static func userSelectedLogAlarm(forDogUUID: UUID, forReminder: Reminder, forLogActionType: LogActionType) {
-        let log = Log()
+        let log = Log(forCreatedByReminderUUID: forReminder.reminderUUID)
         log.logActionTypeId = forLogActionType.logActionTypeId
         log.logCustomActionName = forReminder.reminderCustomActionName
         log.changeLogDate(forLogStartDate: Date(), forLogEndDate: nil)

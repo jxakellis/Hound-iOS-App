@@ -688,6 +688,12 @@ public enum ErrorConstant {
                 forDescription: "Choose at least one log type",
                 forOnTap: nil)
         }
+        static func conditionsInvalid() -> HoundError {
+            HoundError(
+                forName: "TriggerError.conditionsInvalid",
+                forDescription: "Choose at least one condition",
+                forOnTap: nil)
+        }
         static func timeDelayInvalid() -> HoundError {
                 HoundError(
                     forName: "TriggerError.timeDelayInvalid",

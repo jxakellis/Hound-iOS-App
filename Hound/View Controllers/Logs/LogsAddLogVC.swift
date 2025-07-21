@@ -1489,7 +1489,8 @@ final class LogsAddLogVC: HoundScrollViewController,
                 forLogUnitTypeId: selectedLogUnitType?.logUnitTypeId,
                 forLogNumberOfUnits: LogUnitType.convertStringToDouble(
                     forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text
-                )
+                ),
+                forCreatedByReminderUUID: nil
             )
             
             LogsRequest.create(

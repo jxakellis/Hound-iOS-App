@@ -153,6 +153,8 @@ public enum TriggerConstant {
     static let defaultTriggerTimeDelay: Double = 60 * 30
     static let defaultTriggerFixedTimeType = TriggerFixedTimeType.day
     static let defaultTriggerFixedTimeTypeAmount = 1
+    static let defaultTriggerManualCondition = true
+    static let defaultTriggerAlarmCreatedCondition = true
     static let defaultTriggers: [Trigger] = []
 }
 

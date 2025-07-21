@@ -138,6 +138,7 @@ public enum KeyConstant: String {
     case logNote
     case logUnitTypeId
     case logNumberOfLogUnits
+    case logCreatedByReminderUUID
     case logLastModified
     case logIsDeleted
 
@@ -195,6 +196,8 @@ public enum KeyConstant: String {
     case triggerFixedTimeTypeAmount
     case triggerFixedTimeUTCHour
     case triggerFixedTimeUTCMinute
+    case triggerManualCondition
+    case triggerAlarmCreatedCondition
     case triggerLastModified
     case triggerIsDeleted
     

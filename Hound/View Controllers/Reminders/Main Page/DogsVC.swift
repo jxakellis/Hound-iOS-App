@@ -508,7 +508,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             self.createNewMenuButton.tintColor = UIColor.systemRed
             
             self.screenDimmer.alpha = 0.5
-//            self.tabBarController?.tabBar.alpha = 0.05
+            self.tabBarController?.tabBar.alpha = 0.25
             
             self.createNewStackOffScreenConstraint.isActive = false
             self.createNewStackVisibleConstraint.isActive = true
@@ -523,7 +523,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             self.createNewMenuButton.tintColor = UIColor.systemBlue
             
             self.screenDimmer.alpha = 0
-//            self.tabBarController?.tabBar.alpha = 1
+            self.tabBarController?.tabBar.alpha = 1
             
             self.createNewStackVisibleConstraint.isActive = false
             self.createNewStackOffScreenConstraint.isActive = true

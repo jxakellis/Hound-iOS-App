@@ -709,19 +709,19 @@ extension Reminder {
         // known at this point that the reminderTypes are the same
         switch reminderType {
         case .countdown:
-            if countdownComponents.isSame(as: other.countdownComponents) == false {
+            if !countdownComponents.isSame(as: other.countdownComponents) {
                 return false
             }
         case .weekly:
-            if weeklyComponents.isSame(as: other.weeklyComponents) == false {
+            if !weeklyComponents.isSame(as: other.weeklyComponents) {
                 return false
             }
         case .monthly:
-            if monthlyComponents.isSame(as: other.monthlyComponents) == false {
+            if !monthlyComponents.isSame(as: other.monthlyComponents) {
                 return false
             }
         case .oneTime:
-            if oneTimeComponents.isSame(as: other.oneTimeComponents) == false {
+            if !oneTimeComponents.isSame(as: other.oneTimeComponents) {
                 return false
             }
         }

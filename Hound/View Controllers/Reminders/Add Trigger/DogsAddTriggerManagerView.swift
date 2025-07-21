@@ -6,6 +6,7 @@
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
+import SnapKit
 import UIKit
 
 enum DogsAddTriggerDropDownTypes: String {
@@ -30,14 +31,14 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     // MARK: - Elements
     
     private let logReactionsHeaderLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 305, compressionResistancePriority: 305)
+        let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = .label
         label.text = "When This Log is Added"
         return label
     }()
     private lazy var logReactionsLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
+        let label = HoundLabel()
         label.font = Constant.Visual.Font.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select log type(s)..."
@@ -54,16 +55,84 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         label.addGestureRecognizer(gesture)
         return label
     }()
+    private lazy var logReactionStack: HoundStackView = {
+        let stack = HoundStackView.inputFieldStack(logReactionsHeaderLabel)
+        stack.addArrangedSubview(logReactionsLabel)
+        return stack
+    }()
+    
+    private let conditionsHeaderLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
+        label.textColor = .label
+        label.text = "Matching These Conditions"
+        return label
+    }()
+    private let manuallyCreatedLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 250, compressionResistancePriority: 250)
+        label.font = Constant.Visual.Font.secondaryRegularLabel
+        label.textColor = .label
+        label.text = "Added Manually"
+        return label
+    }()
+    private let createdByAlarmLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 250, compressionResistancePriority: 250)
+        label.font = Constant.Visual.Font.secondaryRegularLabel
+        label.textColor = .label
+        label.text = "Added by Alarm"
+        return label
+    }()
+    private lazy var manuallyCreatedSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 255, compressionResistancePriority: 255)
+        uiSwitch.addTarget(self, action: #selector(didToggleSwitch(_:)), for: .valueChanged)
+        return uiSwitch
+    }()
+    private lazy var createdByAlarmSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 255, compressionResistancePriority: 255)
+        uiSwitch.addTarget(self, action: #selector(didToggleSwitch(_:)), for: .valueChanged)
+        return uiSwitch
+    }()
+    private lazy var nestedConditionsStack: HoundStackView = {
+        let manuallyCreatedStack = HoundStackView()
+        manuallyCreatedStack.addArrangedSubview(manuallyCreatedLabel)
+        manuallyCreatedStack.addArrangedSubview(manuallyCreatedSwitch)
+        manuallyCreatedStack.axis = .horizontal
+        manuallyCreatedStack.alignment = .center
+        manuallyCreatedStack.spacing = Constant.Constraint.Spacing.contentIntraHori
+        
+        let createdByAlarmStack = HoundStackView()
+        createdByAlarmStack.addArrangedSubview(createdByAlarmLabel)
+        createdByAlarmStack.addArrangedSubview(createdByAlarmSwitch)
+        createdByAlarmStack.axis = .horizontal
+        createdByAlarmStack.alignment = .center
+        createdByAlarmStack.spacing = Constant.Constraint.Spacing.contentIntraHori
+        
+        let nestedStack = HoundStackView()
+        nestedStack.addArrangedSubview(manuallyCreatedStack)
+        nestedStack.addArrangedSubview(createdByAlarmStack)
+        nestedStack.axis = .vertical
+        nestedStack.spacing = Constant.Constraint.Spacing.contentTallIntraVert
+        
+        nestedStack.errorMessageChangesBorder = false
+        
+        return nestedStack
+    }()
+    private lazy var conditionsStack: HoundStackView = {
+        let stack = HoundStackView.inputFieldStack(conditionsHeaderLabel)
+        stack.addArrangedSubview(nestedConditionsStack)
+        
+        return stack
+    }()
     
     private let reminderResultHeaderLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 295, compressionResistancePriority: 295)
+        let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = .label
         label.text = "Then Create Reminder"
         return label
     }()
     private lazy var reminderResultLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
+        let label = HoundLabel()
         label.font = Constant.Visual.Font.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select reminder action..."
@@ -80,17 +149,26 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         label.addGestureRecognizer(gesture)
         return label
     }()
-    
-    private var reminderCustomActionNameTop: GeneralLayoutConstraint!
-    private var reminderCustomActionNameHeightMultiplier: GeneralLayoutConstraint!
-    private var reminderCustomActionNameMaxHeight: GeneralLayoutConstraint!
     private lazy var reminderCustomActionNameTextField: HoundTextField = {
-        let textField = HoundTextField(huggingPriority: 285, compressionResistancePriority: 285)
+        let textField = HoundTextField()
         textField.font = Constant.Visual.Font.secondaryRegularLabel
         textField.delegate = self
         textField.applyStyle(.thinGrayBorder)
-        textField.placeholder = " Enter a custom name..."
+        textField.placeholder = " Add a custom name... (optional)"
         return textField
+    }()
+    private lazy var reminderResultStack: HoundStackView = {
+        let stack = HoundStackView.inputFieldStack(reminderResultHeaderLabel)
+        
+        let nestedStack = HoundStackView()
+        nestedStack.addArrangedSubview(reminderResultLabel)
+        nestedStack.addArrangedSubview(reminderCustomActionNameTextField)
+        nestedStack.axis = .vertical
+        nestedStack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        
+        stack.addArrangedSubview(nestedStack)
+        
+        return stack
     }()
     
     private enum SegmentedControlSection: Int, CaseIterable {
@@ -99,8 +177,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         var title: String {
             switch self {
-            case .timeDelay: return "Time Delay"
-            case .fixedTime: return "Fixed Time"
+            case .timeDelay: return "After a Delay"
+            case .fixedTime: return "At a Specific Time"
             }
         }
         
@@ -153,6 +231,14 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         return stack
     }()
     
+    @objc private func didToggleSwitch(_ sender: Any) {
+        if sender as? HoundSwitch == manuallyCreatedSwitch || sender as? HoundSwitch == createdByAlarmSwitch {
+            if manuallyCreatedSwitch.isOn || createdByAlarmSwitch.isOn {
+                nestedConditionsStack.errorMessage = nil
+            }
+        }
+    }
+    
     @objc private func didUpdateTriggerType(_ sender: UISegmentedControl) {
         timeDelayView.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.timeDelay.rawValue
         fixedTimeView.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.fixedTime.rawValue
@@ -192,7 +278,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             return true
         }
         
-        return initialTrigger.isSame(as: triggerToUpdate)
+        return !initialTrigger.isSame(as: triggerToUpdate)
     }
     
     // MARK: - Function
@@ -205,9 +291,17 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             if showErrorIfFailed {
                 logReactionsLabel.errorMessage = Constant.Error.TriggerError.logReactionMissing().description
             }
-            
             return nil
         }
+        
+        guard manuallyCreatedSwitch.isOn || createdByAlarmSwitch.isOn else {
+            if showErrorIfFailed {
+                nestedConditionsStack.errorMessage = Constant.Error.TriggerError.conditionsInvalid().description
+            }
+            return nil
+        }
+        trigger.triggerManualCondition = manuallyCreatedSwitch.isOn
+        trigger.triggerAlarmCreatedCondition = createdByAlarmSwitch.isOn
         
         guard let selectedReminderResult = selectedReminderResult else {
             if showErrorIfFailed {
@@ -250,21 +344,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         reminderResultLabel.text = selectedReminderResult?.readableName
         reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
         
-        let allowsCustom = selectedReminderResult.map {
-            ReminderActionType.find(forReminderActionTypeId: $0.reminderActionTypeId).allowsCustom
-        } ?? false
-        
-        reminderCustomActionNameTextField.isHidden = !allowsCustom
-        if allowsCustom {
-            reminderCustomActionNameHeightMultiplier.restore()
-            reminderCustomActionNameMaxHeight.restore()
-            reminderCustomActionNameTop.restore()
-        }
-        else {
-            reminderCustomActionNameHeightMultiplier.setMultiplier(0.0)
-            reminderCustomActionNameMaxHeight.constant = 0.0
-            reminderCustomActionNameTop.constant = 0.0
-        }
+        reminderCustomActionNameTextField.isHidden = !(selectedReminderResult.map { ReminderActionType.find(forReminderActionTypeId: $0.reminderActionTypeId).allowsCustom } ?? false)
+        remakeCustomActionNameConstraints()
         
         UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
             self.setNeedsLayout()
@@ -303,6 +384,9 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             }
             
         }
+        
+        manuallyCreatedSwitch.isOn = forTriggerToUpdate?.triggerManualCondition ?? Constant.Class.Trigger.defaultTriggerManualCondition
+        createdByAlarmSwitch.isOn = forTriggerToUpdate?.triggerAlarmCreatedCondition ?? Constant.Class.Trigger.defaultTriggerAlarmCreatedCondition
         
         // Build available reminder results
         availableReminderResults = []
@@ -412,27 +496,30 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     /// Show or hide the dropdown for the given type
     private func showDropDown(_ type: DogsAddTriggerDropDownTypes, animated: Bool) {
         let label = labelForDropDown(forDropDownType: type)
-        let superview = label.superview
-        let dropDowns = [dropDownLogReactions, dropDownReminderResult]
+        var targetDropDown = dropDown(forDropDownType: type)
         
+        // cannot insert dropdown inside of a stack, so need basic view
+        let rootView = self
+        let referenceFrame = label.superview?.convert(label.frame, to: rootView) ?? label.frame
+        
+        let dropDowns = [dropDownLogReactions, dropDownReminderResult]
         // work around: ui element or error message couldve been added which is higher in the view than dropdown since dropdown last opened
         // ensure that dropdowns are on top (and in correct order relative to other drop downs)
         dropDowns.forEach { dropDown in
             dropDown?.removeFromSuperview()
         }
         dropDowns.reversed().forEach { dropDown in
-            if let dropDown = dropDown, let superview = superview {
-                superview.addSubview(dropDown)
+            if let dropDown = dropDown {
+                rootView.addSubview(dropDown)
             }
         }
         
-        var targetDropDown = dropDown(forDropDownType: type)
         if targetDropDown == nil {
             targetDropDown = HoundDropDown()
             targetDropDown?.setupDropDown(
                 forHoundDropDownIdentifier: type.rawValue,
                 forDataSource: self,
-                forViewPositionReference: label.frame,
+                forViewPositionReference: referenceFrame,
                 forOffset: 2.5,
                 forRowHeight: HoundDropDown.rowHeightForHoundLabel
             )
@@ -440,8 +527,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             case .logReactions: dropDownLogReactions = targetDropDown
             case .reminderResult: dropDownReminderResult = targetDropDown
             }
-            if let superview = superview, let targetDropDown = targetDropDown {
-                superview.addSubview(targetDropDown)
+            if let targetDropDown = targetDropDown {
+                rootView.addSubview(targetDropDown)
             }
         }
         
@@ -566,11 +653,9 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     override func addSubViews() {
         super.addSubViews()
-        addSubview(logReactionsHeaderLabel)
-        addSubview(logReactionsLabel)
-        addSubview(reminderResultHeaderLabel)
-        addSubview(reminderResultLabel)
-        addSubview(reminderCustomActionNameTextField)
+        addSubview(logReactionStack)
+        addSubview(conditionsStack)
+        addSubview(reminderResultStack)
         addSubview(segmentedControl)
         addSubview(triggerViewsStack)
         
@@ -583,62 +668,60 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         addGestureRecognizer(didTapScreenGesture)
     }
     
+    private func remakeCustomActionNameConstraints() {
+        reminderCustomActionNameTextField.snp.remakeConstraints { make in
+            if !reminderCustomActionNameTextField.isHidden {
+                make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+            }
+        }
+    }
+    
     override func setupConstraints() {
         super.setupConstraints()
         
-        NSLayoutConstraint.activate([
-            logReactionsHeaderLabel.topAnchor.constraint(equalTo: topAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
-            logReactionsHeaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            logReactionsHeaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
-        ])
+        logReactionStack.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
+        logReactionsLabel.snp.makeConstraints { make in
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+        }
         
-        NSLayoutConstraint.activate([
-            logReactionsLabel.topAnchor.constraint(equalTo: logReactionsHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTightIntraHori),
-            logReactionsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            logReactionsLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            logReactionsLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
-            logReactionsLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
-        ])
+        conditionsStack.snp.makeConstraints { make in
+            make.top.equalTo(logReactionStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            // add extra inset for the switches inside
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
+        }
         
-        NSLayoutConstraint.activate([
-            reminderResultHeaderLabel.topAnchor.constraint(equalTo: logReactionsLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
-            reminderResultHeaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            reminderResultHeaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
-        ])
+        reminderResultStack.snp.makeConstraints { make in
+            make.top.equalTo(conditionsStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
+        reminderResultLabel.snp.makeConstraints { make in
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldMaxHeight)
+        }
+        remakeCustomActionNameConstraints()
         
-        NSLayoutConstraint.activate([
-            reminderResultLabel.topAnchor.constraint(equalTo: reminderResultHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTightIntraHori),
-            reminderResultLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            reminderResultLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            reminderResultLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
-            reminderResultLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
-        ])
+        segmentedControl.snp.makeConstraints { make in
+            make.top.equalTo(reminderResultStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.segmentedHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(Constant.Constraint.Input.segmentedMaxHeight)
+        }
         
-        reminderCustomActionNameTop = GeneralLayoutConstraint(reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderResultLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert))
-        reminderCustomActionNameHeightMultiplier = GeneralLayoutConstraint(reminderCustomActionNameTextField.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self))
-        reminderCustomActionNameMaxHeight = GeneralLayoutConstraint(reminderCustomActionNameTextField.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight))
-        NSLayoutConstraint.activate([
-            reminderCustomActionNameTop.constraint,
-            reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            reminderCustomActionNameHeightMultiplier.constraint,
-            reminderCustomActionNameMaxHeight.constraint
-        ])
-        
-        NSLayoutConstraint.activate([
-            segmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
-            segmentedControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset / 2.0),
-            segmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset / 2.0),
-            segmentedControl.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: self),
-            segmentedControl.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight)
-        ])
-        
-        NSLayoutConstraint.activate([
-            triggerViewsStack.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
-            triggerViewsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
-            triggerViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            triggerViewsStack.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
+        triggerViewsStack.snp.makeConstraints { make in
+            make.top.equalTo(segmentedControl.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.bottom.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteVertInset)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
     }
 }
 

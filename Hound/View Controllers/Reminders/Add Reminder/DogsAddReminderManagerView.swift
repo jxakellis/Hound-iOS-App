@@ -85,7 +85,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         textField.delegate = self
         
         textField.applyStyle(.thinGrayBorder)
-        textField.placeholder = " Enter a custom name..."
+        textField.placeholder = " Add a custom name... (optional)"
         
         return textField
     }()
@@ -251,7 +251,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             return true
         }
         
-        return initialReminder.isSame(as: reminderToUpdate) == false
+        return !initialReminder.isSame(as: reminderToUpdate)
     }
     
     // MARK: - Setup

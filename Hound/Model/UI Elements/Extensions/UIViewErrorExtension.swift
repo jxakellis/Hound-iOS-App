@@ -9,6 +9,7 @@
 import UIKit
 
 private var houndErrorLabelKey: UInt8 = 0
+private var errorMessageChangesBorderKey: UInt8 = 6
 
 // both
 private var originalBorderWidthKey: UInt8 = 1
@@ -36,6 +37,14 @@ extension UIView {
                 return
             }
             showErrorMessage(message)
+        }
+    }
+    var errorMessageChangesBorder: Bool {
+        get {
+            (objc_getAssociatedObject(self, &errorMessageChangesBorderKey) as? Bool) ?? true
+        }
+        set {
+            objc_setAssociatedObject(self, &errorMessageChangesBorderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 
@@ -87,6 +96,10 @@ extension UIView {
                 objc_setAssociatedObject(self, &originalCornerCurveKey, layer.cornerCurve, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             }
         }
+        
+        guard errorMessageChangesBorder else {
+            return
+        }
 
         if let styleable = self as? (UIView & HoundBorderStylable) {
             styleable.applyStyle(.redBorder)
@@ -103,6 +116,10 @@ extension UIView {
         if let label = objc_getAssociatedObject(self, &houndErrorLabelKey) as? HoundLabel {
             label.removeFromSuperview()
             objc_setAssociatedObject(self, &houndErrorLabelKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        
+        guard errorMessageChangesBorder else {
+            return
         }
 
         // Restore original border
