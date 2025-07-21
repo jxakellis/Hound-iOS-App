@@ -134,7 +134,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         button.setTitle("Choose", for: .normal)
         button.setTitleColor(.placeholderText, for: .normal)
-        button.titleLabel?.font = Constant.Visual.Font.secondaryHeaderLabel
+        button.titleLabel?.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
         
         button.backgroundColor = UIColor.systemBackground
         

@@ -41,6 +41,20 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
         }
     }
 
+    private let insetSpacing: String = "  "
+
+    /// If true, the text field's text will be inset with two spaces on both
+    /// the leading and trailing edge. The padding is stripped when accessing
+    /// `text` so external callers do not need to account for it.
+    var shouldInsetText: Bool = false {
+        didSet {
+            if oldValue != shouldInsetText {
+                self.text = self.text
+                self.placeholder = self.placeholder
+            }
+        }
+    }
+
     // MARK: - Override Properties
     
     override var bounds: CGRect {
@@ -48,6 +62,66 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
             // Make sure to incur didSet of superclass
             super.bounds = bounds
             updateCornerRounding()
+        }
+    }
+
+    private var hasInsetApplied: Bool = false
+    override var text: String? {
+        get {
+            var text = super.text
+            if hasInsetApplied {
+                if text?.hasPrefix(insetSpacing) == true {
+                    text?.removeFirst(2)
+                }
+                if text?.hasSuffix(insetSpacing) == true {
+                    text?.removeLast(2)
+                }
+            }
+            return text
+        }
+        set {
+            hasInsetApplied = false
+            if let newValue = newValue {
+                var value = newValue
+                if shouldInsetText && !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    hasInsetApplied = true
+                    value = insetSpacing + value + insetSpacing
+                }
+                super.text = value
+            }
+            else {
+                super.text = nil
+            }
+        }
+    }
+    
+    private var placeholderHasInsetApplied: Bool = false
+    override var placeholder: String? {
+        get {
+            var placeholder = super.placeholder
+            if hasInsetApplied {
+                if placeholder?.hasPrefix(insetSpacing) == true {
+                    placeholder?.removeFirst(2)
+                }
+                if placeholder?.hasSuffix(insetSpacing) == true {
+                    placeholder?.removeLast(2)
+                }
+            }
+            return placeholder
+        }
+        set {
+            hasInsetApplied = false
+            if let newValue = newValue {
+                var value = newValue
+                if shouldInsetText && !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    hasInsetApplied = true
+                    value = insetSpacing + value + insetSpacing
+                }
+                super.placeholder = value
+            }
+            else {
+                super.placeholder = nil
+            }
         }
     }
 
