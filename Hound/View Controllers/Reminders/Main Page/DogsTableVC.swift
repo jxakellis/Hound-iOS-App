@@ -331,7 +331,7 @@ final class DogsTableVC: HoundTableViewController {
             let logActionTypes: [LogActionType] = reminder.reminderActionType.associatedLogActionTypes
             
             for logActionType in logActionTypes {
-                let fullReadableName = logActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName)
+                let fullReadableName = logActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName, includeMatchingEmoji: true)
                 let logAlertAction = UIAlertAction(
                     title: "Log \(fullReadableName)",
                     style: .default,

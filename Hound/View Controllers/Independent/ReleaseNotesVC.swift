@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum ReleaseNoteImportance {
+    case minor
+    case normal
+}
+
 struct ReleaseNoteItem {
     let title: String
     let description: String
@@ -15,18 +20,18 @@ struct ReleaseNoteItem {
 
 struct ReleaseNotesBuilder {
     private var items: [ReleaseNoteItem] = []
-
+    
     mutating func addFeature(title: String, description: String) {
         items.append(ReleaseNoteItem(title: title, description: description))
     }
-
+    
     func buildAttributedString() -> NSAttributedString {
-        let titleAttr: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel]
-        let descAttr: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.primaryRegularLabel]
-        
         let message = NSMutableAttributedString()
         
         for item in items {
+            let titleAttr: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel]
+            let descAttr: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.primaryRegularLabel]
+            
             message.append(NSAttributedString(string: "\u{2022} \(item.title)\n", attributes: titleAttr))
             message.append(NSAttributedString(string: item.description, attributes: descAttr))
             message.append(NSAttributedString(string: "\n\n"))
@@ -36,7 +41,7 @@ struct ReleaseNotesBuilder {
 }
 
 final class ReleaseNotesVC: HoundScrollViewController {
-
+    
     // MARK: - Elements
     private let pageHeaderView: HoundPageSheetHeaderView = {
         let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
@@ -47,14 +52,14 @@ final class ReleaseNotesVC: HoundScrollViewController {
         view.pageDescriptionLabel.text = "🎉  🦮  🎉  🦮  🎉  🦮  🎉"
         return view
     }()
-
+    
     private let notesLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.numberOfLines = 0
         label.textColor = UIColor.label
         return label
     }()
-
+    
     // MARK: - Main
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -66,52 +71,76 @@ final class ReleaseNotesVC: HoundScrollViewController {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        
-        // TODO RELEASE NOTES make this page snazzier. see reference image from other app
-        
-        // TODO RELEASE NOTES 4.0.0 UPDATE W/ NEW FEATURES
-        // 1. triggers
-        // 2. redone ui for scalability / iPad
-        // 3. skippable reminders
-        // 4. ability to duplicate reminders
-        // 5. ability to search by filter text and filter by time range
-        // 6. log end time is now "in x time" rather than "ago x time"
-        // 7. this custom page itself
-        // 8. new app icon
+
         var builder = ReleaseNotesBuilder()
         builder.addFeature(
             title: "Automations",
-            description: "Automate your dog's logs with customizable automations."
+            description: "Hound can now create reminders for you when you add certain logs.\n\nFor example, setup an automation to get reminded to take Bella out 30 mins after you feed her!"
+        )
+        
+        builder.addFeature(
+            title: "Fresh Interface",
+            description: "A snazzy look built to shine on iPad, plus a slew of visual enhancements"
+        )
+        
+        builder.addFeature(
+            title: "More Filter Options",
+            description: "Filter your logs by text or time range to fetch just what you need"
+        )
+        
+        builder.addFeature(
+            title: "New Log Type",
+            description: "When your dog doesn't eat, now you can add a \"Did't Eat 🍽️\" log to track it!"
+        )
+        
+        builder.addFeature(
+            title: "Skippable Reminders",
+            description: "Easily skip a reminder when playtime runs long."
+        )
+        
+        builder.addFeature(
+            title: "Duplicate Reminders",
+            description: "Copy a reminder and tweak the details in seconds."
+        )
+        
+        builder.addFeature(
+            title: "Release Notes",
+            description: "This page keeps you up to date on every new trick."
+        )
+        
+        builder.addFeature(
+            title: "New App Icon",
+            description: "Spot Hound faster with our crisp new look."
         )
         
         notesLabel.attributedText = builder.buildAttributedString()
     }
-
+    
     // MARK: - Setup Elements
     override func setupGeneratedViews() {
         view.backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
-
+    
     override func addSubViews() {
         super.addSubViews()
         containerView.addSubview(pageHeaderView)
         containerView.addSubview(notesLabel)
     }
-
+    
     override func setupConstraints() {
         super.setupConstraints()
-
+        
         NSLayoutConstraint.activate([
             pageHeaderView.topAnchor.constraint(equalTo: containerView.topAnchor),
             pageHeaderView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             pageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
-
+        
         NSLayoutConstraint.activate([
             notesLabel.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             notesLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),

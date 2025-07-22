@@ -95,7 +95,7 @@ public enum VisualConstant {
 
         static let houndUpdatedTitle: String = "Fresh Paws on the Block! 🐾"
         static var houndUpdatedSubtitle: String {
-            return "Tap here to check out what version \(UIApplication.appVersion) has in store for you!"
+            return "Tap here to check v\(UIApplication.appVersion) added to Hound!"
         }
         
         static let infoEnteredOfflineModeTitle = "Switched to Offline Mode"
