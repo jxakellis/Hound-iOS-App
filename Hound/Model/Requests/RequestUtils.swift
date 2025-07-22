@@ -85,7 +85,7 @@ enum RequestUtils {
         }
         
         // Pass off the task to be executed when its time for it. Handles lots of requests coming in at once
-        DataTaskQueue.enqueueTask(forDataTask: task)
+        DataTaskManager.enqueueTask(forDataTask: task)
         
         return task.progress
     }
@@ -251,7 +251,7 @@ enum RequestUtils {
                 MainTabBarController.shouldSilentlyRefreshDogManager = true
             }
             else if responseError.name == Constant.Error.GeneralResponseError.rateLimitExceeded(forRequestId: -1, forResponseId: -1).name {
-                DataTaskQueue.lastDateRateLimitReceived = Date()
+                DataTaskManager.lastDateRateLimitReceived = Date()
             }
             
             completionHandler(responseBody, .failureResponse, responseError)

@@ -1,5 +1,5 @@
 //
-//  DataTaskQueue.swift
+//  DataTaskManager.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 2/18/24.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-private final class AppActiveTaskQueue {
+private final class DataTaskQueueForAppActive {
     private static var tasks: [() -> Void] = []
     private static var isObserving = false
 
@@ -44,7 +44,7 @@ private final class AppActiveTaskQueue {
     }
 }
 
-enum DataTaskQueue {
+enum DataTaskManager {
     
     // MARK: - Properties
     /// Tracks the date at which a certain task made a request to the Hound server in order to make sure the rate limit isn't exceeded.
@@ -86,7 +86,7 @@ enum DataTaskQueue {
     /// Attempts to send the dataTask at index 0 of the taskQueue. If the app has sent too many requests in a given time frame, then delays the next requests until
     private static func startTask() {
         // If API calls are made when the app isn't active, we will have pathing errors to internet which is hard to pickup with NetworkMonitor
-        AppActiveTaskQueue.performWhenActive {
+        DataTaskQueueForAppActive.performWhenActive {
             // startTask already triggered a delay to avoid the rate limit. Wait for that to return
             guard isDelayInProgress == false else {
                 return
@@ -114,7 +114,7 @@ enum DataTaskQueue {
             
             guard delayNeededToAvoidRateLimit <= 0.1 else {
                 isDelayInProgress = true
-                HoundLogger.apiRequest.warning("DataTaskQueue.startTask: Rate limit triggered, delaying next request by \(delayNeededToAvoidRateLimit) seconds for \(taskQueue.first?.originalRequest?.url?.description ?? "NO URL")")
+                HoundLogger.apiRequest.warning("DataTaskManager.startTask: Rate limit triggered, delaying next request by \(delayNeededToAvoidRateLimit) seconds for \(taskQueue.first?.originalRequest?.url?.description ?? "NO URL")")
                 DispatchQueue.global().asyncAfter(deadline: .now() + delayNeededToAvoidRateLimit) {
                     self.isDelayInProgress = false
                     self.startTask()
