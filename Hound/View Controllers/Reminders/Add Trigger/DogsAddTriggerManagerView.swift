@@ -39,7 +39,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     }()
     private lazy var logReactionsLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = Constant.Visual.Font.secondaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select log type(s)..."
         label.shouldInsetText = true
@@ -71,14 +71,14 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     }()
     private let manuallyCreatedLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 250, compressionResistancePriority: 250)
-        label.font = Constant.Visual.Font.secondaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.textColor = .label
         label.text = "Added Manually"
         return label
     }()
     private let createdByAlarmLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 250, compressionResistancePriority: 250)
-        label.font = Constant.Visual.Font.secondaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.textColor = .label
         label.text = "Added by Alarm"
         return label
@@ -134,7 +134,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     }()
     private lazy var reminderResultLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = Constant.Visual.Font.secondaryRegularLabel
+        label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select reminder action..."
         label.shouldInsetText = true

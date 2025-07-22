@@ -44,7 +44,7 @@ final class ReleaseNotesVC: HoundScrollViewController {
         view.pageHeaderLabel.text = "What's New in v\(UIApplication.appVersion)"
         
         view.isDescriptionEnabled = true
-        view.pageDescriptionLabel.text = "🦮 🎉 🦮 🎉 🦮 🎉 🦮 🎉 🦮"
+        view.pageDescriptionLabel.text = "🎉  🦮  🎉  🦮  🎉  🦮  🎉"
         return view
     }()
 
