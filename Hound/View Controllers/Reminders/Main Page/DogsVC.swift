@@ -259,7 +259,6 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         return label
     }()
-    
     private lazy var createNewDogButton: HoundButton = {
         let button = HoundButton()
         
@@ -270,6 +269,14 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         button.addTarget(self, action: #selector(didSelectCreateDog), for: .touchUpInside)
         
         return button
+    }()
+    private lazy var createNewDogStack: HoundStackView = {
+        let substack = HoundStackView(arrangedSubviews: [createNewDogLabel, createNewDogButton])
+        substack.axis = .horizontal
+        substack.distribution = .fill
+        substack.alignment = .center
+        substack.spacing = Constant.Constraint.Spacing.contentIntraHori
+        return substack
     }()
     
     private lazy var createNewReminderLabel: HoundLabel = {
@@ -288,7 +295,6 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         return label
     }()
-    
     private lazy var createNewReminderButton: HoundButton = {
         let button = HoundButton()
         
@@ -299,6 +305,14 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         button.addTarget(self, action: #selector(didSelectCreateReminder), for: .touchUpInside)
         
         return button
+    }()
+    private lazy var createNewReminderStack: HoundStackView = {
+        let substack = HoundStackView(arrangedSubviews: [createNewReminderLabel, createNewReminderButton])
+        substack.axis = .horizontal
+        substack.distribution = .fill
+        substack.alignment = .center
+        substack.spacing = Constant.Constraint.Spacing.contentIntraHori
+        return substack
     }()
     
     private lazy var createNewTriggerLabel: HoundLabel = {
@@ -317,7 +331,6 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         return label
     }()
-    
     private lazy var createNewTriggerButton: HoundButton = {
         let button = HoundButton()
         
@@ -329,23 +342,19 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         return button
     }()
-    
-    private var createNewLabelsAndButtons: [(HoundLabel, HoundButton)] {
-        return [(createNewDogLabel, createNewDogButton), (createNewReminderLabel, createNewReminderButton), (createNewTriggerLabel, createNewTriggerButton)]
-    }
+    private lazy var createNewTriggerStack: HoundStackView = {
+        let substack = HoundStackView(arrangedSubviews: [createNewTriggerLabel, createNewTriggerButton])
+        substack.axis = .horizontal
+        substack.distribution = .fill
+        substack.alignment = .center
+        substack.spacing = Constant.Constraint.Spacing.contentIntraHori
+        return substack
+    }()
     
     private var createNewStackVisibleConstraint: NSLayoutConstraint!
     private var createNewStackOffScreenConstraint: NSLayoutConstraint!
     private lazy var createNewLabelsAndButtonsStackView: HoundStackView = {
-        let substacks = createNewLabelsAndButtons.map { label, button in
-            let substack = HoundStackView(arrangedSubviews: [label, button])
-            substack.axis = .horizontal
-            substack.distribution = .fill
-            substack.alignment = .center
-            substack.spacing = Constant.Constraint.Spacing.contentIntraHori
-            return substack
-        }
-        let stack = HoundStackView(arrangedSubviews: substacks)
+        let stack = HoundStackView(arrangedSubviews: [createNewDogStack, createNewReminderStack, createNewTriggerStack])
         stack.axis = .vertical
         stack.distribution = .equalSpacing
         stack.alignment = .trailing
@@ -425,6 +434,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         }
         
         noDogsRecordedLabel.isHidden = !dogManager.dogs.isEmpty
+        createNewReminderStack.isHidden = dogManager.dogs.isEmpty
+        createNewTriggerStack.isHidden = dogManager.dogs.isEmpty
     }
     
     // MARK: - Main
@@ -459,9 +470,6 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     private func presentDogSelection(forAction: CreateAction) {
         guard dogManager.dogs.isEmpty == false else {
-            let bannerTitle = "No Dogs Found"
-            // TODO VISUAL make this a text constant
-            PresentationManager.enqueueBanner(forTitle: bannerTitle, forSubtitle: "Create a dog first", forStyle: .info)
             return
         }
         
@@ -493,7 +501,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             return
         }
         
-        let alert = UIAlertController(title: forAction == .reminder ? "Add Reminder to Dog" : "Add Trigger to Dog", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: forAction == .reminder ? "Add Reminder to Dog" : "Add Automation to Dog", message: nil, preferredStyle: .alert)
         for dog in dogManager.dogs {
             alert.addAction(UIAlertAction(title: dog.dogName, style: .default) { _ in
                 openForDog(dog)
@@ -557,7 +565,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         super.setupConstraints()
         
         // createNewButtons
-        for (_, button) in createNewLabelsAndButtons {
+        for button in [createNewDogButton, createNewReminderButton, createNewTriggerButton] {
             NSLayoutConstraint.activate([
                 button.createSquareAspectRatio(),
                 button.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),

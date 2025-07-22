@@ -88,8 +88,6 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
     /// Resize corner radius when the bounds change
     override var bounds: CGRect {
         didSet {
-            // Make sure to incur didSet of superclass
-            super.bounds = bounds
             updateCornerRounding()
             self.updateScaleImagePointSize()
             self.updateBackgroundCircle()
@@ -98,14 +96,12 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
     
     override var isEnabled: Bool {
         didSet {
-            super.isEnabled = isEnabled
             self.alpha = isEnabled ? 1 : 0.5
         }
     }
     
     override var isHidden: Bool {
         didSet {
-            super.isHidden = isHidden
             backgroundCircleView?.isHidden = isHidden
         }
     }

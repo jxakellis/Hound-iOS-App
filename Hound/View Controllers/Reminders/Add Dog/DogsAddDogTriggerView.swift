@@ -10,6 +10,7 @@ import UIKit
 
 protocol DogsAddDogTriggersViewDelegate: AnyObject {
     func shouldOpenAddTriggerVC(forTrigger: Trigger?)
+    func didUpdateTriggerCount()
 }
 
 final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableViewDelegate {
@@ -102,18 +103,21 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
     
     func didAddTrigger(forTrigger: Trigger) {
         dogTriggers.addTrigger(forTrigger: forTrigger)
+        delegate?.didUpdateTriggerCount()
         // not in view so no animation
         self.tableView.reloadData()
     }
     
     func didUpdateTrigger(forTrigger: Trigger) {
         dogTriggers.addTrigger(forTrigger: forTrigger)
+        delegate?.didUpdateTriggerCount()
         // not in view so no animation
         self.tableView.reloadData()
     }
     
     func didRemoveTrigger(forTriggerUUID: UUID) {
         dogTriggers.removeTrigger(forTriggerUUID: forTriggerUUID)
+        delegate?.didUpdateTriggerCount()
         // not in view so no animation
         self.tableView.reloadData()
     }
@@ -171,6 +175,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.dogTriggers.removeTrigger(forTriggerUUID: trigger.triggerUUID)
+            self.delegate?.didUpdateTriggerCount()
             
             self.tableView.deleteSections([indexPath.section], with: .fade)
             UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {

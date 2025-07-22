@@ -114,8 +114,6 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
 
     override var contentSize: CGSize {
         didSet {
-            // Make sure to incur didSet of superclass
-            super.contentSize = contentSize
             if shouldAutomaticallyAdjustHeight {
                 invalidateIntrinsicContentSize()
             }
@@ -124,14 +122,12 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
 
     override var bounds: CGRect {
         didSet {
-            super.bounds = bounds
             updateCornerRounding()
         }
     }
 
     override var isUserInteractionEnabled: Bool {
         didSet {
-            super.isUserInteractionEnabled = isUserInteractionEnabled
             self.alpha = isUserInteractionEnabled ? 1 : 0.5
         }
     }

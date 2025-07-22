@@ -6,12 +6,11 @@
 //  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
+import SnapKit
 import UIKit
 
 // UI VERIFIED 6/24/25
 final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegate {
-    
-    // TODO "Welcome Back, NAME"
     
     // MARK: - ServerFamilyIntroductionVCDelegate
     
@@ -20,6 +19,13 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     }
     
     // MARK: - Elements
+    
+    private let welcomeBackLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.primaryHeaderLabel
+        label.textColor = .systemBackground
+        return label
+    }()
     
     private let houndPaw: HoundPawImageView = {
         let imageView = HoundPawImageView(huggingPriority: 300, compressionResistancePriority: 300)
@@ -44,7 +50,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
         
         button.backgroundColor = UIColor.systemBackground
         
-         button.applyStyle(.labelBorder)
+        button.applyStyle(.labelBorder)
         
         return button
     }()
@@ -86,6 +92,9 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
+        // if no userIdentifier, then they need to sign in so don't show welcome back
+        welcomeBackLabel.isHidden = UserInformation.userIdentifier == nil || (UserInformation.userFirstName == nil && UserInformation.userFirstName == nil)
+        welcomeBackLabel.text = "Welcome Back, \(UserInformation.userFirstName ?? UserInformation.userLastName ?? Constant.Visual.Text.unknownName)!"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -330,6 +339,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     
     override func addSubViews() {
         super.addSubViews()
+        view.addSubview(welcomeBackLabel)
         view.addSubview(houndPaw)
         view.addSubview(getRequestsProgressView)
         view.addSubview(troubleshootLoginButton)
@@ -338,6 +348,12 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     
     override func setupConstraints() {
         super.setupConstraints()
+        
+        welcomeBackLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(Constant.Constraint.Spacing.absoluteVertInset)
+            make.bottom.equalTo(houndPaw.snp.top).inset(Constant.Constraint.Spacing.contentIntraVert)
+            make.horizontalEdges.equalTo(view).inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
         
         // pawWithHands
         NSLayoutConstraint.activate([

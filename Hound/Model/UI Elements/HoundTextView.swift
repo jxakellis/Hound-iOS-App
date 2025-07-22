@@ -56,15 +56,12 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
     
     override var bounds: CGRect {
         didSet {
-            // Make sure to incur didSet of superclass
-            super.bounds = bounds
             updateCornerRounding()
         }
     }
     
     override var isUserInteractionEnabled: Bool {
         didSet {
-            super.isUserInteractionEnabled = isUserInteractionEnabled
             self.alpha = isUserInteractionEnabled ? 1 : 0.5
         }
     }
@@ -99,7 +96,6 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
     
     override var textContainerInset: UIEdgeInsets {
         didSet {
-            super.textContainerInset = textContainerInset
             updatePlaceholderConstraints()
         }
     }

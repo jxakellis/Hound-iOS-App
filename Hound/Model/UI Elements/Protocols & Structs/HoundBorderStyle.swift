@@ -64,3 +64,4 @@ extension HoundTextView: HoundBorderStylable {}
 extension HoundTextField: HoundBorderStylable {}
 extension HoundView: HoundBorderStylable {}
 extension HoundTableView: HoundBorderStylable {}
+extension HoundStackView: HoundBorderStylable {}

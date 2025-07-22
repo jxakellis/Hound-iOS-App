@@ -59,8 +59,6 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
     
     override var bounds: CGRect {
         didSet {
-            // Make sure to incur didSet of superclass
-            super.bounds = bounds
             updateCornerRounding()
         }
     }
@@ -127,8 +125,6 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
 
     override var isEnabled: Bool {
         didSet {
-            // Make sure to incur didSet of superclass
-            super.isEnabled = isEnabled
             self.alpha = isEnabled ? 1 : 0.5
         }
     }

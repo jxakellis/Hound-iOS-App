@@ -29,8 +29,6 @@ class HoundImageView: UIImageView, HoundUIProtocol, HoundDynamicCorners {
     /// Resize corner radius when the bounds change
     override var bounds: CGRect {
         didSet {
-            // Make sure to incur didSet of superclass
-            super.bounds = bounds
             updateCornerRounding()
             self.updateScaleImagePointSize()
             self.checkForOversizedFrame()
@@ -39,8 +37,6 @@ class HoundImageView: UIImageView, HoundUIProtocol, HoundDynamicCorners {
     
     override var image: UIImage? {
         didSet {
-            // Make sure to incur didSet of superclass
-            super.image = image
             self.updateScaleImagePointSize()
         }
     }
@@ -59,8 +55,6 @@ class HoundImageView: UIImageView, HoundUIProtocol, HoundDynamicCorners {
     private var preAdjustmentAlpha: CGFloat?
     override var isUserInteractionEnabled: Bool {
         didSet {
-            // Make sure to incur didSet of superclass
-            super.isUserInteractionEnabled = isUserInteractionEnabled
             if shouldAutoAdjustAlpha {
                 if preAdjustmentAlpha == nil {
                     preAdjustmentAlpha = alpha
@@ -73,7 +67,6 @@ class HoundImageView: UIImageView, HoundUIProtocol, HoundDynamicCorners {
     
     override var alpha: CGFloat {
         didSet {
-            super.alpha = alpha
             self.preAdjustmentAlpha = alpha
         }
     }

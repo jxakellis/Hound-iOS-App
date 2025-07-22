@@ -80,16 +80,17 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         self.remindersView.didAddReminder(forReminder: forReminder)
-        updateSegmentedControlTitles()
     }
     
     func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         self.remindersView.didUpdateReminder(forReminder: forReminder)
-        updateSegmentedControlTitles()
     }
     
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID) {
         self.remindersView.didRemoveReminder(forReminderUUID: forReminderUUID)
+    }
+    
+    func didUpdateReminderCount() {
         updateSegmentedControlTitles()
     }
     
@@ -97,16 +98,17 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     func didAddTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
         self.triggersView.didAddTrigger(forTrigger: forTrigger)
-        updateSegmentedControlTitles()
     }
     
     func didUpdateTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
         self.triggersView.didUpdateTrigger(forTrigger: forTrigger)
-        updateSegmentedControlTitles()
     }
     
     func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, forTriggerUUID: UUID) {
         self.triggersView.didRemoveTrigger(forTriggerUUID: forTriggerUUID)
+    }
+    
+    func didUpdateTriggerCount() {
         updateSegmentedControlTitles()
     }
     
@@ -197,7 +199,6 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         return view
     }()
     
-    // TODO VISUAL add outline to this stack and adjust constriants so border isnt awkward
     private lazy var tableViewsStack: HoundStackView = {
         let stack = HoundStackView(arrangedSubviews: [remindersView, triggersView])
         stack.axis = .vertical

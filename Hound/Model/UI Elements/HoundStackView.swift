@@ -8,11 +8,45 @@
 
 import UIKit
 
-class HoundStackView: UIStackView, HoundUIProtocol {
+class HoundStackView: UIStackView, HoundUIProtocol, HoundDynamicCorners {
     
     // MARK: - HoundUIProtocol
     
     var properties: JSONRequestBody = [:]
+    
+    // MARK: - Properties
+    
+    var staticCornerRadius: CGFloat? = Constant.Visual.Layer.defaultCornerRadius
+    var shouldRoundCorners: Bool = false {
+        didSet {
+            updateCornerRounding()
+        }
+    }
+    
+    var borderWidth: Double {
+        get {
+            Double(self.layer.borderWidth)
+        }
+        set {
+            self.layer.borderWidth = CGFloat(newValue)
+        }
+    }
+    
+    var borderColor: UIColor? {
+        didSet {
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
+        }
+    }
+    
+    // MARK: - Override Properties
+    
+    override var bounds: CGRect {
+        didSet {
+            updateCornerRounding()
+        }
+    }
     
     // MARK: - Main
     
@@ -71,6 +105,8 @@ class HoundStackView: UIStackView, HoundUIProtocol {
         self.translatesAutoresizingMaskIntoConstraints = false
         
         HoundSizeDebugView.install(on: self)
+        
+        updateCornerRounding()
     }
     
     static func inputFieldStack(_ header: UIView) -> HoundStackView {

@@ -10,6 +10,7 @@ import UIKit
 
 protocol DogsAddDogRemindersViewDelegate: AnyObject {
     func shouldOpenAddReminderVC(forReminder: Reminder?)
+    func didUpdateReminderCount()
 }
 
 final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableViewDelegate, DogsAddDogReminderTVCDelegate {
@@ -110,18 +111,21 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
     
     func didAddReminder(forReminder: Reminder) {
         dogReminders.addReminder(forReminder: forReminder)
+        delegate?.didUpdateReminderCount()
         // not in view so no animation
         self.tableView.reloadData()
     }
     
     func didUpdateReminder(forReminder: Reminder) {
         dogReminders.addReminder(forReminder: forReminder)
+        delegate?.didUpdateReminderCount()
         // not in view so no animation
         self.tableView.reloadData()
     }
     
     func didRemoveReminder(forReminderUUID: UUID) {
         dogReminders.removeReminder(forReminderUUID: forReminderUUID)
+        delegate?.didUpdateReminderCount()
         // not in view so no animation
         self.tableView.reloadData()
     }
@@ -184,6 +188,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
+            self.delegate?.didUpdateReminderCount()
             
             self.tableView.deleteSections([indexPath.section], with: .fade)
             UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {

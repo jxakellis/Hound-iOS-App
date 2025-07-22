@@ -54,7 +54,6 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     private let weeklyView = DogsAddReminderWeeklyView()
     private let monthlyView = DogsAddReminderMonthlyView()
     
-    // TODO VISUAL add outline to this stack and adjust constriants so border isnt awkward
     private lazy var reminderViewsStack: HoundStackView = {
         let stack = HoundStackView(arrangedSubviews: [onceView, countdownView, weeklyView, monthlyView])
         stack.axis = .vertical

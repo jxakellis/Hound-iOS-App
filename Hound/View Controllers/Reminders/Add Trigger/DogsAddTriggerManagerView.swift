@@ -233,7 +233,6 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         return view
     }()
     
-    // TODO VISUAL add outline to this stack and adjust constriants so border isnt awkward
     private lazy var triggerViewsStack: HoundStackView = {
         let stack = HoundStackView(arrangedSubviews: [timeDelayView, fixedTimeView])
         stack.axis = .vertical

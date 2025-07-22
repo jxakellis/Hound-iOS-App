@@ -26,19 +26,19 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     
     var borderWidth: Double {
         get {
-                    Double(self.layer.borderWidth)
-                }
-                set {
-                    self.layer.borderWidth = CGFloat(newValue)
-                }
+            Double(self.layer.borderWidth)
+        }
+        set {
+            self.layer.borderWidth = CGFloat(newValue)
+        }
     }
     
     var borderColor: UIColor? {
         didSet {
-                    if let borderColor = borderColor {
-                        self.layer.borderColor = borderColor.cgColor
-                    }
-                }
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+            }
+        }
     }
     
     var textInsets: UIEdgeInsets = .zero {
@@ -117,8 +117,6 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     
     override var bounds: CGRect {
         didSet {
-            // Make sure to incur didSet of superclass
-            super.bounds = bounds
             updateCornerRounding()
         }
     }

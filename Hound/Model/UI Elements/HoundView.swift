@@ -110,19 +110,9 @@ class HoundView: UIView, HoundUIProtocol, HoundUIKitProtocol, HoundDynamicBorder
 
     override var bounds: CGRect {
         didSet {
-            // Make sure to incur didSet of superclass
-            super.bounds = bounds
             updateCornerRounding()
         }
     }
-
-//    override var isUserInteractionEnabled: Bool {
-//        didSet {
-//            // Make sure to incur didSet of superclass
-//            super.isUserInteractionEnabled = isUserInteractionEnabled
-//            self.alpha = isUserInteractionEnabled ? 1 : 0.5
-//        }
-//    }
 
     // MARK: - Main
     

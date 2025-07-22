@@ -70,7 +70,7 @@ final class RemindersIntroductionVC: HoundViewController {
 
         introductionView.backgroundImageView.image = UIImage(named: "creamBackyardCoupleTeachingDogTrick")
         introductionView.pageHeaderLabel.text = "Reminders"
-        introductionView.pageDescriptionLabel.text = "We'll create reminders that are useful for most dogs. Do you want to use them?"
+        introductionView.pageDescriptionLabel.text = "We'll create reminders (and automations) that are useful for most dogs. Do you want to use them?"
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -92,24 +92,55 @@ final class RemindersIntroductionVC: HoundViewController {
         maybeLaterButton.isEnabled = false
 
         NotificationPermissionsManager.requestNotificationAuthorization(shouldAdviseUserBeforeRequestingNotifications: true) {
-            guard self.dogManager.hasCreatedReminder == false, let dog = self.dogManager.dogs.first else {
+            guard let dog = self.dogManager.dogs.first else {
                 self.dismiss(animated: true, completion: nil)
                 return
             }
 
             let reminders = Constant.Class.Reminder.defaultReminders
+            let triggers = Constant.Class.Trigger.defaultTriggers
             PresentationManager.beginFetchingInformationIndicator()
-            RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: reminders) { responseStatus, _ in
-                PresentationManager.endFetchingInformationIndicator {
-                    guard responseStatus != .failureResponse else {
-                        self.setUpRemindersButton.isEnabled = true
-                        self.maybeLaterButton.isEnabled = true
-                        return
-                    }
 
+            let numTasks = (reminders.isEmpty ? 0 : 1) + (triggers.isEmpty ? 0 : 1)
+            guard numTasks > 0 else {
+                PresentationManager.endFetchingInformationIndicator {
+                    self.dismiss(animated: true, completion: nil)
+                }
+                return
+            }
+
+            let completionTracker = CompletionTracker(numberOfTasks: numTasks) {
+                // do nothing when an individual task completes
+            } completedAllTasksCompletionHandler: {
+                PresentationManager.endFetchingInformationIndicator {
                     dog.dogReminders.addReminders(forReminders: reminders)
+                    dog.dogTriggers.addTriggers(forDogTriggers: triggers)
                     self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     self.dismiss(animated: true, completion: nil)
+                }
+            } failedTaskCompletionHandler: {
+                PresentationManager.endFetchingInformationIndicator {
+                    self.setUpRemindersButton.isEnabled = true
+                    self.maybeLaterButton.isEnabled = true
+                }
+            }
+
+            if !reminders.isEmpty {
+                RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: reminders) { responseStatus, _ in
+                    guard responseStatus != .failureResponse else {
+                        completionTracker.failedTask()
+                        return
+                    }
+                    completionTracker.completedTask()
+                }
+            }
+            if !triggers.isEmpty {
+                TriggersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: triggers) { responseStatus, _ in
+                    guard responseStatus != .failureResponse else {
+                        completionTracker.failedTask()
+                        return
+                    }
+                    completionTracker.completedTask()
                 }
             }
         }
