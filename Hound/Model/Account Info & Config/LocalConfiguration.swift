@@ -108,7 +108,7 @@ final class LocalConfiguration: UserDefaultPersistable {
         fromUserDefaults.value(forKey: Constant.Key.localHasCompletedRemindersIntroductionViewController.rawValue) as? Bool
         ?? LocalConfiguration.localHasCompletedRemindersIntroductionViewController
         
-        // Before 3.5.0 "localHasCompletedFamilyUpgradeIntroductionViewController" was "localHasCompletedSettingsFamilyIntroductionViewController"
+        // Before 4.0.0 "localHasCompletedFamilyUpgradeIntroductionViewController" was "localHasCompletedSettingsFamilyIntroductionViewController"
         if let legacyValue = fromUserDefaults.value(forKey: "localHasCompletedSettingsFamilyIntroductionViewController") as? Bool {
             fromUserDefaults.set(legacyValue, forKey: Constant.Key.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
             fromUserDefaults.removeObject(forKey: "localHasCompletedSettingsFamilyIntroductionViewController")

@@ -42,6 +42,9 @@ final class ReleaseNotesVC: HoundScrollViewController {
         let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
         view.useLeftTextAlignment = false
         view.pageHeaderLabel.text = "What's New in v\(UIApplication.appVersion)"
+        
+        view.isDescriptionEnabled = true
+        view.pageDescriptionLabel.text = "🦮 🎉 🦮 🎉 🦮 🎉 🦮 🎉 🦮"
         return view
     }()
 
@@ -70,7 +73,7 @@ final class ReleaseNotesVC: HoundScrollViewController {
         
         // TODO RELEASE NOTES make this page snazzier. see reference image from other app
         
-        // TODO RELEASE NOTES 3.5.0 UPDATE W/ NEW FEATURES
+        // TODO RELEASE NOTES 4.0.0 UPDATE W/ NEW FEATURES
         // 1. triggers
         // 2. redone ui for scalability / iPad
         // 3. skippable reminders
