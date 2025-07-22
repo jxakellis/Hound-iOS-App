@@ -80,28 +80,34 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         self.remindersView.didAddReminder(forReminder: forReminder)
+        updateSegmentedControlTitles()
     }
     
     func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
         self.remindersView.didUpdateReminder(forReminder: forReminder)
+        updateSegmentedControlTitles()
     }
     
     func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID) {
         self.remindersView.didRemoveReminder(forReminderUUID: forReminderUUID)
+        updateSegmentedControlTitles()
     }
     
     // MARK: - DogsAddTriggerVCDelegate
     
     func didAddTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
         self.triggersView.didAddTrigger(forTrigger: forTrigger)
+        updateSegmentedControlTitles()
     }
     
     func didUpdateTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
         self.triggersView.didUpdateTrigger(forTrigger: forTrigger)
+        updateSegmentedControlTitles()
     }
     
     func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, forTriggerUUID: UUID) {
         self.triggersView.didRemoveTrigger(forTriggerUUID: forTriggerUUID)
+        updateSegmentedControlTitles()
     }
     
     // MARK: - Elements
@@ -191,6 +197,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         return view
     }()
     
+    // TODO VISUAL add outline to this stack and adjust constriants so border isnt awkward
     private lazy var tableViewsStack: HoundStackView = {
         let stack = HoundStackView(arrangedSubviews: [remindersView, triggersView])
         stack.axis = .vertical
@@ -631,6 +638,15 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         remindersView.setup(forDelegate: self, forDogReminders: dogToUpdate?.dogReminders)
         triggersView.setup(forDelegate: self, forDogTriggers: dogToUpdate?.dogTriggers)
+        
+        updateSegmentedControlTitles()
+    }
+    
+    // MARK: - Functions
+    
+    private func updateSegmentedControlTitles() {
+        segmentedControl.setTitle("Reminders (\(remindersView.dogReminders.dogReminders.count))", forSegmentAt: SegmentedControlSection.reminders.rawValue)
+        segmentedControl.setTitle("Automations (\(triggersView.dogTriggers.dogTriggers.count))", forSegmentAt: SegmentedControlSection.triggers.rawValue)
     }
     
     // MARK: - Setup Elements

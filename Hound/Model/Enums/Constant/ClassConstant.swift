@@ -155,7 +155,19 @@ public enum TriggerConstant {
     static let defaultTriggerFixedTimeTypeAmount = 1
     static let defaultTriggerManualCondition = true
     static let defaultTriggerAlarmCreatedCondition = true
-    static let defaultTriggers: [Trigger] = []
+    static let defaultTriggers: [Trigger] = {
+        // TODO TEST default trigger
+        // forLogActionTypeId 1 == feed
+        let logReaction = TriggerLogReaction(forLogActionTypeId: 1, forLogCustomActionName: nil)
+        // forReminderActionTypeId 3 == potty
+        let reminderResult = TriggerReminderResult(forReminderActionTypeId: 3, forReminderCustomActionName: nil)
+        let trigger = Trigger(
+            forTriggerLogReactions: [logReaction],
+            forTriggerReminderResult: reminderResult,
+            forTriggerType: .fixedTime,
+            forTriggerTimeDelay: 60.0 * 30.0)
+        return [trigger]
+    }()
 }
 
 public enum DateConstant {

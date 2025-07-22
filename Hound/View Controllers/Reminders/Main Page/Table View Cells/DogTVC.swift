@@ -57,10 +57,13 @@ final class DogTVC: HoundTableViewCell {
     private var dogTriggersRelativeHeightConstraint: NSLayoutConstraint!
     private var dogTriggersZeroHeightConstraint: NSLayoutConstraint!
     private let dogTriggersLabel: HoundLabel = {
+        // TODO convert this to snapkit / stacks so no height costraits
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.backgroundColor = UIColor.systemBackground
         label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = UIColor.label
+        
+        label.shouldInsetText = true
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
         return label
@@ -81,10 +84,10 @@ final class DogTVC: HoundTableViewCell {
         
         dogNameLabel.text = forDog.dogName
         if forDog.dogTriggers.dogTriggers.isEmpty {
-            dogTriggersLabel.text = "  No automations  "
+            dogTriggersLabel.text = "No automations ✨"
         }
         else {
-            dogTriggersLabel.text = "  \(forDog.dogTriggers.dogTriggers.count) automation\(forDog.dogTriggers.dogTriggers.count > 1 ? "s" : "")  "
+            dogTriggersLabel.text = "\(forDog.dogTriggers.dogTriggers.count) automation\(forDog.dogTriggers.dogTriggers.count > 1 ? "s" : "") ✨"
         }
        
         handleDogTriggersLabel()

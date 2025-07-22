@@ -47,7 +47,7 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     }
     
     var readableInterval: String {
-        return readableRecurranceInterval.appending(" \(readableTimeOfDayInterval)")
+        return readableRecurranceInterval.appending(" at \(readableTimeOfDayInterval)")
     }
     
     /// The Date that the alarm should fire

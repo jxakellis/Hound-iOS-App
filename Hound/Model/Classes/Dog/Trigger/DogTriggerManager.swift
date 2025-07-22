@@ -25,7 +25,7 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        guard let dogTriggers: [Trigger] = aDecoder.decodeOptionalObject(forKey: Constant.Key.dogTriggers.rawValue) else {
+        guard let dogTriggers: [Trigger] = aDecoder.decodeOptionalObject(forKey: KeyConstant.dogTriggers.rawValue) else {
             return nil
         }
         
@@ -36,7 +36,7 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
         aCoder.encode(dogTriggers,
-                      forKey: Constant.Key.dogTriggers.rawValue)
+                      forKey: KeyConstant.dogTriggers.rawValue)
     }
     
     // MARK: - Properties
@@ -63,11 +63,11 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
         )
         
         for fromBody in fromTriggerBodies {
-            let triggerId = fromBody[Constant.Key.triggerId.rawValue] as? Int
+            let triggerId = fromBody[KeyConstant.triggerId.rawValue] as? Int
             let triggerUUID = UUID.fromString(
-                forUUIDString: fromBody[Constant.Key.triggerUUID.rawValue] as? String
+                forUUIDString: fromBody[KeyConstant.triggerUUID.rawValue] as? String
             )
-            let triggerIsDeleted = fromBody[Constant.Key.triggerIsDeleted.rawValue] as? Bool
+            let triggerIsDeleted = fromBody[KeyConstant.triggerIsDeleted.rawValue] as? Bool
             
             guard triggerId != nil,
                   let triggerUUID = triggerUUID,

@@ -22,6 +22,9 @@
 
 ## 🎯 Future
 
+- Websockers
+    - Use web sockets to update logs in real-time across devices
+
 - About Page
     - Brief description of me and how hound came to be
     - Picture or two

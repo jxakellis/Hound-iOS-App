@@ -16,6 +16,8 @@ enum DogsAddTriggerDropDownTypes: String {
 
 final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, DogsAddTriggerTimeDelayViewDelegate, DogsAddTriggerFixedTimeViewDelegate, HoundDropDownDataSource {
     
+    // TODO TRIGGER if you select a certain reaction type (with no custom name), then it should also select all children.. if you deselect the parent, then it should deselect all children. if you deselect a child, it should deselect the parent.
+    
     // MARK: - UIGestureRecognizerDelegate
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -231,6 +233,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         return view
     }()
     
+    // TODO VISUAL add outline to this stack and adjust constriants so border isnt awkward
     private lazy var triggerViewsStack: HoundStackView = {
         let stack = HoundStackView(arrangedSubviews: [timeDelayView, fixedTimeView])
         stack.axis = .vertical

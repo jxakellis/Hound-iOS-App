@@ -818,7 +818,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     }
     
     private var dropDownLogEndDate: HoundDropDown?
-    private var availableLogEndDateOptions: [TimeInQuickSelect] = []
+    private var availableLogEndDateOptions: [AfterTimeQuickSelect] = []
     private var selectedLogEndDate: Date? {
         didSet {
             guard let end = selectedLogEndDate else {
@@ -996,9 +996,9 @@ final class LogsAddLogVC: HoundScrollViewController,
         availableLogEndDateOptions = {
             // If selectedLogStartDate is nil, all options are valid
             guard let start = logToUpdate?.logStartDate else {
-                return TimeInQuickSelect.allCases
+                return AfterTimeQuickSelect.allCases
             }
-            return TimeInQuickSelect.optionsOccurringAfterDate(
+            return AfterTimeQuickSelect.optionsOccurringAfterDate(
                 startingPoint: Date(),
                 occurringOnOrAfter: start
             )

@@ -57,20 +57,20 @@ enum TimeAgoQuickSelect: String, CaseIterable {
     }
 }
 
-enum TimeInQuickSelect: String, CaseIterable {
+enum AfterTimeQuickSelect: String, CaseIterable {
     case custom = "Custom"
     case now = "Now"
-    case inFiveMins = "In 5 mins"
-    case inFifteenMins = "In 15 mins"
-    case inThirtyMins = "In 30 mins"
-    case inOneHour = "In 1 hr"
-    case inTwoHours = "In 2 hrs"
-    case inFourHours = "In 4 hrs"
-    case inEightHours = "In 8 hrs"
+    case inFiveMins = "After 5 mins"
+    case inFifteenMins = "After 15 mins"
+    case inThirtyMins = "After 30 mins"
+    case inOneHour = "After 1 hr"
+    case inTwoHours = "After 2 hrs"
+    case inFourHours = "After 4 hrs"
+    case inEightHours = "After 8 hrs"
     
     /// Given a forReferenceDate, finds all of the TimeAgoQuickSelect where startingPoint + valueInSeconds is > occurringOnOrBefore
-    static func optionsOccurringAfterDate(startingPoint: Date, occurringOnOrAfter: Date) -> [TimeInQuickSelect] {
-        return TimeInQuickSelect.allCases.filter { timeQuickSelectOption in
+    static func optionsOccurringAfterDate(startingPoint: Date, occurringOnOrAfter: Date) -> [AfterTimeQuickSelect] {
+        return AfterTimeQuickSelect.allCases.filter { timeQuickSelectOption in
             guard let valueInSeconds = timeQuickSelectOption.valueInSeconds() else {
                 // If timeQuickSelectOption has no valueInSeconds, then assume it is a valid option (e.g. .custom)
                 return true

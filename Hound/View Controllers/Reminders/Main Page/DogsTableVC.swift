@@ -224,7 +224,11 @@ final class DogsTableVC: HoundTableViewController {
         
         guard let reminder = cell.reminder else { return }
         
-        let selectedReminderAlertController = UIAlertController(title: "You Selected: \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName)) for \(dog.dogName)", message: nil, preferredStyle: .actionSheet)
+        var alertControllerTitle = "You Selected: \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName)) for \(dog.dogName)"
+        if reminder.reminderIsTriggerResult {
+            alertControllerTitle += "\n\nReminders created by automations cannot be edited"
+        }
+        let selectedReminderAlertController = UIAlertController(title: alertControllerTitle, message: nil, preferredStyle: .actionSheet)
         
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
@@ -406,7 +410,7 @@ final class DogsTableVC: HoundTableViewController {
                         return
                     }
                     
-                    let triggerReminders = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: forReminder.reminderIsTriggerResult == false)
+                    let triggerReminders = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: true)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     
                     guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {
@@ -442,7 +446,7 @@ final class DogsTableVC: HoundTableViewController {
                         return
                     }
                     
-                    let triggerReminders = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: forReminder.reminderIsTriggerResult == false)
+                    let triggerReminders = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: true)
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     
                     guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {

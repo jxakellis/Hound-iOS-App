@@ -460,6 +460,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private func presentDogSelection(forAction: CreateAction) {
         guard dogManager.dogs.isEmpty == false else {
             let bannerTitle = "No Dogs Found"
+            // TODO VISUAL make this a text constant
             PresentationManager.enqueueBanner(forTitle: bannerTitle, forSubtitle: "Create a dog first", forStyle: .info)
             return
         }
@@ -492,7 +493,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             return
         }
         
-        let alert = UIAlertController(title: "Select Dog", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: forAction == .reminder ? "Add Reminder to Dog" : "Add Trigger to Dog", message: nil, preferredStyle: .alert)
         for dog in dogManager.dogs {
             alert.addAction(UIAlertAction(title: dog.dogName, style: .default) { _ in
                 openForDog(dog)

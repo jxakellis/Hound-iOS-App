@@ -11,7 +11,6 @@ import UIKit
 
 final class DogsReminderTVC: HoundTableViewCell {
     
-    // TODO TRIGGERS Add special display that a reminder is a trigger result
     // MARK: - Elements
     
     let containerView: HoundView = {
@@ -27,23 +26,29 @@ final class DogsReminderTVC: HoundTableViewCell {
         label.font = UIFont.systemFont(ofSize: 42.5, weight: .medium)
         return label
     }()
+    private let triggerResultIndicatorImageView: HoundImageView = {
+        let imageView = HoundImageView()
+        imageView.image = UIImage(systemName: "sparkles")
+        imageView.tintColor = UIColor.systemBlue
+        return imageView
+    }()
     
     private let reminderActionTextLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = Constant.Visual.Font.emphasizedSecondaryHeaderLabel
+        label.font = Constant.Visual.Font.primaryHeaderLabel
         return label
     }()
     
     private let intervalLabel: HoundLabel = {
         let label = HoundLabel()
-        label.font = Constant.Visual.Font.primaryRegularLabel
+        label.font = Constant.Visual.Font.secondaryRegularLabel
         return label
     }()
     
     private let nextAlarmLabel: HoundLabel = {
         let label = HoundLabel()
         label.backgroundColor = UIColor.secondarySystemBackground
-        label.font = Constant.Visual.Font.secondaryRegularLabel
+        // font set in attributed text closure
         label.shouldInsetText = true
         
         label.shouldRoundCorners = true
@@ -51,15 +56,20 @@ final class DogsReminderTVC: HoundTableViewCell {
         return label
     }()
     
-    private lazy var labelStack: HoundStackView = {
-        let stack = HoundStackView(huggingPriority: 280, compressionResistancePriority: 280)
+    private lazy var nestedLabelStack: HoundStackView = {
+        let stack = HoundStackView()
         stack.addArrangedSubview(reminderActionTextLabel)
         stack.addArrangedSubview(intervalLabel)
+        stack.axis = .vertical
+        stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
+        return stack
+    }()
+    private lazy var labelStack: HoundStackView = {
+        let stack = HoundStackView(huggingPriority: 280, compressionResistancePriority: 280)
+        stack.addArrangedSubview(nestedLabelStack)
         stack.addArrangedSubview(nextAlarmLabel)
         stack.axis = .vertical
-        stack.distribution = .equalSpacing
         stack.spacing = Constant.Constraint.Spacing.contentIntraVert
-        stack.alignment = .leading
         return stack
     }()
 
@@ -92,6 +102,10 @@ final class DogsReminderTVC: HoundTableViewCell {
         
         reminderActionIconLabel.text = forReminder.reminderActionType.emoji
         reminderActionIconLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
+        reminderActionIconLabel.isHidden = forReminder.reminderIsTriggerResult
+        
+        triggerResultIndicatorImageView.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
+        triggerResultIndicatorImageView.isHidden = !forReminder.reminderIsTriggerResult
         
         reminderActionTextLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName)
         reminderActionTextLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
@@ -139,7 +153,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         }
         
         let precalculatedDynamicIsSnoozing = reminder.snoozeComponents.executionInterval != nil
-        let precalculatedDynamicText = Date().distance(to: executionDate).readable(capitalizeWords: true, abreviateWords: false)
+        let precalculatedDynamicText = Date().distance(to: executionDate).readable(capitalizeWords: false, abreviateWords: true)
         
         nextAlarmLabel.attributedTextClosure = {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
@@ -162,6 +176,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         super.addSubViews()
         contentView.addSubview(containerView)
         containerView.addSubview(reminderActionIconLabel)
+        containerView.addSubview(triggerResultIndicatorImageView)
         containerView.addSubview(labelStack)
         containerView.addSubview(chevronImageView)
     }
@@ -178,9 +193,16 @@ final class DogsReminderTVC: HoundTableViewCell {
         }
         
         reminderActionIconLabel.snp.makeConstraints { make in
-            make.top.equalTo(labelStack.snp.top).offset(-Constant.Constraint.Spacing.contentTightIntraHori)
+            make.top.equalTo(labelStack.snp.top).inset(Constant.Constraint.Spacing.contentTightIntraHori)
             make.leading.equalTo(containerView.snp.leading).offset(Constant.Constraint.Spacing.absoluteHoriInset)
             make.height.equalTo(reminderActionIconLabel.snp.width)
+        }
+        
+        triggerResultIndicatorImageView.snp.makeConstraints { make in
+            make.top.equalTo(reminderActionIconLabel.snp.top).offset(Constant.Constraint.Spacing.contentTightIntraHori)
+            make.bottom.equalTo(reminderActionIconLabel.snp.bottom).inset(Constant.Constraint.Spacing.contentTightIntraHori)
+            make.leading.equalTo(reminderActionIconLabel.snp.leading).offset(Constant.Constraint.Spacing.contentTightIntraHori)
+            make.trailing.equalTo(reminderActionIconLabel.snp.trailing).inset(Constant.Constraint.Spacing.contentTightIntraHori)
         }
         
         labelStack.snp.makeConstraints { make in

@@ -11,6 +11,8 @@ import UIKit
 // UI VERIFIED 6/24/25
 final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegate {
     
+    // TODO "Welcome Back, NAME"
+    
     // MARK: - ServerFamilyIntroductionVCDelegate
     
     func didCreateOrJoinFamily() {

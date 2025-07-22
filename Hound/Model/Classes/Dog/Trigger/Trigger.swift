@@ -100,7 +100,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             forTriggerId: decodedTriggerId,
             forTriggerUUID: decodedTriggerUUID,
             forTriggerLogReactions: decodedtriggerLogReactions,
-            fortriggerReminderResult: decodedtriggerReminderResult,
+            forTriggerReminderResult: decodedtriggerReminderResult,
             forTriggerType: decodedTriggerType,
             forTriggerTimeDelay: decodedTriggerTimeDelay,
             forTriggerFixedTimeType: decodedTriggerFixedTimeType,
@@ -302,7 +302,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         forTriggerId: Int? = nil,
         forTriggerUUID: UUID? = nil,
         forTriggerLogReactions: [TriggerLogReaction]? = nil,
-        fortriggerReminderResult: TriggerReminderResult? = nil,
+        forTriggerReminderResult: TriggerReminderResult? = nil,
         forTriggerType: TriggerType? = nil,
         forTriggerTimeDelay: Double? = nil,
         forTriggerFixedTimeType: TriggerFixedTimeType? = nil,
@@ -317,7 +317,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         self.triggerId = forTriggerId ?? triggerId
         self.triggerUUID = forTriggerUUID ?? triggerUUID
         self.triggerLogReactions = forTriggerLogReactions ?? self.triggerLogReactions
-        self.triggerReminderResult = fortriggerReminderResult ?? self.triggerReminderResult
+        self.triggerReminderResult = forTriggerReminderResult ?? self.triggerReminderResult
         self.triggerType = forTriggerType ?? self.triggerType
         self.triggerTimeDelay = forTriggerTimeDelay ?? self.triggerTimeDelay
         self.triggerFixedTimeType = forTriggerFixedTimeType ?? self.triggerFixedTimeType
@@ -353,7 +353,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
                 forTriggerId: triggerToOverride.triggerId,
                 forTriggerUUID: triggerToOverride.triggerUUID,
                 forTriggerLogReactions: triggerToOverride.triggerLogReactions,
-                fortriggerReminderResult: triggerToOverride.triggerReminderResult,
+                forTriggerReminderResult: triggerToOverride.triggerReminderResult,
                 forTriggerType: triggerToOverride.triggerType,
                 forTriggerTimeDelay: triggerToOverride.triggerTimeDelay,
                 forTriggerFixedTimeType: triggerToOverride.triggerFixedTimeType,
@@ -410,7 +410,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             forTriggerId: triggerId,
             forTriggerUUID: triggerUUID,
             forTriggerLogReactions: triggerLogReactions,
-            fortriggerReminderResult: triggerReminderResult,
+            forTriggerReminderResult: triggerReminderResult,
             forTriggerType: triggerType,
             forTriggerTimeDelay: triggerTimeDelay,
             forTriggerFixedTimeType: triggerFixedTimeType,
@@ -448,6 +448,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         if triggerAlarmCreatedCondition == false && log.logCreatedByReminderUUID != nil {
             return false
         }
+        
+        // TODO TRIGGER when no custom name on the log RXN, it should match all logs of that given type.
         
         for reaction in triggerLogReactions where reaction.logActionTypeId == log.logActionTypeId {
             guard reaction.logCustomActionName.hasText() else {

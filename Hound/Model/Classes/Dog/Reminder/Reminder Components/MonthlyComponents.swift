@@ -51,7 +51,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     }
     
     var readableInterval: String {
-        return readableRecurranceInterval.appending(" \(readableTimeOfDayInterval)")
+        return readableRecurranceInterval.appending(" at \(readableTimeOfDayInterval)")
     }
     
     /// Hour of the day that that the reminder should fire in GMT+0000. [1, 31]
