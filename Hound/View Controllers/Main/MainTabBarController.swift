@@ -111,7 +111,7 @@ final class MainTabBarController: HoundTabBarController,
     
     private let logsViewController = LogsVC()
     private let dogsViewController = DogsVC()
-    private let settingsPagesTableViewController = SettingsPagesTableVC()
+    private let settingsPagesTableViewController = SettingsPagesTableVC(style: .grouped)
     
     var tabBarUpperLineView: UIView?
     

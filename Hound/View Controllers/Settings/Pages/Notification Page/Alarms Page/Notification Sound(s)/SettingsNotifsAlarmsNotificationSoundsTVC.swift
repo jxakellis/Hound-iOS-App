@@ -20,7 +20,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
     }()
     
     private lazy var tableView: HoundTableView = {
-        let tableView = HoundTableView(huggingPriority: 260, compressionResistancePriority: 260)
+        let tableView = HoundTableView(style: .plain, huggingPriority: 260, compressionResistancePriority: 260)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(SettingsNotifsAlarmsNotificationSoundTVC.self, forCellReuseIdentifier: SettingsNotifsAlarmsNotificationSoundTVC.reuseIdentifier)

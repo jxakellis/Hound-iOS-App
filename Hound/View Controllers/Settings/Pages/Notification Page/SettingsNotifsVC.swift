@@ -18,7 +18,6 @@ final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableV
     
     private lazy var tableView = {
         let tableView = HoundTableView()
-        tableView.enableDummyHeaderView = true
         tableView.delegate = self
         tableView.dataSource = self
         

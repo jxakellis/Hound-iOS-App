@@ -48,7 +48,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
     }()
     
     private lazy var tableView: HoundTableView = {
-        let tableView = HoundTableView(huggingPriority: 340, compressionResistancePriority: 340)
+        let tableView = HoundTableView(style: .plain, huggingPriority: 340, compressionResistancePriority: 340)
         tableView.delegate = self
         tableView.dataSource = self
         

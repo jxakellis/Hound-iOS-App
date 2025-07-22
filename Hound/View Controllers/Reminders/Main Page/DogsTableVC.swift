@@ -73,7 +73,6 @@ final class DogsTableVC: HoundTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.enableDummyHeaderView = true
         
         self.tableView.register(DogTVC.self, forCellReuseIdentifier: DogTVC.reuseIdentifier)
         self.tableView.register(DogsReminderTVC.self, forCellReuseIdentifier: DogsReminderTVC.reuseIdentifier)

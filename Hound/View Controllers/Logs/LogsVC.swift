@@ -100,7 +100,7 @@ final class LogsVC: HoundViewController,
     // MARK: - Elements
     
     /// Container view to hold background or other layering (was UIContainerView in storyboard)
-    let logsTableViewController: LogsTableVC = LogsTableVC()
+    let logsTableViewController: LogsTableVC = LogsTableVC(style: .grouped)
     
     /// Label displayed when no logs exist; hidden by default
     private let noLogsRecordedLabel: HoundLabel = {

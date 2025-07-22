@@ -97,11 +97,10 @@ final class LogsTableVC: HoundTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.enableDummyHeaderView = true
+        // self.enableDummyHeaderView = true
         self.tableView.register(LogTVC.self, forCellReuseIdentifier: LogTVC.reuseIdentifier)
         self.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
         
-        // TODO BUG refresh controller not getting activated when pulled down for this and DogsTableVC
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)
     }

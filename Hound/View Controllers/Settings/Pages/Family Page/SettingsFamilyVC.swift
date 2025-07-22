@@ -83,7 +83,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     }()
     
     private let familyMembersTableView: HoundTableView = {
-        let tableView = HoundTableView(huggingPriority: 240, compressionResistancePriority: 240)
+        let tableView = HoundTableView(style: .plain, huggingPriority: 240, compressionResistancePriority: 240)
         tableView.isScrollEnabled = false
         tableView.backgroundColor = UIColor.systemBackground
         tableView.shouldAutomaticallyAdjustHeight = true

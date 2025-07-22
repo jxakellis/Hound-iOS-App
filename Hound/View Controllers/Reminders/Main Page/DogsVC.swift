@@ -199,7 +199,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     // MARK: - Elements
     
     private lazy var dogsTableViewController: DogsTableVC = {
-        let tableView = DogsTableVC()
+        let tableView = DogsTableVC(style: .grouped)
         
         tableView.setup(forDelegate: self)
         

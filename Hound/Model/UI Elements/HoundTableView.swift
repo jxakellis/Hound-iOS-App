@@ -32,21 +32,6 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
             updateCornerRounding()
         }
     }
-    
-    var enableDummyHeaderView: Bool = false {
-        didSet {
-            if enableDummyHeaderView {
-                let dummyHeaderHeight: CGFloat = 125.0
-                let dummyHeader = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: dummyHeaderHeight))
-                self.tableHeaderView = dummyHeader
-                self.contentInset = UIEdgeInsets(top: -dummyHeaderHeight, left: 0, bottom: 0, right: 0)
-            }
-            else {
-                self.tableHeaderView = nil
-                self.contentInset = .zero
-            }
-        }
-    }
 
     var borderWidth: Double {
         get { Double(self.layer.borderWidth) }
@@ -134,8 +119,8 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
 
     // MARK: - Main
     
-    init(huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
-        super.init(frame: .zero, style: .plain)
+    init(style: UITableView.Style, huggingPriority: Float = UILayoutPriority.defaultLow.rawValue, compressionResistancePriority: Float = UILayoutPriority.defaultLow.rawValue) {
+        super.init(frame: .zero, style: style)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .horizontal)
         self.setContentHuggingPriority(UILayoutPriority(huggingPriority), for: .vertical)
         self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .horizontal)
