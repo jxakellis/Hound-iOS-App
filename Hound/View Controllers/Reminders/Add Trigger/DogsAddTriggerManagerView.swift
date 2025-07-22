@@ -16,8 +16,6 @@ enum DogsAddTriggerDropDownTypes: String {
 
 final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, DogsAddTriggerTimeDelayViewDelegate, DogsAddTriggerFixedTimeViewDelegate, HoundDropDownDataSource {
     
-    // TODO TRIGGER if you select a certain reaction type (with no custom name), then it should also select all children.. if you deselect the parent, then it should deselect all children. if you deselect a child, it should deselect the parent.
-    
     // MARK: - UIGestureRecognizerDelegate
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -593,22 +591,63 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.logReactions.rawValue {
             let currentCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell
-            
+
             let beforeSelectNumberOfLogReactions = selectedLogReactions.count
             let reaction = availableLogReactions[indexPath.row]
-            
-            if let index = selectedLogReactions.firstIndex(where: { $0.logActionTypeId == reaction.logActionTypeId && $0.logCustomActionName == reaction.logCustomActionName }) {
+
+            // Helper to find index of a reaction instance in selected array
+            let indexOfReaction = { (target: TriggerLogReaction) -> Int? in
+                return self.selectedLogReactions.firstIndex { $0 === target }
+            }
+
+            if let index = indexOfReaction(reaction) {
+                // Deselecting reaction
                 currentCell?.setCustomSelectedTableViewCell(forSelected: false)
                 selectedLogReactions.remove(at: index)
+
+                if reaction.logCustomActionName.hasText() {
+                    // Deselect parent if needed
+                    if let parentIndex = self.availableLogReactions.firstIndex(where: { $0.logActionTypeId == reaction.logActionTypeId && !$0.logCustomActionName.hasText() }),
+                       let selectedParentIndex = indexOfReaction(self.availableLogReactions[parentIndex]) {
+                        selectedLogReactions.remove(at: selectedParentIndex)
+                        if let parentCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: parentIndex, section: 0)) as? HoundDropDownTableViewCell {
+                            parentCell.setCustomSelectedTableViewCell(forSelected: false)
+                        }
+                    }
+                }
+                else {
+                    // Deselect all children when deselecting parent
+                    for (idx, item) in self.availableLogReactions.enumerated() where item.logActionTypeId == reaction.logActionTypeId && item.logCustomActionName.hasText() {
+                        if let selectedIdx = indexOfReaction(item) {
+                            selectedLogReactions.remove(at: selectedIdx)
+                        }
+                        if let childCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTableViewCell {
+                            childCell.setCustomSelectedTableViewCell(forSelected: false)
+                        }
+                    }
+                }
             }
             else {
+                // Selecting reaction
                 currentCell?.setCustomSelectedTableViewCell(forSelected: true)
                 selectedLogReactions.append(reaction)
                 logReactionsLabel.errorMessage = nil
+
+                if reaction.logCustomActionName.hasText() == false {
+                    // Selecting parent selects all children
+                    for (idx, item) in self.availableLogReactions.enumerated() where item.logActionTypeId == reaction.logActionTypeId && item.logCustomActionName.hasText() {
+                        if indexOfReaction(item) == nil {
+                            selectedLogReactions.append(item)
+                        }
+                        if let childCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTableViewCell {
+                            childCell.setCustomSelectedTableViewCell(forSelected: true)
+                        }
+                    }
+                }
             }
-            
+
             updateDynamicUIElements()
-            
+
             if beforeSelectNumberOfLogReactions == 0 {
                 // selected their first log action
                 dropDownLogReactions?.hideDropDown(animated: true)

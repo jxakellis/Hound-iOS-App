@@ -51,7 +51,7 @@ enum DataTaskQueue {
     private static var houndServerRequestDates: [Date] = []
     
     /// For a given rateLimitEvaluationTimePeriod, this is the amount of requests that can be performed without triggering a rate limit. Requests per period: The number of requests over the period of time that will trigger the rate limiting rule.
-    private static let numberOfRequestsAllowedInTimePeriod: Int = (20 - 1)
+    private static let numberOfRequestsAllowedInTimePeriod: Int = (50 - 1)
 
     /// The time period in which a specified number of requests can be made to the hound server without getting a rate limit from cloudflare. The true value is multiplied by 1.2 to provide extra padding. Period: The period of time to consider (in seconds) when evaluating the rate.
     private static let rateLimitEvaluationTimePeriod: Double = (10.0 * 1.2)

@@ -337,7 +337,7 @@ final class MainTabBarController: HoundTabBarController,
             ]
             navController.navigationBar.isHidden = true
             navController.tabBarItem = UITabBarItem(
-                title: "Reminders",
+                title: "Dogs",
                 image: UIImage(named: "tabBarBlackPaw"),
                 tag: MainTabBarControllerIndexes.reminders.rawValue
             )

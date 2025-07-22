@@ -76,7 +76,7 @@ enum GenerationManager {
                 continue
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + (Double(i) * 1.0)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + (Double(i) * 0.3)) {
                 guard completionTracker.isFinished == false else {
                     return
                 }

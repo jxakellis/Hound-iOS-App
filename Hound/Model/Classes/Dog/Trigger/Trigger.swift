@@ -449,8 +449,6 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             return false
         }
         
-        // TODO TRIGGER when no custom name on the log RXN, it should match all logs of that given type.
-        
         for reaction in triggerLogReactions where reaction.logActionTypeId == log.logActionTypeId {
             guard reaction.logCustomActionName.hasText() else {
                 return true

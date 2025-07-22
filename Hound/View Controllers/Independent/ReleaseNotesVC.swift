@@ -84,26 +84,6 @@ final class ReleaseNotesVC: HoundScrollViewController {
             title: "Automations",
             description: "Automate your dog's logs with customizable automations."
         )
-        builder.addFeature(
-            title: "Redesigned UI",
-            description: "Interface rebuilt for scalability and iPad support."
-        )
-        builder.addFeature(
-            title: "Skippable Reminders",
-            description: "Want to forgo your reminder's next alarm? Now you can!"
-        )
-        builder.addFeature(
-            title: "Duplicate Reminders",
-            description: "Quickly create a copy of any reminder."
-        )
-        builder.addFeature(
-            title: "Enhanced Search",
-            description: "Filter reminders by text or by time range."
-        )
-        builder.addFeature(
-            title: "Smarter Log Time",
-            description: "Log end time now shows 'in x time' rather than 'ago x time'."
-        )
         
         notesLabel.attributedText = builder.buildAttributedString()
     }

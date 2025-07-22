@@ -239,14 +239,17 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             addSubview(placeholderLabel)
         }
         
-        placeholderLabel.snp.remakeConstraints { make in
-            guard !placeholderLabel.isHidden else {
-                return
+        UIView.performWithoutAnimation {
+            // if placeholderLabel appears, then it will need to be laid out. this will potentially involve animations (and we dont want to see placegholer label moving into correct spot, it should alr be there)
+            placeholderLabel.snp.remakeConstraints { make in
+                guard !placeholderLabel.isHidden else {
+                    return
+                }
+                make.leading.equalTo(self.snp.leading).offset(textInsets.left)
+                make.trailing.equalTo(self.snp.trailing).inset(textInsets.right)
+                make.top.equalTo(self.snp.top).offset(textInsets.top)
+                make.bottom.equalTo(self.snp.bottom).inset(textInsets.bottom)
             }
-            make.leading.equalTo(self.snp.leading).offset(textInsets.left)
-            make.trailing.equalTo(self.snp.trailing).inset(textInsets.right)
-            make.top.equalTo(self.snp.top).offset(textInsets.top)
-            make.bottom.equalTo(self.snp.bottom).inset(textInsets.bottom)
         }
     }
     
