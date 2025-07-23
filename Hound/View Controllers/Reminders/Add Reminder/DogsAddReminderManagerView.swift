@@ -143,9 +143,81 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         label.addGestureRecognizer(gesture)
         return label
     }()
+    private let reminderNotificationsDisabledDisclaimerLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
+        label.textColor = UIColor.secondaryLabel
+        label.numberOfLines = 0
+        
+        label.isHidden = UserConfiguration.isNotificationEnabled && UserConfiguration.isReminderNotificationEnabled
+        
+        let precalculatedDynamicTextColor = label.textColor
+        label.attributedTextClosure = {
+            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+            if !UserConfiguration.isNotificationEnabled {
+                let message = NSMutableAttributedString(
+                    string: "Your notifications are currently ",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                )
+                message.append(NSAttributedString(
+                    string: "disabled",
+                    attributes: [
+                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                message.append(NSAttributedString(
+                    string: " and you will not receive any push notifications.",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                return message
+            }
+            else if !UserConfiguration.isReminderNotificationEnabled {
+                let message = NSMutableAttributedString(
+                    string: "Your notifications for reminders are currently ",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                )
+                message.append(NSAttributedString(
+                    string: "disabled",
+                    attributes: [
+                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                message.append(NSAttributedString(
+                    string: " and you will not receive any push notification for this.",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                return message
+            }
+            return NSAttributedString()
+        }
+
+        return label
+    }()
+    private lazy var nestedRecipientsLabelStack: HoundStackView = {
+        let stack = HoundStackView()
+        stack.addArrangedSubview(reminderRecipientsLabel)
+        stack.addArrangedSubview(reminderNotificationsDisabledDisclaimerLabel)
+        stack.axis = .vertical
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        return stack
+    }()
     private lazy var reminderRecipientsStack: HoundStackView = {
         let stack = HoundStackView.inputFieldStack(reminderRecipientsHeaderLabel)
-        stack.addArrangedSubview(reminderRecipientsLabel)
+        stack.addArrangedSubview(nestedRecipientsLabelStack)
         return stack
     }()
     
@@ -682,7 +754,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         }
         
         segmentedControl.snp.makeConstraints { make in
-            make.top.equalTo(reminderRecipientsLabel.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.top.equalTo(reminderRecipientsStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
             make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
             make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
             make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.segmentedHeightMultiplier).priority(.high)

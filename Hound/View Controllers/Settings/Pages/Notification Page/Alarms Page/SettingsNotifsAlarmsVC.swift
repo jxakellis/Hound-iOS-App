@@ -95,6 +95,7 @@ final class SettingsNotifsAlarmsVC: HoundViewController, UITableViewDelegate, UI
     // MARK: - Setup Elements
 
     override func setupGeneratedViews() {
+        view.backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
 

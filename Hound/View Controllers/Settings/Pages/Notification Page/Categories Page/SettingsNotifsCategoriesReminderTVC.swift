@@ -29,7 +29,7 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
         label.attributedTextClosure = {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             let message = NSMutableAttributedString(
-                string: "Recieve notifications about your family's reminders. ",
+                string: "Recieve notifications about any of your family's reminders. ",
                 attributes: [
                     .font: Constant.Visual.Font.secondaryColorDescLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any
@@ -37,7 +37,7 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
             )
             
             message.append(NSAttributedString(
-                string: "Notifications can also be configured on an individual reminder basis.",
+                string: "Notifications are also customizable for each individual reminder.",
                 attributes: [
                     .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
                     .foregroundColor: precalculatedDynamicTextColor as Any
