@@ -267,7 +267,6 @@ enum PresentationManager {
             }
         }()
         
-        
         banner.show(
             // using default queuePosition: ,
             // using default bannerPosition: ,

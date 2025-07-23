@@ -232,24 +232,29 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     // MARK: - Background Label
     
     private func updatePlaceholderLabel() {
-        placeholderLabel.isHidden = placeholderLabel.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true ||
-        !(text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
+        let usesPlaceholderLabel = !(placeholderLabel.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
+        
+        guard usesPlaceholderLabel else {
+            // if theres no placeholder text but we try to constrain it, the whole houndlabel gets fucked and lays itself upon the 0 size view
+            placeholderLabel.snp.removeConstraints()
+            placeholderLabel.removeFromSuperview()
+            return
+        }
+        
+        placeholderLabel.isHidden = !(text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
         placeholderLabel.font = font
         
         if placeholderLabel.superview != self {
+            placeholderLabel.removeFromSuperview()
             addSubview(placeholderLabel)
         }
         
-        UIView.performWithoutAnimation {
-            // if placeholderLabel appears, then it will need to be laid out. this will potentially involve animations (and we dont want to see placegholer label moving into correct spot, it should alr be there)
-            placeholderLabel.snp.remakeConstraints { make in
-                guard !placeholderLabel.isHidden else {
-                    return
-                }
-                make.leading.equalTo(self.snp.leading).offset(textInsets.left)
-                make.trailing.equalTo(self.snp.trailing).inset(textInsets.right)
-                make.top.equalTo(self.snp.top).offset(textInsets.top)
-                make.bottom.equalTo(self.snp.bottom).inset(textInsets.bottom)
+        placeholderLabel.snp.remakeConstraints { make in
+            if shouldInsetText {
+                make.edges.equalTo(self.snp.edges).inset(textInsets)
+            }
+            else {
+                make.edges.equalTo(self.snp.edges)
             }
         }
     }

@@ -55,7 +55,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = .label
-        label.text = "Remind Me For"
+        label.text = "Remind About"
         return label
     }()
     private lazy var reminderActionLabel: HoundLabel = {
@@ -261,7 +261,11 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     private var reminderToUpdate: Reminder?
     private var initialReminder: Reminder?
     
-    private(set) var selectedReminderAction: ReminderActionType?
+    private(set) var selectedReminderAction: ReminderActionType? {
+        didSet {
+            reminderActionLabel.text = selectedReminderAction?.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
+        }
+    }
     /// Options for the reminder action drop down consisting of base types and their previous custom names
     private var availableReminderActions: [(ReminderActionType, String?)] {
         var options: [(ReminderActionType, String?)] = []
@@ -409,10 +413,6 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         if let reminderToUpdate = reminderToUpdate,
            let index = GlobalTypes.shared.reminderActionTypes.firstIndex(of: reminderToUpdate.reminderActionType) {
             selectedDropDownReminderActionIndexPath = IndexPath(row: index, section: 0)
-            reminderActionLabel.text = reminderToUpdate.reminderActionType.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
-        }
-        else {
-            reminderActionLabel.text = ""
         }
         selectedReminderAction = reminderToUpdate?.reminderActionType
         
@@ -662,26 +662,33 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     }
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderAction.rawValue {
+        dismissKeyboard()
+        
+        if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderAction.rawValue, let cell = dropDownReminderAction?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
+            if cell.isCustomSelected {
+                cell.setCustomSelectedTableViewCell(forSelected: false)
+                selectedReminderAction = nil
+                selectedDropDownReminderActionIndexPath = nil
+                updateDynamicUIElements()
+                return
+            }
+            
+            cell.setCustomSelectedTableViewCell(forSelected: true)
+            
             if let previousSelectedIndexPath = selectedDropDownReminderActionIndexPath, let previousSelectedCell = dropDownReminderAction?.dropDownTableView?.cellForRow(at: previousSelectedIndexPath) as? HoundDropDownTableViewCell {
                 previousSelectedCell.setCustomSelectedTableViewCell(forSelected: false)
             }
-            if let selectedCell = dropDownReminderAction?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
-                selectedCell.setCustomSelectedTableViewCell(forSelected: true)
-            }
-            selectedDropDownReminderActionIndexPath = indexPath
             
             let option = availableReminderActions[indexPath.row]
-            reminderActionLabel.text = option.0.convertToReadableName(customActionName: option.1, includeMatchingEmoji: true)
             selectedReminderAction = option.0
+            selectedDropDownReminderActionIndexPath = indexPath
             
             if let custom = option.1 {
                 reminderCustomActionNameTextField.text = custom
             }
-            
+           
             reminderActionLabel.errorMessage = nil
             
-            dismissKeyboard()
             dropDownReminderAction?.hideDropDown(animated: true)
             updateDynamicUIElements()
             
