@@ -8,8 +8,4 @@
 
 import Foundation
 
-enum LogsFilterDropDownTypes: String {
-    case filterDogs = "DropDownFilterDogs"
-    case filterLogActions = "DropDownFilterLogActions"
-    case filterFamilyMembers = "DropDownFilterFamilyMembers"
-}
+

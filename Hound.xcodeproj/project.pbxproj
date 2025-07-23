@@ -16,6 +16,7 @@
 		A20EEB082E29D94300958592 /* UIViewErrorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB072E29D94000958592 /* UIViewErrorExtension.swift */; };
 		A20EEB0A2E2D7AA000958592 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB092E2D7A9B00958592 /* Constant.swift */; };
 		A20EEB0C2E305FA400958592 /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB0B2E305FA000958592 /* HapticsManager.swift */; };
+		A20EEB0E2E31A33200958592 /* HoundDropDownManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB0D2E31A32D00958592 /* HoundDropDownManager.swift */; };
 		A2101E5A2A68C5C900A65396 /* HoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2101E592A68C5C900A65396 /* HoundButton.swift */; };
 		A2101E612A69B03E00A65396 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2101E602A69B03E00A65396 /* UIViewExtension.swift */; };
 		A2101E652A6AF1B900A65396 /* HoundIntroductionDogIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2101E642A6AF1B900A65396 /* HoundIntroductionDogIconView.swift */; };
@@ -238,6 +239,7 @@
 		A20EEB072E29D94000958592 /* UIViewErrorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewErrorExtension.swift; sourceTree = "<group>"; };
 		A20EEB092E2D7A9B00958592 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		A20EEB0B2E305FA000958592 /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
+		A20EEB0D2E31A32D00958592 /* HoundDropDownManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundDropDownManager.swift; sourceTree = "<group>"; };
 		A2101E592A68C5C900A65396 /* HoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundButton.swift; sourceTree = "<group>"; };
 		A2101E602A69B03E00A65396 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		A2101E642A6AF1B900A65396 /* HoundIntroductionDogIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundIntroductionDogIconView.swift; sourceTree = "<group>"; };
@@ -732,6 +734,7 @@
 			isa = PBXGroup;
 			children = (
 				A2AA5CDA27FE481C00FD0134 /* HoundDropDown.swift */,
+				A20EEB0D2E31A32D00958592 /* HoundDropDownManager.swift */,
 				A2F1791B263F3E5C006824A7 /* HoundDropDownTableViewCell.swift */,
 			);
 			path = "Hound Drop Down";
@@ -1382,6 +1385,7 @@
 				A21AAF1A2DECD53B0077C89D /* LogActionType.swift in Sources */,
 				A218EA3227F6A5D90051159C /* NotificationPermissionsManager.swift in Sources */,
 				A2D7A25E2B672B2C00EB7D10 /* SubscriptionCancellationReason.swift in Sources */,
+				A20EEB0E2E31A33200958592 /* HoundDropDownManager.swift in Sources */,
 				A233519027FB7BAB00CDF1BF /* ClassConstant.swift in Sources */,
 				A23953322B7805A600098CED /* UUIDExtension.swift in Sources */,
 				A2FAB4162E1E121800E85392 /* DogsAddTriggerManagerView.swift in Sources */,

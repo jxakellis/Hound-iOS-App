@@ -12,6 +12,12 @@ protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(forLogsFilter: LogsFilter)
 }
 
+enum LogsFilterDropDownTypes: String {
+    case filterDogs = "DropDownFilterDogs"
+    case filterLogActions = "DropDownFilterLogActions"
+    case filterFamilyMembers = "DropDownFilterFamilyMembers"
+}
+
 class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate

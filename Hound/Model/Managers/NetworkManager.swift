@@ -22,7 +22,8 @@ final class NetworkManager: NSObject {
         super.init()
         monitor.start(queue: queue)
         isConnected = monitor.currentPath.status == .satisfied
-        monitor.pathUpdateHandler = { [self] path in
+        monitor.pathUpdateHandler = { [weak self] path in
+            guard let self = self else { return }
             self.isConnected = path.status == .satisfied
         }
     }
