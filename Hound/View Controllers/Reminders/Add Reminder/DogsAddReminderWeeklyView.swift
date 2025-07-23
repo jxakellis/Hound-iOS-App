@@ -79,7 +79,7 @@ final class DogsAddReminderWeeklyView: HoundView {
     private lazy var timeOfDayDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
         datePicker.datePickerMode = .time
-        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
+        datePicker.minuteInterval = Constant.Development.minuteInterval
         datePicker.preferredDatePickerStyle = .wheels
         
         datePicker.date = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * datePicker.minuteInterval), roundingMethod: .up)

@@ -155,6 +155,7 @@ public enum KeyConstant: String {
     case reminderExecutionDate
     case reminderIsTriggerResult
     case reminderIsEnabled
+    case reminderRecipientUserIds
     case reminderLastModified
     case reminderIsDeleted
     

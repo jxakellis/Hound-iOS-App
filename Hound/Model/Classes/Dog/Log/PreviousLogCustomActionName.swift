@@ -34,6 +34,8 @@ class PreviousLogCustomActionName: NSObject, NSCoding {
     private(set) var logActionTypeId: Int
     private(set) var logCustomActionName: String
     
+    static let maxStored = 3
+    
     // MARK: - Main
     
     init(logActionTypeId: Int, logCustomActionName: String) {

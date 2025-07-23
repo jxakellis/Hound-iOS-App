@@ -65,6 +65,9 @@ public enum ReminderConstant {
     static let defaultReminderType = ReminderType.countdown
     static var defaultReminderExecutionBasis: Date { Date() }
     static let defaultReminderIsEnabled = true
+    static var defaultReminderRecipientUserIds: [String] {
+            FamilyInformation.familyMembers.map { $0.userId }
+        }
     static let reminderCustomActionNameCharacterLimit: Int = 32
     static var defaultReminders: [Reminder] {
         [ defaultReminderOne, defaultReminderTwo, defaultReminderThree, defaultReminderFour ]

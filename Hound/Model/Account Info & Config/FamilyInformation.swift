@@ -101,6 +101,7 @@ final class FamilyInformation: UserDefaultPersistable {
     
     /// Sets the FamilyInformation values equal to all the values found in the fromBody. The key for the each fromBody value must match the name of the FamilyInformation property exactly in order to be used. The value must also be able to be converted into the proper data type.
     static func setup(fromBody: JSONResponseBody) {
+        let oldUserIds = Set(familyMembers.map { $0.userId })
         if let familyHeadUserId = fromBody[Constant.Key.familyHeadUserId.rawValue] as? String {
             self.familyHeadUserId = familyHeadUserId
         }
@@ -136,6 +137,11 @@ final class FamilyInformation: UserDefaultPersistable {
             let familyActiveSubscription = Subscription(fromBody: familyActiveSubscriptionBody)
             addFamilySubscription(forSubscription: familyActiveSubscription)
         }
+        
+        let newUserIds = Set(familyMembers.map { $0.userId })
+                   let added = newUserIds.subtracting(oldUserIds)
+                   let removed = oldUserIds.subtracting(newUserIds)
+                   updateRemindersForFamilyMemberChanges(addedUserIds: added, removedUserIds: removed)
     }
     
     // MARK: - Computed Properties
@@ -187,5 +193,17 @@ final class FamilyInformation: UserDefaultPersistable {
     static func clearAllFamilySubscriptions() {
         familySubscriptions.removeAll()
     }
+    
+    private static func updateRemindersForFamilyMemberChanges(addedUserIds: Set<String>, removedUserIds: Set<String>) {
+            guard let dogManager = DogManager.globalDogManager else { return }
+            for dog in dogManager.dogs {
+                for reminder in dog.dogReminders.dogReminders {
+                    var recipients = Set(reminder.reminderRecipientUserIds)
+                    recipients.formUnion(addedUserIds)
+                    recipients.subtract(removedUserIds)
+                    reminder.reminderRecipientUserIds = Array(recipients)
+                }
+            }
+        }
 
 }

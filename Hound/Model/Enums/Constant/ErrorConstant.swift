@@ -639,7 +639,7 @@ public enum ErrorConstant {
     }
 
     enum LogError {
-        static let parentDogMissing =  "Choose at least one dog"
+        static let parentDogMissing = "Choose at least one dog"
         static let logActionMissing = "Choose an action"
         static let logStartDateMissing = "Choose a start date"
     }

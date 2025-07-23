@@ -34,6 +34,8 @@ class PreviousReminderCustomActionName: NSObject, NSCoding {
     private(set) var reminderActionTypeId: Int
     private(set) var reminderCustomActionName: String
     
+    static let maxStored = 3
+    
     // MARK: - Main
     
     init(reminderActionTypeId: Int, reminderCustomActionName: String) {

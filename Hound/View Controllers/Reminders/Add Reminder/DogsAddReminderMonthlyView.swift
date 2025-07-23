@@ -30,7 +30,7 @@ final class DogsAddReminderMonthlyView: HoundView {
         let datePicker = HoundDatePicker(huggingPriority: 260, compressionResistancePriority: 260)
         datePicker.datePickerMode = .dateAndTime
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
+        datePicker.minuteInterval = Constant.Development.minuteInterval
         
         datePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
         

@@ -6,10 +6,12 @@
 //  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
+import SnapKit
 import UIKit
 
 enum DogsAddReminderDropDownTypes: String {
     case reminderAction = "DropDownReminderAction"
+    case reminderRecipients = "DropDownReminderRecipients"
 }
 
 final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownViewDelegate, DogsAddReminderWeeklyViewDelegate, HoundDropDownDataSource, DogsAddReminderMonthlyViewDelegate, DogsAddReminderOneTimeViewDelegate {
@@ -49,20 +51,15 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     
     // MARK: - Elements
     
-    private let onceView = DogsAddReminderOneTimeView()
-    private let countdownView = DogsAddReminderCountdownView()
-    private let weeklyView = DogsAddReminderWeeklyView()
-    private let monthlyView = DogsAddReminderMonthlyView()
-    
-    private lazy var reminderViewsStack: HoundStackView = {
-        let stack = HoundStackView(arrangedSubviews: [onceView, countdownView, weeklyView, monthlyView])
-        stack.axis = .vertical
-        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
-        return stack
+    private let reminderActionHeaderLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
+        label.textColor = .label
+        label.text = "Remind Me For"
+        return label
     }()
-    
     private lazy var reminderActionLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
+        let label = HoundLabel()
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an action..."
@@ -77,12 +74,13 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         
         return label
     }()
-    
-    private var reminderCustomActionNameTop: GeneralLayoutConstraint!
-    private var reminderCustomActionNameHeightMultiplier: GeneralLayoutConstraint!
-    private var reminderCustomActionNameMaxHeight: GeneralLayoutConstraint!
+    private let reminderIsEnabledSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 300, compressionResistancePriority: 300)
+        uiSwitch.isOn = Constant.Class.Reminder.defaultReminderIsEnabled
+        return uiSwitch
+    }()
     private lazy var reminderCustomActionNameTextField: HoundTextField = {
-        let textField = HoundTextField(huggingPriority: 280, compressionResistancePriority: 280)
+        let textField = HoundTextField()
         textField.delegate = self
         
         textField.applyStyle(.thinGrayBorder)
@@ -91,14 +89,67 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         
         return textField
     }()
-    
-    private let reminderIsEnabledSwitch: HoundSwitch = {
-        let uiSwitch = HoundSwitch(huggingPriority: 310, compressionResistancePriority: 310)
-        uiSwitch.isOn = Constant.Class.Reminder.defaultReminderIsEnabled
-        return uiSwitch
+    private lazy var nestedReminderLabelStack: HoundStackView = {
+        let stack = HoundStackView()
+        stack.addArrangedSubview(reminderActionLabel)
+        
+        // reminderIsEnabledSwitch needs an extra Constant.Constraint.Spacing.absoluteHoriInset before the end of the stack
+        let extraPaddingAfterSwitch = HoundView()
+        let paddedSwitchStack = HoundStackView(arrangedSubviews: [reminderIsEnabledSwitch, extraPaddingAfterSwitch])
+        extraPaddingAfterSwitch.snp.makeConstraints { make in
+            make.width.equalTo(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.height.equalTo(reminderIsEnabledSwitch.snp.height)
+        }
+        stack.addArrangedSubview(paddedSwitchStack)
+        
+        stack.axis = .horizontal
+        stack.spacing = Constant.Constraint.Spacing.absoluteHoriInset
+        stack.alignment = .center
+        stack.distribution = .fill
+        return stack
+    }()
+    private lazy var reminderActionStack: HoundStackView = {
+        let stack = HoundStackView.inputFieldStack(reminderActionHeaderLabel)
+        
+        let nestedStack = HoundStackView()
+        nestedStack.addArrangedSubview(nestedReminderLabelStack)
+        nestedStack.addArrangedSubview(reminderCustomActionNameTextField)
+        nestedStack.axis = .vertical
+        nestedStack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        
+        stack.addArrangedSubview(nestedStack)
+        
+        return stack
     }()
     
-    private lazy var reminderTypeSegmentedControl: HoundSegmentedControl = {
+    private let reminderRecipientsHeaderLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
+        label.textColor = .label
+        label.text = "Notify These People"
+        return label
+    }()
+    private lazy var reminderRecipientsLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 295, compressionResistancePriority: 295)
+        label.font = Constant.Visual.Font.primaryRegularLabel
+        label.applyStyle(.thinGrayBorder)
+        label.shouldInsetText = true
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
+        gesture.name = DogsAddReminderDropDownTypes.reminderRecipients.rawValue
+        gesture.delegate = self
+        gesture.cancelsTouchesInView = false
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(gesture)
+        return label
+    }()
+    private lazy var reminderRecipientsStack: HoundStackView = {
+        let stack = HoundStackView.inputFieldStack(reminderRecipientsHeaderLabel)
+        stack.addArrangedSubview(reminderRecipientsLabel)
+        return stack
+    }()
+    
+    private lazy var segmentedControl: HoundSegmentedControl = {
         let segmentedControl = HoundSegmentedControl()
         segmentedControl.selectedSegmentTintColor = UIColor.systemBlue
         
@@ -113,6 +164,18 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         segmentedControl.addTarget(self, action: #selector(didUpdateReminderType), for: .valueChanged)
         
         return segmentedControl
+    }()
+    
+    private let onceView = DogsAddReminderOneTimeView()
+    private let countdownView = DogsAddReminderCountdownView()
+    private let weeklyView = DogsAddReminderWeeklyView()
+    private let monthlyView = DogsAddReminderMonthlyView()
+    
+    private lazy var reminderViewsStack: HoundStackView = {
+        let stack = HoundStackView(arrangedSubviews: [onceView, countdownView, weeklyView, monthlyView])
+        stack.axis = .vertical
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        return stack
     }()
     
     @objc private func didUpdateReminderType(_ sender: HoundSegmentedControl) {
@@ -140,9 +203,14 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         }
         return options
     }
+    private var availableFamilyMembers: [FamilyMember] {
+        FamilyInformation.familyMembers
+    }
     
     private var dropDownReminderAction: HoundDropDown?
     private var selectedDropDownReminderActionIndexPath: IndexPath?
+    private var dropDownReminderRecipients: HoundDropDown?
+    private var selectedRecipientUserIds: Set<String> = []
     
     func constructReminder(showErrorIfFailed: Bool) -> Reminder? {
         guard let selectedReminderAction = selectedReminderAction else {
@@ -164,8 +232,9 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             reminder.reminderCustomActionName = reminderCustomActionNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         }
         reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
+        reminder.reminderRecipientUserIds = Array(selectedRecipientUserIds)
         
-        switch reminderTypeSegmentedControl.selectedSegmentIndex {
+        switch segmentedControl.selectedSegmentIndex {
         case ReminderType.oneTime.segmentedControlIndex:
             reminder.changeReminderType(forReminderType: .oneTime)
             reminder.oneTimeComponents.oneTimeDate = onceView.oneTimeDate ?? reminder.oneTimeComponents.oneTimeDate
@@ -282,17 +351,20 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         // reminderIsEnabledSwitch
         reminderIsEnabledSwitch.isOn = reminderToUpdate?.reminderIsEnabled ?? reminderIsEnabledSwitch.isOn
         
-        // reminderTypeSegmentedControl
+        selectedRecipientUserIds = Set(reminderToUpdate?.reminderRecipientUserIds ?? FamilyInformation.familyMembers.map { $0.userId })
+        updateRecipientsLabel()
+        
+        // segmentedControl
         if let reminderToUpdate = reminderToUpdate {
-            reminderTypeSegmentedControl.selectedSegmentIndex = reminderToUpdate.reminderType.segmentedControlIndex
+            segmentedControl.selectedSegmentIndex = reminderToUpdate.reminderType.segmentedControlIndex
         }
         else {
-            reminderTypeSegmentedControl.selectedSegmentIndex = ReminderType.countdown.segmentedControlIndex
+            segmentedControl.selectedSegmentIndex = ReminderType.countdown.segmentedControlIndex
         }
-        onceView.isHidden = reminderTypeSegmentedControl.selectedSegmentIndex != ReminderType.oneTime.segmentedControlIndex
-        countdownView.isHidden = reminderTypeSegmentedControl.selectedSegmentIndex != ReminderType.countdown.segmentedControlIndex
-        weeklyView.isHidden = reminderTypeSegmentedControl.selectedSegmentIndex != ReminderType.weekly.segmentedControlIndex
-        monthlyView.isHidden = reminderTypeSegmentedControl.selectedSegmentIndex != ReminderType.monthly.segmentedControlIndex
+        onceView.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.oneTime.segmentedControlIndex
+        countdownView.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.countdown.segmentedControlIndex
+        weeklyView.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.weekly.segmentedControlIndex
+        monthlyView.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.monthly.segmentedControlIndex
         
         // onceView
         if reminderToUpdate?.reminderType == .oneTime {
@@ -334,19 +406,10 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     // MARK: - Functions
     
     private func updateDynamicUIElements() {
-        let reminderCustomActionNameIsHidden = selectedReminderAction?.allowsCustom != true
+        reminderCustomActionNameTextField.isHidden = selectedReminderAction?.allowsCustom != true
+        remakeCustomActionNameConstraints()
         
-        reminderCustomActionNameTextField.isHidden = reminderCustomActionNameIsHidden
-        if reminderCustomActionNameIsHidden {
-            reminderCustomActionNameHeightMultiplier.setMultiplier(0.0)
-            reminderCustomActionNameMaxHeight.constant = 0.0
-            reminderCustomActionNameTop.constant = 0.0
-        }
-        else {
-            reminderCustomActionNameHeightMultiplier.restore()
-            reminderCustomActionNameMaxHeight.restore()
-            reminderCustomActionNameTop.restore()
-        }
+        updateRecipientsLabel()
         
         UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
             self.setNeedsLayout()
@@ -359,6 +422,21 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         endEditing(true)
     }
     
+    private func updateRecipientsLabel() {
+        if selectedRecipientUserIds.isEmpty {
+            reminderRecipientsLabel.text = "None"
+        }
+        else if  selectedRecipientUserIds.count == FamilyInformation.familyMembers.count {
+            reminderRecipientsLabel.text = "All"
+        }
+        else if selectedRecipientUserIds.count == 1, let userId = selectedRecipientUserIds.first {
+            reminderRecipientsLabel.text = FamilyInformation.findFamilyMember(forUserId: userId)?.displayFullName ?? Constant.Visual.Text.unknownName
+        }
+        else {
+            reminderRecipientsLabel.text = "Multiple"
+        }
+    }
+    
     // MARK: - Drop Down Handling
     
     @objc private func didTapScreen(sender: UITapGestureRecognizer) {
@@ -368,6 +446,9 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         
         // If a dropDown exists, hide it unless tap is on its label or itself
         if let dd = dropDownReminderAction, !touched.isDescendant(of: reminderActionLabel) && !touched.isDescendant(of: dd) {
+            dd.hideDropDown(animated: true)
+        }
+        if let dd = dropDownReminderRecipients, !touched.isDescendant(of: reminderRecipientsLabel) && !touched.isDescendant(of: dd) {
             dd.hideDropDown(animated: true)
         }
         
@@ -393,6 +474,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     private func dropDown(forDropDownType type: DogsAddReminderDropDownTypes) -> HoundDropDown? {
         switch type {
         case .reminderAction: return dropDownReminderAction
+        case .reminderRecipients: return dropDownReminderRecipients
         }
     }
     
@@ -400,6 +482,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     private func labelForDropDown(forDropDownType type: DogsAddReminderDropDownTypes) -> HoundLabel {
         switch type {
         case .reminderAction: return reminderActionLabel
+        case .reminderRecipients: return reminderRecipientsLabel
         }
     }
     
@@ -413,35 +496,39 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     /// Show or hide the dropdown for the given type
     private func showDropDown(_ type: DogsAddReminderDropDownTypes, animated: Bool) {
         let label = labelForDropDown(forDropDownType: type)
-        let superview = label.superview
-        let dropDowns = [dropDownReminderAction]
+        var targetDropDown = dropDown(forDropDownType: type)
         
+        // cannot insert dropdown inside of a stack, so need basic view
+        let rootView = self
+        let referenceFrame = label.superview?.convert(label.frame, to: rootView) ?? label.frame
+        
+        let dropDowns = [dropDownReminderAction, dropDownReminderRecipients]
         // work around: ui element or error message couldve been added which is higher in the view than dropdown since dropdown last opened
         // ensure that dropdowns are on top (and in correct order relative to other drop downs)
         dropDowns.forEach { dropDown in
             dropDown?.removeFromSuperview()
         }
         dropDowns.reversed().forEach { dropDown in
-            if let dropDown = dropDown, let superview = superview {
-                superview.addSubview(dropDown)
+            if let dropDown = dropDown {
+                rootView.addSubview(dropDown)
             }
         }
         
-        var targetDropDown = dropDown(forDropDownType: type)
         if targetDropDown == nil {
             targetDropDown = HoundDropDown()
             targetDropDown?.setupDropDown(
                 forHoundDropDownIdentifier: type.rawValue,
                 forDataSource: self,
-                forViewPositionReference: label.frame,
+                forViewPositionReference: referenceFrame,
                 forOffset: 2.5,
                 forRowHeight: HoundDropDown.rowHeightForHoundLabel
             )
             switch type {
             case .reminderAction: dropDownReminderAction = targetDropDown
+            case .reminderRecipients: dropDownReminderRecipients = targetDropDown
             }
-            if let superview = superview, let targetDropDown = targetDropDown {
-                superview.addSubview(targetDropDown)
+            if let targetDropDown = targetDropDown {
+                rootView.addSubview(targetDropDown)
             }
         }
         
@@ -450,6 +537,8 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
                 switch type {
                 case .reminderAction:
                     return CGFloat(availableReminderActions.count)
+                case .reminderRecipients:
+                    return CGFloat(availableFamilyMembers.count)
                 }
             }()),
             animated: animated
@@ -467,12 +556,19 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             let option = availableReminderActions[indexPath.row]
             customCell.label.text = option.0.convertToReadableName(customActionName: option.1, includeMatchingEmoji: true)
         }
+        else if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderRecipients.rawValue {
+            let member = availableFamilyMembers[indexPath.row]
+            customCell.setCustomSelectedTableViewCell(forSelected: selectedRecipientUserIds.contains(member.userId))
+            customCell.label.text = member.displayFullName ?? Constant.Visual.Text.unknownName
+        }
     }
     
     func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
         switch dropDownUIViewIdentifier {
         case DogsAddReminderDropDownTypes.reminderAction.rawValue:
             return availableReminderActions.count
+        case DogsAddReminderDropDownTypes.reminderRecipients.rawValue:
+            return availableFamilyMembers.count
         default:
             return 0
         }
@@ -509,16 +605,37 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             
             showNextRequiredDropDown(animated: true)
         }
+        else if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderRecipients.rawValue, let selectedCell = dropDownReminderRecipients?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
+            let member = availableFamilyMembers[indexPath.row]
+            
+            if selectedCell.isCustomSelected {
+                selectedRecipientUserIds.remove(member.userId)
+            }
+            else {
+                selectedRecipientUserIds.insert(member.userId)
+            }
+            selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
+            
+            if selectedRecipientUserIds.isEmpty {
+                // If no one selected, close
+                dropDownReminderRecipients?.hideDropDown(animated: true)
+            }
+            else if selectedRecipientUserIds.count == availableFamilyMembers.count {
+                // If all ppl selected, close dropdown
+                dropDownReminderRecipients?.hideDropDown(animated: true)
+            }
+            
+            updateRecipientsLabel()
+        }
     }
     
     // MARK: - Setup Elements
     
     override func addSubViews() {
         super.addSubViews()
-        addSubview(reminderActionLabel)
-        addSubview(reminderIsEnabledSwitch)
-        addSubview(reminderCustomActionNameTextField)
-        addSubview(reminderTypeSegmentedControl)
+        addSubview(reminderActionStack)
+        addSubview(reminderRecipientsStack)
+        addSubview(segmentedControl)
         addSubview(reminderViewsStack)
         
         let didTapScreenGesture = UITapGestureRecognizer(
@@ -530,52 +647,54 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         addGestureRecognizer(didTapScreenGesture)
     }
     
+    private func remakeCustomActionNameConstraints() {
+        reminderCustomActionNameTextField.snp.makeConstraints { make in
+            if !reminderCustomActionNameTextField.isHidden {
+                make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
+            }
+        }
+    }
+    
     override func setupConstraints() {
         super.setupConstraints()
         
-        // reminderActionLabel
-        NSLayoutConstraint.activate([
-            reminderActionLabel.topAnchor.constraint(equalTo: topAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
-            reminderActionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            reminderActionLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
-            reminderActionLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
-        ])
+        reminderActionStack.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            // add extra inset for the switch inside
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
+        }
+        reminderActionLabel.snp.makeConstraints { make in
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
+        }
+        remakeCustomActionNameConstraints()
         
-        // reminderIsEnabledSwitch
-        NSLayoutConstraint.activate([
-            reminderIsEnabledSwitch.leadingAnchor.constraint(equalTo: reminderActionLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
-            reminderIsEnabledSwitch.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0),
-            reminderIsEnabledSwitch.centerYAnchor.constraint(equalTo: reminderActionLabel.centerYAnchor)
-        ])
+        reminderRecipientsStack.snp.makeConstraints { make in
+            make.top.equalTo(reminderActionStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
+        reminderRecipientsLabel.snp.makeConstraints { make in
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
+        }
         
-        // reminderCustomActionNameTextField
-        reminderCustomActionNameTop = GeneralLayoutConstraint(reminderCustomActionNameTextField.topAnchor.constraint(equalTo: reminderActionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert))
-        reminderCustomActionNameHeightMultiplier = GeneralLayoutConstraint(reminderCustomActionNameTextField.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self))
-        reminderCustomActionNameMaxHeight = GeneralLayoutConstraint(reminderCustomActionNameTextField.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight))
-        NSLayoutConstraint.activate([
-            reminderCustomActionNameTop.constraint,
-            reminderCustomActionNameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            reminderCustomActionNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            reminderCustomActionNameHeightMultiplier.constraint,
-            reminderCustomActionNameMaxHeight.constraint
-        ])
+        segmentedControl.snp.makeConstraints { make in
+            make.top.equalTo(reminderRecipientsLabel.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.segmentedHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
+        }
         
-        // reminderTypeSegmentedControl
-        NSLayoutConstraint.activate([
-            reminderTypeSegmentedControl.topAnchor.constraint(equalTo: reminderCustomActionNameTextField.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
-            reminderTypeSegmentedControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset / 2.0),
-            reminderTypeSegmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset / 2.0),
-            reminderTypeSegmentedControl.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: self),
-            reminderTypeSegmentedControl.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight)
-        ])
-        
-        // reminderViewsStack
-        NSLayoutConstraint.activate([
-            reminderViewsStack.topAnchor.constraint(equalTo: reminderTypeSegmentedControl.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
-            reminderViewsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
-            reminderViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            reminderViewsStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
-        ])
+        reminderViewsStack.snp.makeConstraints { make in
+            make.top.equalTo(segmentedControl.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.bottom.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteVertInset)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
     }
     
 }

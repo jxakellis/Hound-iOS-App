@@ -392,7 +392,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
                         TriggerLogReaction(forLogActionTypeId: type.logActionTypeId, forLogCustomActionName: name)
                     )
                 }
-                if seen.count >= 5 { break }
+                if seen.count >= PreviousLogCustomActionName.maxStored { break }
             }
             
         }
@@ -416,7 +416,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
                         TriggerReminderResult(forReminderActionTypeId: type.reminderActionTypeId, forReminderCustomActionName: name)
                     )
                 }
-                if seen.count >= 5 { break }
+                if seen.count >= PreviousReminderCustomActionName.maxStored { break }
             }
         }
         

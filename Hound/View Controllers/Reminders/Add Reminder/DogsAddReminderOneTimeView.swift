@@ -20,7 +20,7 @@ final class DogsAddReminderOneTimeView: HoundView {
         let datePicker = HoundDatePicker(huggingPriority: 240, compressionResistancePriority: 260)
         datePicker.datePickerMode = .dateAndTime
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
+        datePicker.minuteInterval = Constant.Development.minuteInterval
         
         datePicker.date = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * datePicker.minuteInterval), roundingMethod: .up)
         

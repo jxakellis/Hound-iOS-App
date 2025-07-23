@@ -21,11 +21,40 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
     
     private let descriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
-        // TODO notif settings, add text that tells the user they can disable notifcations for individual reminders
-        label.text = "Recieve notifications about your family's reminders. Examples include: a reminder's alarm sounding."
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         label.numberOfLines = 0
+        
+        let precalculatedDynamicTextColor = label.textColor
+        label.attributedTextClosure = {
+            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+            let message = NSMutableAttributedString(
+                string: "Recieve notifications about your family's reminders. ",
+                attributes: [
+                    .font: Constant.Visual.Font.secondaryColorDescLabel,
+                    .foregroundColor: precalculatedDynamicTextColor as Any
+                ]
+            )
+            
+            message.append(NSAttributedString(
+                string: "Notifications can also be configured on an individual reminder basis.",
+                attributes: [
+                    .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
+                    .foregroundColor: precalculatedDynamicTextColor as Any
+                ])
+            )
+            
+            message.append(NSAttributedString(
+                string: " Examples include: a reminder's alarm sounding.",
+                attributes: [
+                    .font: Constant.Visual.Font.secondaryColorDescLabel,
+                    .foregroundColor: precalculatedDynamicTextColor as Any
+                ])
+            )
+            
+            return message
+        }
+        
         return label
     }()
 

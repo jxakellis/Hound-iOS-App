@@ -153,7 +153,7 @@ final class LocalConfiguration: UserDefaultPersistable {
         var countForType = 0
         for (index, element) in localPreviousLogCustomActionNames.enumerated().reversed() where element.logActionTypeId == forLogActionType.logActionTypeId {
             countForType += 1
-            if countForType > 5 {
+            if countForType > PreviousLogCustomActionName.maxStored {
                 localPreviousLogCustomActionNames.remove(at: index)
             }
             
@@ -191,7 +191,7 @@ final class LocalConfiguration: UserDefaultPersistable {
         var countForType = 0
         for (index, element) in localPreviousReminderCustomActionNames.enumerated().reversed() where element.reminderActionTypeId == forReminderActionType.reminderActionTypeId {
             countForType += 1
-            if countForType > 5 {
+            if countForType > PreviousReminderCustomActionName.maxStored {
                 localPreviousReminderCustomActionNames.remove(at: index)
             }
         }

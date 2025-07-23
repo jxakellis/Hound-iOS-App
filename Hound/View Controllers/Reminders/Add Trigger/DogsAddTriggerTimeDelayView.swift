@@ -19,7 +19,7 @@ final class DogsAddTriggerTimeDelayView: HoundView {
     private lazy var countdownDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker(huggingPriority: 240, compressionResistancePriority: 240)
         datePicker.datePickerMode = .countDownTimer
-        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
+        datePicker.minuteInterval = Constant.Development.minuteInterval
         datePicker.countDownDuration = Constant.Class.Trigger.defaultTriggerTimeDelay
         datePicker.addTarget(self, action: #selector(didUpdateCountdown), for: .valueChanged)
         return datePicker

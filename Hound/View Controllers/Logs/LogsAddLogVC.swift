@@ -337,7 +337,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var logStartDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker()
         datePicker.datePickerMode = .dateAndTime
-        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
+        datePicker.minuteInterval = Constant.Development.minuteInterval
         datePicker.preferredDatePickerStyle = .wheels
         
         datePicker.addTarget(self, action: #selector(didUpdateLogStartDate), for: .valueChanged)
@@ -390,7 +390,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var logEndDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker()
         datePicker.datePickerMode = .dateAndTime
-        datePicker.minuteInterval = Constant.Development.reminderMinuteInterval
+        datePicker.minuteInterval = Constant.Development.minuteInterval
         datePicker.preferredDatePickerStyle = .wheels
         
         datePicker.addTarget(self, action: #selector(didUpdateLogEndDate), for: .valueChanged)

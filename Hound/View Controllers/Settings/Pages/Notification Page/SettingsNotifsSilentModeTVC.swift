@@ -29,7 +29,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
     private lazy var silentModeStartHoursDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker(huggingPriority: 280, compressionResistancePriority: 280)
         datePicker.datePickerMode = .time
-        datePicker.minuteInterval = 5
+        datePicker.minuteInterval = Constant.Development.minuteInterval
         datePicker.preferredDatePickerStyle = .compact
         datePicker.addTarget(self, action: #selector(didUpdateSilentModeStartHours), for: .valueChanged)
         return datePicker
@@ -38,7 +38,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
     private lazy var silentModeEndHoursDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker(huggingPriority: 270, compressionResistancePriority: 270)
         datePicker.datePickerMode = .time
-        datePicker.minuteInterval = 5
+        datePicker.minuteInterval = Constant.Development.minuteInterval
         datePicker.preferredDatePickerStyle = .compact
         datePicker.addTarget(self, action: #selector(didUpdateSilentModeEndHours), for: .valueChanged)
         return datePicker

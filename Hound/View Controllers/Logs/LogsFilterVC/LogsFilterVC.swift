@@ -52,7 +52,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     private lazy var startDatePicker: HoundDatePicker = {
         let picker = HoundDatePicker(huggingPriority: 330, compressionResistancePriority: 330)
         picker.datePickerMode = .dateAndTime
-        picker.minuteInterval = 5
+        picker.minuteInterval = Constant.Development.minuteInterval
         picker.preferredDatePickerStyle = .compact
         picker.addTarget(self, action: #selector(didChangeStartDate(_:)), for: .valueChanged)
         return picker
@@ -74,7 +74,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     private lazy var endDatePicker: HoundDatePicker = {
         let picker = HoundDatePicker(huggingPriority: 310, compressionResistancePriority: 310)
         picker.datePickerMode = .dateAndTime
-        picker.minuteInterval = 5
+        picker.minuteInterval = Constant.Development.minuteInterval
         picker.preferredDatePickerStyle = .compact
         picker.addTarget(self, action: #selector(didChangeEndDate(_:)), for: .valueChanged)
         return picker

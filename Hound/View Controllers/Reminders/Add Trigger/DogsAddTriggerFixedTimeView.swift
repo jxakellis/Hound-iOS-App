@@ -53,7 +53,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
     private lazy var timeOfDayPicker: HoundDatePicker = {
         let datePicker = HoundDatePicker(huggingPriority: 250, compressionResistancePriority: 250)
         datePicker.datePickerMode = .time
-        datePicker.minuteInterval = Constant.Development.triggerMinuteInterval
+        datePicker.minuteInterval = Constant.Development.minuteInterval
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.date = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * datePicker.minuteInterval), roundingMethod: .up)
         datePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)

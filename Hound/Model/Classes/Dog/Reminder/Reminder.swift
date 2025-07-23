@@ -66,6 +66,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         copy.reminderExecutionBasis = self.reminderExecutionBasis
         copy.reminderIsTriggerResult = self.reminderIsTriggerResult
         copy.storedReminderIsEnabled = self.storedReminderIsEnabled
+        copy.reminderRecipientUserIds = self.reminderRecipientUserIds
         
         copy.countdownComponents = self.countdownComponents.copy() as? CountdownComponents ?? CountdownComponents()
         copy.weeklyComponents = self.weeklyComponents.copy() as? WeeklyComponents ?? WeeklyComponents()
@@ -88,6 +89,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         let decodedReminderExecutionBasis: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.reminderExecutionBasis.rawValue)
         let decodedReminderIsTriggerResult: Bool? = aDecoder.decodeOptionalBool(forKey: Constant.Key.reminderIsTriggerResult.rawValue)
         let decodedReminderIsEnabled: Bool? = aDecoder.decodeOptionalBool(forKey: Constant.Key.reminderIsEnabled.rawValue)
+        let decodedReminderRecipientUserIds: [String]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.reminderRecipientUserIds.rawValue)
         let decodedCountdownComponents: CountdownComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.countdownComponents.rawValue)
         let decodedWeeklyComponents: WeeklyComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.weeklyComponents.rawValue)
         let decodedMonthlyComponents: MonthlyComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.monthlyComponents.rawValue)
@@ -104,6 +106,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             forReminderExecutionBasis: decodedReminderExecutionBasis,
             forReminderIsTriggerResult: decodedReminderIsTriggerResult,
             forReminderIsEnabled: decodedReminderIsEnabled,
+            forReminderRecipientUserIds: decodedReminderRecipientUserIds,
             forCountdownComponents: decodedCountdownComponents,
             forWeeklyComponents: decodedWeeklyComponents,
             forMonthlyComponents: decodedMonthlyComponents,
@@ -126,6 +129,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(reminderExecutionBasis, forKey: Constant.Key.reminderExecutionBasis.rawValue)
         aCoder.encode(reminderIsTriggerResult, forKey: Constant.Key.reminderIsTriggerResult.rawValue)
         aCoder.encode(reminderIsEnabled, forKey: Constant.Key.reminderIsEnabled.rawValue)
+        aCoder.encode(reminderRecipientUserIds, forKey: Constant.Key.reminderRecipientUserIds.rawValue)
         aCoder.encode(countdownComponents, forKey: Constant.Key.countdownComponents.rawValue)
         aCoder.encode(weeklyComponents, forKey: Constant.Key.weeklyComponents.rawValue)
         aCoder.encode(monthlyComponents, forKey: Constant.Key.monthlyComponents.rawValue)
@@ -309,6 +313,8 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
     }
     
+    var reminderRecipientUserIds: [String] = Constant.Class.Reminder.defaultReminderRecipientUserIds
+    
     // Reminder Components
     
     private(set) var countdownComponents: CountdownComponents = CountdownComponents()
@@ -335,6 +341,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         forReminderExecutionBasis: Date? = nil,
         forReminderIsTriggerResult: Bool? = nil,
         forReminderIsEnabled: Bool? = nil,
+        forReminderRecipientUserIds: [String]? = nil,
         forCountdownComponents: CountdownComponents? = nil,
         forWeeklyComponents: WeeklyComponents? = nil,
         forMonthlyComponents: MonthlyComponents? = nil,
@@ -352,6 +359,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.reminderExecutionBasis = forReminderExecutionBasis ?? reminderExecutionBasis
         self.reminderIsTriggerResult = forReminderIsTriggerResult ?? reminderIsTriggerResult
         self.reminderIsEnabled = forReminderIsEnabled ?? reminderIsEnabled
+        self.reminderRecipientUserIds = forReminderRecipientUserIds ?? reminderRecipientUserIds
         
         self.countdownComponents = forCountdownComponents ?? countdownComponents
         self.weeklyComponents = forWeeklyComponents ?? weeklyComponents
@@ -390,6 +398,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
                 forReminderExecutionBasis: reminderToOverride.reminderExecutionBasis,
                 forReminderIsTriggerResult: reminderToOverride.reminderIsTriggerResult,
                 forReminderIsEnabled: reminderToOverride.reminderIsEnabled,
+                forReminderRecipientUserIds: reminderToOverride.reminderRecipientUserIds,
                 forCountdownComponents: reminderToOverride.countdownComponents,
                 forWeeklyComponents: reminderToOverride.weeklyComponents,
                 forMonthlyComponents: reminderToOverride.monthlyComponents,
@@ -419,6 +428,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }() ?? reminderToOverride?.reminderExecutionBasis
         let reminderIsTriggerResult: Bool? = fromBody[Constant.Key.reminderIsTriggerResult.rawValue] as? Bool ?? reminderToOverride?.reminderIsTriggerResult
         let reminderIsEnabled: Bool? = fromBody[Constant.Key.reminderIsEnabled.rawValue] as? Bool ?? reminderToOverride?.reminderIsEnabled
+        let reminderRecipientUserIds: [String]? = fromBody[Constant.Key.reminderRecipientUserIds.rawValue] as? [String] ?? reminderToOverride?.reminderRecipientUserIds
         
         // no properties should be nil. Either a complete fromBody should be provided (i.e. no previousDogManagerSynchronization was used in query) or a potentially partial fromBody (i.e. previousDogManagerSynchronization used in query) should be passed with an dogReminderManagerToOverride
         // reminderCustomActionName can be nil
@@ -503,6 +513,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             forReminderExecutionBasis: reminderExecutionBasis,
             forReminderIsTriggerResult: reminderIsTriggerResult,
             forReminderIsEnabled: reminderIsEnabled,
+            forReminderRecipientUserIds: reminderRecipientUserIds,
             forCountdownComponents: CountdownComponents(forExecutionInterval: countdownExecutionInterval),
             forWeeklyComponents: WeeklyComponents(
                 UTCHour: weeklyUTCHour,
@@ -702,6 +713,9 @@ extension Reminder {
         else if reminderIsEnabled != other.reminderIsEnabled {
             return false
         }
+        else if Set(reminderRecipientUserIds) != Set(other.reminderRecipientUserIds) {
+            return false
+        }
         else if reminderIsTriggerResult != other.reminderIsTriggerResult {
             return false
         }
@@ -748,6 +762,7 @@ extension Reminder {
         body[Constant.Key.reminderExecutionDate.rawValue] = .string(reminderExecutionDate?.ISO8601FormatWithFractionalSeconds())
         body[Constant.Key.reminderIsTriggerResult.rawValue] = .bool(reminderIsTriggerResult)
         body[Constant.Key.reminderIsEnabled.rawValue] = .bool(reminderIsEnabled)
+        body[Constant.Key.reminderRecipientUserIds.rawValue] = .array(reminderRecipientUserIds.map { .string($0) })
         
         body[Constant.Key.snoozeExecutionInterval.rawValue] = .double(snoozeComponents.executionInterval)
         
