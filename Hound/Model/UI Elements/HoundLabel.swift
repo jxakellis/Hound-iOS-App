@@ -148,6 +148,7 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     
     override var isEnabled: Bool {
         didSet {
+            self.isUserInteractionEnabled = isEnabled
             self.alpha = isEnabled ? 1 : 0.5
         }
     }

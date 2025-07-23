@@ -81,11 +81,26 @@ enum AfterTimeQuickSelect: String, CaseIterable {
         }
     }
     
+    func time(startingPoint: Date) -> Date? {
+        guard self != .now else {
+            return Date()
+        }
+        guard self != .custom else {
+            return nil
+        }
+        
+        guard let valueInSeconds = self.valueInSeconds() else {
+            return nil
+        }
+        
+        return startingPoint.addingTimeInterval(valueInSeconds)
+    }
+    
     /// Returns how many seconds ago the TimeAgoQuickSelect represents. .now represents 0.0 seconds ago, .fiveMinsAgo represents -300.0 seconds ago, and .custom represents nil
-    func valueInSeconds() -> Double? {
+    private func valueInSeconds() -> Double? {
         switch self {
         case .now:
-            return 1.0 * 0.0
+            return nil
         case .inFiveMins:
             return 1.0 * 60.0 * 5.0
         case .inFifteenMins:

@@ -642,6 +642,8 @@ public enum ErrorConstant {
         static let parentDogMissing = "Choose at least one dog"
         static let logActionMissing = "Choose an action"
         static let logStartDateMissing = "Choose a start date"
+        static let logStartTooLate = "Start date can't be after end date"
+        static let logEndTooEarly = "End date can't be before start date"
     }
 
     enum ReminderError {

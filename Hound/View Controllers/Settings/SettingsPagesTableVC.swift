@@ -45,6 +45,7 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
         self.eligibleForGlobalPresenter = true
         
         self.tableView.register(SettingsPagesTVC.self, forCellReuseIdentifier: SettingsPagesTVC.reuseIdentifier)
+        self.tableView.contentInset.top = Constant.Constraint.Spacing.absoluteVertInset
         self.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
     }
     

@@ -149,14 +149,12 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         label.textColor = UIColor.secondaryLabel
         label.numberOfLines = 0
         
-        label.isHidden = UserConfiguration.isNotificationEnabled && UserConfiguration.isReminderNotificationEnabled
-        
         let precalculatedDynamicTextColor = label.textColor
         label.attributedTextClosure = {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
             if !UserConfiguration.isNotificationEnabled {
                 let message = NSMutableAttributedString(
-                    string: "Your notifications are currently ",
+                    string: "Your notifications are ",
                     attributes: [
                         .font: Constant.Visual.Font.secondaryColorDescLabel,
                         .foregroundColor: precalculatedDynamicTextColor as Any
@@ -170,7 +168,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
                     ]
                 ))
                 message.append(NSAttributedString(
-                    string: " and you will not receive any push notifications.",
+                    string: ", so you won't receive any push notifications (you can change this in Hound's settings).",
                     attributes: [
                         .font: Constant.Visual.Font.secondaryColorDescLabel,
                         .foregroundColor: precalculatedDynamicTextColor as Any
@@ -180,7 +178,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             }
             else if !UserConfiguration.isReminderNotificationEnabled {
                 let message = NSMutableAttributedString(
-                    string: "Your notifications for reminders are currently ",
+                    string: "Your reminder notifications are ",
                     attributes: [
                         .font: Constant.Visual.Font.secondaryColorDescLabel,
                         .foregroundColor: precalculatedDynamicTextColor as Any
@@ -194,7 +192,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
                     ]
                 ))
                 message.append(NSAttributedString(
-                    string: " and you will not receive any push notification for this.",
+                    string: ", so you won’t get push notifications for reminders (you can change this in Hound's settings).",
                     attributes: [
                         .font: Constant.Visual.Font.secondaryColorDescLabel,
                         .foregroundColor: precalculatedDynamicTextColor as Any
@@ -204,7 +202,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             }
             return NSAttributedString()
         }
-
+        
         return label
     }()
     private lazy var nestedRecipientsLabelStack: HoundStackView = {
@@ -478,10 +476,15 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     // MARK: - Functions
     
     private func updateDynamicUIElements() {
-        reminderCustomActionNameTextField.isHidden = selectedReminderAction?.allowsCustom != true
-        remakeCustomActionNameConstraints()
+        let customActionNameIsHidden = selectedReminderAction?.allowsCustom != true
+        if reminderCustomActionNameTextField.isHidden != customActionNameIsHidden {
+            reminderCustomActionNameTextField.isHidden = customActionNameIsHidden
+            remakeCustomActionNameConstraints()
+        }
         
         updateRecipientsLabel()
+        
+        updateDisclaimerLabel()
         
         UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
             self.setNeedsLayout()
@@ -507,6 +510,9 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         else {
             reminderRecipientsLabel.text = "Multiple"
         }
+    }
+    private func updateDisclaimerLabel() {
+        reminderNotificationsDisabledDisclaimerLabel.isHidden = !selectedRecipientUserIds.contains(UserInformation.userId ?? Constant.Visual.Text.unknownUserId) || (UserConfiguration.isNotificationEnabled && UserConfiguration.isReminderNotificationEnabled)
     }
     
     // MARK: - Drop Down Handling
@@ -697,7 +703,8 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
                 dropDownReminderRecipients?.hideDropDown(animated: true)
             }
             
-            updateRecipientsLabel()
+            // recipient label text changes and disclaimer label maybe appears/disappears
+            updateDynamicUIElements()
         }
     }
     

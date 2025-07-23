@@ -14,6 +14,7 @@ final class SettingsNotifsAlarmsVC: HoundViewController, UITableViewDelegate, UI
 
     private lazy var tableView = {
         let tableView = HoundTableView(style: .grouped)
+        tableView.backgroundColor = .systemBackground
         tableView.delegate = self
         tableView.dataSource = self
         

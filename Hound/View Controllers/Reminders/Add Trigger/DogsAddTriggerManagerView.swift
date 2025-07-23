@@ -356,8 +356,11 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         reminderResultLabel.text = selectedReminderResult?.readableName
         reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
         
-        reminderCustomActionNameTextField.isHidden = !(selectedReminderResult.map { ReminderActionType.find(forReminderActionTypeId: $0.reminderActionTypeId).allowsCustom } ?? false)
-        remakeCustomActionNameConstraints()
+        let customActionNameIsHidden = !(selectedReminderResult.map { ReminderActionType.find(forReminderActionTypeId: $0.reminderActionTypeId).allowsCustom } ?? false)
+        if reminderCustomActionNameTextField.isHidden != customActionNameIsHidden {
+            reminderCustomActionNameTextField.isHidden = customActionNameIsHidden
+            remakeCustomActionNameConstraints()
+        }
         
         UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
             self.setNeedsLayout()

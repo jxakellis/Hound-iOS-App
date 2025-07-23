@@ -76,6 +76,7 @@ final class DogsTableVC: HoundTableViewController {
         
         self.tableView.register(DogTVC.self, forCellReuseIdentifier: DogTVC.reuseIdentifier)
         self.tableView.register(DogsReminderTVC.self, forCellReuseIdentifier: DogsReminderTVC.reuseIdentifier)
+        self.tableView.contentInset.top = Constant.Constraint.Spacing.absoluteVertInset
         self.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
         self.tableView.allowsSelection = !dogManager.dogs.isEmpty
         

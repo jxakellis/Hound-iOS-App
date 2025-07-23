@@ -1,4 +1,3 @@
-//
 //  LogsAddLogVC.swift
 //  Hound
 //
@@ -194,7 +193,6 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = .label
         label.text = "Logged by"
-        label.shouldInsetText = true
         return label
     }()
     private lazy var familyMemberLabel: HoundLabel = {
@@ -337,7 +335,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var logStartDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker()
         datePicker.datePickerMode = .dateAndTime
-        datePicker.minuteInterval = Constant.Development.minuteInterval
+        datePicker.minuteInterval = 1
         datePicker.preferredDatePickerStyle = .wheels
         
         datePicker.addTarget(self, action: #selector(didUpdateLogStartDate), for: .valueChanged)
@@ -390,7 +388,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     private lazy var logEndDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker()
         datePicker.datePickerMode = .dateAndTime
-        datePicker.minuteInterval = Constant.Development.minuteInterval
+        datePicker.minuteInterval = 1
         datePicker.preferredDatePickerStyle = .wheels
         
         datePicker.addTarget(self, action: #selector(didUpdateLogEndDate), for: .valueChanged)
@@ -427,7 +425,6 @@ final class LogsAddLogVC: HoundScrollViewController,
         textField.delegate = self
         textField.applyStyle(.thinGrayBorder)
         textField.placeholder = "0" + (Locale.current.decimalSeparator ?? ".") + "0"
-        textField.shouldInsetText = true
         
         textField.textAlignment = .center
         textField.keyboardType = .decimalPad
@@ -607,12 +604,27 @@ final class LogsAddLogVC: HoundScrollViewController,
             if !logStartDatePicker.isHidden {
                 logStartDatePicker.errorMessage = Constant.Error.LogError.logStartDateMissing
             }
-            if !logStartDateLabel.isHidden || !logStartDatePicker.isHidden {
-                HapticsManager.notification(.error)
-            }
+            HapticsManager.notification(.error)
             return
         }
         
+        if let selectedLogEndDate = selectedLogEndDate, selectedLogEndDate < selectedLogStartDate {
+            if !logStartDateLabel.isHidden {
+                logStartDateLabel.errorMessage = Constant.Error.LogError.logStartTooLate
+            }
+            if !logStartDatePicker.isHidden {
+                logStartDatePicker.errorMessage = Constant.Error.LogError.logStartTooLate
+            }
+            if !logEndDateLabel.isHidden {
+                logEndDateLabel.errorMessage = Constant.Error.LogError.logEndTooEarly
+            }
+            if !logEndDatePicker.isHidden {
+                logEndDatePicker.errorMessage = Constant.Error.LogError.logEndTooEarly
+            }
+            HapticsManager.notification(.error)
+            return
+        }
+           
         // Check to see if we are updating or adding a log
         guard let dogUUIDToUpdate = dogUUIDToUpdate, let logToUpdate = logToUpdate else {
             willAddLog(selectedLogAction: selectedLogAction, selectedLogStartDate: selectedLogStartDate)
@@ -772,13 +784,18 @@ final class LogsAddLogVC: HoundScrollViewController,
     private var availableLogStartDateOptions: [TimeAgoQuickSelect] = []
     private var selectedLogStartDate: Date? {
         didSet {
+            // If start date is after end date, update end date and clear errors
+            if let start = selectedLogStartDate, let end = selectedLogEndDate, start > end {
+                selectedLogEndDate = start
+                updateLogStartEndDateErrors()
+            }
+            
             guard let start = selectedLogStartDate else {
                 logStartDateLabel.text = nil
                 return
             }
-            logStartDateLabel.errorMessage = nil
-            logStartDatePicker.errorMessage = nil
-            
+            updateLogStartEndDateErrors()
+           
             let format: String
             if Calendar.current.isDateInToday(start) {
                 // If the start date is today, show only time
@@ -791,6 +808,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                 format = (yearOfStart == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"
             }
             logStartDateLabel.text = start.houndFormatted(.template(format))
+            logStartDatePicker.date = start
         }
     }
     private var isShowingLogStartDatePicker = false {
@@ -800,7 +818,6 @@ final class LogsAddLogVC: HoundScrollViewController,
                 dropDownLogEndDate?.removeFromSuperview()
                 dropDownLogEndDate = nil
                 
-                logStartDatePicker.maximumDate = selectedLogEndDate
                 logStartDatePicker.date = selectedLogStartDate
                 ?? Date.roundDate(
                     targetDate: Date(),
@@ -820,10 +837,16 @@ final class LogsAddLogVC: HoundScrollViewController,
     private var availableLogEndDateOptions: [AfterTimeQuickSelect] = []
     private var selectedLogEndDate: Date? {
         didSet {
+            // Ensure end date is not before start date
+            if let end = selectedLogEndDate, let start = selectedLogStartDate, end < start {
+                selectedLogStartDate = end
+                updateLogStartEndDateErrors()
+            }
             guard let end = selectedLogEndDate else {
                 logEndDateLabel.text = nil
                 return
             }
+            updateLogStartEndDateErrors()
             
             let format: String
             if Calendar.current.isDateInToday(end) {
@@ -837,6 +860,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                 format = (yearOfEnd == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"
             }
             logEndDateLabel.text = end.houndFormatted(.template(format))
+            logEndDatePicker.date = end
         }
     }
     private var isShowingLogEndDatePicker = false {
@@ -846,7 +870,6 @@ final class LogsAddLogVC: HoundScrollViewController,
                 dropDownLogStartDate?.removeFromSuperview()
                 dropDownLogStartDate = nil
                 
-                logEndDatePicker.minimumDate = selectedLogStartDate
                 logEndDatePicker.date = selectedLogEndDate
                 ?? Date.roundDate(
                     targetDate: Date(),
@@ -967,8 +990,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                 return nil
             }
             return LogUnitTypeConverter.convert(forLogUnitType: unitType, forNumberOfLogUnits: numberOfUnits,
-                                                toTargetSystem: UserConfiguration.measurementSystem
-            )
+                                                toTargetSystem: UserConfiguration.measurementSystem)
         }()
         
         selectedLogUnitType = convertedLogUnits?.0
@@ -1014,15 +1036,15 @@ final class LogsAddLogVC: HoundScrollViewController,
     // MARK: - Functions
     
     private func updateDynamicUIElements() {
-        let familyMewmberIsHidden = dogUUIDToUpdate == nil || logToUpdate == nil
-        if familyMemberStack.isHidden != familyMewmberIsHidden {
-            familyMemberStack.isHidden = familyMewmberIsHidden
+        let familyMemberIsHidden = dogUUIDToUpdate == nil || logToUpdate == nil
+        if familyMemberStack.isHidden != familyMemberIsHidden {
+            familyMemberStack.isHidden = familyMemberIsHidden
             remakeFamilyMemberConstraints()
         }
         
-        let logCustomActionNameIsHidden = selectedLogAction == nil || !(selectedLogAction?.allowsCustom ?? false)
-        if logCustomActionNameStack.isHidden != logCustomActionNameIsHidden {
-            logCustomActionNameStack.isHidden = logCustomActionNameIsHidden
+        let customActionNameIsHidden = selectedLogAction == nil || !(selectedLogAction?.allowsCustom ?? false)
+        if logCustomActionNameStack.isHidden != customActionNameIsHidden {
+            logCustomActionNameStack.isHidden = customActionNameIsHidden
             remakeCustomActionNameConstraints()
         }
         
@@ -1055,6 +1077,40 @@ final class LogsAddLogVC: HoundScrollViewController,
         UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
+        }
+    }
+    
+    private func updateLogStartEndDateErrors() {
+        if selectedLogStartDate != nil && (logStartDateLabel.errorMessage == Constant.Error.LogError.logStartDateMissing || logStartDatePicker.errorMessage == Constant.Error.LogError.logStartDateMissing) {
+            logStartDateLabel.errorMessage = nil
+            logStartDatePicker.errorMessage = nil
+        }
+        
+        guard let end = selectedLogEndDate, let start = selectedLogStartDate else {
+            // if 1 or both missing, then impossible to be conflicting
+            if logStartDateLabel.errorMessage == Constant.Error.LogError.logStartTooLate || logStartDatePicker.errorMessage == Constant.Error.LogError.logStartTooLate {
+                logStartDateLabel.errorMessage = nil
+                logStartDatePicker.errorMessage = nil
+            }
+            if logEndDateLabel.errorMessage == Constant.Error.LogError.logEndTooEarly || logEndDatePicker.errorMessage == Constant.Error.LogError.logEndTooEarly {
+                logEndDateLabel.errorMessage = nil
+                logEndDatePicker.errorMessage = nil
+            }
+            return
+        }
+        
+        // only clear errors if fixed
+        guard start <= end else {
+            return
+        }
+        
+        if logStartDateLabel.errorMessage == Constant.Error.LogError.logStartTooLate || logStartDatePicker.errorMessage == Constant.Error.LogError.logStartTooLate {
+            logStartDateLabel.errorMessage = nil
+            logStartDatePicker.errorMessage = nil
+        }
+        if logEndDateLabel.errorMessage == Constant.Error.LogError.logEndTooEarly || logEndDatePicker.errorMessage == Constant.Error.LogError.logEndTooEarly {
+            logEndDateLabel.errorMessage = nil
+            logEndDatePicker.errorMessage = nil
         }
     }
     
@@ -1376,6 +1432,8 @@ final class LogsAddLogVC: HoundScrollViewController,
             }
             
             dropDownLogUnit?.hideDropDown(animated: true)
+            
+            updateDynamicUIElements()
         }
         else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logStartDate.rawValue,
                 let cell = dropDownLogStartDate?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
@@ -1399,13 +1457,12 @@ final class LogsAddLogVC: HoundScrollViewController,
             
             cell.setCustomSelectedTableViewCell(forSelected: true)
             
-            let timeIntervalSelected = availableLogEndDateOptions[indexPath.row].valueInSeconds()
-            if let interval = timeIntervalSelected {
-                let referenceDate = selectedLogStartDate ?? Date()
-                selectedLogEndDate = referenceDate.addingTimeInterval(interval)
+            let quickSelectOption = availableLogEndDateOptions[indexPath.row]
+            if quickSelectOption == .custom {
+                isShowingLogEndDatePicker = true
             }
             else {
-                isShowingLogEndDatePicker = true
+                selectedLogEndDate = quickSelectOption.time(startingPoint: selectedLogStartDate ?? Date())
             }
             
             dropDownLogEndDate?.hideDropDown(animated: true)
@@ -1686,12 +1743,12 @@ final class LogsAddLogVC: HoundScrollViewController,
             make.trailing.equalTo(containerView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
         
+        remakeFamilyMemberConstraints()
+        
         parentDogLabel.snp.makeConstraints { make in
             make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
-        
-        remakeFamilyMemberConstraints()
         
         logActionLabel.snp.makeConstraints { make in
             make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)

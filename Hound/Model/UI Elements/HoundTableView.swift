@@ -163,6 +163,7 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
         self.separatorStyle = .none
         self.translatesAutoresizingMaskIntoConstraints = false
         self.sectionHeaderTopPadding = 0
+        self.backgroundColor = .systemBackground
         
         HoundSizeDebugView.install(on: self)
         updateCornerRounding()

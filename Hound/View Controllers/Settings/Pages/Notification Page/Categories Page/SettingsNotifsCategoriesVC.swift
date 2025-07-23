@@ -6,6 +6,7 @@ final class SettingsNotifsCategoriesVC: HoundViewController, UITableViewDelegate
 
     private lazy var tableView = {
         let tableView = HoundTableView(style: .grouped)
+        tableView.backgroundColor = .systemBackground
         tableView.delegate = self
         tableView.dataSource = self
         
