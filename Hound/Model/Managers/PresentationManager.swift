@@ -165,24 +165,6 @@ enum PresentationManager {
         banner.contentMode = .scaleAspectFit
         banner.onTap = onTap
         
-        // Select a haptic feedback that corresponds to the style. A more important style requires a heavier haptic
-        banner.haptic = !UserConfiguration.isHapticsEnabled
-        ? .none
-        : {
-            switch style {
-            case .success:
-                return .light
-            case .info:
-                return .medium
-            case .warning:
-                return .medium
-            case .danger:
-                return .heavy
-            default:
-                return .light
-            }
-        }()
-        
         // Select a banner duration that corresponds to the style. A more important style requires a longer duration
         banner.duration = {
             // This is the duration for a title-only banner
@@ -232,21 +214,6 @@ enum PresentationManager {
             }
         }()
         
-        banner.haptic = {
-            switch style {
-            case .success:
-                return .medium
-            case .info:
-                return .light
-            case .warning:
-                return .medium
-            case .danger:
-                return .heavy
-            default:
-                return .medium
-            }
-        }()
-        
         guard let globalPresenter = PresentationManager.globalPresenterStack.last else {
             HoundLogger.general.error("PresentationManager.enqueueBanner: Unable to present banner, globalPresenterStack is empty")
             return
@@ -282,6 +249,24 @@ enum PresentationManager {
                 return 20.0 // Default fallback
             }
         }()
+        
+        banner.haptic = !UserConfiguration.isHapticsEnabled
+        ? .none
+        : {
+            switch style {
+            case .success:
+                return .light
+            case .info:
+                return .medium
+            case .warning:
+                return .medium
+            case .danger:
+                return .heavy
+            default:
+                return .light
+            }
+        }()
+        
         
         banner.show(
             // using default queuePosition: ,

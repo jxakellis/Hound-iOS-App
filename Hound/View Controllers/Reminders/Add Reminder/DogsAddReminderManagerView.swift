@@ -133,6 +133,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         let label = HoundLabel(huggingPriority: 295, compressionResistancePriority: 295)
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
+        label.placeholder = "Select family members... (optional)"
         label.shouldInsetText = true
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
@@ -408,7 +409,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         if let reminderToUpdate = reminderToUpdate,
            let index = GlobalTypes.shared.reminderActionTypes.firstIndex(of: reminderToUpdate.reminderActionType) {
             selectedDropDownReminderActionIndexPath = IndexPath(row: index, section: 0)
-            reminderActionLabel.text = reminderToUpdate.reminderActionType.convertToReadableName(customActionName: nil)
+            reminderActionLabel.text = reminderToUpdate.reminderActionType.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
         }
         else {
             reminderActionLabel.text = ""
@@ -499,13 +500,16 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     
     private func updateRecipientsLabel() {
         if selectedRecipientUserIds.isEmpty {
-            reminderRecipientsLabel.text = "None"
+            reminderRecipientsLabel.text = nil
         }
-        else if  selectedRecipientUserIds.count == FamilyInformation.familyMembers.count {
-            reminderRecipientsLabel.text = "All"
+        else if selectedRecipientUserIds.count == 1, let userId = selectedRecipientUserIds.first, userId == UserInformation.userId {
+            reminderRecipientsLabel.text = "Me"
         }
         else if selectedRecipientUserIds.count == 1, let userId = selectedRecipientUserIds.first {
             reminderRecipientsLabel.text = FamilyInformation.findFamilyMember(forUserId: userId)?.displayFullName ?? Constant.Visual.Text.unknownName
+        }
+        else if  selectedRecipientUserIds.count == FamilyInformation.familyMembers.count {
+            reminderRecipientsLabel.text = "Everyone"
         }
         else {
             reminderRecipientsLabel.text = "Multiple"

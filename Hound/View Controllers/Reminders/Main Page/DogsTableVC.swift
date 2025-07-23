@@ -294,7 +294,7 @@ final class DogsTableVC: HoundTableViewController {
                 return false
             }
             
-            guard reminder.reminderType != .oneTime else {
+            guard reminder.reminderIsEnabled == true && reminder.snoozeComponents.executionInterval == nil && reminder.reminderType != .oneTime else {
                 return false
             }
             
