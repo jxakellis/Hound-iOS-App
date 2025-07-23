@@ -165,7 +165,11 @@ final class LogActionType: NSObject, Comparable, NSCoding {
     // MARK: - Readable Conversion
     
     static func find(forLogActionTypeId: Int) -> LogActionType {
-        return GlobalTypes.shared.logActionTypes.first { $0.logActionTypeId == forLogActionTypeId } ?? GlobalTypes.shared.logActionTypes[0]
+        guard let found = GlobalTypes.shared.logActionTypes.first(where: { $0.logActionTypeId == forLogActionTypeId }) else {
+            HoundLogger.general.error("LogActionType.find: No LogActionType found for id \(forLogActionTypeId). Returning default LogActionType.")
+            return GlobalTypes.shared.logActionTypes[0]
+        }
+        return found
     }
     
     func convertToReadableName(

@@ -142,7 +142,11 @@ final class ReminderActionType: NSObject, Comparable, NSCoding {
     // MARK: - Readable Conversion
     
     static func find(forReminderActionTypeId: Int) -> ReminderActionType {
-        return GlobalTypes.shared.reminderActionTypes.first { $0.reminderActionTypeId == forReminderActionTypeId } ?? GlobalTypes.shared.reminderActionTypes[0]
+        guard let found = GlobalTypes.shared.reminderActionTypes.first(where: { $0.reminderActionTypeId == forReminderActionTypeId }) else {
+            HoundLogger.general.error("ReminderActionType.find: No ReminderActionType found for id \(forReminderActionTypeId). Returning default ReminderActionType.")
+            return GlobalTypes.shared.reminderActionTypes[0]
+        }
+        return found
     }
     
     func convertToReadableName(

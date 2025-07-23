@@ -166,7 +166,9 @@ enum PresentationManager {
         banner.onTap = onTap
         
         // Select a haptic feedback that corresponds to the style. A more important style requires a heavier haptic
-        banner.haptic = {
+        banner.haptic = !UserConfiguration.isHapticsEnabled
+        ? .none
+        : {
             switch style {
             case .success:
                 return .light
@@ -252,12 +254,12 @@ enum PresentationManager {
         
         let topEdgeInset: CGFloat = {
             let safeAreaTop = UIApplication.keyWindow?.safeAreaInsets.top ?? 0.0
-
+            
             // Dynamic Island if top inset is around 54pt (iPhone 14 Pro/15 Pro, etc.)
             let hasDynamicIsland = safeAreaTop > 50.0
             // Notch if top inset is 44pt or more (iPhone X and up)
             let hasNotch = safeAreaTop >= 44.0
-
+            
             let isPortrait: Bool = {
                 if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                     return windowScene.interfaceOrientation.isPortrait
@@ -265,7 +267,7 @@ enum PresentationManager {
                 return true
             }()
             let navBarHidden = globalPresenter.navigationController?.isNavigationBarHidden ?? true
-
+            
             if hasDynamicIsland && isPortrait && navBarHidden {
                 return 44.0
             }

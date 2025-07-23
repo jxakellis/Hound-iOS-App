@@ -21,6 +21,7 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
     
     private let descriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
+        // TODO notif settings, add text that tells the user they can disable notifcations for individual reminders
         label.text = "Recieve notifications about your family's reminders. Examples include: a reminder's alarm sounding."
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel

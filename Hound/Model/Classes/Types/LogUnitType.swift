@@ -138,7 +138,11 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
     // MARK: - Functions
     
     static func find(forLogUnitTypeId: Int) -> LogUnitType {
-        return GlobalTypes.shared.logUnitTypes.first { $0.logUnitTypeId == forLogUnitTypeId } ?? GlobalTypes.shared.logUnitTypes[0]
+        guard let found = GlobalTypes.shared.logUnitTypes.first(where: { $0.logUnitTypeId == forLogUnitTypeId }) else {
+            HoundLogger.general.error("LogUnitType.find: No LogUnitType found for id \(forLogUnitTypeId). Returning default LogUnitType.")
+            return GlobalTypes.shared.logUnitTypes[0]
+        }
+        return found
     }
     
     /// Produces a logNumberOfLogUnits that is more readable to the user. We accomplish this by rounding the double to two decimal places. Additionally, the decimal separator is varied based on locale (e.g. period in U.S.)

@@ -57,6 +57,7 @@ public enum KeyConstant: String {
 
     // client and server
     case userConfigurationInterfaceStyle
+    case userConfigurationIsHapticsEnabled
     case userConfigurationMeasurementSystem
     
     case userConfigurationSnoozeLength

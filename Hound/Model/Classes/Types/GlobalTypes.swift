@@ -77,8 +77,7 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
                 GlobalTypes.shared = nil
                 // clear dogManager and previousDogManagerSynchronization as if those try to init without global types, the app will crash
                 // client needs to fetch global types from server
-                UserDefaults.standard.set(nil, forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
-                UserDefaults.standard.set(nil, forKey: Constant.Key.dogManager.rawValue)
+                PersistenceManager.clearDogManagerStorage()
             }
         }
         catch {
@@ -86,8 +85,7 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
             GlobalTypes.shared = nil
             // clear dogManager and previousDogManagerSynchronization as if those try to init without global types, the app will crash
             // client needs to fetch global types from server
-            UserDefaults.standard.set(nil, forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
-            UserDefaults.standard.set(nil, forKey: Constant.Key.dogManager.rawValue)
+            PersistenceManager.clearDogManagerStorage()
         }
     }
     

@@ -156,11 +156,12 @@ enum PersistenceManager {
         LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController = false
         UserDefaults.standard.set(LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController, forKey: Constant.Key.localHasCompletedFamilyUpgradeIntroductionViewController.rawValue)
         
+        clearDogManagerStorage()
+    }
+    
+    static func clearDogManagerStorage() {
         LocalConfiguration.previousDogManagerSynchronization = nil
-        UserDefaults.standard.set(LocalConfiguration.previousDogManagerSynchronization, forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
-        
-        // MARK: Data
-        
+        UserDefaults.standard.removeObject(forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
         DogManager.globalDogManager = nil
         UserDefaults.standard.removeObject(forKey: Constant.Key.dogManager.rawValue)
     }

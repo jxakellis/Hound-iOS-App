@@ -149,6 +149,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
                     forReminder: reminder
                 )
             }
+            HapticsManager.notification(.success)
             self.dismiss(animated: true)
             return
         }
@@ -177,6 +178,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
                     forReminder: reminder
                 )
             }
+            HapticsManager.notification(.success)
             self.dismiss(animated: true)
         }
         
@@ -208,6 +210,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
                 forDogUUID: nil,
                 forReminder: duplicateReminder
             )
+            HapticsManager.notification(.success)
             self.dismiss(animated: true)
             return
         }
@@ -231,6 +234,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
                 forDogUUID: reminderToUpdateDogUUID,
                 forReminder: duplicateReminder
             )
+            HapticsManager.notification(.success)
             self.dismiss(animated: true)
         }
     }
@@ -243,6 +247,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
                 forDogUUID: nil,
                 forReminderUUID: reminderToUpdate.reminderUUID
             )
+            HapticsManager.notification(.warning)
             self.dismiss(animated: true)
             return
         }
@@ -275,6 +280,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
                     forDogUUID: reminderToUpdateDogUUID,
                     forReminderUUID: reminderToUpdate.reminderUUID
                 )
+                HapticsManager.notification(.warning)
                 self.dismiss(animated: true)
             }
         }

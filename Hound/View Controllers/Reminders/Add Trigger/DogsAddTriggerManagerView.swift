@@ -246,7 +246,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         }
     }
     
-    @objc private func didUpdateTriggerType(_ sender: UISegmentedControl) {
+    @objc private func didUpdateTriggerType(_ sender: HoundSegmentedControl) {
         timeDelayView.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.timeDelay.rawValue
         fixedTimeView.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.fixedTime.rawValue
     }
@@ -296,14 +296,16 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         guard trigger.setTriggerLogReactions(forTriggerLogReactions: selectedLogReactions) else {
             if showErrorIfFailed {
-                logReactionsLabel.errorMessage = Constant.Error.TriggerError.logReactionMissing().description
+                HapticsManager.notification(.error)
+                logReactionsLabel.errorMessage = Constant.Error.TriggerError.logReactionMissing
             }
             return nil
         }
         
         guard manuallyCreatedSwitch.isOn || createdByAlarmSwitch.isOn else {
             if showErrorIfFailed {
-                nestedConditionsStack.errorMessage = Constant.Error.TriggerError.conditionsInvalid().description
+                HapticsManager.notification(.error)
+                nestedConditionsStack.errorMessage = Constant.Error.TriggerError.conditionsInvalid
             }
             return nil
         }
@@ -312,7 +314,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         guard let selectedReminderResult = selectedReminderResult else {
             if showErrorIfFailed {
-                reminderResultLabel.errorMessage = Constant.Error.TriggerError.reminderResultMissing().description
+                HapticsManager.notification(.error)
+                reminderResultLabel.errorMessage = Constant.Error.TriggerError.reminderResultMissing
             }
             
             return nil
@@ -326,7 +329,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             trigger.triggerType = .timeDelay
             if !trigger.changeTriggerTimeDelay(forTimeDelay: timeDelayView.currentTimeDelay ?? Constant.Class.Trigger.defaultTriggerTimeDelay) {
                 if showErrorIfFailed {
-                    timeDelayView.errorMessage = Constant.Error.TriggerError.timeDelayInvalid().description
+                    HapticsManager.notification(.error)
+                    timeDelayView.errorMessage = Constant.Error.TriggerError.timeDelayInvalid
                 }
                 return nil
             }
@@ -338,7 +342,8 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             
             if !trigger.changeTriggerFixedTimeTypeAmount(forAmount: fixedTimeView.currentOffset) {
                 if showErrorIfFailed {
-                    fixedTimeView.errorMessage = Constant.Error.TriggerError.fixedTimeTypeAmountInvalid().description
+                    HapticsManager.notification(.error)
+                    fixedTimeView.errorMessage = Constant.Error.TriggerError.fixedTimeTypeAmountInvalid
                 }
                 return nil
             }

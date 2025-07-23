@@ -155,6 +155,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
             return
         }
         
+        HapticsManager.notification(.success)
         self.dismiss(animated: true) {
             // After we successfully submit this survey and dismiss the view, thank the user
             PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.surveyFeedbackAppExperienceTitle, forSubtitle: Constant.Visual.BannerText.surveyFeedbackAppExperienceSubtitle, forStyle: .success)

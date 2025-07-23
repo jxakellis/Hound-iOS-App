@@ -96,6 +96,14 @@ class HoundSegmentedControl: UISegmentedControl, HoundUIProtocol, HoundUIKitProt
         
         HoundSizeDebugView.install(on: self)
         
+        self.addTarget(self, action: #selector(handleValueChanged), for: .valueChanged)
+        
         setupGeneratedViews()
+    }
+    
+    @objc private func handleValueChanged() {
+        // No need to check isTracking (only user interaction triggers .valueChanged)
+        // DIFFERENT THAN HOW UISWITCH WORKS
+        HapticsManager.selectionChanged()
     }
 }

@@ -251,6 +251,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                     self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
                 }
                 
+                HapticsManager.notification(.warning)
                 self.dismiss(animated: true)
             }
             
@@ -264,7 +265,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         PresentationManager.enqueueAlert(removeDogConfirmation)
     }
     
-    @objc private func didUpdateSegment(_ sender: UISegmentedControl) {
+    @objc private func didUpdateSegment(_ sender: HoundSegmentedControl) {
         remindersView.isHidden = sender.selectedSegmentIndex != SegmentedControlSection.reminders.rawValue
         triggersView.isHidden = sender.selectedSegmentIndex != SegmentedControlSection.triggers.rawValue
     }
@@ -273,7 +274,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     @objc private func didTouchUpInsideSaveDog(_ sender: Any) {
         let dog = dogToUpdate ?? Dog()
         guard dog.changeDogName(forDogName: dogNameTextField.text) else {
-            dogNameTextField.errorMessage = Constant.Error.DogError.dogNameMissing().description
+            HapticsManager.notification(.error)
+            dogNameTextField.errorMessage = Constant.Error.DogError.dogNameMissing
             return
         }
         
@@ -363,6 +365,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                     if let dogManager = self.dogManager {
                         self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
                     }
+                    HapticsManager.notification(.success)
                     self.dismiss(animated: true)
                     return
                 }
@@ -374,6 +377,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                     if let dogManager = self.dogManager {
                         self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
                     }
+                    HapticsManager.notification(.success)
                     self.dismiss(animated: true)
                 } failedTaskCompletionHandler: {
                     self.saveDogButton.isLoading = false
@@ -434,6 +438,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         } completedAllTasksCompletionHandler: {
             // when everything completes, close the page
             self.saveDogButton.isLoading = false
+            HapticsManager.notification(.success)
             self.dismiss(animated: true)
         } failedTaskCompletionHandler: {
             // if a problem is encountered, then just stop the indicator

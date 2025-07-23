@@ -60,6 +60,16 @@ final class HoundSwitch: UISwitch, HoundUIProtocol {
         self.onTintColor = UIColor.systemBlue
         
         HoundSizeDebugView.install(on: self)
+        
+        self.addTarget(self, action: #selector(handleValueChanged), for: .valueChanged)
+    }
+    
+    @objc private func handleValueChanged() {
+        // UISwitch fires .valueChanged for BOTH user interaction and programmatic changes (e.g., mySwitch.setOn(true, animated: true) or mySwitch.isOn = true).
+        // DIFFERENT THAN HOW UISEGMENTEDCONTROL WORKS
+        if self.isTracking {
+            HapticsManager.selectionChanged()
+        }
     }
 
 }

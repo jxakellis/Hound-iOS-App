@@ -635,76 +635,25 @@ public enum ErrorConstant {
     }
 
     enum DogError {
-        static func dogNameMissing() -> HoundError {
-            HoundError(
-                forName: "DogError.dogNameMissing",
-                forDescription: "Choose a name for your dog",
-                forOnTap: nil)
-        }
+        static let dogNameMissing = "Choose a name for your dog"
     }
 
     enum LogError {
-        static func parentDogMissing() -> HoundError {
-            HoundError(
-                forName: "LogError.parentDogMissing",
-                forDescription: "Choose at least one dog",
-                forOnTap: nil)
-        }
-        static func logActionMissing() -> HoundError {
-            HoundError(
-                forName: "LogError.logActionMissing",
-                forDescription: "Choose an action",
-                forOnTap: nil)
-        }
-        static func logStartDateMissing() -> HoundError {
-            HoundError(
-                forName: "LogError.logStartDateMissing",
-                forDescription: "Choose a start date",
-                forOnTap: nil)
-        }
+        static let parentDogMissing =  "Choose at least one dog"
+        static let logActionMissing = "Choose an action"
+        static let logStartDateMissing = "Choose a start date"
     }
 
     enum ReminderError {
-        static func reminderActionMissing() -> HoundError {
-            HoundError(
-                forName: "ReminderError.reminderActionMissing",
-                forDescription: "Choose an action for your reminder",
-                forOnTap: nil)
-        }
+        static let reminderActionMissing = "Choose an action for your reminder"
     }
     
     enum TriggerError {
-        static func reminderResultMissing() -> HoundError {
-                HoundError(
-                    forName: "TriggerError.reminderResultMissing",
-                    forDescription: "Choose a reminder to create",
-                    // "Choose a reminder to create when automation runs",
-                    forOnTap: nil)
-            }
-        static func logReactionMissing() -> HoundError {
-            HoundError(
-                forName: "TriggerError.logReactionMissing",
-                forDescription: "Choose at least one log type",
-                forOnTap: nil)
-        }
-        static func conditionsInvalid() -> HoundError {
-            HoundError(
-                forName: "TriggerError.conditionsInvalid",
-                forDescription: "Choose at least one condition",
-                forOnTap: nil)
-        }
-        static func timeDelayInvalid() -> HoundError {
-                HoundError(
-                    forName: "TriggerError.timeDelayInvalid",
-                    forDescription: "Choose a valid time delay",
-                    forOnTap: nil)
-            }
-        static func fixedTimeTypeAmountInvalid() -> HoundError {
-                HoundError(
-                    forName: "TriggerError.fixedTimeTypeAmountInvalid",
-                    forDescription: "Choose a valid amount of fixed time",
-                    forOnTap: nil)
-            }
+        static let reminderResultMissing = "Choose a reminder to create"
+        static let logReactionMissing = "Choose at least one log type"
+        static let conditionsInvalid = "Choose at least one condition"
+        static let timeDelayInvalid = "Choose a valid time delay"
+        static let fixedTimeTypeAmountInvalid = "Choose a valid amount of fixed time"
     }
 
     enum SignInWithAppleError {
@@ -738,12 +687,7 @@ public enum ErrorConstant {
     }
 
     enum WeeklyComponentsError {
-        static func weekdaysInvalid() -> HoundError {
-            HoundError(
-                forName: "WeeklyComponentsError.weekdaysInvalid",
-                forDescription: "Choose at least one day of week",
-                forOnTap: nil)
-        }
+        static let weekdaysInvalid = "Choose at least one day of week"
     }
 
     enum ExportError {

@@ -98,8 +98,21 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         return segmentedControl
     }()
     
+    private let hapticsHeaderLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.text = "Haptics"
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
+        return label
+    }()
+    
+    private lazy var hapticsEnabledSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 260, compressionResistancePriority: 260)
+        uiSwitch.isOn = UserConfiguration.isHapticsEnabled
+        return uiSwitch
+    }()
+    
     @objc private func didUpdateInterfaceStyle(_ sender: Any) {
-        guard let sender = sender as? UISegmentedControl else { return }
+        guard let sender = sender as? HoundSegmentedControl else { return }
         
         /// Assumes the segmented control is configured for interfaceStyle selection (0: light, 1: dark, 2: unspecified). Using the selectedSegmentIndex, queries the server to update the interfaceStyle UserConfiguration. If successful, then changes UI to new interface style and saves new UserConfiguration value. If unsuccessful, reverts the selectedSegmentIndex to the position before the change, doesn't change the UI interface style, and doesn't save the new UserConfiguration value
         
@@ -121,7 +134,7 @@ final class SettingsAppearanceVC: HoundScrollViewController {
     }
     
     @objc private func didUpdateMeasurementSystem(_ sender: Any) {
-        guard let sender = sender as? UISegmentedControl else { return }
+        guard let sender = sender as? HoundSegmentedControl else { return }
         
         /// Assumes the segmented control is configured for measurementSystem selection (0: imperial, 1: metric, 2: both).
         let beforeUpdateMeasurementSystem = UserConfiguration.measurementSystem
@@ -135,6 +148,22 @@ final class SettingsAppearanceVC: HoundScrollViewController {
                 // Revert local values to previous state due to an error
                 UserConfiguration.measurementSystem = beforeUpdateMeasurementSystem
                 sender.selectedSegmentIndex = beforeUpdateMeasurementSystem.rawValue
+                return
+            }
+        }
+    }
+    
+    @objc private func didToggleHapticsEnabled(_ sender: Any) {
+        let beforeUpdate = UserConfiguration.isHapticsEnabled
+        
+        UserConfiguration.isHapticsEnabled = hapticsEnabledSwitch.isOn
+        
+        let body: JSONRequestBody = [Constant.Key.userConfigurationIsHapticsEnabled.rawValue: .bool(UserConfiguration.isHapticsEnabled)]
+        
+        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+            guard responseStatus != .failureResponse else {
+                UserConfiguration.isHapticsEnabled = beforeUpdate
+                self.hapticsEnabledSwitch.setOn(beforeUpdate, animated: true)
                 return
             }
         }
@@ -172,9 +201,12 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         containerView.addSubview(interfaceStyleHeaderLabel)
         containerView.addSubview(measurementHeaderLabel)
         containerView.addSubview(measurementSystemSegmentedControl)
+        containerView.addSubview(hapticsHeaderLabel)
+        containerView.addSubview(hapticsEnabledSwitch)
         
         interfaceStyleSegmentedControl.addTarget(self, action: #selector(didUpdateInterfaceStyle), for: .valueChanged)
         measurementSystemSegmentedControl.addTarget(self, action: #selector(didUpdateMeasurementSystem), for: .valueChanged)
+        hapticsEnabledSwitch.addTarget(self, action: #selector(didToggleHapticsEnabled), for: .valueChanged)
     }
     
     override func setupConstraints() {
@@ -216,8 +248,21 @@ final class SettingsAppearanceVC: HoundScrollViewController {
             measurementSystemSegmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             measurementSystemSegmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             measurementSystemSegmentedControl.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
-            measurementSystemSegmentedControl.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight),
-            measurementSystemSegmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
+            measurementSystemSegmentedControl.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight)
+        ])
+        
+        // hapticsHeaderLabel
+        NSLayoutConstraint.activate([
+            hapticsHeaderLabel.topAnchor.constraint(equalTo: measurementSystemSegmentedControl.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            hapticsHeaderLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            hapticsHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset)
+        ])
+        
+        // hapticsEnabledSwitch
+        NSLayoutConstraint.activate([
+            hapticsEnabledSwitch.centerYAnchor.constraint(equalTo: hapticsHeaderLabel.centerYAnchor),
+            hapticsEnabledSwitch.leadingAnchor.constraint(equalTo: hapticsHeaderLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            hapticsEnabledSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
     }
     

@@ -16,6 +16,7 @@ final class UserConfiguration: UserDefaultPersistable {
     static func persist(toUserDefaults: UserDefaults) {
         toUserDefaults.set(UserConfiguration.interfaceStyle.rawValue, forKey: Constant.Key.userConfigurationInterfaceStyle.rawValue)
         toUserDefaults.set(UserConfiguration.measurementSystem.rawValue, forKey: Constant.Key.userConfigurationMeasurementSystem.rawValue)
+        toUserDefaults.set(UserConfiguration.isHapticsEnabled, forKey: Constant.Key.userConfigurationIsHapticsEnabled.rawValue)
         
         toUserDefaults.set(UserConfiguration.notificationSound.rawValue, forKey: Constant.Key.userConfigurationNotificationSound.rawValue)
         
@@ -40,6 +41,7 @@ final class UserConfiguration: UserDefaultPersistable {
         if let measurementSystemInt = fromUserDefaults.value(forKey: Constant.Key.userConfigurationMeasurementSystem.rawValue) as? Int {
             UserConfiguration.measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) ?? UserConfiguration.measurementSystem
         }
+        UserConfiguration.isHapticsEnabled = fromUserDefaults.value(forKey: Constant.Key.userConfigurationIsHapticsEnabled.rawValue) as? Bool ?? UserConfiguration.isHapticsEnabled
         
         UserConfiguration.snoozeLength = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSnoozeLength.rawValue) as? Double ?? UserConfiguration.snoozeLength
         
@@ -71,6 +73,9 @@ final class UserConfiguration: UserDefaultPersistable {
         if let measurementSystemInt = body[Constant.Key.userConfigurationMeasurementSystem.rawValue] as? Int, let measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) {
             self.measurementSystem = measurementSystem
         }
+        if let isHapticsEnabled = body[Constant.Key.userConfigurationIsHapticsEnabled.rawValue] as? Bool {
+                    self.isHapticsEnabled = isHapticsEnabled
+                }
         
         if let snoozeLength = body[Constant.Key.userConfigurationSnoozeLength.rawValue] as? Double {
             self.snoozeLength = snoozeLength
@@ -139,6 +144,8 @@ final class UserConfiguration: UserDefaultPersistable {
             return Locale.current.usesMetricSystem ? .metric : .imperial
         }
     }()
+    
+    static var isHapticsEnabled: Bool = true
     
     // MARK: - Alarm Timing Related
     
@@ -243,6 +250,7 @@ extension UserConfiguration {
         
         body[Constant.Key.userConfigurationInterfaceStyle.rawValue] = .int(UserConfiguration.interfaceStyle.rawValue)
         body[Constant.Key.userConfigurationMeasurementSystem.rawValue] = .int(UserConfiguration.measurementSystem.rawValue)
+        body[Constant.Key.userConfigurationIsHapticsEnabled.rawValue] = .bool(UserConfiguration.isHapticsEnabled)
         
         body[Constant.Key.userConfigurationSnoozeLength.rawValue] = .double(UserConfiguration.snoozeLength)
         

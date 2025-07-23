@@ -562,10 +562,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     
     @objc private func didTouchUpInsideBack(_ sender: Any) {
         guard didUpdateInitialValues else {
-            self.dismiss(animated: true) {
-                // Wait for the view to be dismissed, then see if we should request any sort of review from the user
-                ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
-            }
+            self.dismiss(animated: true)
             return
         }
         
@@ -579,11 +576,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             title: "Yes, I don't want to save changes",
             style: .default
         ) { _ in
-            self.dismiss(animated: true) {
-                // Wait for the view to be dismissed, then see if we should request any sort of review from the user
-                // (if we don't wait, then the view presented by ShowBonusInformationManager will be dismissed when this view dismisses)
-                ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
-            }
+            self.dismiss(animated: true)
         }
         
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -596,21 +589,26 @@ final class LogsAddLogVC: HoundScrollViewController,
     
     @objc private func didTouchUpInsideSaveLog(_ sender: Any) {
         guard selectedDogUUIDs.count >= 1 else {
-            parentDogLabel.errorMessage = Constant.Error.LogError.parentDogMissing().description
+            HapticsManager.notification(.error)
+            parentDogLabel.errorMessage = Constant.Error.LogError.parentDogMissing
             return
         }
         guard let selectedLogAction = selectedLogAction else {
             if !logActionLabel.isHidden {
-                logActionLabel.errorMessage = Constant.Error.LogError.logActionMissing().description
+                HapticsManager.notification(.error)
+                logActionLabel.errorMessage = Constant.Error.LogError.logActionMissing
             }
             return
         }
         guard let selectedLogStartDate = selectedLogStartDate else {
             if !logStartDateLabel.isHidden {
-                logStartDateLabel.errorMessage = Constant.Error.LogError.logStartDateMissing().description
+                logStartDateLabel.errorMessage = Constant.Error.LogError.logStartDateMissing
             }
             if !logStartDatePicker.isHidden {
-                logStartDatePicker.errorMessage = Constant.Error.LogError.logStartDateMissing().description
+                logStartDatePicker.errorMessage = Constant.Error.LogError.logStartDateMissing
+            }
+            if !logStartDateLabel.isHidden || !logStartDatePicker.isHidden {
+                HapticsManager.notification(.error)
             }
             return
         }
@@ -657,6 +655,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                     forDogManager: self.dogManager
                 )
                 
+                HapticsManager.notification(.warning)
                 self.dismiss(animated: true) {
                     // Wait for the view to be dismissed, then see if we should request any sort of review from the user
                     ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
@@ -1457,6 +1456,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             
             // When everything completes, close the page
             self.saveLogButton.isLoading = false
+            HapticsManager.notification(.success)
             self.dismiss(animated: true) {
                 // Request reviews or surveys after dismissal
                 ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()
@@ -1576,6 +1576,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                 forDogManager: self.dogManager
             )
             
+            HapticsManager.notification(.success)
             self.dismiss(animated: true) {
                 // Request reviews or surveys after dismissal
                 ShowBonusInformationManager.requestSurveyAppExperienceIfNeeded()

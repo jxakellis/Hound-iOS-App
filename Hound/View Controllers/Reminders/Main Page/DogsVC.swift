@@ -89,7 +89,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         guard let forDogUUID = forDogUUID, let forDog = dogManager.findDog(forDogUUID: forDogUUID) else {
             let vc = DogsAddDogVC()
             vc.setup(forDelegate: self, forDogManager: dogManager, forDogToUpdate: nil)
-            dogsDogsAddDogViewController = vc
+            dogsAddDogViewController = vc
             PresentationManager.enqueueViewController(vc)
             return
         }
@@ -111,7 +111,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                 
                 let vc = DogsAddDogVC()
                 vc.setup(forDelegate: self, forDogManager: self.dogManager, forDogToUpdate: newDog)
-                self.dogsDogsAddDogViewController = vc
+                self.dogsAddDogViewController = vc
                 PresentationManager.enqueueViewController(vc)
             }
         }
@@ -390,7 +390,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     
     private weak var delegate: DogsVCDelegate?
     
-    private(set) var dogsDogsAddDogViewController: DogsAddDogVC?
+    private(set) var dogsAddDogViewController: DogsAddDogVC?
     
     private(set) var dogsAddReminderViewController: DogsAddReminderVC?
     private(set) var dogsAddTriggerViewController: DogsAddTriggerVC?
@@ -425,9 +425,9 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         
         if (sender.localized is MainTabBarController) == true {
             // main tab bar view controller could have performed a dog manager refresh, meaning the open modification page is invalid
-            dogsDogsAddDogViewController?.dismiss(animated: false)
-            dogsAddReminderViewController?.dismiss(animated: false)
-            dogsAddTriggerViewController?.dismiss(animated: false)
+//            dogsAddDogViewController?.dismiss(animated: false)
+//            dogsAddReminderViewController?.dismiss(animated: false)
+//            dogsAddTriggerViewController?.dismiss(animated: false)
         }
         if !(sender.localized is MainTabBarController) {
             delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)

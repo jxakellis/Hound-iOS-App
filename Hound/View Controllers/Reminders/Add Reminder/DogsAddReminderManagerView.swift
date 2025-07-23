@@ -115,7 +115,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         return segmentedControl
     }()
     
-    @objc private func didUpdateReminderType(_ sender: UISegmentedControl) {
+    @objc private func didUpdateReminderType(_ sender: HoundSegmentedControl) {
         onceView.isHidden = !(sender.selectedSegmentIndex == ReminderType.oneTime.segmentedControlIndex)
         countdownView.isHidden = !(sender.selectedSegmentIndex == ReminderType.countdown.segmentedControlIndex)
         weeklyView.isHidden = !(sender.selectedSegmentIndex == ReminderType.weekly.segmentedControlIndex)
@@ -147,7 +147,8 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     func constructReminder(showErrorIfFailed: Bool) -> Reminder? {
         guard let selectedReminderAction = selectedReminderAction else {
             if showErrorIfFailed {
-                reminderActionLabel.errorMessage = Constant.Error.ReminderError.reminderActionMissing().description
+                HapticsManager.notification(.error)
+                reminderActionLabel.errorMessage = Constant.Error.ReminderError.reminderActionMissing
             }
             return nil
         }
@@ -174,7 +175,8 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         case ReminderType.weekly.segmentedControlIndex:
             guard let weekdays = weeklyView.currentWeekdays else {
                 if showErrorIfFailed {
-                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeeklyComponentsError.weekdaysInvalid().description
+                    HapticsManager.notification(.error)
+                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeeklyComponentsError.weekdaysInvalid
                 }
                 
                 return nil
@@ -184,7 +186,8 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             
             guard reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays) else {
                 if showErrorIfFailed {
-                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeeklyComponentsError.weekdaysInvalid().description
+                    HapticsManager.notification(.error)
+                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeeklyComponentsError.weekdaysInvalid
                 }
                 return nil
             }
