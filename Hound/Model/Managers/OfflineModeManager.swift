@@ -58,7 +58,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     
     // MARK: - Properties
     
-    private(set) static var shared: OfflineModeManager = OfflineModeManager()
+    static var shared: OfflineModeManager = OfflineModeManager()
     
     // MARK: Sync-able Variables
     /// If true, a updateUser request got no response. The user's local data is updated and needs to be synced with the server. This is set to true if a update request for a user request receives no response from the Hound server

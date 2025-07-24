@@ -12,12 +12,6 @@
   - Convert LogsRequest into a batch updater (like RemindersRequest).  
   - Update offline-mode manager to send log and reminder changes in batches per dog
 
-- Per-reminder notification settings
-    - Allow users to configure notification options per reminder and select which family members are notified.
-    - By default have all family members selected
-    - When a family member joins the family, add their userid as a recipient to all reminders
-    - When a family member leaves a fam, remove their userid from all reminders
-
 ---
 
 ## 🎯 Future
@@ -46,16 +40,15 @@
     
 - 24-hour clock setting
 
-- haptics enabled/disabled setting
-
 - dynamic error messages
     - if an error cannot be matched to one defined in Constant.Error / ErrorConstant, then create a custom one. This should pull all available info from the error returned by the server.
 
 - Calendar view
     - Visualize logs on a calendar grid in addition to the daily scroll.
     
-- GlobalTypes refresh
-    - if the app encounters an unknown global type, return default type (so app doesnt crash) then clear dogmanager/everything from memory. revert to server sync page and literally redownload everything
+- email service
+    - whenever a user submits feedback about the app, send me an email
+    - later we can do actual email that go to users about stuff but thats a whole thing
 
 ### Metrics & Analytics
 - **Integrate SwiftMetrics** to track:  

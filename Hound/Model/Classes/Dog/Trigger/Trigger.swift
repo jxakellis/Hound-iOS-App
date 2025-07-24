@@ -507,6 +507,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
                 forReminderType: .oneTime,
                 forReminderExecutionBasis: Date(),
                 forReminderIsTriggerResult: true,
+                // all users get this reminder
+                forReminderRecipientUserIds: Constant.Class.Reminder.defaultReminderRecipientUserIds,
                 forOneTimeComponents: OneTimeComponents(date: executionDate)
             )
         }

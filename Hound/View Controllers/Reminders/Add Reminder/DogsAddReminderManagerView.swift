@@ -74,9 +74,10 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         
         return label
     }()
-    private let reminderIsEnabledSwitch: HoundSwitch = {
+    private lazy var reminderIsEnabledSwitch: HoundSwitch = {
         let uiSwitch = HoundSwitch(huggingPriority: 300, compressionResistancePriority: 300)
         uiSwitch.isOn = Constant.Class.Reminder.defaultReminderIsEnabled
+        uiSwitch.addTarget(self, action: #selector(didToggleIsReminderEnabled), for: .valueChanged)
         return uiSwitch
     }()
     private lazy var reminderCustomActionNameTextField: HoundTextField = {
@@ -249,6 +250,12 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         return stack
     }()
     
+    @objc private func didToggleIsReminderEnabled(_ sender: HoundSwitch) {
+        reminderRecipientsLabel.isEnabled = reminderIsEnabledSwitch.isOn
+        if !reminderIsEnabledSwitch.isOn {
+            dropDownReminderRecipients?.hideDropDown(animated: true)
+        }
+    }
     @objc private func didUpdateReminderType(_ sender: HoundSegmentedControl) {
         onceView.isHidden = !(sender.selectedSegmentIndex == ReminderType.oneTime.segmentedControlIndex)
         countdownView.isHidden = !(sender.selectedSegmentIndex == ReminderType.countdown.segmentedControlIndex)
@@ -421,6 +428,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         
         // reminderIsEnabledSwitch
         reminderIsEnabledSwitch.isOn = reminderToUpdate?.reminderIsEnabled ?? reminderIsEnabledSwitch.isOn
+        reminderRecipientsLabel.isEnabled = reminderToUpdate?.reminderIsEnabled ?? reminderIsEnabledSwitch.isOn
         
         selectedRecipientUserIds = Set(reminderToUpdate?.reminderRecipientUserIds ?? FamilyInformation.familyMembers.map { $0.userId })
         updateRecipientsLabel()

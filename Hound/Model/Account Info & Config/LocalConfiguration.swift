@@ -58,15 +58,13 @@ final class LocalConfiguration: UserDefaultPersistable {
             else {
                 // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
                 HoundLogger.general.error("Failed to decode dogManager with unarchiver")
-                DogManager.globalDogManager = nil
-                LocalConfiguration.previousDogManagerSynchronization = nil
+                PersistenceManager.clearDogManagerStorage()
             }
         }
         else {
             // if nil, then decode failed or there was an issue. therefore, set the interval back to past so we can refresh from the server
             HoundLogger.general.error("Failed to construct dataDogManager or construct unarchiver for dogManager")
-            DogManager.globalDogManager = nil
-            LocalConfiguration.previousDogManagerSynchronization = nil
+            PersistenceManager.clearDogManagerStorage()
         }
         
         if let dataLocalPreviousLogCustomActionNames: Data = fromUserDefaults.data(forKey: Constant.Key.localPreviousLogCustomActionNames.rawValue), let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: dataLocalPreviousLogCustomActionNames) {

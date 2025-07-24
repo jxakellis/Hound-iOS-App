@@ -16,6 +16,8 @@ protocol DogsAddDogReminderTVCDelegate: AnyObject {
 
 final class DogsAddDogReminderTVC: HoundTableViewCell {
     
+    // TODO REMINDER add tiny 🔕🔔 bell to indicate if individual reminder notifs are on or off
+    
     // MARK: - Elements
     
     let containerView: HoundView = {

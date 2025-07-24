@@ -164,6 +164,8 @@ enum PersistenceManager {
         UserDefaults.standard.removeObject(forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
         DogManager.globalDogManager = nil
         UserDefaults.standard.removeObject(forKey: Constant.Key.dogManager.rawValue)
+        OfflineModeManager.shared = OfflineModeManager()
+        UserDefaults.standard.removeObject(forKey: Constant.Key.offlineModeManagerShared.rawValue)
     }
     
 }

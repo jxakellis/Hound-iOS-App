@@ -56,6 +56,8 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
             return
         }
         
+        HapticsManager.selectionChanged()
+        
         dropDownDataSource?.selectItemInDropDown(indexPath: indexPath, identifier: identifier)
     }
     

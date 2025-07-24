@@ -1,6 +1,8 @@
 import UIKit
 
 final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableViewDataSource, SettingsNotifsUseNotificationsTVCDelegate {
+    
+    // TODO NOTIFS for all pages where we set isEnabled to false when notifs disabled, have a banner appear if trying to change a notif setting while notifs disabled
 
     // MARK: - SettingsNotifsUseNotificationsTVCDelegate
 
