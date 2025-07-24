@@ -96,6 +96,8 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         let dropDownTableView = HoundTableView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: 0, height: 0))
         self.dropDownTableView = dropDownTableView
 
+        dropDownTableView.rowHeight = HoundDropDownTVC.height
+        dropDownTableView.estimatedRowHeight = HoundDropDownTVC.height
         dropDownTableView.register(HoundDropDownTVC.self, forCellReuseIdentifier: HoundDropDownTVC.reuseIdentifier)
 
         // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.

@@ -14,7 +14,12 @@ enum DogsAddTriggerDropDownTypes: String, HoundDropDownType {
     case reminderResult = "DropDownReminderResult"
 }
 
-final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, DogsAddTriggerTimeDelayViewDelegate, DogsAddTriggerFixedTimeViewDelegate, HoundDropDownDataSource {
+final class DogsAddTriggerManagerView: HoundView,
+                                       UIGestureRecognizerDelegate,
+                                       DogsAddTriggerTimeDelayViewDelegate,
+                                       DogsAddTriggerFixedTimeViewDelegate,
+                                       HoundDropDownDataSource,
+                                       HoundDropDownManagerDelegate {
     
     // MARK: - UIGestureRecognizerDelegate
     
@@ -45,15 +50,14 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         label.shouldInsetText = true
         label.adjustsFontSizeToFitWidth = false
         
-        let gesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(didTapLabelForDropDown(sender:))
-        )
-        gesture.name = DogsAddTriggerDropDownTypes.logReactions.rawValue
-        gesture.delegate = self
-        gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
-        label.addGestureRecognizer(gesture)
+        label.addGestureRecognizer(
+            dropDownManager.showHideDropDownGesture(
+                identifier: DogsAddTriggerDropDownTypes.logReactions,
+                delegate: self
+            )
+        )
+        dropDownManager.register(identifier: .logReactions, label: label)
         return label
     }()
     private lazy var logReactionStack: HoundStackView = {
@@ -140,20 +144,18 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         label.shouldInsetText = true
         label.adjustsFontSizeToFitWidth = false
         
-        let gesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(didTapLabelForDropDown(sender:))
-        )
-        gesture.name = DogsAddTriggerDropDownTypes.reminderResult.rawValue
-        gesture.delegate = self
-        gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
-        label.addGestureRecognizer(gesture)
+        label.addGestureRecognizer(
+            dropDownManager.showHideDropDownGesture(
+                identifier: DogsAddTriggerDropDownTypes.reminderResult,
+                delegate: self
+            )
+        )
+        dropDownManager.register(identifier: .reminderResult, label: label)
         return label
     }()
     private lazy var reminderCustomActionNameTextField: HoundTextField = {
         let textField = HoundTextField()
-        textField.font = Constant.Visual.Font.secondaryRegularLabel
         textField.delegate = self
         textField.applyStyle(.thinGrayBorder)
         textField.placeholder = "Add a custom name... (optional)"
@@ -211,7 +213,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         
         let timeDelayTap = UITapGestureRecognizer(target: self, action: #selector(didInteractWithTimeDelayView))
         timeDelayTap.delegate = self
-                timeDelayTap.cancelsTouchesInView = false
+        timeDelayTap.cancelsTouchesInView = false
         view.addGestureRecognizer(timeDelayTap)
         view.isUserInteractionEnabled = true
         
@@ -237,6 +239,12 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         stack.spacing = Constant.Constraint.Spacing.contentIntraVert
         return stack
     }()
+    
+    private lazy var dropDownManager = HoundDropDownManager<DogsAddTriggerDropDownTypes>(
+        rootView: self,
+        dataSource: self,
+        delegate: self
+    )
     
     @objc private func didToggleSwitch(_ sender: Any) {
         if sender as? HoundSwitch == manuallyCreatedSwitch || sender as? HoundSwitch == createdByAlarmSwitch {
@@ -265,12 +273,9 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     private var initialTrigger: Trigger?
     private var triggerToUpdate: Trigger?
     
-    private var dropDownLogReactions: HoundDropDown?
     private var availableLogReactions: [TriggerLogReaction] = []
     private var selectedLogReactions: [TriggerLogReaction] = []
     
-    private var dropDownReminderResult: HoundDropDown?
-    private var dropDownSelectedReminderIndexPath: IndexPath?
     private var availableReminderResults: [TriggerReminderResult] = []
     private var selectedReminderResult: TriggerReminderResult?
     
@@ -452,142 +457,67 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     // MARK: - Drop Down Handling
     
     @objc func didTapScreen(sender: UITapGestureRecognizer) {
-        guard let senderView = sender.view else { return }
-        let point = sender.location(in: senderView)
-        guard let touched = senderView.hitTest(point, with: nil) else { return }
-        
-        // If a dropDown exists, hide it unless tap is on its label or itself
-        if let dd = dropDownLogReactions, !touched.isDescendant(of: logReactionsLabel) && !touched.isDescendant(of: dd) {
-            dd.hideDropDown(animated: true)
-        }
-        if let dd = dropDownReminderResult, !touched.isDescendant(of: reminderResultLabel) && !touched.isDescendant(of: dd) {
-            dd.hideDropDown(animated: true)
-        }
-        
-        // Dismiss keyboard if tap was outside text inputs
-        dismissKeyboard()
-    }
-    
-    @objc private func didTapLabelForDropDown(sender: UITapGestureRecognizer) {
-        guard let name = sender.name,
-              let targetType = DogsAddTriggerDropDownTypes(rawValue: name) else { return }
-        
-        let targetDropDown = dropDown(forDropDownType: targetType)
-        
-        if (targetDropDown?.isDown ?? false) == false {
-            showDropDown(targetType, animated: true)
-        }
-        else {
-            targetDropDown?.hideDropDown(animated: true)
+        dropDownManager.hideDropDownIfNotTapped(sender: sender)
+        if let senderView = sender.view {
+            let point = sender.location(in: senderView)
+            if let deepestTouchedView = senderView.hitTest(point, with: nil), !deepestTouchedView.isDescendant(of: reminderCustomActionNameTextField) {
+                dismissKeyboard()
+            }
         }
     }
-    
-    /// For a given dropDownType, return the corresponding dropDown UIView
-    private func dropDown(forDropDownType type: DogsAddTriggerDropDownTypes) -> HoundDropDown? {
-        switch type {
-        case .logReactions: return dropDownLogReactions
-        case .reminderResult: return dropDownReminderResult
-        }
-    }
-    
-    /// For a given dropDownType, return the label that triggers it
-    private func labelForDropDown(forDropDownType type: DogsAddTriggerDropDownTypes) -> HoundLabel {
-        switch type {
-        case .logReactions: return logReactionsLabel
-        case .reminderResult: return reminderResultLabel
-        }
-    }
-    
     /// Determine and show the next required dropdown in the log creation flow
     private func showNextRequiredDropDown(animated: Bool) {
         if selectedLogReactions.isEmpty && selectedReminderResult == nil {
-            showDropDown(.logReactions, animated: animated)
+            willShowDropDown(DogsAddTriggerDropDownTypes.logReactions, animated: animated)
         }
         else if selectedReminderResult == nil {
-            showDropDown(.reminderResult, animated: animated)
+            willShowDropDown(DogsAddTriggerDropDownTypes.reminderResult, animated: animated)
         }
     }
     
-    /// Show or hide the dropdown for the given type
-    private func showDropDown(_ type: DogsAddTriggerDropDownTypes, animated: Bool) {
-        let label = labelForDropDown(forDropDownType: type)
-        var targetDropDown = dropDown(forDropDownType: type)
+    func willShowDropDown(_ identifier: any HoundDropDownType, animated: Bool) {
+        guard let type = identifier as? DogsAddTriggerDropDownTypes else { return }
         
-        // cannot insert dropdown inside of a stack, so need basic view
-        let rootView = self
-        let referenceFrame = label.superview?.convert(label.frame, to: rootView) ?? label.frame
-        
-        let dropDowns = [dropDownLogReactions, dropDownReminderResult]
-        // work around: ui element or error message couldve been added which is higher in the view than dropdown since dropdown last opened
-        // ensure that dropdowns are on top (and in correct order relative to other drop downs)
-        dropDowns.forEach { dropDown in
-            dropDown?.removeFromSuperview()
-        }
-        dropDowns.reversed().forEach { dropDown in
-            if let dropDown = dropDown {
-                rootView.addSubview(dropDown)
-            }
-        }
-        
-        if targetDropDown == nil {
-            targetDropDown = HoundDropDown()
-            targetDropDown?.setupDropDown(
-                forHoundDropDownIdentifier: type.rawValue,
-                forDataSource: self,
-                forViewPositionReference: referenceFrame,
-                forOffset: 2.5,
-                forRowHeight: HoundDropDown.rowHeightForHoundLabel
-            )
+        let numberOfRows: CGFloat = {
             switch type {
-            case .logReactions: dropDownLogReactions = targetDropDown
-            case .reminderResult: dropDownReminderResult = targetDropDown
+            case .logReactions: return CGFloat(availableLogReactions.count)
+            case .reminderResult: return CGFloat(availableReminderResults.count)
             }
-            if let targetDropDown = targetDropDown {
-                rootView.addSubview(targetDropDown)
-            }
-        }
+        }()
         
-        targetDropDown?.showDropDown(
-            numberOfRowsToShow: min(6.5, {
-                switch type {
-                case .logReactions:
-                    return CGFloat(availableLogReactions.count)
-                case .reminderResult:
-                    return CGFloat(availableReminderResults.count)
-                }
-            }()),
+        dropDownManager.show(
+            identifier: type,
+            numberOfRowsToShow: min(6.5, numberOfRows),
             animated: animated
         )
     }
     
     // MARK: - DropDown Data Source
     
-    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, identifier: any HoundDropDownType) {
-        guard let custom = cell as? HoundDropDownTVC else { return }
-        custom.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
+    func setupCellForDropDown(cell: HoundDropDownTVC, indexPath: IndexPath, identifier: any HoundDropDownType) {
+        guard let type = identifier as? DogsAddTriggerDropDownTypes else { return }
         
-        if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.logReactions.rawValue {
+        switch type {
+        case .logReactions:
             let item = availableLogReactions[indexPath.row]
-            custom.label.text = item.readableName(includeMatchingEmoji: true)
+            cell.label.text = item.readableName(includeMatchingEmoji: true)
             let selected = selectedLogReactions.contains(item)
-            custom.setCustomSelectedTableViewCell(forSelected: selected, animated: false)
-        }
-        else if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.reminderResult.rawValue {
+            cell.setCustomSelectedTableViewCell(forSelected: selected, animated: false)
+        case .reminderResult:
             let item = availableReminderResults[indexPath.row]
-            custom.label.text = item.readableName
+            cell.label.text = item.readableName
             let selected = selectedReminderResult?.isSame(as: item) ?? false
-            custom.setCustomSelectedTableViewCell(forSelected: selected, animated: false)
+            cell.setCustomSelectedTableViewCell(forSelected: selected, animated: false)
         }
     }
     
     func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
-        switch dropDownUIViewIdentifier {
-        case DogsAddTriggerDropDownTypes.logReactions.rawValue:
+        guard let type = identifier as? DogsAddTriggerDropDownTypes else { return 0 }
+        switch type {
+        case .logReactions:
             return availableLogReactions.count
-        case DogsAddTriggerDropDownTypes.reminderResult.rawValue:
+        case .reminderResult:
             return availableReminderResults.count
-        default:
-            return 0
         }
     }
     
@@ -597,28 +527,30 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     }
     
     func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
-        if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.logReactions.rawValue {
-            let currentCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC
-
+        guard let type = identifier as? DogsAddTriggerDropDownTypes else { return }
+        guard let dropDown = dropDownManager.dropDown(for: type) else { return }
+        guard let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
+        
+        switch type {
+        case .logReactions:
             let beforeSelectNumberOfLogReactions = selectedLogReactions.count
             let reaction = availableLogReactions[indexPath.row]
-
-            // Helper to find index of a reaction instance in selected array
+            
             let indexOfReaction = { (target: TriggerLogReaction) -> Int? in
                 return self.selectedLogReactions.firstIndex { $0 === target }
             }
-
+            
             if let index = indexOfReaction(reaction) {
                 // Deselecting reaction
-                currentCell?.setCustomSelectedTableViewCell(forSelected: false)
+                cell.setCustomSelectedTableViewCell(forSelected: false)
                 selectedLogReactions.remove(at: index)
-
+                
                 if reaction.logCustomActionName.hasText() {
                     // Deselect parent if needed
                     if let parentIndex = self.availableLogReactions.firstIndex(where: { $0.logActionTypeId == reaction.logActionTypeId && !$0.logCustomActionName.hasText() }),
                        let selectedParentIndex = indexOfReaction(self.availableLogReactions[parentIndex]) {
                         selectedLogReactions.remove(at: selectedParentIndex)
-                        if let parentCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: parentIndex, section: 0)) as? HoundDropDownTVC {
+                        if let parentCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: parentIndex, section: 0)) as? HoundDropDownTVC {
                             parentCell.setCustomSelectedTableViewCell(forSelected: false)
                         }
                     }
@@ -629,7 +561,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
                         if let selectedIdx = indexOfReaction(item) {
                             selectedLogReactions.remove(at: selectedIdx)
                         }
-                        if let childCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTVC {
+                        if let childCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTVC {
                             childCell.setCustomSelectedTableViewCell(forSelected: false)
                         }
                     }
@@ -637,67 +569,64 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             }
             else {
                 // Selecting reaction
-                currentCell?.setCustomSelectedTableViewCell(forSelected: true)
+                cell.setCustomSelectedTableViewCell(forSelected: true)
                 selectedLogReactions.append(reaction)
                 logReactionsLabel.errorMessage = nil
-
+                
                 if reaction.logCustomActionName.hasText() == false {
                     // Selecting parent selects all children
                     for (idx, item) in self.availableLogReactions.enumerated() where item.logActionTypeId == reaction.logActionTypeId && item.logCustomActionName.hasText() {
                         if indexOfReaction(item) == nil {
                             selectedLogReactions.append(item)
                         }
-                        if let childCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTVC {
+                        if let childCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTVC {
                             childCell.setCustomSelectedTableViewCell(forSelected: true)
                         }
                     }
                 }
             }
-
+            
             updateDynamicUIElements()
-
-            if beforeSelectNumberOfLogReactions == 0 {
+            
+            if beforeSelectNumberOfLogReactions == 0 || selectedLogReactions.count == availableLogReactions.count {
                 // selected their first log action
-                dropDownLogReactions?.hideDropDown(animated: true)
+                // selected every log reaction
+                dropDown.hideDropDown(animated: true)
                 showNextRequiredDropDown(animated: true)
             }
-            else if selectedLogReactions.count == availableLogReactions.count {
-                // selected every log reaction
-                dropDownLogReactions?.hideDropDown(animated: true)
-            }
-        }
-        else if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.reminderResult.rawValue {
-            let currentCell = dropDownReminderResult?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC
+        case .reminderResult:
             let beforeSelection = selectedReminderResult
             
-            guard currentCell?.isCustomSelected == false else {
-                currentCell?.setCustomSelectedTableViewCell(forSelected: false)
-                dropDownSelectedReminderIndexPath = nil
+            guard cell.isCustomSelected == false else {
+                cell.setCustomSelectedTableViewCell(forSelected: false)
                 selectedReminderResult = nil
                 updateDynamicUIElements()
                 return
             }
             
-            if let previous = dropDownSelectedReminderIndexPath,
-               let previousCell = dropDownReminderResult?.dropDownTableView?.cellForRow(at: previous) as? HoundDropDownTVC {
-                previousCell.setCustomSelectedTableViewCell(forSelected: false)
+            if let previousSelected = availableReminderResults.firstIndex(where: { reminderResult in
+                return reminderResult.reminderActionTypeId == selectedReminderResult?.reminderActionTypeId
+                && ((selectedReminderResult?.reminderCustomActionName.hasText() ?? false)
+                    ? reminderResult.reminderCustomActionName == selectedReminderResult?.reminderCustomActionName
+                    : true)
+            }) {
+                let previouslySelectedIndexPath = IndexPath(row: previousSelected, section: 0)
+                let previousSelectedCell = dropDown.dropDownTableView?.cellForRow(at: previouslySelectedIndexPath) as? HoundDropDownTVC
+                previousSelectedCell?.setCustomSelectedTableViewCell(forSelected: false)
             }
             
-            currentCell?.setCustomSelectedTableViewCell(forSelected: true)
+            cell.setCustomSelectedTableViewCell(forSelected: true)
             reminderResultLabel.errorMessage = nil
-            
-            dropDownSelectedReminderIndexPath = indexPath
             selectedReminderResult = availableReminderResults[indexPath.row]
             
             if let selectedReminderResult = selectedReminderResult, ReminderActionType.find(forReminderActionTypeId: selectedReminderResult.reminderActionTypeId).allowsCustom {
                 // If custom action is allowed, begin editing textField
                 reminderCustomActionNameTextField.text = selectedReminderResult.reminderCustomActionName
-                reminderCustomActionNameTextField.becomeFirstResponder()
             }
             
             updateDynamicUIElements()
             
-            dropDownReminderResult?.hideDropDown(animated: true)
+            dropDown.hideDropDown(animated: true)
             if beforeSelection == nil && !reminderCustomActionNameTextField.isFirstResponder {
                 // First-time selection of reminder result, so open next dropdown
                 showNextRequiredDropDown(animated: true)

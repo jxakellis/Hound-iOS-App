@@ -6,6 +6,7 @@
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
+import SnapKit
 import UIKit
 
 protocol DogsAddTriggerFixedTimeViewDelegate: AnyObject {
@@ -37,13 +38,12 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
     
     private lazy var dayOffsetLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
-        label.font = Constant.Visual.Font.secondaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select the day offset..."
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
-        dropDownManager.register(identifier: .dayOffset, label: label)
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: .dayOffset, delegate: self))
+        dropDownManager.register(identifier: .dayOffset, label: label)
         return label
     }()
     
@@ -55,6 +55,27 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         datePicker.date = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * datePicker.minuteInterval), roundingMethod: .up)
         datePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
         return datePicker
+    }()
+    
+    private let timeZoneDisclaimerLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.textAlignment = .center
+        label.textColor = UIColor.secondaryLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
+        label.text = "If your family is spread across time zones, the reminder’s time will be based off whichever device handles this automation first."
+        label.numberOfLines = 0
+        label.isHidden = FamilyInformation.familyMembers.count <= 1
+        return label
+    }()
+    
+    private lazy var disclaimerStack: HoundStackView = {
+        let stack = HoundStackView()
+        stack.addArrangedSubview(timeOfDayPicker)
+        stack.addArrangedSubview(timeZoneDisclaimerLabel)
+        stack.axis = .vertical
+        stack.distribution = .equalSpacing
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        return stack
     }()
     
     @objc private func didUpdateTimeOfDay(_ sender: Any) {
@@ -109,7 +130,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         
         var emphasizedText: String?
         if selectedDayOffset == 0 {
-            emphasizedText = ". If the time has passed, reminder rolls over to the next day"
+            emphasizedText = ""/* ". If the time has passed, reminder rolls over to the next day"*/
         }
         let precalculatedDynamicTextColor = UIColor.label
         
@@ -145,53 +166,54 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         dismissKeyboard()
     }
     
-    
     // MARK: - DropDown Data Source
     
-    func willShowDropDown(_ identifier: String, animated: Bool) {
-        guard let type = DogsAddTriggerFixedTimeDropDownTypes(rawValue: identifier) else { return }
+    func willShowDropDown(_ identifier: any HoundDropDownType, animated: Bool) {
+        guard let type = identifier as? DogsAddTriggerFixedTimeDropDownTypes else { return }
+        
         let numberOfRows: CGFloat = {
             switch type {
             case .dayOffset: return CGFloat(availableDayOffsets.count)
             }
         }()
+        
         dropDownManager.show(identifier: type, numberOfRowsToShow: min(6.5, numberOfRows), animated: animated)
     }
     
-    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, identifier: any HoundDropDownType) {
-        guard let identifier = DogsAddTriggerFixedTimeDropDownTypes(rawValue: identifier.rawValue) else { return }
-        guard let cell = cell as? HoundDropDownTVC else { return }
+    func setupCellForDropDown(cell: HoundDropDownTVC, indexPath: IndexPath, identifier: any HoundDropDownType) {
+        guard let type = identifier as? DogsAddTriggerFixedTimeDropDownTypes else { return }
         cell.label.text = textForOffset(availableDayOffsets[indexPath.row])
-
-        if identifier == .dayOffset {
-            if indexPath.row == selectedDayOffset {
+        
+        switch type {
+        case .dayOffset:
+            if availableDayOffsets[indexPath.row] == selectedDayOffset {
                 cell.setCustomSelectedTableViewCell(forSelected: true)
-            } else {
+            }
+            else {
                 cell.setCustomSelectedTableViewCell(forSelected: false)
             }
         }
-
     }
-
+    
     func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
-        guard let identifier = DogsAddTriggerFixedTimeDropDownTypes(rawValue: identifier.rawValue) else { return 0 }
-        switch identifier {
+        guard let type = identifier as? DogsAddTriggerFixedTimeDropDownTypes else { return 0 }
+        switch type {
         case .dayOffset:
             return availableDayOffsets.count
         }
     }
-
+    
     func numberOfSections(identifier: any HoundDropDownType) -> Int {
         // Each dropdown has a single section
         return 1
     }
-
+    
     func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
-        guard let identifier = DogsAddTriggerFixedTimeDropDownTypes(rawValue: identifier.rawValue) else { return }
-        guard let dropDown = dropDownManager.dropDown(for: identifier), let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else {
+        guard let type = identifier as? DogsAddTriggerFixedTimeDropDownTypes else { return }
+        guard let dropDown = dropDownManager.dropDown(for: type), let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else {
             return
         }
-        switch identifier {
+        switch type {
         case .dayOffset:
             let previousIndexPath = IndexPath(row: selectedDayOffset, section: 0)
             if previousIndexPath != indexPath {
@@ -200,13 +222,12 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
             }
             
             cell.setCustomSelectedTableViewCell(forSelected: true)
-            let dayOffset = indexPath.row
-            selectedDayOffset = dayOffset
-            dayOffsetLabel.text = textForOffset(availableDayOffsets[dayOffset])
-
-            dropDownManager.hide(identifier: .dayOffset, animated: true)
+            selectedDayOffset = availableDayOffsets[indexPath.row]
+            dayOffsetLabel.text = textForOffset(availableDayOffsets[indexPath.row])
+            
+            dropDown.hideDropDown(animated: true)
             delegate?.willDismissKeyboard()
-
+            
             updateDescriptionLabel()
         }
     }
@@ -217,43 +238,34 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         super.addSubViews()
         addSubview(descriptionLabel)
         addSubview(dayOffsetLabel)
-        addSubview(timeOfDayPicker)
-        
-        DogsAddTriggerFixedTimeDropDownTypes.allCases.forEach { type in
-            switch type {
-                case .dayOffset:
-                    dropDownManager.register(identifier: type, label: dayOffsetLabel)
-            }
-        }
+        addSubview(disclaimerStack)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
-        // descriptionLabel
-        NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: topAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
-        ])
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.horizontalEdges.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
         
-        // dayOffsetLabel
-        NSLayoutConstraint.activate([
-            dayOffsetLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
-            dayOffsetLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            dayOffsetLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            dayOffsetLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: self),
-            dayOffsetLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
-        ])
+        dayOffsetLabel.snp.makeConstraints { make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.horizontalEdges.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
+        }
         
-        NSLayoutConstraint.activate([
-            timeOfDayPicker.topAnchor.constraint(equalTo: dayOffsetLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            timeOfDayPicker.bottomAnchor.constraint(equalTo: bottomAnchor),
-            timeOfDayPicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            timeOfDayPicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            timeOfDayPicker.createHeightMultiplier(Constant.Constraint.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
-            timeOfDayPicker.createMaxHeight(Constant.Constraint.Input.megaDatePickerMaxHeight)
-        ])
+        disclaimerStack.snp.makeConstraints { make in
+            make.top.equalTo(dayOffsetLabel.snp.bottom).offset(Constant.Constraint.Spacing.contentIntraVert)
+            make.bottom.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteVertInset)
+            make.horizontalEdges.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
+        
+        timeOfDayPicker.snp.makeConstraints { make in
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.megaDatePickerHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.megaDatePickerMaxHeight)
+        }
         
     }
 }

@@ -421,8 +421,8 @@ class LogsFilterVC: HoundScrollViewController,
         }
     }
     
-    func willShowDropDown(_ identifier: String, animated: Bool) {
-        guard let type = LogsFilterDropDownTypes(rawValue: identifier) else { return }
+    func willShowDropDown(_ identifier: any HoundDropDownType, animated: Bool) {
+        guard let type = identifier as? LogsFilterDropDownTypes else { return }
         
         let rows: CGFloat = {
             switch type {
@@ -443,20 +443,20 @@ class LogsFilterVC: HoundScrollViewController,
     
     func setupCellForDropDown(cell: HoundDropDownTVC, indexPath: IndexPath, identifier: any HoundDropDownType) {
         guard let filter = filter else { return }
-        guard let type = LogsFilterDropDownTypes(rawValue: identifier.rawValue) else { return }
+        guard let type = identifier as? LogsFilterDropDownTypes else { return }
         switch type {
         case .filterDogs:
             let dog = filter.availableDogs[indexPath.row]
-            customCell.setCustomSelectedTableViewCell(forSelected: filter.filteredDogsUUIDs.contains(dog.dogUUID))
-            customCell.label.text = dog.dogName
+            cell.setCustomSelectedTableViewCell(forSelected: filter.filteredDogsUUIDs.contains(dog.dogUUID))
+            cell.label.text = dog.dogName
         case .filterLogActions:
             let logActionType = filter.availableLogActions[indexPath.row]
-            customCell.setCustomSelectedTableViewCell(forSelected: filter.filteredLogActionActionTypeIds.contains(logActionType.logActionTypeId))
-            customCell.label.text = logActionType.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
+            cell.setCustomSelectedTableViewCell(forSelected: filter.filteredLogActionActionTypeIds.contains(logActionType.logActionTypeId))
+            cell.label.text = logActionType.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
         case .filterFamilyMembers:
             let familyMember = filter.availableFamilyMembers[indexPath.row]
-            customCell.setCustomSelectedTableViewCell(forSelected: filter.filteredFamilyMemberUserIds.contains(familyMember.userId))
-            customCell.label.text = familyMember.displayFullName ?? Constant.Visual.Text.unknownName
+            cell.setCustomSelectedTableViewCell(forSelected: filter.filteredFamilyMemberUserIds.contains(familyMember.userId))
+            cell.label.text = familyMember.displayFullName ?? Constant.Visual.Text.unknownName
         }
     }
     
@@ -464,7 +464,7 @@ class LogsFilterVC: HoundScrollViewController,
         guard let filter = filter else {
             return 0
         }
-        guard let type = LogsFilterDropDownTypes(rawValue: identifier.rawValue) else { return 0 }
+        guard let type = identifier as? LogsFilterDropDownTypes else { return 0 }
         switch type {
         case .filterDogs:
             return filter.availableDogs.count
@@ -476,7 +476,7 @@ class LogsFilterVC: HoundScrollViewController,
     }
     
     func numberOfSections(identifier: any HoundDropDownType) -> Int {
-        guard let type = LogsFilterDropDownTypes(rawValue: identifier.rawValue) else { return 0 }
+        guard let type = identifier as? LogsFilterDropDownTypes else { return 0 }
         switch type {
         case .filterDogs, .filterLogActions, .filterFamilyMembers:
             return 1
@@ -485,43 +485,47 @@ class LogsFilterVC: HoundScrollViewController,
     
     func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
         guard let filter = filter else { return }
-        guard let type = LogsFilterDropDownTypes(rawValue: identifier.rawValue) else { return }
+        guard let type = identifier as? LogsFilterDropDownTypes else { return }
         guard let dropDown = dropDownManager.dropDown(for: type) else { return }
-        guard let selectedCell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
+        guard let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
+        
         switch type {
         case .filterDogs:
             let dogSelected = filter.availableDogs[indexPath.row]
             let beforeSelectNumberOfDogsSelected = filter.availableDogs.count
-            if selectedCell.isCustomSelected == true {
+            if cell.isCustomSelected == true {
                 filter.remove(forFilterDogUUID: dogSelected.dogUUID)
-            } else {
+            }
+            else {
                 filter.add(forFilterDogUUID: dogSelected.dogUUID)
             }
-            selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
+            cell.setCustomSelectedTableViewCell(forSelected: !cell.isCustomSelected)
             if beforeSelectNumberOfDogsSelected == 0 || filter.filteredDogsUUIDs.count == filter.availableDogs.count {
                 dropDown.hideDropDown(animated: true)
             }
         case .filterLogActions:
             let selectedLogAction = filter.availableLogActions[indexPath.row]
             let beforeSelectNumberOfLogActionsSelected = filter.availableLogActions.count
-            if selectedCell.isCustomSelected == true {
+            if cell.isCustomSelected == true {
                 filter.remove(forLogActionTypeId: selectedLogAction.logActionTypeId)
-            } else {
+            }
+            else {
                 filter.add(forLogActionTypeId: selectedLogAction.logActionTypeId)
             }
-            selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
+            cell.setCustomSelectedTableViewCell(forSelected: !cell.isCustomSelected)
             if beforeSelectNumberOfLogActionsSelected == 0 || filter.filteredLogActionActionTypeIds.count == filter.availableLogActions.count {
                 dropDown.hideDropDown(animated: true)
             }
         case .filterFamilyMembers:
             let familyMemberSelected = filter.availableFamilyMembers[indexPath.row]
             let beforeSelectNumberOfFamilyMembersSelected = filter.availableFamilyMembers.count
-            if selectedCell.isCustomSelected == true {
+            if cell.isCustomSelected == true {
                 filter.remove(forUserId: familyMemberSelected.userId)
-            } else {
+            }
+            else {
                 filter.add(forUserId: familyMemberSelected.userId)
             }
-            selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
+            cell.setCustomSelectedTableViewCell(forSelected: !cell.isCustomSelected)
             if beforeSelectNumberOfFamilyMembersSelected == 0 || filter.filteredFamilyMemberUserIds.count == filter.availableFamilyMembers.count {
                 dropDown.hideDropDown(animated: true)
             }

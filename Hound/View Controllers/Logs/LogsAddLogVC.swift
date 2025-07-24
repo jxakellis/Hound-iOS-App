@@ -228,6 +228,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.parentDog, delegate: self))
+        dropDownManager.register(identifier: .parentDog, label: label)
         
         return label
     }()
@@ -255,6 +256,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logActionType, delegate: self))
+        dropDownManager.register(identifier: .logActionType, label: label)
         
         return label
     }()
@@ -307,6 +309,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logStartDate, delegate: self))
+        dropDownManager.register(identifier: .logStartDate, label: label)
         
         return label
     }()
@@ -352,6 +355,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logEndDate, delegate: self))
+        dropDownManager.register(identifier: .logEndDate, label: label)
         
         return label
     }()
@@ -410,6 +414,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logUnit, delegate: self))
+        dropDownManager.register(identifier: .logUnit, label: label)
         
         return label
     }()
@@ -1077,21 +1082,18 @@ final class LogsAddLogVC: HoundScrollViewController,
     /// Determine and show the next required dropdown in the log creation flow
     private func showNextRequiredDropDown(animated: Bool) {
         if selectedDogUUIDs.isEmpty {
-            willShowDropDown(LogsAddLogDropDownTypes.parentDog.rawValue, animated: animated)
+            willShowDropDown(LogsAddLogDropDownTypes.parentDog, animated: animated)
         }
         else if selectedLogAction == nil {
-            willShowDropDown(LogsAddLogDropDownTypes.logActionType.rawValue, animated: animated)
+            willShowDropDown(LogsAddLogDropDownTypes.logActionType, animated: animated)
         }
         else if selectedLogStartDate == nil && !isShowingLogStartDatePicker {
-            willShowDropDown(LogsAddLogDropDownTypes.logStartDate.rawValue, animated: animated)
+            willShowDropDown(LogsAddLogDropDownTypes.logStartDate, animated: animated)
         }
     }
     
-    func willShowDropDown(_ identifier: String, animated: Bool) {
-        guard let type = LogsAddLogDropDownTypes(rawValue: identifier) else {
-            HoundLogger.general.error("LogsAddLogVC.willShowDropDown: Unknown drop down type: \(identifier)")
-            return
-        }
+    func willShowDropDown(_ identifier: any HoundDropDownType, animated: Bool) {
+        guard let type = identifier as? LogsAddLogDropDownTypes else { return }
         // If showing start date and only "custom" and "now" are valid, show picker
         if type == .logStartDate && availableLogStartDateOptions.count <= 1 {
             isShowingLogStartDatePicker = true
@@ -1129,7 +1131,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: HoundDropDownTVC, indexPath: IndexPath, identifier: any HoundDropDownType) {
-        guard let identifier = LogsAddLogDropDownTypes(rawValue: identifier.rawValue) else {
+        guard let identifier = identifier as? LogsAddLogDropDownTypes else {
             HoundLogger.general.error("LogsAddLogVC.setupCellForDropDown: Unable to identifier \(identifier.rawValue)")
             return
         }
@@ -1137,56 +1139,56 @@ final class LogsAddLogVC: HoundScrollViewController,
         switch identifier {
         case .parentDog:
             let dog = dogManager.dogs[indexPath.row]
-            customCell.setCustomSelectedTableViewCell(
+            cell.setCustomSelectedTableViewCell(
                 forSelected: selectedDogUUIDs.contains(dog.dogUUID)
             )
-            customCell.label.text = dog.dogName
+            cell.label.text = dog.dogName
         case .logActionType:
             let option = availableLogActions[indexPath.row]
-            customCell.label.text = option.0.convertToReadableName(
+            cell.label.text = option.0.convertToReadableName(
                 customActionName: option.1,
                 includeMatchingEmoji: true
             )
             if option.1 == nil,
                let selected = selectedLogAction,
                selected.logActionTypeId == option.0.logActionTypeId {
-                customCell.setCustomSelectedTableViewCell(forSelected: true)
+                cell.setCustomSelectedTableViewCell(forSelected: true)
             }
             else {
-                customCell.setCustomSelectedTableViewCell(forSelected: false)
+                cell.setCustomSelectedTableViewCell(forSelected: false)
             }
         case .logUnit:
             guard let selectedAction = selectedLogAction else { return }
-            customCell.setCustomSelectedTableViewCell(forSelected: false)
+            cell.setCustomSelectedTableViewCell(forSelected: false)
             let unitTypes = selectedAction.associatedLogUnitTypes
             if indexPath.row < unitTypes.count {
                 let unit = unitTypes[indexPath.row]
-                customCell.label.text = unit.pluralReadableValueNoNumUnits(
+                cell.label.text = unit.pluralReadableValueNoNumUnits(
                     forLogNumberOfLogUnits: LogUnitType.convertStringToDouble(
                         forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text
                     ) ?? 0.0
                 )
                 if let selectedUnit = selectedLogUnitType, selectedUnit == unit {
-                    customCell.setCustomSelectedTableViewCell(forSelected: true)
+                    cell.setCustomSelectedTableViewCell(forSelected: true)
                 }
             }
         case .logStartDate:
-            customCell.setCustomSelectedTableViewCell(forSelected: false)
+            cell.setCustomSelectedTableViewCell(forSelected: false)
             if let option = availableLogStartDateOptions[safe: indexPath.row] {
-                customCell.label.text = option.rawValue
+                cell.label.text = option.rawValue
                 // Do not set “selected” visually, as quick select depends on current time
             }
         case .logEndDate:
-            customCell.setCustomSelectedTableViewCell(forSelected: false)
+            cell.setCustomSelectedTableViewCell(forSelected: false)
             if let option = availableLogEndDateOptions[safe: indexPath.row] {
-                customCell.label.text = option.rawValue
+                cell.label.text = option.rawValue
                 // Do not set “selected” visually, as quick select depends on current time
             }
         }
     }
     
     func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
-        guard let identifier = LogsAddLogDropDownTypes(rawValue: identifier.rawValue) else {
+        guard let identifier = identifier as? LogsAddLogDropDownTypes else {
             HoundLogger.general.error("LogsAddLogVC.numberOfRows: Unable to identifier \(identifier.rawValue)")
             return 0
         }
@@ -1212,7 +1214,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     }
     
     func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
-        guard let identifier = LogsAddLogDropDownTypes(rawValue: identifier.rawValue) else {
+        guard let identifier = identifier as? LogsAddLogDropDownTypes else {
             HoundLogger.general.error("LogsAddLogVC.selectItemInDropDown: Unable to identifier \(identifier.rawValue)")
             return
         }
@@ -1504,21 +1506,6 @@ final class LogsAddLogVC: HoundScrollViewController,
         containerView.addSubview(editPageHeaderView)
         containerView.addSubview(stackView)
         
-        LogsAddLogDropDownTypes.allCases.forEach { type in
-            switch type {
-            case .parentDog:
-                dropDownManager.register(identifier: type, label: parentDogLabel)
-            case .logActionType:
-                dropDownManager.register(identifier: type, label: logActionLabel)
-            case .logStartDate:
-                dropDownManager.register(identifier: type, label: logStartDateLabel)
-            case .logEndDate:
-                dropDownManager.register(identifier: type, label: logEndDateLabel)
-            case .logUnit:
-                dropDownManager.register(identifier: type, label: logUnitLabel)
-            }
-        }
-        
         let didTapScreenGesture = UITapGestureRecognizer(
             target: self,
             action: #selector(didTapScreen(sender:))
@@ -1600,7 +1587,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         
         stackView.snp.makeConstraints { make in
             make.top.equalTo(editPageHeaderView.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
-            make.bottom.equalTo(containerView.snp.bottom)
+            make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset * 2.0)
             make.leading.equalTo(containerView.snp.leading).offset(Constant.Constraint.Spacing.absoluteHoriInset)
             make.trailing.equalTo(containerView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }

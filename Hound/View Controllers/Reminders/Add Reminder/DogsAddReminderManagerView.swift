@@ -14,7 +14,15 @@ enum DogsAddReminderDropDownTypes: String, HoundDropDownType {
     case reminderRecipients = "DropDownReminderRecipients"
 }
 
-final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestureRecognizerDelegate, DogsAddReminderCountdownViewDelegate, DogsAddReminderWeeklyViewDelegate, HoundDropDownDataSource, DogsAddReminderMonthlyViewDelegate, DogsAddReminderOneTimeViewDelegate {
+final class DogsAddReminderManagerView: HoundView,
+                                        UITextFieldDelegate,
+                                        UIGestureRecognizerDelegate,
+                                        DogsAddReminderCountdownViewDelegate,
+                                        DogsAddReminderWeeklyViewDelegate,
+                                        HoundDropDownDataSource,
+                                        HoundDropDownManagerDelegate,
+                                        DogsAddReminderMonthlyViewDelegate,
+                                        DogsAddReminderOneTimeViewDelegate {
     
     // MARK: - DogsAddReminderCountdownVCDelegate and DogsAddReminderWeeklyViewDelegate
     
@@ -64,13 +72,14 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an action..."
         label.shouldInsetText = true
-        
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
-        gesture.name = DogsAddReminderDropDownTypes.reminderAction.rawValue
-        gesture.delegate = self
-        gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
-        label.addGestureRecognizer(gesture)
+        label.addGestureRecognizer(
+            dropDownManager.showHideDropDownGesture(
+                identifier: DogsAddReminderDropDownTypes.reminderAction,
+                delegate: self
+            )
+        )
+        dropDownManager.register(identifier: .reminderAction, label: label)
         
         return label
     }()
@@ -136,81 +145,28 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select family members... (optional)"
         label.shouldInsetText = true
-        
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLabelForDropDown(sender:)))
-        gesture.name = DogsAddReminderDropDownTypes.reminderRecipients.rawValue
-        gesture.delegate = self
-        gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
-        label.addGestureRecognizer(gesture)
+        label.addGestureRecognizer(
+            dropDownManager.showHideDropDownGesture(
+                identifier: DogsAddReminderDropDownTypes.reminderRecipients,
+                delegate: self
+            )
+        )
+        dropDownManager.register(identifier: .reminderRecipients, label: label)
         return label
     }()
-    private let reminderNotificationsDisabledDisclaimerLabel: HoundLabel = {
+    private let notificationsDisabledLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.secondaryColorDescLabel
-        label.textColor = UIColor.secondaryLabel
+        // label.textColor set in func
         label.numberOfLines = 0
-        
-        let precalculatedDynamicTextColor = label.textColor
-        label.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
-            if !UserConfiguration.isNotificationEnabled {
-                let message = NSMutableAttributedString(
-                    string: "Your notifications are ",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
-                )
-                message.append(NSAttributedString(
-                    string: "disabled",
-                    attributes: [
-                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
-                ))
-                message.append(NSAttributedString(
-                    string: ", so you won't receive any push notifications (you can change this in Hound's settings).",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
-                ))
-                return message
-            }
-            else if !UserConfiguration.isReminderNotificationEnabled {
-                let message = NSMutableAttributedString(
-                    string: "Your reminder notifications are ",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
-                )
-                message.append(NSAttributedString(
-                    string: "disabled",
-                    attributes: [
-                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
-                ))
-                message.append(NSAttributedString(
-                    string: ", so you won’t get push notifications for reminders (you can change this in Hound's settings).",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
-                ))
-                return message
-            }
-            return NSAttributedString()
-        }
         
         return label
     }()
     private lazy var nestedRecipientsLabelStack: HoundStackView = {
         let stack = HoundStackView()
         stack.addArrangedSubview(reminderRecipientsLabel)
-        stack.addArrangedSubview(reminderNotificationsDisabledDisclaimerLabel)
+        stack.addArrangedSubview(notificationsDisabledLabel)
         stack.axis = .vertical
         stack.spacing = Constant.Constraint.Spacing.contentIntraVert
         return stack
@@ -250,10 +206,18 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         return stack
     }()
     
+    private lazy var dropDownManager = HoundDropDownManager<DogsAddReminderDropDownTypes>(
+        rootView: self,
+        dataSource: self,
+        delegate: self
+    )
+    
     @objc private func didToggleIsReminderEnabled(_ sender: HoundSwitch) {
-        reminderRecipientsLabel.isEnabled = reminderIsEnabledSwitch.isOn
+        updateRecipientsLabel()
+        updateDisclaimerLabel()
         if !reminderIsEnabledSwitch.isOn {
-            dropDownReminderRecipients?.hideDropDown(animated: true)
+            let dropDown = dropDownManager.dropDown(for: .reminderRecipients)
+            dropDown?.hideDropDown(animated: true)
         }
     }
     @objc private func didUpdateReminderType(_ sender: HoundSegmentedControl) {
@@ -273,6 +237,45 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             reminderActionLabel.text = selectedReminderAction?.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
         }
     }
+    var selectedReminderActionIndexPath: IndexPath? {
+        guard let selectedReminderAction = selectedReminderAction else { return nil }
+        let mapped = availableReminderActions.enumerated().map { index, element -> (ReminderActionType, String?, Int) in // swiftlint:disable:this large_tuple
+            return (element.0, element.1, index)
+        }
+        
+        let matchingTypes = mapped.filter { type, _, _ in
+            return type.reminderActionTypeId == selectedReminderAction.reminderActionTypeId
+        }
+        
+        guard let first = matchingTypes.first else {
+            return nil
+        }
+        
+        // if we only find 1 match for a given reminder type, then there are no PreviousReminderCustomNames or in the mix, so the one availableReminderActions of type selectedReminderAction is our selected guy
+        guard matchingTypes.count > 1 && (reminderCustomActionNameTextField.text?.hasText() ?? false) else {
+            // first.2 is just the index of selectedReminderAction in availableReminderActions
+            return IndexPath(row: first.2, section: 0)
+        }
+        
+        // we have multiple of the same reminder type, so try to match based upon custom name
+        let typesWithCustomNames = matchingTypes.filter { _, customName, _ in
+            return customName?.hasText() ?? false
+        }
+        let typesWithoutCustomNames = matchingTypes.filter { _, customName, _ in
+            return (customName?.hasText() ?? false) == false
+        }
+        
+        for typesWithCustomName in typesWithCustomNames where reminderCustomActionNameTextField.text == typesWithCustomName.1 {
+            // matched reminder type and custom name
+            return IndexPath(row: typesWithCustomName.2, section: 0)
+        }
+        
+        // no match, revert to just custom name only
+        if let noName = typesWithoutCustomNames.first {
+            return IndexPath(row: noName.2, section: 0)
+        }
+        return nil
+    }
     /// Options for the reminder action drop down consisting of base types and their previous custom names
     private var availableReminderActions: [(ReminderActionType, String?)] {
         var options: [(ReminderActionType, String?)] = []
@@ -289,9 +292,6 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         FamilyInformation.familyMembers
     }
     
-    private var dropDownReminderAction: HoundDropDown?
-    private var selectedDropDownReminderActionIndexPath: IndexPath?
-    private var dropDownReminderRecipients: HoundDropDown?
     private var selectedRecipientUserIds: Set<String> = []
     
     func constructReminder(showErrorIfFailed: Bool) -> Reminder? {
@@ -417,10 +417,6 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         initialReminder = forReminderToUpdate?.copy() as? Reminder
         
         // reminderActionLabel
-        if let reminderToUpdate = reminderToUpdate,
-           let index = GlobalTypes.shared.reminderActionTypes.firstIndex(of: reminderToUpdate.reminderActionType) {
-            selectedDropDownReminderActionIndexPath = IndexPath(row: index, section: 0)
-        }
         selectedReminderAction = reminderToUpdate?.reminderActionType
         
         // reminderCustomActionNameTextField
@@ -428,10 +424,9 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         
         // reminderIsEnabledSwitch
         reminderIsEnabledSwitch.isOn = reminderToUpdate?.reminderIsEnabled ?? reminderIsEnabledSwitch.isOn
-        reminderRecipientsLabel.isEnabled = reminderToUpdate?.reminderIsEnabled ?? reminderIsEnabledSwitch.isOn
-        
         selectedRecipientUserIds = Set(reminderToUpdate?.reminderRecipientUserIds ?? FamilyInformation.familyMembers.map { $0.userId })
         updateRecipientsLabel()
+        updateDisclaimerLabel()
         
         // segmentedControl
         if let reminderToUpdate = reminderToUpdate {
@@ -492,7 +487,6 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         }
         
         updateRecipientsLabel()
-        
         updateDisclaimerLabel()
         
         UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
@@ -507,6 +501,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     }
     
     private func updateRecipientsLabel() {
+        reminderRecipientsLabel.isEnabled = reminderIsEnabledSwitch.isOn
         if selectedRecipientUserIds.isEmpty {
             reminderRecipientsLabel.text = nil
         }
@@ -524,202 +519,212 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         }
     }
     private func updateDisclaimerLabel() {
-        reminderNotificationsDisabledDisclaimerLabel.isHidden = !selectedRecipientUserIds.contains(UserInformation.userId ?? Constant.Visual.Text.unknownUserId) || (UserConfiguration.isNotificationEnabled && UserConfiguration.isReminderNotificationEnabled)
+        let reminderEnabled = reminderIsEnabledSwitch.isOn
+        let userIsRecipient = selectedRecipientUserIds.contains(UserInformation.userId ?? Constant.Visual.Text.unknownUserId)
+        
+        notificationsDisabledLabel.isHidden = selectedRecipientUserIds.isEmpty || (reminderEnabled &&
+            (!userIsRecipient || (UserConfiguration.isNotificationEnabled && UserConfiguration.isReminderNotificationEnabled)))
+        
+        let precalculatedDynamicTextColor = UIColor.secondaryLabel
+        
+        notificationsDisabledLabel.attributedTextClosure = {
+            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+            let message = NSMutableAttributedString()
+            if !reminderEnabled {
+                message.append(NSAttributedString(
+                    string: "Your reminder is currently ",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                message.append(NSAttributedString(
+                    string: "off",
+                    attributes: [
+                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                message.append(NSAttributedString(
+                    string: ", so no alarms will sound.",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+            }
+            else if !UserConfiguration.isNotificationEnabled {
+                message.append(NSAttributedString(
+                    string: "Your notifications are ",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                message.append(NSAttributedString(
+                    string: "disabled",
+                    attributes: [
+                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                message.append(NSAttributedString(
+                    string: ", so you won't receive any push notifications (you can change this in Hound's settings).",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+            }
+            else if !UserConfiguration.isReminderNotificationEnabled {
+                message.append(NSAttributedString(
+                    string: "Your reminder notifications are ",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                message.append(NSAttributedString(
+                    string: "disabled",
+                    attributes: [
+                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                message.append(NSAttributedString(
+                    string: ", so you won’t get push notifications for reminders (you can change this in Hound's settings).",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+            }
+            return message
+        }
     }
     
     // MARK: - Drop Down Handling
     
     @objc private func didTapScreen(sender: UITapGestureRecognizer) {
-        guard let senderView = sender.view else { return }
-        let point = sender.location(in: senderView)
-        guard let touched = senderView.hitTest(point, with: nil) else { return }
-        
-        // If a dropDown exists, hide it unless tap is on its label or itself
-        if let dd = dropDownReminderAction, !touched.isDescendant(of: reminderActionLabel) && !touched.isDescendant(of: dd) {
-            dd.hideDropDown(animated: true)
-        }
-        if let dd = dropDownReminderRecipients, !touched.isDescendant(of: reminderRecipientsLabel) && !touched.isDescendant(of: dd) {
-            dd.hideDropDown(animated: true)
-        }
-        
-        // Dismiss keyboard if tap was outside text inputs
-        dismissKeyboard()
-    }
-    
-    @objc private func didTapLabelForDropDown(sender: UITapGestureRecognizer) {
-        guard let name = sender.name,
-              let targetType = DogsAddReminderDropDownTypes(rawValue: name) else { return }
-        
-        let targetDropDown = dropDown(forDropDownType: targetType)
-        
-        if (targetDropDown?.isDown ?? false) == false {
-            showDropDown(targetType, animated: true)
-        }
-        else {
-            targetDropDown?.hideDropDown(animated: true)
-        }
-    }
-    
-    /// For a given dropDownType, return the corresponding dropDown UIView
-    private func dropDown(forDropDownType type: DogsAddReminderDropDownTypes) -> HoundDropDown? {
-        switch type {
-        case .reminderAction: return dropDownReminderAction
-        case .reminderRecipients: return dropDownReminderRecipients
-        }
-    }
-    
-    /// For a given dropDownType, return the label that triggers it
-    private func labelForDropDown(forDropDownType type: DogsAddReminderDropDownTypes) -> HoundLabel {
-        switch type {
-        case .reminderAction: return reminderActionLabel
-        case .reminderRecipients: return reminderRecipientsLabel
+        dropDownManager.hideDropDownIfNotTapped(sender: sender)
+        if let senderView = sender.view {
+            let point = sender.location(in: senderView)
+            if let deepestTouchedView = senderView.hitTest(point, with: nil), !deepestTouchedView.isDescendant(of: reminderCustomActionNameTextField) {
+                dismissKeyboard()
+            }
         }
     }
     
     /// Determine and show the next required dropdown in the log creation flow
     private func showNextRequiredDropDown(animated: Bool) {
         if selectedReminderAction == nil {
-            showDropDown(.reminderAction, animated: animated)
+            willShowDropDown(DogsAddReminderDropDownTypes.reminderAction, animated: animated)
         }
     }
     
-    /// Show or hide the dropdown for the given type
-    private func showDropDown(_ type: DogsAddReminderDropDownTypes, animated: Bool) {
-        let label = labelForDropDown(forDropDownType: type)
-        var targetDropDown = dropDown(forDropDownType: type)
+    func willShowDropDown(_ identifier: any HoundDropDownType, animated: Bool) {
+        guard let type = identifier as? DogsAddReminderDropDownTypes else { return }
         
-        // cannot insert dropdown inside of a stack, so need basic view
-        let rootView = self
-        let referenceFrame = label.superview?.convert(label.frame, to: rootView) ?? label.frame
-        
-        let dropDowns = [dropDownReminderAction, dropDownReminderRecipients]
-        // work around: ui element or error message couldve been added which is higher in the view than dropdown since dropdown last opened
-        // ensure that dropdowns are on top (and in correct order relative to other drop downs)
-        dropDowns.forEach { dropDown in
-            dropDown?.removeFromSuperview()
-        }
-        dropDowns.reversed().forEach { dropDown in
-            if let dropDown = dropDown {
-                rootView.addSubview(dropDown)
-            }
-        }
-        
-        if targetDropDown == nil {
-            targetDropDown = HoundDropDown()
-            targetDropDown?.setupDropDown(
-                forHoundDropDownIdentifier: type.rawValue,
-                forDataSource: self,
-                forViewPositionReference: referenceFrame,
-                forOffset: 2.5,
-                forRowHeight: HoundDropDown.rowHeightForHoundLabel
-            )
+        let numberOfRows: CGFloat = {
             switch type {
-            case .reminderAction: dropDownReminderAction = targetDropDown
-            case .reminderRecipients: dropDownReminderRecipients = targetDropDown
+            case .reminderAction:
+                return CGFloat(availableReminderActions.count)
+            case .reminderRecipients:
+                return CGFloat(availableFamilyMembers.count)
             }
-            if let targetDropDown = targetDropDown {
-                rootView.addSubview(targetDropDown)
-            }
-        }
+        }()
         
-        targetDropDown?.showDropDown(
-            numberOfRowsToShow: min(6.5, {
-                switch type {
-                case .reminderAction:
-                    return CGFloat(availableReminderActions.count)
-                case .reminderRecipients:
-                    return CGFloat(availableFamilyMembers.count)
-                }
-            }()),
+        dropDownManager.show(
+            identifier: type,
+            numberOfRowsToShow: min(6.5, numberOfRows),
             animated: animated
         )
     }
     
     // MARK: - Drop Down Data Source
     
-    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, identifier: any HoundDropDownType) {
-        guard let customCell = cell as? HoundDropDownTVC else { return }
-        customCell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
+    func setupCellForDropDown(cell: HoundDropDownTVC, indexPath: IndexPath, identifier: any HoundDropDownType) {
+        guard let identifier = identifier as? DogsAddReminderDropDownTypes else { return }
         
-        if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderAction.rawValue {
-            customCell.setCustomSelectedTableViewCell(forSelected: selectedDropDownReminderActionIndexPath == indexPath)
+        switch identifier {
+        case .reminderAction:
             let option = availableReminderActions[indexPath.row]
-            customCell.label.text = option.0.convertToReadableName(customActionName: option.1, includeMatchingEmoji: true)
-        }
-        else if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderRecipients.rawValue {
+            if let selectedReminderActionIndexPath = selectedReminderActionIndexPath {
+                cell.setCustomSelectedTableViewCell(forSelected: selectedReminderActionIndexPath == indexPath)
+            }
+            else {
+                cell.setCustomSelectedTableViewCell(forSelected: false)
+            }
+            cell.label.text = option.0.convertToReadableName(customActionName: option.1, includeMatchingEmoji: true)
+        case .reminderRecipients:
             let member = availableFamilyMembers[indexPath.row]
-            customCell.setCustomSelectedTableViewCell(forSelected: selectedRecipientUserIds.contains(member.userId))
-            customCell.label.text = member.displayFullName ?? Constant.Visual.Text.unknownName
+            cell.setCustomSelectedTableViewCell(forSelected: selectedRecipientUserIds.contains(member.userId))
+            cell.label.text = member.displayFullName ?? Constant.Visual.Text.unknownName
         }
     }
     
     func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
-        switch dropDownUIViewIdentifier {
-        case DogsAddReminderDropDownTypes.reminderAction.rawValue:
-            return availableReminderActions.count
-        case DogsAddReminderDropDownTypes.reminderRecipients.rawValue:
-            return availableFamilyMembers.count
-        default:
+        guard let identifier = identifier as? DogsAddReminderDropDownTypes else {
             return 0
+        }
+        
+        switch identifier {
+        case DogsAddReminderDropDownTypes.reminderAction:
+            return availableReminderActions.count
+        case DogsAddReminderDropDownTypes.reminderRecipients:
+            return availableFamilyMembers.count
         }
     }
     
     func numberOfSections(identifier: any HoundDropDownType) -> Int {
-        // Each dropdown has a single section
         return 1
     }
     
     func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
-        dismissKeyboard()
+        guard let identifier = identifier as? DogsAddReminderDropDownTypes else { return }
+        guard let dropDown = dropDownManager.dropDown(for: identifier), let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
         
-        if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderAction.rawValue, let cell = dropDownReminderAction?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC {
-            if cell.isCustomSelected {
+        switch identifier {
+        case DogsAddReminderDropDownTypes.reminderAction:
+            guard !cell.isCustomSelected else {
                 cell.setCustomSelectedTableViewCell(forSelected: false)
                 selectedReminderAction = nil
-                selectedDropDownReminderActionIndexPath = nil
                 updateDynamicUIElements()
                 return
             }
             
-            cell.setCustomSelectedTableViewCell(forSelected: true)
-            
-            if let previousSelectedIndexPath = selectedDropDownReminderActionIndexPath, let previousSelectedCell = dropDownReminderAction?.dropDownTableView?.cellForRow(at: previousSelectedIndexPath) as? HoundDropDownTVC {
-                previousSelectedCell.setCustomSelectedTableViewCell(forSelected: false)
+            if let previouslySelectedReminderActionIndexPath = selectedReminderActionIndexPath {
+                let previousSelectedCell = dropDown.dropDownTableView?.cellForRow(at: previouslySelectedReminderActionIndexPath) as? HoundDropDownTVC
+                previousSelectedCell?.setCustomSelectedTableViewCell(forSelected: false)
             }
+            
+            cell.setCustomSelectedTableViewCell(forSelected: true)
             
             let option = availableReminderActions[indexPath.row]
             selectedReminderAction = option.0
-            selectedDropDownReminderActionIndexPath = indexPath
+            reminderCustomActionNameTextField.text = option.1
             
-            if let custom = option.1 {
-                reminderCustomActionNameTextField.text = custom
-            }
-           
             reminderActionLabel.errorMessage = nil
             
-            dropDownReminderAction?.hideDropDown(animated: true)
+            dropDown.hideDropDown(animated: true)
             updateDynamicUIElements()
             
             showNextRequiredDropDown(animated: true)
-        }
-        else if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderRecipients.rawValue, let selectedCell = dropDownReminderRecipients?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC {
+        case DogsAddReminderDropDownTypes.reminderRecipients:
             let member = availableFamilyMembers[indexPath.row]
             
-            if selectedCell.isCustomSelected {
+            if cell.isCustomSelected {
                 selectedRecipientUserIds.remove(member.userId)
             }
             else {
                 selectedRecipientUserIds.insert(member.userId)
             }
-            selectedCell.setCustomSelectedTableViewCell(forSelected: !selectedCell.isCustomSelected)
+            cell.setCustomSelectedTableViewCell(forSelected: !cell.isCustomSelected)
             
-            if selectedRecipientUserIds.isEmpty {
-                // If no one selected, close
-                dropDownReminderRecipients?.hideDropDown(animated: true)
-            }
-            else if selectedRecipientUserIds.count == availableFamilyMembers.count {
-                // If all ppl selected, close dropdown
-                dropDownReminderRecipients?.hideDropDown(animated: true)
+            // If no one selected, close
+            // If all ppl selected, close dropdown
+            if selectedRecipientUserIds.isEmpty || selectedRecipientUserIds.count == availableFamilyMembers.count {
+                dropDown.hideDropDown(animated: true)
             }
             
             // recipient label text changes and disclaimer label maybe appears/disappears

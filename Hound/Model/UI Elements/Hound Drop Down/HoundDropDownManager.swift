@@ -9,7 +9,7 @@
 import UIKit
 
 protocol HoundDropDownManagerDelegate: AnyObject {
-    func willShowDropDown(_ identifier: String, animated: Bool)
+    func willShowDropDown(_ identifier: any HoundDropDownType, animated: Bool)
 }
 
 /// Manages multiple `HoundDropDown` instances so callers don't repeat setup code.
@@ -110,13 +110,18 @@ final class HoundDropDownManager<T: HoundDropDownType> {
     }
     
     @objc private func didTapLabel(sender: UITapGestureRecognizer) {
-        guard let name = sender.name, let identifier = Identifier(rawValue: name), let dropDown = dropDown(for: identifier) else {
+        guard let name = sender.name, let identifier = Identifier(rawValue: name) else {
             HoundLogger.general.warning("HoundDropDownManager.tappedDropDownLabel: No drop down found for identifier \(String(describing: sender.name))")
             return
         }
         
+        guard let dropDown = dropDown(for: identifier) else {
+            delegate.willShowDropDown(identifier, animated: true)
+            return
+        }
+        
         if !dropDown.isDown {
-            delegate.willShowDropDown(name, animated: true)
+            delegate.willShowDropDown(identifier, animated: true)
         }
         else {
             dropDown.hideDropDown(animated: true)
@@ -129,7 +134,7 @@ final class HoundDropDownManager<T: HoundDropDownType> {
         let point = sender.location(in: senderView)
         guard let touched = senderView.hitTest(point, with: nil) else { return }
         
-        for (identifier, entry) in entries {
+        for (_, entry) in entries {
             guard let dd = entry.dropDown, let label = entry.label else { continue }
             
             if !touched.isDescendant(of: label) && !touched.isDescendant(of: dd) {
