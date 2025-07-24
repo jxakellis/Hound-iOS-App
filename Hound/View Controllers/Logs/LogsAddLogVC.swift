@@ -180,7 +180,6 @@ final class LogsAddLogVC: HoundScrollViewController,
         let view = HoundEditPageHeaderView(huggingPriority: 300, compressionResistancePriority: 300)
         
         view.trailingButton.setImage(UIImage(systemName: "trash.circle"), for: .normal)
-        view.trailingButton.isHidden = false
         
         view.trailingButton.addTarget(self, action: #selector(didTouchUpInsideRemoveLog), for: .touchUpInside)
         
@@ -883,6 +882,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         
         if let dogUUIDToUpdate = dogUUIDToUpdate, logToUpdate != nil {
             editPageHeaderView.setTitle("Edit Log")
+            editPageHeaderView.isTrailingButtonEnabled = true
             if let dog = dogManager.findDog(forDogUUID: dogUUIDToUpdate) {
                 selectedDogUUIDs = [dog.dogUUID]
                 initialSelectedDogUUIDs = selectedDogUUIDs
@@ -897,7 +897,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         }
         else {
             editPageHeaderView.setTitle("Create Log")
-            
+            editPageHeaderView.isTrailingButtonEnabled = false
             // If the family only has one dog, then force the parent dog selected to be that single dog.
             // Otherwise, leave list empty so user must select.
             if dogManager.dogs.count == 1, let uuid = dogManager.dogs.first?.dogUUID {

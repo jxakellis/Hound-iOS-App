@@ -25,11 +25,9 @@ final class DogsAddReminderVC: HoundScrollViewController {
         let view = HoundEditPageHeaderView(huggingPriority: 330, compressionResistancePriority: 330)
         
         view.leadingButton.setImage(UIImage(systemName: "doc.circle"), for: .normal)
-        view.leadingButton.isHidden = false
         view.leadingButton.addTarget(self, action: #selector(didTouchUpInsideDuplicateReminder), for: .touchUpInside)
         
         view.trailingButton.setImage(UIImage(systemName: "trash.circle"), for: .normal)
-        view.trailingButton.isHidden = false
         view.trailingButton.addTarget(self, action: #selector(didTouchUpInsideRemoveReminder), for: .touchUpInside)
         
         return view
@@ -113,12 +111,10 @@ final class DogsAddReminderVC: HoundScrollViewController {
         self.reminderToUpdateDogUUID = forReminderToUpdateDogUUID
         self.reminderToUpdate = forReminderToUpdate
         
-        if forReminderToUpdate == nil {
-            editPageHeaderView.setTitle("Create Reminder")
-        }
-        else {
-            editPageHeaderView.setTitle("Edit Reminder")
-        }
+        editPageHeaderView.setTitle(forReminderToUpdate == nil ? "Create Reminder" : "Edit Reminder")
+        editPageHeaderView.isLeadingButtonEnabled = forReminderToUpdate != nil
+        editPageHeaderView.isTrailingButtonEnabled = forReminderToUpdate != nil
+        
         dogsAddReminderManagerView.setup(forReminderToUpdate: forReminderToUpdate)
     }
     

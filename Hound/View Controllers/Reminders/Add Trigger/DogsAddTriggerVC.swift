@@ -21,11 +21,9 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     private lazy var editPageHeaderView: HoundEditPageHeaderView = {
         let view = HoundEditPageHeaderView(huggingPriority: 330, compressionResistancePriority: 330)
         view.leadingButton.setImage(UIImage(systemName: "doc.circle"), for: .normal)
-        view.leadingButton.isHidden = false
         view.leadingButton.addTarget(self, action: #selector(didTouchUpInsideDuplicateTrigger), for: .touchUpInside)
         
         view.trailingButton.setImage(UIImage(systemName: "trash.circle"), for: .normal)
-        view.trailingButton.isHidden = false
         view.trailingButton.addTarget(self, action: #selector(didTouchUpInsideRemoveTrigger), for: .touchUpInside)
         
         return view
@@ -97,23 +95,24 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     
     /// Changes made by this view controller will not be persisted to the server, and will only be used locally. Dog is optional
     func setupWithoutServerPersistence(forDelegate: DogsAddTriggerVCDelegate, forDog: Dog?, forTriggerToUpdate: Trigger?) {
-        delegate = forDelegate
         shouldPersistChangesToServer = false
-        dog = forDog
-        triggerToUpdate = forTriggerToUpdate
-        
-        editPageHeaderView.setTitle(forTriggerToUpdate == nil ? "Create Automation" : "Edit Automation")
-        managerView.setup(forDog: forDog, forTriggerToUpdate: forTriggerToUpdate)
+        commonSetup(forDelegate: forDelegate, forDog: forDog, forTriggerToUpdate: forTriggerToUpdate)
     }
     
     /// Changes made by this view controller will be persisted to the server. Dog is required
     func setupWithServerPersistence(forDelegate: DogsAddTriggerVCDelegate, forDog: Dog, forTriggerToUpdate: Trigger?) {
-        delegate = forDelegate
         shouldPersistChangesToServer = true
+        commonSetup(forDelegate: forDelegate, forDog: forDog, forTriggerToUpdate: forTriggerToUpdate)
+    }
+    
+    private func commonSetup(forDelegate: DogsAddTriggerVCDelegate, forDog: Dog?, forTriggerToUpdate: Trigger?) {
+        delegate = forDelegate
         dog = forDog
         triggerToUpdate = forTriggerToUpdate
         
         editPageHeaderView.setTitle(forTriggerToUpdate == nil ? "Create Automation" : "Edit Automation")
+        editPageHeaderView.isLeadingButtonEnabled = forTriggerToUpdate != nil
+        editPageHeaderView.isTrailingButtonEnabled = forTriggerToUpdate != nil
         managerView.setup(forDog: forDog, forTriggerToUpdate: forTriggerToUpdate)
     }
     

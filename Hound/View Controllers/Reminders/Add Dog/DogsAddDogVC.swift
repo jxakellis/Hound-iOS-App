@@ -117,7 +117,6 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     private lazy var editPageHeaderView: HoundEditPageHeaderView = {
         let view = HoundEditPageHeaderView(huggingPriority: 330, compressionResistancePriority: 330)
         
-        view.trailingButton.isHidden = false
         view.trailingButton.setImage(UIImage(systemName: "trash.circle"), for: .normal)
         view.trailingButton.addTarget(self, action: #selector(didTouchUpInsideRemoveDog), for: .touchUpInside)
         
@@ -632,6 +631,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         dogToUpdate = forDogToUpdate
         
         editPageHeaderView.setTitle(dogToUpdate == nil ? "Create Dog" : "Edit Dog")
+        editPageHeaderView.isTrailingButtonEnabled = dogToUpdate != nil
         
         dogNameTextField.text = dogToUpdate?.dogName
         initialDogName = dogToUpdate?.dogName
