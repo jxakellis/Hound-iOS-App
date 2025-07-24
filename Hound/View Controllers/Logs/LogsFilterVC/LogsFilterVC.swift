@@ -12,7 +12,7 @@ protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(forLogsFilter: LogsFilter)
 }
 
-enum LogsFilterDropDownTypes: String {
+enum LogsFilterDropDownTypes: String, HoundDropDownType {
     case filterDogs = "DropDownFilterDogs"
     case filterLogActions = "DropDownFilterLogActions"
     case filterFamilyMembers = "DropDownFilterFamilyMembers"
@@ -532,7 +532,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let filter = filter, let customCell = cell as? HoundDropDownTableViewCell else { return }
+        guard let filter = filter, let customCell = cell as? HoundDropDownTVC else { return }
         
         customCell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         
@@ -591,7 +591,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         guard let filter = filter else { return }
         
-        if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue, let selectedCell = dropDownFilterDogs?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
+        if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterDogs.rawValue, let selectedCell = dropDownFilterDogs?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC {
             let dogSelected = filter.availableDogs[indexPath.row]
             let beforeSelectNumberOfDogsSelected = filter.availableDogs.count
             
@@ -613,7 +613,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
                 dropDownFilterDogs?.hideDropDown(animated: true)
             }
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue, let selectedCell = dropDownFilterLogActions?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterLogActions.rawValue, let selectedCell = dropDownFilterLogActions?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC {
             let selectedLogAction = filter.availableLogActions[indexPath.row]
             let beforeSelectNumberOfLogActionsSelected = filter.availableLogActions.count
             
@@ -635,7 +635,7 @@ class LogsFilterVC: HoundScrollViewController, HoundDropDownDataSource, UITextFi
                 dropDownFilterLogActions?.hideDropDown(animated: true)
             }
         }
-        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue, let selectedCell = dropDownFilterFamilyMembers?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
+        else if dropDownUIViewIdentifier == LogsFilterDropDownTypes.filterFamilyMembers.rawValue, let selectedCell = dropDownFilterFamilyMembers?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC {
             let familyMemberSelected = filter.availableFamilyMembers[indexPath.row]
             let beforeSelectNumberOfFamilyMembersSelected = filter.availableFamilyMembers.count
             

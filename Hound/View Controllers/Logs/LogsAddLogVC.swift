@@ -12,7 +12,7 @@ protocol LogsAddLogDelegate: AnyObject {
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
 }
 
-enum LogsAddLogDropDownTypes: String {
+enum LogsAddLogDropDownTypes: String, HoundDropDownType {
     case parentDog = "DropDownParentDog"
     case logActionType = "DropDownLogAction"
     case logUnit = "DropDownLogUnit"
@@ -225,15 +225,9 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select a dog (or dogs)..."
         label.shouldInsetText = true
-        let gesture = UITapGestureRecognizer(
-            target: dropDownManager,
-            action: #selector(HoundDropDownManager.didTapLabel(sender:))
-        )
-        gesture.name = LogsAddLogDropDownTypes.parentDog.rawValue
-        gesture.delegate = self
-        gesture.cancelsTouchesInView = false
+        
         label.isUserInteractionEnabled = true
-        label.addGestureRecognizer(gesture)
+        label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.parentDog, delegate: self))
         
         return label
     }()
@@ -259,16 +253,8 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an action..."
         label.shouldInsetText = true
-        
-        let gesture = UITapGestureRecognizer(
-            target: dropDownManager,
-            action: #selector(HoundDropDownManager.didTapLabel(sender:))
-        )
-        gesture.name = LogsAddLogDropDownTypes.logActionType.rawValue
-        gesture.delegate = self
-        gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
-        label.addGestureRecognizer(gesture)
+        label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logActionType, delegate: self))
         
         return label
     }()
@@ -319,16 +305,8 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select a start date..."
         label.shouldInsetText = true
-        
-        let gesture = UITapGestureRecognizer(
-            target: dropDownManager,
-            action: #selector(HoundDropDownManager.didTapLabel(sender:))
-        )
-        gesture.name = LogsAddLogDropDownTypes.logStartDate.rawValue
-        gesture.delegate = self
-        gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
-        label.addGestureRecognizer(gesture)
+        label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logStartDate, delegate: self))
         
         return label
     }()
@@ -372,16 +350,8 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select an end date... (optional)"
         label.shouldInsetText = true
-        
-        let gesture = UITapGestureRecognizer(
-            target: dropDownManager,
-            action: #selector(HoundDropDownManager.didTapLabel(sender:))
-        )
-        gesture.name = LogsAddLogDropDownTypes.logEndDate.rawValue
-        gesture.delegate = self
-        gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
-        label.addGestureRecognizer(gesture)
+        label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logEndDate, delegate: self))
         
         return label
     }()
@@ -438,16 +408,8 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.applyStyle(.thinGrayBorder)
         label.placeholder = "Select a unit... (optional)"
         label.shouldInsetText = true
-        
-        let gesture = UITapGestureRecognizer(
-            target: dropDownManager,
-            action: #selector(HoundDropDownManager.didTapLabel(sender:))
-        )
-        gesture.name = LogsAddLogDropDownTypes.logUnit.rawValue
-        gesture.delegate = self
-        gesture.cancelsTouchesInView = false
         label.isUserInteractionEnabled = true
-        label.addGestureRecognizer(gesture)
+        label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logUnit, delegate: self))
         
         return label
     }()
@@ -508,6 +470,8 @@ final class LogsAddLogVC: HoundScrollViewController,
         return stack
     }()
     
+    private lazy var dropDownManager = HoundDropDownManager<LogsAddLogDropDownTypes>(rootView: containerView, dataSource: self, delegate: self)
+    
     private lazy var backButton: HoundButton = {
         let button = HoundButton()
         
@@ -537,7 +501,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     @objc private func didUpdateLogStartDate(_ sender: Any) {
         // By updating selectedLogStartDate, it can invalidate the quick time select options in the open drop down.
         // If a user then selects an invalid option, it will lead to incorrect data or crashing.
-        self.dropDownManager.hide(identifier: LogsAddLogDropDownTypes.logEndDate.rawValue, animated: true)
+        self.dropDownManager.hide(identifier: LogsAddLogDropDownTypes.logEndDate, animated: true)
         self.selectedLogStartDate = logStartDatePicker.date
         self.dismissKeyboard()
     }
@@ -545,7 +509,7 @@ final class LogsAddLogVC: HoundScrollViewController,
     @objc private func didUpdateLogEndDate(_ sender: Any) {
         // By updating selectedLogEndDate, it can invalidate the quick time select options in the open drop down.
         // If a user then selects an invalid option, it will lead to incorrect data or crashing.
-        self.dropDownManager.hide(identifier: LogsAddLogDropDownTypes.logStartDate.rawValue, animated: true)
+        self.dropDownManager.hide(identifier: LogsAddLogDropDownTypes.logStartDate, animated: true)
         self.selectedLogEndDate = logEndDatePicker.date
         self.dismissKeyboard()
     }
@@ -624,7 +588,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             HapticsManager.notification(.error)
             return
         }
-           
+        
         // Check to see if we are updating or adding a log
         guard let dogUUIDToUpdate = dogUUIDToUpdate, let logToUpdate = logToUpdate else {
             willAddLog(selectedLogAction: selectedLogAction, selectedLogStartDate: selectedLogStartDate)
@@ -691,8 +655,6 @@ final class LogsAddLogVC: HoundScrollViewController,
     private var dogUUIDToUpdate: UUID?
     private var logToUpdate: Log?
     
-    // MARK: Initial Value Tracking
-    
     private var initialSelectedDogUUIDs: [UUID] = []
     private var initialLogActionType: LogActionType?
     private var initialLogCustomActionName: String?
@@ -701,7 +663,6 @@ final class LogsAddLogVC: HoundScrollViewController,
     private var initialLogNote: String?
     private var initialLogStartDate: Date?
     private var initialLogEndDate: Date?
-    
     private var didUpdateInitialValues: Bool {
         if initialLogActionType != selectedLogAction { return true }
         if selectedLogAction?.allowsCustom == true && initialLogCustomActionName != logCustomActionNameTextField.text {
@@ -715,8 +676,6 @@ final class LogsAddLogVC: HoundScrollViewController,
         if initialSelectedDogUUIDs != selectedDogUUIDs { return true }
         return false
     }
-    
-    private lazy var dropDownManager = HoundDropDownManager(rootView: containerView, dataSource: self, delegate: self)
     
     private var selectedDogUUIDs: [UUID] = [] {
         didSet {
@@ -793,7 +752,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                 return
             }
             updateLogStartEndDateErrors()
-           
+            
             let format: String
             if Calendar.current.isDateInToday(start) {
                 // If the start date is today, show only time
@@ -1107,8 +1066,6 @@ final class LogsAddLogVC: HoundScrollViewController,
     
     @objc private func didTapScreen(sender: UITapGestureRecognizer) {
         dropDownManager.hideDropDownIfNotTapped(sender: sender)
-        
-        // Dismiss keyboard if tap was outside text inputs
         dismissKeyboard()
     }
     
@@ -1158,26 +1115,30 @@ final class LogsAddLogVC: HoundScrollViewController,
         }()
         
         dropDownManager.show(
-                    identifier: type.rawValue,
-                    numberOfRowsToShow: min(6.5, numberOfRows),
-                    animated: animated
-                )
+            identifier: type,
+            numberOfRowsToShow: min(6.5, numberOfRows),
+            animated: animated
+        )
     }
     
     // MARK: - Drop Down Data Source
     
-    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let customCell = cell as? HoundDropDownTableViewCell else { return }
-        customCell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
+    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, identifier: any HoundDropDownType) {
+        guard let identifier = LogsAddLogDropDownTypes(rawValue: identifier.rawValue) else {
+            HoundLogger.general.error("LogsAddLogVC.setupCellForDropDown: Unable to identifier \(identifier.rawValue)")
+            return
+        }
         
-        if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.parentDog.rawValue {
+        guard let customCell = cell as? HoundDropDownTVC else { return }
+        
+        switch identifier {
+        case .parentDog:
             let dog = dogManager.dogs[indexPath.row]
             customCell.setCustomSelectedTableViewCell(
                 forSelected: selectedDogUUIDs.contains(dog.dogUUID)
             )
             customCell.label.text = dog.dogName
-        }
-        else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logActionType.rawValue {
+        case .logActionType:
             let option = availableLogActions[indexPath.row]
             customCell.label.text = option.0.convertToReadableName(
                 customActionName: option.1,
@@ -1191,8 +1152,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             else {
                 customCell.setCustomSelectedTableViewCell(forSelected: false)
             }
-        }
-        else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logUnit.rawValue {
+        case .logUnit:
             guard let selectedAction = selectedLogAction else { return }
             customCell.setCustomSelectedTableViewCell(forSelected: false)
             let unitTypes = selectedAction.associatedLogUnitTypes
@@ -1207,15 +1167,13 @@ final class LogsAddLogVC: HoundScrollViewController,
                     customCell.setCustomSelectedTableViewCell(forSelected: true)
                 }
             }
-        }
-        else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logStartDate.rawValue {
+        case .logStartDate:
             customCell.setCustomSelectedTableViewCell(forSelected: false)
             if let option = availableLogStartDateOptions[safe: indexPath.row] {
                 customCell.label.text = option.rawValue
                 // Do not set “selected” visually, as quick select depends on current time
             }
-        }
-        else if dropDownUIViewIdentifier == LogsAddLogDropDownTypes.logEndDate.rawValue {
+        case .logEndDate:
             customCell.setCustomSelectedTableViewCell(forSelected: false)
             if let option = availableLogEndDateOptions[safe: indexPath.row] {
                 customCell.label.text = option.rawValue
@@ -1224,37 +1182,44 @@ final class LogsAddLogVC: HoundScrollViewController,
         }
     }
     
-    func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
-        switch dropDownUIViewIdentifier {
-        case LogsAddLogDropDownTypes.parentDog.rawValue:
+    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
+        guard let identifier = LogsAddLogDropDownTypes(rawValue: identifier.rawValue) else {
+            HoundLogger.general.error("LogsAddLogVC.numberOfRows: Unable to identifier \(identifier.rawValue)")
+            return 0
+        }
+        
+        switch identifier {
+        case LogsAddLogDropDownTypes.parentDog:
             return dogManager.dogs.count
-        case LogsAddLogDropDownTypes.logActionType.rawValue:
+        case LogsAddLogDropDownTypes.logActionType:
             return availableLogActions.count
-        case LogsAddLogDropDownTypes.logUnit.rawValue:
+        case LogsAddLogDropDownTypes.logUnit:
             guard let selected = selectedLogAction else { return 0 }
             return selected.associatedLogUnitTypes.count
-        case LogsAddLogDropDownTypes.logStartDate.rawValue:
+        case LogsAddLogDropDownTypes.logStartDate:
             return availableLogStartDateOptions.count
-        case LogsAddLogDropDownTypes.logEndDate.rawValue:
+        case LogsAddLogDropDownTypes.logEndDate:
             return availableLogEndDateOptions.count
-        default:
-            return 0
         }
     }
     
-    func numberOfSections(dropDownUIViewIdentifier: String) -> Int {
+    func numberOfSections(identifier: any HoundDropDownType) -> Int {
         // Each dropdown has a single section
         return 1
     }
     
-    func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let dropDown = dropDownManager.dropDown(for: dropDownUIViewIdentifier), let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell else {
-            HoundLogger.general.error("LogsAddLogVC.selectItemInDropDown: Unable to find drop down or cell for identifier \(dropDownUIViewIdentifier)")
+    func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
+        guard let identifier = LogsAddLogDropDownTypes(rawValue: identifier.rawValue) else {
+            HoundLogger.general.error("LogsAddLogVC.selectItemInDropDown: Unable to identifier \(identifier.rawValue)")
+            return
+        }
+        guard let dropDown = dropDownManager.dropDown(for: identifier), let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else {
+            HoundLogger.general.error("LogsAddLogVC.selectItemInDropDown: Unable to find drop down or cell for identifier \(identifier.rawValue)")
             return
         }
         
-        switch dropDownUIViewIdentifier {
-            case LogsAddLogDropDownTypes.parentDog.rawValue:
+        switch identifier {
+        case LogsAddLogDropDownTypes.parentDog:
             let dog = dogManager.dogs[indexPath.row]
             let beforeCount = selectedDogUUIDs.count
             
@@ -1277,7 +1242,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                 // If all dogs selected, close dropdown
                 dropDown.hideDropDown(animated: true)
             }
-            case LogsAddLogDropDownTypes.logActionType.rawValue:
+        case LogsAddLogDropDownTypes.logActionType:
             let beforeSelection = selectedLogAction
             
             if cell.isCustomSelected {
@@ -1306,7 +1271,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                 // First-time selection of log action, so open next dropdown
                 showNextRequiredDropDown(animated: true)
             }
-            case LogsAddLogDropDownTypes.logUnit.rawValue:
+        case LogsAddLogDropDownTypes.logUnit:
             if cell.isCustomSelected {
                 cell.setCustomSelectedTableViewCell(forSelected: false)
                 selectedLogUnitType = nil
@@ -1319,7 +1284,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             dropDown.hideDropDown(animated: true)
             
             updateDynamicUIElements()
-            case LogsAddLogDropDownTypes.logStartDate.rawValue:
+        case LogsAddLogDropDownTypes.logStartDate:
             // Time quick select cells should never stay visually selected.
             cell.setCustomSelectedTableViewCell(forSelected: true)
             
@@ -1333,7 +1298,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             }
             
             dropDown.hideDropDown(animated: true)
-            case LogsAddLogDropDownTypes.logEndDate.rawValue:
+        case LogsAddLogDropDownTypes.logEndDate:
             cell.setCustomSelectedTableViewCell(forSelected: true)
             
             let quickSelectOption = availableLogEndDateOptions[indexPath.row]
@@ -1345,9 +1310,6 @@ final class LogsAddLogVC: HoundScrollViewController,
             }
             
             dropDown.hideDropDown(animated: true)
-        default:
-            HoundLogger.general.error("LogsAddLogVC.selectItemInDropDown: Unknown drop down identifier \(dropDownUIViewIdentifier)")
-            
         }
     }
     

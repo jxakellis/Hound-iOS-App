@@ -12,7 +12,7 @@ protocol DogsAddTriggerFixedTimeViewDelegate: AnyObject {
     func willDismissKeyboard()
 }
 
-enum DogsAddTriggerFixedTimeDropDownTypes: String {
+enum DogsAddTriggerFixedTimeDropDownTypes: String, HoundDropDownType {
     case dayOffset = "DropDownDayOffset"
 }
 
@@ -235,7 +235,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
     // MARK: - DropDown Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let cell = cell as? HoundDropDownTableViewCell else { return }
+        guard let cell = cell as? HoundDropDownTVC else { return }
         cell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         cell.label.text = textForOffset(availableDayOffsets[indexPath.row])
         
@@ -265,10 +265,10 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, UIG
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         switch dropDownUIViewIdentifier {
         case DogsAddTriggerFixedTimeDropDownTypes.dayOffset.rawValue:
-            if let previousSelectedIndexPath = selectedDropDownDayOffsetIndexPath, let previousSelectedCell = dropDownDayOffset?.dropDownTableView?.cellForRow(at: previousSelectedIndexPath) as? HoundDropDownTableViewCell {
+            if let previousSelectedIndexPath = selectedDropDownDayOffsetIndexPath, let previousSelectedCell = dropDownDayOffset?.dropDownTableView?.cellForRow(at: previousSelectedIndexPath) as? HoundDropDownTVC {
                 previousSelectedCell.setCustomSelectedTableViewCell(forSelected: false)
             }
-            if let selectedCell = dropDownDayOffset?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
+            if let selectedCell = dropDownDayOffset?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC {
                 selectedCell.setCustomSelectedTableViewCell(forSelected: true)
             }
             selectedDropDownDayOffsetIndexPath = indexPath

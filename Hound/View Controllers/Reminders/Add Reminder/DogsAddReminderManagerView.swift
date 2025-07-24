@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-enum DogsAddReminderDropDownTypes: String {
+enum DogsAddReminderDropDownTypes: String, HoundDropDownType {
     case reminderAction = "DropDownReminderAction"
     case reminderRecipients = "DropDownReminderRecipients"
 }
@@ -630,7 +630,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     // MARK: - Drop Down Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let customCell = cell as? HoundDropDownTableViewCell else { return }
+        guard let customCell = cell as? HoundDropDownTVC else { return }
         customCell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         
         if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderAction.rawValue {
@@ -664,7 +664,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         dismissKeyboard()
         
-        if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderAction.rawValue, let cell = dropDownReminderAction?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
+        if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderAction.rawValue, let cell = dropDownReminderAction?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC {
             if cell.isCustomSelected {
                 cell.setCustomSelectedTableViewCell(forSelected: false)
                 selectedReminderAction = nil
@@ -675,7 +675,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             
             cell.setCustomSelectedTableViewCell(forSelected: true)
             
-            if let previousSelectedIndexPath = selectedDropDownReminderActionIndexPath, let previousSelectedCell = dropDownReminderAction?.dropDownTableView?.cellForRow(at: previousSelectedIndexPath) as? HoundDropDownTableViewCell {
+            if let previousSelectedIndexPath = selectedDropDownReminderActionIndexPath, let previousSelectedCell = dropDownReminderAction?.dropDownTableView?.cellForRow(at: previousSelectedIndexPath) as? HoundDropDownTVC {
                 previousSelectedCell.setCustomSelectedTableViewCell(forSelected: false)
             }
             
@@ -694,7 +694,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
             
             showNextRequiredDropDown(animated: true)
         }
-        else if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderRecipients.rawValue, let selectedCell = dropDownReminderRecipients?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell {
+        else if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderRecipients.rawValue, let selectedCell = dropDownReminderRecipients?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC {
             let member = availableFamilyMembers[indexPath.row]
             
             if selectedCell.isCustomSelected {

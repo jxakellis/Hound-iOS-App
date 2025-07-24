@@ -6,9 +6,10 @@
 //  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
+import SnapKit
 import UIKit
 
-class HoundDropDownTableViewCell: HoundTableViewCell {
+class HoundDropDownTVC: HoundTableViewCell {
 
     // MARK: - Elements
 
@@ -23,17 +24,12 @@ class HoundDropDownTableViewCell: HoundTableViewCell {
 
     // MARK: - Properties
     
-    static let reuseIdentifier = "HoundDropDownTableViewCell"
+    static let reuseIdentifier = "HoundDropDownTVC"
 
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private(set) var isCustomSelected: Bool = false
 
     // MARK: - Functions
-
-    func adjustLeadingTrailing(newConstant: CGFloat) {
-        leading.constant = newConstant
-        trailing.constant = newConstant
-    }
 
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     func setCustomSelectedTableViewCell(forSelected selected: Bool, animated: Bool = true) {
@@ -68,14 +64,10 @@ class HoundDropDownTableViewCell: HoundTableViewCell {
 
     override func setupConstraints() {
         super.setupConstraints()
-        leading = label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori)
-        trailing = label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori)
-        
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: contentView.topAnchor),
-            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            leading,
-            trailing
-        ])
+        label.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(contentView.snp.horizontalEdges).inset(Constant.Constraint.Spacing.contentIntraHori)
+            // Use .high priority to avoid breaking during table view height estimation
+            make.verticalEdges.equalTo(contentView.snp.verticalEdges).inset(Constant.Constraint.Spacing.absoluteVertInset).priority(.high)
+        }
     }
 }

@@ -9,30 +9,60 @@
 import UIKit
 
 protocol HoundDropDownDataSource {
-    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String)
+    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, identifier: any HoundDropDownType)
     /// Returns number of rows in a given section of the dropDownMenu
-    func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int
+    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int
     /// Returns number section in the dropDownMenu
-    func numberOfSections(dropDownUIViewIdentifier: String) -> Int
+    func numberOfSections(identifier: any HoundDropDownType) -> Int
 
     /// Called when an item is selected in the dropdown menu
-    func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String)
+    func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType)
 }
 
-final class HoundDropDown: HoundView {
+final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate, UITableViewDataSource {
+    typealias Identifier = T
+    
+    // MARK: - UITableViewDelegate & UITableViewDataSource
+    func numberOfSections(in tableView: UITableView) -> Int {
+        guard let identifier = identifier else {
+            return 0
+        }
+        
+        return (dropDownDataSource?.numberOfSections(identifier: identifier) ?? 0)
+    }
 
-    // MARK: - Static
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let identifier = identifier else {
+            return 0
+        }
+        
+        return (dropDownDataSource?.numberOfRows(forSection: section, identifier: identifier) ?? 0)
+    }
 
-    /// Leading and trailing inset for labels inside drop down. 8.0 aligns properly with the inset from a  HoundLabel
-    static let insetForHoundLabel: CGFloat = 8.0
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let identifier = identifier else {
+            return HoundTableViewCell()
+        }
+        
+        let cell: UITableViewCell = (dropDownTableView?.dequeueReusableCell(withIdentifier: HoundDropDownTVC.reuseIdentifier) ?? HoundTableViewCell())
 
-    /// Height of each row in the dropdownuiview, should be same height as the Houndlabel that it presents on
-    static let rowHeightForHoundLabel: CGFloat = 45.0
+        dropDownDataSource?.setupCellForDropDown(cell: cell, indexPath: indexPath, identifier: identifier)
 
-    // MARK: - Variables
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let identifier = identifier else {
+            return
+        }
+        
+        dropDownDataSource?.selectItemInDropDown(indexPath: indexPath, identifier: identifier)
+    }
+    
+    // MARK: - Properties
 
     /// The DropDownIdentifier is to differentiate if you are using multiple Xibs
-    private var dropDownUIViewIdentifier: String = "DROP_DOWN"
+    private var identifier: Identifier?
     // Table View
     private(set) var dropDownTableView: HoundTableView?
     private var dropDownViewWidth: CGFloat = 0
@@ -46,12 +76,12 @@ final class HoundDropDown: HoundView {
     // MARK: - DropDown Methods
 
     /// Make Table View Programatically
-    func setupDropDown(forHoundDropDownIdentifier: String, forDataSource: HoundDropDownDataSource, forViewPositionReference: CGRect, forOffset: CGFloat, forRowHeight: CGFloat) {
-        self.dropDownUIViewIdentifier = forHoundDropDownIdentifier
-        self.dropDownDataSource = forDataSource
-        self.viewPositionReference = forViewPositionReference
-        self.dropDownViewWidth = forViewPositionReference.width
-        self.dropDownViewOffset = forOffset
+    func setupDropDown(identifier: Identifier, dataSource: HoundDropDownDataSource, viewPositionReference: CGRect, offset: CGFloat = Constant.Constraint.Spacing.contentTightIntraVert) {
+        self.identifier = identifier
+        self.dropDownDataSource = dataSource
+        self.viewPositionReference = viewPositionReference
+        self.dropDownViewWidth = viewPositionReference.width
+        self.dropDownViewOffset = offset
 
         // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.
         self.shadowColor = UIColor.label
@@ -59,15 +89,12 @@ final class HoundDropDown: HoundView {
         self.shadowRadius = 5.0
         self.shadowOpacity = 0.5
 
-        self.frame = CGRect(x: forViewPositionReference.minX, y: forViewPositionReference.maxY + forOffset, width: 0, height: 0)
+        self.frame = CGRect(x: viewPositionReference.minX, y: viewPositionReference.maxY + offset, width: 0, height: 0)
 
         let dropDownTableView = HoundTableView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: 0, height: 0))
         self.dropDownTableView = dropDownTableView
 
-        // Sets Row Height of your Custom XIB
-        dropDownTableView.rowHeight = forRowHeight
-        dropDownTableView.estimatedRowHeight = forRowHeight
-        dropDownTableView.register(HoundDropDownTableViewCell.self, forCellReuseIdentifier: HoundDropDownTableViewCell.reuseIdentifier)
+        dropDownTableView.register(HoundDropDownTVC.self, forCellReuseIdentifier: HoundDropDownTVC.reuseIdentifier)
 
         // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.
         dropDownTableView.applyStyle(.thinGrayBorder)
@@ -80,6 +107,10 @@ final class HoundDropDown: HoundView {
 
     /// Shows Drop Down Menu, hides it if already present. The height of the dropdown shown will be equal to the rowHeight of the individual dropdown cells multiplied by the numberOfRowsToShow
     func showDropDown(numberOfRowsToShow numberOfRows: CGFloat, animated: Bool) {
+        guard let identifier = identifier else {
+            return
+        }
+        
         guard isDown == false else {
             self.hideDropDown(animated: animated)
             return
@@ -90,10 +121,10 @@ final class HoundDropDown: HoundView {
         let heightSpecifiedForNumberOfRows = numberOfRows * dropDownTableView.rowHeight
         let heightNeededToDisplayAllRows: CGFloat = {
             var heightNeeded: CGFloat = 0.0
-            let numberOfSections = dropDownDataSource?.numberOfSections(dropDownUIViewIdentifier: self.dropDownUIViewIdentifier) ?? 0
+            let numberOfSections = dropDownDataSource?.numberOfSections(identifier: identifier) ?? 0
             
             for i in 0..<numberOfSections {
-                let numberOfRows = dropDownDataSource?.numberOfRows(forSection: i, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier) ?? 0
+                let numberOfRows = dropDownDataSource?.numberOfRows(forSection: i, identifier: identifier) ?? 0
                 heightNeeded += CGFloat(numberOfRows) * dropDownTableView.rowHeight
             }
             
@@ -135,30 +166,4 @@ final class HoundDropDown: HoundView {
             self.dropDownTableView?.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
         })
     }
-}
-
-// MARK: - Table View Methods
-
-extension HoundDropDown: UITableViewDelegate, UITableViewDataSource {
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        (dropDownDataSource?.numberOfSections(dropDownUIViewIdentifier: self.dropDownUIViewIdentifier) ?? 0)
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        (dropDownDataSource?.numberOfRows(forSection: section, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier) ?? 0)
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = (dropDownTableView?.dequeueReusableCell(withIdentifier: HoundDropDownTableViewCell.reuseIdentifier) ?? HoundTableViewCell())
-
-        dropDownDataSource?.setupCellForDropDown(cell: cell, indexPath: indexPath, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier)
-
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        dropDownDataSource?.selectItemInDropDown(indexPath: indexPath, dropDownUIViewIdentifier: self.dropDownUIViewIdentifier)
-    }
-
 }

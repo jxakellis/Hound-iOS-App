@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-enum DogsAddTriggerDropDownTypes: String {
+enum DogsAddTriggerDropDownTypes: String, HoundDropDownType {
     case logReactions = "DropDownLogReactions"
     case reminderResult = "DropDownReminderResult"
 }
@@ -563,7 +563,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     // MARK: - DropDown Data Source
     
     func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
-        guard let custom = cell as? HoundDropDownTableViewCell else { return }
+        guard let custom = cell as? HoundDropDownTVC else { return }
         custom.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         
         if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.logReactions.rawValue {
@@ -598,7 +598,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
         if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.logReactions.rawValue {
-            let currentCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell
+            let currentCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC
 
             let beforeSelectNumberOfLogReactions = selectedLogReactions.count
             let reaction = availableLogReactions[indexPath.row]
@@ -618,7 +618,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
                     if let parentIndex = self.availableLogReactions.firstIndex(where: { $0.logActionTypeId == reaction.logActionTypeId && !$0.logCustomActionName.hasText() }),
                        let selectedParentIndex = indexOfReaction(self.availableLogReactions[parentIndex]) {
                         selectedLogReactions.remove(at: selectedParentIndex)
-                        if let parentCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: parentIndex, section: 0)) as? HoundDropDownTableViewCell {
+                        if let parentCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: parentIndex, section: 0)) as? HoundDropDownTVC {
                             parentCell.setCustomSelectedTableViewCell(forSelected: false)
                         }
                     }
@@ -629,7 +629,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
                         if let selectedIdx = indexOfReaction(item) {
                             selectedLogReactions.remove(at: selectedIdx)
                         }
-                        if let childCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTableViewCell {
+                        if let childCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTVC {
                             childCell.setCustomSelectedTableViewCell(forSelected: false)
                         }
                     }
@@ -647,7 +647,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
                         if indexOfReaction(item) == nil {
                             selectedLogReactions.append(item)
                         }
-                        if let childCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTableViewCell {
+                        if let childCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTVC {
                             childCell.setCustomSelectedTableViewCell(forSelected: true)
                         }
                     }
@@ -667,7 +667,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             }
         }
         else if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.reminderResult.rawValue {
-            let currentCell = dropDownReminderResult?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTableViewCell
+            let currentCell = dropDownReminderResult?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC
             let beforeSelection = selectedReminderResult
             
             guard currentCell?.isCustomSelected == false else {
@@ -679,7 +679,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
             }
             
             if let previous = dropDownSelectedReminderIndexPath,
-               let previousCell = dropDownReminderResult?.dropDownTableView?.cellForRow(at: previous) as? HoundDropDownTableViewCell {
+               let previousCell = dropDownReminderResult?.dropDownTableView?.cellForRow(at: previous) as? HoundDropDownTVC {
                 previousCell.setCustomSelectedTableViewCell(forSelected: false)
             }
             
