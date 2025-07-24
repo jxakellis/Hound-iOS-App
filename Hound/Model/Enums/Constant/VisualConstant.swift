@@ -125,6 +125,9 @@ public enum VisualConstant {
         static let notFamilyHeadInvalidPermissionSubtitle = "Only the family head can modify your family's subscription. Please contact them to complete this action"
         
         // MARK: .warning (banner style)
+        
+        static let noEditNotificationSettingsTitle = "Heads Up!"
+        static let noEditNotificationSettingsSubtitle = "Your notifications are curr"
 
         static let noEditTriggerResultRemindersTitle = "Heads Up!"
         static let noEditTriggerResultRemindersSubtitle = "Reminders created by automations can't be edited (only deleted)"

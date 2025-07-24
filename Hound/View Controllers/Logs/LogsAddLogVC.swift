@@ -1066,7 +1066,12 @@ final class LogsAddLogVC: HoundScrollViewController,
     
     @objc private func didTapScreen(sender: UITapGestureRecognizer) {
         dropDownManager.hideDropDownIfNotTapped(sender: sender)
-        dismissKeyboard()
+        if let senderView = sender.view {
+            let point = sender.location(in: senderView)
+            if let deepestTouchedView = senderView.hitTest(point, with: nil), !deepestTouchedView.isDescendant(of: logCustomActionNameTextField) && !deepestTouchedView.isDescendant(of: logNumberOfLogUnitsTextField) {
+                dismissKeyboard()
+            }
+        }
     }
     
     /// Determine and show the next required dropdown in the log creation flow
@@ -1123,13 +1128,11 @@ final class LogsAddLogVC: HoundScrollViewController,
     
     // MARK: - Drop Down Data Source
     
-    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, identifier: any HoundDropDownType) {
+    func setupCellForDropDown(cell: HoundDropDownTVC, indexPath: IndexPath, identifier: any HoundDropDownType) {
         guard let identifier = LogsAddLogDropDownTypes(rawValue: identifier.rawValue) else {
             HoundLogger.general.error("LogsAddLogVC.setupCellForDropDown: Unable to identifier \(identifier.rawValue)")
             return
         }
-        
-        guard let customCell = cell as? HoundDropDownTVC else { return }
         
         switch identifier {
         case .parentDog:
@@ -1500,6 +1503,21 @@ final class LogsAddLogVC: HoundScrollViewController,
         
         containerView.addSubview(editPageHeaderView)
         containerView.addSubview(stackView)
+        
+        LogsAddLogDropDownTypes.allCases.forEach { type in
+            switch type {
+            case .parentDog:
+                dropDownManager.register(identifier: type, label: parentDogLabel)
+            case .logActionType:
+                dropDownManager.register(identifier: type, label: logActionLabel)
+            case .logStartDate:
+                dropDownManager.register(identifier: type, label: logStartDateLabel)
+            case .logEndDate:
+                dropDownManager.register(identifier: type, label: logEndDateLabel)
+            case .logUnit:
+                dropDownManager.register(identifier: type, label: logUnitLabel)
+            }
+        }
         
         let didTapScreenGesture = UITapGestureRecognizer(
             target: self,

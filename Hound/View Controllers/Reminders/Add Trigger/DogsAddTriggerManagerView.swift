@@ -562,7 +562,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
     
     // MARK: - DropDown Data Source
     
-    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
+    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, identifier: any HoundDropDownType) {
         guard let custom = cell as? HoundDropDownTVC else { return }
         custom.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         
@@ -580,7 +580,7 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         }
     }
     
-    func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
+    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
         switch dropDownUIViewIdentifier {
         case DogsAddTriggerDropDownTypes.logReactions.rawValue:
             return availableLogReactions.count
@@ -591,12 +591,12 @@ final class DogsAddTriggerManagerView: HoundView, UIGestureRecognizerDelegate, D
         }
     }
     
-    func numberOfSections(dropDownUIViewIdentifier: String) -> Int {
+    func numberOfSections(identifier: any HoundDropDownType) -> Int {
         // Each dropdown has a single section
         return 1
     }
     
-    func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
+    func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
         if dropDownUIViewIdentifier == DogsAddTriggerDropDownTypes.logReactions.rawValue {
             let currentCell = dropDownLogReactions?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC
 

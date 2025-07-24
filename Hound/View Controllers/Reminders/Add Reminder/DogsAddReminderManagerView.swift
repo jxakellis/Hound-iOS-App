@@ -637,7 +637,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
     
     // MARK: - Drop Down Data Source
     
-    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, dropDownUIViewIdentifier: String) {
+    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, identifier: any HoundDropDownType) {
         guard let customCell = cell as? HoundDropDownTVC else { return }
         customCell.adjustLeadingTrailing(newConstant: HoundDropDown.insetForHoundLabel)
         
@@ -653,7 +653,7 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         }
     }
     
-    func numberOfRows(forSection: Int, dropDownUIViewIdentifier: String) -> Int {
+    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
         switch dropDownUIViewIdentifier {
         case DogsAddReminderDropDownTypes.reminderAction.rawValue:
             return availableReminderActions.count
@@ -664,12 +664,12 @@ final class DogsAddReminderManagerView: HoundView, UITextFieldDelegate, UIGestur
         }
     }
     
-    func numberOfSections(dropDownUIViewIdentifier: String) -> Int {
+    func numberOfSections(identifier: any HoundDropDownType) -> Int {
         // Each dropdown has a single section
         return 1
     }
     
-    func selectItemInDropDown(indexPath: IndexPath, dropDownUIViewIdentifier: String) {
+    func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
         dismissKeyboard()
         
         if dropDownUIViewIdentifier == DogsAddReminderDropDownTypes.reminderAction.rawValue, let cell = dropDownReminderAction?.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC {

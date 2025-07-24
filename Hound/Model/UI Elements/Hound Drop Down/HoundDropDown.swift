@@ -9,7 +9,7 @@
 import UIKit
 
 protocol HoundDropDownDataSource {
-    func setupCellForDropDown(cell: UITableViewCell, indexPath: IndexPath, identifier: any HoundDropDownType)
+    func setupCellForDropDown(cell: HoundDropDownTVC, indexPath: IndexPath, identifier: any HoundDropDownType)
     /// Returns number of rows in a given section of the dropDownMenu
     func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int
     /// Returns number section in the dropDownMenu
@@ -41,10 +41,10 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let identifier = identifier else {
-            return HoundTableViewCell()
+            return HoundDropDownTVC()
         }
         
-        let cell: UITableViewCell = (dropDownTableView?.dequeueReusableCell(withIdentifier: HoundDropDownTVC.reuseIdentifier) ?? HoundTableViewCell())
+        let cell: HoundDropDownTVC = (dropDownTableView?.dequeueReusableCell(withIdentifier: HoundDropDownTVC.reuseIdentifier) as? HoundDropDownTVC ?? HoundDropDownTVC())
 
         dropDownDataSource?.setupCellForDropDown(cell: cell, indexPath: indexPath, identifier: identifier)
 
