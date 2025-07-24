@@ -11,8 +11,6 @@ import UIKit
 
 final class DogsReminderTVC: HoundTableViewCell {
     
-    // TODO REMINDER add tiny 🔕🔔 bell to indicate if individual reminder notifs are on or off
-    
     // MARK: - Elements
     
     let containerView: HoundView = {
@@ -85,6 +83,15 @@ final class DogsReminderTVC: HoundTableViewCell {
         return imageView
     }()
     
+    private let notificationBellImageView: HoundImageView = {
+        let imageView = HoundImageView()
+        
+        imageView.image = UIImage(systemName: "bell.slash")
+        imageView.tintColor = UIColor.systemGray4
+        
+        return imageView
+    }()
+    
     // MARK: - Properties
     
     static let reuseIdentifier = "DogsReminderTVC"
@@ -127,6 +134,9 @@ final class DogsReminderTVC: HoundTableViewCell {
         intervalLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
         chevronImageView.alpha = (forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha) * 0.75
+        notificationBellImageView.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
+        
+        notificationBellImageView.isHidden = !forReminder.reminderIsEnabled || forReminder.reminderRecipientUserIds.contains(where: { $0 == UserInformation.userId ?? Constant.Visual.Text.unknownUserId })
         
         reloadNextAlarmLabel()
     }
@@ -181,6 +191,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         containerView.addSubview(triggerResultIndicatorImageView)
         containerView.addSubview(labelStack)
         containerView.addSubview(chevronImageView)
+        containerView.addSubview(notificationBellImageView)
     }
 
     override func setupConstraints() {
@@ -220,6 +231,13 @@ final class DogsReminderTVC: HoundTableViewCell {
             make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
             make.width.equalTo(chevronImageView.snp.height).multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
+        }
+        
+        notificationBellImageView.snp.makeConstraints { make in
+            make.centerX.equalTo(chevronImageView.snp.centerX)
+            make.centerY.equalTo(reminderActionTextLabel.snp.centerY)
+            make.height.equalTo(chevronImageView.snp.height)
+            make.width.equalTo(notificationBellImageView.snp.height)
         }
     }
 

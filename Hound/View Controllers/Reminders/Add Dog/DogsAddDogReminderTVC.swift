@@ -16,8 +16,6 @@ protocol DogsAddDogReminderTVCDelegate: AnyObject {
 
 final class DogsAddDogReminderTVC: HoundTableViewCell {
     
-    // TODO REMINDER add tiny 🔕🔔 bell to indicate if individual reminder notifs are on or off
-    
     // MARK: - Elements
     
     let containerView: HoundView = {
@@ -74,8 +72,18 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return imageView
     }()
     
+    private let notificationBellImageView: HoundImageView = {
+        let imageView = HoundImageView()
+        
+        imageView.image = UIImage(systemName: "bell.slash")
+        imageView.tintColor = UIColor.systemGray4
+        
+        return imageView
+    }()
+    
     private lazy var chevronSwitchStack: HoundStackView = {
         let stack = HoundStackView(huggingPriority: 300, compressionResistancePriority: 300)
+        stack.addArrangedSubview(notificationBellImageView)
         stack.addArrangedSubview(reminderIsEnabledSwitch)
         stack.addArrangedSubview(chevronImageView)
         stack.axis = .horizontal
@@ -98,16 +106,17 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     }()
     
     @objc private func didToggleReminderIsEnabled(_ sender: Any) {
-        guard let reminderUUID = reminderUUID else { return }
+        guard let reminder = reminder else { return }
         
-        delegate?.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminderUUID, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
+        updateNotificationBell()
+        delegate?.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminder.reminderUUID, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
     }
     
     // MARK: - Properties
     
     static let reuseIdentifier = "DogsAddDogReminderTVC"
     
-    private var reminderUUID: UUID?
+    private var reminder: Reminder?
     
     private weak var delegate: DogsAddDogReminderTVCDelegate?
     
@@ -116,10 +125,12 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     func setup(forDelegate: DogsAddDogReminderTVCDelegate, forReminder: Reminder) {
         delegate = forDelegate
         reminderIsEnabledSwitch.isOn = forReminder.reminderIsEnabled
-        reminderUUID = forReminder.reminderUUID
+        reminder = forReminder
         
         triggerResultIndicatorImageView.isHidden = !forReminder.reminderIsTriggerResult
         chevronSwitchStack.isHidden = forReminder.reminderIsTriggerResult
+        
+        updateNotificationBell()
         
         reminderActionLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName, includeMatchingEmoji: true)
         
@@ -136,6 +147,13 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
             }
         }()
         
+    }
+    
+    // MARK: - Functions
+    
+    private func updateNotificationBell() {
+        guard let reminder = reminder else { return }
+        notificationBellImageView.isHidden = !reminder.reminderIsEnabled || reminder.reminderRecipientUserIds.contains(where: { $0 == UserInformation.userId ?? Constant.Visual.Text.unknownUserId })
     }
     
     // MARK: - Setup Elements
@@ -179,6 +197,12 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
             make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
             make.width.equalTo(chevronImageView.snp.height).multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
+        }
+        
+        notificationBellImageView.snp.makeConstraints { make in
+            make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
+            make.width.equalTo(notificationBellImageView.snp.height)
         }
     }
 
