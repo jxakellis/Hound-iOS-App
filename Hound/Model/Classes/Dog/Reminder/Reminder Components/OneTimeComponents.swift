@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class OneTimeComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
+final class OneTimeComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
     
@@ -32,7 +32,7 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
     
     // MARK: - Properties
     
-    var readableRecurranceInterval: String {
+    var readableDayOfYear: String {
         let dateYear = Calendar.current.component(.year, from: oneTimeDate)
         let currentYear = Calendar.current.component(.year, from: Date())
         
@@ -41,13 +41,13 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
         return oneTimeDate.houndFormatted(.template(template))
     }
     
-    var readableTimeOfDayInterval: String {
+    var readableTimeOfDay: String {
         // 7:53 AM
         return oneTimeDate.houndFormatted(.template("hma"))
     }
     
-    var readableInterval: String {
-        return readableRecurranceInterval.appending(" at \(readableTimeOfDayInterval)")
+    var readableRecurrance: String {
+        return readableDayOfYear.appending(" at \(readableTimeOfDay)")
     }
     
     /// The Date that the alarm should fire
@@ -64,11 +64,33 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying, ReminderComponent 
         self.oneTimeDate = date
     }
     
+    convenience init?(fromBody: JSONResponseBody, componentToOverride: OneTimeComponents?) {
+        let oneTimeDate: Date? = {
+            guard let oneTimeDateString = fromBody[Constant.Key.oneTimeDate.rawValue] as? String else {
+                return nil
+            }
+            return oneTimeDateString.formatISO8601IntoDate()
+        }() ?? componentToOverride?.oneTimeDate
+        
+        guard let oneTimeDate = oneTimeDate else {
+            return nil
+        }
+        self.init(date: oneTimeDate)
+    }
+    
     // MARK: - Compare
     
     /// Returns true if the stored date matches another one-time component
     func isSame(as other: OneTimeComponents) -> Bool {
         return oneTimeDate == other.oneTimeDate
+    }
+    
+    // MARK: - Request
+    
+    func createBody() -> JSONRequestBody {
+        var body: JSONRequestBody = [:]
+        body[Constant.Key.oneTimeDate.rawValue] = .string(oneTimeDate.ISO8601FormatWithFractionalSeconds())
+        return body
     }
     
 }

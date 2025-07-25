@@ -327,7 +327,7 @@ final class DogsAddReminderManagerView: HoundView,
             guard let weekdays = weeklyView.currentWeekdays else {
                 if showErrorIfFailed {
                     HapticsManager.notification(.error)
-                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeeklyComponentsError.weekdaysInvalid
+                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeekdayComponentsError.weekdaysInvalid
                 }
                 
                 return nil
@@ -338,7 +338,7 @@ final class DogsAddReminderManagerView: HoundView,
             guard reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays) else {
                 if showErrorIfFailed {
                     HapticsManager.notification(.error)
-                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeeklyComponentsError.weekdaysInvalid
+                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeekdayComponentsError.weekdaysInvalid
                 }
                 return nil
             }

@@ -9,54 +9,21 @@
 import UIKit
 
 extension String {
-
-    /// Converts dateComponents with .hour and .minute to a readable string, e.g. 8:56AM or 2:23 PM
-    static func convertToReadable(fromUTCHour UTCHour: Int, fromUTCMinute UTCMinute: Int) -> String {
-
-        var localHour: Int = {
-            let hoursFromUTC = Int(TimeZone.current.secondsFromGMT() / 3600)
-            var localHour = UTCHour + hoursFromUTC
-            // Verify localHour >= 0
-            if localHour < 0 {
-                localHour += 24
-            }
-
-            // Verify localHour <= 23
-            if localHour > 23 {
-                localHour = localHour % 24
-            }
-
-            return localHour
-        }()
-
-        let localMinute: Int = {
-            let minutesFromUTC = Int((TimeZone.current.secondsFromGMT() % 3600) / 60 )
-            var localMinute = UTCMinute + minutesFromUTC
-            // Verify localMinute >= 0
-            if localMinute < 0 {
-                localMinute += 60
-            }
-
-            // Verify localMinute <= 59
-            if localMinute > 59 {
-                localMinute = localMinute % 60
-            }
-
-            return localMinute
-        }()
-
-        let amOrPM: String = localHour < 12 ? "AM" : "PM"
-
-        // convert localHour to non-military time
-        if localHour > 12 {
-            localHour -= 12
-        }
-        else if localHour == 0 {
-            localHour = 12
+    
+    static func convert(hour: Int, minute: Int) -> String {
+        // Build a date with the hour/minute (date is arbitrary, e.g., Jan 1, 2000)
+        var components = DateComponents()
+        components.year = 2000
+        components.month = 1
+        components.day = 1
+        components.hour = hour
+        components.minute = minute
+        let calendar = Calendar(identifier: .gregorian)
+        guard let date = calendar.date(from: components) else {
+            return "\(hour):\(String(format: "%02d", minute))"
         }
 
-        // 7:00 PM, 7:10 AM
-        return "\(localHour):\(localMinute < 10 ? "0" : "")\(localMinute) \(amOrPM)"
+        return date.formatted(date: .omitted, time: .shortened)
     }
 
     /// Only works if the label it is being used on has a single line of text OR has its paragraphs predefined with \n (s).

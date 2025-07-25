@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
+final class CountdownComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
     
@@ -31,16 +31,12 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
     
     // MARK: - Properties
     
-    var readableRecurranceInterval: String {
-        return "Every"
-    }
-    
-    var readableTimeOfDayInterval: String {
+    var readableTimeOfDay: String {
         return executionInterval.readable(capitalizeWords: true, abreviateWords: false)
     }
     
-    var readableInterval: String {
-        return readableRecurranceInterval.appending(" \(readableTimeOfDayInterval)")
+    var readableRecurrance: String {
+        return "Every \(readableTimeOfDay)"
     }
     
     /// Interval at which a countdown should be last for reminder
@@ -55,11 +51,27 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying, ReminderComponen
         super.init()
     }
     
+    convenience init?(fromBody: JSONResponseBody, componentToOverride: CountdownComponents?) {
+        let executionInterval: Double? = fromBody[Constant.Key.countdownExecutionInterval.rawValue] as? Double ?? componentToOverride?.executionInterval
+        guard let executionInterval = executionInterval else {
+            return nil
+        }
+        self.init(forExecutionInterval: executionInterval)
+    }
+    
     // MARK: - Compare
     
     /// Returns true if all stored properties are equivalent
     func isSame(as other: CountdownComponents) -> Bool {
         return executionInterval == other.executionInterval
+    }
+    
+    // MARK: - Request
+    
+    func createBody() -> JSONRequestBody {
+        var body: JSONRequestBody = [:]
+        body[Constant.Key.countdownExecutionInterval.rawValue] = .double(executionInterval)
+        return body
     }
     
 }

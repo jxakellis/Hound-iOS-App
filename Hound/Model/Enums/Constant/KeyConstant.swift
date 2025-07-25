@@ -156,6 +156,7 @@ public enum KeyConstant: String {
     case reminderIsTriggerResult
     case reminderIsEnabled
     case reminderRecipientUserIds
+    case reminderTimeZone
     case reminderLastModified
     case reminderIsDeleted
     
@@ -221,17 +222,16 @@ public enum KeyConstant: String {
 
     // client
     case weeklyComponents
-    case weeklyWeekdays
     // client and server
-    case weeklyUTCHour
-    case weeklyUTCMinute
-    case weeklySunday
-    case weeklyMonday
-    case weeklyTuesday
-    case weeklyWednesday
-    case weeklyThursday
-    case weeklyFriday
-    case weeklySaturday
+    case weeklyZonedHour
+    case weeklyZonedMinute
+    case weeklyZonedSunday
+    case weeklyZonedMonday
+    case weeklyZonedTuesday
+    case weeklyZonedWednesday
+    case weeklyZonedThursday
+    case weeklyZonedFriday
+    case weeklyZonedSaturday
     case weeklySkippedDate
 
     // MARK: Monthly Components
@@ -239,9 +239,9 @@ public enum KeyConstant: String {
     // client
     case monthlyComponents
     // client and server
-    case monthlyUTCDay
-    case monthlyUTCHour
-    case monthlyUTCMinute
+    case monthlyZonedDay
+    case monthlyZonedHour
+    case monthlyZonedMinute
     case monthlySkippedDate
 
     // MARK: One Time Components

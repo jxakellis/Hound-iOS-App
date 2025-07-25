@@ -1,5 +1,5 @@
 //
-//  WeeklyComponents.swift
+//  WeekdayComponents.swift
 //  Hound
 //
 //  Created by Jonathan Xakellis on 3/4/22.
@@ -8,15 +8,56 @@
 
 import Foundation
 
-final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
+enum Weekday: Int, CaseIterable, Comparable {
+    case sunday = 1
+    case monday
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+    case saturday
+    
+    var shortAbbreviation: String {
+        switch self {
+        case .sunday:    return "Su"
+        case .monday:    return "M"
+        case .tuesday:   return "Tu"
+        case .wednesday: return "W"
+        case .thursday:  return "Th"
+        case .friday:    return "F"
+        case .saturday:  return "Sa"
+        }
+    }
+    var longName: String {
+        switch self {
+        case .sunday:    return "Sunday"
+        case .monday:    return "Monday"
+        case .tuesday:   return "Tuesday"
+        case .wednesday: return "Wednesday"
+        case .thursday:  return "Thursday"
+        case .friday:    return "Friday"
+        case .saturday:  return "Saturday"
+        }
+    }
+    
+    static func < (lhs: Weekday, rhs: Weekday) -> Bool { lhs.rawValue < rhs.rawValue }
+}
+
+final class WeekdayComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {
-        let copy = WeeklyComponents()
-        copy.weekdays = self.weekdays
-        copy.UTCHour = self.UTCHour
-        copy.UTCMinute = self.UTCMinute
+        let copy = WeekdayComponents()
+        copy.zonedSunday = self.zonedSunday
+        copy.zonedMonday = self.zonedMonday
+        copy.zonedTuesday = self.zonedTuesday
+        copy.zonedWednesday = self.zonedWednesday
+        copy.zonedThursday = self.zonedThursday
+        copy.zonedFriday = self.zonedFriday
+        copy.zonedSaturday = self.zonedSaturday
+        copy.zonedHour = self.zonedHour
+        copy.zonedMinute = self.zonedMinute
         copy.skippedDate = self.skippedDate
         
         return copy
@@ -25,18 +66,30 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
     // MARK: - NSCoding
     
     required init?(coder aDecoder: NSCoder) {
-        weekdays = aDecoder.decodeOptionalObject(forKey: Constant.Key.weeklyWeekdays.rawValue) ?? weekdays
-        UTCHour = aDecoder.decodeOptionalInteger(forKey: Constant.Key.weeklyUTCHour.rawValue) ?? UTCHour
-        UTCMinute = aDecoder.decodeOptionalInteger(forKey: Constant.Key.weeklyUTCMinute.rawValue) ?? UTCMinute
+        zonedSunday = aDecoder.decodeOptionalBool(forKey: Constant.Key.weeklyZonedSunday.rawValue) ?? zonedSunday
+        zonedMonday = aDecoder.decodeOptionalBool(forKey: Constant.Key.weeklyZonedMonday.rawValue) ?? zonedMonday
+        zonedTuesday = aDecoder.decodeOptionalBool(forKey: Constant.Key.weeklyZonedTuesday.rawValue) ?? zonedTuesday
+        zonedWednesday = aDecoder.decodeOptionalBool(forKey: Constant.Key.weeklyZonedWednesday.rawValue) ?? zonedWednesday
+        zonedThursday = aDecoder.decodeOptionalBool(forKey: Constant.Key.weeklyZonedThursday.rawValue) ?? zonedThursday
+        zonedFriday = aDecoder.decodeOptionalBool(forKey: Constant.Key.weeklyZonedFriday.rawValue) ?? zonedFriday
+        zonedSaturday = aDecoder.decodeOptionalBool(forKey: Constant.Key.weeklyZonedSaturday.rawValue) ?? zonedSaturday
+        zonedHour = aDecoder.decodeOptionalInteger(forKey: Constant.Key.weeklyZonedHour.rawValue) ?? zonedHour
+        zonedMinute = aDecoder.decodeOptionalInteger(forKey: Constant.Key.weeklyZonedMinute.rawValue) ?? zonedMinute
         skippedDate = aDecoder.decodeOptionalObject(forKey: Constant.Key.weeklySkippedDate.rawValue)
     }
     
     func encode(with aCoder: NSCoder) {
         // IMPORTANT ENCODING INFORMATION. DO NOT ENCODE NIL FOR PRIMATIVE TYPES. If encoding a data type which requires a decoding function other than decodeObject (e.g. decodeObject, decodeDouble...), the value that you encode CANNOT be nil. If nil is encoded, then one of these custom decoding functions trys to decode it, a cascade of erros will happen that results in a completely default dog being decoded.
         
-        aCoder.encode(weekdays, forKey: Constant.Key.weeklyWeekdays.rawValue)
-        aCoder.encode(UTCHour, forKey: Constant.Key.weeklyUTCHour.rawValue)
-        aCoder.encode(UTCMinute, forKey: Constant.Key.weeklyUTCMinute.rawValue)
+        aCoder.encode(zonedSunday, forKey: Constant.Key.weeklyZonedSunday.rawValue)
+        aCoder.encode(zonedMonday, forKey: Constant.Key.weeklyZonedMonday.rawValue)
+        aCoder.encode(zonedTuesday, forKey: Constant.Key.weeklyZonedTuesday.rawValue)
+        aCoder.encode(zonedWednesday, forKey: Constant.Key.weeklyZonedWednesday.rawValue)
+        aCoder.encode(zonedThursday, forKey: Constant.Key.weeklyZonedThursday.rawValue)
+        aCoder.encode(zonedFriday, forKey: Constant.Key.weeklyZonedFriday.rawValue)
+        aCoder.encode(zonedSaturday, forKey: Constant.Key.weeklyZonedSaturday.rawValue)
+        aCoder.encode(zonedHour, forKey: Constant.Key.weeklyZonedHour.rawValue)
+        aCoder.encode(zonedMinute, forKey: Constant.Key.weeklyZonedMinute.rawValue)
         if let skippedDate = skippedDate {
             aCoder.encode(skippedDate, forKey: Constant.Key.weeklySkippedDate.rawValue)
         }
@@ -44,123 +97,46 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
     
     // MARK: - Properties
     
-    var readableRecurranceInterval: String {
-        switch weekdays {
-        case [1, 2, 3, 4, 5, 6, 7]:
-            return "Everyday"
-        case [1, 7]:
-            return "Weekends"
-        case [2, 3, 4, 5, 6]:
-            return "Weekdays"
-        default:
-            var string = ""
-            
-            let shouldAbreviateWeekday = weekdays.count > 1
-            for weekdayInt in weekdays {
-                switch weekdayInt {
-                case 1:
-                    string.append(shouldAbreviateWeekday ? "Su, " : "Sunday ")
-                case 2:
-                    string.append(shouldAbreviateWeekday ? "M, " : "Monday ")
-                case 3:
-                    string.append(shouldAbreviateWeekday ? "Tu, " : "Tuesday ")
-                case 4:
-                    string.append(shouldAbreviateWeekday ? "W, " : "Wednesday ")
-                case 5:
-                    string.append(shouldAbreviateWeekday ? "Th, " : "Thursday ")
-                case 6:
-                    string.append(shouldAbreviateWeekday ? "F, " : "Friday ")
-                case 7:
-                    string.append(shouldAbreviateWeekday ? "Sa, " : "Saturday ")
-                default:
-                    continue
-                }
-            }
-            
-            // Check for case of "Su, M, Tu, " to correct to "Su, M, Tu ", replacing last occurance of ", " with " "
-            let lastTwoCharactersIndex = string.index(string.endIndex, offsetBy: -2)
-            let lastTwoCharacters = String(string[lastTwoCharactersIndex...])
-            if lastTwoCharacters == ", " {
-                string.removeLast()
-                string.removeLast()
-            }
-            
-            return string.trimmingCharacters(in: .whitespacesAndNewlines)
+    private var zonedSunday: Bool = true
+    private var zonedMonday: Bool = true
+    private var zonedTuesday: Bool = true
+    private var zonedWednesday: Bool = true
+    private var zonedThursday: Bool = true
+    private var zonedFriday: Bool = true
+    private var zonedSaturday: Bool = true
+    var zonedWeekdays: [Weekday] {
+        var weekdays: [Weekday] = []
+        if zonedSunday    { weekdays.append(.sunday) }
+        if zonedMonday    { weekdays.append(.monday) }
+        if zonedTuesday   { weekdays.append(.tuesday) }
+        if zonedWednesday { weekdays.append(.wednesday) }
+        if zonedThursday  { weekdays.append(.thursday) }
+        if zonedFriday    { weekdays.append(.friday) }
+        if zonedSaturday  { weekdays.append(.saturday) }
+        return weekdays
+    }
+    func setZonedWeekdays(_ weekdays: [Weekday]) {
+        guard !weekdays.isEmpty else {
+            return
         }
+        zonedSunday = weekdays.contains(.sunday)
+        zonedMonday = weekdays.contains(.monday)
+        zonedTuesday = weekdays.contains(.tuesday)
+        zonedWednesday = weekdays.contains(.wednesday)
+        zonedThursday = weekdays.contains(.thursday)
+        zonedFriday = weekdays.contains(.friday)
+        zonedSaturday = weekdays.contains(.saturday)
     }
     
-    var readableTimeOfDayInterval: String {
-        return String.convertToReadable(fromUTCHour: UTCHour, fromUTCMinute: UTCMinute)
-    }
+    private(set) var zonedHour: Int = Constant.Class.ReminderComponent.defaultZonedHour
     
-    var readableInterval: String {
-        return readableRecurranceInterval.appending(" at \(readableTimeOfDayInterval)")
-    }
-    
-    /// The weekdays on which the reminder should fire. 1 - 7, where 1 is sunday and 7 is saturday.
-    private(set) var weekdays: [Int] = [1, 2, 3, 4, 5, 6, 7]
-    @discardableResult
-    func changeWeekdays(forWeekdays: [Int]) -> Bool {
-        let acceptableWeekdays = [1, 2, 3, 4, 5, 6, 7]
-        // remove duplicates from forWeekdays
-        // remove weekdays that aren't valid from weekdays
-        // sort weekdays
-        
-        let filteredWeekdays = Array(Set(forWeekdays)).filter({ forWeekday in
-            acceptableWeekdays.contains(forWeekday)
-        }).sorted()
-        
-        guard !filteredWeekdays.isEmpty else {
-            return false
-        }
-        
-        weekdays = filteredWeekdays
-        return true
-    }
-    
-    /// Hour of the day that that the reminder should fire in GMT+0000. [0, 23]
-    private(set) var UTCHour: Int = Constant.Class.ReminderComponent.defaultUTCHour
-    /// UTCHour but converted to the hour in the user's timezone
-    var localHour: Int {
-        let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
-        
-        var localHour = UTCHour + hoursFromUTC
-        // localHour could be negative, so roll over into positive
-        localHour += 24
-        // Make sure localHour [0, 23]
-        localHour = localHour % 24
-        return localHour
-    }
-    
-    /// Takes a given date and extracts the UTC Hour (GMT+0000) from it.
-    func changeUTCHour(forDate: Date) {
-        UTCHour = Calendar.UTCCalendar.component(.hour, from: forDate)
-    }
-    
-    /// Minute of the day that that the reminder should fire in GMT+0000. [0, 59]
-    private(set) var UTCMinute: Int = Constant.Class.ReminderComponent.defaultUTCMinute
-    /// UTCMinute but converted to the minute in the user's timezone
-    var localMinute: Int {
-        let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
-        var localMinute = UTCMinute + minutesFromUTC
-        // localMinute could be negative, so roll over into positive
-        localMinute += 60
-        // Make sure localMinute [0, 59]
-        localMinute = localMinute % 60
-        return localMinute
-    }
-    /// Takes a given date and extracts the UTC minute (GMT+0000) from it.
-    func changeUTCMinute(forDate: Date) {
-        UTCMinute = Calendar.UTCCalendar.component(.minute, from: forDate)
-    }
-    
-    /// Whether or not the next alarm will be skipped
-    var isSkipping: Bool {
-        skippedDate != nil
-    }
+    private(set) var zonedMinute: Int = Constant.Class.ReminderComponent.defaultZonedMinute
     
     /// The date at which the user changed the isSkipping to true.  If is skipping is true, then a certain log date was appended. If unskipped, then we have to remove that previously added log. Slight caveat: if the skip log was modified (by the user changing its date) we don't remove it.
     var skippedDate: Date?
+    var isSkipping: Bool {
+        skippedDate != nil
+    }
     
     // MARK: - Main
     
@@ -168,180 +144,231 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying, ReminderComponent {
         super.init()
     }
     
-    convenience init(UTCHour: Int, UTCMinute: Int, skippedDate: Date?, sunday: Bool, monday: Bool, tuesday: Bool, wednesday: Bool, thursday: Bool, friday: Bool, saturday: Bool) {
-        self.init()
-        self.UTCHour = UTCHour
-        self.UTCMinute = UTCMinute
-        self.skippedDate = skippedDate
+    convenience init(
+        zonedSunday: Bool,
+        zonedMonday: Bool,
+        zonedTuesday: Bool,
+        zonedWednesday: Bool,
+        zonedThursday: Bool,
+        zonedFriday: Bool,
+        zonedSaturday: Bool,
+        zonedHour: Int,
+        zonedMinute: Int,
+        skippedDate: Date?, ) {
+            self.init()
+            self.zonedSunday = zonedSunday
+            self.zonedMonday = zonedMonday
+            self.zonedTuesday = zonedTuesday
+            self.zonedWednesday = zonedWednesday
+            self.zonedThursday = zonedThursday
+            self.zonedFriday = zonedFriday
+            self.zonedSaturday = zonedSaturday
+            self.zonedHour = zonedHour
+            self.zonedMinute = zonedMinute
+            self.skippedDate = skippedDate
+        }
+    
+    convenience init?(fromBody: JSONResponseBody, componentToOverride: WeekdayComponents?) {
+        let zonedSunday: Bool? = fromBody[Constant.Key.weeklyZonedSunday.rawValue] as? Bool ?? componentToOverride?.zonedSunday
+        let zonedMonday: Bool? = fromBody[Constant.Key.weeklyZonedMonday.rawValue] as? Bool ?? componentToOverride?.zonedMonday
+        let zonedTuesday: Bool? = fromBody[Constant.Key.weeklyZonedTuesday.rawValue] as? Bool ?? componentToOverride?.zonedTuesday
+        let zonedWednesday: Bool? = fromBody[Constant.Key.weeklyZonedWednesday.rawValue] as? Bool ?? componentToOverride?.zonedWednesday
+        let zonedThursday: Bool? = fromBody[Constant.Key.weeklyZonedThursday.rawValue] as? Bool ?? componentToOverride?.zonedThursday
+        let zonedFriday: Bool? = fromBody[Constant.Key.weeklyZonedFriday.rawValue] as? Bool ?? componentToOverride?.zonedFriday
+        let zonedSaturday: Bool? = fromBody[Constant.Key.weeklyZonedSaturday.rawValue] as? Bool ?? componentToOverride?.zonedSaturday
+        let zonedHour: Int? = fromBody[Constant.Key.weeklyZonedHour.rawValue] as? Int ?? componentToOverride?.zonedHour
+        let zonedMinute: Int? = fromBody[Constant.Key.weeklyZonedMinute.rawValue] as? Int ?? componentToOverride?.zonedMinute
+        let skippedDate: Date? = {
+            guard let weeklySkippedDateString = fromBody[Constant.Key.weeklySkippedDate.rawValue] as? String else {
+                return nil
+            }
+            return weeklySkippedDateString.formatISO8601IntoDate()
+        }() ?? componentToOverride?.skippedDate
         
-        weekdays = []
-        if sunday == true {
-            weekdays.append(1)
+        guard let zonedSunday = zonedSunday,
+              let zonedMonday = zonedMonday,
+              let zonedTuesday = zonedTuesday,
+              let zonedWednesday = zonedWednesday,
+              let zonedThursday = zonedThursday,
+              let zonedFriday = zonedFriday,
+              let zonedSaturday = zonedSaturday,
+              let zonedHour = zonedHour,
+              let zonedMinute = zonedMinute else {
+            return nil
         }
-        if monday == true {
-            weekdays.append(2)
-        }
-        if tuesday == true {
-            weekdays.append(3)
-        }
-        if wednesday == true {
-            weekdays.append(4)
-        }
-        if thursday == true {
-            weekdays.append(5)
-        }
-        if friday == true {
-            weekdays.append(6)
-        }
-        if saturday == true {
-            weekdays.append(7)
-        }
-        
-        if weekdays.isEmpty {
-            weekdays = [1, 2, 3, 4, 5, 6, 7]
-        }
+        self.init(
+            zonedSunday: zonedSunday,
+            zonedMonday: zonedMonday,
+            zonedTuesday: zonedTuesday,
+            zonedWednesday: zonedWednesday,
+            zonedThursday: zonedThursday,
+            zonedFriday: zonedFriday,
+            zonedSaturday: zonedSaturday,
+            zonedHour: zonedHour,
+            zonedMinute: zonedMinute,
+            skippedDate: skippedDate
+        )
     }
     
     // MARK: - Functions
     
-    /// This find the next execution date that takes place after the reminderExecutionBasis. It purposelly not factoring in isSkipping.
-    func notSkippingExecutionDate(forReminderExecutionBasis reminderExecutionBasis: Date) -> Date {
-        
-        let futureExecutionDates = futureExecutionDates(forReminderExecutionBasis: reminderExecutionBasis)
-        
-        // Default to the first item in the array, as it is most likely the closest to the present
-        var soonestFutureExecutionDate: Date = futureExecutionDates.first ?? Constant.Class.Date.default1970Date
-        
-        // Find any dates that are closer to the present that the current soonestFutureExecutionDate. If a date is closer to the present that soonestFutureExecutionDate, set soonestFutureExecutionDate to its value
-        for futureExecutionDate in futureExecutionDates where reminderExecutionBasis.distance(to: futureExecutionDate) < reminderExecutionBasis.distance(to: soonestFutureExecutionDate) {
-            soonestFutureExecutionDate = futureExecutionDate
+    func readableDaysOfWeek(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> String {
+        let mappedWeekdays = zonedTimeZone.convert(weekdays: zonedWeekdays, hour: zonedHour, minute: zonedMinute, to: destinationTimeZone)
+        switch Set(mappedWeekdays) {
+        case Set(Weekday.allCases): return "Everyday"
+        case [.sunday, .saturday]: return "Weekends"
+        case [.monday, .tuesday, .wednesday, .thursday, .friday]: return "Weekdays"
+        default:
+            let abbreviate = mappedWeekdays.count > 1
+            return mappedWeekdays.sorted().map { abbreviate ? $0.shortAbbreviation : $0.longName }.joined(separator: ", ")
         }
-        
-        return soonestFutureExecutionDate
     }
     
-    /// Returns the date that the reminder should have last sounded an alarm at. This helps in finding alarms that might have been missed
-    func previousExecutionDate(forReminderExecutionBasis reminderExecutionBasis: Date) -> Date {
-        
-        let nextExecutionDate = notSkippingExecutionDate(forReminderExecutionBasis: reminderExecutionBasis)
-        
-        guard weekdays.count > 1 else {
-            // only 1 day of week so simply subtract a week
-            return Calendar.UTCCalendar.date(byAdding: .day, value: -7, to: nextExecutionDate) ?? Constant.Class.Date.default1970Date
-        }
-        
-        let futureExecutionDates = futureExecutionDates(forReminderExecutionBasis: reminderExecutionBasis)
-        
-        var pastExecutionDates: [Date] = []
-        
-        // Take every date and shift it back a week
-        for futureExecutionDate in futureExecutionDates {
-            pastExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: -7, to: futureExecutionDate) ?? Constant.Class.Date.default1970Date)
-        }
-        
-        // Choose date that is likely to be the closest to the present
-        var soonestExecutionDate: Date = pastExecutionDates.first ?? Constant.Class.Date.default1970Date
-        
-        // Find date that are before the nextExecutionDate while also being closer to nextExecutionDate that soonestExecutionDate
-        for pastExecutionDate in pastExecutionDates where
-        nextExecutionDate.distance(to: pastExecutionDate) < 0
-        && nextExecutionDate.distance(to: pastExecutionDate) > nextExecutionDate.distance(to: soonestExecutionDate) {
-            // pastExecutionDate comes before nextExecutionDate while being closer to nextExecutionDate than soonestExecutionDate
-            soonestExecutionDate = pastExecutionDate
-        }
-        
-        return soonestExecutionDate
+    func readableTimeOfDay(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> String {
+        let (hour, minute) = zonedTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: destinationTimeZone)
+        return String.convert(hour: hour, minute: minute)
     }
     
-    /// Factors in isSkipping to figure out the next time of day
-    func nextExecutionDate(forReminderExecutionBasis reminderExecutionBasis: Date) -> Date {
-        isSkipping ? skippingExecutionDate(forReminderExecutionBasis: reminderExecutionBasis) : notSkippingExecutionDate(forReminderExecutionBasis: reminderExecutionBasis)
+    func readableRecurrance(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> String {
+        let readableDaysOfWeek = readableDaysOfWeek(from: zonedTimeZone, to: destinationTimeZone)
+        let readableTimeOfDay = readableTimeOfDay(from: zonedTimeZone, to: destinationTimeZone)
+        return readableDaysOfWeek.appending(" at \(readableTimeOfDay)")
     }
     
-    // MARK: - Private Helper Functions
+    // MARK: - Timing
     
-    /// Produces an array of at least two with all of the future dates that the reminder will fire given the weekday(s), hour, and minute
-    private func futureExecutionDates(forReminderExecutionBasis reminderExecutionBasis: Date) -> [Date] {
-        
-        // the dates calculated to be reminderExecutionDates
-        var futureExecutionDates: [Date] = {
-            var futureExecutionDates: [Date] = []
+    /// Determines the next execution date, considering isSkipping state, based on `sourceTimeZone`.
+    func nextExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
+        return isSkipping
+        ? skippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+        : notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+    }
+    
+    /// Finds the next execution date after `reminderExecutionBasis`, using zoned weekdays/hours/minutes in the specified `sourceTimeZone`.
+    /// Skipping state is NOT factored in.
+    /// - Returns: The closest valid future execution date (or default date if none found).
+    func notSkippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
+        let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+        return futureDates.first(where: { $0 > reminderExecutionBasis }) ?? Constant.Class.Date.default1970Date
+    }
+    
+    /// If a reminder is skipping, find the next soonest execution date after the skipped one.
+    /// Returns: The next valid execution date strictly after the skipped one, or default date if none found.
+    private func skippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
+        let nextExecution = notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+        // The next execution after the skipped one, robustly (no +7 day fudge).
+        let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+        return futureDates.first(where: { $0 > nextExecution }) ?? Constant.Class.Date.default1970Date
+    }
+    
+    /// Finds the most recent valid execution date strictly before `reminderExecutionBasis`
+    /// based on the component's zoned weekdays, hour, and minute, in the specified `sourceTimeZone`.
+    /// Robust to DST and ambiguous/skipped times.
+    func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
+        let calendar = Calendar(identifier: .gregorian)
+        var latestPrevious: Date?
+        // Try all active weekdays to find the most recent valid date < basis
+        for zonedWeekday in zonedWeekdays {
+            var components = calendar.dateComponents(in: sourceTimeZone, from: reminderExecutionBasis)
+            components.weekday = zonedWeekday.rawValue
+            components.hour = zonedHour
+            components.minute = zonedMinute
+            components.second = 0
             
-            // iterate throguh all weekdays
-            for weekday in weekdays {
-                // Add the target weekday to reminderExecutionBasis
-                var futureExecutionDate = Calendar.UTCCalendar.date(bySetting: .weekday, value: weekday, of: reminderExecutionBasis) ?? Constant.Class.Date.default1970Date
-                
-                // Iterate the futureExecutionDate forward until the first result that matches UTCHour and UTCMinute is found
-                futureExecutionDate = Calendar.UTCCalendar.date(bySettingHour: UTCHour, minute: UTCMinute, second: 0, of: futureExecutionDate, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward) ?? Constant.Class.Date.default1970Date
-                
-                // Make sure futureExecutionDate is after reminderExecutionBasis
-                // Correction for setting components to the same day. e.g. if its 11:00Am friday and you apply 8:30AM Friday to the current date, then it is in the past, this gets around this by making it 8:30AM Next Friday
-                if reminderExecutionBasis.distance(to: futureExecutionDate) < 0 {
-                    futureExecutionDate = Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: futureExecutionDate) ?? Constant.Class.Date.default1970Date
+            // Use direction: .backward to get previous matching
+            if let previous = calendar.nextDate(
+                after: reminderExecutionBasis,
+                matching: components,
+                matchingPolicy: .nextTimePreservingSmallerComponents,
+                repeatedTimePolicy: .first,
+                direction: .backward
+            ) {
+                if latestPrevious == nil || previous > latestPrevious! {
+                    latestPrevious = previous
                 }
-                
-                futureExecutionDates.append(futureExecutionDate)
-            }
-            return futureExecutionDates
-        }()
-        
-        // futureExecutionDates should have at least two dates
-        if futureExecutionDates.count <= 1 {
-            if let futureExecutionDate = futureExecutionDates.first {
-                // Only one weekday is active. Take the execution date for that single weekday and add a duplicate, but a week in the future
-                futureExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: futureExecutionDate) ?? Constant.Class.Date.default1970Date)
-            }
-            else {
-                // No weekdays active. Shouldn't happen. Handle by adding 1 week and 2 weeks to reminderExecutionBasis
-                futureExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: reminderExecutionBasis) ?? Constant.Class.Date.default1970Date)
-                futureExecutionDates.append(Calendar.UTCCalendar.date(byAdding: .day, value: 14, to: reminderExecutionBasis) ?? Constant.Class.Date.default1970Date)
             }
         }
-        
-        futureExecutionDates.sort()
-        
-        return futureExecutionDates
+        // Return the latest found or your chosen default
+        return latestPrevious ?? Constant.Class.Date.default1970Date
     }
     
-    /// If a reminder is skipping, then we must find the next soonest reminderExecutionDate. We have to find the execution date that takes place after the skipped execution date (but before any other execution date).
-    private func skippingExecutionDate(forReminderExecutionBasis reminderExecutionBasis: Date) -> Date {
+    /// Computes the next three valid execution dates (in strict chronological order) in the specified source time zone,
+    /// using the object's zoned weekdays, hour, and minute, relative to `reminderExecutionBasis`.
+    /// This function is robust to DST changes, ambiguous times, and ensures results are always valid for the zone provided.
+    private func futureExecutionDates(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> [Date] {
+        let calendar = Calendar(identifier: .gregorian)
+        var dates: [Date] = []
+        var searchBasis = reminderExecutionBasis
         
-        let nextExecutionDate = notSkippingExecutionDate(forReminderExecutionBasis: reminderExecutionBasis)
-        
-        guard weekdays.count > 1 else {
-            // If only 1 day of week selected so simply add 1 week.
-            return Calendar.UTCCalendar.date(byAdding: .day, value: 7, to: nextExecutionDate) ?? Constant.Class.Date.default1970Date
+        // Compute the next 3 valid, non-ambiguous, non-skipped occurrences.
+        for _ in 0..<3 {
+            var soonest: Date?
+            for zonedWeekday in zonedWeekdays {
+                var components = calendar.dateComponents(in: sourceTimeZone, from: searchBasis)
+                components.weekday = zonedWeekday.rawValue
+                components.hour = zonedHour
+                components.minute = zonedMinute
+                components.second = 0
+                
+                // Use .nextTimePreservingSmallerComponents to handle DST and real-world scheduling.
+                if let next = calendar.nextDate(
+                    after: searchBasis,
+                    matching: components,
+                    matchingPolicy: .nextTimePreservingSmallerComponents,
+                    repeatedTimePolicy: .first,
+                    direction: .forward
+                ) {
+                    if soonest == nil {
+                        soonest = next
+                    }
+                    else if let s = soonest, next < s{
+                        soonest = next
+                    }
+                }
+            }
+            if let found = soonest {
+                dates.append(found)
+                // Advance search basis for next iteration
+                searchBasis = found.addingTimeInterval(1)
+            } else {
+                break // No further dates found
+            }
         }
-        
-        // If there are multiple dates to be sorted through to find the date that is closer in time to traditionalNextTimeOfDay but still in the future
-        let futureExecutionDates = futureExecutionDates(forReminderExecutionBasis: reminderExecutionBasis)
-        
-        // Find the futureExecutionDate that is after nextExecutionDate
-        var soonestFutureExecutionDate: Date = futureExecutionDates.first(where: { futureExecutionDate in
-            nextExecutionDate.distance(to: futureExecutionDate) > 0
-        }) ?? Constant.Class.Date.default1970Date
-        
-        // Attempt to find futureExecutionDates that are further in the future than nextExecutionDate while being closer to nextExecutionDate than soonestFutureExecutionDate. Doing this will give us the first executionDate that is directly after nextExecutionDate
-        for futureExecutionDate in futureExecutionDates where
-        nextExecutionDate.distance(to: futureExecutionDate) > 0
-        && nextExecutionDate.distance(to: futureExecutionDate) < nextExecutionDate.distance(to: soonestFutureExecutionDate) {
-            soonestFutureExecutionDate = futureExecutionDate
-        }
-        
-        return soonestFutureExecutionDate
+        return dates
     }
     
     // MARK: - Compare
     
     /// Returns true if all stored properties are equivalent
-    func isSame(as other: WeeklyComponents) -> Bool {
-        if UTCHour != other.UTCHour { return false }
-        if UTCMinute != other.UTCMinute { return false }
-        if weekdays != other.weekdays { return false }
+    func isSame(as other: WeekdayComponents) -> Bool {
+        if zonedSunday != other.zonedSunday { return false }
+        if zonedMonday != other.zonedMonday { return false }
+        if zonedTuesday != other.zonedTuesday { return false }
+        if zonedWednesday != other.zonedWednesday { return false }
+        if zonedThursday != other.zonedThursday { return false }
+        if zonedFriday != other.zonedFriday { return false }
+        if zonedSaturday != other.zonedSaturday { return false }
+        if zonedHour != other.zonedHour { return false }
+        if zonedMinute != other.zonedMinute { return false }
         if isSkipping != other.isSkipping { return false }
         if skippedDate != other.skippedDate { return false }
         return true
     }
     
+    // MARK: - Request
+    
+    func createBody() -> JSONRequestBody {
+        var body: JSONRequestBody = [:]
+        body[Constant.Key.weeklyZonedSunday.rawValue] = .bool(zonedSunday)
+        body[Constant.Key.weeklyZonedMonday.rawValue] = .bool(zonedMonday)
+        body[Constant.Key.weeklyZonedTuesday.rawValue] = .bool(zonedTuesday)
+        body[Constant.Key.weeklyZonedWednesday.rawValue] = .bool(zonedWednesday)
+        body[Constant.Key.weeklyZonedThursday.rawValue] = .bool(zonedThursday)
+        body[Constant.Key.weeklyZonedFriday.rawValue] = .bool(zonedFriday)
+        body[Constant.Key.weeklyZonedSaturday.rawValue] = .bool(zonedSaturday)
+        body[Constant.Key.weeklyZonedHour.rawValue] = .int(zonedHour)
+        body[Constant.Key.weeklyZonedMinute.rawValue] = .int(zonedMinute)
+        body[Constant.Key.weeklySkippedDate.rawValue] = .string(skippedDate?.ISO8601FormatWithFractionalSeconds())
+        return body
+    }
 }

@@ -688,7 +688,7 @@ public enum ErrorConstant {
         }
     }
 
-    enum WeeklyComponentsError {
+    enum WeekdayComponentsError {
         static let weekdaysInvalid = "Choose at least one day of week"
     }
 

@@ -113,42 +113,9 @@ public enum ReminderConstant {
 public enum ReminderComponentConstant {
     static let defaultCountdownExecutionInterval: Double = 60 * 60 * 2
 
-    static let defaultUTCDay: Int = 1
-
-    /// Hour 7 of the day in the user's local time zone, but adjusted so that hour 7 is in UTC hours (e.g. UTC-5 so localHour is 7 and UTCHour is 12)
-    static var defaultUTCHour: Int {
-        // We want hour 7 of the day in the users local timezone
-        let defaultLocalHour = 7
-        let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
-
-        // UTCHour + hoursFromUTC = localHour
-        // UTCHour = localHour - hoursFromUTC
-
-        var UTCHour = defaultLocalHour - hoursFromUTC
-        // UTCHour could be negative, so roll over into positive
-        UTCHour += 24
-        // Make sure UTCHour [0, 23]
-        UTCHour = UTCHour % 24
-
-        return UTCHour
-    }
-
-    /// Minute 0 of the hour in the user's local time zone, but adjusted so that minute 0  is in UTC hours (e.g. UTC-0:30 so localMinute is 0 and UTCMinute is 30)
-    static var defaultUTCMinute: Int {
-        let defaultLocalMinute = 0
-        let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
-
-        // UTCMinute + minutesFromUTC = localMinute
-        // UTCMinute = localMinute - minutesFromUTC
-
-        var UTCMinute = defaultLocalMinute - minutesFromUTC
-        // UTCMinute could be negative, so roll over into positive
-        UTCMinute += 60
-        // Make sure UTCMinute [0, 59]
-        UTCMinute = UTCMinute % 60
-
-        return UTCMinute
-    }
+    static let defaultZonedDay: Int = 1
+    static var defaultZonedHour: Int  = 7
+    static var defaultZonedMinute: Int = 0
 }
 
 public enum TriggerConstant {

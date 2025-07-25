@@ -18,6 +18,7 @@
 		A20EEB0C2E305FA400958592 /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB0B2E305FA000958592 /* HapticsManager.swift */; };
 		A20EEB0E2E31A33200958592 /* HoundDropDownManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB0D2E31A32D00958592 /* HoundDropDownManager.swift */; };
 		A20EEB102E31AE9C00958592 /* HoundDropDownType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB0F2E31AE9900958592 /* HoundDropDownType.swift */; };
+		A20EEB122E331C6B00958592 /* TimeZoneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB112E331C6700958592 /* TimeZoneExtension.swift */; };
 		A2101E5A2A68C5C900A65396 /* HoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2101E592A68C5C900A65396 /* HoundButton.swift */; };
 		A2101E612A69B03E00A65396 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2101E602A69B03E00A65396 /* UIViewExtension.swift */; };
 		A2101E652A6AF1B900A65396 /* HoundIntroductionDogIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2101E642A6AF1B900A65396 /* HoundIntroductionDogIconView.swift */; };
@@ -135,7 +136,6 @@
 		A2A284852B0C835C00ACC5C0 /* HoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A284842B0C835C00ACC5C0 /* HoundViewController.swift */; };
 		A2A284872B0C85F300ACC5C0 /* HoundTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A284862B0C85F300ACC5C0 /* HoundTabBarController.swift */; };
 		A2A284892B0C860600ACC5C0 /* HoundTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A284882B0C860600ACC5C0 /* HoundTableViewController.swift */; };
-		A2A2848B2B0D3EA900ACC5C0 /* ReminderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2848A2B0D3EA900ACC5C0 /* ReminderComponent.swift */; };
 		A2A29D4B287A893A00770993 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A29D4A287A893A00770993 /* NetworkManager.swift */; };
 		A2A45CCF2644914A0050E5A1 /* RemindersIntroductionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */; };
 		A2A801112B782B6200CF1BEB /* GeneralProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A801102B782B6200CF1BEB /* GeneralProtocols.swift */; };
@@ -241,6 +241,7 @@
 		A20EEB0B2E305FA000958592 /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
 		A20EEB0D2E31A32D00958592 /* HoundDropDownManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundDropDownManager.swift; sourceTree = "<group>"; };
 		A20EEB0F2E31AE9900958592 /* HoundDropDownType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundDropDownType.swift; sourceTree = "<group>"; };
+		A20EEB112E331C6700958592 /* TimeZoneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneExtension.swift; sourceTree = "<group>"; };
 		A2101E592A68C5C900A65396 /* HoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundButton.swift; sourceTree = "<group>"; };
 		A2101E602A69B03E00A65396 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		A2101E642A6AF1B900A65396 /* HoundIntroductionDogIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundIntroductionDogIconView.swift; sourceTree = "<group>"; };
@@ -360,7 +361,6 @@
 		A2A284842B0C835C00ACC5C0 /* HoundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundViewController.swift; sourceTree = "<group>"; };
 		A2A284862B0C85F300ACC5C0 /* HoundTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundTabBarController.swift; sourceTree = "<group>"; };
 		A2A284882B0C860600ACC5C0 /* HoundTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundTableViewController.swift; sourceTree = "<group>"; };
-		A2A2848A2B0D3EA900ACC5C0 /* ReminderComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderComponent.swift; sourceTree = "<group>"; };
 		A2A29D4A287A893A00770993 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A2A45CCE2644914A0050E5A1 /* RemindersIntroductionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersIntroductionVC.swift; sourceTree = "<group>"; };
 		A2A801102B782B6200CF1BEB /* GeneralProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralProtocols.swift; sourceTree = "<group>"; };
@@ -750,6 +750,7 @@
 				A2AB6C1F2E03BC45004EE121 /* UnitExtension.swift */,
 				A2AB6C172E0248C3004EE121 /* NSLayoutConstraintExtension.swift */,
 				A23953312B7805A600098CED /* UUIDExtension.swift */,
+				A20EEB112E331C6700958592 /* TimeZoneExtension.swift */,
 				A2D8A8E42A73656700D53A43 /* NotificationNameExtension.swift */,
 				A22DEAB3298D88AD0036F7B6 /* UIPasteboardExtension.swift */,
 				A24BAD9E28B5BE9F00EEFD44 /* CalendarExtension.swift */,
@@ -882,7 +883,6 @@
 			isa = PBXGroup;
 			children = (
 				A2AC89F527D2778900115831 /* CountdownComponents.swift */,
-				A2A2848A2B0D3EA900ACC5C0 /* ReminderComponent.swift */,
 				A2AC89F927D2780500115831 /* WeeklyComponents.swift */,
 				A2AC89FB27D2781600115831 /* MonthlyComponents.swift */,
 				A2AC89FD27D2782100115831 /* OneTimeComponents.swift */,
@@ -1279,6 +1279,7 @@
 				A21AAF212DECDA280077C89D /* MappingLogActionTypeReminderActionType.swift in Sources */,
 				A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */,
 				A2FAB40B2E1DE15800E85392 /* UIScrollViewExtension.swift in Sources */,
+				A20EEB122E331C6B00958592 /* TimeZoneExtension.swift in Sources */,
 				A24BAD9F28B5BE9F00EEFD44 /* CalendarExtension.swift in Sources */,
 				A21AAF1C2DECD7E80077C89D /* ReminderActionType.swift in Sources */,
 				A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */,
@@ -1311,7 +1312,6 @@
 				A20EEB0A2E2D7AA000958592 /* Constant.swift in Sources */,
 				A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */,
 				A2C2952E2E13A869008F1054 /* HoundScrollViewController.swift in Sources */,
-				A2A2848B2B0D3EA900ACC5C0 /* ReminderComponent.swift in Sources */,
 				A21AAF272DED30D50077C89D /* LogUnitType.swift in Sources */,
 				A2FAB4242E20D53000E85392 /* TriggerReminderResult.swift in Sources */,
 				A2B57EEF2A74CE6500013A1B /* HoundTableView.swift in Sources */,
