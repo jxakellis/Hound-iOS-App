@@ -342,8 +342,8 @@ final class DogsAddTriggerManagerView: HoundView,
         }
         else {
             trigger.triggerType = .fixedTime
-            trigger.changeTriggerFixedTimeUTCHour(forDate: fixedTimeView.currentTimeOfDay)
-            trigger.changeTriggerFixedTimeUTCMinute(forDate: fixedTimeView.currentTimeOfDay)
+            trigger.changeTriggerFixedTimeHour(forDate: fixedTimeView.currentTimeOfDay)
+            trigger.changeTriggerFixedTimeMinute(forDate: fixedTimeView.currentTimeOfDay)
             
             if !trigger.changeTriggerFixedTimeTypeAmount(forAmount: fixedTimeView.currentOffset) {
                 if showErrorIfFailed {

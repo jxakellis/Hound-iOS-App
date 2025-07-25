@@ -106,7 +106,7 @@ final class DogsAddReminderWeeklyView: HoundView {
             senderButton.isUserInteractionEnabled = true
         }
         
-        if let currentWeekdays = currentWeekdays, !currentWeekdays.isEmpty {
+        if !currentWeekdays.isEmpty {
             weekdayStack.errorMessage = nil
         }
     }
@@ -123,9 +123,8 @@ final class DogsAddReminderWeeklyView: HoundView {
         return [sundayButton, mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton]
     }
     
-    /// Converts enabled buttons to an array of day of weeks according to CalendarComponents.weekdays, 1 being sunday and 7 being saturday
-    var currentWeekdays: [Int]? {
-        var days: [Int] = []
+    var currentWeekdays: [Weekday] {
+        var days: [Weekday] = []
         
         weekdayButtons.forEach { button in
             guard button.tag == Constant.Visual.ViewTag.weekdayEnabled else {
@@ -135,7 +134,7 @@ final class DogsAddReminderWeeklyView: HoundView {
             days.append(valueForWeekdayButton(button))
         }
         
-        return days.isEmpty ? nil : days
+        return days
     }
     /// timeOfDayDatePicker.date
     var currentTimeOfDay: Date? {
@@ -144,7 +143,7 @@ final class DogsAddReminderWeeklyView: HoundView {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderWeeklyViewDelegate, forTimeOfDay: Date?, forWeekdays: [Int]?) {
+    func setup(forDelegate: DogsAddReminderWeeklyViewDelegate, forTimeOfDay: Date?, forWeekdays: [Weekday]?) {
         delegate = forDelegate
         timeOfDayDatePicker.date = forTimeOfDay ?? timeOfDayDatePicker.date
         
@@ -179,15 +178,17 @@ final class DogsAddReminderWeeklyView: HoundView {
         button.tag = Constant.Visual.ViewTag.weekdayDisabled
         button.tintColor = UIColor.systemGray4
     }
-    private func valueForWeekdayButton(_ button: HoundButton) -> Int {
-        // CalendarComponents.weekdays starts at 1 for Sunday
-        return weekdayButtons.firstIndex(of: button)! + 1 // swiftlint:disable:this force_unwrapping
-    }
-    private func weekdayButtonForValue(_ value: Int) -> HoundButton? {
-        guard value >= 1 && value <= 7 else {
-            return nil
+    private func valueForWeekdayButton(_ button: HoundButton) -> Weekday {
+        switch button {
+        case sundayButton: return .sunday
+        case mondayButton: return .monday
+        case tuesdayButton: return .tuesday
+        case wednesdayButton: return .wednesday
+        case thursdayButton: return .thursday
+        case fridayButton: return .friday
+        case saturdayButton: return .saturday
+        default: fatalError("DogsAddReminderWeeklyView.valueForWeekdayButton: Unrecognized weekday button")
         }
-        return weekdayButtons[value - 1] // CalendarComponents.weekdays starts at 1 for Sunday
     }
     
     // MARK: - Setup Elements

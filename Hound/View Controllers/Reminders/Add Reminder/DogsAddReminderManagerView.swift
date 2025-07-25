@@ -324,21 +324,12 @@ final class DogsAddReminderManagerView: HoundView,
             reminder.changeReminderType(forReminderType: .countdown)
             reminder.countdownComponents.executionInterval = countdownView.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
         case ReminderType.weekly.segmentedControlIndex:
-            guard let weekdays = weeklyView.currentWeekdays else {
-                if showErrorIfFailed {
-                    HapticsManager.notification(.error)
-                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeekdayComponentsError.weekdaysInvalid
-                }
-                
-                return nil
-            }
-            
             reminder.changeReminderType(forReminderType: .weekly)
             
-            guard reminder.weeklyComponents.changeWeekdays(forWeekdays: weekdays) else {
+            guard reminder.weeklyComponents.setZonedWeekdays(weeklyView.currentWeekdays) else {
                 if showErrorIfFailed {
                     HapticsManager.notification(.error)
-                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeekdayComponentsError.weekdaysInvalid
+                    weeklyView.weekdayStack.errorMessage = Constant.Error.WeeklyComponentsError.weekdaysInvalid
                 }
                 return nil
             }
@@ -372,23 +363,19 @@ final class DogsAddReminderManagerView: HoundView,
         // If you were 5 minutes in to a 1 hour countdown but then change it to 30 minutes, you would want to be 0 minutes into the new timer and not 5 minutes in like previously.
         switch reminder.reminderType {
         case .oneTime:
-            // execution date changed
-            if reminder.oneTimeComponents.oneTimeDate != reminderToUpdate.oneTimeComponents.oneTimeDate {
+            if !reminder.oneTimeComponents.isSame(as: reminderToUpdate.oneTimeComponents) {
                 reminder.resetForNextAlarm()
             }
         case .countdown:
-            // execution interval changed
-            if reminder.countdownComponents.executionInterval != reminderToUpdate.countdownComponents.executionInterval {
+            if !reminder.countdownComponents.isSame(as: reminderToUpdate.countdownComponents) {
                 reminder.resetForNextAlarm()
             }
         case .weekly:
-            // time of day or weekdays changed
-            if reminder.weeklyComponents.weekdays != reminderToUpdate.weeklyComponents.weekdays || reminder.weeklyComponents.UTCHour != reminderToUpdate.weeklyComponents.UTCHour || reminder.weeklyComponents.UTCMinute != reminderToUpdate.weeklyComponents.UTCMinute {
+            if !reminder.weeklyComponents.isSame(as: reminderToUpdate.weeklyComponents) {
                 reminder.resetForNextAlarm()
             }
         case .monthly:
-            // time of day or day of month changed
-            if reminder.monthlyComponents.UTCDay != reminderToUpdate.monthlyComponents.UTCDay || reminder.monthlyComponents.UTCHour != reminderToUpdate.monthlyComponents.UTCHour || reminder.monthlyComponents.UTCMinute != reminderToUpdate.monthlyComponents.UTCMinute {
+            if !reminder.monthlyComponents.isSame(as: reminderToUpdate.monthlyComponents) {
                 reminder.resetForNextAlarm()
             }
         }

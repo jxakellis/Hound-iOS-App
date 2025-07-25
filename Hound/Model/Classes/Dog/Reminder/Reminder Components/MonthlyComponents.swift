@@ -23,11 +23,13 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCoding
     
-    required init?(coder aDecoder: NSCoder) {
-        zonedDay = aDecoder.decodeOptionalInteger(forKey: Constant.Key.monthlyZonedDay.rawValue) ?? zonedDay
-        zonedHour = aDecoder.decodeOptionalInteger(forKey: Constant.Key.monthlyZonedHour.rawValue) ?? zonedHour
-        zonedMinute = aDecoder.decodeOptionalInteger(forKey: Constant.Key.monthlyZonedMinute.rawValue) ?? zonedMinute
-        skippedDate = aDecoder.decodeOptionalObject(forKey: Constant.Key.monthlySkippedDate.rawValue)
+    required convenience init?(coder aDecoder: NSCoder) {
+        let zonedDay = aDecoder.decodeOptionalInteger(forKey: Constant.Key.monthlyZonedDay.rawValue)
+        let zonedHour = aDecoder.decodeOptionalInteger(forKey: Constant.Key.monthlyZonedHour.rawValue)
+        let zonedMinute = aDecoder.decodeOptionalInteger(forKey: Constant.Key.monthlyZonedMinute.rawValue)
+        let skippedDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.monthlySkippedDate.rawValue)
+        
+        self.init(zonedDay: zonedDay, zonedHour: zonedHour, zonedMinute: zonedMinute, skippedDate: skippedDate)
     }
     
     func encode(with aCoder: NSCoder) {
@@ -42,81 +44,135 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Properties
     
-    /// 1-31
+    /// User-selected day of month in the source time zone (1-31).
+    /// If this value exceeds the days in a particular month (e.g. 31 in April), the calculation will roll down to the last day of the month (e.g. April 30).
     private(set) var zonedDay: Int = Constant.Class.ReminderComponent.defaultZonedDay
-    /// 0-23
+    /// User-selected hour in the source time zone (0-23).
     private(set) var zonedHour: Int = Constant.Class.ReminderComponent.defaultZonedHour
-    /// 0-59
+    /// User-selected minute in the source time zone (0-59).
     private(set) var zonedMinute: Int = Constant.Class.ReminderComponent.defaultZonedMinute
-    var isSkipping: Bool { skippedDate != nil }
-    var skippedDate: Date?
     
-    // MARK: - Main
+    /// Set to non-nil if the next scheduled execution should be skipped (e.g. due to a user-initiated skip).
+    var skippedDate: Date?
+    var isSkipping: Bool { skippedDate != nil }
+    
+    // MARK: - Initializers
     
     override init() {
         super.init()
     }
     
-    convenience init(zonedDay: Int, zonedHour: Int, zonedMinute: Int, skippedDate: Date?) {
+    convenience init(zonedDay: Int? = nil, zonedHour: Int? = nil, zonedMinute: Int? = nil, skippedDate: Date? = nil) {
         self.init()
-        self.zonedDay = zonedDay
-        self.zonedHour = zonedHour
-        self.zonedMinute = zonedMinute
-        self.skippedDate = skippedDate
+        self.zonedDay = zonedDay ?? self.zonedDay
+        self.zonedHour = zonedHour ?? self.zonedHour
+        self.zonedMinute = zonedMinute ?? self.zonedMinute
+        self.skippedDate = skippedDate ?? self.skippedDate
     }
     
-    convenience init?(fromBody: JSONResponseBody, componentToOverride: MonthlyComponents?) {
-        let zonedDay = fromBody[Constant.Key.monthlyZonedDay.rawValue] as? Int ?? componentToOverride?.zonedDay
-        let zonedHour = fromBody[Constant.Key.monthlyZonedHour.rawValue] as? Int ?? componentToOverride?.zonedHour
-        let zonedMinute = fromBody[Constant.Key.monthlyZonedMinute.rawValue] as? Int ?? componentToOverride?.zonedMinute
-        let skippedDateString = fromBody[Constant.Key.monthlySkippedDate.rawValue] as? String
-        let skippedDate = skippedDateString?.formatISO8601IntoDate() ?? componentToOverride?.skippedDate
+    convenience init(fromBody: JSONResponseBody, componentToOverride: MonthlyComponents?) {
+        let monthlyZonedDay = fromBody[Constant.Key.monthlyZonedDay.rawValue] as? Int ?? componentToOverride?.zonedDay
+        let monthlyZonedHour = fromBody[Constant.Key.monthlyZonedHour.rawValue] as? Int ?? componentToOverride?.zonedHour
+        let monthlyZonedMinute = fromBody[Constant.Key.monthlyZonedMinute.rawValue] as? Int ?? componentToOverride?.zonedMinute
+        let monthlySkippedDate = (fromBody[Constant.Key.monthlySkippedDate.rawValue] as? String)?.formatISO8601IntoDate() ?? componentToOverride?.skippedDate
         
-        guard let day = zonedDay, let hour = zonedHour, let minute = zonedMinute else { return nil }
-        
-        self.init(zonedDay: day, zonedHour: hour, zonedMinute: minute, skippedDate: skippedDate)
+        self.init(zonedDay: monthlyZonedDay, zonedHour: monthlyZonedHour, zonedMinute: monthlyZonedMinute, skippedDate: monthlySkippedDate)
     }
     
     // MARK: - Functions
     
+    func localTimeOfDay(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> (hour: Int, minute: Int) {
+        return zonedTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: destinationTimeZone)
+    }
+    
+    func localDayOfMonth(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> Int {
+        let referenceDate = notSkippingExecutionDate(
+            reminderExecutionBasis: Date(),
+            sourceTimeZone: zonedTimeZone
+        )
+        
+        let (day, _, _) = zonedTimeZone.convert(
+            day: zonedDay,
+            hour: zonedHour,
+            minute: zonedMinute,
+            to: destinationTimeZone,
+            referenceDate: referenceDate
+        )
+        return day
+    }
+    
+    /// Returns a readable recurrence string in the *destination* time zone.
+    /// Example: "Every 31st at 7:30 PM" (will adjust hour/minute for destination zone).
+    /// NOTE: If the requested day does not exist in a month, the reminder will run on the last valid day of that month (e.g. "31" on April will run April 30).
     func readableRecurrence(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> String {
-        let (hour, minute) = zonedTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: destinationTimeZone)
-        return "Every \(zonedDay)\(zonedDay.daySuffix()) at \(String.convert(hour: hour, minute: minute))"
+        let referenceDate = notSkippingExecutionDate(
+            reminderExecutionBasis: Date(),
+            sourceTimeZone: zonedTimeZone
+        )
+        
+        let (day, hour, minute) = zonedTimeZone.convert(
+            day: zonedDay,
+            hour: zonedHour,
+            minute: zonedMinute,
+            to: destinationTimeZone,
+            referenceDate: referenceDate
+        )
+        return "Every \(day)\(day.daySuffix()) at \(String.convert(hour: hour, minute: minute))"
     }
     
     // MARK: - Timing
     
+    /// Finds the next valid execution date after `reminderExecutionBasis`, using the user-selected day/hour/minute in the specified sourceTimeZone.
+    /// - If isSkipping is true, skips the soonest and returns the following date.
+    /// - If the selected day does not exist in a month (e.g. 31st in February), the calculation will roll down to the last day of the month.
+    /// - Handles DST and ambiguous/missing times using `.nextTimePreservingSmallerComponents`.
     func nextExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
-        return isSkipping ? skippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+        isSkipping
+        ? skippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
         : notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
     }
     
+    /// Returns the first valid execution date strictly after the basis, or 1970 if none.
     func notSkippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
-        return futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+        futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
             .first(where: { $0 > reminderExecutionBasis }) ?? Constant.Class.Date.default1970Date
     }
     
+    /// Finds the previous valid execution date before the basis.
+    /// Handles day roll-down if day exceeds days in target month, and is robust to DST.
     func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
-            let calendar = Calendar(identifier: .gregorian)
-            var components = calendar.dateComponents(in: sourceTimeZone, from: reminderExecutionBasis)
-            components.day = zonedDay
-            components.hour = zonedHour
-            components.minute = zonedMinute
-            components.second = 0
-
-            guard let previousDate = calendar.nextDate(after: reminderExecutionBasis, matching: components, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward) else {
-                return Constant.Class.Date.default1970Date
-            }
-
-            return previousDate
+        let calendar = Calendar(identifier: .gregorian)
+        var components = calendar.dateComponents(in: sourceTimeZone, from: reminderExecutionBasis)
+        let daysInMonth = calendar.range(of: .day, in: .month, for: reminderExecutionBasis)?.count ?? zonedDay
+        components.day = min(zonedDay, daysInMonth)
+        components.hour = zonedHour
+        components.minute = zonedMinute
+        components.second = 0
+        
+        guard let previousDate = calendar.nextDate(
+            after: reminderExecutionBasis,
+            matching: components,
+            matchingPolicy: .nextTimePreservingSmallerComponents,
+            direction: .backward
+        ) else {
+            // No match found; return default.
+            return Constant.Class.Date.default1970Date
         }
+        
+        return previousDate
+    }
     
+    /// Returns the next valid execution date after the one that would normally be triggered (skipping state).
     private func skippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
         let nextExecution = notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
         let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
         return futureDates.first(where: { $0 > nextExecution }) ?? Constant.Class.Date.default1970Date
     }
     
+    /// Finds up to 3 future execution dates based on the user-selected day/hour/minute in the sourceTimeZone.
+    /// - For months where `zonedDay` exceeds days in month, calculation rolls down to last valid day.
+    /// - Robust to DST (handles both non-existent and repeated times).
+    /// - Always returns strictly increasing dates; searchBasis is advanced by one second each iteration.
     private func futureExecutionDates(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> [Date] {
         var dates: [Date] = []
         var searchBasis = reminderExecutionBasis
@@ -124,15 +180,23 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
         
         for _ in 0..<3 {
             var components = calendar.dateComponents(in: sourceTimeZone, from: searchBasis)
+            // Clamp the day to the last valid day of the month to avoid rollovers (e.g., "31" in April becomes April 30).
             let daysInMonth = calendar.range(of: .day, in: .month, for: searchBasis)?.count ?? zonedDay
             components.day = min(zonedDay, daysInMonth)
             components.hour = zonedHour
             components.minute = zonedMinute
             components.second = 0
             
-            guard let nextDate = calendar.nextDate(after: searchBasis, matching: components, matchingPolicy: .nextTimePreservingSmallerComponents) else { break }
-            
+            // Use .nextTimePreservingSmallerComponents for DST safety.
+            guard let nextDate = calendar.nextDate(
+                after: searchBasis,
+                matching: components,
+                matchingPolicy: .nextTimePreservingSmallerComponents
+            ) else {
+                break
+            }
             dates.append(nextDate)
+            // Advance search basis to avoid repeated/ambiguous times.
             searchBasis = nextDate.addingTimeInterval(1)
         }
         
@@ -156,8 +220,6 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
         zonedDay == other.zonedDay &&
         zonedHour == other.zonedHour &&
         zonedMinute == other.zonedMinute &&
-        isSkipping == other.isSkipping &&
         skippedDate == other.skippedDate
     }
-    
 }

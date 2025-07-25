@@ -21,8 +21,8 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedExecutionInterval: Double? = aDecoder.decodeOptionalDouble(forKey: Constant.Key.countdownExecutionInterval.rawValue)
-        self.init(forExecutionInterval: decodedExecutionInterval)
+        let executionInterval = aDecoder.decodeOptionalDouble(forKey: Constant.Key.countdownExecutionInterval.rawValue)
+        self.init(executionInterval: executionInterval)
     }
     
     func encode(with aCoder: NSCoder) {
@@ -40,23 +40,23 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying {
     }
     
     /// Interval at which a countdown should be last for reminder
-    var executionInterval: Double
+    var executionInterval: Double = Constant.Class.ReminderComponent.defaultCountdownExecutionInterval
     
     // MARK: - Main
     
-    init(
-        forExecutionInterval: Double? = nil
-    ) {
-        self.executionInterval = forExecutionInterval ?? Constant.Class.ReminderComponent.defaultCountdownExecutionInterval
+    override init() {
         super.init()
     }
     
-    convenience init?(fromBody: JSONResponseBody, componentToOverride: CountdownComponents?) {
-        let executionInterval: Double? = fromBody[Constant.Key.countdownExecutionInterval.rawValue] as? Double ?? componentToOverride?.executionInterval
-        guard let executionInterval = executionInterval else {
-            return nil
-        }
-        self.init(forExecutionInterval: executionInterval)
+    init(executionInterval: Double? = nil) {
+        super.init()
+        self.executionInterval = executionInterval ?? self.executionInterval
+    }
+    
+    convenience init(fromBody: JSONResponseBody, componentToOverride: CountdownComponents?) {
+        let countdownExecutionInterval: Double? = fromBody[Constant.Key.countdownExecutionInterval.rawValue] as? Double ?? componentToOverride?.executionInterval
+        
+        self.init(executionInterval: countdownExecutionInterval)
     }
     
     // MARK: - Compare

@@ -20,8 +20,10 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCoding
     
-    required init?(coder aDecoder: NSCoder) {
-        oneTimeDate = aDecoder.decodeOptionalObject(forKey: Constant.Key.oneTimeDate.rawValue) ?? oneTimeDate
+    required convenience init?(coder aDecoder: NSCoder) {
+        let oneTimeDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.oneTimeDate.rawValue)
+        
+        self.init(oneTimeDate: oneTimeDate)
     }
     
     func encode(with aCoder: NSCoder) {
@@ -59,23 +61,15 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
         super.init()
     }
     
-    convenience init(date: Date) {
+    convenience init(oneTimeDate: Date? = nil) {
         self.init()
-        self.oneTimeDate = date
+        self.oneTimeDate = oneTimeDate ?? Date()
     }
     
-    convenience init?(fromBody: JSONResponseBody, componentToOverride: OneTimeComponents?) {
-        let oneTimeDate: Date? = {
-            guard let oneTimeDateString = fromBody[Constant.Key.oneTimeDate.rawValue] as? String else {
-                return nil
-            }
-            return oneTimeDateString.formatISO8601IntoDate()
-        }() ?? componentToOverride?.oneTimeDate
+    convenience init(fromBody: JSONResponseBody, componentToOverride: OneTimeComponents?) {
+        let oneTimeDate: Date? = (fromBody[Constant.Key.oneTimeDate.rawValue] as? String)?.formatISO8601IntoDate() ?? componentToOverride?.oneTimeDate
         
-        guard let oneTimeDate = oneTimeDate else {
-            return nil
-        }
-        self.init(date: oneTimeDate)
+        self.init(oneTimeDate: oneTimeDate)
     }
     
     // MARK: - Compare

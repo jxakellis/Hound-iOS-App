@@ -197,8 +197,8 @@ public enum KeyConstant: String {
     case triggerTimeDelay
     case triggerFixedTimeType
     case triggerFixedTimeTypeAmount
-    case triggerFixedTimeUTCHour
-    case triggerFixedTimeUTCMinute
+    case triggerFixedTimeHour
+    case triggerFixedTimeMinute
     case triggerManualCondition
     case triggerAlarmCreatedCondition
     case triggerLastModified

@@ -82,7 +82,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         copy.reminderTimeZone = self.reminderTimeZone
         
         copy.countdownComponents = self.countdownComponents.copy() as? CountdownComponents ?? CountdownComponents()
-        copy.weeklyComponents = self.weeklyComponents.copy() as? WeekdayComponents ?? WeekdayComponents()
+        copy.weeklyComponents = self.weeklyComponents.copy() as? WeeklyComponents ?? WeeklyComponents()
         copy.monthlyComponents = self.monthlyComponents.copy() as? MonthlyComponents ?? MonthlyComponents()
         copy.oneTimeComponents = self.oneTimeComponents.copy() as? OneTimeComponents ?? OneTimeComponents()
         copy.snoozeComponents = self.snoozeComponents.copy() as? SnoozeComponents ?? SnoozeComponents()
@@ -104,30 +104,31 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         let decodedReminderIsEnabled: Bool? = aDecoder.decodeOptionalBool(forKey: Constant.Key.reminderIsEnabled.rawValue)
         let decodedReminderRecipientUserIds: [String]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.reminderRecipientUserIds.rawValue)
         let decodedReminderTimeZone: TimeZone? = TimeZone.from(aDecoder.decodeOptionalString(forKey: Constant.Key.reminderTimeZone.rawValue))
+        
         let decodedCountdownComponents: CountdownComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.countdownComponents.rawValue)
-        let decodedWeekdayComponents: WeekdayComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.weeklyComponents.rawValue)
+        let decodedWeeklyComponents: WeeklyComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.weeklyComponents.rawValue)
         let decodedMonthlyComponents: MonthlyComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.monthlyComponents.rawValue)
         let decodedOneTimeComponents: OneTimeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.oneTimeComponents.rawValue)
         let decodedSnoozeComponents: SnoozeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.snoozeComponents.rawValue)
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
         
         self.init(
-            forReminderId: decodedReminderId,
-            forReminderUUID: decodedReminderUUID,
-            forReminderActionTypeId: decodedReminderActionTypeId,
-            forReminderCustomActionName: decodedReminderCustomActionName,
-            forReminderType: decodedReminderType,
-            forReminderExecutionBasis: decodedReminderExecutionBasis,
-            forReminderIsTriggerResult: decodedReminderIsTriggerResult,
-            forReminderIsEnabled: decodedReminderIsEnabled,
-            forReminderRecipientUserIds: decodedReminderRecipientUserIds,
-            forReminderTimeZone: decodedReminderTimeZone,
-            forCountdownComponents: decodedCountdownComponents,
-            forWeekdayComponents: decodedWeekdayComponents,
-            forMonthlyComponents: decodedMonthlyComponents,
-            forOneTimeComponents: decodedOneTimeComponents,
-            forSnoozeComponents: decodedSnoozeComponents,
-            forOfflineModeComponents: decodedOfflineModeComponents
+            reminderId: decodedReminderId,
+            reminderUUID: decodedReminderUUID,
+            reminderActionTypeId: decodedReminderActionTypeId,
+            reminderCustomActionName: decodedReminderCustomActionName,
+            reminderType: decodedReminderType,
+            reminderExecutionBasis: decodedReminderExecutionBasis,
+            reminderIsTriggerResult: decodedReminderIsTriggerResult,
+            reminderIsEnabled: decodedReminderIsEnabled,
+            reminderRecipientUserIds: decodedReminderRecipientUserIds,
+            reminderTimeZone: decodedReminderTimeZone,
+            countdownComponents: decodedCountdownComponents,
+            weeklyComponents: decodedWeeklyComponents,
+            monthlyComponents: decodedMonthlyComponents,
+            oneTimeComponents: decodedOneTimeComponents,
+            snoozeComponents: decodedSnoozeComponents,
+            offlineModeComponents: decodedOfflineModeComponents
         )
     }
     
@@ -146,6 +147,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(reminderIsEnabled, forKey: Constant.Key.reminderIsEnabled.rawValue)
         aCoder.encode(reminderRecipientUserIds, forKey: Constant.Key.reminderRecipientUserIds.rawValue)
         aCoder.encode(reminderTimeZone.identifier, forKey: Constant.Key.reminderTimeZone.rawValue)
+        
         aCoder.encode(countdownComponents, forKey: Constant.Key.countdownComponents.rawValue)
         aCoder.encode(weeklyComponents, forKey: Constant.Key.weeklyComponents.rawValue)
         aCoder.encode(monthlyComponents, forKey: Constant.Key.monthlyComponents.rawValue)
@@ -157,6 +159,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - Comparable
     
     static func < (lhs: Reminder, rhs: Reminder) -> Bool {
+        // TODO TIMING this should use local time components, not the zoned ones
         guard lhs.reminderType == rhs.reminderType else {
             // lhs and rhs are known to be different styles
             switch lhs.reminderType {
@@ -176,7 +179,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         /// Analyzes both the reminderId and reminderUUID, finding which reminder is lessor than the other reminder.
-        func isLHSReminderBeforeRHSReminder(lhs: Reminder, rhs: Reminder) -> Bool {
+        func isLHSBeforeRHS(lhs: Reminder, rhs: Reminder) -> Bool {
             guard let lhsReminderId = lhs.reminderId else {
                 guard rhs.reminderId != nil else {
                     // neither lhs nor rhs has a reminderId. The one that was created first should come first
@@ -203,24 +206,24 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             
             guard lhsExecutionInterval != rhsExecutionInterval else {
                 // if equal, then smaller reminderId comes first
-                return isLHSReminderBeforeRHSReminder(lhs: lhs, rhs: rhs)
+                return isLHSBeforeRHS(lhs: lhs, rhs: rhs)
             }
             // shorter executionInterval comes first
             return lhsExecutionInterval < rhsExecutionInterval
         case .weekly:
             // both weekly
             // earlier in the day is listed first
-            let lhsHour = lhs.weeklyComponents.localHour
-            let rhsHour = rhs.weeklyComponents.localHour
+            let lhsHour = lhs.weeklyComponents.zonedHour
+            let rhsHour = rhs.weeklyComponents.zonedHour
             
             guard lhsHour != rhsHour else {
                 // hours are equal
-                let lhsMinute = lhs.weeklyComponents.localMinute
-                let rhsMinute = rhs.weeklyComponents.localMinute
+                let lhsMinute = lhs.weeklyComponents.zonedMinute
+                let rhsMinute = rhs.weeklyComponents.zonedMinute
                 
                 guard lhsMinute != rhsMinute else {
                     // if equal, then smaller reminderId comes first
-                    return isLHSReminderBeforeRHSReminder(lhs: lhs, rhs: rhs)
+                    return isLHSBeforeRHS(lhs: lhs, rhs: rhs)
                 }
                 
                 // smaller minute comes first
@@ -231,22 +234,22 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             return lhsHour < rhsHour
         case .monthly:
             // both monthly
-            let lhsDay = lhs.monthlyComponents.UTCDay
-            let rhsDay = rhs.monthlyComponents.UTCDay
+            let lhsDay = lhs.monthlyComponents.zonedDay
+            let rhsDay = rhs.monthlyComponents.zonedDay
             
             guard lhsDay != rhsDay else {
                 // earliest in day comes first if same days
-                let lhsHour = lhs.monthlyComponents.localHour
-                let rhsHour = rhs.monthlyComponents.localHour
+                let lhsHour = lhs.monthlyComponents.zonedHour
+                let rhsHour = rhs.monthlyComponents.zonedHour
                 
                 guard lhsHour != rhsHour else {
                     // earliest in hour comes first if same hour
-                    let lhsMinute = lhs.monthlyComponents.localMinute
-                    let rhsMinute = rhs.monthlyComponents.localMinute
+                    let lhsMinute = lhs.monthlyComponents.zonedMinute
+                    let rhsMinute = rhs.monthlyComponents.zonedMinute
                     
                     guard lhsMinute != rhsMinute else {
                         // smaller remidnerId comes first
-                        return isLHSReminderBeforeRHSReminder(lhs: lhs, rhs: rhs)
+                        return isLHSBeforeRHS(lhs: lhs, rhs: rhs)
                     }
                     // smaller minute comes first
                     return lhsMinute < rhsMinute
@@ -264,7 +267,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             
             guard lhsDistanceToPast != rhsDistanceToPast else {
                 // if equal, then smaller reminderId comes first
-                return isLHSReminderBeforeRHSReminder(lhs: lhs, rhs: rhs)
+                return isLHSBeforeRHS(lhs: lhs, rhs: rhs)
             }
             // not equal, the oldest one comes first
             return lhsDistanceToPast < rhsDistanceToPast
@@ -336,57 +339,52 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     // Reminder Components
     
     private(set) var countdownComponents: CountdownComponents = CountdownComponents()
-    
-    private(set) var weeklyComponents: WeekdayComponents = WeekdayComponents()
-    
+    private(set) var weeklyComponents: WeeklyComponents = WeeklyComponents()
     private(set) var monthlyComponents: MonthlyComponents = MonthlyComponents()
-    
     private(set) var oneTimeComponents: OneTimeComponents = OneTimeComponents()
-    
     private(set) var snoozeComponents: SnoozeComponents = SnoozeComponents()
-    
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
     private(set) var offlineModeComponents: OfflineModeComponents = OfflineModeComponents()
     
     // MARK: - Main
     
     init(
-        forReminderId: Int? = nil,
-        forReminderUUID: UUID? = nil,
-        forReminderActionTypeId: Int? = nil,
-        forReminderCustomActionName: String? = nil,
-        forReminderType: ReminderType? = nil,
-        forReminderExecutionBasis: Date? = nil,
-        forReminderIsTriggerResult: Bool? = nil,
-        forReminderIsEnabled: Bool? = nil,
-        forReminderRecipientUserIds: [String]? = nil,
-        forReminderTimeZone: TimeZone? = nil,
-        forCountdownComponents: CountdownComponents? = nil,
-        forWeekdayComponents: WeekdayComponents? = nil,
-        forMonthlyComponents: MonthlyComponents? = nil,
-        forOneTimeComponents: OneTimeComponents? = nil,
-        forSnoozeComponents: SnoozeComponents? = nil,
-        forOfflineModeComponents: OfflineModeComponents? = nil
+        reminderId: Int? = nil,
+        reminderUUID: UUID? = nil,
+        reminderActionTypeId: Int? = nil,
+        reminderCustomActionName: String? = nil,
+        reminderType: ReminderType? = nil,
+        reminderExecutionBasis: Date? = nil,
+        reminderIsTriggerResult: Bool? = nil,
+        reminderIsEnabled: Bool? = nil,
+        reminderRecipientUserIds: [String]? = nil,
+        reminderTimeZone: TimeZone? = nil,
+        countdownComponents: CountdownComponents? = nil,
+        weeklyComponents: WeeklyComponents? = nil,
+        monthlyComponents: MonthlyComponents? = nil,
+        oneTimeComponents: OneTimeComponents? = nil,
+        snoozeComponents: SnoozeComponents? = nil,
+        offlineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
         
-        self.reminderId = forReminderId ?? reminderId
-        self.reminderUUID = forReminderUUID ?? reminderUUID
-        self.reminderActionTypeId = forReminderActionTypeId ?? reminderActionTypeId
-        self.reminderCustomActionName = forReminderCustomActionName ?? reminderCustomActionName
-        self.reminderType = forReminderType ?? reminderType
-        self.reminderExecutionBasis = forReminderExecutionBasis ?? reminderExecutionBasis
-        self.reminderIsTriggerResult = forReminderIsTriggerResult ?? reminderIsTriggerResult
-        self.reminderIsEnabled = forReminderIsEnabled ?? reminderIsEnabled
-        self.reminderRecipientUserIds = forReminderRecipientUserIds ?? reminderRecipientUserIds
-        self.reminderTimeZone = forReminderTimeZone ?? reminderTimeZone
+        self.reminderId = reminderId ?? self.reminderId
+        self.reminderUUID = reminderUUID ?? self.reminderUUID
+        self.reminderActionTypeId = reminderActionTypeId ?? self.reminderActionTypeId
+        self.reminderCustomActionName = reminderCustomActionName ?? self.reminderCustomActionName
+        self.reminderType = reminderType ?? self.reminderType
+        self.reminderExecutionBasis = reminderExecutionBasis ?? self.reminderExecutionBasis
+        self.reminderIsTriggerResult = reminderIsTriggerResult ?? self.reminderIsTriggerResult
+        self.reminderIsEnabled = reminderIsEnabled ?? self.reminderIsEnabled
+        self.reminderRecipientUserIds = reminderRecipientUserIds ?? self.reminderRecipientUserIds
+        self.reminderTimeZone = reminderTimeZone ?? self.reminderTimeZone
         
-        self.countdownComponents = forCountdownComponents ?? countdownComponents
-        self.weeklyComponents = forWeekdayComponents ?? weeklyComponents
-        self.monthlyComponents = forMonthlyComponents ?? monthlyComponents
-        self.oneTimeComponents = forOneTimeComponents ?? oneTimeComponents
-        self.snoozeComponents = forSnoozeComponents ?? snoozeComponents
-        self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
+        self.countdownComponents = countdownComponents ?? self.countdownComponents
+        self.weeklyComponents = weeklyComponents ?? self.weeklyComponents
+        self.monthlyComponents = monthlyComponents ?? self.monthlyComponents
+        self.oneTimeComponents = oneTimeComponents ?? self.oneTimeComponents
+        self.snoozeComponents = snoozeComponents ?? self.snoozeComponents
+        self.offlineModeComponents = offlineModeComponents ?? self.offlineModeComponents
     }
     
     /// Provide a dictionary literal of reminder properties to instantiate reminder. Optionally, provide a reminder to override with new properties from fromBody.
@@ -397,35 +395,33 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         let reminderLastModified: Date? = (fromBody[Constant.Key.reminderLastModified.rawValue] as? String)?.formatISO8601IntoDate()
         let reminderIsDeleted: Bool? = fromBody[Constant.Key.reminderIsDeleted.rawValue] as? Bool
         
-        // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
         guard let reminderId = reminderId, let reminderUUID = reminderUUID, let reminderLastModified = reminderLastModified, let reminderIsDeleted = reminderIsDeleted else {
             return nil
         }
         
         guard reminderIsDeleted == false else {
-            // The reminder has been deleted. Doesn't matter if our offline mode any changes
             return nil
         }
         
         // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer update takes precedence over our update
         if let reminderToOverride = reminderToOverride, let initialAttemptedSyncDate = reminderToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= reminderLastModified {
             self.init(
-                forReminderId: reminderToOverride.reminderId,
-                forReminderUUID: reminderToOverride.reminderUUID,
-                forReminderActionTypeId: reminderToOverride.reminderActionTypeId,
-                forReminderCustomActionName: reminderToOverride.reminderCustomActionName,
-                forReminderType: reminderToOverride.reminderType,
-                forReminderExecutionBasis: reminderToOverride.reminderExecutionBasis,
-                forReminderIsTriggerResult: reminderToOverride.reminderIsTriggerResult,
-                forReminderIsEnabled: reminderToOverride.reminderIsEnabled,
-                forReminderRecipientUserIds: reminderToOverride.reminderRecipientUserIds,
-                forReminderTimeZone: reminderToOverride.reminderTimeZone,
-                forCountdownComponents: reminderToOverride.countdownComponents,
-                forWeekdayComponents: reminderToOverride.weeklyComponents,
-                forMonthlyComponents: reminderToOverride.monthlyComponents,
-                forOneTimeComponents: reminderToOverride.oneTimeComponents,
-                forSnoozeComponents: reminderToOverride.snoozeComponents,
-                forOfflineModeComponents: reminderToOverride.offlineModeComponents
+                reminderId: reminderToOverride.reminderId,
+                reminderUUID: reminderToOverride.reminderUUID,
+                reminderActionTypeId: reminderToOverride.reminderActionTypeId,
+                reminderCustomActionName: reminderToOverride.reminderCustomActionName,
+                reminderType: reminderToOverride.reminderType,
+                reminderExecutionBasis: reminderToOverride.reminderExecutionBasis,
+                reminderIsTriggerResult: reminderToOverride.reminderIsTriggerResult,
+                reminderIsEnabled: reminderToOverride.reminderIsEnabled,
+                reminderRecipientUserIds: reminderToOverride.reminderRecipientUserIds,
+                reminderTimeZone: reminderToOverride.reminderTimeZone,
+                countdownComponents: reminderToOverride.countdownComponents,
+                weeklyComponents: reminderToOverride.weeklyComponents,
+                monthlyComponents: reminderToOverride.monthlyComponents,
+                oneTimeComponents: reminderToOverride.oneTimeComponents,
+                snoozeComponents: reminderToOverride.snoozeComponents,
+                offlineModeComponents: reminderToOverride.offlineModeComponents
             )
             return
         }
@@ -452,172 +448,65 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         let reminderRecipientUserIds: [String]? = fromBody[Constant.Key.reminderRecipientUserIds.rawValue] as? [String] ?? reminderToOverride?.reminderRecipientUserIds
         let reminderTimeZone: TimeZone? = TimeZone.from(fromBody[Constant.Key.reminderTimeZone.rawValue] as? String) ?? reminderToOverride?.reminderTimeZone
         
-        // no properties should be nil. Either a complete fromBody should be provided (i.e. no previousDogManagerSynchronization was used in query) or a potentially partial fromBody (i.e. previousDogManagerSynchronization used in query) should be passed with an dogReminderManagerToOverride
         // reminderCustomActionName can be nil
-        guard let reminderActionTypeId = reminderActionTypeId, let reminderCustomActionName = reminderCustomActionName, let reminderType = reminderType, let reminderExecutionBasis = reminderExecutionBasis, let reminderIsTriggerResult = reminderIsTriggerResult, let reminderIsEnabled = reminderIsEnabled, let reminderRecipientUserIds = reminderRecipientUserIds, let reminderTimeZone = reminderTimeZone else {
-            // halt and don't do anything more, reached an invalid state
+        guard let reminderActionTypeId = reminderActionTypeId,
+              let reminderCustomActionName = reminderCustomActionName,
+              let reminderType = reminderType,
+              let reminderExecutionBasis = reminderExecutionBasis,
+              let reminderIsTriggerResult = reminderIsTriggerResult,
+              let reminderIsEnabled = reminderIsEnabled,
+              let reminderRecipientUserIds = reminderRecipientUserIds,
+              let reminderTimeZone = reminderTimeZone else {
             return nil
         }
         
-        // countdown
-        let countdownExecutionInterval: Double? = fromBody[Constant.Key.countdownExecutionInterval.rawValue] as? Double ?? reminderToOverride?.countdownComponents.executionInterval
-        
-        guard let countdownExecutionInterval = countdownExecutionInterval else {
-            // halt and don't do anything more, reached an invalid state
-            return nil
-        }
-        
-        // weekly
-        let weeklyZonedHour: Int? = fromBody[Constant.Key.weeklyZonedHour.rawValue] as? Int ?? reminderToOverride?.weeklyComponents.UTCHour
-        let weeklyZonedMinute: Int? = fromBody[Constant.Key.weeklyZonedMinute.rawValue] as? Int ?? reminderToOverride?.weeklyComponents.UTCMinute
-        let weeklySkippedDate: Date? = {
-            guard let weeklySkippedDateString = fromBody[Constant.Key.weeklySkippedDate.rawValue] as? String else {
-                return nil
-            }
-            return weeklySkippedDateString.formatISO8601IntoDate()
-        }() ?? reminderToOverride?.weeklyComponents.skippedDate
-        let weeklySunday: Bool? = fromBody[Constant.Key.weeklySunday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(1)
-        let weeklyMonday: Bool? = fromBody[Constant.Key.weeklyMonday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(2)
-        let weeklyTuesday: Bool? = fromBody[Constant.Key.weeklyTuesday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(3)
-        let weeklyWednesday: Bool? = fromBody[Constant.Key.weeklyWednesday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(4)
-        let weeklyThursday: Bool? = fromBody[Constant.Key.weeklyThursday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(5)
-        let weeklyFriday: Bool? = fromBody[Constant.Key.weeklyFriday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(6)
-        let weeklySaturday: Bool? = fromBody[Constant.Key.weeklySaturday.rawValue] as? Bool ?? reminderToOverride?.weeklyComponents.weekdays.contains(7)
-        
-        // weeklySkippedDate can be nil
-        guard let weeklyZonedHour = weeklyZonedHour, let weeklyZonedMinute = weeklyZonedMinute, let weeklySunday = weeklySunday, let weeklyMonday = weeklyMonday, let weeklyTuesday = weeklyTuesday, let weeklyWednesday = weeklyWednesday, let weeklyThursday = weeklyThursday, let weeklyFriday = weeklyFriday, let weeklySaturday = weeklySaturday else {
-            // halt and don't do anything more, reached an invalid state
-            return nil
-        }
-        
-        // monthly
-        let monthlyUTCDay: Int? = fromBody[Constant.Key.monthlyUTCDay.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCDay
-        let monthlyUTCHour: Int? = fromBody[Constant.Key.monthlyUTCHour.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCHour
-        let monthlyUTCMinute: Int? = fromBody[Constant.Key.monthlyUTCMinute.rawValue] as? Int ?? reminderToOverride?.monthlyComponents.UTCMinute
-        let monthlySkippedDate: Date? = {
-            guard let monthlySkippedDateString = fromBody[Constant.Key.monthlySkippedDate.rawValue] as? String else {
-                return nil
-            }
-            return monthlySkippedDateString.formatISO8601IntoDate()
-        }() ?? reminderToOverride?.monthlyComponents.skippedDate
-        
-        // monthlySkippedDate can be nil
-        guard let monthlyUTCDay = monthlyUTCDay, let monthlyUTCHour = monthlyUTCHour, let monthlyUTCMinute = monthlyUTCMinute else {
-            // halt and don't do anything more, reached an invalid state
-            return nil
-        }
-        
-        // one time
-        let oneTimeDate: Date? = {
-            guard let oneTimeDateString = fromBody[Constant.Key.oneTimeDate.rawValue] as? String else {
-                return nil
-            }
-            return oneTimeDateString.formatISO8601IntoDate()
-        }() ?? reminderToOverride?.oneTimeComponents.oneTimeDate
-        
-        guard let oneTimeDate = oneTimeDate else {
-            // halt and don't do anything more, reached an invalid state
-            return nil
-        }
-        
-        // snooze
-        
-        let snoozeExecutionInterval = fromBody[Constant.Key.snoozeExecutionInterval.rawValue] as? Double ?? reminderToOverride?.snoozeComponents.executionInterval
-        
-        // snoozeExecutionInterval can be nil
+        let countdownComponents = CountdownComponents(fromBody: fromBody, componentToOverride: reminderToOverride?.countdownComponents)
+        let weekdayComponents = WeeklyComponents(fromBody: fromBody, componentToOverride: reminderToOverride?.weeklyComponents)
+        let monthlyComponents = MonthlyComponents(fromBody: fromBody, componentToOverride: reminderToOverride?.monthlyComponents)
+        let oneTimeComponents = OneTimeComponents(fromBody: fromBody, componentToOverride: reminderToOverride?.oneTimeComponents)
+        let snoozeComponents = SnoozeComponents(fromBody: fromBody, componentToOverride: reminderToOverride?.snoozeComponents)
         
         self.init(
-            forReminderId: reminderId,
-            forReminderUUID: reminderUUID,
-            forReminderActionTypeId: reminderActionTypeId,
-            forReminderCustomActionName: reminderCustomActionName,
-            forReminderType: reminderType,
-            forReminderExecutionBasis: reminderExecutionBasis,
-            forReminderIsTriggerResult: reminderIsTriggerResult,
-            forReminderIsEnabled: reminderIsEnabled,
-            forReminderRecipientUserIds: reminderRecipientUserIds,
-            forReminderTimeZone: reminderTimeZone,
-            forCountdownComponents: CountdownComponents(forExecutionInterval: countdownExecutionInterval),
-            forWeekdayComponents: WeekdayComponents(
-                UTCHour: weeklyZonedHour,
-                UTCMinute: weeklyZonedMinute,
-                skippedDate: weeklySkippedDate,
-                sunday: weeklySunday,
-                monday: weeklyMonday,
-                tuesday: weeklyTuesday,
-                wednesday: weeklyWednesday,
-                thursday: weeklyThursday,
-                friday: weeklyFriday,
-                saturday: weeklySaturday
-            ), forMonthlyComponents: MonthlyComponents(
-                UTCDay: monthlyUTCDay,
-                UTCHour: monthlyUTCHour,
-                UTCMinute: monthlyUTCMinute,
-                skippedDate: monthlySkippedDate
-            ), forOneTimeComponents: OneTimeComponents(
-                date: oneTimeDate
-            ), forSnoozeComponents: SnoozeComponents(
-                executionInterval: snoozeExecutionInterval
-                // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
-            ), forOfflineModeComponents: nil
+            reminderId: reminderId,
+            reminderUUID: reminderUUID,
+            reminderActionTypeId: reminderActionTypeId,
+            reminderCustomActionName: reminderCustomActionName,
+            reminderType: reminderType,
+            reminderExecutionBasis: reminderExecutionBasis,
+            reminderIsTriggerResult: reminderIsTriggerResult,
+            reminderIsEnabled: reminderIsEnabled,
+            reminderRecipientUserIds: reminderRecipientUserIds,
+            reminderTimeZone: reminderTimeZone,
+            countdownComponents: countdownComponents,
+            weeklyComponents:   weekdayComponents,
+            monthlyComponents: monthlyComponents,
+            oneTimeComponents: oneTimeComponents,
+            snoozeComponents: snoozeComponents,
+        // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
+            offlineModeComponents: nil
         )
     }
     
     // MARK: - Timing
     
-    var intervalRemaining: Double? {
-        guard snoozeComponents.executionInterval == nil else {
-            return snoozeComponents.executionInterval
-        }
-        
-        switch reminderType {
-        case .oneTime:
-            return Date().distance(to: oneTimeComponents.oneTimeDate)
-        case .countdown:
-            // the time is supposed to countdown for minus the time it has countdown
-            return countdownComponents.executionInterval
-        case .weekly:
-            if self.reminderExecutionBasis.distance(to: self.weeklyComponents.previousExecutionDate(forReminderExecutionBasis: self.reminderExecutionBasis)) > 0 {
-                return nil
-            }
-            else {
-                return Date().distance(to: self.weeklyComponents.nextExecutionDate(forReminderExecutionBasis: self.reminderExecutionBasis))
-            }
-        case .monthly:
-            if self.reminderExecutionBasis.distance(to:
-                                                        self.monthlyComponents.previousExecutionDate(forReminderExecutionBasis: self.reminderExecutionBasis)) > 0 {
-                return nil
-            }
-            else {
-                return Date().distance(to: self.monthlyComponents.nextExecutionDate(forReminderExecutionBasis: self.reminderExecutionBasis))
-            }
-        }
-    }
-    
     var reminderExecutionDate: Date? {
-        // the reminder will not go off if disabled or the family is paused
         guard reminderIsEnabled == true else {
             return nil
         }
         
-        guard let intervalRemaining = intervalRemaining else {
-            // If the intervalRemaining is nil than means there is no time left
-            return Date()
-        }
-        
-        guard snoozeComponents.executionInterval == nil else {
-            return Date(timeInterval: intervalRemaining, since: reminderExecutionBasis)
+        if let snooze = snoozeComponents.executionInterval {
+            return Date(timeInterval: snooze, since: reminderExecutionBasis)
         }
         
         switch reminderType {
         case .oneTime:
             return oneTimeComponents.oneTimeDate
         case .countdown:
-            return Date(timeInterval: intervalRemaining, since: reminderExecutionBasis)
+            return Date(timeInterval: countdownComponents.executionInterval, since: reminderExecutionBasis)
         case .weekly:
-            return weeklyComponents.nextExecutionDate(forReminderExecutionBasis: self.reminderExecutionBasis)
+            return weeklyComponents.nextExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: reminderTimeZone)
         case .monthly:
-            return monthlyComponents.nextExecutionDate(forReminderExecutionBasis: self.reminderExecutionBasis)
+            return monthlyComponents.nextExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: reminderTimeZone)
         }
     }
     
@@ -637,51 +526,41 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         if reminderType == .monthly && monthlyComponents.isSkipping == true {
-            return monthlyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderExecutionBasis)
+            return monthlyComponents.notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: reminderTimeZone)
         }
         else if reminderType == .weekly && weeklyComponents.isSkipping == true {
-            return weeklyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderExecutionBasis)
+            return weeklyComponents.notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: reminderTimeZone)
         }
-        else {
-            return nil
-        }
+        
+        return nil
     }
     
     /// Call this function when a user driven action directly intends to enable the skip status of the weekly or monthy components. This function only timing related data, no logs are added or removed. Additioanlly, if oneTime is getting skipped, it must be deleted externally.
-    func enableIsSkipping(forSkippedDate: Date?) {
-        // can't change is skipping on a disabled reminder. nothing to skip.
-        guard reminderIsEnabled == true else { return }
+    func enableIsSkipping(skippedDate: Date?) {
+        guard reminderIsEnabled else { return }
         
         switch reminderType {
         case .oneTime: break
             // oneTime can't skip
         case .countdown:
-            // countdown can skip
             resetForNextAlarm()
         case .weekly:
-            // weekly can skip
-            weeklyComponents.skippedDate = forSkippedDate
+            weeklyComponents.skippedDate = skippedDate
         case .monthly:
-            // monthly can skip
-            monthlyComponents.skippedDate = forSkippedDate
+            monthlyComponents.skippedDate = skippedDate
         }
     }
     
     /// Call this function when a user driven action directly intends to disable the skip status of the weekly or monthy components. This function only timing related data, no logs are added or removed.
     func disableIsSkipping() {
-        // can't change is skipping on a disabled reminder. nothing to unskip.
-        guard reminderIsEnabled == true else { return }
+        guard reminderIsEnabled else { return }
         
         switch reminderType {
         case .oneTime: break
-            // oneTim can't unskip
         case .countdown: break
-            // countdown can't unskip, only way to skip a countdown reminder is to reset it to restart its countdown
         case .weekly:
-            // weekly can unskip
             weeklyComponents.skippedDate = nil
         case .monthly:
-            // monthly can unskip
             monthlyComponents.skippedDate = nil
         }
     }
@@ -701,9 +580,6 @@ extension Reminder {
         duplicate.reminderId = nil
         duplicate.reminderUUID = UUID()
         duplicate.reminderExecutionBasis = Constant.Class.Reminder.defaultReminderExecutionBasis
-        
-        duplicate.snoozeComponents = SnoozeComponents()
-        duplicate.offlineModeComponents = OfflineModeComponents()
         
         duplicate.resetForNextAlarm()
         
@@ -726,7 +602,6 @@ extension Reminder {
         else if reminderCustomActionName != other.reminderCustomActionName {
             return false
         }
-        // reminder types (countdown, weekly, monthly, one time)
         else if reminderType != other.reminderType {
             return false
         }
@@ -791,27 +666,21 @@ extension Reminder {
         body[Constant.Key.reminderRecipientUserIds.rawValue] = .array(reminderRecipientUserIds.map { .string($0) })
         body[Constant.Key.reminderTimeZone.rawValue] = .string(reminderTimeZone.identifier)
         
-        body[Constant.Key.snoozeExecutionInterval.rawValue] = .double(snoozeComponents.executionInterval)
-        
-        body[Constant.Key.countdownExecutionInterval.rawValue] = .double(countdownComponents.executionInterval)
-        
-        body[Constant.Key.weeklyZonedHour.rawValue] = .int(weeklyComponents.UTCHour)
-        body[Constant.Key.weeklyZonedMinute.rawValue] = .int(weeklyComponents.UTCMinute)
-        body[Constant.Key.weeklySkippedDate.rawValue] = .string(weeklyComponents.skippedDate?.ISO8601FormatWithFractionalSeconds())
-        body[Constant.Key.weeklySunday.rawValue] = .bool(weeklyComponents.weekdays.contains(1))
-        body[Constant.Key.weeklyMonday.rawValue] = .bool(weeklyComponents.weekdays.contains(2))
-        body[Constant.Key.weeklyTuesday.rawValue] = .bool(weeklyComponents.weekdays.contains(3))
-        body[Constant.Key.weeklyWednesday.rawValue] = .bool(weeklyComponents.weekdays.contains(4))
-        body[Constant.Key.weeklyThursday.rawValue] = .bool(weeklyComponents.weekdays.contains(5))
-        body[Constant.Key.weeklyFriday.rawValue] = .bool(weeklyComponents.weekdays.contains(6))
-        body[Constant.Key.weeklySaturday.rawValue] = .bool(weeklyComponents.weekdays.contains(7))
-        
-        body[Constant.Key.monthlyUTCDay.rawValue] = .int(monthlyComponents.UTCDay)
-        body[Constant.Key.monthlyUTCHour.rawValue] = .int(monthlyComponents.UTCHour)
-        body[Constant.Key.monthlyUTCMinute.rawValue] = .int(monthlyComponents.UTCMinute)
-        body[Constant.Key.monthlySkippedDate.rawValue] = .string(monthlyComponents.skippedDate?.ISO8601FormatWithFractionalSeconds())
-        
-        body[Constant.Key.oneTimeDate.rawValue] = .string(oneTimeComponents.oneTimeDate.ISO8601FormatWithFractionalSeconds())
+        body.merge(countdownComponents.createBody()) { _, new in
+            return new
+        }
+        body.merge(weeklyComponents.createBody()) { _, new in
+            return new
+        }
+        body.merge(monthlyComponents.createBody()) { _, new in
+            return new
+        }
+        body.merge(oneTimeComponents.createBody()) { _, new in
+            return new
+        }
+        body.merge(snoozeComponents.createBody()) { _, new in
+            return new
+        }
         return body
     }
 }

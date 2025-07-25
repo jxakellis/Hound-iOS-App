@@ -90,22 +90,16 @@ public enum ReminderConstant {
         let reminder = Reminder()
         reminder.reminderActionTypeId = 1
         reminder.changeReminderType(forReminderType: .weekly)
-        var date = reminder.reminderExecutionDate ?? DateConstant.default1970Date
-        // 12:00 PM local time
-        date = Calendar.current.date(byAdding: .hour, value: 5, to: date) ?? DateConstant.default1970Date
-        reminder.weeklyComponents.changeUTCHour(forDate: date)
-        reminder.weeklyComponents.changeUTCMinute(forDate: date)
+        // 12:00 PM
+        reminder.weeklyComponents.zonedHour = 11
         return reminder
     }
     private static var defaultReminderFour: Reminder {
         let reminder = Reminder()
         reminder.reminderActionTypeId = 1
         reminder.changeReminderType(forReminderType: .weekly)
-        var date = reminder.reminderExecutionDate ?? DateConstant.default1970Date
-        // 5:00 PM local time
-        date = Calendar.current.date(byAdding: .hour, value: 10, to: date) ?? DateConstant.default1970Date
-        reminder.weeklyComponents.changeUTCHour(forDate: date)
-        reminder.weeklyComponents.changeUTCMinute(forDate: date)
+        // 5:00 PM
+        reminder.weeklyComponents.zonedHour = 16
         return reminder
     }
 }
@@ -114,7 +108,7 @@ public enum ReminderComponentConstant {
     static let defaultCountdownExecutionInterval: Double = 60 * 60 * 2
 
     static let defaultZonedDay: Int = 1
-    static var defaultZonedHour: Int  = 7
+    static var defaultZonedHour: Int = 7
     static var defaultZonedMinute: Int = 0
 }
 
@@ -125,6 +119,8 @@ public enum TriggerConstant {
     static let defaultTriggerFixedTimeTypeAmount = 1
     static let defaultTriggerManualCondition = true
     static let defaultTriggerAlarmCreatedCondition = true
+    static let defaultTriggerFixedTimeHour = 16
+    static let defaultTriggerFixedTimeMinute = 5
     static let defaultTriggers: [Trigger] = {
         // forLogActionTypeId 1 == feed
         let logReaction = TriggerLogReaction(forLogActionTypeId: 1, forLogCustomActionName: nil)
