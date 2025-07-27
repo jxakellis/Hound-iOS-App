@@ -15,7 +15,7 @@ final class MonthlyComponentsTests: XCTestCase {
     }
 
     func testNextExecutionNormalMonth() {
-        var comp = MonthlyComponents(zonedDay: 15, zonedHour: 10, zonedMinute: 0)
+        let comp = MonthlyComponents(zonedDay: 15, zonedHour: 10, zonedMinute: 0)
         let tz = TimeZone(identifier: "UTC")!
         let basis = makeDate("2024-01-10T00:00:00Z")
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
@@ -27,19 +27,19 @@ final class MonthlyComponentsTests: XCTestCase {
     }
 
     func testNextExecutionDayOverflow() {
-        var comp = MonthlyComponents(zonedDay: 31, zonedHour: 8, zonedMinute: 0)
+        let comp = MonthlyComponents(zonedDay: 31, zonedHour: 8, zonedMinute: 0)
         let tz = TimeZone(identifier: "UTC")!
         let basis = makeDate("2024-04-01T00:00:00Z")
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
         let cal = Calendar(identifier: .gregorian)
         var comps = cal.dateComponents(in: tz, from: basis)
         comps.day = 30; comps.hour = 8; comps.minute = 0; comps.second = 0
-        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
         XCTAssertEqual(next, expected)
     }
 
     func testSkippingBehavior() {
-        var comp = MonthlyComponents(zonedDay: 5, zonedHour: 12, zonedMinute: 0, skippedDate: makeDate("2024-06-05T12:00:00Z"))
+        let comp = MonthlyComponents(zonedDay: 5, zonedHour: 12, zonedMinute: 0, skippedDate: makeDate("2024-06-05T12:00:00Z"))
         let tz = TimeZone(identifier: "UTC")!
         let basis = makeDate("2024-06-01T00:00:00Z")
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
@@ -52,7 +52,7 @@ final class MonthlyComponentsTests: XCTestCase {
     }
 
     func testPreviousExecutionDST() {
-        var comp = MonthlyComponents(zonedDay: 14, zonedHour: 2, zonedMinute: 30)
+        let comp = MonthlyComponents(zonedDay: 14, zonedHour: 2, zonedMinute: 30)
         let tz = TimeZone(identifier: "America/New_York")!
         let basis = makeDate("2024-03-15T12:00:00Z")
         let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
@@ -64,7 +64,7 @@ final class MonthlyComponentsTests: XCTestCase {
     }
 
     func testLocalConversion() {
-        var comp = MonthlyComponents(zonedDay: 10, zonedHour: 22, zonedMinute: 15)
+        let comp = MonthlyComponents(zonedDay: 10, zonedHour: 22, zonedMinute: 15)
         let est = TimeZone(identifier: "America/New_York")!
         let gmt = TimeZone(identifier: "GMT")!
         let ref = makeDate("2024-05-01T00:00:00Z")
@@ -75,7 +75,7 @@ final class MonthlyComponentsTests: XCTestCase {
     }
 
     func testPreviousExecutionDayOverflow() {
-        var comp = MonthlyComponents(zonedDay: 31, zonedHour: 9, zonedMinute: 0)
+        let comp = MonthlyComponents(zonedDay: 31, zonedHour: 9, zonedMinute: 0)
         let tz = TimeZone(identifier: "UTC")!
         let basis = makeDate("2024-04-15T00:00:00Z")
         let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
@@ -92,7 +92,7 @@ final class MonthlyComponentsTests: XCTestCase {
     }
 
     func testNextExecutionDSTSpringForward() {
-        var comp = MonthlyComponents(zonedDay: 10, zonedHour: 2, zonedMinute: 30)
+        let comp = MonthlyComponents(zonedDay: 10, zonedHour: 2, zonedMinute: 30)
         let tz = TimeZone(identifier: "America/New_York")!
         let basis = makeDate("2024-03-01T00:00:00Z")
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)

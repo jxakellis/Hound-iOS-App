@@ -15,7 +15,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
 
     func testNextExecutionBasic() {
-        var comp = WeeklyComponents(zonedSunday: false,
+        let comp = WeeklyComponents(zonedSunday: false,
                                     zonedMonday: true,
                                     zonedTuesday: false,
                                     zonedWednesday: false,
@@ -39,7 +39,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
 
     func testNextExecutionSkipping() {
-        var comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
+        let comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
                                     zonedWednesday: false, zonedThursday: false,
                                     zonedFriday: false, zonedSaturday: false,
                                     zonedHour: 6, zonedMinute: 0,
@@ -79,7 +79,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
 
     func testLocalConversions() {
-        var comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
+        let comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
                                     zonedWednesday: false, zonedThursday: false, zonedFriday: false,
                                     zonedSaturday: false, zonedHour: 23, zonedMinute: 0)
         let pst = TimeZone(identifier: "America/Los_Angeles")!
@@ -93,7 +93,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
 
     func testMultipleWeekdayNextAndPrevious() {
-        var comp = WeeklyComponents(zonedSunday: false, zonedMonday: true, zonedTuesday: false,
+        let comp = WeeklyComponents(zonedSunday: false, zonedMonday: true, zonedTuesday: false,
                                     zonedWednesday: true, zonedThursday: false, zonedFriday: false,
                                     zonedSaturday: false, zonedHour: 8, zonedMinute: 45)
         let tz = TimeZone(identifier: "UTC")!
@@ -115,7 +115,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
 
     func testDSTFallBackNextExecution() {
-        var comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
+        let comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
                                     zonedWednesday: false, zonedThursday: false, zonedFriday: false,
                                     zonedSaturday: false, zonedHour: 1, zonedMinute: 30)
         let tz = TimeZone(identifier: "America/New_York")!
@@ -127,7 +127,7 @@ final class WeeklyComponentsTests: XCTestCase {
         comps.hour = 1
         comps.minute = 30
         comps.second = 0
-        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
         XCTAssertEqual(next, expected)
     }
 }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -205,6 +205,12 @@
 		A2EB7A83285ACEE60063A3B9 /* SettingsSubscriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EB7A81285ACEE60063A3B9 /* SettingsSubscriptionVC.swift */; };
 		A2EB7A84285ACEE60063A3B9 /* SettingsTierTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EB7A82285ACEE60063A3B9 /* SettingsTierTVC.swift */; };
 		A2EBFB9E264F6A1A001AAF18 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EBFB9D264F6A1A001AAF18 /* AudioManager.swift */; };
+		A2EFABC62E36A1A8006AC481 /* MonthlyComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB152E35C75100958592 /* MonthlyComponentTests.swift */; };
+		A2EFABC72E36A1A8006AC481 /* ReminderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB162E35C78D00958592 /* ReminderTests.swift */; };
+		A2EFABC82E36A1A8006AC481 /* TimeZoneExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB172E35C7C200958592 /* TimeZoneExtensionTests.swift */; };
+		A2EFABC92E36A1A8006AC481 /* WeeklyComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB182E35C7D800958592 /* WeeklyComponentTests.swift */; };
+		A2EFABCB2E36A1D4006AC481 /* SanityTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABCA2E36A1CA006AC481 /* SanityTest.swift */; };
+		A2EFABCD2E36A37E006AC481 /* TriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABCC2E36A37A006AC481 /* TriggerTests.swift */; };
 		A2F1791C263F3E5C006824A7 /* HoundDropDownTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F1791B263F3E5C006824A7 /* HoundDropDownTVC.swift */; };
 		A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F4F0392980A04700DF26D5 /* IntExtension.swift */; };
 		A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F6F4C427FC9D3200CAA320 /* SettingsMemberTVC.swift */; };
@@ -449,6 +455,8 @@
 		A2EB7A81285ACEE60063A3B9 /* SettingsSubscriptionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsSubscriptionVC.swift; sourceTree = "<group>"; };
 		A2EB7A82285ACEE60063A3B9 /* SettingsTierTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTierTVC.swift; sourceTree = "<group>"; };
 		A2EBFB9D264F6A1A001AAF18 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		A2EFABCA2E36A1CA006AC481 /* SanityTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SanityTest.swift; sourceTree = "<group>"; };
+		A2EFABCC2E36A37A006AC481 /* TriggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerTests.swift; sourceTree = "<group>"; };
 		A2F1791B263F3E5C006824A7 /* HoundDropDownTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundDropDownTVC.swift; sourceTree = "<group>"; };
 		A2F4F0392980A04700DF26D5 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		A2F6F4C427FC9D3200CAA320 /* SettingsMemberTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMemberTVC.swift; sourceTree = "<group>"; };
@@ -478,20 +486,6 @@
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
 		F1A5C1841BA2129D46477D9A /* Pods-Hound.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.debug.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		A20EEB1E2E35C84200958592 /* HoundTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = HoundTests;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A20EEB1A2E35C84200958592 /* Frameworks */ = {
@@ -567,10 +561,12 @@
 		A20EEB142E35C74B00958592 /* Reminders */ = {
 			isa = PBXGroup;
 			children = (
+				A2EFABCA2E36A1CA006AC481 /* SanityTest.swift */,
 				A20EEB152E35C75100958592 /* MonthlyComponentTests.swift */,
 				A20EEB162E35C78D00958592 /* ReminderTests.swift */,
 				A20EEB172E35C7C200958592 /* TimeZoneExtensionTests.swift */,
 				A20EEB182E35C7D800958592 /* WeeklyComponentTests.swift */,
+				A2EFABCC2E36A37A006AC481 /* TriggerTests.swift */,
 			);
 			path = Reminders;
 			sourceTree = "<group>";
@@ -1072,7 +1068,6 @@
 			children = (
 				A20EEB132E35C74200958592 /* HoundTests */,
 				A2E66C9925534A880068CCA6 /* Hound */,
-				A20EEB1E2E35C84200958592 /* HoundTests */,
 				A2E66C9825534A880068CCA6 /* Products */,
 				51C8E1093F80CB0FA31E38CA /* Pods */,
 				EFBF0ADD5C81646357590C75 /* Frameworks */,
@@ -1205,9 +1200,6 @@
 			dependencies = (
 				A20EEB222E35C84200958592 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				A20EEB1E2E35C84200958592 /* HoundTests */,
-			);
 			name = HoundTests;
 			productName = HoundTests;
 			productReference = A20EEB1D2E35C84200958592 /* HoundTests.xctest */;
@@ -1335,9 +1327,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Hound/Pods-Hound-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Hound/Pods-Hound-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1392,6 +1388,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2EFABCD2E36A37E006AC481 /* TriggerTests.swift in Sources */,
+				A2EFABCB2E36A1D4006AC481 /* SanityTest.swift in Sources */,
+				A2EFABC62E36A1A8006AC481 /* MonthlyComponentTests.swift in Sources */,
+				A2EFABC72E36A1A8006AC481 /* ReminderTests.swift in Sources */,
+				A2EFABC82E36A1A8006AC481 /* TimeZoneExtensionTests.swift in Sources */,
+				A2EFABC92E36A1A8006AC481 /* WeeklyComponentTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
