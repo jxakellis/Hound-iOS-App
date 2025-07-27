@@ -32,7 +32,7 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying {
     // MARK: - Properties
     
     var readableTimeOfDay: String {
-        return executionInterval.readable(capitalizeWords: true, abreviateWords: false)
+        return executionInterval.readable(capitalizeWords: true, abbreviationLevel: .long)
     }
     
     var readableRecurrance: String {

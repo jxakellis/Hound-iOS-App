@@ -62,7 +62,7 @@ final class DogsAddReminderCountdownView: HoundView {
     // MARK: - Functions
     
     private func updateDescriptionLabel() {
-        countdownDescriptionLabel.text = "Reminder will sound every \((currentCountdownDuration ?? 0).readable(capitalizeWords: false, abreviateWords: false)) then automatically restart"
+        countdownDescriptionLabel.text = "Reminder will sound every \((currentCountdownDuration ?? 0).readable(capitalizeWords: false, abbreviationLevel: .long)) then automatically restart"
     }
     
     // MARK: - Setup Elements

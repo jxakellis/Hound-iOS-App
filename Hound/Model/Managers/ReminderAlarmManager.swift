@@ -104,7 +104,7 @@ final class ReminderAlarmManager {
             }
 
             let snoozeAlertAction = UIAlertAction(
-                title: "Snooze",
+                title: "Snooze for \(UserConfiguration.snoozeLength.readable(capitalizeWords: false, abbreviationLevel: .short))",
                 style: .default,
                 handler: { (_: UIAlertAction!)  in
                     // alarmAlertController could have been absorbed into another alarmAlertController

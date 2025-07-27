@@ -59,6 +59,8 @@ public enum KeyConstant: String {
     case userConfigurationInterfaceStyle
     case userConfigurationIsHapticsEnabled
     case userConfigurationMeasurementSystem
+    case userConfigurationUserTimeZone
+    case userConfigurationUsesDeviceTimeZone
     
     case userConfigurationSnoozeLength
     
@@ -69,6 +71,7 @@ public enum KeyConstant: String {
     case userConfigurationNotificationSound
     
     case userConfigurationIsSilentModeEnabled
+    // TODO TIMING this shouldn't be utc anymore. it should be a zoned hour and then user time zone is used to determine when this actually occurs
     case userConfigurationSilentModeStartUTCHour
     case userConfigurationSilentModeEndUTCHour
     case userConfigurationSilentModeStartUTCMinute

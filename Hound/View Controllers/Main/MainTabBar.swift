@@ -8,12 +8,11 @@
 
 import UIKit
 
-// UI VERIFIED 6/24/25
 final class MainTabBar: UITabBar {
 
     // MARK: - Properties
 
-    private var shapeLayer: CALayer?
+    private var shapeLayer: CAShapeLayer?
     private let radii: Double = Constant.Visual.Layer.imageCoveringViewCornerRadius
 
     // MARK: - Main
@@ -28,6 +27,18 @@ final class MainTabBar: UITabBar {
         self.layer.cornerRadius = Constant.Visual.Layer.imageCoveringViewCornerRadius
         self.layer.cornerCurve = .continuous
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        // UI has changed its appearance to dark/light mode
+        if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            // same as addShape
+            shapeLayer?.strokeColor = UIColor.systemGray4.cgColor
+            shapeLayer?.fillColor = UIColor.systemBackground.cgColor
+            shapeLayer?.shadowColor = UIColor.systemGray4.cgColor
+        }
+    }
 
     // MARK: - Functions
 
@@ -41,10 +52,11 @@ final class MainTabBar: UITabBar {
                 cornerRadii: CGSize(width: radii, height: 0.0)
             ).cgPath
         }()
+        // same as traitCollectionDidChange
         shapeLayer.strokeColor = UIColor.systemGray4.cgColor
         shapeLayer.fillColor = UIColor.systemBackground.cgColor
-        shapeLayer.lineWidth = 1
         shapeLayer.shadowColor = UIColor.systemGray4.cgColor
+        shapeLayer.lineWidth = 1
         shapeLayer.shadowOffset = CGSize(width: 0, height: -2)
         shapeLayer.shadowOpacity = 0.1
         shapeLayer.shadowRadius = 8

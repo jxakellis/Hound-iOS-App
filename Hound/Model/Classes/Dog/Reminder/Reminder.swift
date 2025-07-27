@@ -478,7 +478,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             reminderRecipientUserIds: reminderRecipientUserIds,
             reminderTimeZone: reminderTimeZone,
             countdownComponents: countdownComponents,
-            weeklyComponents:   weekdayComponents,
+            weeklyComponents: weekdayComponents,
             monthlyComponents: monthlyComponents,
             oneTimeComponents: oneTimeComponents,
             snoozeComponents: snoozeComponents,
@@ -487,6 +487,20 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         )
     }
     
+    // MARK: - Functions
+    
+    func readableRecurrance(to destinationTimeZone: TimeZone = UserConfiguration.timeZone) -> String {
+        switch self.reminderType {
+        case .countdown:
+            return countdownComponents.readableRecurrance
+        case .weekly:
+            return weeklyComponents.readableRecurrance(from: reminderTimeZone, to: destinationTimeZone)
+        case .monthly:
+            return monthlyComponents.readableRecurrence(from: reminderTimeZone, to: destinationTimeZone)
+        case .oneTime:
+            return oneTimeComponents.readableRecurrance
+        }
+    }
     // MARK: - Timing
     
     var reminderExecutionDate: Date? {

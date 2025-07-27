@@ -39,6 +39,18 @@ final class DogsAddReminderMonthlyView: HoundView {
         return datePicker
     }()
     
+    private let rollUnderDisclaimerLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.textAlignment = .center
+        label.textColor = UIColor.secondaryLabel
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
+        // TODO TIMING write text for this disclaimer, then dynamically show if selected day of month is 29/30/31
+        label.text = ""
+        label.numberOfLines = 0
+        label.isHidden = FamilyInformation.familyMembers.count <= 1
+        return label
+    }()
+    
     @objc private func didUpdateTimeOfDay(_ sender: Any) {
         updateDescriptionLabel()
         delegate?.willDismissKeyboard()

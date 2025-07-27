@@ -62,7 +62,7 @@ final class DogsAddTriggerTimeDelayView: HoundView {
     // MARK: - Functions
     
     private func updateDescriptionLabel() {
-        descriptionLabel.text = "Reminder will go off \(countdownDatePicker.countDownDuration.readable(capitalizeWords: false, abreviateWords: false)) after the log is added"
+        descriptionLabel.text = "Reminder will go off \(countdownDatePicker.countDownDuration.readable(capitalizeWords: false, abbreviationLevel: .long)) after the log is added"
     }
     
     // MARK: - Setup Elements

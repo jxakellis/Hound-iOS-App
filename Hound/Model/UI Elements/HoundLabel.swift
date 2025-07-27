@@ -66,6 +66,7 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         return label
     }()
     
+    // TODO ATTR TEXT I dont think this is needed UIColor should adapt to light/dark mode.
     /// When set, this closure will create the NSAttributedString for attributedText and set attributedTet equal to that. This is necessary because attributedText doesn't support dynamic colors and therefore doesn't change its colors when the UITraitCollection updates. Additionally, this closure is invoke when the UITraitCollection updates to manually make the attributedText support dynamic colors
     var attributedTextClosure: (() -> NSAttributedString)? {
         didSet {

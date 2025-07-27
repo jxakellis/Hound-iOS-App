@@ -509,8 +509,11 @@ final class DogsAddReminderManagerView: HoundView,
         let reminderEnabled = reminderIsEnabledSwitch.isOn
         let userIsRecipient = selectedRecipientUserIds.contains(UserInformation.userId ?? Constant.Visual.Text.unknownUserId)
         
-        notificationsDisabledLabel.isHidden = selectedRecipientUserIds.isEmpty || (reminderEnabled &&
-            (!userIsRecipient || (UserConfiguration.isNotificationEnabled && UserConfiguration.isReminderNotificationEnabled)))
+        // TODO this should show itself and have text if the current users isnt a recipient
+        notificationsDisabledLabel.isHidden = selectedRecipientUserIds.isEmpty
+        || (reminderEnabled &&
+            (!userIsRecipient || (UserConfiguration.isNotificationEnabled && UserConfiguration.isReminderNotificationEnabled))
+        )
         
         let precalculatedDynamicTextColor = UIColor.secondaryLabel
         

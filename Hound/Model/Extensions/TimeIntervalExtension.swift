@@ -8,65 +8,76 @@
 
 import Foundation
 
+import Foundation
+
 extension TimeInterval {
-
+    enum AbbreviationLevel {
+        case short   // e.g. "5s"
+        case medium  // e.g. "5 sec"
+        case long    // e.g. "5 seconds"
+    }
+    
     /**
-     Converts a TimeInterval to a readable string.
-        Examples:
-        (1800.0, true, true): 30 Mins
-        (1800.0, true, false): 30 Minutes
-        (1800.0, false, true): 30 mins
-        (1800.0, false, false): 30 minutes
-        (5400.0, false, true) 1 hr 30 mins
+     Converts a `TimeInterval` to a human-readable string.
+     
+     - Parameters:
+     - capitalizeWords: If `true`, capitalizes the first letter of each time component.
+     - abbreviationLevel: The abbreviation level to use (`.short`, `.medium`, or `.long`).
+     - maxComponents: The maximum number of time components to display (e.g., 2 → "3 days 5 hours").
+     
+     - Examples:
+     - `interval.readable(abbreviationLevel: .short, maxComponents: 2)` → `"2d 4h"`
+     - `interval.readable(abbreviationLevel: .medium)` → `"2 days 4 hrs"`
+     - `interval.readable(abbreviationLevel: .long, maxComponents: 3)` → `"2 days 4 hours 48 minutes"`
+     - `interval.readable(capitalizeWords: true, abbreviationLevel: .long)` → `"2 Days 4 Hours"`
      */
-    func readable(capitalizeWords: Bool, abreviateWords: Bool) -> String {
+    func readable(
+        capitalizeWords: Bool = false,
+        abbreviationLevel: AbbreviationLevel = .medium,
+        maxComponents: Int? = nil
+    ) -> String {
         let totalSeconds = abs(Int(self.rounded()))
-
-        let numberOfWeeks = Int((totalSeconds / (86400)) / 7)
-        let numberOfDays = Int((totalSeconds / (86400)) % 7)
-        let numberOfHours = Int((totalSeconds % (86400)) / (3600))
-        let numberOfMinutes = Int((totalSeconds % 3600) / 60)
-        let numberOfSeconds = Int((totalSeconds % 3600) % 60)
+        let units: [(value: Int, short: String, medium: String, long: String)] = [
+            (totalSeconds / 604800, "w", "wk", "week"),                      // weeks
+            ((totalSeconds % 604800) / 86400, "d", "day", "day"),           // days
+            ((totalSeconds % 86400) / 3600, "h", "hr", "hour"),             // hours
+            ((totalSeconds % 3600) / 60, "m", "min", "minute"),             // minutes
+            (totalSeconds % 60, "s", "sec", "second")                       // seconds
+        ]
         
-        var secondString = (abreviateWords ? "Sec" : "Second").appending(numberOfSeconds > 1 ? "s" : "")
-        secondString = capitalizeWords ? secondString : secondString.lowercased()
+        var components: [String] = []
+        var usedComponents = 0
         
-        var minuteString = (abreviateWords ? "Min" : "Minute").appending(numberOfMinutes > 1 ? "s" : "")
-        minuteString = capitalizeWords ? minuteString : minuteString.lowercased()
-        
-        var hourString = (abreviateWords ? "Hr" : "Hour").appending(numberOfHours > 1 ? "s" : "")
-        hourString = capitalizeWords ? hourString : hourString.lowercased()
-        
-        var dayString = (abreviateWords ? "D" : "Day").appending(numberOfDays > 1 ? "s" : "")
-        dayString = capitalizeWords ? dayString : dayString.lowercased()
-        
-        var weekString = (abreviateWords ? "Wk" : "Week").appending(numberOfWeeks > 1 ? "s" : "")
-        weekString = capitalizeWords ? weekString : weekString.lowercased()
-        
-        var string = ""
-
-        switch totalSeconds {
-        case 0..<60:
-            string.append("\(numberOfSeconds) \(secondString) ")
-        case 60..<3600:
-            string.append("\(numberOfMinutes) \(minuteString) ")
-        case 3600..<86400:
-            string.append("\(numberOfHours) \(hourString) ")
-            if numberOfMinutes > 0 {
-                string.append("\(numberOfMinutes) \(minuteString) ")
+        for (value, short, medium, long) in units {
+            if let maxComponents = maxComponents {
+                guard usedComponents < maxComponents else { break }
             }
-        case 86400..<604800:
-            string.append("\(numberOfDays) \(dayString) ")
-            if numberOfHours > 0 {
-                string.append("\(numberOfHours) \(hourString) ")
+            guard value > 0 || components.isEmpty else { continue } // Always show at least one unit
+            
+            let label: String
+            switch abbreviationLevel {
+            case .short:
+                label = "\(value)\(short)"
+            case .medium:
+                let base = medium
+                let plural = value == 1 ? base : "\(base)s"
+                label = "\(value) \(plural)"
+            case .long:
+                let base = long
+                let plural = value == 1 ? base : "\(base)s"
+                label = "\(value) \(plural)"
             }
-        default:
-            string.append("\(numberOfWeeks) \(weekString) ")
-            if numberOfDays > 0 {
-                string.append("\(numberOfDays) \(dayString) ")
-            }
+            
+            let finalLabel = capitalizeWords
+            ? label.capitalized
+            : label.lowercased()
+            
+            components.append(finalLabel)
+            usedComponents += 1
         }
-
-        return string.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Short form should have no space between number and unit (e.g., 5s)
+        return components.joined(separator: " ")
     }
 }
+

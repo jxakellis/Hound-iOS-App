@@ -119,18 +119,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         reminderActionTextLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName)
         reminderActionTextLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
-        intervalLabel.text = {
-            switch forReminder.reminderType {
-            case .countdown:
-                return forReminder.countdownComponents.readableInterval
-            case .weekly:
-                return forReminder.weeklyComponents.readableInterval
-            case .monthly:
-                return forReminder.monthlyComponents.readableInterval
-            case .oneTime:
-                return forReminder.oneTimeComponents.readableInterval
-            }
-        }()
+        intervalLabel.text = forReminder.readableRecurrance()
         intervalLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
         chevronImageView.alpha = (forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha) * 0.75
@@ -165,7 +154,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         }
         
         let precalculatedDynamicIsSnoozing = reminder.snoozeComponents.executionInterval != nil
-        let precalculatedDynamicText = Date().distance(to: executionDate).readable(capitalizeWords: false, abreviateWords: true)
+        let precalculatedDynamicText = Date().distance(to: executionDate).readable(capitalizeWords: false, abbreviationLevel: .short, maxComponents: 2)
         
         nextAlarmLabel.attributedTextClosure = {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated

@@ -398,7 +398,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     func readableTime() -> String {
         switch triggerType {
         case .timeDelay:
-            return "\(triggerTimeDelay.readable(capitalizeWords: false, abreviateWords: true)) later"
+            return "\(triggerTimeDelay.readable(capitalizeWords: false, abbreviationLevel: .short)) later"
         case .fixedTime:
             var text = ""
             switch triggerFixedTimeTypeAmount {

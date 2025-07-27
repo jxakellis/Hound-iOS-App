@@ -40,7 +40,19 @@ private enum InterfaceStyleOption: CaseIterable {
     }
 }
 
-final class SettingsAppearanceVC: HoundScrollViewController {
+enum SettingsAppearanceDropDownTypes: String, HoundDropDownType {
+    case timeZone = "DropDownTimeZone"
+}
+
+final class SettingsAppearanceVC: HoundScrollViewController,
+                                  HoundDropDownDataSource,
+                                  HoundDropDownManagerDelegate {
+    
+    // MARK: - UIGestureRecognizerDelegate
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
     
     // MARK: - Elements
     
@@ -111,6 +123,32 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         return uiSwitch
     }()
     
+    private let usesDeviceTimeZoneHeaderLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.text = "Use Device Time Zone"
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
+        return label
+    }()
+    
+    private lazy var usesDeviceTimeZoneSwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 255, compressionResistancePriority: 255)
+        uiSwitch.isOn = UserConfiguration.usesDeviceTimeZone
+        return uiSwitch
+    }()
+    
+    private lazy var timeZoneLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.applyStyle(.thinGrayBorder)
+        label.placeholder = "Select a time zone..."
+        label.shouldInsetText = true
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: .timeZone, delegate: self))
+        dropDownManager.register(identifier: .timeZone, label: label)
+        return label
+    }()
+    
+    private lazy var dropDownManager = HoundDropDownManager<SettingsAppearanceDropDownTypes>(rootView: containerView, dataSource: self, delegate: self)
+    
     @objc private func didUpdateInterfaceStyle(_ sender: Any) {
         guard let sender = sender as? HoundSegmentedControl else { return }
         
@@ -169,6 +207,41 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         }
     }
     
+    @objc private func didToggleUsesDeviceTimeZone(_ sender: Any) {
+        let newUses = usesDeviceTimeZoneSwitch.isOn
+        let beforeUpdateUses = UserConfiguration.usesDeviceTimeZone
+        
+        let newTz = usesDeviceTimeZoneSwitch.isOn ? (UserConfiguration.userTimeZone ?? UserConfiguration.timeZone) : UserConfiguration.userTimeZone
+        let beforeUpdateTz = UserConfiguration.userTimeZone
+        
+        UserConfiguration.usesDeviceTimeZone = newUses
+        // if setting usesDeviceTimeZone to true, then we need a userTimeZone
+        UserConfiguration.userTimeZone = newTz
+        synchronizeTimeZoneUI(animated: true)
+        
+        let body: JSONRequestBody = [
+            Constant.Key.userConfigurationUsesDeviceTimeZone.rawValue: .bool(newUses),
+            Constant.Key.userConfigurationUserTimeZone.rawValue: .string(newTz?.identifier)
+        ]
+        
+        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+            guard responseStatus != .failureResponse else {
+                UserConfiguration.usesDeviceTimeZone = beforeUpdateUses
+                UserConfiguration.userTimeZone = beforeUpdateTz
+                self.synchronizeTimeZoneUI(animated: true)
+                return
+            }
+        }
+    }
+    
+    // MARK: - Properties
+    
+    private let allTimeZones = {
+        return TimeZone.knownTimeZoneIdentifiers
+            .compactMap { TimeZone(identifier: $0) }
+            .sorted { $0.secondsFromGMT() < $1.secondsFromGMT() }
+    }()
+    
     // MARK: - Main
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -186,6 +259,99 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         self.eligibleForGlobalPresenter = true
     }
     
+    // MARK: - Functions
+    
+    private func displayName(for timeZone: TimeZone) -> String {
+        let name = timeZone.localizedName(for: .generic, locale: .current) ?? timeZone.identifier
+        
+        let seconds = timeZone.secondsFromGMT()
+        let hours = abs(seconds) / 3600
+        let minutes = (abs(seconds) % 3600) / 60
+        let sign = seconds >= 0 ? "+" : "-"
+        let offsetString = String(format: "%@%02d:%02d", sign, hours, minutes)
+        
+        let currentSuffix = (timeZone.identifier == TimeZone.current.identifier) ? " (current)" : ""
+        return "\(name) \(offsetString)\(currentSuffix)"
+    }
+    
+    private func synchronizeTimeZoneUI(animated: Bool) {
+        timeZoneLabel.isEnabled = !UserConfiguration.usesDeviceTimeZone
+        // use UserConfiguration.timeZone b/c if no UserConfiguration.userTimeZone, then this defaults to current TZ
+        timeZoneLabel.text = displayName(for: UserConfiguration.timeZone)
+        usesDeviceTimeZoneSwitch.setOn(UserConfiguration.usesDeviceTimeZone, animated: animated)
+    }
+    
+    // MARK: - HoundDropDownManagerDelegate
+    
+    func willShowDropDown(_ identifier: any HoundDropDownType, animated: Bool) {
+        guard let type = identifier as? SettingsAppearanceDropDownTypes else { return }
+        switch type {
+        case .timeZone:
+            dropDownManager.show(identifier: .timeZone, numberOfRowsToShow: min(6.5, CGFloat(allTimeZones.count)), animated: animated)
+        }
+    }
+    
+    // MARK: - HoundDropDownDataSource
+    
+    func setupCellForDropDown(cell: HoundDropDownTVC, indexPath: IndexPath, identifier: any HoundDropDownType) {
+        guard let type = identifier as? SettingsAppearanceDropDownTypes else { return }
+        switch type {
+        case .timeZone:
+            let tz = allTimeZones[indexPath.row]
+            cell.label.text = displayName(for: tz)
+            // use UserConfiguration.timeZone b/c if no UserConfiguration.userTimeZone, then this defaults to current TZ
+            cell.setCustomSelectedTableViewCell(forSelected: tz == UserConfiguration.timeZone)
+        }
+    }
+    
+    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
+        guard let type = identifier as? SettingsAppearanceDropDownTypes else { return 0 }
+        switch type {
+        case .timeZone:
+            return allTimeZones.count
+        }
+    }
+    
+    func numberOfSections(identifier: any HoundDropDownType) -> Int {
+        1
+    }
+    
+    func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
+        guard let type = identifier as? SettingsAppearanceDropDownTypes else { return }
+        guard let dropDown = dropDownManager.dropDown(for: type), let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
+        switch type {
+        case .timeZone:
+            if let prevTz = UserConfiguration.userTimeZone,
+               let prevIndex = allTimeZones.firstIndex(where: { $0.identifier == prevTz.identifier }),
+               prevIndex != indexPath.row {
+                let prevIndexPath = IndexPath(row: prevIndex, section: 0)
+                if let prevCell = dropDown.dropDownTableView?.cellForRow(at: prevIndexPath) as? HoundDropDownTVC {
+                    prevCell.setCustomSelectedTableViewCell(forSelected: false)
+                }
+            }
+            
+            let beforeUpdateTz = UserConfiguration.userTimeZone
+            
+            let newTz = allTimeZones[indexPath.row]
+            cell.setCustomSelectedTableViewCell(forSelected: true)
+            UserConfiguration.userTimeZone = newTz
+            timeZoneLabel.text = displayName(for: newTz)
+            dropDown.hideDropDown(animated: true)
+            
+            let body: JSONRequestBody = [
+                Constant.Key.userConfigurationUserTimeZone.rawValue: .string(newTz.identifier)
+            ]
+            
+            UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+                guard responseStatus != .failureResponse else {
+                    UserConfiguration.userTimeZone = beforeUpdateTz
+                    self.synchronizeTimeZoneUI(animated: true)
+                    return
+                }
+            }
+        }
+    }
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -201,12 +367,16 @@ final class SettingsAppearanceVC: HoundScrollViewController {
         containerView.addSubview(interfaceStyleHeaderLabel)
         containerView.addSubview(measurementHeaderLabel)
         containerView.addSubview(measurementSystemSegmentedControl)
+        containerView.addSubview(usesDeviceTimeZoneHeaderLabel)
+        containerView.addSubview(usesDeviceTimeZoneSwitch)
+        containerView.addSubview(timeZoneLabel)
         containerView.addSubview(hapticsHeaderLabel)
         containerView.addSubview(hapticsEnabledSwitch)
         
         interfaceStyleSegmentedControl.addTarget(self, action: #selector(didUpdateInterfaceStyle), for: .valueChanged)
         measurementSystemSegmentedControl.addTarget(self, action: #selector(didUpdateMeasurementSystem), for: .valueChanged)
         hapticsEnabledSwitch.addTarget(self, action: #selector(didToggleHapticsEnabled), for: .valueChanged)
+        usesDeviceTimeZoneSwitch.addTarget(self, action: #selector(didToggleUsesDeviceTimeZone), for: .valueChanged)
     }
     
     override func setupConstraints() {
@@ -251,9 +421,31 @@ final class SettingsAppearanceVC: HoundScrollViewController {
             measurementSystemSegmentedControl.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight)
         ])
         
+        // usesDeviceTimeZoneHeaderLabel
+        NSLayoutConstraint.activate([
+            usesDeviceTimeZoneHeaderLabel.topAnchor.constraint(equalTo: measurementSystemSegmentedControl.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            usesDeviceTimeZoneHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset)
+        ])
+        
+        // usesDeviceTimeZoneSwitch
+        NSLayoutConstraint.activate([
+            usesDeviceTimeZoneSwitch.centerYAnchor.constraint(equalTo: usesDeviceTimeZoneHeaderLabel.centerYAnchor),
+            usesDeviceTimeZoneSwitch.leadingAnchor.constraint(equalTo: usesDeviceTimeZoneHeaderLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
+            usesDeviceTimeZoneSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
+        ])
+        
+        // timeZoneLabel
+        NSLayoutConstraint.activate([
+            timeZoneLabel.topAnchor.constraint(equalTo: usesDeviceTimeZoneHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            timeZoneLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            timeZoneLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            timeZoneLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
+            timeZoneLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
+        ])
+        
         // hapticsHeaderLabel
         NSLayoutConstraint.activate([
-            hapticsHeaderLabel.topAnchor.constraint(equalTo: measurementSystemSegmentedControl.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            hapticsHeaderLabel.topAnchor.constraint(equalTo: timeZoneLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
             hapticsHeaderLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
             hapticsHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset)
         ])

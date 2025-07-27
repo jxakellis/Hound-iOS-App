@@ -17,6 +17,8 @@ final class UserConfiguration: UserDefaultPersistable {
         toUserDefaults.set(UserConfiguration.interfaceStyle.rawValue, forKey: Constant.Key.userConfigurationInterfaceStyle.rawValue)
         toUserDefaults.set(UserConfiguration.measurementSystem.rawValue, forKey: Constant.Key.userConfigurationMeasurementSystem.rawValue)
         toUserDefaults.set(UserConfiguration.isHapticsEnabled, forKey: Constant.Key.userConfigurationIsHapticsEnabled.rawValue)
+        toUserDefaults.set(UserConfiguration.usesDeviceTimeZone, forKey: Constant.Key.userConfigurationUsesDeviceTimeZone.rawValue)
+        toUserDefaults.set(UserConfiguration.userTimeZone?.identifier, forKey: Constant.Key.userConfigurationUserTimeZone.rawValue)
         
         toUserDefaults.set(UserConfiguration.notificationSound.rawValue, forKey: Constant.Key.userConfigurationNotificationSound.rawValue)
         
@@ -42,6 +44,13 @@ final class UserConfiguration: UserDefaultPersistable {
             UserConfiguration.measurementSystem = MeasurementSystem(rawValue: measurementSystemInt) ?? UserConfiguration.measurementSystem
         }
         UserConfiguration.isHapticsEnabled = fromUserDefaults.value(forKey: Constant.Key.userConfigurationIsHapticsEnabled.rawValue) as? Bool ?? UserConfiguration.isHapticsEnabled
+        UserConfiguration.usesDeviceTimeZone = fromUserDefaults.value(forKey: Constant.Key.userConfigurationUsesDeviceTimeZone.rawValue) as? Bool ?? UserConfiguration.usesDeviceTimeZone
+        UserConfiguration.userTimeZone = {
+            if let str = fromUserDefaults.value(forKey: Constant.Key.userConfigurationUserTimeZone.rawValue) as? String {
+                return TimeZone(identifier: str)
+            }
+            return nil
+        }() ?? UserConfiguration.userTimeZone
         
         UserConfiguration.snoozeLength = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSnoozeLength.rawValue) as? Double ?? UserConfiguration.snoozeLength
         
@@ -76,7 +85,12 @@ final class UserConfiguration: UserDefaultPersistable {
         if let isHapticsEnabled = body[Constant.Key.userConfigurationIsHapticsEnabled.rawValue] as? Bool {
                     self.isHapticsEnabled = isHapticsEnabled
                 }
-        
+        if let usesDeviceTimeZone = body[Constant.Key.userConfigurationUsesDeviceTimeZone.rawValue] as? Bool {
+            self.usesDeviceTimeZone = usesDeviceTimeZone
+        }
+        if let userTimeZone = body[Constant.Key.userConfigurationUserTimeZone.rawValue] as? String {
+            self.userTimeZone = TimeZone(identifier: userTimeZone)
+        }
         if let snoozeLength = body[Constant.Key.userConfigurationSnoozeLength.rawValue] as? Double {
             self.snoozeLength = snoozeLength
         }
@@ -146,6 +160,16 @@ final class UserConfiguration: UserDefaultPersistable {
     }()
     
     static var isHapticsEnabled: Bool = true
+    
+    static var usesDeviceTimeZone: Bool = true
+    
+    static var userTimeZone: TimeZone? = nil
+    static var deviceTimeZone: TimeZone {
+        return TimeZone.current
+    }
+    static var timeZone: TimeZone {
+        return usesDeviceTimeZone ? deviceTimeZone : userTimeZone ?? deviceTimeZone
+    }
     
     // MARK: - Alarm Timing Related
     
@@ -251,6 +275,8 @@ extension UserConfiguration {
         body[Constant.Key.userConfigurationInterfaceStyle.rawValue] = .int(UserConfiguration.interfaceStyle.rawValue)
         body[Constant.Key.userConfigurationMeasurementSystem.rawValue] = .int(UserConfiguration.measurementSystem.rawValue)
         body[Constant.Key.userConfigurationIsHapticsEnabled.rawValue] = .bool(UserConfiguration.isHapticsEnabled)
+        body[Constant.Key.userConfigurationUsesDeviceTimeZone.rawValue] = .bool(UserConfiguration.usesDeviceTimeZone)
+        body[Constant.Key.userConfigurationUserTimeZone.rawValue] = .string(UserConfiguration.userTimeZone?.identifier)
         
         body[Constant.Key.userConfigurationSnoozeLength.rawValue] = .double(UserConfiguration.snoozeLength)
         

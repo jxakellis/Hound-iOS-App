@@ -139,7 +139,7 @@ final class LogTVC: HoundTableViewCell {
             guard let logEndDate = log.logEndDate else {
                 return nil
             }
-            return log.logStartDate.distance(to: logEndDate).readable(capitalizeWords: false, abreviateWords: true)
+            return log.logStartDate.distance(to: logEndDate).readable(capitalizeWords: false, abbreviationLevel: .short, maxComponents: 2)
         }()
         
         let logUnitString: String? = {

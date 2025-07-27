@@ -49,6 +49,7 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
     }
     
     var readableRecurrance: String {
+        // TODO TIMING I think this needs to be localized
         return readableDayOfYear.appending(" at \(readableTimeOfDay)")
     }
     
