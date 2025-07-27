@@ -319,34 +319,26 @@ final class DogsAddReminderManagerView: HoundView,
         switch segmentedControl.selectedSegmentIndex {
         case ReminderType.oneTime.segmentedControlIndex:
             reminder.changeReminderType(forReminderType: .oneTime)
-            reminder.oneTimeComponents.oneTimeDate = onceView.oneTimeDate ?? reminder.oneTimeComponents.oneTimeDate
+            reminder.oneTimeComponents.oneTimeDate = onceView.currentComponent.oneTimeDate
         case ReminderType.countdown.segmentedControlIndex:
             reminder.changeReminderType(forReminderType: .countdown)
-            reminder.countdownComponents.executionInterval = countdownView.currentCountdownDuration ?? reminder.countdownComponents.executionInterval
+            reminder.countdownComponents.executionInterval = countdownView.currentComponent.executionInterval
         case ReminderType.weekly.segmentedControlIndex:
             reminder.changeReminderType(forReminderType: .weekly)
-            
-            guard reminder.weeklyComponents.setZonedWeekdays(weeklyView.currentWeekdays) else {
+            guard let component = weeklyView.currentComponent else {
                 if showErrorIfFailed {
                     HapticsManager.notification(.error)
                     weeklyView.weekdayStack.errorMessage = Constant.Error.WeeklyComponentsError.weekdaysInvalid
                 }
                 return nil
             }
-            
-            guard let date = weeklyView.currentTimeOfDay else {
-                break
-            }
-            reminder.weeklyComponents.changeUTCHour(forDate: date)
-            reminder.weeklyComponents.changeUTCMinute(forDate: date)
+            reminder.weeklyComponents.zonedHour = component.zonedHour
+            reminder.weeklyComponents.zonedMinute = component.zonedMinute
+            _ = reminder.weeklyComponents.setZonedWeekdays(component.zonedWeekdays)
         case ReminderType.monthly.segmentedControlIndex:
             reminder.changeReminderType(forReminderType: .monthly)
-            guard let date = monthlyView.currentTimeOfDay else {
-                break
-            }
-            reminder.monthlyComponents.changeUTCDay(forDate: date)
-            reminder.monthlyComponents.changeUTCHour(forDate: date)
-            reminder.monthlyComponents.changeUTCMinute(forDate: date)
+            let component = monthlyView.currentComponent
+            reminder.monthlyComponents.apply(from: component)
         default: break
         }
         
@@ -429,36 +421,47 @@ final class DogsAddReminderManagerView: HoundView,
         
         // onceView
         if reminderToUpdate?.reminderType == .oneTime {
-            onceView.setup(forDelegate: self, forOneTimeDate: Date().distance(to: reminderToUpdate?.oneTimeComponents.oneTimeDate ?? Date()) > 0 ? reminderToUpdate?.oneTimeComponents.oneTimeDate : nil)
-        }
-        else {
-            onceView.setup(forDelegate: self, forOneTimeDate: nil)
+            let date = Date().distance(to: reminderToUpdate?.oneTimeComponents.oneTimeDate ?? Date()) > 0 ?
+            reminderToUpdate?.oneTimeComponents.oneTimeDate : nil
+            onceView.setup(
+                forDelegate: self,
+                forComponents: date != nil ? OneTimeComponents(oneTimeDate: date) : nil,
+                forTimeZone: reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
+            )
+        } else {
+            onceView.setup(forDelegate: self, forComponents: nil, forTimeZone: UserConfiguration.timeZone)
         }
         
         // countdownView
         if reminderToUpdate?.reminderType == .countdown {
-            countdownView.setup(forDelegate: self, forCountdownDuration: reminderToUpdate?.countdownComponents.executionInterval)
-        }
-        else {
-            countdownView.setup(forDelegate: self, forCountdownDuration: nil)
+            countdownView.setup(
+                forDelegate: self,
+                forComponents: reminderToUpdate?.countdownComponents
+            )
+        } else {
+            countdownView.setup(forDelegate: self, forComponents: nil)
         }
         
         // weeklyView
         if reminderToUpdate?.reminderType == .weekly {
-            weeklyView.setup(forDelegate: self,
-                             forTimeOfDay: reminderToUpdate?.weeklyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date()),
-                             forWeekdays: reminderToUpdate?.weeklyComponents.weekdays)
-        }
-        else {
-            weeklyView.setup(forDelegate: self, forTimeOfDay: nil, forWeekdays: nil)
+            weeklyView.setup(
+                forDelegate: self,
+                forComponents: reminderToUpdate?.weeklyComponents,
+                forTimeZone: reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
+            )
+        } else {
+            weeklyView.setup(forDelegate: self, forComponents: nil, forTimeZone: UserConfiguration.timeZone)
         }
         
         // monthlyView
         if reminderToUpdate?.reminderType == .monthly {
-            monthlyView.setup(forDelegate: self, forTimeOfDay: reminderToUpdate?.monthlyComponents.notSkippingExecutionDate(forReminderExecutionBasis: reminderToUpdate?.reminderExecutionBasis ?? Date()))
-        }
-        else {
-            monthlyView.setup(forDelegate: self, forTimeOfDay: nil)
+            monthlyView.setup(
+                forDelegate: self,
+                forComponents: reminderToUpdate?.monthlyComponents,
+                forTimeZone: reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
+            )
+        } else {
+            monthlyView.setup(forDelegate: self, forComponents: nil, forTimeZone: UserConfiguration.timeZone)
         }
         
         updateDynamicUIElements()

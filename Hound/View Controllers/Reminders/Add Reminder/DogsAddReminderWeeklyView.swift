@@ -119,11 +119,13 @@ final class DogsAddReminderWeeklyView: HoundView {
     
     private weak var delegate: DogsAddReminderWeeklyViewDelegate?
     
+    private(set) var currentTimeZone: TimeZone = .current
+    
     private var weekdayButtons: [HoundButton] {
         return [sundayButton, mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton]
     }
     
-    var currentWeekdays: [Weekday] {
+    private var currentWeekdays: [Weekday] {
         var days: [Weekday] = []
         
         weekdayButtons.forEach { button in
@@ -136,31 +138,96 @@ final class DogsAddReminderWeeklyView: HoundView {
         
         return days
     }
-    /// timeOfDayDatePicker.date
-    var currentTimeOfDay: Date? {
-        timeOfDayDatePicker.date
+    
+    /// The weekly component represented by the current UI state.
+    var currentComponent: WeeklyComponents? {
+        guard !currentWeekdays.isEmpty else { return nil }
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents(in: currentTimeZone, from: timeOfDayDatePicker.date)
+        let hour = comps.hour ?? Constant.Class.ReminderComponent.defaultZonedHour
+        let minute = comps.minute ?? Constant.Class.ReminderComponent.defaultZonedMinute
+        let component = WeeklyComponents(zonedHour: hour, zonedMinute: minute)
+        _ = component.setZonedWeekdays(currentWeekdays)
+        return component
     }
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderWeeklyViewDelegate, forTimeZone: TimeZone, forWeeklyComponent: WeeklyComponents) {
+    func setup(
+        forDelegate: DogsAddReminderWeeklyViewDelegate,
+        forComponents: WeeklyComponents?,
+        forTimeZone: TimeZone
+    ) {
         delegate = forDelegate
-        timeOfDayDatePicker.date = forTimeOfDay ?? timeOfDayDatePicker.date
+        currentTimeZone = forTimeZone
+        timeOfDayDatePicker.timeZone = forTimeZone
         
-        weekdayButtons.forEach { button in
-            guard let forWeekdays = forWeekdays else {
-                enabledWeekdayButton(button)
-                return
+        if let components = forComponents {
+            let calendar = Calendar(identifier: .gregorian)
+            var dateComponents = DateComponents()
+            dateComponents.year = 2000
+            dateComponents.month = 1
+            dateComponents.day = 1
+            dateComponents.hour = components.zonedHour
+            dateComponents.minute = components.zonedMinute
+            dateComponents.second = 0
+            dateComponents.timeZone = forTimeZone
+            timeOfDayDatePicker.date = calendar.date(from: dateComponents) ?? timeOfDayDatePicker.date
+            
+            weekdayButtons.forEach { button in
+                let value = valueForWeekdayButton(button)
+                if components.zonedWeekdays.contains(value) {
+                    enabledWeekdayButton(button)
+                }
+                else {
+                    disableWeekdayButton(button)
+                }
             }
             
+        } else {
+            weekdayButtons.forEach { enabledWeekdayButton($0) }
+        }
+    }
+    
+    func updateDisplayedTimeZone(from oldTimeZone: TimeZone, to newTimeZone: TimeZone) {
+        guard oldTimeZone != newTimeZone else { return }
+        
+        let calendar = Calendar(identifier: .gregorian)
+        let oldComponents = calendar.dateComponents(in: oldTimeZone, from: timeOfDayDatePicker.date)
+        let hour = oldComponents.hour ?? 0
+        let minute = oldComponents.minute ?? 0
+        
+        let converted = oldTimeZone.convert(hour: hour, minute: minute, to: newTimeZone)
+        var newDateComponents = DateComponents()
+        newDateComponents.year = 2000
+        newDateComponents.month = 1
+        newDateComponents.day = 1
+        newDateComponents.hour = converted.hour
+        newDateComponents.minute = converted.minute
+        newDateComponents.second = 0
+        newDateComponents.timeZone = newTimeZone
+        if let newDate = calendar.date(from: newDateComponents) {
+            timeOfDayDatePicker.timeZone = newTimeZone
+            timeOfDayDatePicker.date = newDate
+        }
+        
+        let newWeekdays = oldTimeZone.convert(
+            weekdays: currentWeekdays,
+            hour: hour,
+            minute: minute,
+            to: newTimeZone
+        )
+        weekdayButtons.forEach { button in
             let value = valueForWeekdayButton(button)
-            if forWeekdays.contains(value) {
+            if newWeekdays.contains(value) {
                 enabledWeekdayButton(button)
             }
             else {
                 disableWeekdayButton(button)
             }
         }
+        
+        currentTimeZone = newTimeZone
     }
     
     // MARK: - Functions

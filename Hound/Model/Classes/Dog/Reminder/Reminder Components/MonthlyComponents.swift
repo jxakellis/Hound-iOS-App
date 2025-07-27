@@ -119,6 +119,24 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
         )
         return "Every \(day)\(day.daySuffix()) at \(String.convert(hour: hour, minute: minute))"
     }
+
+    // MARK: - Mutation
+
+    /// Updates the component using the provided date in the specified time zone.
+    func configure(from date: Date, timeZone: TimeZone) {
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents(in: timeZone, from: date)
+        if let day = comps.day { zonedDay = day }
+        if let hour = comps.hour { zonedHour = hour }
+        if let minute = comps.minute { zonedMinute = minute }
+    }
+
+    /// Copies zoned values from another monthly component.
+    func apply(from other: MonthlyComponents) {
+        zonedDay = other.zonedDay
+        zonedHour = other.zonedHour
+        zonedMinute = other.zonedMinute
+    }
     
     // MARK: - Timing
     

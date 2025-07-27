@@ -59,17 +59,82 @@ final class DogsAddReminderMonthlyView: HoundView {
     // MARK: - Properties
     
     private weak var delegate: DogsAddReminderMonthlyViewDelegate?
+    private(set) var currentTimeZone: TimeZone = .current
     
     // timeOfDayDatePicker.date
-    var currentTimeOfDay: Date? {
+    private var currentTimeOfDay: Date {
         timeOfDayDatePicker.date
+    }
+    
+    /// Monthly component represented by the current UI state.
+    var currentComponent: MonthlyComponents {
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents(in: currentTimeZone, from: currentTimeOfDay)
+        let day = comps.day ?? Constant.Class.ReminderComponent.defaultZonedDay
+        let hour = comps.hour ?? Constant.Class.ReminderComponent.defaultZonedHour
+        let minute = comps.minute ?? Constant.Class.ReminderComponent.defaultZonedMinute
+        return MonthlyComponents(zonedDay: day, zonedHour: hour, zonedMinute: minute)
     }
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderMonthlyViewDelegate, forTimeOfDay: Date?) {
+    func setup(
+        forDelegate: DogsAddReminderMonthlyViewDelegate,
+        forComponents: MonthlyComponents?,
+        forTimeZone: TimeZone
+    ) {
         delegate = forDelegate
-        timeOfDayDatePicker.date = forTimeOfDay ?? timeOfDayDatePicker.date
+        currentTimeZone = forTimeZone
+        timeOfDayDatePicker.timeZone = forTimeZone
+        
+        if let components = forComponents {
+            let calendar = Calendar(identifier: .gregorian)
+            var comps = DateComponents()
+            comps.year = 2000
+            comps.month = 1
+            comps.day = components.zonedDay
+            comps.hour = components.zonedHour
+            comps.minute = components.zonedMinute
+            comps.second = 0
+            comps.timeZone = forTimeZone
+            timeOfDayDatePicker.date = calendar.date(from: comps) ?? timeOfDayDatePicker.date
+        }
+        updateDescriptionLabel()
+    }
+    
+    // MARK: - Time Zone
+    
+    func updateDisplayedTimeZone(from oldTimeZone: TimeZone, to newTimeZone: TimeZone) {
+        guard oldTimeZone != newTimeZone else { return }
+        
+        let calendar = Calendar(identifier: .gregorian)
+        let oldComps = calendar.dateComponents(in: oldTimeZone, from: timeOfDayDatePicker.date)
+        let day = oldComps.day ?? 1
+        let hour = oldComps.hour ?? 0
+        let minute = oldComps.minute ?? 0
+        
+        let converted = oldTimeZone.convert(
+            day: day,
+            hour: hour,
+            minute: minute,
+            to: newTimeZone,
+            referenceDate: timeOfDayDatePicker.date
+        )
+        
+        var newComps = DateComponents()
+        newComps.year = oldComps.year
+        newComps.month = oldComps.month
+        newComps.day = converted.day
+        newComps.hour = converted.hour
+        newComps.minute = converted.minute
+        newComps.second = 0
+        newComps.timeZone = newTimeZone
+        if let newDate = calendar.date(from: newComps) {
+            timeOfDayDatePicker.timeZone = newTimeZone
+            timeOfDayDatePicker.date = newDate
+        }
+        
+        currentTimeZone = newTimeZone
         updateDescriptionLabel()
     }
     
@@ -78,10 +143,17 @@ final class DogsAddReminderMonthlyView: HoundView {
     private func updateDescriptionLabel() {
         // TODO TIMING implement new logic to utilize localization here
         // TODO TIMING add disclaimer if time is 29, 30, or 31 (do we roll over? I forget how we handle that)
-        let day = Calendar.current.component(.day, from: timeOfDayDatePicker.date)
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents(in: currentTimeZone, from: timeOfDayDatePicker.date)
+        let day = comps.day ?? 1
         
-        // Reminder will go
-        monthlyDescriptionLabel.text = "Reminder will sound on the \(day)\(day.daySuffix()) of each month at \(timeOfDayDatePicker.date.formatted(date: .omitted, time: .shortened))"
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        formatter.timeZone = currentTimeZone
+        let timeString = formatter.string(from: timeOfDayDatePicker.date)
+        
+        monthlyDescriptionLabel.text = "Reminder will sound on the \(day)\(day.daySuffix()) of each month at \(timeString)"
     }
     
     // MARK: - Setup Elements

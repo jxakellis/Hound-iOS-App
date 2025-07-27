@@ -45,24 +45,25 @@ final class DogsAddReminderCountdownView: HoundView {
     
     private weak var delegate: DogsAddReminderCountdownViewDelegate?
     
-    /// countdownDatePicker.countDownDuration
-    var currentCountdownDuration: Double? {
-        countdownDatePicker.countDownDuration
+    var currentComponent: CountdownComponents {
+        CountdownComponents(executionInterval: countdownDatePicker.countDownDuration)
     }
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderCountdownViewDelegate, forCountdownDuration: Double?) {
+    func setup(forDelegate: DogsAddReminderCountdownViewDelegate,
+               forComponents: CountdownComponents?) {
         delegate = forDelegate
         
-        countdownDatePicker.countDownDuration = forCountdownDuration ?? countdownDatePicker.countDownDuration
+        countdownDatePicker.countDownDuration = forComponents?.executionInterval ??
+        countdownDatePicker.countDownDuration
         updateDescriptionLabel()
     }
     
     // MARK: - Functions
     
     private func updateDescriptionLabel() {
-        countdownDescriptionLabel.text = "Reminder will sound every \((currentCountdownDuration ?? 0).readable(capitalizeWords: false, abbreviationLevel: .long)) then automatically restart"
+        countdownDescriptionLabel.text = "Reminder will sound every \(countdownDatePicker.countDownDuration.readable(capitalizeWords: false, abbreviationLevel: .long)) then automatically restart"
     }
     
     // MARK: - Setup Elements

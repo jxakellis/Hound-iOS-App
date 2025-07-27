@@ -49,23 +49,50 @@ final class DogsAddReminderOneTimeView: HoundView {
     // MARK: - Properties
     
     private weak var delegate: DogsAddReminderOneTimeViewDelegate?
+    private(set) var currentTimeZone: TimeZone = .current
     
-    var oneTimeDate: Date? {
+    private var oneTimeDate: Date {
         oneTimeDatePicker.date
+    }
+    
+    /// One-time component represented by the current UI state.
+    var currentComponent: OneTimeComponents {
+        OneTimeComponents(oneTimeDate: oneTimeDate)
     }
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderOneTimeViewDelegate, forOneTimeDate: Date?) {
+    func setup(
+        forDelegate: DogsAddReminderOneTimeViewDelegate,
+        forComponents: OneTimeComponents?,
+        forTimeZone: TimeZone
+    ) {
         delegate = forDelegate
-        oneTimeDatePicker.date = forOneTimeDate ?? oneTimeDatePicker.date
+        currentTimeZone = forTimeZone
+        oneTimeDatePicker.timeZone = forTimeZone
+        if let date = forComponents?.oneTimeDate {
+            oneTimeDatePicker.date = date
+        }
+        updateDescriptionLabel()
+    }
+    
+    // MARK: - Time Zone
+    
+    func updateDisplayedTimeZone(from _: TimeZone, to newTimeZone: TimeZone) {
+        currentTimeZone = newTimeZone
+        oneTimeDatePicker.timeZone = newTimeZone
         updateDescriptionLabel()
     }
     
     // MARK: - Functions
     
     private func updateDescriptionLabel() {
-        oneTimeDescriptionLabel.text = "Reminder will sound once on \(oneTimeDatePicker.date.formatted(date: .long, time: .shortened)) then automatically delete"
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .short
+        formatter.timeZone = currentTimeZone
+        let dateString = formatter.string(from: oneTimeDatePicker.date)
+        oneTimeDescriptionLabel.text = "Reminder will sound once on \(dateString) then automatically delete"
     }
     
     // MARK: - Setup Elements

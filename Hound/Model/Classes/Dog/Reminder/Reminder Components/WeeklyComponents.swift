@@ -240,6 +240,19 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         let readableTimeOfDay = readableTimeOfDay(from: zonedTimeZone, to: destinationTimeZone)
         return readableDaysOfWeek.appending(" at \(readableTimeOfDay)")
     }
+
+    // MARK: - Mutation
+
+    /// Updates the component using a date in the provided time zone and a set of weekdays.
+    /// - Returns: `true` if weekdays were valid and applied.
+    @discardableResult
+    func configure(from date: Date, timeZone: TimeZone, weekdays: [Weekday]) -> Bool {
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents(in: timeZone, from: date)
+        zonedHour = comps.hour ?? zonedHour
+        zonedMinute = comps.minute ?? zonedMinute
+        return setZonedWeekdays(weekdays)
+    }
     
     // MARK: - Timing
     

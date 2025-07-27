@@ -73,4 +73,36 @@ final class MonthlyComponentsTests: XCTestCase {
         let str = "Every \(day)\(day.daySuffix()) at \(String.convert(hour: hour, minute: minute))"
         XCTAssertEqual(local, str)
     }
+
+    func testPreviousExecutionDayOverflow() {
+        var comp = MonthlyComponents(zonedDay: 31, zonedHour: 9, zonedMinute: 0)
+        let tz = TimeZone(identifier: "UTC")!
+        let basis = makeDate("2024-04-15T00:00:00Z")
+        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let cal = Calendar(identifier: .gregorian)
+        var comps = cal.dateComponents(in: tz, from: basis)
+        comps.day = 31
+        comps.hour = 9
+        comps.minute = 0
+        comps.second = 0
+        let expected = cal.nextDate(after: basis, matching: comps,
+                                    matchingPolicy: .nextTimePreservingSmallerComponents,
+                                    direction: .backward)!
+        XCTAssertEqual(prev, expected)
+    }
+
+    func testNextExecutionDSTSpringForward() {
+        var comp = MonthlyComponents(zonedDay: 10, zonedHour: 2, zonedMinute: 30)
+        let tz = TimeZone(identifier: "America/New_York")!
+        let basis = makeDate("2024-03-01T00:00:00Z")
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let cal = Calendar(identifier: .gregorian)
+        var comps = cal.dateComponents(in: tz, from: basis)
+        comps.day = 10
+        comps.hour = 2
+        comps.minute = 30
+        comps.second = 0
+        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+        XCTAssertEqual(next, expected)
+    }
 }

@@ -91,4 +91,43 @@ final class WeeklyComponentsTests: XCTestCase {
         let localWeekdays = comp.localWeekdays(from: pst, to: utc)
         XCTAssertEqual(Set(localWeekdays), Set(pst.convert(weekdays: [.sunday], hour: 23, minute: 0, to: utc)))
     }
+
+    func testMultipleWeekdayNextAndPrevious() {
+        var comp = WeeklyComponents(zonedSunday: false, zonedMonday: true, zonedTuesday: false,
+                                    zonedWednesday: true, zonedThursday: false, zonedFriday: false,
+                                    zonedSaturday: false, zonedHour: 8, zonedMinute: 45)
+        let tz = TimeZone(identifier: "UTC")!
+        let basis = makeBasis("2024-05-14T12:00:00Z")
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let cal = Calendar(identifier: .gregorian)
+        var comps = cal.dateComponents(in: tz, from: basis)
+        comps.weekday = Weekday.wednesday.rawValue
+        comps.hour = 8
+        comps.minute = 45
+        comps.second = 0
+        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+        XCTAssertEqual(next, expected)
+        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let prevExpected = cal.nextDate(after: basis, matching: comps,
+                                        matchingPolicy: .nextTimePreservingSmallerComponents,
+                                        direction: .backward)!
+        XCTAssertEqual(prev, prevExpected)
+    }
+
+    func testDSTFallBackNextExecution() {
+        var comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
+                                    zonedWednesday: false, zonedThursday: false, zonedFriday: false,
+                                    zonedSaturday: false, zonedHour: 1, zonedMinute: 30)
+        let tz = TimeZone(identifier: "America/New_York")!
+        let basis = makeBasis("2024-10-20T00:00:00Z")
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let cal = Calendar(identifier: .gregorian)
+        var comps = cal.dateComponents(in: tz, from: basis)
+        comps.weekday = Weekday.sunday.rawValue
+        comps.hour = 1
+        comps.minute = 30
+        comps.second = 0
+        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+        XCTAssertEqual(next, expected)
+    }
 }

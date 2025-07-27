@@ -62,4 +62,19 @@ final class TimeZoneExtensionTests: XCTestCase {
         XCTAssertEqual(h, expComp.hour)
         XCTAssertEqual(m, expComp.minute)
     }
+
+    func testHalfHourOffsetConversion() {
+        let ist = TimeZone(identifier: "Asia/Kolkata")! // GMT+5:30
+        let gmt = TimeZone(identifier: "GMT")!
+        let result = ist.convert(hour: 9, minute: 0, to: gmt)
+        var comps = DateComponents()
+        comps.year = 2000; comps.month = 1; comps.day = 1
+        comps.hour = 9; comps.minute = 0; comps.second = 0
+        comps.timeZone = ist
+        let cal = Calendar(identifier: .gregorian)
+        let date = cal.date(from: comps)!
+        let expected = cal.dateComponents(in: gmt, from: date)
+        XCTAssertEqual(result.hour, expected.hour)
+        XCTAssertEqual(result.minute, expected.minute)
+    }
 }

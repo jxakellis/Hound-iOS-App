@@ -251,7 +251,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
         let actionName = dogsAddReminderManagerView
             .selectedReminderAction?
             .convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName)
-            ?? reminderToUpdate.reminderActionType.convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName)
+        ?? reminderToUpdate.reminderActionType.convertToReadableName(customActionName: reminderToUpdate.reminderCustomActionName)
         
         let alert = UIAlertController(
             title: "Are you sure you want to delete \(actionName)?",
@@ -354,5 +354,5 @@ final class DogsAddReminderVC: HoundScrollViewController {
             backButton.createSquareAspectRatio()
         ])
     }
-
+    
 }
