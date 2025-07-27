@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B151643C45CC5DEA62B513F /* libPods-HoundTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7582D84ED0DAFA493246CF5 /* libPods-HoundTests.a */; };
 		213BEB01BC15BA8E95D699CA /* libPods-Hound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */; };
 		A2040BA3262A13B000D9667E /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2040BA2262A13B000D9667E /* PersistenceManager.swift */; };
 		A207F7A0280610D6003248E8 /* DogIconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A207F79F280610D6003248E8 /* DogIconManager.swift */; };
@@ -241,6 +242,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		15E4D71FCC3E82E15F037BE9 /* Pods-HoundTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HoundTests.release.xcconfig"; path = "Target Support Files/Pods-HoundTests/Pods-HoundTests.release.xcconfig"; sourceTree = "<group>"; };
+		5F79421113F2DEEC4E5F5471 /* Pods-HoundTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HoundTests.debug.xcconfig"; path = "Target Support Files/Pods-HoundTests/Pods-HoundTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A2040BA2262A13B000D9667E /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		A207F79F280610D6003248E8 /* DogIconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogIconManager.swift; sourceTree = "<group>"; };
 		A20C99962568671F00E2C9C8 /* DogReminderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogReminderManager.swift; sourceTree = "<group>"; };
@@ -471,12 +474,23 @@
 		A2FAB4232E20D52C00E85392 /* TriggerReminderResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerReminderResult.swift; sourceTree = "<group>"; };
 		A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultPersistable.swift; sourceTree = "<group>"; };
 		C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hound.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7582D84ED0DAFA493246CF5 /* libPods-HoundTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HoundTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.release.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.release.xcconfig"; sourceTree = "<group>"; };
 		F1A5C1841BA2129D46477D9A /* Pods-Hound.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.debug.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A20EEB1E2E35C84200958592 /* HoundTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = HoundTests; sourceTree = "<group>"; };
+		A20EEB1E2E35C84200958592 /* HoundTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = HoundTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -484,6 +498,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B151643C45CC5DEA62B513F /* libPods-HoundTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +519,8 @@
 			children = (
 				F1A5C1841BA2129D46477D9A /* Pods-Hound.debug.xcconfig */,
 				E7B3D19811D2D739602885E4 /* Pods-Hound.release.xcconfig */,
+				5F79421113F2DEEC4E5F5471 /* Pods-HoundTests.debug.xcconfig */,
+				15E4D71FCC3E82E15F037BE9 /* Pods-HoundTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1166,6 +1183,7 @@
 			children = (
 				A2AB7CCF285817AE00851FF2 /* StoreKit.framework */,
 				C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */,
+				C7582D84ED0DAFA493246CF5 /* libPods-HoundTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1177,6 +1195,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A20EEB232E35C84200958592 /* Build configuration list for PBXNativeTarget "HoundTests" */;
 			buildPhases = (
+				3495EA7298D4F4FFFCA5D4A8 /* [CP] Check Pods Manifest.lock */,
 				A20EEB192E35C84200958592 /* Sources */,
 				A20EEB1A2E35C84200958592 /* Frameworks */,
 				A20EEB1B2E35C84200958592 /* Resources */,
@@ -1190,8 +1209,6 @@
 				A20EEB1E2E35C84200958592 /* HoundTests */,
 			);
 			name = HoundTests;
-			packageProductDependencies = (
-			);
 			productName = HoundTests;
 			productReference = A20EEB1D2E35C84200958592 /* HoundTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -1288,6 +1305,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3495EA7298D4F4FFFCA5D4A8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HoundTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		80965E96747E14D59BF3E567 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1296,13 +1335,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Hound/Pods-Hound-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Hound/Pods-Hound-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1595,6 +1630,7 @@
 /* Begin XCBuildConfiguration section */
 		A20EEB242E35C84200958592 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5F79421113F2DEEC4E5F5471 /* Pods-HoundTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1618,6 +1654,7 @@
 		};
 		A20EEB252E35C84200958592 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15E4D71FCC3E82E15F037BE9 /* Pods-HoundTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

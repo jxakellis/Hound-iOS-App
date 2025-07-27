@@ -134,19 +134,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         
         reminderActionLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName, includeMatchingEmoji: true)
         
-        intervalLabel.text = {
-            switch forReminder.reminderType {
-            case .countdown:
-                return forReminder.countdownComponents.readableInterval
-            case .weekly:
-                return forReminder.weeklyComponents.readableInterval
-            case .monthly:
-                return forReminder.monthlyComponents.readableInterval
-            case .oneTime:
-                return forReminder.oneTimeComponents.readableInterval
-            }
-        }()
-        
+        intervalLabel.text = forReminder.readableRecurrance()
     }
     
     // MARK: - Functions

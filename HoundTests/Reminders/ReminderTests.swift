@@ -14,7 +14,7 @@ final class ReminderIntegrationTests: XCTestCase {
 
     func testOneTimeReminderExecution() {
         let execDate = date("2024-10-05T12:30:00Z")
-        var rem = Reminder()
+        var rem = Reminder(reminderId: <#T##Int?#>, reminderUUID: <#T##UUID?#>, reminderActionTypeId: <#T##Int?#>, reminderCustomActionName: <#T##String?#>, reminderType: .oneTime, reminderExecutionBasis: <#T##Date?#>, reminderIsTriggerResult: <#T##Bool?#>, reminderIsEnabled: <#T##Bool?#>, reminderRecipientUserIds: <#T##[String]?#>, reminderTimeZone: <#T##TimeZone?#>, countdownComponents: <#T##CountdownComponents?#>, weeklyComponents: <#T##WeeklyComponents?#>, monthlyComponents: <#T##MonthlyComponents?#>, oneTimeComponents: <#T##OneTimeComponents?#>, snoozeComponents: <#T##SnoozeComponents?#>, offlineModeComponents: <#T##OfflineModeComponents?#>)
         rem.changeReminderType(forReminderType: .oneTime)
         rem.oneTimeComponents = OneTimeComponents(oneTimeDate: execDate)
         rem.reminderTimeZone = TimeZone(identifier: "UTC")!
@@ -224,6 +224,7 @@ final class ReminderIntegrationTests: XCTestCase {
     func testDisableIsSkippingDateSnoozedReturnsNil() {
         var rem = Reminder()
         rem.changeReminderType(forReminderType: .weekly)
+        rem.reminderExecutionBasis
         rem.reminderTimeZone = TimeZone(identifier: "UTC")!
         rem.weeklyComponents = WeeklyComponents(zonedSunday: true, zonedMonday: false,
                                                zonedTuesday: false, zonedWednesday: false,

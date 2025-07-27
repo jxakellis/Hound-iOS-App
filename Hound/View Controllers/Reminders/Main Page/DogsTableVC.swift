@@ -430,7 +430,7 @@ final class DogsTableVC: HoundTableViewController {
         }
         // Nest all the other cases inside this else statement as otherwise .oneTime alarms would make request with the above code then again down here.
         else {
-            forReminder.enableIsSkipping(forSkippedDate: Date())
+            forReminder.enableIsSkipping(skippedDate: Date())
             
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
             RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
@@ -470,7 +470,7 @@ final class DogsTableVC: HoundTableViewController {
     private func userSkippedReminderOnce(forDogUUID: UUID, forReminder: Reminder) {
         guard forReminder.reminderType != .oneTime else { return }
         
-        forReminder.enableIsSkipping(forSkippedDate: Date())
+        forReminder.enableIsSkipping(skippedDate: Date())
         
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
         RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
