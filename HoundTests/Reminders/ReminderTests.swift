@@ -10,8 +10,11 @@ import XCTest
 @testable import Hound
 
 final class ReminderIntegrationTests: XCTestCase {
-    func date(_ str: String) -> Date { ISO8601DateFormatter().date(from: str)! }
-
+    
+    func date(_ str: String) -> Date {
+        return str.formatISO8601IntoDate()!
+    }
+    
     func testOneTimeReminderExecution() {
         let execDate = date("2024-10-05T12:30:00Z")
         let rem = Reminder(
@@ -22,7 +25,7 @@ final class ReminderIntegrationTests: XCTestCase {
         )
         XCTAssertEqual(rem.reminderExecutionDate, execDate)
     }
-
+    
     func testCountdownReminderExecution() {
         let rem = Reminder(
             reminderType: .countdown,
@@ -32,7 +35,7 @@ final class ReminderIntegrationTests: XCTestCase {
         )
         XCTAssertEqual(rem.reminderExecutionDate, date("2024-01-01T00:01:00Z"))
     }
-
+    
     func testWeeklyReminderExecutionInDifferentTZ() {
         let rem = Reminder(
             reminderType: .weekly,
@@ -50,10 +53,10 @@ final class ReminderIntegrationTests: XCTestCase {
         comps.hour = 9
         comps.minute = 0
         comps.second = 0
-        let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+        let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
         XCTAssertEqual(next, expected)
     }
-
+    
     func testMonthlyReminderExecutionSkipsAndDisables() {
         let rem = Reminder(
             reminderType: .monthly,
@@ -66,14 +69,18 @@ final class ReminderIntegrationTests: XCTestCase {
         let cal = Calendar(identifier: .gregorian)
         var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
         comps.day = 20; comps.hour = 7; comps.minute = 0; comps.second = 0
-        let first = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
-        let second = cal.nextDate(after: first.addingTimeInterval(1), matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+        let first = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
+        XCTAssertNotNil(first)
+        guard let first = first else {
+            return
+        }
+        let second = cal.nextDate(after: first.addingTimeInterval(1), matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
         XCTAssertEqual(next, second)
         // disable skipping
         rem.disableIsSkipping()
         XCTAssertFalse(rem.monthlyComponents.isSkipping)
     }
-
+    
     func testSnoozeOverridesReminder() {
         let rem = Reminder(
             reminderType: .weekly,
@@ -100,7 +107,7 @@ final class ReminderIntegrationTests: XCTestCase {
         XCTAssertNotEqual(copy.reminderUUID, rem.reminderUUID)
         XCTAssertNotEqual(copy.reminderExecutionBasis, rem.reminderExecutionBasis)
     }
-
+    
     func testWeeklyReminderDSTSpringForward() {
         let rem = Reminder(
             reminderType: .weekly,
@@ -119,10 +126,10 @@ final class ReminderIntegrationTests: XCTestCase {
         comps.minute = 30
         comps.second = 0
         let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
-                                    matchingPolicy: .nextTimePreservingSmallerComponents)!
+                                    matchingPolicy: .nextTimePreservingSmallerComponents)
         XCTAssertEqual(next, expected)
     }
-
+    
     func testWeeklyReminderDSTFallBack() {
         let rem = Reminder(
             reminderType: .weekly,
@@ -141,10 +148,10 @@ final class ReminderIntegrationTests: XCTestCase {
         comps.minute = 30
         comps.second = 0
         let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
-                                    matchingPolicy: .nextTimePreservingSmallerComponents)!
+                                    matchingPolicy: .nextTimePreservingSmallerComponents)
         XCTAssertEqual(next, expected)
     }
-
+    
     func testWeeklyMultipleDaysPreviousNext() {
         let rem = Reminder(
             reminderType: .weekly,
@@ -163,16 +170,16 @@ final class ReminderIntegrationTests: XCTestCase {
         comps.minute = 0
         comps.second = 0
         let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
-                                    matchingPolicy: .nextTimePreservingSmallerComponents)!
+                                    matchingPolicy: .nextTimePreservingSmallerComponents)
         XCTAssertEqual(next, expected)
         let prev = rem.weeklyComponents.previousExecutionDate(reminderExecutionBasis: rem.reminderExecutionBasis,
                                                               sourceTimeZone: rem.reminderTimeZone)
         let prevExpected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
                                         matchingPolicy: .nextTimePreservingSmallerComponents,
-                                        direction: .backward)!
+                                        direction: .backward)
         XCTAssertEqual(prev, prevExpected)
     }
-
+    
     func testMonthlyDayOverflowNextAndPrevious() {
         let rem = Reminder(
             reminderType: .monthly,
@@ -194,10 +201,10 @@ final class ReminderIntegrationTests: XCTestCase {
                                                                sourceTimeZone: rem.reminderTimeZone)
         let prevExpected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
                                         matchingPolicy: .nextTimePreservingSmallerComponents,
-                                        direction: .backward)!
+                                        direction: .backward)
         XCTAssertEqual(prev, prevExpected)
     }
-
+    
     func testDisableIsSkippingDateWeekly() {
         let rem = Reminder(
             reminderType: .weekly,
@@ -213,7 +220,7 @@ final class ReminderIntegrationTests: XCTestCase {
                                                                      sourceTimeZone: rem.reminderTimeZone)
         XCTAssertEqual(rem.disableIsSkippingDate, expected)
     }
-
+    
     func testDisableIsSkippingDateSnoozedReturnsNil() {
         let rem = Reminder(
             reminderType: .weekly,
@@ -227,5 +234,104 @@ final class ReminderIntegrationTests: XCTestCase {
             snoozeComponents: SnoozeComponents(executionInterval: 600)
         )
         XCTAssertNil(rem.disableIsSkippingDate)
+    }
+    
+    func makeFullReminder(type: ReminderType) -> Reminder {
+        let basis = date("2024-01-01T00:00:00Z")
+        let tz = TimeZone(identifier: "America/Los_Angeles")!
+        let recipients = ["a", "b"]
+        let countdown = CountdownComponents(executionInterval: 120)
+        let weekly = WeeklyComponents(zonedSunday: true,
+                                      zonedMonday: false,
+                                      zonedTuesday: false,
+                                      zonedWednesday: false,
+                                      zonedThursday: false,
+                                      zonedFriday: false,
+                                      zonedSaturday: false,
+                                      zonedHour: 8,
+                                      zonedMinute: 0)
+        let monthly = MonthlyComponents(zonedDay: 15, zonedHour: 9, zonedMinute: 0)
+        let oneTime = OneTimeComponents(oneTimeDate: date("2024-05-05T12:00:00Z"))
+        let snooze = SnoozeComponents(executionInterval: 60)
+        let offline = OfflineModeComponents(forInitialAttemptedSyncDate: basis,
+                                            forInitialCreationDate: basis)
+        return Reminder(
+            reminderId: 5,
+            reminderUUID: UUID(uuidString: "00000000-0000-0000-0000-000000000555"),
+            reminderActionTypeId: 2,
+            reminderCustomActionName: "Walk",
+            reminderType: type,
+            reminderExecutionBasis: basis,
+            reminderIsTriggerResult: false,
+            reminderIsEnabled: true,
+            reminderRecipientUserIds: recipients,
+            reminderTimeZone: tz,
+            countdownComponents: countdown,
+            weeklyComponents: weekly,
+            monthlyComponents: monthly,
+            oneTimeComponents: oneTime,
+            snoozeComponents: snooze,
+            offlineModeComponents: offline
+        )
+    }
+    
+    func testInitializationAllTypes() {
+        for t in ReminderType.allCases {
+            let reminder = makeFullReminder(type: t)
+            XCTAssertEqual(reminder.reminderId, 5)
+            XCTAssertEqual(reminder.reminderUUID, UUID(uuidString: "00000000-0000-0000-0000-000000000555"))
+            XCTAssertEqual(reminder.reminderActionTypeId, 2)
+            XCTAssertEqual(reminder.reminderCustomActionName, "Walk")
+            XCTAssertEqual(reminder.reminderType, t)
+            XCTAssertEqual(reminder.reminderRecipientUserIds, ["a","b"])
+            XCTAssertEqual(reminder.reminderTimeZone.identifier, "America/Los_Angeles")
+            XCTAssertEqual(reminder.countdownComponents.executionInterval, 120)
+            XCTAssertEqual(reminder.weeklyComponents.zonedWeekdays, [Weekday.sunday])
+            XCTAssertEqual(reminder.monthlyComponents.zonedDay, 15)
+            XCTAssertEqual(reminder.oneTimeComponents.oneTimeDate, date("2024-05-05T12:00:00Z"))
+            XCTAssertEqual(reminder.snoozeComponents.executionInterval, 60)
+            XCTAssertNotNil(reminder.offlineModeComponents.initialAttemptedSyncDate)
+        }
+    }
+    
+    func testCustomActionNameSanitization() {
+        let rem = makeFullReminder(type: .countdown)
+        rem.reminderCustomActionName = "   extremely long custom name that should be truncated to thirty two characters  "
+        XCTAssertLessThanOrEqual(rem.reminderCustomActionName.count, Constant.Class.Reminder.reminderCustomActionNameCharacterLimit)
+        XCTAssertFalse(rem.reminderCustomActionName.hasPrefix(" "))
+        XCTAssertFalse(rem.reminderCustomActionName.hasSuffix(" "))
+    }
+    
+    func testChangeTypeResetsExecutionBasis() {
+        let rem = makeFullReminder(type: .countdown)
+        let before = rem.reminderExecutionBasis
+        rem.changeReminderType(forReminderType: .weekly)
+        XCTAssertEqual(rem.reminderType, .weekly)
+        XCTAssertGreaterThan(rem.reminderExecutionBasis, before)
+    }
+    
+    func testEnableDisableAndReset() {
+        let rem = makeFullReminder(type: .weekly)
+        rem.reminderIsEnabled = false
+        XCTAssertNil(rem.reminderExecutionDate)
+        rem.reminderIsEnabled = true
+        XCTAssertNotNil(rem.reminderExecutionDate)
+    }
+    
+    func testSkippingAndDisableIsSkippingDate() {
+        let rem = makeFullReminder(type: .weekly)
+        let skipDate = date("2024-05-05T15:00:00Z")
+        rem.enableIsSkipping(skippedDate: skipDate)
+        XCTAssertTrue(rem.weeklyComponents.isSkipping)
+        XCTAssertEqual(rem.disableIsSkippingDate, rem.weeklyComponents.notSkippingExecutionDate(reminderExecutionBasis: rem.reminderExecutionBasis, sourceTimeZone: rem.reminderTimeZone))
+        rem.disableIsSkipping()
+        XCTAssertFalse(rem.weeklyComponents.isSkipping)
+    }
+    
+    func testSnoozeOverridesExecution() {
+        let rem = makeFullReminder(type: .countdown)
+        rem.snoozeComponents.executionInterval = 300
+        let expected = rem.reminderExecutionBasis.addingTimeInterval(300)
+        XCTAssertEqual(rem.reminderExecutionDate, expected)
     }
 }

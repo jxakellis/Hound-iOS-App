@@ -211,6 +211,9 @@
 		A2EFABC92E36A1A8006AC481 /* WeeklyComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EEB182E35C7D800958592 /* WeeklyComponentTests.swift */; };
 		A2EFABCB2E36A1D4006AC481 /* SanityTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABCA2E36A1CA006AC481 /* SanityTest.swift */; };
 		A2EFABCD2E36A37E006AC481 /* TriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABCC2E36A37A006AC481 /* TriggerTests.swift */; };
+		A2EFABCF2E36A9A1006AC481 /* OneTimeComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABCE2E36A99D006AC481 /* OneTimeComponentTests.swift */; };
+		A2EFABD12E36A9D7006AC481 /* CountdownComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABD02E36A9D3006AC481 /* CountdownComponentTests.swift */; };
+		A2EFABD32E36AA22006AC481 /* SnoozeComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABD22E36AA1E006AC481 /* SnoozeComponentTests.swift */; };
 		A2F1791C263F3E5C006824A7 /* HoundDropDownTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F1791B263F3E5C006824A7 /* HoundDropDownTVC.swift */; };
 		A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F4F0392980A04700DF26D5 /* IntExtension.swift */; };
 		A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F6F4C427FC9D3200CAA320 /* SettingsMemberTVC.swift */; };
@@ -457,6 +460,9 @@
 		A2EBFB9D264F6A1A001AAF18 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		A2EFABCA2E36A1CA006AC481 /* SanityTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SanityTest.swift; sourceTree = "<group>"; };
 		A2EFABCC2E36A37A006AC481 /* TriggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerTests.swift; sourceTree = "<group>"; };
+		A2EFABCE2E36A99D006AC481 /* OneTimeComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneTimeComponentTests.swift; sourceTree = "<group>"; };
+		A2EFABD02E36A9D3006AC481 /* CountdownComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownComponentTests.swift; sourceTree = "<group>"; };
+		A2EFABD22E36AA1E006AC481 /* SnoozeComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnoozeComponentTests.swift; sourceTree = "<group>"; };
 		A2F1791B263F3E5C006824A7 /* HoundDropDownTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundDropDownTVC.swift; sourceTree = "<group>"; };
 		A2F4F0392980A04700DF26D5 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		A2F6F4C427FC9D3200CAA320 /* SettingsMemberTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMemberTVC.swift; sourceTree = "<group>"; };
@@ -553,7 +559,10 @@
 		A20EEB132E35C74200958592 /* HoundTests */ = {
 			isa = PBXGroup;
 			children = (
+				A2EFABCA2E36A1CA006AC481 /* SanityTest.swift */,
+				A2EFABD42E36AB3C006AC481 /* Trigger */,
 				A20EEB142E35C74B00958592 /* Reminders */,
+				A2EFABD52E36AB48006AC481 /* Other */,
 			);
 			path = HoundTests;
 			sourceTree = "<group>";
@@ -561,12 +570,12 @@
 		A20EEB142E35C74B00958592 /* Reminders */ = {
 			isa = PBXGroup;
 			children = (
-				A2EFABCA2E36A1CA006AC481 /* SanityTest.swift */,
-				A20EEB152E35C75100958592 /* MonthlyComponentTests.swift */,
 				A20EEB162E35C78D00958592 /* ReminderTests.swift */,
-				A20EEB172E35C7C200958592 /* TimeZoneExtensionTests.swift */,
+				A2EFABD02E36A9D3006AC481 /* CountdownComponentTests.swift */,
 				A20EEB182E35C7D800958592 /* WeeklyComponentTests.swift */,
-				A2EFABCC2E36A37A006AC481 /* TriggerTests.swift */,
+				A20EEB152E35C75100958592 /* MonthlyComponentTests.swift */,
+				A2EFABCE2E36A99D006AC481 /* OneTimeComponentTests.swift */,
+				A2EFABD22E36AA1E006AC481 /* SnoozeComponentTests.swift */,
 			);
 			path = Reminders;
 			sourceTree = "<group>";
@@ -1123,6 +1132,22 @@
 			path = "Subscription Page";
 			sourceTree = "<group>";
 		};
+		A2EFABD42E36AB3C006AC481 /* Trigger */ = {
+			isa = PBXGroup;
+			children = (
+				A2EFABCC2E36A37A006AC481 /* TriggerTests.swift */,
+			);
+			path = Trigger;
+			sourceTree = "<group>";
+		};
+		A2EFABD52E36AB48006AC481 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				A20EEB172E35C7C200958592 /* TimeZoneExtensionTests.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
 		A2F996A227569F4400605D03 /* mp3 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1390,10 +1415,13 @@
 			files = (
 				A2EFABCD2E36A37E006AC481 /* TriggerTests.swift in Sources */,
 				A2EFABCB2E36A1D4006AC481 /* SanityTest.swift in Sources */,
+				A2EFABCF2E36A9A1006AC481 /* OneTimeComponentTests.swift in Sources */,
+				A2EFABD32E36AA22006AC481 /* SnoozeComponentTests.swift in Sources */,
 				A2EFABC62E36A1A8006AC481 /* MonthlyComponentTests.swift in Sources */,
 				A2EFABC72E36A1A8006AC481 /* ReminderTests.swift in Sources */,
 				A2EFABC82E36A1A8006AC481 /* TimeZoneExtensionTests.swift in Sources */,
 				A2EFABC92E36A1A8006AC481 /* WeeklyComponentTests.swift in Sources */,
+				A2EFABD12E36A9D7006AC481 /* CountdownComponentTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

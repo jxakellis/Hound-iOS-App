@@ -128,6 +128,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         if zonedSaturday { weekdays.append(.saturday) }
         return weekdays
     }
+    @discardableResult
     func setZonedWeekdays(_ weekdays: [Weekday]) -> Bool {
         guard !weekdays.isEmpty else {
             return false

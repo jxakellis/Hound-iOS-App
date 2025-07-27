@@ -10,7 +10,9 @@ import XCTest
 @testable import Hound
 
 final class TriggerTests: XCTestCase {
-    func makeDate(_ str: String) -> Date { ISO8601DateFormatter().date(from: str)! }
+    func makeDate(_ str: String) -> Date {
+        return str.formatISO8601IntoDate()!
+    }
 
     func testTimeDelayInitializationAndChanges() {
         let reaction = TriggerLogReaction(forLogActionTypeId: 2, forLogCustomActionName: "walk")
@@ -107,7 +109,7 @@ final class TriggerTests: XCTestCase {
 
     func testCreateTriggerResultReminder() {
         let trig = Trigger(forTriggerType: .timeDelay, forTriggerTimeDelay: 60)
-        var log = Log(forLogActionTypeId: 1)
+        let log = Log(forLogActionTypeId: 1)
         let tz = TimeZone(identifier: "UTC")!
         guard let rem = trig.createTriggerResultReminder(afterLog: log, in: tz) else { return XCTFail("nil") }
         XCTAssertEqual(rem.reminderActionTypeId, trig.triggerReminderResult.reminderActionTypeId)
