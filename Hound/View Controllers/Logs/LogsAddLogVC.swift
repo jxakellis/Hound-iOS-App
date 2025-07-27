@@ -1373,7 +1373,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         }
         
         matchingReminders.forEach { dogUUID, matchingReminder in
-            matchingReminder.enableIsSkipping(forSkippedDate: selectedLogStartDate)
+            matchingReminder.enableIsSkipping(skippedDate: selectedLogStartDate)
             
             RemindersRequest.update(
                 forErrorAlert: .automaticallyAlertOnlyForFailure,

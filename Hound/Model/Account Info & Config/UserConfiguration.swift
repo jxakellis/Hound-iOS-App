@@ -163,10 +163,12 @@ final class UserConfiguration: UserDefaultPersistable {
     
     static var usesDeviceTimeZone: Bool = true
     
-    static var userTimeZone: TimeZone? = nil
+    static var userTimeZone: TimeZone?
+    
     static var deviceTimeZone: TimeZone {
         return TimeZone.current
     }
+    /// If usesTimeZone is true, this simply returns the device timeZone. Otherwise, it attempts to use the userTimeZone (possibly configured) to load the TZ
     static var timeZone: TimeZone {
         return usesDeviceTimeZone ? deviceTimeZone : userTimeZone ?? deviceTimeZone
     }

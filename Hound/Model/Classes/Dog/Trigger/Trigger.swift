@@ -255,8 +255,18 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     }
     /// 0-23
     private(set) var triggerFixedTimeHour: Int = Constant.Class.Trigger.defaultTriggerFixedTimeHour
+    func changeFixedTimeHour(forHour: Int) -> Bool {
+        guard (0...23).contains(forHour) else { return false }
+        triggerFixedTimeHour = forHour
+        return true
+    }
     /// 0-59
     private(set) var triggerFixedTimeMinute: Int = Constant.Class.Trigger.defaultTriggerFixedTimeMinute
+    func changeFixedTimeMinute(forMinute: Int) -> Bool {
+        guard (0...59).contains(forMinute) else { return false }
+        triggerFixedTimeMinute = forMinute
+        return true
+    }
     
     /// If true, the trigger will be activated by logs that were manually created by the user (no reminder/alarm)
     var triggerManualCondition: Bool = Constant.Class.Trigger.defaultTriggerManualCondition

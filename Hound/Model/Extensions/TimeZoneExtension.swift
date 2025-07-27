@@ -75,8 +75,7 @@ extension TimeZone {
         minute: Int,
         to destinationTimeZone: TimeZone,
         referenceDate: Date
-    ) -> (day: Int, hour: Int, minute: Int)
-    {
+    ) -> (day: Int, hour: Int, minute: Int) {
         let calendar = Calendar(identifier: .gregorian)
         // Clamp day to last valid day in zoned (source) time zone for month of referenceDate
         let daysInMonthSource = calendar.range(of: .day, in: .month, for: referenceDate, in: self)?.count ?? day

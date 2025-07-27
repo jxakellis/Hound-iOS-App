@@ -48,3 +48,4 @@ trailing_whitespace: # Enforces no trailing whitespace
     
 excluded: # Paths to ignore during linting. Takes precedence over `included`.
   - Pods
+  - HoundTests

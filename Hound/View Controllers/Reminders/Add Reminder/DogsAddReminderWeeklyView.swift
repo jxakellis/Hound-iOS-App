@@ -184,7 +184,8 @@ final class DogsAddReminderWeeklyView: HoundView {
                 }
             }
             
-        } else {
+        }
+        else {
             weekdayButtons.forEach { enabledWeekdayButton($0) }
         }
     }

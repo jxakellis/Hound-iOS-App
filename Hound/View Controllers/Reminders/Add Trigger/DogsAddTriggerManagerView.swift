@@ -342,10 +342,18 @@ final class DogsAddTriggerManagerView: HoundView,
         }
         else {
             trigger.triggerType = .fixedTime
-            trigger.changeTriggerFixedTimeHour(forDate: fixedTimeView.currentTimeOfDay)
-            trigger.changeTriggerFixedTimeMinute(forDate: fixedTimeView.currentTimeOfDay)
+            let calendar = Calendar(identifier: .gregorian)
+            // currently, trigger doesn't adapt to TZs, if you have automation for same day at 8:50PM, it will always be that no matter where hound is opened
+            let comps = calendar.dateComponents(in: UserConfiguration.deviceTimeZone, from: fixedTimeView.currentTimeOfDay)
+            guard let hour = comps.hour, let min = comps.minute else {
+                if showErrorIfFailed {
+                    HapticsManager.notification(.error)
+                    fixedTimeView.errorMessage = Constant.Error.TriggerError.fixedTimeTypeAmountInvalid
+                }
+                return nil
+            }
             
-            if !trigger.changeTriggerFixedTimeTypeAmount(forAmount: fixedTimeView.currentOffset) {
+            if !trigger.changeFixedTimeHour(forHour: hour) || !trigger.changeFixedTimeMinute(forMinute: min) || !trigger.changeTriggerFixedTimeTypeAmount(forAmount: fixedTimeView.currentOffset) {
                 if showErrorIfFailed {
                     HapticsManager.notification(.error)
                     fixedTimeView.errorMessage = Constant.Error.TriggerError.fixedTimeTypeAmountInvalid

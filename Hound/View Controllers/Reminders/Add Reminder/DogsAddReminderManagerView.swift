@@ -428,7 +428,8 @@ final class DogsAddReminderManagerView: HoundView,
                 forComponents: date != nil ? OneTimeComponents(oneTimeDate: date) : nil,
                 forTimeZone: reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
             )
-        } else {
+        }
+        else {
             onceView.setup(forDelegate: self, forComponents: nil, forTimeZone: UserConfiguration.timeZone)
         }
         
@@ -438,7 +439,8 @@ final class DogsAddReminderManagerView: HoundView,
                 forDelegate: self,
                 forComponents: reminderToUpdate?.countdownComponents
             )
-        } else {
+        }
+        else {
             countdownView.setup(forDelegate: self, forComponents: nil)
         }
         
@@ -449,7 +451,8 @@ final class DogsAddReminderManagerView: HoundView,
                 forComponents: reminderToUpdate?.weeklyComponents,
                 forTimeZone: reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
             )
-        } else {
+        }
+        else {
             weeklyView.setup(forDelegate: self, forComponents: nil, forTimeZone: UserConfiguration.timeZone)
         }
         
@@ -460,7 +463,8 @@ final class DogsAddReminderManagerView: HoundView,
                 forComponents: reminderToUpdate?.monthlyComponents,
                 forTimeZone: reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
             )
-        } else {
+        }
+        else {
             monthlyView.setup(forDelegate: self, forComponents: nil, forTimeZone: UserConfiguration.timeZone)
         }
         
