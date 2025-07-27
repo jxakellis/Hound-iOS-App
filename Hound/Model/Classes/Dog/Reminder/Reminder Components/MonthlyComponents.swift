@@ -124,8 +124,9 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
 
     /// Updates the component using the provided date in the specified time zone.
     func configure(from date: Date, timeZone: TimeZone) {
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents(in: timeZone, from: date)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        let comps = calendar.dateComponents([.day, .hour, .minute], from: date)
         if let day = comps.day { zonedDay = day }
         if let hour = comps.hour { zonedHour = hour }
         if let minute = comps.minute { zonedMinute = minute }
@@ -159,25 +160,32 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     /// Finds the previous valid execution date before the basis.
     /// Handles day roll-down if day exceeds days in target month, and is robust to DST.
     func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
-        let calendar = Calendar(identifier: .gregorian)
-        let searchBasis = reminderExecutionBasis.addingTimeInterval(-1)
-        var components = calendar.dateComponents(in: sourceTimeZone, from: reminderExecutionBasis)
-        let daysInMonth = calendar.range(of: .day, in: .month, for: reminderExecutionBasis)?.count ?? zonedDay
-        components.day = min(zonedDay, daysInMonth)
-        components.hour = zonedHour
-        components.minute = zonedMinute
-        components.second = 0
-        
-        guard let previousDate = calendar.nextDate(
-            after: searchBasis,
-            matching: components,
-            matchingPolicy: .nextTimePreservingSmallerComponents,
-            direction: .backward
-        ) else {
-            return nil
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = sourceTimeZone
+        var searchBasis = reminderExecutionBasis.addingTimeInterval(-1)
+
+        for _ in 0..<12 { // Look back up to 12 months to find a valid previous date
+            let daysInMonth = calendar.range(of: .day, in: .month, for: searchBasis)?.count ?? zonedDay
+            let targetDay = min(zonedDay, daysInMonth)
+
+            var components = calendar.dateComponents(in: sourceTimeZone, from: searchBasis)
+            components.day = targetDay
+            components.hour = zonedHour
+            components.minute = zonedMinute
+            components.second = 0
+
+            if let previousDate = calendar.date(from: components), previousDate < reminderExecutionBasis {
+                return previousDate
+            }
+
+            // Step back one month if no valid date found yet
+            guard let newSearchBasis = calendar.date(byAdding: .month, value: -1, to: searchBasis) else {
+                return nil
+            }
+            searchBasis = newSearchBasis
         }
 
-        return previousDate
+        return nil
     }
     
     /// Returns the next valid execution date after the one that would normally be triggered (skipping state).
@@ -196,10 +204,11 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     private func futureExecutionDates(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> [Date] {
         var dates: [Date] = []
         var searchBasis = reminderExecutionBasis
-        let calendar = Calendar(identifier: .gregorian)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = sourceTimeZone
         
         for _ in 0..<3 {
-            var components = calendar.dateComponents(in: sourceTimeZone, from: searchBasis)
+            var components = DateComponents()
             // Clamp the day to the last valid day of the month to avoid rollovers (e.g., "31" in April becomes April 30).
             let daysInMonth = calendar.range(of: .day, in: .month, for: searchBasis)?.count ?? zonedDay
             components.day = min(zonedDay, daysInMonth)

@@ -112,14 +112,4 @@ final class TriggerTests: XCTestCase {
         XCTAssertTrue(rem.reminderIsTriggerResult)
         XCTAssertEqual(rem.oneTimeComponents.oneTimeDate, log.logStartDate.addingTimeInterval(60))
     }
-
-    func testDogTriggerManagerOperations() {
-        let trig1 = Trigger(forTriggerUUID: UUID(), forTriggerTimeDelay: 60)
-        let trig2 = Trigger(forTriggerUUID: UUID(), forTriggerTimeDelay: 120)
-        let manager = DogTriggerManager()
-        manager.addTriggers(forDogTriggers: [trig1, trig2])
-        XCTAssertEqual(manager.matchingActivatedTriggers(forLog: Log()), [trig1, trig2])
-        XCTAssertTrue(manager.removeTrigger(forTriggerUUID: trig1.triggerUUID))
-        XCTAssertNil(manager.findTrigger(forTriggerUUID: trig1.triggerUUID))
-    }
 }

@@ -248,8 +248,9 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     /// - Returns: `true` if weekdays were valid and applied.
     @discardableResult
     func configure(from date: Date, timeZone: TimeZone, weekdays: [Weekday]) -> Bool {
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents(in: timeZone, from: date)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        let comps = calendar.dateComponents([.hour, .minute], from: date)
         zonedHour = comps.hour ?? zonedHour
         zonedMinute = comps.minute ?? zonedMinute
         return setZonedWeekdays(weekdays)
@@ -286,12 +287,14 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     /// based on the component's zoned weekdays, hour, and minute, in the specified `sourceTimeZone`.
     /// Robust to DST and ambiguous/skipped times.
     func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
-        let calendar = Calendar(identifier: .gregorian)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = sourceTimeZone
+        
         let searchBasis = reminderExecutionBasis.addingTimeInterval(-1)
         var latestPrevious: Date?
         // Try all active weekdays to find the most recent valid date < basis
         for zonedWeekday in zonedWeekdays {
-            var components = calendar.dateComponents(in: sourceTimeZone, from: reminderExecutionBasis)
+            var components = DateComponents()
             components.weekday = zonedWeekday.rawValue
             components.hour = zonedHour
             components.minute = zonedMinute
@@ -321,7 +324,8 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     /// using the object's zoned weekdays, hour, and minute, relative to `reminderExecutionBasis`.
     /// This function is robust to DST changes, ambiguous times, and ensures results are always valid for the zone provided.
     private func futureExecutionDates(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> [Date] {
-        let calendar = Calendar(identifier: .gregorian)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = sourceTimeZone
         var dates: [Date] = []
         var searchBasis = reminderExecutionBasis
         
@@ -329,7 +333,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         for _ in 0..<3 {
             var soonest: Date?
             for zonedWeekday in zonedWeekdays {
-                var components = calendar.dateComponents(in: sourceTimeZone, from: searchBasis)
+                var components = DateComponents()
                 components.weekday = zonedWeekday.rawValue
                 components.hour = zonedHour
                 components.minute = zonedMinute
@@ -360,7 +364,9 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
                 break // No further dates found
             }
         }
-        return dates
+        return dates.sorted { d1, d2 in
+            return d1 < d2
+        }
     }
     
     // MARK: - Compare
