@@ -160,6 +160,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     /// Handles day roll-down if day exceeds days in target month, and is robust to DST.
     func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
         let calendar = Calendar(identifier: .gregorian)
+        let searchBasis = reminderExecutionBasis.addingTimeInterval(-1)
         var components = calendar.dateComponents(in: sourceTimeZone, from: reminderExecutionBasis)
         let daysInMonth = calendar.range(of: .day, in: .month, for: reminderExecutionBasis)?.count ?? zonedDay
         components.day = min(zonedDay, daysInMonth)
@@ -168,7 +169,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
         components.second = 0
         
         guard let previousDate = calendar.nextDate(
-            after: reminderExecutionBasis,
+            after: searchBasis,
             matching: components,
             matchingPolicy: .nextTimePreservingSmallerComponents,
             direction: .backward

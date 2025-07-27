@@ -9,7 +9,7 @@
 import XCTest
 @testable import Hound
 
-final class ReminderIntegrationTests: XCTestCase {
+final class ReminderTests: XCTestCase {
     
     func date(_ str: String) -> Date {
         return str.formatISO8601IntoDate()!

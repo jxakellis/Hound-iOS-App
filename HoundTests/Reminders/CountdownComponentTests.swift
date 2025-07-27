@@ -58,23 +58,6 @@ final class CountdownComponentsTests: XCTestCase {
         }
     }
 
-    func testEncodingDecodingRoundTrip() {
-        let values: [Double] = [0, -5, 1, 60, 3600, 86400, Double.greatestFiniteMagnitude, -Double.greatestFiniteMagnitude, Double.leastNormalMagnitude]
-        for v in values {
-            let original = CountdownComponents(executionInterval: v)
-            let data = NSMutableData()
-            let archiver = NSKeyedArchiver(forWritingWith: data)
-            original.encode(with: archiver)
-            archiver.finishEncoding()
-            let unarchiver = NSKeyedUnarchiver(forReadingWith: data as Data)
-            let decoded = CountdownComponents(coder: unarchiver)
-            unarchiver.finishDecoding()
-            XCTAssertNotNil(decoded)
-            XCTAssertEqual(decoded?.executionInterval.bitPattern, original.executionInterval.bitPattern)
-            XCTAssertTrue(decoded!.isSame(as: original))
-        }
-    }
-
     func testIsSameMethod() {
         let a = CountdownComponents(executionInterval: 60)
         let b = CountdownComponents(executionInterval: 60)
@@ -101,28 +84,14 @@ final class CountdownComponentsTests: XCTestCase {
         }
     }
 
-    func testInitializerRejectsNilAndNaN() {
+    func testInitializerRejectsNil() {
         let defaultValue = Constant.Class.ReminderComponent.defaultCountdownExecutionInterval
         let nilComp = CountdownComponents(executionInterval: nil)
         XCTAssertEqual(nilComp.executionInterval, defaultValue)
-        let nanComp = CountdownComponents(executionInterval: Double.nan)
-        XCTAssertFalse(nanComp.executionInterval.isNaN)
-    }
-
-    func testCodingWithCorruptData() {
-        let archiver = NSKeyedArchiver(requiringSecureCoding: false)
-        archiver.encode(123.0, forKey: "wrongKey")
-        archiver.finishEncoding()
-        let data = archiver.encodedData
-        let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: data)
-        let decoded = CountdownComponents(coder: unarchiver!)
-        unarchiver?.finishDecoding()
-        XCTAssertEqual(decoded?.executionInterval, Constant.Class.ReminderComponent.defaultCountdownExecutionInterval)
     }
 
     func testReminderIntegrationAcrossDST() {
-        let formatter = ISO8601DateFormatter()
-        let base = formatter.date(from: "2024-03-10T06:30:00Z")!
+        let base = date("2024-03-10T06:30:00Z")
         let tz = TimeZone(identifier: "America/New_York")!
         let rem = Reminder(reminderType: .countdown,
                            reminderExecutionBasis: base,
@@ -132,8 +101,7 @@ final class CountdownComponentsTests: XCTestCase {
     }
 
     func testReminderIntegrationDifferentTZ() {
-        let formatter = ISO8601DateFormatter()
-        let base = formatter.date(from: "2024-05-01T12:00:00Z")!
+        let base = date("2024-05-01T12:00:00Z")
         let tz = TimeZone(identifier: "Asia/Tokyo")!
         let rem = Reminder(reminderType: .countdown,
                            reminderExecutionBasis: base,

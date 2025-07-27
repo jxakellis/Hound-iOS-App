@@ -175,7 +175,7 @@ final class MonthlyComponentsTests: XCTestCase {
                 cal.timeZone = tz
                 var comps = cal.dateComponents(in: tz, from: basis)
                 comps.day = 15; comps.hour = 10; comps.minute = 0; comps.second = 0
-                let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+                let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
                 XCTAssertEqual(next, expected)
             }
         }
@@ -189,8 +189,12 @@ final class MonthlyComponentsTests: XCTestCase {
             let cal = Calendar(identifier: .gregorian)
             var comps = cal.dateComponents(in: tz, from: basis)
             comps.day = 20; comps.hour = 8; comps.minute = 0; comps.second = 0
-            let first = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
-            let second = cal.nextDate(after: first.addingTimeInterval(1), matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+            let first = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
+            XCTAssertNotNil(first)
+            guard let first = first else {
+                return
+            }
+            let second = cal.nextDate(after: first.addingTimeInterval(1), matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
             XCTAssertEqual(next, second)
         }
 
@@ -202,7 +206,7 @@ final class MonthlyComponentsTests: XCTestCase {
             let cal = Calendar(identifier: .gregorian)
             var comps = cal.dateComponents(in: tz, from: basis)
             comps.day = 31; comps.hour = 9; comps.minute = 0; comps.second = 0
-            let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward)!
+            let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward)
             XCTAssertEqual(prev, expected)
         }
 
@@ -214,7 +218,7 @@ final class MonthlyComponentsTests: XCTestCase {
             let cal = Calendar(identifier: .gregorian)
             var comps = cal.dateComponents(in: tz, from: basis)
             comps.day = 3; comps.hour = 1; comps.minute = 30; comps.second = 0
-            let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+            let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
             XCTAssertEqual(next, expected)
         }
 
@@ -262,7 +266,7 @@ final class MonthlyComponentsTests: XCTestCase {
             let cal = Calendar(identifier: .gregorian)
             var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
             comps.day = 20; comps.hour = 7; comps.minute = 0; comps.second = 0
-            let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+            let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
             XCTAssertEqual(next, expected)
         }
 

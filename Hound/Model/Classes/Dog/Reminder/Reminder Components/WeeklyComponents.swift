@@ -286,6 +286,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     /// Robust to DST and ambiguous/skipped times.
     func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
         let calendar = Calendar(identifier: .gregorian)
+        let searchBasis = reminderExecutionBasis.addingTimeInterval(-1)
         var latestPrevious: Date?
         // Try all active weekdays to find the most recent valid date < basis
         for zonedWeekday in zonedWeekdays {
@@ -297,7 +298,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
             
             // Use direction: .backward to get previous matching
             if let previous = calendar.nextDate(
-                after: reminderExecutionBasis,
+                after: searchBasis,
                 matching: components,
                 matchingPolicy: .nextTimePreservingSmallerComponents,
                 repeatedTimePolicy: .first,

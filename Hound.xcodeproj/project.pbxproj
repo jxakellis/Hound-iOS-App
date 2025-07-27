@@ -214,6 +214,7 @@
 		A2EFABCF2E36A9A1006AC481 /* OneTimeComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABCE2E36A99D006AC481 /* OneTimeComponentTests.swift */; };
 		A2EFABD12E36A9D7006AC481 /* CountdownComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABD02E36A9D3006AC481 /* CountdownComponentTests.swift */; };
 		A2EFABD32E36AA22006AC481 /* SnoozeComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABD22E36AA1E006AC481 /* SnoozeComponentTests.swift */; };
+		A2EFABD72E36B40D006AC481 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFABD62E36B403006AC481 /* TestHelper.swift */; };
 		A2F1791C263F3E5C006824A7 /* HoundDropDownTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F1791B263F3E5C006824A7 /* HoundDropDownTVC.swift */; };
 		A2F4F03A2980A04700DF26D5 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F4F0392980A04700DF26D5 /* IntExtension.swift */; };
 		A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F6F4C427FC9D3200CAA320 /* SettingsMemberTVC.swift */; };
@@ -463,6 +464,7 @@
 		A2EFABCE2E36A99D006AC481 /* OneTimeComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneTimeComponentTests.swift; sourceTree = "<group>"; };
 		A2EFABD02E36A9D3006AC481 /* CountdownComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownComponentTests.swift; sourceTree = "<group>"; };
 		A2EFABD22E36AA1E006AC481 /* SnoozeComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnoozeComponentTests.swift; sourceTree = "<group>"; };
+		A2EFABD62E36B403006AC481 /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
 		A2F1791B263F3E5C006824A7 /* HoundDropDownTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundDropDownTVC.swift; sourceTree = "<group>"; };
 		A2F4F0392980A04700DF26D5 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		A2F6F4C427FC9D3200CAA320 /* SettingsMemberTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMemberTVC.swift; sourceTree = "<group>"; };
@@ -559,6 +561,7 @@
 		A20EEB132E35C74200958592 /* HoundTests */ = {
 			isa = PBXGroup;
 			children = (
+				A2EFABD62E36B403006AC481 /* TestHelper.swift */,
 				A2EFABCA2E36A1CA006AC481 /* SanityTest.swift */,
 				A2EFABD42E36AB3C006AC481 /* Trigger */,
 				A20EEB142E35C74B00958592 /* Reminders */,
@@ -1414,6 +1417,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2EFABCD2E36A37E006AC481 /* TriggerTests.swift in Sources */,
+				A2EFABD72E36B40D006AC481 /* TestHelper.swift in Sources */,
 				A2EFABCB2E36A1D4006AC481 /* SanityTest.swift in Sources */,
 				A2EFABCF2E36A9A1006AC481 /* OneTimeComponentTests.swift in Sources */,
 				A2EFABD32E36AA22006AC481 /* SnoozeComponentTests.swift in Sources */,

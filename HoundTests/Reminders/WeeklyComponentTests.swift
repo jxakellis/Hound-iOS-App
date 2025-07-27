@@ -10,9 +10,8 @@ import XCTest
 @testable import Hound
 
 final class WeeklyComponentsTests: XCTestCase {
-    func date(_ string: String) -> Date {
-        return string.formatISO8601IntoDate()!
-    }
+    
+    
     
     func testNextExecutionBasic() {
         let comp = WeeklyComponents(zonedSunday: false,
@@ -34,7 +33,7 @@ final class WeeklyComponentsTests: XCTestCase {
         expected.hour = 9
         expected.minute = 30
         expected.second = 0
-        let expectedDate = cal.nextDate(after: basis, matching: expected, matchingPolicy: .nextTimePreservingSmallerComponents)!
+        let expectedDate = cal.nextDate(after: basis, matching: expected, matchingPolicy: .nextTimePreservingSmallerComponents)
         XCTAssertEqual(next, expectedDate)
     }
     
@@ -47,13 +46,18 @@ final class WeeklyComponentsTests: XCTestCase {
         let tz = TimeZone(identifier: "UTC")!
         let basis = date("2024-06-01T00:00:00Z")
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
-        let cal = Calendar(identifier: .gregorian)
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = tz
         var comps = cal.dateComponents(in: tz, from: basis)
         comps.weekday = Weekday.sunday.rawValue
         comps.hour = 6
         comps.minute = 0
         comps.second = 0
-        let first = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+        let first = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
+        XCTAssertNotNil(first)
+        guard let first = first else {
+            return
+        }
         comps.weekday = Weekday.sunday.rawValue
         comps.hour = 6
         let second = cal.nextDate(after: first.addingTimeInterval(1), matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
@@ -69,6 +73,7 @@ final class WeeklyComponentsTests: XCTestCase {
         let basis = date("2024-03-12T12:00:00Z") // after spring forward
         let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
         let cal = Calendar(identifier: .gregorian)
+        cal.timeZone = tz
         var comps = cal.dateComponents(in: tz, from: basis)
         comps.weekday = Weekday.monday.rawValue
         comps.hour = 2
@@ -246,7 +251,7 @@ final class WeeklyComponentsTests: XCTestCase {
         comps.hour = 2
         comps.minute = 30
         comps.second = 0
-        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)!
+        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
         XCTAssertEqual(next, expected)
     }
     
