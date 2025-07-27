@@ -104,9 +104,9 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     /// Returns a readable recurrence string in the *destination* time zone.
     /// Example: "Every 31st at 7:30 PM" (will adjust hour/minute for destination zone).
     /// NOTE: If the requested day does not exist in a month, the reminder will run on the last valid day of that month (e.g. "31" on April will run April 30).
-    func readableRecurrence(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> String {
+    func readableRecurrence(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone, reminderExecutionBasis: Date) -> String {
         let referenceDate = notSkippingExecutionDate(
-            reminderExecutionBasis: Date(),
+            reminderExecutionBasis: reminderExecutionBasis,
             sourceTimeZone: zonedTimeZone
         )
         
@@ -115,7 +115,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
             hour: zonedHour,
             minute: zonedMinute,
             to: destinationTimeZone,
-            referenceDate: referenceDate ?? Constant.Class.Date.default1970Date
+            referenceDate: referenceDate ?? reminderExecutionBasis
         )
         return "Every \(day)\(day.daySuffix()) at \(String.convert(hour: hour, minute: minute))"
     }

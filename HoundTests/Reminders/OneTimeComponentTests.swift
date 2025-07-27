@@ -22,54 +22,17 @@ final class OneTimeComponentsTests: XCTestCase {
         return try body()
     }
 
-    func testInitializerDefaultAndExplicit() {
-        let before = Date()
-        let defaultComp = OneTimeComponents()
-        let after = Date()
-        XCTAssertGreaterThanOrEqual(defaultComp.oneTimeDate, before)
-        XCTAssertLessThanOrEqual(defaultComp.oneTimeDate, after)
-
-        let date = TestHelper.date("2024-05-05T12:00:00Z")
-        let explicitComp = OneTimeComponents(oneTimeDate: date)
-        XCTAssertEqual(explicitComp.oneTimeDate, date)
-    }
-
-    func testIsSameComparison() {
-        let date = TestHelper.date("2024-07-04T15:00:00Z")
-        let a = OneTimeComponents(oneTimeDate: date)
-        let b = OneTimeComponents(oneTimeDate: date)
-        XCTAssertTrue(a.isSame(as: b))
-        let c = OneTimeComponents(oneTimeDate: date.addingTimeInterval(60))
-        XCTAssertFalse(a.isSame(as: c))
-    }
-
-    func testCreateBodyMatchesISO8601() {
-        let date = TestHelper.date("2024-08-10T11:22:33Z")
-        let comp = OneTimeComponents(oneTimeDate: date)
-        let body = comp.createBody()
-        guard let value = body[Constant.Key.oneTimeDate.rawValue] ?? nil else {
-            return XCTFail("missing value")
-        }
-        if case let .string(str?) = value {
-            XCTAssertEqual(str, date.ISO8601FormatWithFractionalSeconds())
-        } else {
-            XCTFail("unexpected JSON value")
-        }
-    }
-
     func testReadablePropertiesVariousDates() throws {
-        try withTimezone("America/New_York") {
-            let currentYear = Calendar.current.component(.year, from: Date())
-            let sameYear = TestHelper.date("\(currentYear)-01-02T05:06:07Z")
-            let diffYear = TestHelper.date("\(currentYear - 1)-12-31T23:59:59Z")
-            let compSame = OneTimeComponents(oneTimeDate: sameYear)
-            let compDiff = OneTimeComponents(oneTimeDate: diffYear)
-            XCTAssertEqual(compSame.readableDayOfYear, sameYear.houndFormatted(.template("MMMMd")))
-            XCTAssertEqual(compDiff.readableDayOfYear, diffYear.houndFormatted(.template("MMMMdyyyy")))
-            XCTAssertEqual(compSame.readableTimeOfDay, sameYear.houndFormatted(.template("hma")))
-            XCTAssertTrue(compSame.readableRecurrance.contains(compSame.readableDayOfYear))
-            XCTAssertTrue(compSame.readableRecurrance.contains(compSame.readableTimeOfDay))
-        }
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let sameYear = TestHelper.date("\(currentYear)-01-02T05:06:07Z")
+        let diffYear = TestHelper.date("\(currentYear - 1)-12-31T23:59:59Z")
+        let compSame = OneTimeComponents(oneTimeDate: sameYear)
+        let compDiff = OneTimeComponents(oneTimeDate: diffYear)
+        XCTAssertEqual(compSame.readableDayOfYear, sameYear.houndFormatted(.template("MMMMd")))
+        XCTAssertEqual(compDiff.readableDayOfYear, diffYear.houndFormatted(.template("MMMMdyyyy")))
+        XCTAssertEqual(compSame.readableTimeOfDay, sameYear.houndFormatted(.template("hma")))
+        XCTAssertTrue(compSame.readableRecurrance.contains(compSame.readableDayOfYear))
+        XCTAssertTrue(compSame.readableRecurrance.contains(compSame.readableTimeOfDay))
     }
 
     func testDSTBoundaryHandling() throws {

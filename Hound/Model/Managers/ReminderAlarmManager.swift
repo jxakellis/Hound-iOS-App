@@ -177,7 +177,7 @@ final class ReminderAlarmManager {
     /// User responded to the reminder's alarm that popped up on their screen. They selected to 'Snooze' the reminder. Therefore we modify the timing data so the reminder turns into .snooze mode, alerting them again soon. We don't add a log
     private static func userSelectedSnoozeAlarm(forDogUUID: UUID, forReminder: Reminder) {
         forReminder.resetForNextAlarm()
-        forReminder.snoozeComponents.executionInterval = UserConfiguration.snoozeLength
+        forReminder.snoozeComponents.changeExecutionInterval(UserConfiguration.snoozeLength)
 
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
         RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatus, _ in

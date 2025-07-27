@@ -37,7 +37,24 @@ final class SnoozeComponents: NSObject, NSCoding, NSCopying {
     // MARK: - Properties
     
     /// Interval at which a snooze should be last for reminder. If this value isn't nil, then the reminder is snoozing.
-    var executionInterval: Double?
+    private(set) var executionInterval: Double?
+    var isSnoozing: Bool {
+        return executionInterval != nil && (executionInterval ?? 0.0) > 0.0
+    }
+    @discardableResult
+    func changeExecutionInterval(_ newExecutionInterval: Double?) -> Bool {
+        guard let newExecutionInterval = newExecutionInterval else {
+            executionInterval = nil
+            return true
+        }
+        
+        guard newExecutionInterval > 0 else {
+            return false
+        }
+        
+        executionInterval = newExecutionInterval
+        return true
+    }
     
     // MARK: - Main
     

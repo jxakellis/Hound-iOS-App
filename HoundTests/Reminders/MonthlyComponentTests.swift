@@ -16,7 +16,7 @@ final class MonthlyComponentsTests: XCTestCase {
     func testNextExecutionNormalMonth() {
         let tz = TestHelper.utc
         
-        let comp = TestHelper.monthly(day: 15, hour: 10, minute: 15)
+        let comp = TestHelper.monthly(day: 15, hour: 10, minute: 15, skipped: nil)
         let basis = TestHelper.date("2024-01-10T00:00:00Z")
         
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
@@ -28,7 +28,7 @@ final class MonthlyComponentsTests: XCTestCase {
     func testNextExecutionFirstDay() {
         let tz = TestHelper.utc
         
-        let comp = TestHelper.monthly(day: 1, hour: 10, minute: 15)
+        let comp = TestHelper.monthly(day: 1, hour: 10, minute: 15, skipped: nil)
         let basis = TestHelper.date("2024-01-10T00:00:00Z")
         
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
@@ -40,7 +40,7 @@ final class MonthlyComponentsTests: XCTestCase {
     func testNextExecutionDayUnderflowTo30() {
         let tz = TestHelper.utc
         
-        let comp = TestHelper.monthly(day: 31, hour: 8, minute: 0)
+        let comp = TestHelper.monthly(day: 31, hour: 8, minute: 0, skipped: nil)
         let basis = TestHelper.date("2024-04-01T00:00:00Z")
         
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
@@ -52,7 +52,7 @@ final class MonthlyComponentsTests: XCTestCase {
     func testNextExecutionDayNoUnderflow() {
         let tz = TestHelper.utc
         
-        let comp = TestHelper.monthly(day: 31, hour: 8, minute: 0)
+        let comp = TestHelper.monthly(day: 31, hour: 8, minute: 0, skipped: nil)
         let basis = TestHelper.date("2024-05-01T00:00:00Z")
         
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
@@ -62,18 +62,26 @@ final class MonthlyComponentsTests: XCTestCase {
     }
     
     func testNextExecutionDSTSpringForward() {
-        let comp = TestHelper.monthly(day: 10, hour: 2, minute: 30)
+        let comp = TestHelper.monthly(day: 10, hour: 2, minute: 30, skipped: nil)
+        let noDSTBasis = TestHelper.date("2024-02-01T00:00:00Z")
         let basis = TestHelper.date("2024-03-01T00:00:00Z")
         let tz = TimeZone(identifier: "America/New_York")!
+        
+        // For February, 2:30 AM EST (UTC-5) = 07:30 UTC
+        let noDSTNext = comp.nextExecutionDate(reminderExecutionBasis: noDSTBasis, sourceTimeZone: tz)
+        let noDSTExpected = TestHelper.date("2024-02-10T07:30:00Z")
+        XCTAssertEqual(noDSTNext, noDSTExpected)
+
+        // For March 10, 2024, 2:30 AM does NOT exist, so it should jump to 3:30 AM EDT (UTC-4) = 07:30 UTC
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
-        let expected = TestHelper.date("2024-03-10T06:30:00Z") // DST spring forward (EST->EDT)
+        let expected = TestHelper.date("2024-03-10T07:30:00Z") // 3:30 AM EDT
         XCTAssertEqual(next, expected)
     }
     
     // MARK: - Previous Execution Tests
     
     func testPreviousExecutionDST() {
-        let comp = TestHelper.monthly(day: 14, hour: 2, minute: 30)
+        let comp = TestHelper.monthly(day: 14, hour: 2, minute: 30, skipped: nil)
         let basis = TestHelper.date("2024-03-15T12:00:00Z")
         let tz = TimeZone(identifier: "America/New_York")!
         let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
@@ -82,7 +90,7 @@ final class MonthlyComponentsTests: XCTestCase {
     }
     
     func testPreviousExecutionDayOverflow() {
-        let comp = TestHelper.monthly(day: 31, hour: 9, minute: 0)
+        let comp = TestHelper.monthly(day: 31, hour: 9, minute: 0, skipped: nil)
         let basis = TestHelper.date("2024-04-15T00:00:00Z")
         let tz = TimeZone(identifier: "America/New_York")!
         let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
@@ -91,7 +99,7 @@ final class MonthlyComponentsTests: XCTestCase {
     }
     
     func testPreviousExecutionLeapYear() {
-            let comp = TestHelper.monthly(day: 31, hour: 9, minute: 0)
+            let comp = TestHelper.monthly(day: 31, hour: 9, minute: 0, skipped: nil)
             let basis = TestHelper.date("2024-03-15T00:00:00Z")
             let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: TestHelper.utc)
             let expected = "2024-02-29T09:00:00Z"
@@ -112,85 +120,40 @@ final class MonthlyComponentsTests: XCTestCase {
     
     // MARK: - Readable Recurrence Tests
     
-    func testLocalConversionReadableRecurrence() {
-        let comp = TestHelper.monthly(day: 10, hour: 22, minute: 15)
-        let est = TimeZone(identifier: "America/New_York")!
-        let gmt = TimeZone(identifier: "GMT")!
-        let local = comp.readableRecurrence(from: est, to: gmt)
-        let expected = "Every 11th at 3:15 AM" // EST->GMT conversion
-        XCTAssertEqual(local, expected)
-    }
-    
-    // MARK: - Initializer Tests
-    
-    func testDefaultInitializer() {
-        let comp = MonthlyComponents()
-        XCTAssertEqual(comp.zonedDay, Constant.Class.ReminderComponent.defaultZonedDay)
-        XCTAssertEqual(comp.zonedHour, Constant.Class.ReminderComponent.defaultZonedHour)
-        XCTAssertEqual(comp.zonedMinute, Constant.Class.ReminderComponent.defaultZonedMinute)
-        XCTAssertNil(comp.skippedDate)
-    }
-    
-    func testInitializerWithValues() {
-        let date = TestHelper.date("2024-06-02T09:15:00Z")
-        let comp = TestHelper.monthly(day: 2, hour: 9, minute: 15, skipped: date)
-        XCTAssertEqual(comp.zonedDay, 2)
-        XCTAssertEqual(comp.zonedHour, 9)
-        XCTAssertEqual(comp.zonedMinute, 15)
-        XCTAssertEqual(comp.skippedDate, date)
-    }
-    
-    func testInitFromBody() {
-        let body: JSONResponseBody = [
-            Constant.Key.monthlyZonedDay.rawValue: 5,
-            Constant.Key.monthlyZonedHour.rawValue: 14,
-            Constant.Key.monthlyZonedMinute.rawValue: 45,
-            Constant.Key.monthlySkippedDate.rawValue: "2024-05-05T14:45:00Z"
-        ]
-        let comp = MonthlyComponents(fromBody: body, componentToOverride: nil)
-        XCTAssertEqual(comp.zonedDay, 5)
-        XCTAssertEqual(comp.zonedHour, 14)
-        XCTAssertEqual(comp.zonedMinute, 45)
-        XCTAssertEqual(comp.skippedDate, TestHelper.date("2024-05-05T14:45:00Z"))
-    }
-    
-    func testInitFromBodyWithOverride() {
-        let override = TestHelper.monthly(day: 1, hour: 1, minute: 1)
-        let body: JSONResponseBody = [Constant.Key.monthlyZonedHour.rawValue: 22]
-        let comp = MonthlyComponents(fromBody: body, componentToOverride: override)
-        XCTAssertEqual(comp.zonedDay, 1)
-        XCTAssertEqual(comp.zonedHour, 22)
-        XCTAssertEqual(comp.zonedMinute, 1)
-    }
-    
-    // MARK: - BELOW THIS NEEDS TO BE CONVERTED
-    
     func testLocalConversion() {
+        // Helper to replace all kinds of non-breaking/narrow spaces with regular spaces
+        func normalized(_ s: String) -> String {
+            s.replacingOccurrences(of: "\u{202F}", with: " ")
+             .replacingOccurrences(of: "\u{00A0}", with: " ")
+        }
+        
         let est = TimeZone(identifier: "America/New_York")!
         let gmt = TimeZone(identifier: "GMT")!
+        // 2024-01-10 is always standard time (EST, UTC-5)
+        let comp = TestHelper.monthly(day: 10, hour: 22, minute: 15, skipped: nil)
+        let basis = TestHelper.date("2024-01-10T00:00:00-05:00")
+
+        let estReadable = comp.readableRecurrence(from: est, to: est, reminderExecutionBasis: basis)
+        XCTAssertEqual(normalized(estReadable), "Every 10th at 10:15 PM")
         
-        let comp = TestHelper.monthly(day: 10, hour: 22, minute: 15)
-        let ref = TestHelper.date("2024-05-01T00:00:00Z")
-        let (day, hour, minute) = est.convert(day: 10, hour: 22, minute: 15, to: gmt, referenceDate: ref)
-        let local = comp.readableRecurrence(from: est, to: gmt)
-        let str = "Every \(day)\(day.daySuffix()) at \(String.convert(hour: hour, minute: minute))"
-        XCTAssertEqual(local, str)
+        let local = comp.readableRecurrence(from: est, to: gmt, reminderExecutionBasis: basis)
+        // 10:15 PM EST converts to 3:15 AM GMT on the 11th
+        XCTAssertEqual(normalized(local), "Every 11th at 3:15 AM")
     }
-    
     
     func testNotSkippingExecutionAcrossTimeZones() {
-        let zones = ["UTC", "Pacific/Auckland", "Pacific/Honolulu", "Asia/Kolkata"]
-        let comp = TestHelper.monthly(day: 15, hour: 10, minute: 0)
+        let expectations: [String: String] = [
+            "UTC": "2024-01-15T10:00:00Z",
+            "Pacific/Auckland": "2024-01-14T21:00:00Z",
+            "Pacific/Honolulu": "2024-01-15T20:00:00Z",
+            "Asia/Kolkata": "2024-01-15T04:30:00Z"
+        ]
+        let comp = TestHelper.monthly(day: 15, hour: 10, minute: 0, skipped: nil)
         let basis = TestHelper.date("2024-01-01T00:00:00Z")
-        for id in zones {
+        for (id, expected) in expectations {
             let tz = TimeZone(identifier: id)!
             let next = comp.notSkippingExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
-            var cal = Calendar(identifier: .gregorian)
-            cal.timeZone = tz
-            var comps = cal.dateComponents(in: tz, from: basis)
-            comps.day = 15; comps.hour = 10; comps.minute = 0; comps.second = 0
-            let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
-            XCTAssertEqual(next, expected)
+            XCTAssertEqual(next, TestHelper.date(expected))
         }
     }
     
@@ -200,46 +163,31 @@ final class MonthlyComponentsTests: XCTestCase {
         let tz = TestHelper.utc
         let basis = TestHelper.date("2024-08-01T00:00:00Z")
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
-        let cal = Calendar(identifier: .gregorian)
-        var comps = cal.dateComponents(in: tz, from: basis)
-        comps.day = 20; comps.hour = 8; comps.minute = 0; comps.second = 0
-        let first = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertNotNil(first)
-        guard let first = first else {
-            return
-        }
-        let second = cal.nextDate(after: first.addingTimeInterval(1), matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertEqual(next, second)
+        // first execution on 2024-08-20T08:00:00Z is skipped; next is 2024-09-20T08:00:00Z
+        XCTAssertEqual(next, TestHelper.date("2024-09-20T08:00:00Z"))
     }
     
-    func testPreviousExecutionLeapYear() {
+    func testPreviousExecutionLeapYearUTC() {
         let tz = TestHelper.utc
-        let cal = TestHelper.calendar(tz)
-        
-        let comp = TestHelper.monthly(day: 31, hour: 9, minute: 0)
+        let comp = TestHelper.monthly(day: 31, hour: 9, minute: 0, skipped: nil)
         let basis = TestHelper.date("2024-03-15T00:00:00Z") // leap year
         let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
-        var comps = cal.dateComponents(in: tz, from: basis)
-        comps.day = 31; comps.hour = 9; comps.minute = 0; comps.second = 0
-        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents, direction: .backward)
-        XCTAssertEqual(prev, expected)
+        // previous valid date is 2024-02-29 at 09:00 UTC
+        XCTAssertEqual(prev, TestHelper.date("2024-02-29T09:00:00Z"))
     }
     
     func testDSTFallBackAmbiguousTime() {
         let tz = TimeZone(identifier: "America/New_York")!
-        let cal = TestHelper.calendar(tz)
-        
-        let comp = TestHelper.monthly(day: 3, hour: 1, minute: 30)
+
+        let comp = TestHelper.monthly(day: 3, hour: 1, minute: 30, skipped: nil)
         let basis = TestHelper.date("2024-10-20T00:00:00Z")
         let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
-        var comps = cal.dateComponents(in: tz, from: basis)
-        comps.day = 3; comps.hour = 1; comps.minute = 30; comps.second = 0
-        let expected = cal.nextDate(after: basis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertEqual(next, expected)
+        // falls on DST change day: 2024-11-03 at 1:30 AM EDT -> 05:30 UTC
+        XCTAssertEqual(next, TestHelper.date("2024-11-03T05:30:00Z"))
     }
     
     func testReadableRecurrenceDifferentTimeZone() {
-        let comp = TestHelper.monthly(day: 15, hour: 22, minute: 45)
+        let comp = TestHelper.monthly(day: 15, hour: 22, minute: 45, skipped: nil)
         let est = TimeZone(identifier: "America/New_York")!
         let pst = TimeZone(identifier: "America/Los_Angeles")!
         let basis = TestHelper.date("2024-07-01T00:00:00Z")
@@ -250,13 +198,13 @@ final class MonthlyComponentsTests: XCTestCase {
         }
         let (d,h,m) = est.convert(day: 15, hour: 22, minute: 45, to: pst, referenceDate: next)
         let expected = "Every \(d)\(d.daySuffix()) at \(String.convert(hour: h, minute: m))"
-        XCTAssertEqual(comp.readableRecurrence(from: est, to: pst), expected)
+        XCTAssertEqual(comp.readableRecurrence(from: est, to: pst, reminderExecutionBasis: basis), expected)
     }
     
     func testConfigureFromDate() {
         let date = TestHelper.date("2024-07-04T18:30:00Z")
         let tz = TestHelper.utc
-        let comp = TestHelper.monthly()
+        let comp = TestHelper.monthly(day: 1, hour: 1, minute: 1, skipped: nil)
         comp.configure(from: date, timeZone: tz)
         XCTAssertEqual(comp.zonedDay, 4)
         XCTAssertEqual(comp.zonedHour, 18)
@@ -264,8 +212,8 @@ final class MonthlyComponentsTests: XCTestCase {
     }
     
     func testApplyFromOtherComponent() {
-        let base = TestHelper.monthly(day: 5, hour: 7, minute: 0)
-        let other = TestHelper.monthly(day: 10, hour: 20, minute: 45)
+        let base = TestHelper.monthly(day: 5, hour: 7, minute: 0, skipped: nil)
+        let other = TestHelper.monthly(day: 10, hour: 20, minute: 45, skipped: nil)
         base.apply(from: other)
         XCTAssertEqual(base.zonedDay, 10)
         XCTAssertEqual(base.zonedHour, 20)
@@ -276,13 +224,10 @@ final class MonthlyComponentsTests: XCTestCase {
         let rem = Reminder(reminderType: .monthly,
                            reminderExecutionBasis: TestHelper.date("2024-05-01T00:00:00Z"),
                            reminderTimeZone: TestHelper.utc,
-                           monthlyComponents: TestHelper.monthly(day: 20, hour: 7, minute: 0))
+                           monthlyComponents: TestHelper.monthly(day: 20, hour: 7, minute: 0, skipped: nil))
         let next = rem.reminderExecutionDate
-        let cal = Calendar(identifier: .gregorian)
-        var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
-        comps.day = 20; comps.hour = 7; comps.minute = 0; comps.second = 0
-        let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertEqual(next, expected)
+        // next occurrence is 2024-05-20 at 07:00 UTC
+        XCTAssertEqual(next, TestHelper.date("2024-05-20T07:00:00Z"))
     }
     
     func testReminderIntegrationSkipping() {

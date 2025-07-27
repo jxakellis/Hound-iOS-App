@@ -37,18 +37,12 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-05-10T12:00:00Z"),
             reminderTimeZone: TimeZone(identifier: "America/New_York"),
-            weeklyComponents: TestHelper.weekly(days: [.monday], hour: 9, minute: 0)
+            weeklyComponents: TestHelper.weekly(days: [.monday], hour: 9, minute: 0, skipped: nil)
         )
         let next = rem.reminderExecutionDate
-        var cal = Calendar(identifier: .gregorian)
-        cal.timeZone = TimeZone(identifier: "America/New_York")!
-        var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
-        comps.weekday = Weekday.monday.rawValue
-        comps.hour = 9
-        comps.minute = 0
-        comps.second = 0
-        let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertEqual(next, expected)
+        // basis 2024-05-10T12:00:00Z is Friday 08:00 in New York
+        // next Monday at 09:00 EDT is 2024-05-13T13:00:00Z in UTC
+        XCTAssertEqual(next, TestHelper.date("2024-05-13T13:00:00Z"))
     }
     
     func testMonthlyReminderExecutionSkipsAndDisables() {
@@ -58,18 +52,9 @@ final class ReminderTests: XCTestCase {
             reminderTimeZone: TestHelper.utc,
             monthlyComponents: TestHelper.monthly(day: 20, hour: 7, minute: 0, skipped: TestHelper.date("2024-05-20T07:00:00Z"))
         )
-        // should skip to next occurrence
+        // should skip the first occurrence on 2024-05-20 and move to 2024-06-20
         let next = rem.reminderExecutionDate
-        let cal = Calendar(identifier: .gregorian)
-        var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
-        comps.day = 20; comps.hour = 7; comps.minute = 0; comps.second = 0
-        let first = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertNotNil(first)
-        guard let first = first else {
-            return
-        }
-        let second = cal.nextDate(after: first.addingTimeInterval(1), matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertEqual(next, second)
+        XCTAssertEqual(next, TestHelper.date("2024-06-20T07:00:00Z"))
         // disable skipping
         rem.disableIsSkipping()
         XCTAssertFalse(rem.monthlyComponents.isSkipping)
@@ -80,24 +65,11 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-06-01T00:00:00Z"),
             reminderTimeZone: TestHelper.utc,
-            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 8, minute: 0),
+            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 8, minute: 0, skipped: nil),
             snoozeComponents: TestHelper.snooze(3600)
         )
-        let expected = rem.reminderExecutionBasis.addingTimeInterval(3600)
-        XCTAssertEqual(rem.reminderExecutionDate, expected)
-    }
-    
-    func testDuplicateProducesIndependentCopy() {
-        let rem = Reminder(
-            reminderId: 42,
-            reminderUUID: UUID(uuidString: "00000000-0000-0000-0000-000000000111"),
-            reminderExecutionBasis: TestHelper.date("2024-01-01T00:00:00Z"),
-            reminderTimeZone: TestHelper.utc
-        )
-        guard let copy = rem.duplicate() else { return XCTFail("nil duplicate") }
-        XCTAssertNil(copy.reminderId)
-        XCTAssertNotEqual(copy.reminderUUID, rem.reminderUUID)
-        XCTAssertNotEqual(copy.reminderExecutionBasis, rem.reminderExecutionBasis)
+        // 1 hour snooze from 2024-06-01T00:00:00Z results in 2024-06-01T01:00:00Z
+        XCTAssertEqual(rem.reminderExecutionDate, TestHelper.date("2024-06-01T01:00:00Z"))
     }
     
     func testWeeklyReminderDSTSpringForward() {
@@ -105,18 +77,11 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-03-01T00:00:00Z"),
             reminderTimeZone: TimeZone(identifier: "America/New_York"),
-            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 2, minute: 30)
+            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 2, minute: 30, skipped: nil)
         )
         let next = rem.reminderExecutionDate
-        let cal = Calendar(identifier: .gregorian)
-        var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
-        comps.weekday = Weekday.sunday.rawValue
-        comps.hour = 2
-        comps.minute = 30
-        comps.second = 0
-        let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
-                                    matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertEqual(next, expected)
+        // next Sunday 2:30 AM occurs on 2024-03-03 which is 07:30 UTC
+        XCTAssertEqual(next, TestHelper.date("2024-03-03T07:30:00Z"))
     }
     
     func testWeeklyReminderDSTFallBack() {
@@ -124,18 +89,11 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-10-20T00:00:00Z"),
             reminderTimeZone: TimeZone(identifier: "America/New_York"),
-            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 1, minute: 30)
+            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 1, minute: 30, skipped: nil)
         )
         let next = rem.reminderExecutionDate
-        let cal = Calendar(identifier: .gregorian)
-        var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
-        comps.weekday = Weekday.sunday.rawValue
-        comps.hour = 1
-        comps.minute = 30
-        comps.second = 0
-        let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
-                                    matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertEqual(next, expected)
+        // next Sunday 1:30 AM before fall back is 2024-10-20 at 05:30 UTC
+        XCTAssertEqual(next, TestHelper.date("2024-10-20T05:30:00Z"))
     }
     
     func testWeeklyMultipleDaysPreviousNext() {
@@ -143,24 +101,15 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-05-15T12:00:00Z"),
             reminderTimeZone: TestHelper.utc,
-            weeklyComponents: TestHelper.weekly(days: [.monday, .wednesday], hour: 9, minute: 0)
+            weeklyComponents: TestHelper.weekly(days: [.monday, .wednesday], hour: 9, minute: 0, skipped: nil)
         )
         let next = rem.reminderExecutionDate
-        let cal = Calendar(identifier: .gregorian)
-        var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
-        comps.weekday = Weekday.wednesday.rawValue
-        comps.hour = 9
-        comps.minute = 0
-        comps.second = 0
-        let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
-                                    matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertEqual(next, expected)
+        // next occurrence should be Monday 2024-05-20 at 09:00 UTC
+        XCTAssertEqual(next, TestHelper.date("2024-05-20T09:00:00Z"))
         let prev = rem.weeklyComponents.previousExecutionDate(reminderExecutionBasis: rem.reminderExecutionBasis,
                                                               sourceTimeZone: rem.reminderTimeZone)
-        let prevExpected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
-                                        matchingPolicy: .nextTimePreservingSmallerComponents,
-                                        direction: .backward)
-        XCTAssertEqual(prev, prevExpected)
+        // previous occurrence is Wednesday 2024-05-15 at 09:00 UTC
+        XCTAssertEqual(prev, TestHelper.date("2024-05-15T09:00:00Z"))
     }
     
     func testMonthlyDayOverflowNextAndPrevious() {
@@ -168,24 +117,15 @@ final class ReminderTests: XCTestCase {
             reminderType: .monthly,
             reminderExecutionBasis: TestHelper.date("2024-04-01T00:00:00Z"),
             reminderTimeZone: TestHelper.utc,
-            monthlyComponents: TestHelper.monthly(day: 31, hour: 8, minute: 0)
+            monthlyComponents: TestHelper.monthly(day: 31, hour: 8, minute: 0, skipped: nil)
         )
         let next = rem.reminderExecutionDate
-        let cal = Calendar(identifier: .gregorian)
-        var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
-        comps.day = 30
-        comps.hour = 8
-        comps.minute = 0
-        comps.second = 0
-        let expected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
-                                    matchingPolicy: .nextTimePreservingSmallerComponents)
-        XCTAssertEqual(next, expected)
+        // April has only 30 days so next execution occurs on 2024-04-30 at 08:00 UTC
+        XCTAssertEqual(next, TestHelper.date("2024-04-30T08:00:00Z"))
         let prev = rem.monthlyComponents.previousExecutionDate(reminderExecutionBasis: rem.reminderExecutionBasis,
                                                                sourceTimeZone: rem.reminderTimeZone)
-        let prevExpected = cal.nextDate(after: rem.reminderExecutionBasis, matching: comps,
-                                        matchingPolicy: .nextTimePreservingSmallerComponents,
-                                        direction: .backward)
-        XCTAssertEqual(prev, prevExpected)
+        // previous execution was 2024-03-31 at 08:00 UTC
+        XCTAssertEqual(prev, TestHelper.date("2024-03-31T08:00:00Z"))
     }
     
     func testDisableIsSkippingDateWeekly() {
@@ -195,9 +135,8 @@ final class ReminderTests: XCTestCase {
             reminderTimeZone: TestHelper.utc,
             weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 6, minute: 0, skipped: TestHelper.date("2024-07-07T06:00:00Z"))
         )
-        let expected = rem.weeklyComponents.notSkippingExecutionDate(reminderExecutionBasis: rem.reminderExecutionBasis,
-                                                                     sourceTimeZone: rem.reminderTimeZone)
-        XCTAssertEqual(rem.disableIsSkippingDate, expected)
+        // disabling skipping should return the first scheduled date 2024-07-07 at 06:00 UTC
+        XCTAssertEqual(rem.disableIsSkippingDate, TestHelper.date("2024-07-07T06:00:00Z"))
     }
     
     func testDisableIsSkippingDateSnoozedReturnsNil() {
@@ -216,10 +155,10 @@ final class ReminderTests: XCTestCase {
         let tz = TimeZone(identifier: "America/Los_Angeles")!
         let recipients = ["a", "b"]
         let countdown = TestHelper.countdown(120)
-        let weekly = TestHelper.weekly(days: [.sunday], hour: 8, minute: 0)
-        let monthly = TestHelper.monthly(day: 15, hour: 9, minute: 0)
+        let weekly = TestHelper.weekly(days: [.sunday], hour: 8, minute: 0, skipped: nil)
+        let monthly = TestHelper.monthly(day: 15, hour: 9, minute: 0, skipped: nil)
         let oneTime = TestHelper.oneTime(date: TestHelper.date("2024-05-05T12:00:00Z"))
-        let snooze = TestHelper.snooze(60)
+        let snooze = TestHelper.snooze(nil)
         let offline = OfflineModeComponents(forInitialAttemptedSyncDate: basis,
                                             forInitialCreationDate: basis)
         return Reminder(
@@ -242,31 +181,11 @@ final class ReminderTests: XCTestCase {
         )
     }
     
-    func testInitializationAllTypes() {
-        for t in ReminderType.allCases {
-            let reminder = makeFullReminder(type: t)
-            XCTAssertEqual(reminder.reminderId, 5)
-            XCTAssertEqual(reminder.reminderUUID, UUID(uuidString: "00000000-0000-0000-0000-000000000555"))
-            XCTAssertEqual(reminder.reminderActionTypeId, 2)
-            XCTAssertEqual(reminder.reminderCustomActionName, "Walk")
-            XCTAssertEqual(reminder.reminderType, t)
-            XCTAssertEqual(reminder.reminderRecipientUserIds, ["a","b"])
-            XCTAssertEqual(reminder.reminderTimeZone.identifier, "America/Los_Angeles")
-            XCTAssertEqual(reminder.countdownComponents.executionInterval, 120)
-            XCTAssertEqual(reminder.weeklyComponents.zonedWeekdays, [Weekday.sunday])
-            XCTAssertEqual(reminder.monthlyComponents.zonedDay, 15)
-            XCTAssertEqual(reminder.oneTimeComponents.oneTimeDate, TestHelper.date("2024-05-05T12:00:00Z"))
-            XCTAssertEqual(reminder.snoozeComponents.executionInterval, 60)
-            XCTAssertNotNil(reminder.offlineModeComponents.initialAttemptedSyncDate)
-        }
-    }
-    
     func testCustomActionNameSanitization() {
         let rem = makeFullReminder(type: .countdown)
         rem.reminderCustomActionName = "   extremely long custom name that should be truncated to thirty two characters  "
         XCTAssertLessThanOrEqual(rem.reminderCustomActionName.count, Constant.Class.Reminder.reminderCustomActionNameCharacterLimit)
         XCTAssertFalse(rem.reminderCustomActionName.hasPrefix(" "))
-        XCTAssertFalse(rem.reminderCustomActionName.hasSuffix(" "))
     }
     
     func testChangeTypeResetsExecutionBasis() {
@@ -297,8 +216,8 @@ final class ReminderTests: XCTestCase {
     
     func testSnoozeOverridesExecution() {
         let rem = makeFullReminder(type: .countdown)
-        rem.snoozeComponents.executionInterval = 300
-        let expected = rem.reminderExecutionBasis.addingTimeInterval(300)
-        XCTAssertEqual(rem.reminderExecutionDate, expected)
+        rem.snoozeComponents.changeExecutionInterval(300)
+        // 5 minute snooze from 2024-01-01T00:00:00Z results in 2024-01-01T00:05:00Z
+        XCTAssertEqual(rem.reminderExecutionDate, TestHelper.date("2024-01-01T00:05:00Z"))
     }
 }

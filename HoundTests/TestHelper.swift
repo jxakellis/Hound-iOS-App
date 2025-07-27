@@ -30,11 +30,11 @@ final class TestHelper {
         return string.formatISO8601IntoDate()!
     }
     
-    static func countdown(_ interval: Double? = Constant.Class.ReminderComponent.defaultCountdownExecutionInterval) -> CountdownComponents {
+    static func countdown(_ interval: Double?) -> CountdownComponents {
         CountdownComponents(executionInterval: interval)
     }
     
-    static func weekly(days: [Weekday] = Weekday.allCases, hour: Int = Constant.Class.ReminderComponent.defaultZonedHour, minute: Int = Constant.Class.ReminderComponent.defaultZonedMinute, skipped: Date? = nil) -> WeeklyComponents {
+    static func weekly(days: [Weekday], hour: Int, minute: Int, skipped: Date?) -> WeeklyComponents {
         let comp = WeeklyComponents()
         _ = comp.setZonedWeekdays(days)
         comp.zonedHour = hour
@@ -43,7 +43,7 @@ final class TestHelper {
         return comp
     }
     
-    static func monthly(day: Int = Constant.Class.ReminderComponent.defaultZonedDay, hour: Int = Constant.Class.ReminderComponent.defaultZonedHour, minute: Int = Constant.Class.ReminderComponent.defaultZonedMinute, skipped: Date? = nil) -> MonthlyComponents {
+    static func monthly(day: Int, hour: Int, minute: Int, skipped: Date?) -> MonthlyComponents {
         MonthlyComponents(zonedDay: day, zonedHour: hour, zonedMinute: minute, skippedDate: skipped)
     }
     

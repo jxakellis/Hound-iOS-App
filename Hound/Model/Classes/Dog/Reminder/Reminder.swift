@@ -303,12 +303,12 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     private(set) var reminderType: ReminderType = Constant.Class.Reminder.defaultReminderType
     /// Changes reminderType invokes resetForNextAlarm if reminderType is different than the current one
     func changeReminderType(forReminderType: ReminderType) {
-        reminderType = forReminderType
-        
         if forReminderType != reminderType {
             // If switching to a different reminder type, reset all of thew components
             resetForNextAlarm()
         }
+        
+        reminderType = forReminderType
     }
     
     /// This is what the reminder should base its timing off it. This is either the last time a user responded to a reminder alarm or the last time a user changed a timing related property of the reminder. For example, 5 minutes into the timer you change the countdown from 30 minutes to 15. To start the timer fresh, having it count down from the moment it was changed, reset reminderExecutionBasis to Date()
@@ -496,7 +496,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         case .weekly:
             return weeklyComponents.readableRecurrance(from: reminderTimeZone, to: destinationTimeZone)
         case .monthly:
-            return monthlyComponents.readableRecurrence(from: reminderTimeZone, to: destinationTimeZone)
+            return monthlyComponents.readableRecurrence(from: reminderTimeZone, to: destinationTimeZone, reminderExecutionBasis: reminderExecutionBasis)
         case .oneTime:
             return oneTimeComponents.readableRecurrance
         }
@@ -508,7 +508,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             return nil
         }
         
-        if let snooze = snoozeComponents.executionInterval {
+        if snoozeComponents.isSnoozing, let snooze = snoozeComponents.executionInterval {
             return Date(timeInterval: snooze, since: reminderExecutionBasis)
         }
         
@@ -528,14 +528,14 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     func resetForNextAlarm() {
         reminderExecutionBasis = Date()
         
-        snoozeComponents.executionInterval = nil
+        snoozeComponents.changeExecutionInterval(nil)
         weeklyComponents.skippedDate = nil
         monthlyComponents.skippedDate = nil
     }
     
     /// Finds the date which the reminder should be transformed from isSkipping to not isSkipping. This is the date at which the skipped reminder would have occured.
     var disableIsSkippingDate: Date? {
-        guard reminderIsEnabled && snoozeComponents.executionInterval == nil else {
+        guard reminderIsEnabled && !snoozeComponents.isSnoozing else {
             return nil
         }
         
@@ -655,7 +655,7 @@ extension Reminder {
             }
         }
         
-        if snoozeComponents.executionInterval != other.snoozeComponents.executionInterval {
+        if !snoozeComponents.isSame(as: other.snoozeComponents) {
             return false
         }
         
