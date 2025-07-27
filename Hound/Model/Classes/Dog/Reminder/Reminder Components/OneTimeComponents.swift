@@ -45,7 +45,7 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
     
     var readableTimeOfDay: String {
         // 7:53 AM
-        return oneTimeDate.houndFormatted(.template("hma"))
+        return oneTimeDate.houndFormatted(.formatStyle(date: .omitted, time: .shortened))
     }
     
     var readableRecurrance: String {

@@ -53,15 +53,12 @@ enum ReminderType: String, CaseIterable {
 
 final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
-    // TODO TIMING 1. convert all utc to zoned (and days of week should also be zoned as well too now)
-    // TODO TIMING 2. add TZ to each reminder
     // TODO TIMING 3. default TZ to UTC for legacy in DB but locally make it current TZ
     // TODO TIMING 4. add TZ drop down to one time, weekly, and monthly views
-    // TODO TIMING 5. Add TZ setting to user (TZ is default null and they have usesDeviceTimeZone), then make a getter which, if usesDeviceTimeZone, returns current device TZ for usage elsewhere.
-    // TODO TIMING 6. convert calendar.current/utc to calendar.zoned that pulls from user TZ (or ofc if doing reminder time calculations, it utilizes reminder TZ)
+    
     // TODO TIMING 7. when we detect a change in the user's TZ, we ask them if they want hound to switch their user setting to that new TZ
     // TODO TIMING 8. triggers possible need TZs?
-    // TODO TIMING 9. Have GPT write a ridiculious amount of tests
+    
     // TODO TIMING 10. have hound date formatter use the collese'd user time zone to format dates
     // TODO TIMING 11. get rid of HMA timing throughout, just use omitted date and shortened time
     

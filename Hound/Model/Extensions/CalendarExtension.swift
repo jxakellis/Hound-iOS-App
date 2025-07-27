@@ -15,9 +15,13 @@ extension Calendar {
         return calendar.range(of: component, in: larger, for: date)
     }
     
-    static var UTCCalendar: Calendar {
-        var cal = Calendar(identifier: .gregorian)
-        cal.timeZone = TimeZone(secondsFromGMT: 0)! // swiftlint:disable:this force_unwrapping
-        return cal
+    func withZone(_ timeZone: TimeZone) -> Calendar {
+        var calendar = self
+        calendar.timeZone = timeZone
+        return calendar
+    }
+    
+    static var utc: Calendar {
+        return Calendar(identifier: .gregorian).withZone(TimeZone.utc)
     }
 }

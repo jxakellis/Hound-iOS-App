@@ -760,15 +760,16 @@ final class LogsAddLogVC: HoundScrollViewController,
             let format: String
             if Calendar.current.isDateInToday(start) {
                 // If the start date is today, show only time
-                format = "hma" // 7:53 AM
+                // 7:53 AM
+                logStartDateLabel.text = start.houndFormatted(.formatStyle(date: .omitted, time: .shortened))
             }
             else {
                 // If start date is not today, show month/day and possibly year
                 let yearOfStart = Calendar.current.component(.year, from: start)
                 let currentYear = Calendar.current.component(.year, from: Date())
-                format = (yearOfStart == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"
+                logStartDateLabel.text = start.houndFormatted(.template(yearOfStart == currentYear ? "MMMMdhma" : "MMMMdyyyyhma"))
             }
-            logStartDateLabel.text = start.houndFormatted(.template(format))
+            
             logStartDatePicker.date = start
         }
     }
@@ -804,18 +805,18 @@ final class LogsAddLogVC: HoundScrollViewController,
             }
             updateLogStartEndDateErrors()
             
-            let format: String
             if Calendar.current.isDateInToday(end) {
                 // If the end date is today, show only time
-                format = "hma" // 7:53 AM
+                // 7:53 AM
+                logEndDateLabel.text = end.houndFormatted(.formatStyle(date: .omitted, time: .shortened))
             }
             else {
                 // If end date is not today, show month/day and possibly year
                 let yearOfEnd = Calendar.current.component(.year, from: end)
                 let currentYear = Calendar.current.component(.year, from: Date())
-                format = (yearOfEnd == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"
+                logEndDateLabel.text = end.houndFormatted(.template((yearOfEnd == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"))
             }
-            logEndDateLabel.text = end.houndFormatted(.template(format))
+            
             logEndDatePicker.date = end
         }
     }

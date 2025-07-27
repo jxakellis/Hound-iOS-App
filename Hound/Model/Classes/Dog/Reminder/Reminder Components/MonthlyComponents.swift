@@ -81,21 +81,21 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Functions
     
-    func localTimeOfDay(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> (hour: Int, minute: Int) {
-        return zonedTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: destinationTimeZone)
+    func localTimeOfDay(reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> (hour: Int, minute: Int) {
+        return reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: destinationTimeZone ?? reminderTimeZone)
     }
     
-    func localDayOfMonth(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> Int {
+    func localDayOfMonth(reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> Int {
         let referenceDate = notSkippingExecutionDate(
             reminderExecutionBasis: Date(),
-            sourceTimeZone: zonedTimeZone
+            reminderTimeZone: reminderTimeZone
         )
         
-        let (day, _, _) = zonedTimeZone.convert(
+        let (day, _, _) = reminderTimeZone.convert(
             day: zonedDay,
             hour: zonedHour,
             minute: zonedMinute,
-            to: destinationTimeZone,
+            to: destinationTimeZone ?? reminderTimeZone,
             referenceDate: referenceDate ?? Constant.Class.Date.default1970Date
         )
         return day
@@ -104,17 +104,17 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     /// Returns a readable recurrence string in the *destination* time zone.
     /// Example: "Every 31st at 7:30 PM" (will adjust hour/minute for destination zone).
     /// NOTE: If the requested day does not exist in a month, the reminder will run on the last valid day of that month (e.g. "31" on April will run April 30).
-    func readableRecurrence(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone, reminderExecutionBasis: Date) -> String {
+    func readableRecurrence(reminderExecutionBasis: Date, reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> String {
         let referenceDate = notSkippingExecutionDate(
             reminderExecutionBasis: reminderExecutionBasis,
-            sourceTimeZone: zonedTimeZone
+            reminderTimeZone: reminderTimeZone
         )
         
-        let (day, hour, minute) = zonedTimeZone.convert(
+        let (day, hour, minute) = reminderTimeZone.convert(
             day: zonedDay,
             hour: zonedHour,
             minute: zonedMinute,
-            to: destinationTimeZone,
+            to: destinationTimeZone ?? reminderTimeZone,
             referenceDate: referenceDate ?? reminderExecutionBasis
         )
         return "Every \(day)\(day.daySuffix()) at \(String.convert(hour: hour, minute: minute))"
@@ -124,8 +124,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
 
     /// Updates the component using the provided date in the specified time zone.
     func configure(from date: Date, timeZone: TimeZone) {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = timeZone
+        var calendar = Calendar(identifier: .gregorian).withZone(timeZone)
         let comps = calendar.dateComponents([.day, .hour, .minute], from: date)
         if let day = comps.day { zonedDay = day }
         if let hour = comps.hour { zonedHour = hour }
@@ -141,34 +140,33 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Timing
     
-    /// Finds the next valid execution date after `reminderExecutionBasis`, using the user-selected day/hour/minute in the specified sourceTimeZone.
+    /// Finds the next valid execution date after `reminderExecutionBasis`, using the user-selected day/hour/minute in the specified reminderTimeZone.
     /// - If isSkipping is true, skips the soonest and returns the following date.
     /// - If the selected day does not exist in a month (e.g. 31st in February), the calculation will roll down to the last day of the month.
     /// - Handles DST and ambiguous/missing times using `.nextTimePreservingSmallerComponents`.
-    func nextExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
+    func nextExecutionDate(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> Date? {
         isSkipping
-        ? skippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
-        : notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+        ? skippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
+        : notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
     }
     
     /// Returns the first valid execution date strictly after the basis, or 1970 if none.
-    func notSkippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
-        futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+    func notSkippingExecutionDate(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> Date? {
+        futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
             .first(where: { $0 > reminderExecutionBasis })
     }
     
     /// Finds the previous valid execution date before the basis.
     /// Handles day roll-down if day exceeds days in target month, and is robust to DST.
-    func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = sourceTimeZone
+    func previousExecutionDate(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> Date? {
+        var calendar = Calendar(identifier: .gregorian).withZone(reminderTimeZone)
         var searchBasis = reminderExecutionBasis.addingTimeInterval(-1)
 
         for _ in 0..<12 { // Look back up to 12 months to find a valid previous date
             let daysInMonth = calendar.range(of: .day, in: .month, for: searchBasis)?.count ?? zonedDay
             let targetDay = min(zonedDay, daysInMonth)
 
-            var components = calendar.dateComponents(in: sourceTimeZone, from: searchBasis)
+            var components = calendar.dateComponents(in: reminderTimeZone, from: searchBasis)
             components.day = targetDay
             components.hour = zonedHour
             components.minute = zonedMinute
@@ -189,23 +187,22 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     }
     
     /// Returns the next valid execution date after the one that would normally be triggered (skipping state).
-    private func skippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
-        guard let nextExecution = notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone) else {
+    private func skippingExecutionDate(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> Date? {
+        guard let nextExecution = notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone) else {
             return nil
         }
-        let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+        let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
         return futureDates.first(where: { $0 > nextExecution })
     }
     
-    /// Finds up to 3 future execution dates based on the user-selected day/hour/minute in the sourceTimeZone.
+    /// Finds up to 3 future execution dates based on the user-selected day/hour/minute in the reminderTimeZone.
     /// - For months where `zonedDay` exceeds days in month, calculation rolls down to last valid day.
     /// - Robust to DST (handles both non-existent and repeated times).
     /// - Always returns strictly increasing dates; searchBasis is advanced by one second each iteration.
-    private func futureExecutionDates(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> [Date] {
+    private func futureExecutionDates(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> [Date] {
         var dates: [Date] = []
         var searchBasis = reminderExecutionBasis
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = sourceTimeZone
+        var calendar = Calendar(identifier: .gregorian).withZone(reminderTimeZone)
         
         for _ in 0..<3 {
             var components = DateComponents()

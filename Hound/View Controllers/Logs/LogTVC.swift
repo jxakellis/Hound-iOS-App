@@ -117,21 +117,20 @@ final class LogTVC: HoundTableViewCell {
         logActionTextLabel.text = log.logActionType.convertToReadableName(customActionName: log.logCustomActionName, includeMatchingEmoji: false)
         
         // e.g., “7:53 AM”
-        logStartToEndDateLabel.text = log.logStartDate.houndFormatted(.template("hma"))
+        logStartToEndDateLabel.text = log.logStartDate.houndFormatted(.formatStyle(date: .omitted, time: .shortened))
         
         if let logEndDate = log.logEndDate {
-            let format: String
+            let endString: String
             if log.logStartDate.distance(to: logEndDate) < 60 * 60 * 24 {
                 // Same day: no need for date information
-                format = "hma"
+                endString = logEndDate.houndFormatted(.formatStyle(date: .omitted, time: .shortened))
             }
             else {
                 // Different day: show month + day (and year if not current)
                 let logEndYear = Calendar.current.component(.year, from: logEndDate)
                 let currentYear = Calendar.current.component(.year, from: Date())
-                format = logEndYear == currentYear ? "MMMd" : "MMMdyy"
+                endString = logEndDate.houndFormatted(.template(logEndYear == currentYear ? "MMMd" : "MMMdyy"))
             }
-            let endString = logEndDate.houndFormatted(.template(format))
             logStartToEndDateLabel.text = logStartToEndDateLabel.text?.appending(" - \(endString)")
         }
         

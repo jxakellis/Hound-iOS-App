@@ -211,16 +211,16 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Functions
     
-    func localTimeOfDay(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> (hour: Int, minute: Int) {
-        return zonedTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: destinationTimeZone)
+    func localTimeOfDay(reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> (hour: Int, minute: Int) {
+        return reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: destinationTimeZone ?? reminderTimeZone)
     }
     
-    func localWeekdays(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> [Weekday] {
-        return zonedTimeZone.convert(weekdays: zonedWeekdays, hour: zonedHour, minute: zonedMinute, to: destinationTimeZone)
+    func localWeekdays(reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> [Weekday] {
+        return reminderTimeZone.convert(weekdays: zonedWeekdays, hour: zonedHour, minute: zonedMinute, to: destinationTimeZone ?? reminderTimeZone)
     }
     
-    func readableDaysOfWeek(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> String {
-        let mappedWeekdays = zonedTimeZone.convert(weekdays: zonedWeekdays, hour: zonedHour, minute: zonedMinute, to: destinationTimeZone)
+    func readableDaysOfWeek(reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> String {
+        let mappedWeekdays = reminderTimeZone.convert(weekdays: zonedWeekdays, hour: zonedHour, minute: zonedMinute, to: destinationTimeZone ?? reminderTimeZone)
         switch Set(mappedWeekdays) {
         case Set(Weekday.allCases): return "Everyday"
         case [.sunday, .saturday]: return "Weekends"
@@ -231,14 +231,14 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         }
     }
     
-    func readableTimeOfDay(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> String {
-        let (hour, minute) = zonedTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: destinationTimeZone)
+    func readableTimeOfDay(reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> String {
+        let (hour, minute) = reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: destinationTimeZone ?? reminderTimeZone)
         return String.convert(hour: hour, minute: minute)
     }
     
-    func readableRecurrance(from zonedTimeZone: TimeZone, to destinationTimeZone: TimeZone) -> String {
-        let readableDaysOfWeek = readableDaysOfWeek(from: zonedTimeZone, to: destinationTimeZone)
-        let readableTimeOfDay = readableTimeOfDay(from: zonedTimeZone, to: destinationTimeZone)
+    func readableRecurrance(reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> String {
+        let readableDaysOfWeek = readableDaysOfWeek(reminderTimeZone: reminderTimeZone, destinationTimeZone: destinationTimeZone)
+        let readableTimeOfDay = readableTimeOfDay(reminderTimeZone: reminderTimeZone, destinationTimeZone: destinationTimeZone)
         return readableDaysOfWeek.appending(" at \(readableTimeOfDay)")
     }
 
@@ -248,8 +248,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     /// - Returns: `true` if weekdays were valid and applied.
     @discardableResult
     func configure(from date: Date, timeZone: TimeZone, weekdays: [Weekday]) -> Bool {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = timeZone
+        let calendar = Calendar(identifier: .gregorian).withZone(timeZone)
         let comps = calendar.dateComponents([.hour, .minute], from: date)
         zonedHour = comps.hour ?? zonedHour
         zonedMinute = comps.minute ?? zonedMinute
@@ -258,37 +257,36 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Timing
     
-    /// Determines the next execution date, considering isSkipping state, based on `sourceTimeZone`.
-    func nextExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
+    /// Determines the next execution date, considering isSkipping state, based on `reminderTimeZone`.
+    func nextExecutionDate(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> Date? {
         return isSkipping
-        ? skippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
-        : notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+        ? skippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
+        : notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
     }
     
-    /// Finds the next execution date after `reminderExecutionBasis`, using zoned weekdays/hours/minutes in the specified `sourceTimeZone`.
+    /// Finds the next execution date after `reminderExecutionBasis`, using zoned weekdays/hours/minutes in the specified `reminderTimeZone`.
     /// Skipping state is NOT factored in.
     /// - Returns: The closest valid future execution date (or default date if none found).
-    func notSkippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
-        let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+    func notSkippingExecutionDate(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> Date? {
+        let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
         return futureDates.first(where: { $0 > reminderExecutionBasis })
     }
     
     /// If a reminder is skipping, find the next soonest execution date after the skipped one.
     /// Returns: The next valid execution date strictly after the skipped one, or default date if none found.
-    private func skippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
-        guard let nextExecution = notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone) else {
+    private func skippingExecutionDate(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> Date? {
+        guard let nextExecution = notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone) else {
             return nil
         }
-        let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+        let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
         return futureDates.first(where: { $0 > nextExecution })
     }
     
     /// Finds the most recent valid execution date strictly before `reminderExecutionBasis`
-    /// based on the component's zoned weekdays, hour, and minute, in the specified `sourceTimeZone`.
+    /// based on the component's zoned weekdays, hour, and minute, in the specified `reminderTimeZone`.
     /// Robust to DST and ambiguous/skipped times.
-    func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = sourceTimeZone
+    func previousExecutionDate(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> Date? {
+        let calendar = Calendar(identifier: .gregorian).withZone(reminderTimeZone)
         
         let searchBasis = reminderExecutionBasis.addingTimeInterval(-1)
         var latestPrevious: Date?
@@ -323,9 +321,8 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     /// Computes the next three valid execution dates (in strict chronological order) in the specified source time zone,
     /// using the object's zoned weekdays, hour, and minute, relative to `reminderExecutionBasis`.
     /// This function is robust to DST changes, ambiguous times, and ensures results are always valid for the zone provided.
-    private func futureExecutionDates(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> [Date] {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = sourceTimeZone
+    private func futureExecutionDates(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> [Date] {
+        let calendar = Calendar(identifier: .gregorian).withZone(reminderTimeZone)
         var dates: [Date] = []
         var searchBasis = reminderExecutionBasis
         

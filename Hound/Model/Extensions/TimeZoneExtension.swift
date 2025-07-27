@@ -14,6 +14,10 @@ extension TimeZone {
         guard let str = str else { return nil }
         return TimeZone(identifier: str)
     }
+    
+    static var utc: TimeZone {
+        return TimeZone.from("UTC")! // swiftlint:disable:this force_unwrapping
+    }
 
     /// Converts a (hour, minute) in this time zone to the same wall time in a target time zone, for display.
     /// Always uses a fixed reference date (2000-01-01) to avoid DST edge cases.

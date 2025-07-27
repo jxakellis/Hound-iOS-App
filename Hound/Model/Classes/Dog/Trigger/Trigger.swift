@@ -444,8 +444,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         case .timeDelay:
             return date.addingTimeInterval(triggerTimeDelay)
         case .fixedTime:
-            var calendar = Calendar(identifier: .gregorian)
-            calendar.timeZone = inTimeZone
+            var calendar = Calendar(identifier: .gregorian).withZone(inTimeZone)
 
             // Compute the start of day in the user's current time zone so the
             // "day" component aligns with local expectations.
