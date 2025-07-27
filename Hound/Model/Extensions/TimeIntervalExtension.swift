@@ -8,8 +8,6 @@
 
 import Foundation
 
-import Foundation
-
 extension TimeInterval {
     enum AbbreviationLevel {
         case short   // e.g. "5s"

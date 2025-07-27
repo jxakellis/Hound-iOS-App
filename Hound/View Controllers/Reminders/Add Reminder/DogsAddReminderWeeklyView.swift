@@ -143,7 +143,7 @@ final class DogsAddReminderWeeklyView: HoundView {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderWeeklyViewDelegate, forTimeOfDay: Date?, forWeekdays: [Weekday]?) {
+    func setup(forDelegate: DogsAddReminderWeeklyViewDelegate, forTimeZone: TimeZone, forWeeklyComponent: WeeklyComponents) {
         delegate = forDelegate
         timeOfDayDatePicker.date = forTimeOfDay ?? timeOfDayDatePicker.date
         

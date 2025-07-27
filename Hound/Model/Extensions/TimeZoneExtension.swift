@@ -75,7 +75,7 @@ extension TimeZone {
         minute: Int,
         to destinationTimeZone: TimeZone,
         referenceDate: Date
-    ) -> (day: Int, hour: Int, minute: Int) // swiftlint:disable:this large_tuple
+    ) -> (day: Int, hour: Int, minute: Int)
     {
         let calendar = Calendar(identifier: .gregorian)
         // Clamp day to last valid day in zoned (source) time zone for month of referenceDate

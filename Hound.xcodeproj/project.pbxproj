@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -230,6 +230,16 @@
 		A2FBEA292B7DCA6500D564EB /* UserDefaultPersistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FBEA282B7DCA6500D564EB /* UserDefaultPersistable.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A20EEB212E35C84200958592 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A2E66C8F25534A880068CCA6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A2E66C9625534A880068CCA6;
+			remoteInfo = Hound;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		A2040BA2262A13B000D9667E /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		A207F79F280610D6003248E8 /* DogIconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogIconManager.swift; sourceTree = "<group>"; };
@@ -242,6 +252,11 @@
 		A20EEB0D2E31A32D00958592 /* HoundDropDownManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundDropDownManager.swift; sourceTree = "<group>"; };
 		A20EEB0F2E31AE9900958592 /* HoundDropDownType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundDropDownType.swift; sourceTree = "<group>"; };
 		A20EEB112E331C6700958592 /* TimeZoneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneExtension.swift; sourceTree = "<group>"; };
+		A20EEB152E35C75100958592 /* MonthlyComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyComponentTests.swift; sourceTree = "<group>"; };
+		A20EEB162E35C78D00958592 /* ReminderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTests.swift; sourceTree = "<group>"; };
+		A20EEB172E35C7C200958592 /* TimeZoneExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneExtensionTests.swift; sourceTree = "<group>"; };
+		A20EEB182E35C7D800958592 /* WeeklyComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyComponentTests.swift; sourceTree = "<group>"; };
+		A20EEB1D2E35C84200958592 /* HoundTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HoundTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2101E592A68C5C900A65396 /* HoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundButton.swift; sourceTree = "<group>"; };
 		A2101E602A69B03E00A65396 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		A2101E642A6AF1B900A65396 /* HoundIntroductionDogIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundIntroductionDogIconView.swift; sourceTree = "<group>"; };
@@ -460,7 +475,18 @@
 		F1A5C1841BA2129D46477D9A /* Pods-Hound.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hound.debug.xcconfig"; path = "Target Support Files/Pods-Hound/Pods-Hound.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A20EEB1E2E35C84200958592 /* HoundTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = HoundTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		A20EEB1A2E35C84200958592 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A2E66C9425534A880068CCA6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -511,6 +537,25 @@
 				A2EAF17C25C9D45E0022BBDD /* ReminderTVC.swift */,
 			);
 			path = "Table View Cells";
+			sourceTree = "<group>";
+		};
+		A20EEB132E35C74200958592 /* HoundTests */ = {
+			isa = PBXGroup;
+			children = (
+				A20EEB142E35C74B00958592 /* Reminders */,
+			);
+			path = HoundTests;
+			sourceTree = "<group>";
+		};
+		A20EEB142E35C74B00958592 /* Reminders */ = {
+			isa = PBXGroup;
+			children = (
+				A20EEB152E35C75100958592 /* MonthlyComponentTests.swift */,
+				A20EEB162E35C78D00958592 /* ReminderTests.swift */,
+				A20EEB172E35C7C200958592 /* TimeZoneExtensionTests.swift */,
+				A20EEB182E35C7D800958592 /* WeeklyComponentTests.swift */,
+			);
+			path = Reminders;
 			sourceTree = "<group>";
 		};
 		A2101E5D2A69A39B00A65396 /* Hound Introduction */ = {
@@ -1008,7 +1053,9 @@
 		A2E66C8E25534A880068CCA6 = {
 			isa = PBXGroup;
 			children = (
+				A20EEB132E35C74200958592 /* HoundTests */,
 				A2E66C9925534A880068CCA6 /* Hound */,
+				A20EEB1E2E35C84200958592 /* HoundTests */,
 				A2E66C9825534A880068CCA6 /* Products */,
 				51C8E1093F80CB0FA31E38CA /* Pods */,
 				EFBF0ADD5C81646357590C75 /* Frameworks */,
@@ -1019,6 +1066,7 @@
 			isa = PBXGroup;
 			children = (
 				A2E66C9725534A880068CCA6 /* Hound.app */,
+				A20EEB1D2E35C84200958592 /* HoundTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1125,6 +1173,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A20EEB1C2E35C84200958592 /* HoundTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A20EEB232E35C84200958592 /* Build configuration list for PBXNativeTarget "HoundTests" */;
+			buildPhases = (
+				A20EEB192E35C84200958592 /* Sources */,
+				A20EEB1A2E35C84200958592 /* Frameworks */,
+				A20EEB1B2E35C84200958592 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A20EEB222E35C84200958592 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A20EEB1E2E35C84200958592 /* HoundTests */,
+			);
+			name = HoundTests;
+			packageProductDependencies = (
+			);
+			productName = HoundTests;
+			productReference = A20EEB1D2E35C84200958592 /* HoundTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		A2E66C9625534A880068CCA6 /* Hound */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A2E66CB825534A8A0068CCA6 /* Build configuration list for PBXNativeTarget "Hound" */;
@@ -1152,10 +1223,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1170;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				ORGANIZATIONNAME = "Jonathan Xakellis";
 				TargetAttributes = {
+					A20EEB1C2E35C84200958592 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = A2E66C9625534A880068CCA6;
+					};
 					A2E66C9625534A880068CCA6 = {
 						CreatedOnToolsVersion = 11.7;
 					};
@@ -1175,11 +1250,19 @@
 			projectRoot = "";
 			targets = (
 				A2E66C9625534A880068CCA6 /* Hound */,
+				A20EEB1C2E35C84200958592 /* HoundTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		A20EEB1B2E35C84200958592 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A2E66C9525534A880068CCA6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1270,6 +1353,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A20EEB192E35C84200958592 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A2E66C9325534A880068CCA6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1483,6 +1573,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		A20EEB222E35C84200958592 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A2E66C9625534A880068CCA6 /* Hound */;
+			targetProxy = A20EEB212E35C84200958592 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		A2E66CA725534A8A0068CCA6 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -1495,6 +1593,51 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		A20EEB242E35C84200958592 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9L3M99FST5;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Hound.HoundTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hound.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Hound";
+			};
+			name = Debug;
+		};
+		A20EEB252E35C84200958592 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9L3M99FST5;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Hound.HoundTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hound.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Hound";
+			};
+			name = Release;
+		};
 		A2E66CB625534A8A0068CCA6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1684,6 +1827,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A20EEB232E35C84200958592 /* Build configuration list for PBXNativeTarget "HoundTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A20EEB242E35C84200958592 /* Debug */,
+				A20EEB252E35C84200958592 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A2E66C9225534A880068CCA6 /* Build configuration list for PBXProject "Hound" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -239,7 +239,7 @@ final class DogsAddReminderManagerView: HoundView,
     }
     var selectedReminderActionIndexPath: IndexPath? {
         guard let selectedReminderAction = selectedReminderAction else { return nil }
-        let mapped = availableReminderActions.enumerated().map { index, element -> (ReminderActionType, String?, Int) in // swiftlint:disable:this large_tuple
+        let mapped = availableReminderActions.enumerated().map { index, element -> (ReminderActionType, String?, Int) in
             return (element.0, element.1, index)
         }
         

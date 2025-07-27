@@ -429,8 +429,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         return false
     }
     
-    func nextReminderDate(afterDate date: Date, in inTimeZone: TimeZone) -> Date? {
-        // TODO TIMING make this support user TZ config
+    func nextReminderDate(afterDate date: Date, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
         switch triggerType {
         case .timeDelay:
             return date.addingTimeInterval(triggerTimeDelay)
@@ -480,13 +479,13 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         }
     }
     
-    func nextReminderDate(afterLog log: Log, in inTimeZone: TimeZone) -> Date? {
+    func nextReminderDate(afterLog log: Log, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
         let date = log.logEndDate ?? log.logStartDate
         
         return nextReminderDate(afterDate: date, in: inTimeZone)
     }
     
-    func createTriggerResultReminder(afterLog log: Log, in inTimeZone: TimeZone) -> Reminder? {
+    func createTriggerResultReminder(afterLog log: Log, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Reminder? {
         guard let executionDate = nextReminderDate(afterLog: log, in: inTimeZone) else {
                 return nil
             }

@@ -7,6 +7,7 @@ disabled_rules: # rule identifiers turned on by default to exclude from running
   - type_body_length # Enforces maximum class, struct and enum body length.
   - cyclomatic_complexity # Measures the complexity of function by counting the number of unique paths through it.
   - function_parameter_count # Limits function parameters to 5 or less
+  - large_tuple # Enforces a maximum number of elements in a tuple
 
 analyzer_rules: # Analyze code for correctness issues.
  - explicit_self # Requires explicit use of `self` in closure and method.
