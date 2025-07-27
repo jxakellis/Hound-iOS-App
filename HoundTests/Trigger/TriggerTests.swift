@@ -10,9 +10,6 @@ import XCTest
 @testable import Hound
 
 final class TriggerTests: XCTestCase {
-    func makeDate(_ str: String) -> Date {
-        return str.formatISO8601IntoDate()!
-    }
 
     func testTimeDelayInitializationAndChanges() {
         let reaction = TriggerLogReaction(forLogActionTypeId: 2, forLogCustomActionName: "walk")
@@ -81,8 +78,8 @@ final class TriggerTests: XCTestCase {
 
     func testNextReminderDateTimeDelay() {
         let trig = Trigger(forTriggerType: .timeDelay, forTriggerTimeDelay: 60)
-        let basis = makeDate("2024-01-01T00:00:00Z")
-        let next = trig.nextReminderDate(afterDate: basis, in: TimeZone(identifier: "UTC")!)
+        let basis = TestHelper.date("2024-01-01T00:00:00Z")
+        let next = trig.nextReminderDate(afterDate: basis, in: TestHelper.utc)
         XCTAssertEqual(next, basis.addingTimeInterval(60))
     }
 
@@ -91,7 +88,7 @@ final class TriggerTests: XCTestCase {
                            forTriggerFixedTimeTypeAmount: 0,
                            forTriggerFixedTimeHour: 15,
                            forTriggerFixedTimeMinute: 0)
-        let basis = makeDate("2024-05-10T14:00:00Z")
+        let basis = TestHelper.date("2024-05-10T14:00:00Z")
         let tz = TimeZone(identifier: "UTC")!
         let next = trig.nextReminderDate(afterDate: basis, in: tz)!
         var cal = Calendar(identifier: .gregorian)
@@ -101,7 +98,7 @@ final class TriggerTests: XCTestCase {
         let expected = cal.date(from: comps)!
         XCTAssertEqual(next, expected)
         // when past time, roll over next day
-        let pastBasis = makeDate("2024-05-10T16:00:00Z")
+        let pastBasis = TestHelper.date("2024-05-10T16:00:00Z")
         let rollover = trig.nextReminderDate(afterDate: pastBasis, in: tz)!
         let expectedRoll = cal.date(byAdding: .day, value: 1, to: expected)!
         XCTAssertEqual(rollover, expectedRoll)
@@ -110,8 +107,7 @@ final class TriggerTests: XCTestCase {
     func testCreateTriggerResultReminder() {
         let trig = Trigger(forTriggerType: .timeDelay, forTriggerTimeDelay: 60)
         let log = Log(forLogActionTypeId: 1)
-        let tz = TimeZone(identifier: "UTC")!
-        guard let rem = trig.createTriggerResultReminder(afterLog: log, in: tz) else { return XCTFail("nil") }
+        guard let rem = trig.createTriggerResultReminder(afterLog: log, in: TestHelper.utc) else { return XCTFail("nil") }
         XCTAssertEqual(rem.reminderActionTypeId, trig.triggerReminderResult.reminderActionTypeId)
         XCTAssertTrue(rem.reminderIsTriggerResult)
         XCTAssertEqual(rem.oneTimeComponents.oneTimeDate, log.logStartDate.addingTimeInterval(60))

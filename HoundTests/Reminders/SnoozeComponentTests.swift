@@ -11,9 +11,6 @@ import XCTest
 
 final class SnoozeComponentsTests: XCTestCase {
 
-    // Helper to make ISO8601 dates
-    func makeDate(_ string: String) -> Date { ISO8601DateFormatter().date(from: string)! }
-
     func testInitializationStates() {
         let defaultComp = SnoozeComponents()
         XCTAssertNil(defaultComp.executionInterval)
@@ -99,7 +96,7 @@ final class SnoozeComponentsTests: XCTestCase {
 
     func testSnoozeAcrossDSTSpringForward() {
         let tz = TimeZone(identifier: "America/New_York")!
-        let base = makeDate("2024-03-10T06:30:00Z") // 1:30 EST before jump
+        let base = TestHelper.date("2024-03-10T06:30:00Z") // 1:30 EST before jump
         let rem = Reminder(
             reminderType: .oneTime,
             reminderExecutionBasis: base,
@@ -118,7 +115,7 @@ final class SnoozeComponentsTests: XCTestCase {
 
     func testSnoozeAcrossDSTFallBack() {
         let tz = TimeZone(identifier: "America/New_York")!
-        let base = makeDate("2024-11-03T04:30:00Z") // 0:30 EDT before fall back
+        let base = TestHelper.date("2024-11-03T04:30:00Z") // 0:30 EDT before fall back
         let rem = Reminder(
             reminderType: .oneTime,
             reminderExecutionBasis: base,
@@ -136,7 +133,7 @@ final class SnoozeComponentsTests: XCTestCase {
     }
 
     func testResetForNextAlarmClearsSnooze() {
-        let base = makeDate("2024-05-01T00:00:00Z")
+        let base = TestHelper.date("2024-05-01T00:00:00Z")
         let rem = Reminder(
             reminderType: .countdown,
             reminderExecutionBasis: base,

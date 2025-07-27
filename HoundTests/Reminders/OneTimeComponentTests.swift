@@ -10,13 +10,7 @@ import XCTest
 @testable import Hound
 
 final class OneTimeComponentsTests: XCTestCase {
-    /// Helper to create a date from ISO8601 string
-    func iso(_ str: String) -> Date {
-        let fmt = ISO8601DateFormatter()
-        return fmt.date(from: str)!
-    }
-
-    /// Execute body with a specific timezone set via TZ env var
+    
     func withTimezone<T>(_ identifier: String, _ body: () throws -> T) rethrows -> T {
         let original = getenv("TZ").flatMap { String(cString: $0) }
         setenv("TZ", identifier, 1)
@@ -35,13 +29,13 @@ final class OneTimeComponentsTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(defaultComp.oneTimeDate, before)
         XCTAssertLessThanOrEqual(defaultComp.oneTimeDate, after)
 
-        let date = iso("2024-05-05T12:00:00Z")
+        let date = TestHelper.date("2024-05-05T12:00:00Z")
         let explicitComp = OneTimeComponents(oneTimeDate: date)
         XCTAssertEqual(explicitComp.oneTimeDate, date)
     }
 
     func testCopyAndCodingRoundTrip() throws {
-        let date = iso("2024-06-01T00:00:00Z")
+        let date = TestHelper.date("2024-06-01T00:00:00Z")
         let comp = OneTimeComponents(oneTimeDate: date)
         guard let copy = comp.copy() as? OneTimeComponents else { return XCTFail("copy failed") }
         XCTAssertNotEqual(ObjectIdentifier(comp), ObjectIdentifier(copy))
@@ -56,7 +50,7 @@ final class OneTimeComponentsTests: XCTestCase {
     }
 
     func testIsSameComparison() {
-        let date = iso("2024-07-04T15:00:00Z")
+        let date = TestHelper.date("2024-07-04T15:00:00Z")
         let a = OneTimeComponents(oneTimeDate: date)
         let b = OneTimeComponents(oneTimeDate: date)
         XCTAssertTrue(a.isSame(as: b))
@@ -65,7 +59,7 @@ final class OneTimeComponentsTests: XCTestCase {
     }
 
     func testCreateBodyMatchesISO8601() {
-        let date = iso("2024-08-10T11:22:33Z")
+        let date = TestHelper.date("2024-08-10T11:22:33Z")
         let comp = OneTimeComponents(oneTimeDate: date)
         let body = comp.createBody()
         guard let value = body[Constant.Key.oneTimeDate.rawValue] ?? nil else {
@@ -81,8 +75,8 @@ final class OneTimeComponentsTests: XCTestCase {
     func testReadablePropertiesVariousDates() throws {
         try withTimezone("America/New_York") {
             let currentYear = Calendar.current.component(.year, from: Date())
-            let sameYear = iso("\(currentYear)-01-02T05:06:07Z")
-            let diffYear = iso("\(currentYear - 1)-12-31T23:59:59Z")
+            let sameYear = TestHelper.date("\(currentYear)-01-02T05:06:07Z")
+            let diffYear = TestHelper.date("\(currentYear - 1)-12-31T23:59:59Z")
             let compSame = OneTimeComponents(oneTimeDate: sameYear)
             let compDiff = OneTimeComponents(oneTimeDate: diffYear)
             XCTAssertEqual(compSame.readableDayOfYear, sameYear.houndFormatted(.template("MMMMd")))
@@ -95,8 +89,8 @@ final class OneTimeComponentsTests: XCTestCase {
 
     func testDSTBoundaryHandling() throws {
         try withTimezone("America/New_York") {
-            let beforeDST = iso("2024-03-10T06:59:00Z") // 1:59 AM EST
-            let afterDST = iso("2024-03-10T07:01:00Z")  // 3:01 AM EDT
+            let beforeDST = TestHelper.date("2024-03-10T06:59:00Z") // 1:59 AM EST
+            let afterDST = TestHelper.date("2024-03-10T07:01:00Z")  // 3:01 AM EDT
             let compBefore = OneTimeComponents(oneTimeDate: beforeDST)
             let compAfter = OneTimeComponents(oneTimeDate: afterDST)
             XCTAssertLessThan(compBefore.readableTimeOfDay, compAfter.readableTimeOfDay)
@@ -107,8 +101,8 @@ final class OneTimeComponentsTests: XCTestCase {
         try withTimezone("UTC") {
             let early = Date.distantPast
             let late = Date.distantFuture
-            let midnight = iso("2024-01-01T00:00:00Z")
-            let almostMidnight = iso("2024-01-01T23:59:59Z")
+            let midnight = TestHelper.date("2024-01-01T00:00:00Z")
+            let almostMidnight = TestHelper.date("2024-01-01T23:59:59Z")
             let comps = [OneTimeComponents(oneTimeDate: early),
                          OneTimeComponents(oneTimeDate: late),
                          OneTimeComponents(oneTimeDate: midnight),

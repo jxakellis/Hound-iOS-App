@@ -10,10 +10,6 @@ import XCTest
 @testable import Hound
 
 final class CountdownComponentsTests: XCTestCase {
-    
-    func date(_ str: String) -> Date {
-        return str.formatISO8601IntoDate()!
-    }
 
     func testDefaultInitializer() {
         let comp = CountdownComponents()
@@ -91,7 +87,7 @@ final class CountdownComponentsTests: XCTestCase {
     }
 
     func testReminderIntegrationAcrossDST() {
-        let base = date("2024-03-10T06:30:00Z")
+        let base = TestHelper.date("2024-03-10T06:30:00Z")
         let tz = TimeZone(identifier: "America/New_York")!
         let rem = Reminder(reminderType: .countdown,
                            reminderExecutionBasis: base,
@@ -101,7 +97,7 @@ final class CountdownComponentsTests: XCTestCase {
     }
 
     func testReminderIntegrationDifferentTZ() {
-        let base = date("2024-05-01T12:00:00Z")
+        let base = TestHelper.date("2024-05-01T12:00:00Z")
         let tz = TimeZone(identifier: "Asia/Tokyo")!
         let rem = Reminder(reminderType: .countdown,
                            reminderExecutionBasis: base,
