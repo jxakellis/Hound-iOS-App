@@ -12,14 +12,14 @@ import XCTest
 final class CountdownComponentsTests: XCTestCase {
 
     func testDefaultInitializer() {
-        let comp = CountdownComponents()
+        let comp = TestHelper.countdown()
         XCTAssertEqual(comp.executionInterval, Constant.Class.ReminderComponent.defaultCountdownExecutionInterval)
     }
 
     func testExplicitInitializerValues() {
         let values: [Double] = [60, 3600, 86400]
         for v in values {
-            let comp = CountdownComponents(executionInterval: v)
+            let comp = TestHelper.countdown(v)
             XCTAssertEqual(comp.executionInterval, v)
         }
     }
@@ -31,7 +31,7 @@ final class CountdownComponentsTests: XCTestCase {
     }
 
     func testInitFromBodyFallsBackToOverride() {
-        let override = CountdownComponents(executionInterval: 120)
+        let override = TestHelper.countdown(120)
         let body: JSONResponseBody = [:]
         let comp = CountdownComponents(fromBody: body, componentToOverride: override)
         XCTAssertEqual(comp.executionInterval, 120)
@@ -46,7 +46,7 @@ final class CountdownComponentsTests: XCTestCase {
     func testCopyProducesIdenticalClone() {
         let values: [Double] = [0, -5, 1, 60, 3600, 86400, Double.greatestFiniteMagnitude, -Double.greatestFiniteMagnitude, Double.leastNormalMagnitude]
         for v in values {
-            let original = CountdownComponents(executionInterval: v)
+            let original = TestHelper.countdown(v)
             guard let copy = original.copy() as? CountdownComponents else { XCTFail("copy failed"); continue }
             XCTAssertTrue(copy.isSame(as: original))
             XCTAssertFalse(copy === original)
@@ -55,16 +55,16 @@ final class CountdownComponentsTests: XCTestCase {
     }
 
     func testIsSameMethod() {
-        let a = CountdownComponents(executionInterval: 60)
-        let b = CountdownComponents(executionInterval: 60)
-        let c = CountdownComponents(executionInterval: 120)
+        let a = TestHelper.countdown(60)
+        let b = TestHelper.countdown(60)
+        let c = TestHelper.countdown(120)
         XCTAssertTrue(a.isSame(as: b))
         XCTAssertFalse(a.isSame(as: c))
     }
 
     func testCreateBodyMatchesState() {
         let value: Double = 90.5
-        let comp = CountdownComponents(executionInterval: value)
+        let comp = TestHelper.countdown(value)
         let body = comp.createBody()
         let any = body.toAnyDictionary()
         XCTAssertEqual(any[Constant.Key.countdownExecutionInterval.rawValue] as? Double, value)
@@ -73,7 +73,7 @@ final class CountdownComponentsTests: XCTestCase {
     func testReadableProperties() {
         let values: [Double] = [1, 60, 3661, -90]
         for v in values {
-            let comp = CountdownComponents(executionInterval: v)
+            let comp = TestHelper.countdown(v)
             let expected = v.readable(capitalizeWords: true, abbreviationLevel: .long)
             XCTAssertEqual(comp.readableTimeOfDay, expected)
             XCTAssertEqual(comp.readableRecurrance, "Every \(expected)")
@@ -82,7 +82,7 @@ final class CountdownComponentsTests: XCTestCase {
 
     func testInitializerRejectsNil() {
         let defaultValue = Constant.Class.ReminderComponent.defaultCountdownExecutionInterval
-        let nilComp = CountdownComponents(executionInterval: nil)
+        let nilComp = TestHelper.countdown(nil)
         XCTAssertEqual(nilComp.executionInterval, defaultValue)
     }
 
@@ -92,7 +92,7 @@ final class CountdownComponentsTests: XCTestCase {
         let rem = Reminder(reminderType: .countdown,
                            reminderExecutionBasis: base,
                            reminderTimeZone: tz,
-                           countdownComponents: CountdownComponents(executionInterval: 3600))
+                           countdownComponents: TestHelper.countdown(3600))
         XCTAssertEqual(rem.reminderExecutionDate, base.addingTimeInterval(3600))
     }
 
@@ -102,7 +102,7 @@ final class CountdownComponentsTests: XCTestCase {
         let rem = Reminder(reminderType: .countdown,
                            reminderExecutionBasis: base,
                            reminderTimeZone: tz,
-                           countdownComponents: CountdownComponents(executionInterval: 120))
+                           countdownComponents: TestHelper.countdown(120))
         XCTAssertEqual(rem.reminderExecutionDate, base.addingTimeInterval(120))
     }
 

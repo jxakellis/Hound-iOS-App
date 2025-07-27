@@ -17,7 +17,7 @@ final class ReminderTests: XCTestCase {
             reminderType: .oneTime,
             reminderExecutionBasis: execDate,
             reminderTimeZone: TestHelper.utc,
-            oneTimeComponents: OneTimeComponents(oneTimeDate: execDate)
+            oneTimeComponents: TestHelper.oneTime(date: execDate)
         )
         XCTAssertEqual(rem.reminderExecutionDate, execDate)
     }
@@ -27,7 +27,7 @@ final class ReminderTests: XCTestCase {
             reminderType: .countdown,
             reminderExecutionBasis: TestHelper.date("2024-01-01T00:00:00Z"),
             reminderTimeZone: TestHelper.utc,
-            countdownComponents: CountdownComponents(executionInterval: 60)
+            countdownComponents: TestHelper.countdown(60)
         )
         XCTAssertEqual(rem.reminderExecutionDate, TestHelper.date("2024-01-01T00:01:00Z"))
     }
@@ -37,11 +37,9 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-05-10T12:00:00Z"),
             reminderTimeZone: TimeZone(identifier: "America/New_York"),
-            weeklyComponents: WeeklyComponents(zonedSunday: false, zonedMonday: true, zonedTuesday: false,
-                                               zonedWednesday: false, zonedThursday: false, zonedFriday: false,
-                                               zonedSaturday: false, zonedHour: 9, zonedMinute: 0)
+            weeklyComponents: TestHelper.weekly(days: [.monday], hour: 9, minute: 0)
         )
-        let next = rem.reminderExecutionDate!
+        let next = rem.reminderExecutionDate
         var cal = Calendar(identifier: .gregorian)
         cal.timeZone = TimeZone(identifier: "America/New_York")!
         var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
@@ -58,10 +56,10 @@ final class ReminderTests: XCTestCase {
             reminderType: .monthly,
             reminderExecutionBasis: TestHelper.date("2024-05-01T00:00:00Z"),
             reminderTimeZone: TestHelper.utc,
-            monthlyComponents: MonthlyComponents(zonedDay: 20, zonedHour: 7, zonedMinute: 0, skippedDate: TestHelper.date("2024-05-20T07:00:00Z"))
+            monthlyComponents: TestHelper.monthly(day: 20, hour: 7, minute: 0, skipped: TestHelper.date("2024-05-20T07:00:00Z"))
         )
         // should skip to next occurrence
-        let next = rem.reminderExecutionDate!
+        let next = rem.reminderExecutionDate
         let cal = Calendar(identifier: .gregorian)
         var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
         comps.day = 20; comps.hour = 7; comps.minute = 0; comps.second = 0
@@ -82,10 +80,8 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-06-01T00:00:00Z"),
             reminderTimeZone: TestHelper.utc,
-            weeklyComponents: WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
-                                               zonedWednesday: false, zonedThursday: false, zonedFriday: false,
-                                               zonedSaturday: false, zonedHour: 8, zonedMinute: 0),
-            snoozeComponents: SnoozeComponents(executionInterval: 3600)
+            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 8, minute: 0),
+            snoozeComponents: TestHelper.snooze(3600)
         )
         let expected = rem.reminderExecutionBasis.addingTimeInterval(3600)
         XCTAssertEqual(rem.reminderExecutionDate, expected)
@@ -109,12 +105,9 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-03-01T00:00:00Z"),
             reminderTimeZone: TimeZone(identifier: "America/New_York"),
-            weeklyComponents: WeeklyComponents(zonedSunday: true, zonedMonday: false,
-                                               zonedTuesday: false, zonedWednesday: false,
-                                               zonedThursday: false, zonedFriday: false,
-                                               zonedSaturday: false, zonedHour: 2, zonedMinute: 30)
+            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 2, minute: 30)
         )
-        let next = rem.reminderExecutionDate!
+        let next = rem.reminderExecutionDate
         let cal = Calendar(identifier: .gregorian)
         var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
         comps.weekday = Weekday.sunday.rawValue
@@ -131,12 +124,9 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-10-20T00:00:00Z"),
             reminderTimeZone: TimeZone(identifier: "America/New_York"),
-            weeklyComponents: WeeklyComponents(zonedSunday: true, zonedMonday: false,
-                                               zonedTuesday: false, zonedWednesday: false,
-                                               zonedThursday: false, zonedFriday: false,
-                                               zonedSaturday: false, zonedHour: 1, zonedMinute: 30)
+            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 1, minute: 30)
         )
-        let next = rem.reminderExecutionDate!
+        let next = rem.reminderExecutionDate
         let cal = Calendar(identifier: .gregorian)
         var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
         comps.weekday = Weekday.sunday.rawValue
@@ -153,12 +143,9 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-05-15T12:00:00Z"),
             reminderTimeZone: TestHelper.utc,
-            weeklyComponents: WeeklyComponents(zonedSunday: false, zonedMonday: true,
-                                               zonedTuesday: false, zonedWednesday: true,
-                                               zonedThursday: false, zonedFriday: false,
-                                               zonedSaturday: false, zonedHour: 9, zonedMinute: 0)
+            weeklyComponents: TestHelper.weekly(days: [.monday, .wednesday], hour: 9, minute: 0)
         )
-        let next = rem.reminderExecutionDate!
+        let next = rem.reminderExecutionDate
         let cal = Calendar(identifier: .gregorian)
         var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
         comps.weekday = Weekday.wednesday.rawValue
@@ -181,9 +168,9 @@ final class ReminderTests: XCTestCase {
             reminderType: .monthly,
             reminderExecutionBasis: TestHelper.date("2024-04-01T00:00:00Z"),
             reminderTimeZone: TestHelper.utc,
-            monthlyComponents: MonthlyComponents(zonedDay: 31, zonedHour: 8, zonedMinute: 0)
+            monthlyComponents: TestHelper.monthly(day: 31, hour: 8, minute: 0)
         )
-        let next = rem.reminderExecutionDate!
+        let next = rem.reminderExecutionDate
         let cal = Calendar(identifier: .gregorian)
         var comps = cal.dateComponents(in: rem.reminderTimeZone, from: rem.reminderExecutionBasis)
         comps.day = 30
@@ -206,11 +193,7 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-07-01T00:00:00Z"),
             reminderTimeZone: TestHelper.utc,
-            weeklyComponents: WeeklyComponents(zonedSunday: true, zonedMonday: false,
-                                               zonedTuesday: false, zonedWednesday: false,
-                                               zonedThursday: false, zonedFriday: false,
-                                               zonedSaturday: false, zonedHour: 6, zonedMinute: 0,
-                                               skippedDate: TestHelper.date("2024-07-07T06:00:00Z"))
+            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 6, minute: 0, skipped: TestHelper.date("2024-07-07T06:00:00Z"))
         )
         let expected = rem.weeklyComponents.notSkippingExecutionDate(reminderExecutionBasis: rem.reminderExecutionBasis,
                                                                      sourceTimeZone: rem.reminderTimeZone)
@@ -222,12 +205,8 @@ final class ReminderTests: XCTestCase {
             reminderType: .weekly,
             reminderExecutionBasis: TestHelper.date("2024-07-01T00:00:00Z"),
             reminderTimeZone: TestHelper.utc,
-            weeklyComponents: WeeklyComponents(zonedSunday: true, zonedMonday: false,
-                                               zonedTuesday: false, zonedWednesday: false,
-                                               zonedThursday: false, zonedFriday: false,
-                                               zonedSaturday: false, zonedHour: 6, zonedMinute: 0,
-                                               skippedDate: TestHelper.date("2024-07-07T06:00:00Z")),
-            snoozeComponents: SnoozeComponents(executionInterval: 600)
+            weeklyComponents: TestHelper.weekly(days: [.sunday], hour: 6, minute: 0, skipped: TestHelper.date("2024-07-07T06:00:00Z")),
+            snoozeComponents: TestHelper.snooze(600)
         )
         XCTAssertNil(rem.disableIsSkippingDate)
     }
@@ -236,19 +215,11 @@ final class ReminderTests: XCTestCase {
         let basis = TestHelper.date("2024-01-01T00:00:00Z")
         let tz = TimeZone(identifier: "America/Los_Angeles")!
         let recipients = ["a", "b"]
-        let countdown = CountdownComponents(executionInterval: 120)
-        let weekly = WeeklyComponents(zonedSunday: true,
-                                      zonedMonday: false,
-                                      zonedTuesday: false,
-                                      zonedWednesday: false,
-                                      zonedThursday: false,
-                                      zonedFriday: false,
-                                      zonedSaturday: false,
-                                      zonedHour: 8,
-                                      zonedMinute: 0)
-        let monthly = MonthlyComponents(zonedDay: 15, zonedHour: 9, zonedMinute: 0)
-        let oneTime = OneTimeComponents(oneTimeDate: TestHelper.date("2024-05-05T12:00:00Z"))
-        let snooze = SnoozeComponents(executionInterval: 60)
+        let countdown = TestHelper.countdown(120)
+        let weekly = TestHelper.weekly(days: [.sunday], hour: 8, minute: 0)
+        let monthly = TestHelper.monthly(day: 15, hour: 9, minute: 0)
+        let oneTime = TestHelper.oneTime(date: TestHelper.date("2024-05-05T12:00:00Z"))
+        let snooze = TestHelper.snooze(60)
         let offline = OfflineModeComponents(forInitialAttemptedSyncDate: basis,
                                             forInitialCreationDate: basis)
         return Reminder(

@@ -96,7 +96,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
             hour: zonedHour,
             minute: zonedMinute,
             to: destinationTimeZone,
-            referenceDate: referenceDate
+            referenceDate: referenceDate ?? Constant.Class.Date.default1970Date
         )
         return day
     }
@@ -115,7 +115,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
             hour: zonedHour,
             minute: zonedMinute,
             to: destinationTimeZone,
-            referenceDate: referenceDate
+            referenceDate: referenceDate ?? Constant.Class.Date.default1970Date
         )
         return "Every \(day)\(day.daySuffix()) at \(String.convert(hour: hour, minute: minute))"
     }
@@ -144,21 +144,21 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     /// - If isSkipping is true, skips the soonest and returns the following date.
     /// - If the selected day does not exist in a month (e.g. 31st in February), the calculation will roll down to the last day of the month.
     /// - Handles DST and ambiguous/missing times using `.nextTimePreservingSmallerComponents`.
-    func nextExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
+    func nextExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
         isSkipping
         ? skippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
         : notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
     }
     
     /// Returns the first valid execution date strictly after the basis, or 1970 if none.
-    func notSkippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
+    func notSkippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
         futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
-            .first(where: { $0 > reminderExecutionBasis }) ?? Constant.Class.Date.default1970Date
+            .first(where: { $0 > reminderExecutionBasis })
     }
     
     /// Finds the previous valid execution date before the basis.
     /// Handles day roll-down if day exceeds days in target month, and is robust to DST.
-    func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
+    func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
         let calendar = Calendar(identifier: .gregorian)
         let searchBasis = reminderExecutionBasis.addingTimeInterval(-1)
         var components = calendar.dateComponents(in: sourceTimeZone, from: reminderExecutionBasis)
@@ -174,18 +174,19 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
             matchingPolicy: .nextTimePreservingSmallerComponents,
             direction: .backward
         ) else {
-            // No match found; return default.
-            return Constant.Class.Date.default1970Date
+            return nil
         }
-        
+
         return previousDate
     }
     
     /// Returns the next valid execution date after the one that would normally be triggered (skipping state).
-    private func skippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
-        let nextExecution = notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
+    private func skippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
+        guard let nextExecution = notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone) else {
+            return nil
+        }
         let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
-        return futureDates.first(where: { $0 > nextExecution }) ?? Constant.Class.Date.default1970Date
+        return futureDates.first(where: { $0 > nextExecution })
     }
     
     /// Finds up to 3 future execution dates based on the user-selected day/hour/minute in the sourceTimeZone.

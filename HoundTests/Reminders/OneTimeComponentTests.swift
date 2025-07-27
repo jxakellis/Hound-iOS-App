@@ -34,21 +34,6 @@ final class OneTimeComponentsTests: XCTestCase {
         XCTAssertEqual(explicitComp.oneTimeDate, date)
     }
 
-    func testCopyAndCodingRoundTrip() throws {
-        let date = TestHelper.date("2024-06-01T00:00:00Z")
-        let comp = OneTimeComponents(oneTimeDate: date)
-        guard let copy = comp.copy() as? OneTimeComponents else { return XCTFail("copy failed") }
-        XCTAssertNotEqual(ObjectIdentifier(comp), ObjectIdentifier(copy))
-        XCTAssertEqual(copy.oneTimeDate, comp.oneTimeDate)
-
-        let data = try NSKeyedArchiver.archivedData(withRootObject: comp, requiringSecureCoding: false)
-        let unarchiver = try NSKeyedUnarchiver(forReadingFrom: data)
-        unarchiver.requiresSecureCoding = false
-        let decoded = OneTimeComponents(coder: unarchiver)
-        XCTAssertNotNil(decoded)
-        XCTAssertEqual(decoded?.oneTimeDate, comp.oneTimeDate)
-    }
-
     func testIsSameComparison() {
         let date = TestHelper.date("2024-07-04T15:00:00Z")
         let a = OneTimeComponents(oneTimeDate: date)

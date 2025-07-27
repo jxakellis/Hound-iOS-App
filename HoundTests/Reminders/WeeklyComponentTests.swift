@@ -12,15 +12,7 @@ import XCTest
 final class WeeklyComponentsTests: XCTestCase {
     
     func testNextExecutionBasic() {
-        let comp = WeeklyComponents(zonedSunday: false,
-                                    zonedMonday: true,
-                                    zonedTuesday: false,
-                                    zonedWednesday: false,
-                                    zonedThursday: false,
-                                    zonedFriday: false,
-                                    zonedSaturday: false,
-                                    zonedHour: 9,
-                                    zonedMinute: 30)
+        let comp = TestHelper.weekly(days: [.monday], hour: 9, minute: 30)
         let tz = TimeZone(identifier: "America/Los_Angeles")!
         let cal = TestHelper.calendar(tz)
         let basis = TestHelper.date("2024-06-01T12:00:00Z")
@@ -35,11 +27,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testNextExecutionSkipping() {
-        let comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
-                                    zonedWednesday: false, zonedThursday: false,
-                                    zonedFriday: false, zonedSaturday: false,
-                                    zonedHour: 6, zonedMinute: 0,
-                                    skippedDate: TestHelper.date("2024-06-02T06:00:00Z"))
+        let comp = TestHelper.weekly(days: [.sunday], hour: 6, minute: 0, skipped: TestHelper.date("2024-06-02T06:00:00Z"))
         let tz = TestHelper.utc
         let cal = TestHelper.calendar(tz)
         let basis = TestHelper.date("2024-06-01T00:00:00Z")
@@ -61,10 +49,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testPreviousExecutionDST() {
-        let comp = WeeklyComponents(zonedSunday: false, zonedMonday: true,
-                                    zonedTuesday: false, zonedWednesday: false,
-                                    zonedThursday: false, zonedFriday: false, zonedSaturday: false,
-                                    zonedHour: 2, zonedMinute: 30)
+        let comp = TestHelper.weekly(days: [.monday], hour: 2, minute: 30)
         let tz = TimeZone(identifier: "America/New_York")!
         let cal = TestHelper.calendar(tz)
         let basis = TestHelper.date("2024-03-12T12:00:00Z") // after spring forward
@@ -79,9 +64,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testLocalConversions() {
-        let comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
-                                    zonedWednesday: false, zonedThursday: false, zonedFriday: false,
-                                    zonedSaturday: false, zonedHour: 23, zonedMinute: 0)
+        let comp = TestHelper.weekly(days: [.sunday], hour: 23, minute: 0)
         let pst = TimeZone(identifier: "America/Los_Angeles")!
         let utc = TestHelper.utc
         let localTime = comp.localTimeOfDay(from: pst, to: utc)
@@ -93,9 +76,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testMultipleWeekdayNextAndPrevious() {
-        let comp = WeeklyComponents(zonedSunday: false, zonedMonday: true, zonedTuesday: false,
-                                    zonedWednesday: true, zonedThursday: false, zonedFriday: false,
-                                    zonedSaturday: false, zonedHour: 8, zonedMinute: 45)
+        let comp = TestHelper.weekly(days: [.monday, .wednesday], hour: 8, minute: 45)
         let tz = TestHelper.utc
         let cal = TestHelper.calendar(tz)
         let basis = TestHelper.date("2024-05-14T12:00:00Z")
@@ -115,9 +96,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testDSTFallBackNextExecution() {
-        let comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
-                                    zonedWednesday: false, zonedThursday: false, zonedFriday: false,
-                                    zonedSaturday: false, zonedHour: 1, zonedMinute: 30)
+        let comp = TestHelper.weekly(days: [.sunday], hour: 1, minute: 30)
         let tz = TimeZone(identifier: "America/New_York")!
         let cal = TestHelper.calendar(tz)
         let basis = TestHelper.date("2024-10-20T00:00:00Z")
@@ -132,7 +111,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testDefaultInitValues() {
-        let comp = WeeklyComponents()
+        let comp = TestHelper.weekly()
         XCTAssertEqual(Set(comp.zonedWeekdays), Set(Weekday.allCases))
         XCTAssertEqual(comp.zonedHour, Constant.Class.ReminderComponent.defaultZonedHour)
         XCTAssertEqual(comp.zonedMinute, Constant.Class.ReminderComponent.defaultZonedMinute)
@@ -141,16 +120,7 @@ final class WeeklyComponentsTests: XCTestCase {
     
     func testConvenienceInitCustomValues() {
         let skip = TestHelper.date("2024-01-05T08:30:00Z")
-        let comp = WeeklyComponents(zonedSunday: false,
-                                    zonedMonday: true,
-                                    zonedTuesday: false,
-                                    zonedWednesday: true,
-                                    zonedThursday: true,
-                                    zonedFriday: false,
-                                    zonedSaturday: false,
-                                    zonedHour: 0,
-                                    zonedMinute: 59,
-                                    skippedDate: skip)
+        let comp = TestHelper.weekly(days: [.monday, .wednesday, .thursday], hour: 0, minute: 59, skipped: skip)
         XCTAssertEqual(Set(comp.zonedWeekdays), Set([.monday, .wednesday, .thursday]))
         XCTAssertEqual(comp.zonedHour, 0)
         XCTAssertEqual(comp.zonedMinute, 59)
@@ -158,10 +128,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testFromBodyInitializerMergesWithOverride() {
-        let override = WeeklyComponents(zonedSunday: true, zonedMonday: false,
-                                        zonedTuesday: false, zonedWednesday: false,
-                                        zonedThursday: false, zonedFriday: false,
-                                        zonedSaturday: false, zonedHour: 9, zonedMinute: 0)
+        let override = TestHelper.weekly(days: [.sunday], hour: 9, minute: 0)
         let body: JSONResponseBody = [
             Constant.Key.weeklyZonedSunday.rawValue: false,
             Constant.Key.weeklyZonedHour.rawValue: 22,
@@ -175,10 +142,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testCopyingProducesIndependentObject() {
-        let comp = WeeklyComponents(zonedSunday: true, zonedMonday: false,
-                                    zonedTuesday: false, zonedWednesday: false,
-                                    zonedThursday: false, zonedFriday: false,
-                                    zonedSaturday: false, zonedHour: 10, zonedMinute: 15)
+        let comp = TestHelper.weekly(days: [.sunday], hour: 10, minute: 15)
         guard let copy = comp.copy() as? WeeklyComponents else { return XCTFail("bad copy") }
         XCTAssertTrue(comp.isSame(as: copy))
         copy.setZonedWeekdays([.monday])
@@ -189,7 +153,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testSetZonedWeekdaysValidation() {
-        let comp = WeeklyComponents()
+        let comp = TestHelper.weekly()
         let result = comp.setZonedWeekdays([])
         XCTAssertFalse(result)
         XCTAssertEqual(Set(comp.zonedWeekdays), Set(Weekday.allCases))
@@ -198,7 +162,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testConfigureUpdatesComponents() {
-        let comp = WeeklyComponents()
+        let comp = TestHelper.weekly()
         let tz = TestHelper.utc
         let date = TestHelper.date("2024-06-01T12:34:00Z")
         let result = comp.configure(from: date, timeZone: tz, weekdays: [.monday])
@@ -209,7 +173,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testConfigureWithInvalidWeekdaysStillUpdatesTime() {
-        let comp = WeeklyComponents()
+        let comp = TestHelper.weekly()
         let tz = TestHelper.utc
         let date = TestHelper.date("2024-06-01T01:02:00Z")
         let result = comp.configure(from: date, timeZone: tz, weekdays: [])
@@ -220,10 +184,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testNextExecutionHandlesDSTSpringForward() {
-        let comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
-                                    zonedWednesday: false, zonedThursday: false,
-                                    zonedFriday: false, zonedSaturday: false,
-                                    zonedHour: 2, zonedMinute: 30)
+        let comp = TestHelper.weekly(days: [.sunday], hour: 2, minute: 30)
         let tz = TestHelper.utc
         let cal = TestHelper.calendar(tz)
         let basis = TestHelper.date("2024-03-01T00:00:00Z")
@@ -238,10 +199,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testLocalWeekdaysCrossMidnight() {
-        let comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
-                                    zonedWednesday: false, zonedThursday: false,
-                                    zonedFriday: false, zonedSaturday: false,
-                                    zonedHour: 23, zonedMinute: 30)
+        let comp = TestHelper.weekly(days: [.sunday], hour: 23, minute: 30)
         let utc = TestHelper.utc
         let tokyo = TimeZone(identifier: "Asia/Tokyo")!
         let local = comp.localWeekdays(from: utc, to: tokyo)
@@ -249,10 +207,7 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testReadableRecurranceFormatting() {
-        let comp = WeeklyComponents(zonedSunday: false, zonedMonday: true, zonedTuesday: false,
-                                    zonedWednesday: true, zonedThursday: false,
-                                    zonedFriday: false, zonedSaturday: false,
-                                    zonedHour: 9, zonedMinute: 0)
+        let comp = TestHelper.weekly(days: [.monday, .wednesday], hour: 9, minute: 0)
         let pst = TimeZone(identifier: "America/Los_Angeles")!
         let utc = TestHelper.utc
         let rec = comp.readableRecurrance(from: pst, to: utc)
@@ -267,17 +222,14 @@ final class WeeklyComponentsTests: XCTestCase {
     func testReminderIntegrationWithSkipping() {
         let tz = TimeZone(identifier: "UTC")!
         let basis = TestHelper.date("2024-06-01T00:00:00Z")
-        let comp = WeeklyComponents(zonedSunday: true, zonedMonday: false, zonedTuesday: false,
-                                    zonedWednesday: false, zonedThursday: false,
-                                    zonedFriday: false, zonedSaturday: false,
-                                    zonedHour: 8, zonedMinute: 0)
+        let comp = TestHelper.weekly(days: [.sunday], hour: 8, minute: 0)
         let rem = Reminder(reminderType: .weekly,
                            reminderExecutionBasis: basis,
                            reminderTimeZone: tz,
                            weeklyComponents: comp)
-        let first = rem.reminderExecutionDate!
+        let first = rem.reminderExecutionDate
         rem.enableIsSkipping(skippedDate: first)
-        let next = rem.reminderExecutionDate!
+        let next = rem.reminderExecutionDate
         var cal = Calendar(identifier: .gregorian)
         cal.timeZone = tz
         var comps = cal.dateComponents(in: tz, from: basis)
@@ -292,5 +244,16 @@ final class WeeklyComponentsTests: XCTestCase {
         }
         let secondDate = cal.nextDate(after: firstDate.addingTimeInterval(1), matching: comps, matchingPolicy: .nextTimePreservingSmallerComponents)
         XCTAssertEqual(next, secondDate)
+    }
+
+    func testNoWeekdaysProducesNil() {
+        let comp = WeeklyComponents(zonedSunday: false, zonedMonday: false,
+                                    zonedTuesday: false, zonedWednesday: false,
+                                    zonedThursday: false, zonedFriday: false,
+                                    zonedSaturday: false, zonedHour: 8, zonedMinute: 0)
+        let tz = TestHelper.utc
+        let basis = TestHelper.date("2024-06-01T00:00:00Z")
+        XCTAssertNil(comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz))
+        XCTAssertNil(comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz))
     }
 }

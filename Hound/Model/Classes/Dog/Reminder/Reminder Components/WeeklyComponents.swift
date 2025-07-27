@@ -258,7 +258,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     // MARK: - Timing
     
     /// Determines the next execution date, considering isSkipping state, based on `sourceTimeZone`.
-    func nextExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
+    func nextExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
         return isSkipping
         ? skippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
         : notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
@@ -267,24 +267,25 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     /// Finds the next execution date after `reminderExecutionBasis`, using zoned weekdays/hours/minutes in the specified `sourceTimeZone`.
     /// Skipping state is NOT factored in.
     /// - Returns: The closest valid future execution date (or default date if none found).
-    func notSkippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
+    func notSkippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
         let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
-        return futureDates.first(where: { $0 > reminderExecutionBasis }) ?? Constant.Class.Date.default1970Date
+        return futureDates.first(where: { $0 > reminderExecutionBasis })
     }
     
     /// If a reminder is skipping, find the next soonest execution date after the skipped one.
     /// Returns: The next valid execution date strictly after the skipped one, or default date if none found.
-    private func skippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
-        let nextExecution = notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
-        // The next execution after the skipped one, robustly (no +7 day fudge).
+    private func skippingExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
+        guard let nextExecution = notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone) else {
+            return nil
+        }
         let futureDates = futureExecutionDates(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: sourceTimeZone)
-        return futureDates.first(where: { $0 > nextExecution }) ?? Constant.Class.Date.default1970Date
+        return futureDates.first(where: { $0 > nextExecution })
     }
     
     /// Finds the most recent valid execution date strictly before `reminderExecutionBasis`
     /// based on the component's zoned weekdays, hour, and minute, in the specified `sourceTimeZone`.
     /// Robust to DST and ambiguous/skipped times.
-    func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date {
+    func previousExecutionDate(reminderExecutionBasis: Date, sourceTimeZone: TimeZone) -> Date? {
         let calendar = Calendar(identifier: .gregorian)
         let searchBasis = reminderExecutionBasis.addingTimeInterval(-1)
         var latestPrevious: Date?
@@ -313,7 +314,7 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
             }
         }
         // Return the latest found or your chosen default
-        return latestPrevious ?? Constant.Class.Date.default1970Date
+        return latestPrevious
     }
     
     /// Computes the next three valid execution dates (in strict chronological order) in the specified source time zone,
