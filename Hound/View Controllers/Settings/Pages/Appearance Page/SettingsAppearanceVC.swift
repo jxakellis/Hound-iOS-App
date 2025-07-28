@@ -286,7 +286,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
             let tz = TimeZone.uniqueHoundTimeZones[indexPath.row]
             cell.label.text = tz.displayName(currentTimeZone: TimeZone.current)
             // use UserConfiguration.timeZone b/c if no UserConfiguration.userTimeZone, then this defaults to current TZ
-            cell.setCustomSelectedTableViewCell(forSelected: tz == UserConfiguration.timeZone)
+            cell.setCustomSelected(tz == UserConfiguration.timeZone, animated: false)
         }
     }
     
@@ -302,6 +302,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         1
     }
     
+    // TODO BUG selecting shit maybe broken
     func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
         guard let type = identifier as? SettingsAppearanceDropDownTypes else { return }
         guard let dropDown = dropDownManager.dropDown(for: type), let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
@@ -312,14 +313,14 @@ final class SettingsAppearanceVC: HoundScrollViewController,
                prevIndex != indexPath.row {
                 let prevIndexPath = IndexPath(row: prevIndex, section: 0)
                 if let prevCell = dropDown.dropDownTableView?.cellForRow(at: prevIndexPath) as? HoundDropDownTVC {
-                    prevCell.setCustomSelectedTableViewCell(forSelected: false)
+                    prevCell.setCustomSelected(false)
                 }
             }
             
             let beforeUpdateTz = UserConfiguration.userTimeZone
             
             let newTz = TimeZone.uniqueHoundTimeZones[indexPath.row]
-            cell.setCustomSelectedTableViewCell(forSelected: true)
+            cell.setCustomSelected(true)
             UserConfiguration.userTimeZone = newTz
             // set currentTimeZone to nil so it doesn't append (current) to the end
             timeZoneLabel.text = newTz.displayName(currentTimeZone: nil)

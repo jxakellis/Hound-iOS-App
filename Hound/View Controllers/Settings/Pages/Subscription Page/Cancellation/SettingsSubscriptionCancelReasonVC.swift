@@ -161,7 +161,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
         
         // We can only have one cell selected at once, therefore clear lastSelectedCell's selection state
         if cellIsCustomSelected == true {
-            lastSelectedCell?.setCustomSelectedTableViewCell(forSelected: false, isAnimated: false)
+            lastSelectedCell?.setCustomSelected(false, animated: false)
         }
         
         cell.setup(forDelegate: self, forCancellationReason: cellCancellationReason, forIsCustomSelected: cellIsCustomSelected)
@@ -176,12 +176,12 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
         // Check if lastSelectedCell and selectedCells are actually different cells
         if let lastSelectedCell = lastSelectedCell, lastSelectedCell != selectedCell {
             // If they are different cells, then that must mean a new cell is being selected to transition into the selected state. Unselect the old cell and select the new one
-            lastSelectedCell.setCustomSelectedTableViewCell(forSelected: false, isAnimated: true)
-            selectedCell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: true)
+            lastSelectedCell.setCustomSelected(false, animated: true)
+            selectedCell.setCustomSelected(true, animated: true)
         }
         // We are selecting the same cell as last time. However, a cell always needs to be selected. Therefore, we cannot deselect the current cell as that would mean we would have no cell selected at all, so always select.
         else {
-            selectedCell.setCustomSelectedTableViewCell(forSelected: true, isAnimated: true)
+            selectedCell.setCustomSelected(true, animated: true)
         }
         
         lastSelectedCell = selectedCell

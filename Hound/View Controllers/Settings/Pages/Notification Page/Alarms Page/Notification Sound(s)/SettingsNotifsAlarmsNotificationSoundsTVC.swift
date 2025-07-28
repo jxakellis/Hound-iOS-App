@@ -72,14 +72,14 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         for cellRow in 0..<NotificationSound.allCases.count {
             let cellIndexPath = IndexPath(row: cellRow, section: 0)
             let cell = tableView.cellForRow(at: cellIndexPath) as? SettingsNotifsAlarmsNotificationSoundTVC
-            cell?.setCustomSelectedTableViewCell(false, animated: true)
+            cell?.setCustomSelected(false, animated: true)
         }
         
         // set user configuration notification sound cell to selected
         guard let currentNotificationSoundCellRow = NotificationSound.allCases.firstIndex(of: UserConfiguration.notificationSound) else { return }
         let currentNotificationSoundCellIndexPath = IndexPath(row: currentNotificationSoundCellRow, section: 0)
         let currentNotificationSoundCell = tableView.cellForRow(at: currentNotificationSoundCellIndexPath) as? SettingsNotifsAlarmsNotificationSoundTVC
-        currentNotificationSoundCell?.setCustomSelectedTableViewCell(true, animated: true)
+        currentNotificationSoundCell?.setCustomSelected(true, animated: true)
     }
     
     // MARK: - Table View Data Source
@@ -101,7 +101,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         let notificationSound = NotificationSound.allCases[indexPath.row]
         
         cell.setup(forNotificationSound: notificationSound == NotificationSound.radar ? "Radar (Default)" : notificationSound.rawValue)
-        cell.setCustomSelectedTableViewCell(notificationSound == UserConfiguration.notificationSound, animated: false)
+        cell.setCustomSelected(notificationSound == UserConfiguration.notificationSound, animated: false)
         
         return cell
     }
@@ -133,10 +133,10 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         // find the current notification sound cell and unselect it, as the user just selected a new one
         let currentNotificationSoundIndexPath = IndexPath(row: currentNotificationSoundIndex, section: 0)
         let currentNotificationSoundCell = tableView.cellForRow(at: currentNotificationSoundIndexPath) as? SettingsNotifsAlarmsNotificationSoundTVC
-        currentNotificationSoundCell?.setCustomSelectedTableViewCell(false, animated: true)
+        currentNotificationSoundCell?.setCustomSelected(false, animated: true)
         
         // highlight the new selected cell
-        selectedCell.setCustomSelectedTableViewCell(true, animated: true)
+        selectedCell.setCustomSelected(true, animated: true)
         
         // leave this code right here, don't move below or its value will be incorrect
         let beforeUpdateNotificationSound = UserConfiguration.notificationSound

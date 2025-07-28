@@ -16,7 +16,7 @@ protocol HoundDropDownManagerDelegate: AnyObject {
 /// Each dropdown is referenced by a unique string identifier.
 final class HoundDropDownManager<T: HoundDropDownType> {
     typealias Identifier = T
-
+    
     /// Internal representation of a registered drop down
     private struct Entry {
         weak var label: HoundLabel?
@@ -25,18 +25,18 @@ final class HoundDropDownManager<T: HoundDropDownType> {
     }
     
     // MARK: - Properties
-
+    
     private unowned let rootView: UIView
     private let dataSource: HoundDropDownDataSource
     private unowned let delegate: HoundDropDownManagerDelegate
     private let offset: CGFloat
-
+    
     // Preserve the registration order so drop downs are stacked correctly
     private var order: [Identifier] = []
     private var entries: [Identifier: Entry] = [:]
     
     // MARK: - Main
-
+    
     init(rootView: UIView, dataSource: HoundDropDownDataSource, delegate: HoundDropDownManagerDelegate, offset: CGFloat = Constant.Constraint.Spacing.contentTightIntraVert) {
         self.rootView = rootView
         self.dataSource = dataSource
@@ -45,7 +45,7 @@ final class HoundDropDownManager<T: HoundDropDownType> {
     }
     
     // MARK: - Functions
-
+    
     /// Register a label that will trigger/show a dropdown with the identifier.
     func register(
         identifier: Identifier,
@@ -61,7 +61,7 @@ final class HoundDropDownManager<T: HoundDropDownType> {
             direction: direction
         )
     }
-
+    
     /// Returns the managed dropdown for identifier if it exists
     func dropDown(for identifier: Identifier) -> HoundDropDown<T>? {
         return entries[identifier]?.dropDown
@@ -70,15 +70,15 @@ final class HoundDropDownManager<T: HoundDropDownType> {
     func label(for identifier: Identifier) -> HoundLabel? {
         return entries[identifier]?.label
     }
-
+    
     /// Show the drop down corresponding to `identifier`.
     /// If a drop down hasn't been created yet one will be lazily instantiated.
     func show(identifier: Identifier, numberOfRowsToShow numberOfRows: CGFloat, animated: Bool) {
         guard let label = entries[identifier]?.label else { return }
         var entry = entries[identifier] ?? Entry(label: label, dropDown: nil, direction: .down)
-
+        
         let referenceFrame = label.superview?.convert(label.frame, to: rootView) ?? label.frame
-
+        
         if entry.dropDown == nil {
             let drop = HoundDropDown<T>()
             drop.setupDropDown(
@@ -91,16 +91,19 @@ final class HoundDropDownManager<T: HoundDropDownType> {
             entry.dropDown = drop
             entries[identifier] = entry
         }
-
+        else {
+            entry.dropDown?.updateReferenceFrame(referenceFrame)
+        }
+        
         reorderDropDowns()
-        entry.dropDown?.showDropDown(numberOfRowsToShow: numberOfRows, animated: animated)
+        entry.dropDown?.showDropDown(numberOfRowsToShow: numberOfRows, animated: animated, direction: entry.direction)
     }
-
+    
     /// Hide the dropdown for identifier if it is currently showing
     func hide(identifier: Identifier, animated: Bool) {
         entries[identifier]?.dropDown?.hideDropDown(animated: animated)
     }
-
+    
     /// Remove and re-add drop downs so they appear stacked using registration order
     private func reorderDropDowns() {
         let dropDowns = order.compactMap { entries[$0]?.dropDown }

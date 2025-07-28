@@ -1139,9 +1139,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         switch identifier {
         case .parentDog:
             let dog = dogManager.dogs[indexPath.row]
-            cell.setCustomSelectedTableViewCell(
-                forSelected: selectedDogUUIDs.contains(dog.dogUUID)
-            )
+            cell.setCustomSelected(forSelected: selectedDogUUIDs.contains(dog.dogUUID), animated: false)
             cell.label.text = dog.dogName
         case .logActionType:
             let option = availableLogActions[indexPath.row]
@@ -1152,14 +1150,14 @@ final class LogsAddLogVC: HoundScrollViewController,
             if option.1 == nil,
                let selected = selectedLogAction,
                selected.logActionTypeId == option.0.logActionTypeId {
-                cell.setCustomSelectedTableViewCell(forSelected: true)
+                cell.setCustomSelected(true, animated: false)
             }
             else {
-                cell.setCustomSelectedTableViewCell(forSelected: false)
+                cell.setCustomSelected(false, animated: false)
             }
         case .logUnit:
             guard let selectedAction = selectedLogAction else { return }
-            cell.setCustomSelectedTableViewCell(forSelected: false)
+            cell.setCustomSelected(false, animated: false)
             let unitTypes = selectedAction.associatedLogUnitTypes
             if indexPath.row < unitTypes.count {
                 let unit = unitTypes[indexPath.row]
@@ -1169,17 +1167,17 @@ final class LogsAddLogVC: HoundScrollViewController,
                     ) ?? 0.0
                 )
                 if let selectedUnit = selectedLogUnitType, selectedUnit == unit {
-                    cell.setCustomSelectedTableViewCell(forSelected: true)
+                    cell.setCustomSelected(true, animated: false)
                 }
             }
         case .logStartDate:
-            cell.setCustomSelectedTableViewCell(forSelected: false)
+            cell.setCustomSelected(false, animated: false)
             if let option = availableLogStartDateOptions[safe: indexPath.row] {
                 cell.label.text = option.rawValue
                 // Do not set “selected” visually, as quick select depends on current time
             }
         case .logEndDate:
-            cell.setCustomSelectedTableViewCell(forSelected: false)
+            cell.setCustomSelected(false, animated: false)
             if let option = availableLogEndDateOptions[safe: indexPath.row] {
                 cell.label.text = option.rawValue
                 // Do not set “selected” visually, as quick select depends on current time
@@ -1236,7 +1234,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                 // Select parent dog
                 selectedDogUUIDs.append(dog.dogUUID)
             }
-            cell.setCustomSelectedTableViewCell(forSelected: !cell.isCustomSelected)
+            cell.setCustomSelected(!cell.isCustomSelected)
             
             if beforeCount == 0 {
                 // After first selection, hide parent dropdown and open log action dropdown
@@ -1252,13 +1250,13 @@ final class LogsAddLogVC: HoundScrollViewController,
             
             if cell.isCustomSelected {
                 // Unselect current log action
-                cell.setCustomSelectedTableViewCell(forSelected: false)
+                cell.setCustomSelected(false)
                 selectedLogAction = nil
                 // Do not hide dropdown, need selection for valid log
                 return
             }
             
-            cell.setCustomSelectedTableViewCell(forSelected: true)
+            cell.setCustomSelected(true)
             
             let option = availableLogActions[indexPath.row]
             selectedLogAction = option.0
@@ -1278,11 +1276,11 @@ final class LogsAddLogVC: HoundScrollViewController,
             }
         case LogsAddLogDropDownTypes.logUnit:
             if cell.isCustomSelected {
-                cell.setCustomSelectedTableViewCell(forSelected: false)
+                cell.setCustomSelected(false)
                 selectedLogUnitType = nil
             }
             else {
-                cell.setCustomSelectedTableViewCell(forSelected: true)
+                cell.setCustomSelected(true)
                 selectedLogUnitType = selectedLogAction?.associatedLogUnitTypes[indexPath.row]
             }
             
@@ -1291,7 +1289,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             updateDynamicUIElements()
         case LogsAddLogDropDownTypes.logStartDate:
             // Time quick select cells should never stay visually selected.
-            cell.setCustomSelectedTableViewCell(forSelected: true)
+            cell.setCustomSelected(true)
             
             let timeIntervalSelected = availableLogStartDateOptions[indexPath.row].valueInSeconds()
             if let interval = timeIntervalSelected {
@@ -1304,7 +1302,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             
             dropDown.hideDropDown(animated: true)
         case LogsAddLogDropDownTypes.logEndDate:
-            cell.setCustomSelectedTableViewCell(forSelected: true)
+            cell.setCustomSelected(true)
             
             let quickSelectOption = availableLogEndDateOptions[indexPath.row]
             if quickSelectOption == .custom {

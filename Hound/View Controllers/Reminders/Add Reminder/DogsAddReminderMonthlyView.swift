@@ -44,7 +44,6 @@ final class DogsAddReminderMonthlyView: HoundView {
         label.textAlignment = .center
         label.textColor = UIColor.secondaryLabel
         label.font = Constant.Visual.Font.secondaryColorDescLabel
-        label.text = "If a month has fewer days, the reminder will occur on the last day of that month."
         label.numberOfLines = 0
         label.isHidden = true
         return label
@@ -141,6 +140,7 @@ final class DogsAddReminderMonthlyView: HoundView {
         let comps = Calendar.fromZone(currentTimeZone).dateComponents([.day], from: timeOfDayDatePicker.date)
         let day = comps.day ?? 1
         
+        rollUnderDisclaimerLabel.text = "If a month has less than \(day) days, the reminder will occur on the last day of that month."
         rollUnderDisclaimerLabel.isHidden = day <= 28
         
         let timeString = timeOfDayDatePicker.date.houndFormatted(

@@ -503,12 +503,12 @@ final class DogsAddTriggerManagerView: HoundView,
             let item = availableLogReactions[indexPath.row]
             cell.label.text = item.readableName(includeMatchingEmoji: true)
             let selected = selectedLogReactions.contains(item)
-            cell.setCustomSelectedTableViewCell(forSelected: selected, animated: false)
+            cell.setCustomSelected(selected, animated: false)
         case .reminderResult:
             let item = availableReminderResults[indexPath.row]
             cell.label.text = item.readableName
             let selected = selectedReminderResult?.isSame(as: item) ?? false
-            cell.setCustomSelectedTableViewCell(forSelected: selected, animated: false)
+            cell.setCustomSelected(selected, animated: false)
         }
     }
     
@@ -543,7 +543,7 @@ final class DogsAddTriggerManagerView: HoundView,
             
             if let index = indexOfReaction(reaction) {
                 // Deselecting reaction
-                cell.setCustomSelectedTableViewCell(forSelected: false)
+                cell.setCustomSelected(false)
                 selectedLogReactions.remove(at: index)
                 
                 if reaction.logCustomActionName.hasText() {
@@ -552,7 +552,7 @@ final class DogsAddTriggerManagerView: HoundView,
                        let selectedParentIndex = indexOfReaction(self.availableLogReactions[parentIndex]) {
                         selectedLogReactions.remove(at: selectedParentIndex)
                         if let parentCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: parentIndex, section: 0)) as? HoundDropDownTVC {
-                            parentCell.setCustomSelectedTableViewCell(forSelected: false)
+                            parentCell.setCustomSelected(false)
                         }
                     }
                 }
@@ -563,14 +563,14 @@ final class DogsAddTriggerManagerView: HoundView,
                             selectedLogReactions.remove(at: selectedIdx)
                         }
                         if let childCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTVC {
-                            childCell.setCustomSelectedTableViewCell(forSelected: false)
+                            childCell.setCustomSelected(false)
                         }
                     }
                 }
             }
             else {
                 // Selecting reaction
-                cell.setCustomSelectedTableViewCell(forSelected: true)
+                cell.setCustomSelected(true)
                 selectedLogReactions.append(reaction)
                 logReactionsLabel.errorMessage = nil
                 
@@ -581,7 +581,7 @@ final class DogsAddTriggerManagerView: HoundView,
                             selectedLogReactions.append(item)
                         }
                         if let childCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: idx, section: 0)) as? HoundDropDownTVC {
-                            childCell.setCustomSelectedTableViewCell(forSelected: true)
+                            childCell.setCustomSelected(true)
                         }
                     }
                 }
@@ -599,7 +599,7 @@ final class DogsAddTriggerManagerView: HoundView,
             let beforeSelection = selectedReminderResult
             
             guard cell.isCustomSelected == false else {
-                cell.setCustomSelectedTableViewCell(forSelected: false)
+                cell.setCustomSelected(false)
                 selectedReminderResult = nil
                 updateDynamicUIElements()
                 return
@@ -613,10 +613,10 @@ final class DogsAddTriggerManagerView: HoundView,
             }) {
                 let previouslySelectedIndexPath = IndexPath(row: previousSelected, section: 0)
                 let previousSelectedCell = dropDown.dropDownTableView?.cellForRow(at: previouslySelectedIndexPath) as? HoundDropDownTVC
-                previousSelectedCell?.setCustomSelectedTableViewCell(forSelected: false)
+                previousSelectedCell?.setCustomSelected(false)
             }
             
-            cell.setCustomSelectedTableViewCell(forSelected: true)
+            cell.setCustomSelected(true)
             reminderResultLabel.errorMessage = nil
             selectedReminderResult = availableReminderResults[indexPath.row]
             

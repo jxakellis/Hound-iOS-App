@@ -53,8 +53,6 @@ enum ReminderType: String, CaseIterable {
 
 final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
-    // TODO TIMING 4. add TZ drop down to one time, weekly, and monthly views
-    
     // TODO TIMING 7. when we detect a change in the user's TZ, we ask them if they want hound to switch their user setting to that new TZ
     
     // MARK: - NSCopying
@@ -151,7 +149,6 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - Comparable
     
     static func < (lhs: Reminder, rhs: Reminder) -> Bool {
-        // TODO TIMING this should use local time components, not the zoned ones
         guard lhs.reminderType == rhs.reminderType else {
             // lhs and rhs are known to be different styles
             switch lhs.reminderType {

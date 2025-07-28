@@ -62,18 +62,18 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
         self.delegate = forDelegate
         self.cancellationReason = forCancellationReason
         
-        setCustomSelectedTableViewCell(forSelected: forIsCustomSelected, isAnimated: false)
+        setCustomSelected(selected: forIsCustomSelected, animated: false)
     }
     
     // MARK: - Functions
     
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
-    func setCustomSelectedTableViewCell(forSelected: Bool, isAnimated: Bool) {
-        isCustomSelected = forSelected
+    func setCustomSelected(_ selected: Bool, animated: Bool) {
+        isCustomSelected = selected
         
         delegate?.didSetCustomIsSelected(forCell: self, forIsCustomSelected: isCustomSelected)
         
-        UIView.animate(withDuration: isAnimated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
+        UIView.animate(withDuration: animated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
             self.checkmarkButton.isHidden = !self.isCustomSelected
             
             self.containerView.applyStyle(self.isCustomSelected ? .greenSelectionBorder : .labelBorder)

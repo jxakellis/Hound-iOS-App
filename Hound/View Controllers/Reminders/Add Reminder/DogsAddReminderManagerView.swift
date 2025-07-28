@@ -14,6 +14,8 @@ enum DogsAddReminderDropDownTypes: String, HoundDropDownType {
     case reminderRecipients = "DropDownReminderRecipients"
 }
 
+// TODO TIMING Add a TZ dropdown. this should live at the bottom of the reminderViewsStack. should become visible if onetime, weekly, or monthly page is selected. it should use the globe icon to contextualize wtf the globe icon means in other views. maybe even add a disclaimer label below the dropdown to be like: yo this reminder is in a diff TZ than your are in. if they are diff
+
 final class DogsAddReminderManagerView: HoundView,
                                         UITextFieldDelegate,
                                         UIGestureRecognizerDelegate,
@@ -185,7 +187,7 @@ final class DogsAddReminderManagerView: HoundView,
             segmentedControl.insertSegment(withTitle: option.readableName, at: index, animated: false)
         }
         
-        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
+        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel, .foregroundColor: UIColor.systemBackground]
         
         segmentedControl.setTitleTextAttributes(attributes, for: .normal)
         segmentedControl.backgroundColor = UIColor.systemGray4
@@ -672,15 +674,15 @@ final class DogsAddReminderManagerView: HoundView,
         case .reminderAction:
             let option = availableReminderActions[indexPath.row]
             if let selectedReminderActionIndexPath = selectedReminderActionIndexPath {
-                cell.setCustomSelectedTableViewCell(forSelected: selectedReminderActionIndexPath == indexPath)
+                cell.setCustomSelected(selectedReminderActionIndexPath == indexPath, animated: false)
             }
             else {
-                cell.setCustomSelectedTableViewCell(forSelected: false)
+                cell.setCustomSelected(false, animated: false)
             }
             cell.label.text = option.0.convertToReadableName(customActionName: option.1, includeMatchingEmoji: true)
         case .reminderRecipients:
             let member = availableFamilyMembers[indexPath.row]
-            cell.setCustomSelectedTableViewCell(forSelected: selectedRecipientUserIds.contains(member.userId))
+            cell.setCustomSelected(selectedRecipientUserIds.contains(member.userId), animated: false)
             cell.label.text = member.displayFullName ?? Constant.Visual.Text.unknownName
         }
     }
@@ -709,7 +711,7 @@ final class DogsAddReminderManagerView: HoundView,
         switch identifier {
         case DogsAddReminderDropDownTypes.reminderAction:
             guard !cell.isCustomSelected else {
-                cell.setCustomSelectedTableViewCell(forSelected: false)
+                cell.setCustomSelected(false)
                 selectedReminderAction = nil
                 updateDynamicUIElements()
                 return
@@ -717,10 +719,10 @@ final class DogsAddReminderManagerView: HoundView,
             
             if let previouslySelectedReminderActionIndexPath = selectedReminderActionIndexPath {
                 let previousSelectedCell = dropDown.dropDownTableView?.cellForRow(at: previouslySelectedReminderActionIndexPath) as? HoundDropDownTVC
-                previousSelectedCell?.setCustomSelectedTableViewCell(forSelected: false)
+                previousSelectedCell?.setCustomSelected(false)
             }
             
-            cell.setCustomSelectedTableViewCell(forSelected: true)
+            cell.setCustomSelected(true)
             
             let option = availableReminderActions[indexPath.row]
             selectedReminderAction = option.0
@@ -741,7 +743,7 @@ final class DogsAddReminderManagerView: HoundView,
             else {
                 selectedRecipientUserIds.insert(member.userId)
             }
-            cell.setCustomSelectedTableViewCell(forSelected: !cell.isCustomSelected)
+            cell.setCustomSelected(!cell.isCustomSelected)
             
             // If no one selected, close
             // If all ppl selected, close dropdown

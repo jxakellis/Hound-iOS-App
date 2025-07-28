@@ -168,8 +168,9 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
             (hasRecipients && !UserConfiguration.isReminderNotificationEnabled)
         )
         
+        // TODO UI timeZoneIndicatorImageView is just not showing/disappearing when it should be. review and see whats up with it after adding tz selection to reminder page
         notificationBellImageView.isHidden = !shouldShowBell
-        timeZoneIndicatorImageView.isHidden = !reminder.reminderIsEnabled || reminder.reminderTimeZone == UserConfiguration.timeZone
+        timeZoneIndicatorImageView.isHidden = !reminderEnabled || reminder.reminderTimeZone == UserConfiguration.timeZone
     }
     
     // MARK: - Setup Elements

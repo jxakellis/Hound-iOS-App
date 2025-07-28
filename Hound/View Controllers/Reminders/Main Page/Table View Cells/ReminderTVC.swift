@@ -146,7 +146,6 @@ final class DogsReminderTVC: HoundTableViewCell {
         )
         
         notificationBellImageView.isHidden = !shouldShowBell
-        
         timeZoneIndicatorImageView.isHidden = !forReminder.reminderIsEnabled || UserConfiguration.timeZone == forReminder.reminderTimeZone
         
         reloadNextAlarmLabel()
@@ -245,7 +244,6 @@ final class DogsReminderTVC: HoundTableViewCell {
             make.width.equalTo(chevronImageView.snp.height).multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
         }
         
-        // TODO UI TEST HOW THESE LOOK TOGETHER
         notificationBellImageView.snp.makeConstraints { make in
             make.centerX.equalTo(chevronImageView.snp.centerX)
             make.centerY.equalTo(reminderActionTextLabel.snp.centerY)

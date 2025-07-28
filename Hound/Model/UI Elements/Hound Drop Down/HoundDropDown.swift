@@ -51,10 +51,7 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         
         let cell: HoundDropDownTVC = (dropDownTableView?.dequeueReusableCell(withIdentifier: HoundDropDownTVC.reuseIdentifier) as? HoundDropDownTVC ?? HoundDropDownTVC())
         
-        let rows = dropDownDataSource?.numberOfRows(forSection: indexPath.section, identifier: identifier) ?? 0
-        let adjustedIndexPath = direction == .up ? IndexPath(row: rows - 1 - indexPath.row, section: indexPath.section) : indexPath
-        
-        dropDownDataSource?.setupCellForDropDown(cell: cell, indexPath: adjustedIndexPath, identifier: identifier)
+        dropDownDataSource?.setupCellForDropDown(cell: cell, indexPath: indexPath, identifier: identifier)
         
         return cell
     }
@@ -66,10 +63,7 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         
         HapticsManager.selectionChanged()
         
-        let rows = dropDownDataSource?.numberOfRows(forSection: indexPath.section, identifier: identifier) ?? 0
-        let adjustedIndexPath = direction == .up ? IndexPath(row: rows - 1 - indexPath.row, section: indexPath.section) : indexPath
-        
-        dropDownDataSource?.selectItemInDropDown(indexPath: adjustedIndexPath, identifier: identifier)
+        dropDownDataSource?.selectItemInDropDown(indexPath: indexPath, identifier: identifier)
     }
     
     // MARK: - Properties
@@ -129,14 +123,16 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.
         dropDownTableView.applyStyle(.thinGrayBorder)
         
-        if direction == .up {
-            dropDownTableView.transform = CGAffineTransform(scaleX: 1, y: -1)
-        }
-        
         dropDownTableView.delegate = self
         dropDownTableView.dataSource = self
         
         self.addSubview(dropDownTableView)
+    }
+    
+    /// Update the reference frame used to position the dropdown
+    func updateReferenceFrame(_ referenceFrame: CGRect) {
+        self.viewPositionReference = referenceFrame
+        self.dropDownViewWidth = referenceFrame.width
     }
     
     /// Shows Drop Down Menu, hides it if already present. The height of the dropdown shown will be equal to the rowHeight of the individual dropdown cells multiplied by the numberOfRowsToShow
@@ -196,6 +192,11 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         // First, we don't want to make the drop down larger than the space needed to display all of its content. So we limit its size to the theoretical maximum space it would need to display all of its content
         // Second, we don't want the drop down larger than the available space in the superview. So we cap its size at the available vertical space.
         let height = min(min(heightSpecifiedForNumberOfRows, heightNeededToDisplayAllRows), availableSpace)
+        
+        if self.direction == .up {
+            let bottomOffset = max(dropDownTableView.contentSize.height - height, 0)
+            dropDownTableView.setContentOffset(CGPoint(x: 0, y: bottomOffset), animated: false)
+        }
         
         UIView.animate(withDuration: animated ? 0.7 : 0.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.05, options: .curveLinear, animations: {
             //            if self.direction == .up {

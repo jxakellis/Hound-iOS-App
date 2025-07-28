@@ -216,12 +216,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         
         switch type {
         case .dayOffset:
-            if availableDayOffsets[indexPath.row] == selectedDayOffset {
-                cell.setCustomSelectedTableViewCell(forSelected: true)
-            }
-            else {
-                cell.setCustomSelectedTableViewCell(forSelected: false)
-            }
+            cell.setCustomSelected(availableDayOffsets[indexPath.row] == selectedDayOffset, animated: false)
         }
     }
     
@@ -248,10 +243,10 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
             let previousIndexPath = IndexPath(row: selectedDayOffset, section: 0)
             if previousIndexPath != indexPath {
                 let previousCell = dropDown.dropDownTableView?.cellForRow(at: previousIndexPath) as? HoundDropDownTVC
-                previousCell?.setCustomSelectedTableViewCell(forSelected: false)
+                previousCell?.setCustomSelected(false)
             }
             
-            cell.setCustomSelectedTableViewCell(forSelected: true)
+            cell.setCustomSelected(true)
             selectedDayOffset = availableDayOffsets[indexPath.row]
             dayOffsetLabel.text = textForOffset(availableDayOffsets[indexPath.row])
             

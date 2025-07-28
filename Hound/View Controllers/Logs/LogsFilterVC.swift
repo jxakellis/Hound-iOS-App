@@ -447,15 +447,15 @@ class LogsFilterVC: HoundScrollViewController,
         switch type {
         case .filterDogs:
             let dog = filter.availableDogs[indexPath.row]
-            cell.setCustomSelectedTableViewCell(forSelected: filter.filteredDogsUUIDs.contains(dog.dogUUID))
+            cell.setCustomSelected(filter.filteredDogsUUIDs.contains(dog.dogUUID), animated: false)
             cell.label.text = dog.dogName
         case .filterLogActions:
             let logActionType = filter.availableLogActions[indexPath.row]
-            cell.setCustomSelectedTableViewCell(forSelected: filter.filteredLogActionActionTypeIds.contains(logActionType.logActionTypeId))
+            cell.setCustomSelected(filter.filteredLogActionActionTypeIds.contains(logActionType.logActionTypeId), animated: false)
             cell.label.text = logActionType.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
         case .filterFamilyMembers:
             let familyMember = filter.availableFamilyMembers[indexPath.row]
-            cell.setCustomSelectedTableViewCell(forSelected: filter.filteredFamilyMemberUserIds.contains(familyMember.userId))
+            cell.setCustomSelected(filter.filteredFamilyMemberUserIds.contains(familyMember.userId), animated: false)
             cell.label.text = familyMember.displayFullName ?? Constant.Visual.Text.unknownName
         }
     }
@@ -499,7 +499,7 @@ class LogsFilterVC: HoundScrollViewController,
             else {
                 filter.add(forFilterDogUUID: dogSelected.dogUUID)
             }
-            cell.setCustomSelectedTableViewCell(forSelected: !cell.isCustomSelected)
+            cell.setCustomSelected(!cell.isCustomSelected)
             if beforeSelectNumberOfDogsSelected == 0 || filter.filteredDogsUUIDs.count == filter.availableDogs.count {
                 dropDown.hideDropDown(animated: true)
             }
@@ -512,7 +512,7 @@ class LogsFilterVC: HoundScrollViewController,
             else {
                 filter.add(forLogActionTypeId: selectedLogAction.logActionTypeId)
             }
-            cell.setCustomSelectedTableViewCell(forSelected: !cell.isCustomSelected)
+            cell.setCustomSelected(!cell.isCustomSelected)
             if beforeSelectNumberOfLogActionsSelected == 0 || filter.filteredLogActionActionTypeIds.count == filter.availableLogActions.count {
                 dropDown.hideDropDown(animated: true)
             }
@@ -525,7 +525,7 @@ class LogsFilterVC: HoundScrollViewController,
             else {
                 filter.add(forUserId: familyMemberSelected.userId)
             }
-            cell.setCustomSelectedTableViewCell(forSelected: !cell.isCustomSelected)
+            cell.setCustomSelected(!cell.isCustomSelected)
             if beforeSelectNumberOfFamilyMembersSelected == 0 || filter.filteredFamilyMemberUserIds.count == filter.availableFamilyMembers.count {
                 dropDown.hideDropDown(animated: true)
             }

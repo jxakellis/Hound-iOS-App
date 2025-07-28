@@ -95,14 +95,14 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         self.delegate = forDelegate
         self.product = forProduct
 
-        setCustomSelectedTableViewCell(forSelected: forIsCustomSelected, isAnimated: false)
+        setCustomSelected(forIsCustomSelected, animated: false)
     }
     
     // MARK: - Functions
 
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
-    func setCustomSelectedTableViewCell(forSelected: Bool, isAnimated: Bool) {
-        isCustomSelected = forSelected
+    func setCustomSelected(_ selected: Bool, animated: Bool) {
+        isCustomSelected = selected
 
         if isCustomSelected == true {
             delegate?.didSetCustomIsSelectedToTrue(forCell: self)
@@ -111,7 +111,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         // this must come first as savePercentLabel.text changes
         self.setupPriceLabels()
 
-        UIView.animate(withDuration: isAnimated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
+        UIView.animate(withDuration: animated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
             self.checkmarkImageView.isHidden = !self.isCustomSelected
             self.savePercentLabel.isHidden = !self.isCustomSelected && self.savePercentLabel.text != nil
 
