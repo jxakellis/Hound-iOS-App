@@ -21,6 +21,7 @@ final class HoundDropDownManager<T: HoundDropDownType> {
     private struct Entry {
         weak var label: HoundLabel?
         var dropDown: HoundDropDown<T>?
+        var direction: HoundDropDownDirection
     }
     
     // MARK: - Properties
@@ -46,11 +47,19 @@ final class HoundDropDownManager<T: HoundDropDownType> {
     // MARK: - Functions
 
     /// Register a label that will trigger/show a dropdown with the identifier.
-    func register(identifier: Identifier, label: HoundLabel) {
+    func register(
+        identifier: Identifier,
+        label: HoundLabel,
+        direction: HoundDropDownDirection = .down
+    ) {
         if entries[identifier] == nil {
             order.append(identifier)
         }
-        entries[identifier] = Entry(label: label, dropDown: entries[identifier]?.dropDown)
+        entries[identifier] = Entry(
+            label: label,
+            dropDown: entries[identifier]?.dropDown,
+            direction: direction
+        )
     }
 
     /// Returns the managed dropdown for identifier if it exists
@@ -66,7 +75,7 @@ final class HoundDropDownManager<T: HoundDropDownType> {
     /// If a drop down hasn't been created yet one will be lazily instantiated.
     func show(identifier: Identifier, numberOfRowsToShow numberOfRows: CGFloat, animated: Bool) {
         guard let label = entries[identifier]?.label else { return }
-        var entry = entries[identifier] ?? Entry(label: label, dropDown: nil)
+        var entry = entries[identifier] ?? Entry(label: label, dropDown: nil, direction: .down)
 
         let referenceFrame = label.superview?.convert(label.frame, to: rootView) ?? label.frame
 
@@ -76,7 +85,8 @@ final class HoundDropDownManager<T: HoundDropDownType> {
                 identifier: identifier,
                 dataSource: dataSource,
                 viewPositionReference: referenceFrame,
-                offset: offset
+                offset: offset,
+                direction: entry.direction
             )
             entry.dropDown = drop
             entries[identifier] = entry

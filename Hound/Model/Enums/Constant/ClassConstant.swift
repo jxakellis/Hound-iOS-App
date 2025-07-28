@@ -75,21 +75,21 @@ public enum ReminderConstant {
     private static var defaultReminderOne: Reminder {
         let reminder = Reminder()
         reminder.reminderActionTypeId = 3
-        reminder.changeReminderType(forReminderType: .countdown)
+        reminder.changeReminderType(.countdown)
         reminder.countdownComponents.executionInterval = Constant.Class.ReminderComponent.defaultCountdownExecutionInterval
         return reminder
     }
     private static var defaultReminderTwo: Reminder {
         let reminder = Reminder()
         reminder.reminderActionTypeId = 1
-        reminder.changeReminderType(forReminderType: .weekly)
+        reminder.changeReminderType(.weekly)
         // 7:00 AM local time
         return reminder
     }
     private static var defaultReminderThree: Reminder {
         let reminder = Reminder()
         reminder.reminderActionTypeId = 1
-        reminder.changeReminderType(forReminderType: .weekly)
+        reminder.changeReminderType(.weekly)
         // 12:00 PM
         reminder.weeklyComponents.zonedHour = 11
         return reminder
@@ -97,7 +97,7 @@ public enum ReminderConstant {
     private static var defaultReminderFour: Reminder {
         let reminder = Reminder()
         reminder.reminderActionTypeId = 1
-        reminder.changeReminderType(forReminderType: .weekly)
+        reminder.changeReminderType(.weekly)
         // 5:00 PM
         reminder.weeklyComponents.zonedHour = 16
         return reminder
@@ -130,7 +130,8 @@ public enum TriggerConstant {
             triggerLogReactions: [logReaction],
             triggerReminderResult: reminderResult,
             triggerType: .timeDelay,
-            triggerTimeDelay: 60.0 * 30.0)
+            triggerTimeDelayComponents: TriggerTimeDelayComponents(triggerTimeDelay: 60.0 * 30.0)
+            )
         return [trigger]
     }()
 }

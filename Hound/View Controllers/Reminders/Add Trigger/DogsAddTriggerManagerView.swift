@@ -333,7 +333,7 @@ final class DogsAddTriggerManagerView: HoundView,
         if segmentedControl.selectedSegmentIndex == SegmentedControlSection.timeDelay.rawValue {
             trigger.triggerType = .timeDelay
             let component = timeDelayView.currentComponent
-            if !trigger.timeDelayComponents.changeTriggerTimeDelay(forTimeDelay: component.triggerTimeDelay) {
+            if !trigger.timeDelayComponents.changeTriggerTimeDelay(component.triggerTimeDelay) {
                             if showErrorIfFailed {
                                 HapticsManager.notification(.error)
                                 timeDelayView.errorMessage = Constant.Error.TriggerError.timeDelayInvalid
@@ -344,9 +344,9 @@ final class DogsAddTriggerManagerView: HoundView,
         else {
             trigger.triggerType = .fixedTime
             let component = fixedTimeView.currentComponent
-            if !trigger.fixedTimeComponents.changeFixedTimeHour(forHour: component.triggerFixedTimeHour) ||
-                !trigger.fixedTimeComponents.changeFixedTimeMinute(forMinute: component.triggerFixedTimeMinute) ||
-                !trigger.fixedTimeComponents.changeTriggerFixedTimeTypeAmount(forAmount: component.triggerFixedTimeTypeAmount) {
+            if !trigger.fixedTimeComponents.changeFixedTimeHour(component.triggerFixedTimeHour) ||
+                !trigger.fixedTimeComponents.changeFixedTimeMinute(component.triggerFixedTimeMinute) ||
+                !trigger.fixedTimeComponents.changeTriggerFixedTimeTypeAmount(component.triggerFixedTimeTypeAmount) {
                 if showErrorIfFailed {
                     HapticsManager.notification(.error)
                     fixedTimeView.errorMessage = Constant.Error.TriggerError.fixedTimeTypeAmountInvalid
