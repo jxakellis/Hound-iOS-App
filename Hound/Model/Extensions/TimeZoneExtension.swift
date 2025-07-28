@@ -9,6 +9,42 @@
 import Foundation
 
 extension TimeZone {
+    
+    static var uniqueHoundTimeZones: [TimeZone] {
+        var seenNames = Set<String>()
+        return TimeZone.knownTimeZoneIdentifiers
+            .compactMap { TimeZone(identifier: $0) }
+            .filter {
+                let name = $0.localizedName(for: .generic, locale: .current) ?? $0.identifier
+                if seenNames.contains(name) {
+                    return false
+                }
+                else {
+                    seenNames.insert(name)
+                    return true
+                }
+            }
+            .sorted { $0.secondsFromGMT() < $1.secondsFromGMT() }
+    }
+    
+    func displayName(currentTimeZone: TimeZone? = nil) -> String {
+        let genericName = self.localizedName(for: .generic, locale: .current) ?? ""
+        // let cityName = self.identifier.components(separatedBy: "/").last?.replacingOccurrences(of: "_", with: " ") ?? self.identifier
+
+        let seconds = self.secondsFromGMT()
+        let hours = abs(seconds) / 3600
+        let minutes = (abs(seconds) % 3600) / 60
+        let sign = seconds >= 0 ? "+" : "-"
+        let offsetString = String(format: "%@%02d:%02d", sign, hours, minutes)
+
+        let currentSuffix = (self.identifier == currentTimeZone?.identifier) ? " (current)" : ""
+        // Example: "Pacific Time (Los Angeles) -08:00"
+        // return "\(genericName) (\(cityName)) \(offsetString)\(currentSuffix)"
+        return "\(genericName) \(offsetString)\(currentSuffix)"
+    }
+    
+    // MARK: - Time Zone Constructions
+    
     /// Creates a TimeZone from an identifier string, or returns nil if the string is invalid or nil.
     static func from(_ str: String?) -> TimeZone? {
         guard let str = str else { return nil }
@@ -18,6 +54,8 @@ extension TimeZone {
     static var utc: TimeZone {
         return TimeZone.from("UTC")! // swiftlint:disable:this force_unwrapping
     }
+    
+    // MARK: - Conversions
 
     /// Converts a (hour, minute) in this time zone to the same wall time in a target time zone, for display.
     /// Always uses a fixed reference date (2000-01-01) to avoid DST edge cases.

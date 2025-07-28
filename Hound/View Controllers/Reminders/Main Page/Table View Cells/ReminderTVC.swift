@@ -255,7 +255,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         
         timeZoneIndicatorImageView.snp.makeConstraints { make in
             make.centerX.equalTo(chevronImageView.snp.centerX)
-            make.centerY.equalTo(intervalLabel.snp.centerY)
+            make.centerY.equalTo(nextAlarmLabel.snp.centerY)
             make.height.equalTo(chevronImageView.snp.height)
             make.width.equalTo(timeZoneIndicatorImageView.snp.height)
         }
