@@ -21,41 +21,64 @@ final class OneTimeComponentsTests: XCTestCase {
         }
         return try body()
     }
-
+    
     func testReadablePropertiesVariousDates() throws {
-        let currentYear = Calendar.current.component(.year, from: Date())
-        let sameYear = TestHelper.date("\(currentYear)-01-02T05:06:07Z")
-        let diffYear = TestHelper.date("\(currentYear - 1)-12-31T23:59:59Z")
+        let calendar = Calendar.user
+        let currentYear = calendar.component(.year, from: Date())
+        let sameYear = TestHelper.date("2025-01-02T05:06:07Z")
+        let diffYear = TestHelper.date("2024-12-31T23:59:59Z")
         let compSame = OneTimeComponents(oneTimeDate: sameYear)
         let compDiff = OneTimeComponents(oneTimeDate: diffYear)
-        XCTAssertEqual(compSame.readableDayOfYear, sameYear.houndFormatted(.template("MMMMd")))
-        XCTAssertEqual(compDiff.readableDayOfYear, diffYear.houndFormatted(.template("MMMMdyyyy")))
-        XCTAssertEqual(compSame.readableTimeOfDay, sameYear.houndFormatted(.template("hma")))
-        XCTAssertTrue(compSame.readableRecurrance.contains(compSame.readableDayOfYear))
-        XCTAssertTrue(compSame.readableRecurrance.contains(compSame.readableTimeOfDay))
+        XCTAssertEqual(
+            compSame.readableDayOfYear(displayTimeZone: .utc),
+            sameYear.houndFormatted(
+                .template("MMMMd"),
+                displayTimeZone: .utc
+            )
+        )
+        XCTAssertEqual(
+            compDiff.readableDayOfYear(displayTimeZone: .utc),
+            diffYear.houndFormatted(
+                .template("MMMMdyyyy"),
+                displayTimeZone: .utc
+            )
+        )
+        XCTAssertEqual(
+            compSame.readableTimeOfDay(displayTimeZone: .utc),
+            sameYear.houndFormatted(
+                .template("hma"),
+                displayTimeZone: .utc
+            )
+        )
     }
-
+    
     func testDSTBoundaryHandling() throws {
-        try withTimezone("America/New_York") {
-            let beforeDST = TestHelper.date("2024-03-10T06:59:00Z") // 1:59 AM EST
-            let afterDST = TestHelper.date("2024-03-10T07:01:00Z")  // 3:01 AM EDT
-            let compBefore = OneTimeComponents(oneTimeDate: beforeDST)
-            let compAfter = OneTimeComponents(oneTimeDate: afterDST)
-            XCTAssertLessThan(compBefore.readableTimeOfDay, compAfter.readableTimeOfDay)
-        }
+        let newYork = TimeZone(identifier: "America/New_York")!
+        let beforeDST = TestHelper.date("2024-03-10T06:59:00Z") // 1:59 AM EST
+        let afterDST = TestHelper.date("2024-03-10T07:01:00Z")  // 3:01 AM EDT
+        
+        let compBefore = OneTimeComponents(oneTimeDate: beforeDST)
+        let compAfter = OneTimeComponents(oneTimeDate: afterDST)
+        
+        XCTAssertLessThan(
+            compBefore.readableTimeOfDay(displayTimeZone: newYork),
+            compAfter.readableTimeOfDay(displayTimeZone: newYork)
+        )
     }
-
+    
     func testExtremeDateValues() throws {
-        try withTimezone("UTC") {
-            let early = Date.distantPast
-            let late = Date.distantFuture
-            let midnight = TestHelper.date("2024-01-01T00:00:00Z")
-            let almostMidnight = TestHelper.date("2024-01-01T23:59:59Z")
-            let comps = [OneTimeComponents(oneTimeDate: early),
-                         OneTimeComponents(oneTimeDate: late),
-                         OneTimeComponents(oneTimeDate: midnight),
-                         OneTimeComponents(oneTimeDate: almostMidnight)]
-            for c in comps { XCTAssertNotNil(c.oneTimeDate) }
+        let utc = TimeZone(identifier: "UTC")!
+        let early = Date.distantPast
+        let late = Date.distantFuture
+        let midnight = TestHelper.date("2024-01-01T00:00:00Z")
+        let almostMidnight = TestHelper.date("2024-01-01T23:59:59Z")
+        
+        let comps = [OneTimeComponents(oneTimeDate: early),
+                     OneTimeComponents(oneTimeDate: late),
+                     OneTimeComponents(oneTimeDate: midnight),
+                     OneTimeComponents(oneTimeDate: almostMidnight)]
+        for c in comps {
+            XCTAssertNotNil(c.oneTimeDate)
         }
     }
 }

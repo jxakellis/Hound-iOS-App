@@ -27,7 +27,7 @@ struct HoundLogger {
     private static let timeFormat: HoundDateFormat = .template("HH:mm:ss")
     
     private func formattedMessage(_ message: String) -> String {
-        let time = Date().houndFormatted(Self.timeFormat)
+        let time = Date().houndFormatted(Self.timeFormat, displayTimeZone: TimeZone.current)
         return "\(time) [\(category)] \(message)"
     }
     

@@ -61,13 +61,8 @@ enum ExportActivityViewManager {
             return
         }
 
-        let dateFormatter = DateFormatter()
         // Specifies a short style, typically numeric only, such as “11/23/37” or “3:30 PM”.
-        dateFormatter.dateStyle = .short
-        // Specifies no style.
-        dateFormatter.timeStyle = .none
-        
-        let dateString = dateFormatter.string(from: Date()).replacingOccurrences(of: "/", with: "-")
+        let dateString = Date().houndFormatted(.formatStyle(date: .numeric, time: .omitted), displayTimeZone: UserConfiguration.timeZone).replacingOccurrences(of: "/", with: "-")
 
         let houndExportedLogsURL: URL = documentsDirectoryURL.appendingPathComponent("Hound-Exported-Logs-\(dateString)").appendingPathExtension("csv")
         // Header for CSV file
@@ -105,14 +100,14 @@ enum ExportActivityViewManager {
 
             // January 25, 2023 at 7:53 AM
             let format = HoundDateFormat.template("MMMMdyyyyhma")
-            let logStartDate = log.logStartDate.houndFormatted(format)
+            let logStartDate = log.logStartDate.houndFormatted(format, displayTimeZone: UserConfiguration.timeZone)
             
             let logEndDate = {
                 guard let logEndDate = log.logEndDate else {
                     return ""
                 }
                 
-                return logEndDate.houndFormatted(format)
+                return logEndDate.houndFormatted(format, displayTimeZone: UserConfiguration.timeZone)
             }()
             
             let logUnit = {

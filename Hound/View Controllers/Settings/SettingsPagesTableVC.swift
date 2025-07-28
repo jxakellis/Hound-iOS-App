@@ -15,8 +15,8 @@ protocol SettingsPagesTableVCDelegate: AnyObject {
 
 final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDelegate, FamilyUpgradeIntroductionVCDelegate {
     
-    // TODO make a release notes tab
-    // TODO make hound versions an enum. when trying to open release notes, have a setup func that takes enum and builds notes dynamically.sort by most recent version (we have comparator build somewhere) and give option to find 5 more recent
+    // TODO RELEASE NOTES make a release notes tab
+    // TODO RELEASE NOTES make hound versions an enum. when trying to open release notes, have a setup func that takes enum and builds notes dynamically.sort by most recent version (we have comparator build somewhere) and give option to find 5 more recent
     
     // MARK: - SettingsAccountVCDelegate
     

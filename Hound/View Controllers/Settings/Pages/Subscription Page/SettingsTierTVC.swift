@@ -217,8 +217,8 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
                 return ""
             }
             
-            let expiresYear = Calendar.current.component(.year, from: expiresDate)
-            let currentYear = Calendar.current.component(.year, from: Date())
+            let expiresYear = Calendar.user.component(.year, from: expiresDate)
+            let currentYear = Calendar.user.component(.year, from: Date())
             
             // January 25 OR January 25, 2023
             let template = expiresYear == currentYear ? "MMMMd" : "MMMMdyyyy"
@@ -226,13 +226,13 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
             guard FamilyInformation.familyActiveSubscription.productId == product.productIdentifier else {
                 // This cell isn't the active subscription, however it is set to renew
                 if FamilyInformation.familyActiveSubscription.autoRenewStatus == true && FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier {
-                    return ", renewing \(expiresDate.houndFormatted(.template(template)))"
+                    return ", renewing \(expiresDate.houndFormatted(.template(template), displayTimeZone: UserConfiguration.timeZone))"
                 }
                 return ""
             }
             // This cell is the active subscription with an expiresDate. It could be renewing or expiring on the expiresDate
 
-            return ", \(FamilyInformation.familyActiveSubscription.autoRenewStatus == true && FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(expiresDate.houndFormatted(.template(template)))"
+            return ", \(FamilyInformation.familyActiveSubscription.autoRenewStatus == true && FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(expiresDate.houndFormatted(.template(template), displayTimeZone: UserConfiguration.timeZone))"
         }()
 
         let precalculatedDynamicMonthlyPriceText = "\(roundedMonthlyPriceWithCurrencySymbol) / month\(activeSubscriptionExpirationText)"

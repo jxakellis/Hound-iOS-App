@@ -76,7 +76,7 @@ final class ReleaseNotesVC: HoundScrollViewController {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        // TODO MORE RELEASE NOTES
+        // TODO RELEASE NOTES
         // ability to enable / disable haptics
         // reminder timing calculation changes
         // per reminder notification settings

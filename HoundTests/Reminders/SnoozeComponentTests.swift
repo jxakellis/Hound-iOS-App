@@ -52,4 +52,16 @@ final class SnoozeComponentsTests: XCTestCase {
         rem.resetForNextAlarm()
         XCTAssertNil(rem.snoozeComponents.executionInterval)
     }
+    
+    func testChangeExecutionIntervalValidation() {
+            let comp = SnoozeComponents(executionInterval: 60)
+            XCTAssertTrue(comp.changeExecutionInterval(120))
+            XCTAssertEqual(comp.executionInterval, 120)
+            XCTAssertFalse(comp.changeExecutionInterval(0))
+            XCTAssertEqual(comp.executionInterval, 120)
+            XCTAssertFalse(comp.changeExecutionInterval(-5))
+            XCTAssertEqual(comp.executionInterval, 120)
+            XCTAssertTrue(comp.changeExecutionInterval(nil))
+            XCTAssertNil(comp.executionInterval)
+        }
 }

@@ -15,13 +15,17 @@ extension Calendar {
         return calendar.range(of: component, in: larger, for: date)
     }
     
-    func withZone(_ timeZone: TimeZone) -> Calendar {
-        var calendar = self
+    static func fromZone(_ timeZone: TimeZone) -> Calendar {
+        var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
         return calendar
     }
     
+    static var user: Calendar {
+        return Calendar.fromZone(UserConfiguration.timeZone)
+    }
+    
     static var utc: Calendar {
-        return Calendar(identifier: .gregorian).withZone(TimeZone.utc)
+        return Calendar.fromZone(TimeZone.utc)
     }
 }

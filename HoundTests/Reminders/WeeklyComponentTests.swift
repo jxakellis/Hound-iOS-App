@@ -15,7 +15,7 @@ final class WeeklyComponentsTests: XCTestCase {
         let comp = TestHelper.weekly(days: [.monday], hour: 9, minute: 30, skipped: nil)
         let tz = TimeZone(identifier: "America/Los_Angeles")!
         let basis = TestHelper.date("2024-06-01T12:00:00Z")
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         // next Monday 9:30 PDT is 2024-06-03T16:30:00Z
         XCTAssertEqual(next, TestHelper.date("2024-06-03T16:30:00Z"))
     }
@@ -24,7 +24,7 @@ final class WeeklyComponentsTests: XCTestCase {
         let comp = TestHelper.weekly(days: [.sunday], hour: 6, minute: 0, skipped: TestHelper.date("2024-06-02T06:00:00Z"))
         let tz = TestHelper.utc
         let basis = TestHelper.date("2024-06-01T00:00:00Z")
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         // first occurrence 2024-06-02T06:00:00Z is skipped so next is 2024-06-09T06:00:00Z
         XCTAssertEqual(next, TestHelper.date("2024-06-09T06:00:00Z"))
     }
@@ -33,7 +33,7 @@ final class WeeklyComponentsTests: XCTestCase {
         let comp = TestHelper.weekly(days: [.monday], hour: 2, minute: 30, skipped: nil)
         let tz = TimeZone(identifier: "America/New_York")!
         let basis = TestHelper.date("2024-03-12T12:00:00Z") // after spring forward
-        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         // previous Monday 2:30 AM EDT is 2024-03-11T06:30:00Z
         XCTAssertEqual(prev, TestHelper.date("2024-03-11T06:30:00Z"))
     }
@@ -42,11 +42,11 @@ final class WeeklyComponentsTests: XCTestCase {
         let comp = TestHelper.weekly(days: [.sunday], hour: 23, minute: 0, skipped: nil)
         let pst = TimeZone(identifier: "America/Los_Angeles")!
         let utc = TestHelper.utc
-        let localTime = comp.localTimeOfDay(from: pst, to: utc)
+        let localTime = comp.localTimeOfDay(reminderTimeZone: pst, displayTimeZone: utc)
         let expected = pst.convert(hour: 23, minute: 0, to: utc)
         XCTAssertEqual(localTime.hour, expected.hour)
         XCTAssertEqual(localTime.minute, expected.minute)
-        let localWeekdays = comp.localWeekdays(from: pst, to: utc)
+        let localWeekdays = comp.localWeekdays(reminderTimeZone: pst, displayTimeZone: utc)
         XCTAssertEqual(Set(localWeekdays), Set(pst.convert(weekdays: [.sunday], hour: 23, minute: 0, to: utc)))
     }
     
@@ -54,10 +54,10 @@ final class WeeklyComponentsTests: XCTestCase {
         let comp = TestHelper.weekly(days: [.monday, .wednesday], hour: 8, minute: 45, skipped: nil)
         let tz = TestHelper.utc
         let basis = TestHelper.date("2024-05-14T12:00:00Z")
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         // next occurrence is Wednesday 2024-05-15 at 08:45 UTC
         XCTAssertEqual(next, TestHelper.date("2024-05-15T08:45:00Z"))
-        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         // previous occurrence is Monday 2024-05-13 at 08:45 UTC
         XCTAssertEqual(prev, TestHelper.date("2024-05-13T08:45:00Z"))
     }
@@ -66,7 +66,7 @@ final class WeeklyComponentsTests: XCTestCase {
         let comp = TestHelper.weekly(days: [.sunday], hour: 1, minute: 30, skipped: nil)
         let tz = TimeZone(identifier: "America/New_York")!
         let basis = TestHelper.date("2024-10-20T00:00:00Z")
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         // next Sunday 1:30 AM occurs on 2024-10-20T05:30:00Z
         XCTAssertEqual(next, TestHelper.date("2024-10-20T05:30:00Z"))
     }
@@ -106,7 +106,7 @@ final class WeeklyComponentsTests: XCTestCase {
         let comp = TestHelper.weekly(days: [.sunday], hour: 2, minute: 30, skipped: nil)
         let tz = TestHelper.utc
         let basis = TestHelper.date("2024-03-01T00:00:00Z")
-        let next = comp.notSkippingExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.notSkippingExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         // next Sunday 2:30 UTC is 2024-03-03T02:30:00Z
         XCTAssertEqual(next, TestHelper.date("2024-03-03T02:30:00Z"))
     }
@@ -115,7 +115,7 @@ final class WeeklyComponentsTests: XCTestCase {
         let comp = TestHelper.weekly(days: [.sunday], hour: 23, minute: 30, skipped: nil)
         let utc = TestHelper.utc
         let tokyo = TimeZone(identifier: "Asia/Tokyo")!
-        let local = comp.localWeekdays(from: utc, to: tokyo)
+        let local = comp.localWeekdays(reminderTimeZone: utc, displayTimeZone: tokyo)
         XCTAssertEqual(Set(local), Set(utc.convert(weekdays: [.sunday], hour: 23, minute: 30, to: tokyo)))
     }
     
@@ -123,7 +123,7 @@ final class WeeklyComponentsTests: XCTestCase {
         let comp = TestHelper.weekly(days: [.monday, .wednesday], hour: 9, minute: 0, skipped: nil)
         let pst = TimeZone(identifier: "America/Los_Angeles")!
         let utc = TestHelper.utc
-        let rec = comp.readableRecurrance(from: pst, to: utc)
+        let rec = comp.readableRecurrance(reminderTimeZone: pst, displayTimeZone: utc)
         let days = pst.convert(weekdays: [.monday, .wednesday], hour: 9, minute: 0, to: utc)
         let time = String.convert(hour: pst.convert(hour: 9, minute: 0, to: utc).hour,
                                   minute: pst.convert(hour: 9, minute: 0, to: utc).minute)
@@ -154,7 +154,23 @@ final class WeeklyComponentsTests: XCTestCase {
                                     zonedSaturday: false, zonedHour: 8, zonedMinute: 0)
         let tz = TestHelper.utc
         let basis = TestHelper.date("2024-06-01T00:00:00Z")
-        XCTAssertNil(comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz))
-        XCTAssertNil(comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz))
+        XCTAssertNil(comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz))
+        XCTAssertNil(comp.previousExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz))
     }
+    
+    func testReadableDaysOfWeekAggregations() {
+            let tz = TestHelper.utc
+
+            let everyday = TestHelper.weekly(days: Weekday.allCases, hour: 0, minute: 0, skipped: nil)
+            XCTAssertEqual(everyday.readableDaysOfWeek(reminderTimeZone: tz), "Everyday")
+
+            let weekdays = TestHelper.weekly(days: [.monday, .tuesday, .wednesday, .thursday, .friday], hour: 0, minute: 0, skipped: nil)
+            XCTAssertEqual(weekdays.readableDaysOfWeek(reminderTimeZone: tz), "Weekdays")
+
+            let weekends = TestHelper.weekly(days: [.sunday, .saturday], hour: 0, minute: 0, skipped: nil)
+            XCTAssertEqual(weekends.readableDaysOfWeek(reminderTimeZone: tz), "Weekends")
+
+            let abbrev = TestHelper.weekly(days: [.tuesday, .thursday], hour: 0, minute: 0, skipped: nil)
+            XCTAssertEqual(abbrev.readableDaysOfWeek(reminderTimeZone: tz), "Tu, Th")
+        }
 }

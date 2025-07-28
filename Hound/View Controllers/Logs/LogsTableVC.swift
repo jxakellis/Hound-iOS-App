@@ -201,24 +201,24 @@ final class LogsTableVC: HoundTableViewController {
         let headerView = HoundTableHeaderFooterView()
         
         let date = logsForDogUUIDsGroupedByDate[section].first?.1.logStartDate ?? Date()
-        let currentYear = Calendar.current.component(.year, from: Date())
-        let dateYear = Calendar.current.component(.year, from: date)
+        let currentYear = Calendar.user.component(.year, from: Date())
+        let dateYear = Calendar.user.component(.year, from: date)
         
         // today
-        if Calendar.current.isDateInToday(date) {
+        if Calendar.user.isDateInToday(date) {
             headerView.setTitle("Today")
         }
         // yesterday
-        else if Calendar.current.isDateInYesterday(date) {
+        else if Calendar.user.isDateInYesterday(date) {
             headerView.setTitle("Yesterday")
         }
-        else if Calendar.current.isDateInTomorrow(date) {
+        else if Calendar.user.isDateInTomorrow(date) {
             headerView.setTitle("Tomorrow")
         }
         else {
             // Wednesday, January 25 or Wednesday, January 25 2023
             let template = dateYear == currentYear ? "EEEEMMMMd" : "EEEEMMMMdyyyy"
-            headerView.setTitle(date.houndFormatted(.template(template)))
+            headerView.setTitle(date.houndFormatted(.template(template), displayTimeZone: UserConfiguration.timeZone))
         }
         
         return headerView

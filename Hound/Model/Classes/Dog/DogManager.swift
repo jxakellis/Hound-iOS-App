@@ -195,9 +195,9 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         
         // we will be going from oldest logs to newest logs (by logStartDate)
         for (dogUUID, log) in dogUUIDLogPairs {
-            let logDay = Calendar.current.component(.day, from: log.logStartDate)
-            let logMonth = Calendar.current.component(.month, from: log.logStartDate)
-            let logYear = Calendar.current.component(.year, from: log.logStartDate)
+            let logDay = Calendar.user.component(.day, from: log.logStartDate)
+            let logMonth = Calendar.user.component(.month, from: log.logStartDate)
+            let logYear = Calendar.user.component(.year, from: log.logStartDate)
             
             let containsDateCombination = {
                 // dogUUIDLogPairs is sorted chronologically, which means everything is added in chronological order to logsForDogUUIDsGroupedByDate.
@@ -205,9 +205,9 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                     return false
                 }
                 
-                let lastDay = Calendar.current.component(.day, from: logFromLastDateGroup.logStartDate)
-                let lastMonth = Calendar.current.component(.month, from: logFromLastDateGroup.logStartDate)
-                let lastYear = Calendar.current.component(.year, from: logFromLastDateGroup.logStartDate)
+                let lastDay = Calendar.user.component(.day, from: logFromLastDateGroup.logStartDate)
+                let lastMonth = Calendar.user.component(.month, from: logFromLastDateGroup.logStartDate)
+                let lastYear = Calendar.user.component(.year, from: logFromLastDateGroup.logStartDate)
                 
                 // check to see if that day, month, year comboination is already present
                 return lastDay == logDay && lastMonth == logMonth && lastYear == logYear

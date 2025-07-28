@@ -72,6 +72,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return imageView
     }()
     
+    // TODO add indicator if reminder is in diff TZ than the user
     private let notificationBellImageView: HoundImageView = {
         let imageView = HoundImageView()
         

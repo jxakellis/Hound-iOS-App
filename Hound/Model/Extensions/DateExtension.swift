@@ -13,17 +13,15 @@ enum HoundDateFormat {
     case template(String)
     
     /// Returns a formatted string for the supplied date based on the style, in the given time zone.
-    func string(from date: Date, localizedTo: TimeZone? = nil) -> String {
+    func string(from date: Date, displayTimeZone: TimeZone) -> String {
         switch self {
         case let .formatStyle(dateStyle, timeStyle):
-            var style = Date.FormatStyle(date: dateStyle, time: timeStyle, timeZone: localizedTo ?? .autoupdatingCurrent)
+            var style = Date.FormatStyle(date: dateStyle, time: timeStyle, timeZone: displayTimeZone)
             return date.formatted(style)
         case let .template(template):
             let formatter = DateFormatter()
             formatter.setLocalizedDateFormatFromTemplate(template)
-            if let tz = localizedTo {
-                formatter.timeZone = tz
-            }
+            formatter.timeZone = displayTimeZone
             return formatter.string(from: date)
         }
     }
@@ -35,8 +33,8 @@ extension Date {
         self.ISO8601Format(Date.ISO8601FormatStyle.init(dateSeparator: .dash, dateTimeSeparator: .standard, timeSeparator: .colon, includingFractionalSeconds: true))
     }
     
-    func houndFormatted(_ format: HoundDateFormat, localizedTo: TimeZone? = nil) -> String {
-        format.string(from: self, localizedTo: localizedTo)
+    func houndFormatted(_ format: HoundDateFormat, displayTimeZone: TimeZone) -> String {
+        format.string(from: self, displayTimeZone: displayTimeZone)
     }
     
     /// Returns a rounded version of targetDate depending on roundingInterval, e.g. targetDate 18:41:51 -> rounded 18:42:00 for RI of 10 but for a RI of 5 rounded 18:41:50

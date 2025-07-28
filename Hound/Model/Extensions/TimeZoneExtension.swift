@@ -21,7 +21,7 @@ extension TimeZone {
 
     /// Converts a (hour, minute) in this time zone to the same wall time in a target time zone, for display.
     /// Always uses a fixed reference date (2000-01-01) to avoid DST edge cases.
-    func convert(hour: Int, minute: Int, to targetTimeZone: TimeZone) -> (hour: Int, minute: Int) {
+    func convert(hour: Int, minute: Int, to displayTimeZone: TimeZone) -> (hour: Int, minute: Int) {
         var components = DateComponents()
         components.year = 2000
         components.month = 1
@@ -31,19 +31,19 @@ extension TimeZone {
         components.second = 0
         components.timeZone = self
 
-        let calendar = Calendar(identifier: .gregorian)
+        let calendar = Calendar.fromZone(displayTimeZone)
         guard let dateInSource = calendar.date(from: components) else {
             return (hour, minute) // Defensive fallback
         }
-        let targetComponents = calendar.dateComponents(in: targetTimeZone, from: dateInSource)
+        let targetComponents = calendar.dateComponents(in: displayTimeZone, from: dateInSource)
         return (targetComponents.hour ?? hour, targetComponents.minute ?? minute)
     }
 
     /// Converts a list of weekdays (from this time zone) to their equivalents in the target time zone, for a given hour/minute.
     /// Always uses a fixed reference week (starting 2000-01-02) to ensure the weekday value is deterministic.
-    func convert(weekdays: [Weekday], hour: Int, minute: Int, to targetTimeZone: TimeZone) -> [Weekday] {
+    func convert(weekdays: [Weekday], hour: Int, minute: Int, to displayTimeZone: TimeZone) -> [Weekday] {
         var targetWeekdays = Set<Weekday>()
-        let calendar = Calendar(identifier: .gregorian)
+        let calendar = Calendar.fromZone(displayTimeZone)
         for weekday in weekdays {
             var components = DateComponents()
             components.year = 2000
@@ -55,7 +55,7 @@ extension TimeZone {
             components.timeZone = self
 
             guard let dateInSource = calendar.date(from: components) else { continue }
-            let targetComponents = calendar.dateComponents(in: targetTimeZone, from: dateInSource)
+            let targetComponents = calendar.dateComponents(in: displayTimeZone, from: dateInSource)
             if let targetWeekdayValue = targetComponents.weekday,
                let targetWeekday = Weekday(rawValue: targetWeekdayValue) {
                 targetWeekdays.insert(targetWeekday)
@@ -70,17 +70,17 @@ extension TimeZone {
     ///   - day: The user-selected day of the month in the source time zone (1-31)
     ///   - hour: User-selected hour in source time zone
     ///   - minute: User-selected minute in source time zone
-    ///   - destinationTimeZone: The tz to display for the user
+    ///   - displayTimeZone: The tz to display for the user
     ///   - referenceDate: Any date in the desired month (typically next execution date or today)
     /// - Returns: (day, hour, minute) in the destination time zone, after all corrections.
     func convert(
         day: Int,
         hour: Int,
         minute: Int,
-        to destinationTimeZone: TimeZone,
+        to displayTimeZone: TimeZone,
         referenceDate: Date
     ) -> (day: Int, hour: Int, minute: Int) {
-        let calendar = Calendar(identifier: .gregorian)
+        let calendar = Calendar.fromZone(displayTimeZone)
         // Clamp day to last valid day in zoned (source) time zone for month of referenceDate
         let daysInMonthSource = calendar.range(of: .day, in: .month, for: referenceDate, in: self)?.count ?? day
         let clampedDay = min(day, daysInMonthSource)
@@ -97,9 +97,9 @@ extension TimeZone {
         }
 
         // Convert date to destination tz and get day/hour/minute in target tz
-        let localComponents = calendar.dateComponents(in: destinationTimeZone, from: zonedDate)
+        let localComponents = calendar.dateComponents(in: displayTimeZone, from: zonedDate)
         // Clamp day to valid range in destination tz (handles roll-under if, for example, the 31st maps to the 30th)
-        let daysInMonthDest = calendar.range(of: .day, in: .month, for: zonedDate, in: destinationTimeZone)?.count ?? clampedDay
+        let daysInMonthDest = calendar.range(of: .day, in: .month, for: zonedDate, in: displayTimeZone)?.count ?? clampedDay
         let localDay = min(localComponents.day ?? clampedDay, daysInMonthDest)
         let localHour = localComponents.hour ?? hour
         let localMinute = localComponents.minute ?? minute

@@ -142,10 +142,11 @@ final class DogsAddReminderWeeklyView: HoundView {
     /// The weekly component represented by the current UI state.
     var currentComponent: WeeklyComponents? {
         guard !currentWeekdays.isEmpty else { return nil }
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents(in: currentTimeZone, from: timeOfDayDatePicker.date)
+        let calendar = Calendar.fromZone(currentTimeZone)
+        let comps = calendar.dateComponents([.hour, .minute], from: timeOfDayDatePicker.date)
         let hour = comps.hour ?? Constant.Class.ReminderComponent.defaultZonedHour
         let minute = comps.minute ?? Constant.Class.ReminderComponent.defaultZonedMinute
+        
         let component = WeeklyComponents(zonedHour: hour, zonedMinute: minute)
         _ = component.setZonedWeekdays(currentWeekdays)
         return component
@@ -163,7 +164,8 @@ final class DogsAddReminderWeeklyView: HoundView {
         timeOfDayDatePicker.timeZone = forTimeZone
         
         if let components = forComponents {
-            let calendar = Calendar(identifier: .gregorian)
+            // TODO TIME we can do better than 2000, this will probably mess up some calclations
+            let calendar = Calendar.fromZone(currentTimeZone)
             var dateComponents = DateComponents()
             dateComponents.year = 2000
             dateComponents.month = 1
@@ -193,13 +195,14 @@ final class DogsAddReminderWeeklyView: HoundView {
     func updateDisplayedTimeZone(from oldTimeZone: TimeZone, to newTimeZone: TimeZone) {
         guard oldTimeZone != newTimeZone else { return }
         
-        let calendar = Calendar(identifier: .gregorian)
-        let oldComponents = calendar.dateComponents(in: oldTimeZone, from: timeOfDayDatePicker.date)
+        let calendar = Calendar.fromZone(oldTimeZone)
+        let oldComponents = calendar.dateComponents([.hour, .minute], from: timeOfDayDatePicker.date)
         let hour = oldComponents.hour ?? 0
         let minute = oldComponents.minute ?? 0
         
         let converted = oldTimeZone.convert(hour: hour, minute: minute, to: newTimeZone)
         var newDateComponents = DateComponents()
+        // TODO TIME we can do better than 2000, this will probably mess up some calclations
         newDateComponents.year = 2000
         newDateComponents.month = 1
         newDateComponents.day = 1

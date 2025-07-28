@@ -19,7 +19,7 @@ final class MonthlyComponentsTests: XCTestCase {
         let comp = TestHelper.monthly(day: 15, hour: 10, minute: 15, skipped: nil)
         let basis = TestHelper.date("2024-01-10T00:00:00Z")
         
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         let expected = TestHelper.date("2024-01-15T10:15:00Z")
         
         XCTAssertEqual(next, expected)
@@ -31,7 +31,7 @@ final class MonthlyComponentsTests: XCTestCase {
         let comp = TestHelper.monthly(day: 1, hour: 10, minute: 15, skipped: nil)
         let basis = TestHelper.date("2024-01-10T00:00:00Z")
         
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         let expected = TestHelper.date("2024-02-01T10:15:00Z")
         
         XCTAssertEqual(next, expected)
@@ -43,7 +43,7 @@ final class MonthlyComponentsTests: XCTestCase {
         let comp = TestHelper.monthly(day: 31, hour: 8, minute: 0, skipped: nil)
         let basis = TestHelper.date("2024-04-01T00:00:00Z")
         
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         let expected = TestHelper.date("2024-04-30T08:00:00Z")
         
         XCTAssertEqual(next, expected)
@@ -55,7 +55,7 @@ final class MonthlyComponentsTests: XCTestCase {
         let comp = TestHelper.monthly(day: 31, hour: 8, minute: 0, skipped: nil)
         let basis = TestHelper.date("2024-05-01T00:00:00Z")
         
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         let expected = TestHelper.date("2024-05-31T08:00:00Z")
         
         XCTAssertEqual(next, expected)
@@ -68,12 +68,12 @@ final class MonthlyComponentsTests: XCTestCase {
         let tz = TimeZone(identifier: "America/New_York")!
         
         // For February, 2:30 AM EST (UTC-5) = 07:30 UTC
-        let noDSTNext = comp.nextExecutionDate(reminderExecutionBasis: noDSTBasis, sourceTimeZone: tz)
+        let noDSTNext = comp.nextExecutionDate(reminderExecutionBasis: noDSTBasis, reminderTimeZone: tz)
         let noDSTExpected = TestHelper.date("2024-02-10T07:30:00Z")
         XCTAssertEqual(noDSTNext, noDSTExpected)
 
         // For March 10, 2024, 2:30 AM does NOT exist, so it should jump to 3:30 AM EDT (UTC-4) = 07:30 UTC
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         let expected = TestHelper.date("2024-03-10T07:30:00Z") // 3:30 AM EDT
         XCTAssertEqual(next, expected)
     }
@@ -84,7 +84,7 @@ final class MonthlyComponentsTests: XCTestCase {
         let comp = TestHelper.monthly(day: 14, hour: 2, minute: 30, skipped: nil)
         let basis = TestHelper.date("2024-03-15T12:00:00Z")
         let tz = TimeZone(identifier: "America/New_York")!
-        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         let expected = "2024-03-14T06:30:00Z" // DST consideration
         XCTAssertEqual(prev, TestHelper.date(expected))
     }
@@ -93,7 +93,7 @@ final class MonthlyComponentsTests: XCTestCase {
         let comp = TestHelper.monthly(day: 31, hour: 9, minute: 0, skipped: nil)
         let basis = TestHelper.date("2024-04-15T00:00:00Z")
         let tz = TimeZone(identifier: "America/New_York")!
-        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         let expected = TestHelper.date("2024-03-31T13:00:00Z") // previous month (March)
         XCTAssertEqual(prev, expected)
     }
@@ -101,7 +101,7 @@ final class MonthlyComponentsTests: XCTestCase {
     func testPreviousExecutionLeapYear() {
             let comp = TestHelper.monthly(day: 31, hour: 9, minute: 0, skipped: nil)
             let basis = TestHelper.date("2024-03-15T00:00:00Z")
-            let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: TestHelper.utc)
+            let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: TestHelper.utc)
             let expected = "2024-02-29T09:00:00Z"
             XCTAssertEqual(prev, TestHelper.date(expected))
         }
@@ -113,7 +113,7 @@ final class MonthlyComponentsTests: XCTestCase {
         let skipped = TestHelper.date("2024-06-05T12:00:00Z")
         let comp = TestHelper.monthly(day: 5, hour: 12, minute: 0, skipped: skipped)
         let basis = TestHelper.date("2024-06-01T00:00:00Z")
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: TestHelper.utc)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: TestHelper.utc)
         let expected = TestHelper.date("2024-07-05T12:00:00Z")
         XCTAssertEqual(next, expected)
     }
@@ -133,10 +133,10 @@ final class MonthlyComponentsTests: XCTestCase {
         let comp = TestHelper.monthly(day: 10, hour: 22, minute: 15, skipped: nil)
         let basis = TestHelper.date("2024-01-10T00:00:00-05:00")
 
-        let estReadable = comp.readableRecurrence(from: est, to: est, reminderExecutionBasis: basis)
+        let estReadable = comp.readableRecurrence(reminderExecutionBasis: basis, reminderTimeZone: est, displayTimeZone: est)
         XCTAssertEqual(normalized(estReadable), "Every 10th at 10:15 PM")
         
-        let local = comp.readableRecurrence(from: est, to: gmt, reminderExecutionBasis: basis)
+        let local = comp.readableRecurrence(reminderExecutionBasis: basis, reminderTimeZone: est, displayTimeZone: gmt)
         // 10:15 PM EST converts to 3:15 AM GMT on the 11th
         XCTAssertEqual(normalized(local), "Every 11th at 3:15 AM")
     }
@@ -152,7 +152,7 @@ final class MonthlyComponentsTests: XCTestCase {
         let basis = TestHelper.date("2024-01-01T00:00:00Z")
         for (id, expected) in expectations {
             let tz = TimeZone(identifier: id)!
-            let next = comp.notSkippingExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+            let next = comp.notSkippingExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
             XCTAssertEqual(next, TestHelper.date(expected))
         }
     }
@@ -162,7 +162,7 @@ final class MonthlyComponentsTests: XCTestCase {
         let comp = TestHelper.monthly(day: 20, hour: 8, minute: 0, skipped: date)
         let tz = TestHelper.utc
         let basis = TestHelper.date("2024-08-01T00:00:00Z")
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         // first execution on 2024-08-20T08:00:00Z is skipped; next is 2024-09-20T08:00:00Z
         XCTAssertEqual(next, TestHelper.date("2024-09-20T08:00:00Z"))
     }
@@ -171,7 +171,7 @@ final class MonthlyComponentsTests: XCTestCase {
         let tz = TestHelper.utc
         let comp = TestHelper.monthly(day: 31, hour: 9, minute: 0, skipped: nil)
         let basis = TestHelper.date("2024-03-15T00:00:00Z") // leap year
-        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let prev = comp.previousExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         // previous valid date is 2024-02-29 at 09:00 UTC
         XCTAssertEqual(prev, TestHelper.date("2024-02-29T09:00:00Z"))
     }
@@ -181,7 +181,7 @@ final class MonthlyComponentsTests: XCTestCase {
 
         let comp = TestHelper.monthly(day: 3, hour: 1, minute: 30, skipped: nil)
         let basis = TestHelper.date("2024-10-20T00:00:00Z")
-        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: tz)
+        let next = comp.nextExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: tz)
         // falls on DST change day: 2024-11-03 at 1:30 AM EDT -> 05:30 UTC
         XCTAssertEqual(next, TestHelper.date("2024-11-03T05:30:00Z"))
     }
@@ -191,14 +191,14 @@ final class MonthlyComponentsTests: XCTestCase {
         let est = TimeZone(identifier: "America/New_York")!
         let pst = TimeZone(identifier: "America/Los_Angeles")!
         let basis = TestHelper.date("2024-07-01T00:00:00Z")
-        let next = comp.notSkippingExecutionDate(reminderExecutionBasis: basis, sourceTimeZone: est)
+        let next = comp.notSkippingExecutionDate(reminderExecutionBasis: basis, reminderTimeZone: est)
         XCTAssertNotNil(next)
         guard let next = next else {
             return
         }
         let (d,h,m) = est.convert(day: 15, hour: 22, minute: 45, to: pst, referenceDate: next)
         let expected = "Every \(d)\(d.daySuffix()) at \(String.convert(hour: h, minute: m))"
-        XCTAssertEqual(comp.readableRecurrence(from: est, to: pst, reminderExecutionBasis: basis), expected)
+        XCTAssertEqual(comp.readableRecurrence(reminderExecutionBasis: basis, reminderTimeZone: est, displayTimeZone: pst), expected)
     }
     
     func testConfigureFromDate() {

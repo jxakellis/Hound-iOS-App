@@ -81,11 +81,11 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Functions
     
-    func localTimeOfDay(reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> (hour: Int, minute: Int) {
-        return reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: destinationTimeZone ?? reminderTimeZone)
+    func localTimeOfDay(reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> (hour: Int, minute: Int) {
+        return reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: displayTimeZone ?? reminderTimeZone)
     }
     
-    func localDayOfMonth(reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> Int {
+    func localDayOfMonth(reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> Int {
         let referenceDate = notSkippingExecutionDate(
             reminderExecutionBasis: Date(),
             reminderTimeZone: reminderTimeZone
@@ -95,7 +95,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
             day: zonedDay,
             hour: zonedHour,
             minute: zonedMinute,
-            to: destinationTimeZone ?? reminderTimeZone,
+            to: displayTimeZone ?? reminderTimeZone,
             referenceDate: referenceDate ?? Constant.Class.Date.default1970Date
         )
         return day
@@ -104,7 +104,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     /// Returns a readable recurrence string in the *destination* time zone.
     /// Example: "Every 31st at 7:30 PM" (will adjust hour/minute for destination zone).
     /// NOTE: If the requested day does not exist in a month, the reminder will run on the last valid day of that month (e.g. "31" on April will run April 30).
-    func readableRecurrence(reminderExecutionBasis: Date, reminderTimeZone: TimeZone, destinationTimeZone: TimeZone? = nil) -> String {
+    func readableRecurrence(reminderExecutionBasis: Date, reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> String {
         let referenceDate = notSkippingExecutionDate(
             reminderExecutionBasis: reminderExecutionBasis,
             reminderTimeZone: reminderTimeZone
@@ -114,7 +114,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
             day: zonedDay,
             hour: zonedHour,
             minute: zonedMinute,
-            to: destinationTimeZone ?? reminderTimeZone,
+            to: displayTimeZone ?? reminderTimeZone,
             referenceDate: referenceDate ?? reminderExecutionBasis
         )
         return "Every \(day)\(day.daySuffix()) at \(String.convert(hour: hour, minute: minute))"
@@ -124,7 +124,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
 
     /// Updates the component using the provided date in the specified time zone.
     func configure(from date: Date, timeZone: TimeZone) {
-        var calendar = Calendar(identifier: .gregorian).withZone(timeZone)
+        let calendar = Calendar.fromZone(timeZone)
         let comps = calendar.dateComponents([.day, .hour, .minute], from: date)
         if let day = comps.day { zonedDay = day }
         if let hour = comps.hour { zonedHour = hour }
@@ -159,7 +159,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     /// Finds the previous valid execution date before the basis.
     /// Handles day roll-down if day exceeds days in target month, and is robust to DST.
     func previousExecutionDate(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> Date? {
-        var calendar = Calendar(identifier: .gregorian).withZone(reminderTimeZone)
+        let calendar = Calendar.fromZone(reminderTimeZone)
         var searchBasis = reminderExecutionBasis.addingTimeInterval(-1)
 
         for _ in 0..<12 { // Look back up to 12 months to find a valid previous date
@@ -202,7 +202,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     private func futureExecutionDates(reminderExecutionBasis: Date, reminderTimeZone: TimeZone) -> [Date] {
         var dates: [Date] = []
         var searchBasis = reminderExecutionBasis
-        var calendar = Calendar(identifier: .gregorian).withZone(reminderTimeZone)
+        let calendar = Calendar.fromZone(reminderTimeZone)
         
         for _ in 0..<3 {
             var components = DateComponents()

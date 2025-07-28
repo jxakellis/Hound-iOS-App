@@ -127,8 +127,8 @@ final class LogTVC: HoundTableViewCell {
             }
             else {
                 // Different day: show month + day (and year if not current)
-                let logEndYear = Calendar.current.component(.year, from: logEndDate)
-                let currentYear = Calendar.current.component(.year, from: Date())
+                let logEndYear = Calendar.user.component(.year, from: logEndDate)
+                let currentYear = Calendar.user.component(.year, from: Date())
                 endString = logEndDate.houndFormatted(.template(logEndYear == currentYear ? "MMMd" : "MMMdyy"))
             }
             logStartToEndDateLabel.text = logStartToEndDateLabel.text?.appending(" - \(endString)")

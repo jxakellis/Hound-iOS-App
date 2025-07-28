@@ -18,7 +18,7 @@ extension String {
         components.day = 1
         components.hour = hour
         components.minute = minute
-        let calendar = Calendar(identifier: .gregorian)
+        let calendar = Calendar.utc
         guard let date = calendar.date(from: components) else {
             return "\(hour):\(String(format: "%02d", minute))"
         }

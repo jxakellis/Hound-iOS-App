@@ -758,15 +758,15 @@ final class LogsAddLogVC: HoundScrollViewController,
             updateLogStartEndDateErrors()
             
             let format: String
-            if Calendar.current.isDateInToday(start) {
+            if Calendar.user.isDateInToday(start) {
                 // If the start date is today, show only time
                 // 7:53 AM
                 logStartDateLabel.text = start.houndFormatted(.formatStyle(date: .omitted, time: .shortened))
             }
             else {
                 // If start date is not today, show month/day and possibly year
-                let yearOfStart = Calendar.current.component(.year, from: start)
-                let currentYear = Calendar.current.component(.year, from: Date())
+                let yearOfStart = Calendar.user.component(.year, from: start)
+                let currentYear = Calendar.user.component(.year, from: Date())
                 logStartDateLabel.text = start.houndFormatted(.template(yearOfStart == currentYear ? "MMMMdhma" : "MMMMdyyyyhma"))
             }
             
@@ -805,15 +805,15 @@ final class LogsAddLogVC: HoundScrollViewController,
             }
             updateLogStartEndDateErrors()
             
-            if Calendar.current.isDateInToday(end) {
+            if Calendar.user.isDateInToday(end) {
                 // If the end date is today, show only time
                 // 7:53 AM
                 logEndDateLabel.text = end.houndFormatted(.formatStyle(date: .omitted, time: .shortened))
             }
             else {
                 // If end date is not today, show month/day and possibly year
-                let yearOfEnd = Calendar.current.component(.year, from: end)
-                let currentYear = Calendar.current.component(.year, from: Date())
+                let yearOfEnd = Calendar.user.component(.year, from: end)
+                let currentYear = Calendar.user.component(.year, from: Date())
                 logEndDateLabel.text = end.houndFormatted(.template((yearOfEnd == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"))
             }
             

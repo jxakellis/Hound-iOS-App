@@ -59,9 +59,6 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     // TODO TIMING 7. when we detect a change in the user's TZ, we ask them if they want hound to switch their user setting to that new TZ
     // TODO TIMING 8. triggers possible need TZs?
     
-    // TODO TIMING 10. have hound date formatter use the collese'd user time zone to format dates
-    // TODO TIMING 11. get rid of HMA timing throughout, just use omitted date and shortened time
-    
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {
@@ -486,16 +483,16 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
     // MARK: - Functions
     
-    func readableRecurrance(to destinationTimeZone: TimeZone = UserConfiguration.timeZone) -> String {
+    func readableRecurrance(displayTimeZone: TimeZone = UserConfiguration.timeZone) -> String {
         switch self.reminderType {
         case .countdown:
             return countdownComponents.readableRecurrance
         case .weekly:
-            return weeklyComponents.readableRecurrance(from: reminderTimeZone, to: destinationTimeZone)
+            return weeklyComponents.readableRecurrance(reminderTimeZone: reminderTimeZone, displayTimeZone: displayTimeZone)
         case .monthly:
-            return monthlyComponents.readableRecurrence(from: reminderTimeZone, to: destinationTimeZone, reminderExecutionBasis: reminderExecutionBasis)
+            return monthlyComponents.readableRecurrence(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone, displayTimeZone: displayTimeZone)
         case .oneTime:
-            return oneTimeComponents.readableRecurrance
+            return oneTimeComponents.readableRecurrance(displayTimeZone: displayTimeZone)
         }
     }
     // MARK: - Timing
@@ -515,9 +512,9 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         case .countdown:
             return Date(timeInterval: countdownComponents.executionInterval, since: reminderExecutionBasis)
         case .weekly:
-            return weeklyComponents.nextExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: reminderTimeZone)
+            return weeklyComponents.nextExecutionDate(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
         case .monthly:
-            return monthlyComponents.nextExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: reminderTimeZone)
+            return monthlyComponents.nextExecutionDate(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
         }
     }
     
@@ -537,10 +534,10 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         
         if reminderType == .monthly && monthlyComponents.isSkipping == true {
-            return monthlyComponents.notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: reminderTimeZone)
+            return monthlyComponents.notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
         }
         else if reminderType == .weekly && weeklyComponents.isSkipping == true {
-            return weeklyComponents.notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, sourceTimeZone: reminderTimeZone)
+            return weeklyComponents.notSkippingExecutionDate(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone)
         }
         
         return nil

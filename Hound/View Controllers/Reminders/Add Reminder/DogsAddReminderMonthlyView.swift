@@ -44,7 +44,7 @@ final class DogsAddReminderMonthlyView: HoundView {
         label.textAlignment = .center
         label.textColor = UIColor.secondaryLabel
         label.font = Constant.Visual.Font.secondaryColorDescLabel
-        // TODO TIMING write text for this disclaimer, then dynamically show if selected day of month is 29/30/31
+        // TODO TIME write text for this disclaimer, then dynamically show if selected day of month is 29/30/31
         label.text = ""
         label.numberOfLines = 0
         label.isHidden = FamilyInformation.familyMembers.count <= 1
@@ -59,7 +59,8 @@ final class DogsAddReminderMonthlyView: HoundView {
     // MARK: - Properties
     
     private weak var delegate: DogsAddReminderMonthlyViewDelegate?
-    private(set) var currentTimeZone: TimeZone = .current
+    // TODO TIME find all occurances of .current and possible replace
+    private(set) var currentTimeZone: TimeZone = UserConfiguration.timeZone
     
     // timeOfDayDatePicker.date
     private var currentTimeOfDay: Date {
@@ -68,7 +69,7 @@ final class DogsAddReminderMonthlyView: HoundView {
     
     /// Monthly component represented by the current UI state.
     var currentComponent: MonthlyComponents {
-        let calendar = Calendar(identifier: .gregorian)
+        let calendar = Calendar.fromZone(currentTimeZone)
         let comps = calendar.dateComponents(in: currentTimeZone, from: currentTimeOfDay)
         let day = comps.day ?? Constant.Class.ReminderComponent.defaultZonedDay
         let hour = comps.hour ?? Constant.Class.ReminderComponent.defaultZonedHour
@@ -88,8 +89,9 @@ final class DogsAddReminderMonthlyView: HoundView {
         timeOfDayDatePicker.timeZone = forTimeZone
         
         if let components = forComponents {
-            let calendar = Calendar(identifier: .gregorian)
+            let calendar = Calendar.fromZone(currentTimeZone)
             var comps = DateComponents()
+            // TODO TIME this is kinda wrong, it should be the current year/month, not 2000
             comps.year = 2000
             comps.month = 1
             comps.day = components.zonedDay
@@ -107,8 +109,8 @@ final class DogsAddReminderMonthlyView: HoundView {
     func updateDisplayedTimeZone(from oldTimeZone: TimeZone, to newTimeZone: TimeZone) {
         guard oldTimeZone != newTimeZone else { return }
         
-        let calendar = Calendar(identifier: .gregorian)
-        let oldComps = calendar.dateComponents(in: oldTimeZone, from: timeOfDayDatePicker.date)
+        let calendar = Calendar.fromZone(oldTimeZone)
+        let oldComps = calendar.dateComponents([.day, .hour, .minute], from: timeOfDayDatePicker.date)
         let day = oldComps.day ?? 1
         let hour = oldComps.hour ?? 0
         let minute = oldComps.minute ?? 0
@@ -141,17 +143,11 @@ final class DogsAddReminderMonthlyView: HoundView {
     // MARK: - Functions
     
     private func updateDescriptionLabel() {
-        // TODO TIMING implement new logic to utilize localization here
-        // TODO TIMING add disclaimer if time is 29, 30, or 31 (do we roll over? I forget how we handle that)
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents(in: currentTimeZone, from: timeOfDayDatePicker.date)
+        // TODO TIME add disclaimer if time is 29, 30, or 31 (do we roll over? I forget how we handle that)
+        let comps = Calendar.fromZone(currentTimeZone).dateComponents([.day], from: timeOfDayDatePicker.date)
         let day = comps.day ?? 1
         
-        let formatter = DateFormatter()
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
-        formatter.timeZone = currentTimeZone
-        let timeString = formatter.string(from: timeOfDayDatePicker.date)
+        let timeString = timeOfDayDatePicker.date.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: currentTimeZone)
         
         monthlyDescriptionLabel.text = "Reminder will sound on the \(day)\(day.daySuffix()) of each month at \(timeString)"
     }

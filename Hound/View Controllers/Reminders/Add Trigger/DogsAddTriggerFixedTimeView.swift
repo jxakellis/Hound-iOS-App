@@ -102,6 +102,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
     // MARK: - Setup
     
     func setup(forDelegate: DogsAddTriggerFixedTimeViewDelegate, forDaysOffset: Int?, forTimeOfDay: Date?) {
+        // TODO TIME we need to make this NOT adapt to diff TZs. this is static regardless of TZs
         delegate = forDelegate
         
         let index = forDaysOffset ?? selectedDayOffset
@@ -126,7 +127,8 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         default: text += "\(selectedDayOffset) days after the log "
         }
         
-        text += "at \(timeOfDayPicker.date.houndFormatted(.formatStyle(date: .omitted, time: .shortened)))"
+        // TODO TIME make this time so it doesnt localize
+        text += "at \(timeOfDayPicker.date.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: TimeZone.current))"
         
         var emphasizedText: String?
         if selectedDayOffset == 0 {

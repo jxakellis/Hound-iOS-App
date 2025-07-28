@@ -42,7 +42,7 @@ enum GenerationManager {
             ? (Int.random(in: 0...1) == 0 ? generateRandomAlphanumericString(ofLength: Int.random(in: 0...32)) : nil)
             : nil
             
-            let referenceDate = Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? Date(timeIntervalSinceReferenceDate: 0.0)
+            let referenceDate = Calendar.user.date(byAdding: .month, value: -1, to: Date()) ?? Date(timeIntervalSinceReferenceDate: 0.0)
             let logStartDate = referenceDate.addingTimeInterval(
                 Double.random(in: 0.0...referenceDate.distance(to: Date()))
             )

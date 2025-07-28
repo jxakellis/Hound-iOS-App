@@ -516,7 +516,7 @@ final class DogsAddReminderManagerView: HoundView,
         let reminderEnabled = reminderIsEnabledSwitch.isOn
         let userIsRecipient = selectedRecipientUserIds.contains(UserInformation.userId ?? Constant.Visual.Text.unknownUserId)
         
-        // TODO this should show itself and have text if the current users isnt a recipient
+        // TODO UI this should show itself and have text if the current users isnt a recipient
         notificationsDisabledLabel.isHidden = selectedRecipientUserIds.isEmpty
         || (reminderEnabled &&
             (!userIsRecipient || (UserConfiguration.isNotificationEnabled && UserConfiguration.isReminderNotificationEnabled))

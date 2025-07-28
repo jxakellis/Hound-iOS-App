@@ -34,23 +34,25 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Properties
     
-    var readableDayOfYear: String {
-        let dateYear = Calendar.current.component(.year, from: oneTimeDate)
-        let currentYear = Calendar.current.component(.year, from: Date())
+    func readableDayOfYear(displayTimeZone: TimeZone? = nil) -> String {
+        let tz = displayTimeZone ?? UserConfiguration.timeZone
+        let calendar = Calendar.fromZone(tz)
+        let dateYear = calendar.component(.year, from: oneTimeDate)
+        let currentYear = calendar.component(.year, from: Date())
         
         // January 25 OR January 25, 2023
         let template = dateYear == currentYear ? "MMMMd" : "MMMMdyyyy"
-        return oneTimeDate.houndFormatted(.template(template))
+        return oneTimeDate.houndFormatted(.template(template), displayTimeZone: tz)
     }
     
-    var readableTimeOfDay: String {
+    func readableTimeOfDay(displayTimeZone: TimeZone? = nil) -> String {
+        let tz = displayTimeZone ?? UserConfiguration.timeZone
         // 7:53 AM
-        return oneTimeDate.houndFormatted(.formatStyle(date: .omitted, time: .shortened))
+        return oneTimeDate.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: tz)
     }
     
-    var readableRecurrance: String {
-        // TODO TIMING I think this needs to be localized
-        return readableDayOfYear.appending(" at \(readableTimeOfDay)")
+    func readableRecurrance(displayTimeZone: TimeZone? = nil) -> String {
+        return readableDayOfYear(displayTimeZone: displayTimeZone).appending(" at \(readableTimeOfDay(displayTimeZone: displayTimeZone))")
     }
     
     /// The Date that the alarm should fire
