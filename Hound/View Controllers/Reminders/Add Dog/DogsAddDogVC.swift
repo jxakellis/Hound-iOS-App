@@ -104,8 +104,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         self.triggersView.didUpdateTrigger(forTrigger: forTrigger)
     }
     
-    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, forTriggerUUID: UUID) {
-        self.triggersView.didRemoveTrigger(forTriggerUUID: forTriggerUUID)
+    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, triggerUUID: UUID) {
+        self.triggersView.didRemoveTrigger(triggerUUID: triggerUUID)
     }
     
     func didUpdateTriggerCount() {
@@ -519,7 +519,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                 TriggersRequest.delete(
                     forErrorAlert: .automaticallyAlertOnlyForFailure,
                     forDogUUID: dog.dogUUID,
-                    forTriggerUUIDs: deletedTriggers.map({ trigger in
+                    triggerUUIDs: deletedTriggers.map({ trigger in
                         return trigger.triggerUUID
                     })
                 ) { responseStatusTriggerDelete, _ in
@@ -528,7 +528,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                         return
                     }
                     for deletedTrigger in deletedTriggers {
-                        dog.dogTriggers.removeTrigger(forTriggerUUID: deletedTrigger.triggerUUID)
+                        dog.dogTriggers.removeTrigger(triggerUUID: deletedTrigger.triggerUUID)
                     }
                     completionTracker.completedTask()
                 }

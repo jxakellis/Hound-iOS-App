@@ -14,12 +14,12 @@ final class TriggerTests: XCTestCase {
     func testTimeDelayInitializationAndChanges() {
         let reaction = TriggerLogReaction(forLogActionTypeId: 2, forLogCustomActionName: "walk")
         let reminderResult = TriggerReminderResult(forReminderActionTypeId: 4, forReminderCustomActionName: nil)
-        let trig = Trigger(forTriggerLogReactions: [reaction],
-                           forTriggerReminderResult: reminderResult,
-                           forTriggerType: .timeDelay,
-                           forTriggerTimeDelay: 120,
-                           forTriggerManualCondition: true,
-                           forTriggerAlarmCreatedCondition: false)
+        let trig = Trigger(triggerLogReactions: [reaction],
+                           triggerReminderResult: reminderResult,
+                           triggerType: .timeDelay,
+                           triggerTimeDelay: 120,
+                           triggerManualCondition: true,
+                           triggerAlarmCreatedCondition: false)
         XCTAssertEqual(trig.triggerType, .timeDelay)
         XCTAssertEqual(trig.triggerTimeDelay, 120)
         XCTAssertTrue(trig.triggerManualCondition)
@@ -33,9 +33,9 @@ final class TriggerTests: XCTestCase {
     func testFixedTimeInitializationAndChanges() {
         let reaction = TriggerLogReaction(forLogActionTypeId: 1, forLogCustomActionName: nil)
         let reminderResult = TriggerReminderResult(forReminderActionTypeId: 3, forReminderCustomActionName: "potty")
-        let trig = Trigger(forTriggerLogReactions: [reaction],
-                           forTriggerReminderResult: reminderResult,
-                           forTriggerType: .fixedTime,
+        let trig = Trigger(triggerLogReactions: [reaction],
+                           triggerReminderResult: reminderResult,
+                           triggerType: .fixedTime,
                            forTriggerFixedTimeTypeAmount: 1,
                            forTriggerFixedTimeHour: 6,
                            forTriggerFixedTimeMinute: 30)
@@ -60,7 +60,7 @@ final class TriggerTests: XCTestCase {
     func testShouldActivateTrigger() {
         let reaction1 = TriggerLogReaction(forLogActionTypeId: 1, forLogCustomActionName: nil)
         let reaction2 = TriggerLogReaction(forLogActionTypeId: 2, forLogCustomActionName: "play")
-        let trig = Trigger(forTriggerLogReactions: [reaction1, reaction2])
+        let trig = Trigger(triggerLogReactions: [reaction1, reaction2])
         var log = Log(forLogActionTypeId: 1, forLogCustomActionName: nil)
         XCTAssertTrue(trig.shouldActivateTrigger(forLog: log))
         log = Log(forLogActionTypeId: 2, forLogCustomActionName: "play")
@@ -77,14 +77,14 @@ final class TriggerTests: XCTestCase {
     }
 
     func testNextReminderDateTimeDelay() {
-        let trig = Trigger(forTriggerType: .timeDelay, forTriggerTimeDelay: 60)
+        let trig = Trigger(triggerType: .timeDelay, triggerTimeDelay: 60)
         let basis = TestHelper.date("2024-01-01T00:00:00Z")
         let next = trig.nextReminderDate(afterDate: basis, in: TestHelper.utc)
         XCTAssertEqual(next, basis.addingTimeInterval(60))
     }
 
     func testNextReminderDateFixedTime() {
-        let trig = Trigger(forTriggerType: .fixedTime,
+        let trig = Trigger(triggerType: .fixedTime,
                            forTriggerFixedTimeTypeAmount: 0,
                            forTriggerFixedTimeHour: 15,
                            forTriggerFixedTimeMinute: 0)
@@ -105,7 +105,7 @@ final class TriggerTests: XCTestCase {
     }
 
     func testCreateTriggerResultReminder() {
-        let trig = Trigger(forTriggerType: .timeDelay, forTriggerTimeDelay: 60)
+        let trig = Trigger(triggerType: .timeDelay, triggerTimeDelay: 60)
         let log = Log(forLogActionTypeId: 1)
         guard let rem = trig.createTriggerResultReminder(afterLog: log, in: TestHelper.utc) else { return XCTFail("nil") }
         XCTAssertEqual(rem.reminderActionTypeId, trig.triggerReminderResult.reminderActionTypeId)

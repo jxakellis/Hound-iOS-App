@@ -74,11 +74,11 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         setDogManager(sender: sender, forDogManager: dogManager)
     }
     
-    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, forTriggerUUID: UUID) {
+    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, triggerUUID: UUID) {
         // forDogUUID must be defined, as we are either adding a trigger to some existing dog or creating a trigger for an existing dog. Only DogsAddDogVC can use dogsAddTriggerViewController without a forDogUUID
         guard let forDogUUID = forDogUUID else { return }
         
-        dogManager.findDog(forDogUUID: forDogUUID)?.dogTriggers.removeTrigger(forTriggerUUID: forTriggerUUID)
+        dogManager.findDog(forDogUUID: forDogUUID)?.dogTriggers.removeTrigger(triggerUUID: triggerUUID)
         setDogManager(sender: sender, forDogManager: dogManager)
     }
     
@@ -177,7 +177,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                 guard let trigger = trigger else {
                     // If the response was successful but no trigger was returned, that means the trigger was deleted. Therefore, update the dogManager to indicate as such.
                     let dogTriggers = self.dogManager.findDog(forDogUUID: forDog.dogUUID)?.dogTriggers
-                    dogTriggers?.removeTrigger(forTriggerUUID: forTrigger.triggerUUID)
+                    dogTriggers?.removeTrigger(triggerUUID: forTrigger.triggerUUID)
                     
                     self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
                     return

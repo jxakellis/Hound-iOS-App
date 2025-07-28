@@ -59,7 +59,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forLogUnitTypeId: decodedLogUnitTypeId,
             forLogNumberOfUnits: decodedLogNumberOfLogUnits,
             forCreatedByReminderUUID: decodedLogCreatedByReminderUUID,
-            forOfflineModeComponents: decodedOfflineModeComponents
+            offlineModeComponents: decodedOfflineModeComponents
         )
     }
     
@@ -207,7 +207,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         forLogUnitTypeId: Int? = nil,
         forLogNumberOfUnits: Double? = nil,
         forCreatedByReminderUUID: UUID? = nil,
-        forOfflineModeComponents: OfflineModeComponents? = nil
+        offlineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
         self.logId = forLogId ?? logId
@@ -220,7 +220,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         self.logNote = forLogNote ?? logNote
         self.changeLogUnit(forLogUnitTypeId: forLogUnitTypeId, forLogNumberOfLogUnits: forLogNumberOfUnits)
         self.logCreatedByReminderUUID = forCreatedByReminderUUID ?? logCreatedByReminderUUID
-        self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
+        self.offlineModeComponents = offlineModeComponents ?? offlineModeComponents
     }
     
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from fromBody.
@@ -255,7 +255,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
                 forLogUnitTypeId: logToOverride.logUnitTypeId,
                 forLogNumberOfUnits: logToOverride.logNumberOfLogUnits,
                 forCreatedByReminderUUID: logToOverride.logCreatedByReminderUUID,
-                forOfflineModeComponents: logToOverride.offlineModeComponents
+                offlineModeComponents: logToOverride.offlineModeComponents
             )
             return
         }
@@ -302,7 +302,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             forLogNumberOfUnits: logNumberOfLogUnits,
             forCreatedByReminderUUID: logCreatedByReminderUUID,
             // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
-            forOfflineModeComponents: nil
+            offlineModeComponents: nil
         )
     }
     

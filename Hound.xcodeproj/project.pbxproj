@@ -11,6 +11,8 @@
 		213BEB01BC15BA8E95D699CA /* libPods-Hound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6BA7C2F91F8CB1DF213275F /* libPods-Hound.a */; };
 		A2040BA3262A13B000D9667E /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2040BA2262A13B000D9667E /* PersistenceManager.swift */; };
 		A207F7A0280610D6003248E8 /* DogIconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A207F79F280610D6003248E8 /* DogIconManager.swift */; };
+		A20C8E3A2E370BF0000837DA /* TriggerFixedTimeComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C8E392E370BE9000837DA /* TriggerFixedTimeComponents.swift */; };
+		A20C8E3C2E370D54000837DA /* TriggerTimeDelayComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C8E3B2E370D4C000837DA /* TriggerTimeDelayComponents.swift */; };
 		A20C99972568671F00E2C9C8 /* DogReminderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C99962568671F00E2C9C8 /* DogReminderManager.swift */; };
 		A20C999925686B7600E2C9C8 /* ReminderTimingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C999825686B7600E2C9C8 /* ReminderTimingManager.swift */; };
 		A20D64A42880E0CD001BDC9B /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20D64A32880E0CD001BDC9B /* Subscription.swift */; };
@@ -256,6 +258,8 @@
 		5F79421113F2DEEC4E5F5471 /* Pods-HoundTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HoundTests.debug.xcconfig"; path = "Target Support Files/Pods-HoundTests/Pods-HoundTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A2040BA2262A13B000D9667E /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		A207F79F280610D6003248E8 /* DogIconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogIconManager.swift; sourceTree = "<group>"; };
+		A20C8E392E370BE9000837DA /* TriggerFixedTimeComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerFixedTimeComponents.swift; sourceTree = "<group>"; };
+		A20C8E3B2E370D4C000837DA /* TriggerTimeDelayComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerTimeDelayComponents.swift; sourceTree = "<group>"; };
 		A20C99962568671F00E2C9C8 /* DogReminderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogReminderManager.swift; sourceTree = "<group>"; };
 		A20C999825686B7600E2C9C8 /* ReminderTimingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTimingManager.swift; sourceTree = "<group>"; };
 		A20D64A32880E0CD001BDC9B /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
@@ -1043,6 +1047,8 @@
 			children = (
 				A2DAC44F2DD583090053EB09 /* DogTriggerManager.swift */,
 				A2DAC44D2DD572C40053EB09 /* Trigger.swift */,
+				A20C8E392E370BE9000837DA /* TriggerFixedTimeComponents.swift */,
+				A20C8E3B2E370D4C000837DA /* TriggerTimeDelayComponents.swift */,
 				A2FAB4212E20CC5E00E85392 /* TriggerLogReaction.swift */,
 				A2FAB4232E20D52C00E85392 /* TriggerReminderResult.swift */,
 			);
@@ -1439,6 +1445,7 @@
 				A2AA5CBF27FE421B00FD0134 /* RequestUtils.swift in Sources */,
 				A2FAB40B2E1DE15800E85392 /* UIScrollViewExtension.swift in Sources */,
 				A20EEB122E331C6B00958592 /* TimeZoneExtension.swift in Sources */,
+				A20C8E3C2E370D54000837DA /* TriggerTimeDelayComponents.swift in Sources */,
 				A24BAD9F28B5BE9F00EEFD44 /* CalendarExtension.swift in Sources */,
 				A21AAF1C2DECD7E80077C89D /* ReminderActionType.swift in Sources */,
 				A2F6F4C527FC9D3200CAA320 /* SettingsMemberTVC.swift in Sources */,
@@ -1618,6 +1625,7 @@
 				A2101E652A6AF1B900A65396 /* HoundIntroductionDogIconView.swift in Sources */,
 				A2B678E527D13AD100424FB0 /* ServerSyncVC.swift in Sources */,
 				A2B00F9E27FA3C2E00C6126E /* FamilyRequest.swift in Sources */,
+				A20C8E3A2E370BF0000837DA /* TriggerFixedTimeComponents.swift in Sources */,
 				A2AA5CD927FE480000FD0134 /* Log.swift in Sources */,
 				A2C2951F2E0B8768008F1054 /* HoundIntroductionView.swift in Sources */,
 				A2588BA72930877900B0ACB2 /* SettingsNotifsCategoriesReminderTVC.swift in Sources */,

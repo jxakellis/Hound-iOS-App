@@ -46,7 +46,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 forDogReminders: decodedDogReminders,
                 forDogLogs: decodedDogLogs,
                 forDogTriggers: decodedDogTriggers,
-                forOfflineModeComponents: decodedOfflineModeComponents
+                offlineModeComponents: decodedOfflineModeComponents
             )
         }
         catch {
@@ -57,7 +57,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 forDogReminders: decodedDogReminders,
                 forDogLogs: decodedDogLogs,
                 forDogTriggers: decodedDogTriggers,
-                forOfflineModeComponents: decodedOfflineModeComponents
+                offlineModeComponents: decodedOfflineModeComponents
             )
         }
     }
@@ -127,7 +127,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         forDogReminders: DogReminderManager? = nil,
         forDogLogs: DogLogManager? = nil,
         forDogTriggers: DogTriggerManager? = nil,
-        forOfflineModeComponents: OfflineModeComponents? = nil
+        offlineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
         self.dogId = forDogId ?? dogId
@@ -137,7 +137,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         self.dogLogs = forDogLogs ?? dogLogs
         self.dogLogs.parentDog = self
         self.dogTriggers = forDogTriggers ?? dogTriggers
-        self.offlineModeComponents = forOfflineModeComponents ?? offlineModeComponents
+        self.offlineModeComponents = offlineModeComponents ?? self.offlineModeComponents
     }
     
     convenience init(
@@ -147,9 +147,9 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         forDogReminders: DogReminderManager? = nil,
         forDogLogs: DogLogManager? = nil,
         forDogTriggers: DogTriggerManager? = nil,
-        forOfflineModeComponents: OfflineModeComponents? = nil
+        offlineModeComponents: OfflineModeComponents? = nil
     ) throws {
-        self.init(forDogId: forDogId, forDogUUID: forDogUUID, forDogReminders: forDogReminders, forDogLogs: forDogLogs, forDogTriggers: forDogTriggers, forOfflineModeComponents: forOfflineModeComponents)
+        self.init(forDogId: forDogId, forDogUUID: forDogUUID, forDogReminders: forDogReminders, forDogLogs: forDogLogs, forDogTriggers: forDogTriggers, offlineModeComponents: offlineModeComponents)
         changeDogName(forDogName: forDogName)
     }
     
@@ -182,7 +182,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                     forDogLogs: dogToOverride.dogLogs,
                     forDogTriggers: dogToOverride.dogTriggers,
                     // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
-                    forOfflineModeComponents: nil
+                    offlineModeComponents: nil
                 )
             }
             catch {
@@ -194,7 +194,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                     forDogLogs: dogToOverride.dogLogs,
                     forDogTriggers: dogToOverride.dogTriggers,
                     // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
-                    forOfflineModeComponents: nil
+                    offlineModeComponents: nil
                 )
             }
             return
@@ -238,7 +238,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 forDogLogs: dogLogs,
                 forDogTriggers: dogTriggers,
                 // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
-                forOfflineModeComponents: nil
+                offlineModeComponents: nil
             )
         }
         catch {
@@ -250,7 +250,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
                 forDogLogs: dogLogs,
                 forDogTriggers: dogTriggers,
                 // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
-                forOfflineModeComponents: nil
+                offlineModeComponents: nil
             )
         }
         

@@ -23,34 +23,6 @@ enum TriggerType: String, CaseIterable {
     case fixedTime
 }
 
-enum TriggerFixedTimeType: String, CaseIterable {
-    
-    init?(rawValue: String) {
-        for type in TriggerFixedTimeType.allCases where type.rawValue.lowercased() == rawValue.lowercased() {
-            self = type
-            return
-        }
-        
-        self = .day
-        return
-    }
-    
-    case day
-    case week
-    case month
-    
-    var calendarComponent: Calendar.Component {
-        switch self {
-        case .day:
-            return .day
-        case .week:
-            return .weekOfYear
-        case .month:
-            return .month
-        }
-    }
-}
-
 final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
     // MARK: - NSCopying
@@ -67,11 +39,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         }
         copy.triggerReminderResult = self.triggerReminderResult.copy() as? TriggerReminderResult ?? TriggerReminderResult()
         copy.triggerType = self.triggerType
-        copy.triggerTimeDelay = self.triggerTimeDelay
-        copy.triggerFixedTimeType = self.triggerFixedTimeType
-        copy.triggerFixedTimeTypeAmount = self.triggerFixedTimeTypeAmount
-        copy.triggerFixedTimeHour = self.triggerFixedTimeHour
-        copy.triggerFixedTimeMinute = self.triggerFixedTimeMinute
+        
+        copy.timeDelayComponents = self.timeDelayComponents.copy() as? TriggerTimeDelayComponents ?? TriggerTimeDelayComponents()
+        copy.fixedTimeComponents = self.fixedTimeComponents.copy() as? TriggerFixedTimeComponents ?? TriggerFixedTimeComponents()
+        
         copy.triggerManualCondition = self.triggerManualCondition
         copy.triggerAlarmCreatedCondition = self.triggerAlarmCreatedCondition
         copy.offlineModeComponents = self.offlineModeComponents.copy() as? OfflineModeComponents ?? OfflineModeComponents()
@@ -82,34 +53,30 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedTriggerId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerId.rawValue)
-        let decodedTriggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerUUID.rawValue))
-        let decodedtriggerLogReactions: [TriggerLogReaction]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerLogReactions.rawValue)
-        let decodedtriggerReminderResult: TriggerReminderResult? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerReminderResult.rawValue)
-        let decodedTriggerType = TriggerType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerType.rawValue) ?? Constant.Class.Trigger.defaultTriggerType.rawValue)
-        let decodedTriggerTimeDelay = aDecoder.decodeOptionalDouble(forKey: Constant.Key.triggerTimeDelay.rawValue)
-        let decodedTriggerFixedTimeType = TriggerFixedTimeType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerFixedTimeType.rawValue) ?? Constant.Class.Trigger.defaultTriggerFixedTimeType.rawValue)
-        let decodedTriggerFixedTimeTypeAmount = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeTypeAmount.rawValue)
-        let decodedTriggerFixedTimeHour = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeHour.rawValue)
-        let decodedTriggerFixedTimeMinute = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerFixedTimeMinute.rawValue)
-        let decodedTriggerManualCondition = aDecoder.decodeOptionalBool(forKey: Constant.Key.triggerManualCondition.rawValue) ?? Constant.Class.Trigger.defaultTriggerManualCondition
-        let decodedTriggerAlarmCreatedCondition = aDecoder.decodeOptionalBool(forKey: Constant.Key.triggerAlarmCreatedCondition.rawValue) ?? Constant.Class.Trigger.defaultTriggerAlarmCreatedCondition
-        let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
+        let triggerId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerId.rawValue)
+        let triggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerUUID.rawValue))
+        let triggerLogReactions: [TriggerLogReaction]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerLogReactions.rawValue)
+        let triggerReminderResult: TriggerReminderResult? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerReminderResult.rawValue)
+        let triggerType = TriggerType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerType.rawValue) ?? Constant.Class.Trigger.defaultTriggerType.rawValue)
+        
+        let triggerTimeDelayComponents: TriggerTimeDelayComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerTimeDelayComponents.rawValue)
+        let triggerFixedTimeComponents: TriggerFixedTimeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerFixedTimeComponents.rawValue)
+        
+        let triggerManualCondition = aDecoder.decodeOptionalBool(forKey: Constant.Key.triggerManualCondition.rawValue) ?? Constant.Class.Trigger.defaultTriggerManualCondition
+        let triggerAlarmCreatedCondition = aDecoder.decodeOptionalBool(forKey: Constant.Key.triggerAlarmCreatedCondition.rawValue) ?? Constant.Class.Trigger.defaultTriggerAlarmCreatedCondition
+        let offlineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
         
         self.init(
-            forTriggerId: decodedTriggerId,
-            forTriggerUUID: decodedTriggerUUID,
-            forTriggerLogReactions: decodedtriggerLogReactions,
-            forTriggerReminderResult: decodedtriggerReminderResult,
-            forTriggerType: decodedTriggerType,
-            forTriggerTimeDelay: decodedTriggerTimeDelay,
-            forTriggerFixedTimeType: decodedTriggerFixedTimeType,
-            forTriggerFixedTimeTypeAmount: decodedTriggerFixedTimeTypeAmount,
-            forTriggerFixedTimeHour: decodedTriggerFixedTimeHour,
-            forTriggerFixedTimeMinute: decodedTriggerFixedTimeMinute,
-            forTriggerManualCondition: decodedTriggerManualCondition,
-            forTriggerAlarmCreatedCondition: decodedTriggerAlarmCreatedCondition,
-            forOfflineModeComponents: decodedOfflineModeComponents
+            triggerId: triggerId,
+            triggerUUID: triggerUUID,
+            triggerLogReactions: triggerLogReactions,
+            triggerReminderResult: triggerReminderResult,
+            triggerType: triggerType,
+            triggerTimeDelayComponents: triggerTimeDelayComponents,
+            triggerFixedTimeComponents: triggerFixedTimeComponents,
+            triggerManualCondition: triggerManualCondition,
+            triggerAlarmCreatedCondition: triggerAlarmCreatedCondition,
+            offlineModeComponents: offlineModeComponents
         )
     }
     
@@ -121,11 +88,11 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(triggerLogReactions, forKey: Constant.Key.triggerLogReactions.rawValue)
         aCoder.encode(triggerReminderResult, forKey: Constant.Key.triggerReminderResult.rawValue)
         aCoder.encode(triggerType.rawValue, forKey: Constant.Key.triggerType.rawValue)
-        aCoder.encode(triggerTimeDelay, forKey: Constant.Key.triggerTimeDelay.rawValue)
-        aCoder.encode(triggerFixedTimeType.rawValue, forKey: Constant.Key.triggerFixedTimeType.rawValue)
-        aCoder.encode(triggerFixedTimeTypeAmount, forKey: Constant.Key.triggerFixedTimeTypeAmount.rawValue)
-        aCoder.encode(triggerFixedTimeHour, forKey: Constant.Key.triggerFixedTimeHour.rawValue)
-        aCoder.encode(triggerFixedTimeMinute, forKey: Constant.Key.triggerFixedTimeMinute.rawValue)
+        
+        aCoder.encode(timeDelayComponents, forKey: Constant.Key.triggerTimeDelayComponents.rawValue)
+        
+        aCoder.encode(fixedTimeComponents, forKey: Constant.Key.triggerFixedTimeComponents.rawValue)
+        
         aCoder.encode(triggerManualCondition, forKey: Constant.Key.triggerManualCondition.rawValue)
         aCoder.encode(triggerAlarmCreatedCondition, forKey: Constant.Key.triggerAlarmCreatedCondition.rawValue)
         aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
@@ -140,17 +107,17 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         case (.fixedTime, .timeDelay): return false
         case (.timeDelay, .timeDelay):
             // 2a. if both timeDelay, smaller time delay comes first (if one is smaller)
-            if lhs.triggerTimeDelay < rhs.triggerTimeDelay {
+            if lhs.timeDelayComponents.triggerTimeDelay < rhs.timeDelayComponents.triggerTimeDelay {
                 return true
             }
-            else if lhs.triggerTimeDelay > rhs.triggerTimeDelay {
+            else if lhs.timeDelayComponents.triggerTimeDelay > rhs.timeDelayComponents.triggerTimeDelay {
                 return false
             }
         case (.fixedTime, .fixedTime):
             // 2a. if both fixedTime, smaller fixed time comes first (if one is smaller)
             // If they are of the same fixed time type, ignore this check
             // If diff fixed time types, the smaller one comes first
-            switch (lhs.triggerFixedTimeType, rhs.triggerFixedTimeType) {
+            switch (lhs.fixedTimeComponents.triggerFixedTimeType, rhs.fixedTimeComponents.triggerFixedTimeType) {
             case let (lhsType, rhsType) where lhsType == rhsType: break
             case (.day, _): return true
             case (.week, .day): return false
@@ -161,28 +128,28 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             
             // One with smaller fixed time type amount comes first
             // If equal, need a different tie breaker
-            if lhs.triggerFixedTimeTypeAmount < rhs.triggerFixedTimeTypeAmount {
+            if lhs.fixedTimeComponents.triggerFixedTimeTypeAmount < rhs.fixedTimeComponents.triggerFixedTimeTypeAmount {
                 return true
             }
-            else if lhs.triggerFixedTimeTypeAmount > rhs.triggerFixedTimeTypeAmount {
+            else if lhs.fixedTimeComponents.triggerFixedTimeTypeAmount > rhs.fixedTimeComponents.triggerFixedTimeTypeAmount {
                 return false
             }
             
             // One with smaller fixed time hour comes first
             // If equal, need a different tie breaker
-            if lhs.triggerFixedTimeHour < rhs.triggerFixedTimeHour {
+            if lhs.fixedTimeComponents.triggerFixedTimeHour < rhs.fixedTimeComponents.triggerFixedTimeHour {
                 return true
             }
-            else if lhs.triggerFixedTimeHour > rhs.triggerFixedTimeHour {
+            else if lhs.fixedTimeComponents.triggerFixedTimeHour > rhs.fixedTimeComponents.triggerFixedTimeHour {
                 return false
             }
             
             // One with smaller fixed time minute comes first
             // If equal, need a different tie breaker
-            if lhs.triggerFixedTimeMinute < rhs.triggerFixedTimeMinute {
+            if lhs.fixedTimeComponents.triggerFixedTimeMinute < rhs.fixedTimeComponents.triggerFixedTimeMinute {
                 return true
             }
-            else if lhs.triggerFixedTimeMinute > rhs.triggerFixedTimeMinute {
+            else if lhs.fixedTimeComponents.triggerFixedTimeMinute > rhs.fixedTimeComponents.triggerFixedTimeMinute {
                 return false
             }
         }
@@ -224,10 +191,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             }
         }
     }
-    func setTriggerLogReactions(forTriggerLogReactions: [TriggerLogReaction]) -> Bool {
-        if forTriggerLogReactions.isEmpty { return false }
+    func setTriggerLogReactions(_ newLogReactions: [TriggerLogReaction]) -> Bool {
+        if newLogReactions.isEmpty { return false }
         var seen = Set<String>()
-        triggerLogReactions = forTriggerLogReactions.filter { reaction in
+        triggerLogReactions = newLogReactions.filter { reaction in
             let identifier = "\(reaction.logActionTypeId)-\(reaction.logCustomActionName)"
             return seen.insert(identifier).inserted
         }
@@ -238,35 +205,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
     var triggerType: TriggerType = Constant.Class.Trigger.defaultTriggerType
     
-    private(set) var triggerTimeDelay: Double = Constant.Class.Trigger.defaultTriggerTimeDelay
-    func changeTriggerTimeDelay(forTimeDelay: Double) -> Bool {
-        guard forTimeDelay > 0 else { return false }
-        triggerTimeDelay = forTimeDelay
-        return true
-    }
-    
-    /// triggerFixedTimeType isn't used currently. leave as its default of .day
-    private var triggerFixedTimeType: TriggerFixedTimeType = Constant.Class.Trigger.defaultTriggerFixedTimeType
-    private(set) var triggerFixedTimeTypeAmount: Int = Constant.Class.Trigger.defaultTriggerFixedTimeTypeAmount
-    func changeTriggerFixedTimeTypeAmount(forAmount: Int) -> Bool {
-        guard forAmount >= 0 else { return false }
-        triggerFixedTimeTypeAmount = forAmount
-        return true
-    }
-    /// 0-23
-    private(set) var triggerFixedTimeHour: Int = Constant.Class.Trigger.defaultTriggerFixedTimeHour
-    func changeFixedTimeHour(forHour: Int) -> Bool {
-        guard (0...23).contains(forHour) else { return false }
-        triggerFixedTimeHour = forHour
-        return true
-    }
-    /// 0-59
-    private(set) var triggerFixedTimeMinute: Int = Constant.Class.Trigger.defaultTriggerFixedTimeMinute
-    func changeFixedTimeMinute(forMinute: Int) -> Bool {
-        guard (0...59).contains(forMinute) else { return false }
-        triggerFixedTimeMinute = forMinute
-        return true
-    }
+    private(set) var timeDelayComponents: TriggerTimeDelayComponents = TriggerTimeDelayComponents()
+    private(set) var fixedTimeComponents: TriggerFixedTimeComponents = TriggerFixedTimeComponents()
     
     /// If true, the trigger will be activated by logs that were manually created by the user (no reminder/alarm)
     var triggerManualCondition: Bool = Constant.Class.Trigger.defaultTriggerManualCondition
@@ -279,34 +219,28 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - Main
     
     init(
-        forTriggerId: Int? = nil,
-        forTriggerUUID: UUID? = nil,
-        forTriggerLogReactions: [TriggerLogReaction]? = nil,
-        forTriggerReminderResult: TriggerReminderResult? = nil,
-        forTriggerType: TriggerType? = nil,
-        forTriggerTimeDelay: Double? = nil,
-        forTriggerFixedTimeType: TriggerFixedTimeType? = nil,
-        forTriggerFixedTimeTypeAmount: Int? = nil,
-        forTriggerFixedTimeHour: Int? = nil,
-        forTriggerFixedTimeMinute: Int? = nil,
-        forTriggerManualCondition: Bool? = nil,
-        forTriggerAlarmCreatedCondition: Bool? = nil,
-        forOfflineModeComponents: OfflineModeComponents? = nil
+        triggerId: Int? = nil,
+        triggerUUID: UUID? = nil,
+        triggerLogReactions: [TriggerLogReaction]? = nil,
+        triggerReminderResult: TriggerReminderResult? = nil,
+        triggerType: TriggerType? = nil,
+        triggerTimeDelayComponents: TriggerTimeDelayComponents? = nil,
+        triggerFixedTimeComponents: TriggerFixedTimeComponents? = nil,
+        triggerManualCondition: Bool? = nil,
+        triggerAlarmCreatedCondition: Bool? = nil,
+        offlineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
-        self.triggerId = forTriggerId ?? triggerId
-        self.triggerUUID = forTriggerUUID ?? triggerUUID
-        self.triggerLogReactions = forTriggerLogReactions ?? self.triggerLogReactions
-        self.triggerReminderResult = forTriggerReminderResult ?? self.triggerReminderResult
-        self.triggerType = forTriggerType ?? self.triggerType
-        self.triggerTimeDelay = forTriggerTimeDelay ?? self.triggerTimeDelay
-        self.triggerFixedTimeType = forTriggerFixedTimeType ?? self.triggerFixedTimeType
-        self.triggerFixedTimeTypeAmount = forTriggerFixedTimeTypeAmount ?? self.triggerFixedTimeTypeAmount
-        self.triggerFixedTimeHour = forTriggerFixedTimeHour ?? self.triggerFixedTimeHour
-        self.triggerFixedTimeMinute = forTriggerFixedTimeMinute ?? self.triggerFixedTimeMinute
-        self.triggerManualCondition = forTriggerManualCondition ?? self.triggerManualCondition
-        self.triggerAlarmCreatedCondition = forTriggerAlarmCreatedCondition ?? self.triggerAlarmCreatedCondition
-        self.offlineModeComponents = forOfflineModeComponents ?? self.offlineModeComponents
+        self.triggerId = triggerId ?? self.triggerId
+        self.triggerUUID = triggerUUID ?? self.triggerUUID
+        self.triggerLogReactions = triggerLogReactions ?? self.triggerLogReactions
+        self.triggerReminderResult = triggerReminderResult ?? self.triggerReminderResult
+        self.triggerType = triggerType ?? self.triggerType
+        self.timeDelayComponents = triggerTimeDelayComponents ?? self.timeDelayComponents
+        self.fixedTimeComponents = triggerFixedTimeComponents ?? self.fixedTimeComponents
+        self.triggerManualCondition = triggerManualCondition ?? self.triggerManualCondition
+        self.triggerAlarmCreatedCondition = triggerAlarmCreatedCondition ?? self.triggerAlarmCreatedCondition
+        self.offlineModeComponents = offlineModeComponents ?? self.offlineModeComponents
     }
     
     /// Provide a dictionary literal of reminder trigger properties to instantiate reminder trigger. Optionally, provide a reminder trigger to override with new properties from fromBody.
@@ -330,19 +264,16 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer server update takes precedence over our offline update
         if let triggerToOverride = triggerToOverride, let initialAttemptedSyncDate = triggerToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= triggerLastModified {
             self.init(
-                forTriggerId: triggerToOverride.triggerId,
-                forTriggerUUID: triggerToOverride.triggerUUID,
-                forTriggerLogReactions: triggerToOverride.triggerLogReactions,
-                forTriggerReminderResult: triggerToOverride.triggerReminderResult,
-                forTriggerType: triggerToOverride.triggerType,
-                forTriggerTimeDelay: triggerToOverride.triggerTimeDelay,
-                forTriggerFixedTimeType: triggerToOverride.triggerFixedTimeType,
-                forTriggerFixedTimeTypeAmount: triggerToOverride.triggerFixedTimeTypeAmount,
-                forTriggerFixedTimeHour: triggerToOverride.triggerFixedTimeHour,
-                forTriggerFixedTimeMinute: triggerToOverride.triggerFixedTimeMinute,
-                forTriggerManualCondition: triggerToOverride.triggerManualCondition,
-                forTriggerAlarmCreatedCondition: triggerToOverride.triggerAlarmCreatedCondition,
-                forOfflineModeComponents: triggerToOverride.offlineModeComponents
+                triggerId: triggerToOverride.triggerId,
+                triggerUUID: triggerToOverride.triggerUUID,
+                triggerLogReactions: triggerToOverride.triggerLogReactions,
+                triggerReminderResult: triggerToOverride.triggerReminderResult,
+                triggerType: triggerToOverride.triggerType,
+                triggerTimeDelayComponents: triggerToOverride.timeDelayComponents,
+                triggerFixedTimeComponents: triggerToOverride.fixedTimeComponents,
+                triggerManualCondition: triggerToOverride.triggerManualCondition,
+                triggerAlarmCreatedCondition: triggerToOverride.triggerAlarmCreatedCondition,
+                offlineModeComponents: triggerToOverride.offlineModeComponents
             )
             return
         }
@@ -371,35 +302,24 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             }
             return TriggerType(rawValue: triggerTypeString)
         }() ?? triggerToOverride?.triggerType
-        let triggerTimeDelay = fromBody[Constant.Key.triggerTimeDelay.rawValue] as? Double ?? triggerToOverride?.triggerTimeDelay
         
-        let triggerFixedTimeType: TriggerFixedTimeType? = {
-            guard let triggerFixedTimeTypeString = fromBody[Constant.Key.triggerFixedTimeType.rawValue] as? String else {
-                return nil
-            }
-            return TriggerFixedTimeType(rawValue: triggerFixedTimeTypeString)
-        }() ?? triggerToOverride?.triggerFixedTimeType
+        let triggerTimeDelayComponents = TriggerTimeDelayComponents(fromBody: fromBody, componentToOverride: triggerToOverride?.timeDelayComponents)
+        let triggerFixedTimeComponents = TriggerFixedTimeComponents(fromBody: fromBody, componentToOverride: triggerToOverride?.fixedTimeComponents)
         
-        let triggerFixedTimeTypeAmount = fromBody[Constant.Key.triggerFixedTimeTypeAmount.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeTypeAmount
-        let triggerFixedTimeHour = fromBody[Constant.Key.triggerFixedTimeHour.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeHour
-        let triggerFixedTimeMinute = fromBody[Constant.Key.triggerFixedTimeMinute.rawValue] as? Int ?? triggerToOverride?.triggerFixedTimeMinute
         let triggerManualCondition = fromBody[Constant.Key.triggerManualCondition.rawValue] as? Bool ?? triggerToOverride?.triggerManualCondition
         let triggerAlarmCreatedCondition = fromBody[Constant.Key.triggerAlarmCreatedCondition.rawValue] as? Bool ?? triggerToOverride?.triggerAlarmCreatedCondition
         
         self.init(
-            forTriggerId: triggerId,
-            forTriggerUUID: triggerUUID,
-            forTriggerLogReactions: triggerLogReactions,
-            forTriggerReminderResult: triggerReminderResult,
-            forTriggerType: triggerType,
-            forTriggerTimeDelay: triggerTimeDelay,
-            forTriggerFixedTimeType: triggerFixedTimeType,
-            forTriggerFixedTimeTypeAmount: triggerFixedTimeTypeAmount,
-            forTriggerFixedTimeHour: triggerFixedTimeHour,
-            forTriggerFixedTimeMinute: triggerFixedTimeMinute,
-            forTriggerManualCondition: triggerManualCondition,
-            forTriggerAlarmCreatedCondition: triggerAlarmCreatedCondition,
-            forOfflineModeComponents: nil
+            triggerId: triggerId,
+            triggerUUID: triggerUUID,
+            triggerLogReactions: triggerLogReactions,
+            triggerReminderResult: triggerReminderResult,
+            triggerType: triggerType,
+            triggerTimeDelayComponents: triggerTimeDelayComponents,
+            triggerFixedTimeComponents: triggerFixedTimeComponents,
+            triggerManualCondition: triggerManualCondition,
+            triggerAlarmCreatedCondition: triggerAlarmCreatedCondition,
+            offlineModeComponents: nil
         )
     }
     
@@ -408,16 +328,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     func readableTime() -> String {
         switch triggerType {
         case .timeDelay:
-            return "\(triggerTimeDelay.readable(capitalizeWords: false, abbreviationLevel: .short)) later"
+            return timeDelayComponents.readableTime()
         case .fixedTime:
-            var text = ""
-            switch triggerFixedTimeTypeAmount {
-            case 0: text += "same day"
-            case 1: text += "next day"
-            default: text += "\(triggerFixedTimeTypeAmount) days later"
-            }
-            text += " @ \(String.convert(hour: triggerFixedTimeHour, minute: triggerFixedTimeMinute))"
-            return text
+            return fixedTimeComponents.readableTime()
         }
     }
     
@@ -442,49 +355,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     func nextReminderDate(afterDate date: Date, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
         switch triggerType {
         case .timeDelay:
-            return date.addingTimeInterval(triggerTimeDelay)
+            return timeDelayComponents.nextReminderDate(afterDate: date)
         case .fixedTime:
-            var calendar = Calendar.fromZone(inTimeZone)
-
-            // Compute the start of day in the user's current time zone so the
-            // "day" component aligns with local expectations.
-            let startOfDay = calendar.startOfDay(for: date)
-            
-            // Advance by the configured component (e.g., day, week, month)
-            let advanced = calendar.date(byAdding: triggerFixedTimeType.calendarComponent,
-                                         value: triggerFixedTimeTypeAmount,
-                                         to: startOfDay) ?? Constant.Class.Date.default1970Date
-
-            // Set the hour/minute in the provided TZ
-            let executionDate = calendar.date(
-                bySettingHour: triggerFixedTimeHour,
-                minute: triggerFixedTimeMinute,
-                second: 0,
-                of: advanced,
-                matchingPolicy: .nextTimePreservingSmallerComponents,
-                repeatedTimePolicy: .first,
-                direction: .forward
-            )
-
-            if let executionDate = executionDate, executionDate > date {
-                return executionDate
-            }
-            
-            // specified trigger has already happpened e.g. its 6:00pm and trigger is for 5:00PM today, so roll over to next day
-            
-            // Compute a fallback to the next day
-            let nextDay = calendar.date(byAdding: .day, value: 1, to: advanced) ?? advanced
-            let nextDayDate = calendar.date(
-                bySettingHour: triggerFixedTimeHour,
-                minute: triggerFixedTimeMinute,
-                second: 0,
-                of: nextDay,
-                matchingPolicy: .nextTime,
-                repeatedTimePolicy: .first,
-                direction: .forward
-            )
-
-            return nextDayDate
+            return fixedTimeComponents.nextReminderDate(afterDate: date, in: inTimeZone)
         }
     }
     
@@ -518,11 +391,12 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         body[Constant.Key.triggerLogReactions.rawValue] = .array(triggerLogReactions.map { .object($0.createBody()) })
         body[Constant.Key.triggerReminderResult.rawValue] = .object(triggerReminderResult.createBody())
         body[Constant.Key.triggerType.rawValue] = .string(triggerType.rawValue)
-        body[Constant.Key.triggerTimeDelay.rawValue] = .double(triggerTimeDelay)
-        body[Constant.Key.triggerFixedTimeType.rawValue] = .string(triggerFixedTimeType.rawValue)
-        body[Constant.Key.triggerFixedTimeTypeAmount.rawValue] = .int(triggerFixedTimeTypeAmount)
-        body[Constant.Key.triggerFixedTimeHour.rawValue] = .int(triggerFixedTimeHour)
-        body[Constant.Key.triggerFixedTimeMinute.rawValue] = .int(triggerFixedTimeMinute)
+        body.merge(timeDelayComponents.createBody()) { _, new in
+            return new
+        }
+        body.merge(fixedTimeComponents.createBody()) { _, new in
+            return new
+        }
         body[Constant.Key.triggerManualCondition.rawValue] = .bool(triggerManualCondition)
         body[Constant.Key.triggerAlarmCreatedCondition.rawValue] = .bool(triggerAlarmCreatedCondition)
         return body
@@ -540,11 +414,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         }
         if !triggerReminderResult.isSame(as: other.triggerReminderResult) { return false }
         if triggerType != other.triggerType { return false }
-        if triggerTimeDelay != other.triggerTimeDelay { return false }
-        if triggerFixedTimeType != other.triggerFixedTimeType { return false }
-        if triggerFixedTimeTypeAmount != other.triggerFixedTimeTypeAmount { return false }
-        if triggerFixedTimeHour != other.triggerFixedTimeHour { return false }
-        if triggerFixedTimeMinute != other.triggerFixedTimeMinute { return false }
+        if !timeDelayComponents.isSame(as: other.timeDelayComponents) { return false }
+        if !fixedTimeComponents.isSame(as: other.fixedTimeComponents) { return false }
         if triggerManualCondition != other.triggerManualCondition { return false }
         if triggerAlarmCreatedCondition != other.triggerAlarmCreatedCondition { return false }
         return true

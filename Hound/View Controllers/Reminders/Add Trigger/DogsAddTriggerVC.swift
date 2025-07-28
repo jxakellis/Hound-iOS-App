@@ -11,7 +11,7 @@ import UIKit
 protocol DogsAddTriggerVCDelegate: AnyObject {
     func didAddTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger)
     func didUpdateTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger)
-    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, forTriggerUUID: UUID)
+    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, triggerUUID: UUID)
 }
 
 final class DogsAddTriggerVC: HoundScrollViewController {
@@ -206,7 +206,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         }
         
         guard shouldPersistChangesToServer, let dog = dog else {
-            delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, forTriggerUUID: triggerToUpdate.triggerUUID)
+            delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, triggerUUID: triggerToUpdate.triggerUUID)
             HapticsManager.notification(.warning)
             self.dismiss(animated: true)
             return
@@ -215,10 +215,10 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         let alert = UIAlertController(title: "Are you sure you want to delete this trigger?", message: nil, preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.view.isUserInteractionEnabled = false
-            TriggersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forTriggerUUIDs: [triggerToUpdate.triggerUUID]) { status, _ in
+            TriggersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, triggerUUIDs: [triggerToUpdate.triggerUUID]) { status, _ in
                 self.view.isUserInteractionEnabled = true
                 guard status != .failureResponse else { return }
-                self.delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dog.dogUUID, forTriggerUUID: triggerToUpdate.triggerUUID)
+                self.delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dog.dogUUID, triggerUUID: triggerToUpdate.triggerUUID)
                 HapticsManager.notification(.warning)
                 self.dismiss(animated: true)
             }

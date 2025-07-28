@@ -96,16 +96,17 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
     }
     private let availableDayOffsets = [0, 1, 2, 3, 4, 5, 6, 7]
     
-    var currentOffset: Int { selectedDayOffset }
-    var currentTimeOfDay: Date { timeOfDayPicker.date }
+    var currentComponents: TriggerFixedTimeComponents? {
+        
+    }
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddTriggerFixedTimeViewDelegate, forDaysOffset: Int?, forTimeOfDay: Date?) {
+    func setup(forDelegate: DogsAddTriggerFixedTimeViewDelegate, forComponents: TriggerFixedTimeComponents?) {
         // TODO TIME we need to make this NOT adapt to diff TZs. this is static regardless of TZs
         delegate = forDelegate
         
-        let index = forDaysOffset ?? selectedDayOffset
+        let index = forComponents?.triggerFixedTimeTypeAmount ?? selectedDayOffset
         selectedDayOffset = index
         dayOffsetLabel.text = textForOffset(index)
         

@@ -241,21 +241,21 @@ extension TriggersRequest {
         forErrorAlert: ResponseAutomaticErrorAlertTypes,
         forSourceFunction: RequestSourceFunctionTypes = .normal,
         forDogUUID: UUID,
-        forTriggerUUIDs: [UUID],
+        triggerUUIDs: [UUID],
         completionHandler: @escaping (
             ResponseStatus,
             HoundError?
         ) -> Void
     ) -> Progress? {
         // There should be reminders to actually delete
-        guard forTriggerUUIDs.count >= 1 else {
+        guard triggerUUIDs.count >= 1 else {
             completionHandler(.successResponse, nil)
             return nil
         }
         
         let body: JSONRequestBody = {
             var triggerBodies: [JSONRequestBody] = []
-            for forUUID in forTriggerUUIDs {
+            for forUUID in triggerUUIDs {
                 var entry: JSONRequestBody = [:]
                 entry[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
                 entry[Constant.Key.triggerUUID.rawValue] = .string(forUUID.uuidString)
@@ -281,7 +281,7 @@ extension TriggersRequest {
             // Either completed successfully or no response from the server, we can proceed as usual
             
             if responseStatus == .noResponse {
-                forTriggerUUIDs.forEach { uuid in
+                triggerUUIDs.forEach { uuid in
                     OfflineModeManager.shared
                         .addDeletedObjectToQueue(forObject:
                                                     OfflineModeDeletedTrigger(

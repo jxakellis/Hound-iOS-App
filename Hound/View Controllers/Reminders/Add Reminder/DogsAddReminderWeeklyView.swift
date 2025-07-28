@@ -166,10 +166,7 @@ final class DogsAddReminderWeeklyView: HoundView {
         if let components = forComponents {
             // TODO TIME we can do better than 2000, this will probably mess up some calclations
             let calendar = Calendar.fromZone(currentTimeZone)
-            var dateComponents = DateComponents()
-            dateComponents.year = 2000
-            dateComponents.month = 1
-            dateComponents.day = 1
+            var dateComponents = calendar.dateComponents([.year, .month, .day], from: Date())
             dateComponents.hour = components.zonedHour
             dateComponents.minute = components.zonedMinute
             dateComponents.second = 0
@@ -201,11 +198,7 @@ final class DogsAddReminderWeeklyView: HoundView {
         let minute = oldComponents.minute ?? 0
         
         let converted = oldTimeZone.convert(hour: hour, minute: minute, to: newTimeZone)
-        var newDateComponents = DateComponents()
-        // TODO TIME we can do better than 2000, this will probably mess up some calclations
-        newDateComponents.year = 2000
-        newDateComponents.month = 1
-        newDateComponents.day = 1
+        var newDateComponents = calendar.dateComponents([.year, .month, .day], from: timeOfDayDatePicker.date)
         newDateComponents.hour = converted.hour
         newDateComponents.minute = converted.minute
         newDateComponents.second = 0

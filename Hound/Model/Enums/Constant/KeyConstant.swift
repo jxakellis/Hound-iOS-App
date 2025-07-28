@@ -197,7 +197,9 @@ public enum KeyConstant: String {
     case triggerLogReactions
     case triggerReminderResult
     case triggerType
+    case triggerTimeDelayComponents
     case triggerTimeDelay
+    case triggerFixedTimeComponents
     case triggerFixedTimeType
     case triggerFixedTimeTypeAmount
     case triggerFixedTimeHour

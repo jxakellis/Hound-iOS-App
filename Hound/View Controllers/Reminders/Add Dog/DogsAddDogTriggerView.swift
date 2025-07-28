@@ -115,8 +115,8 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
         self.tableView.reloadData()
     }
     
-    func didRemoveTrigger(forTriggerUUID: UUID) {
-        dogTriggers.removeTrigger(forTriggerUUID: forTriggerUUID)
+    func didRemoveTrigger(triggerUUID: UUID) {
+        dogTriggers.removeTrigger(triggerUUID: triggerUUID)
         delegate?.didUpdateTriggerCount()
         // not in view so no animation
         self.tableView.reloadData()
@@ -174,7 +174,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
         let removeTriggerConfirmation = UIAlertController(title: "Are you sure you want to delete this trigger?", message: nil, preferredStyle: .alert)
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            self.dogTriggers.removeTrigger(forTriggerUUID: trigger.triggerUUID)
+            self.dogTriggers.removeTrigger(triggerUUID: trigger.triggerUUID)
             self.delegate?.didUpdateTriggerCount()
             
             self.tableView.deleteSections([indexPath.section], with: .fade)

@@ -127,10 +127,10 @@ public enum TriggerConstant {
         // forReminderActionTypeId 3 == potty
         let reminderResult = TriggerReminderResult(forReminderActionTypeId: 3, forReminderCustomActionName: nil)
         let trigger = Trigger(
-            forTriggerLogReactions: [logReaction],
-            forTriggerReminderResult: reminderResult,
-            forTriggerType: .timeDelay,
-            forTriggerTimeDelay: 60.0 * 30.0)
+            triggerLogReactions: [logReaction],
+            triggerReminderResult: reminderResult,
+            triggerType: .timeDelay,
+            triggerTimeDelay: 60.0 * 30.0)
         return [trigger]
     }()
 }

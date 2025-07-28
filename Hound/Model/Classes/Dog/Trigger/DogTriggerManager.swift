@@ -77,13 +77,13 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
             }
             
             guard triggerIsDeleted == false else {
-                removeTrigger(forTriggerUUID: triggerUUID)
+                removeTrigger(triggerUUID: triggerUUID)
                 continue
             }
             
             if let trigger = Trigger(
                 fromBody: fromBody,
-                triggerToOverride: findTrigger(forTriggerUUID: triggerUUID)
+                triggerToOverride: findTrigger(triggerUUID: triggerUUID)
             ) {
                 addTrigger(forTrigger: trigger)
             }
@@ -94,10 +94,10 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
     
     /// finds and returns the reference of a trigger matching the given UUID
     func findTrigger(
-        forTriggerUUID: UUID
+        triggerUUID: UUID
     ) -> Trigger? {
         dogTriggers.first {
-            $0.triggerUUID == forTriggerUUID
+            $0.triggerUUID == triggerUUID
         }
     }
     
@@ -130,12 +130,12 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
     /// Returns true if at least one trigger was removed by UUID
     @discardableResult
     func removeTrigger(
-        forTriggerUUID: UUID
+        triggerUUID: UUID
     ) -> Bool {
         var didRemoveObject = false
         /// finds and returns the reference of a trigger matching the given UUID
         dogTriggers.removeAll { trigger in
-            guard trigger.triggerUUID == forTriggerUUID else {
+            guard trigger.triggerUUID == triggerUUID else {
                 return false
             }
             didRemoveObject = true

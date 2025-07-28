@@ -442,7 +442,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 forErrorAlert: .automaticallyAlertForNone,
                 forSourceFunction: .offlineModeManager,
                 forDogUUID: deletedTrigger.dogUUID,
-                forTriggerUUIDs: [deletedTrigger.triggerUUID]
+                triggerUUIDs: [deletedTrigger.triggerUUID]
             ) { responseStatus, _ in
                 guard responseStatus != .noResponse else {
                     self.noResponseForSync()
@@ -455,7 +455,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 }
                 
                 // If the dog got added back into the dogManager, remove it again and then push the change to everything else
-                if let globalDogManager = DogManager.globalDogManager, globalDogManager.findDog(forDogUUID: deletedTrigger.dogUUID)?.dogTriggers.removeTrigger(forTriggerUUID: deletedTrigger.triggerUUID) == true {
+                if let globalDogManager = DogManager.globalDogManager, globalDogManager.findDog(forDogUUID: deletedTrigger.dogUUID)?.dogTriggers.removeTrigger(triggerUUID: deletedTrigger.triggerUUID) == true {
                     self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: globalDogManager)
                 }
                 

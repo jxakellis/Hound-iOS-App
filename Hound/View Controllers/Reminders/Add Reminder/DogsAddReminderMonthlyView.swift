@@ -44,10 +44,9 @@ final class DogsAddReminderMonthlyView: HoundView {
         label.textAlignment = .center
         label.textColor = UIColor.secondaryLabel
         label.font = Constant.Visual.Font.secondaryColorDescLabel
-        // TODO TIME write text for this disclaimer, then dynamically show if selected day of month is 29/30/31
-        label.text = ""
+        label.text = "If a month has fewer days, the reminder will occur on the last day of that month."
         label.numberOfLines = 0
-        label.isHidden = FamilyInformation.familyMembers.count <= 1
+        label.isHidden = true
         return label
     }()
     
@@ -59,7 +58,6 @@ final class DogsAddReminderMonthlyView: HoundView {
     // MARK: - Properties
     
     private weak var delegate: DogsAddReminderMonthlyViewDelegate?
-    // TODO TIME find all occurances of .current and possible replace
     private(set) var currentTimeZone: TimeZone = UserConfiguration.timeZone
     
     // timeOfDayDatePicker.date
@@ -90,10 +88,7 @@ final class DogsAddReminderMonthlyView: HoundView {
         
         if let components = forComponents {
             let calendar = Calendar.fromZone(currentTimeZone)
-            var comps = DateComponents()
-            // TODO TIME this is kinda wrong, it should be the current year/month, not 2000
-            comps.year = 2000
-            comps.month = 1
+            var comps = calendar.dateComponents([.year, .month], from: Date())
             comps.day = components.zonedDay
             comps.hour = components.zonedHour
             comps.minute = components.zonedMinute
@@ -143,11 +138,15 @@ final class DogsAddReminderMonthlyView: HoundView {
     // MARK: - Functions
     
     private func updateDescriptionLabel() {
-        // TODO TIME add disclaimer if time is 29, 30, or 31 (do we roll over? I forget how we handle that)
         let comps = Calendar.fromZone(currentTimeZone).dateComponents([.day], from: timeOfDayDatePicker.date)
         let day = comps.day ?? 1
         
-        let timeString = timeOfDayDatePicker.date.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: currentTimeZone)
+        rollUnderDisclaimerLabel.isHidden = day <= 28
+        
+        let timeString = timeOfDayDatePicker.date.houndFormatted(
+            .formatStyle(date: .omitted, time: .shortened),
+            displayTimeZone: currentTimeZone
+        )
         
         monthlyDescriptionLabel.text = "Reminder will sound on the \(day)\(day.daySuffix()) of each month at \(timeString)"
     }
@@ -158,6 +157,7 @@ final class DogsAddReminderMonthlyView: HoundView {
         super.addSubViews()
         addSubview(timeOfDayDatePicker)
         addSubview(monthlyDescriptionLabel)
+        addSubview(rollUnderDisclaimerLabel)
     }
     
     override func setupConstraints() {
@@ -174,9 +174,15 @@ final class DogsAddReminderMonthlyView: HoundView {
             timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
             timeOfDayDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             timeOfDayDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
-            timeOfDayDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
             timeOfDayDatePicker.createHeightMultiplier(Constant.Constraint.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
             timeOfDayDatePicker.createMaxHeight(Constant.Constraint.Input.megaDatePickerMaxHeight)
+        ])
+        
+        NSLayoutConstraint.activate([
+            rollUnderDisclaimerLabel.topAnchor.constraint(equalTo: timeOfDayDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            rollUnderDisclaimerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            rollUnderDisclaimerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            rollUnderDisclaimerLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
     }

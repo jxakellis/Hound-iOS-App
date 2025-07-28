@@ -81,8 +81,8 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         let beforeUpdateSilentModeStartUTCHour = UserConfiguration.silentModeStartUTCHour
         let beforeUpdateSilentModeStartUTCMinute = UserConfiguration.silentModeStartUTCMinute
         
-        UserConfiguration.silentModeStartUTCHour = Calendar.UTCCalendar.component(.hour, from: silentModeStartHoursDatePicker.date)
-        UserConfiguration.silentModeStartUTCMinute = Calendar.UTCCalendar.component(.minute, from: silentModeStartHoursDatePicker.date)
+        UserConfiguration.silentModeStartUTCHour = Calendar.utc.component(.hour, from: silentModeStartHoursDatePicker.date)
+        UserConfiguration.silentModeStartUTCMinute = Calendar.utc.component(.minute, from: silentModeStartHoursDatePicker.date)
         
         let body: JSONRequestBody = [Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue: .int(UserConfiguration.silentModeStartUTCHour),
                                      Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue: .int(UserConfiguration.silentModeStartUTCMinute)]
@@ -102,8 +102,8 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         let beforeUpdateSilentModeEndUTCHour = UserConfiguration.silentModeEndUTCHour
         let beforeUpdateSilentModeEndUTCMinute = UserConfiguration.silentModeEndUTCMinute
         
-        UserConfiguration.silentModeEndUTCHour = Calendar.UTCCalendar.component(.hour, from: silentModeEndHoursDatePicker.date)
-        UserConfiguration.silentModeEndUTCMinute = Calendar.UTCCalendar.component(.minute, from: silentModeEndHoursDatePicker.date)
+        UserConfiguration.silentModeEndUTCHour = Calendar.utc.component(.hour, from: silentModeEndHoursDatePicker.date)
+        UserConfiguration.silentModeEndUTCMinute = Calendar.utc.component(.minute, from: silentModeEndHoursDatePicker.date)
         
         let body: JSONRequestBody = [Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue: .int(UserConfiguration.silentModeEndUTCHour),
                                      Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue: .int(UserConfiguration.silentModeEndUTCMinute)]
@@ -150,13 +150,13 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         
         isSilentModeEnabledSwitch.setOn(UserConfiguration.isSilentModeEnabled, animated: animated)
         silentModeStartHoursDatePicker.setDate(
-            Calendar.UTCCalendar.date(
+            Calendar.utc.date(
                 bySettingHour: UserConfiguration.silentModeStartUTCHour,
                 minute: UserConfiguration.silentModeStartUTCMinute,
                 second: 0, of: Date()) ?? Date(),
             animated: animated)
         silentModeEndHoursDatePicker.setDate(
-            Calendar.UTCCalendar.date(
+            Calendar.utc.date(
                 bySettingHour: UserConfiguration.silentModeEndUTCHour,
                 minute: UserConfiguration.silentModeEndUTCMinute,
                 second: 0, of: Date()) ?? Date(),

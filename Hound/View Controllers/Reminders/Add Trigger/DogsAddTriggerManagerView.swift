@@ -299,7 +299,7 @@ final class DogsAddTriggerManagerView: HoundView,
     func constructTrigger(showErrorIfFailed: Bool) -> Trigger? {
         let trigger: Trigger = triggerToUpdate?.copy() as? Trigger ?? Trigger()
         
-        guard trigger.setTriggerLogReactions(forTriggerLogReactions: selectedLogReactions) else {
+        guard trigger.setTriggerLogReactions(triggerLogReactions: selectedLogReactions) else {
             if showErrorIfFailed {
                 HapticsManager.notification(.error)
                 logReactionsLabel.errorMessage = Constant.Error.TriggerError.logReactionMissing
