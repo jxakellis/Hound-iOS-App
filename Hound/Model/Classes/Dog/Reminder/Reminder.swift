@@ -192,6 +192,8 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             return lhsReminderId <= rhsReminderId
         }
         
+        let displayTZ = UserConfiguration.timeZone
+        
         switch lhs.reminderType {
         case .countdown:
             // both countdown
@@ -207,53 +209,36 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         case .weekly:
             // both weekly
             // earlier in the day is listed first
-            let lhsHour = lhs.weeklyComponents.zonedHour
-            let rhsHour = rhs.weeklyComponents.zonedHour
+            let lhsTime = lhs.weeklyComponents.localTimeOfDay(reminderTimeZone: lhs.reminderTimeZone, displayTimeZone: displayTZ)
+            let rhsTime = rhs.weeklyComponents.localTimeOfDay(reminderTimeZone: rhs.reminderTimeZone, displayTimeZone: displayTZ)
             
-            guard lhsHour != rhsHour else {
-                // hours are equal
-                let lhsMinute = lhs.weeklyComponents.zonedMinute
-                let rhsMinute = rhs.weeklyComponents.zonedMinute
-                
-                guard lhsMinute != rhsMinute else {
-                    // if equal, then smaller reminderId comes first
-                    return isLHSBeforeRHS(lhs: lhs, rhs: rhs)
-                }
-                
-                // smaller minute comes first
-                return lhsMinute < rhsMinute
+            if lhsTime.hour != rhsTime.hour {
+                return lhsTime.hour < rhsTime.hour
+            }
+            if lhsTime.minute != rhsTime.minute {
+                return lhsTime.minute < rhsTime.minute
             }
             
-            // smaller hour comes first
-            return lhsHour < rhsHour
+            return isLHSBeforeRHS(lhs: lhs, rhs: rhs)
         case .monthly:
             // both monthly
-            let lhsDay = lhs.monthlyComponents.zonedDay
-            let rhsDay = rhs.monthlyComponents.zonedDay
-            
-            guard lhsDay != rhsDay else {
-                // earliest in day comes first if same days
-                let lhsHour = lhs.monthlyComponents.zonedHour
-                let rhsHour = rhs.monthlyComponents.zonedHour
-                
-                guard lhsHour != rhsHour else {
-                    // earliest in hour comes first if same hour
-                    let lhsMinute = lhs.monthlyComponents.zonedMinute
-                    let rhsMinute = rhs.monthlyComponents.zonedMinute
-                    
-                    guard lhsMinute != rhsMinute else {
-                        // smaller remidnerId comes first
-                        return isLHSBeforeRHS(lhs: lhs, rhs: rhs)
-                    }
-                    // smaller minute comes first
-                    return lhsMinute < rhsMinute
-                }
-                
-                // smaller hour comes first
-                return lhsHour < rhsHour
+            let lhsDay = lhs.monthlyComponents.localDayOfMonth(reminderTimeZone: lhs.reminderTimeZone, displayTimeZone: displayTZ)
+            let rhsDay = rhs.monthlyComponents.localDayOfMonth(reminderTimeZone: rhs.reminderTimeZone, displayTimeZone: displayTZ)
+            if lhsDay != rhsDay {
+                return lhsDay < rhsDay
             }
-            // smaller day comes first
-            return lhsDay < rhsDay
+            
+            let lhsTime = lhs.monthlyComponents.localTimeOfDay(reminderTimeZone: lhs.reminderTimeZone, displayTimeZone: displayTZ)
+            let rhsTime = rhs.monthlyComponents.localTimeOfDay(reminderTimeZone: rhs.reminderTimeZone, displayTimeZone: displayTZ)
+            
+            if lhsTime.hour != rhsTime.hour {
+                return lhsTime.hour < rhsTime.hour
+            }
+            if lhsTime.minute != rhsTime.minute {
+                return lhsTime.minute < rhsTime.minute
+            }
+            
+            return isLHSBeforeRHS(lhs: lhs, rhs: rhs)
         case .oneTime:
             // both oneTime
             let lhsDistanceToPast = Date().distance(to: lhs.oneTimeComponents.oneTimeDate)
@@ -296,13 +281,13 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     /// Tells the reminder what components to use to make sure its in the correct timing style. Changing this changes between countdown, weekly, monthly, and oneTime mode.
     private(set) var reminderType: ReminderType = Constant.Class.Reminder.defaultReminderType
     /// Changes reminderType invokes resetForNextAlarm if reminderType is different than the current one
-    func changeReminderType(forReminderType: ReminderType) {
-        if forReminderType != reminderType {
+    func changeReminderType(_ newReminderType: ReminderType) {
+        if newReminderType != reminderType {
             // If switching to a different reminder type, reset all of thew components
             resetForNextAlarm()
         }
         
-        reminderType = forReminderType
+        reminderType = newReminderType
     }
     
     /// This is what the reminder should base its timing off it. This is either the last time a user responded to a reminder alarm or the last time a user changed a timing related property of the reminder. For example, 5 minutes into the timer you change the countdown from 30 minutes to 15. To start the timer fresh, having it count down from the moment it was changed, reset reminderExecutionBasis to Date()
@@ -476,7 +461,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             monthlyComponents: monthlyComponents,
             oneTimeComponents: oneTimeComponents,
             snoozeComponents: snoozeComponents,
-        // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
+            // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
             offlineModeComponents: nil
         )
     }

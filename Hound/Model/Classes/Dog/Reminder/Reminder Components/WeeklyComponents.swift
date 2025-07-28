@@ -241,9 +241,9 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         let readableTimeOfDay = readableTimeOfDay(reminderTimeZone: reminderTimeZone, displayTimeZone: displayTimeZone)
         return readableDaysOfWeek.appending(" at \(readableTimeOfDay)")
     }
-
+    
     // MARK: - Mutation
-
+    
     /// Updates the component using a date in the provided time zone and a set of weekdays.
     /// - Returns: `true` if weekdays were valid and applied.
     @discardableResult

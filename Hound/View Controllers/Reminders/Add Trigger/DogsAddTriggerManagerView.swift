@@ -299,7 +299,7 @@ final class DogsAddTriggerManagerView: HoundView,
     func constructTrigger(showErrorIfFailed: Bool) -> Trigger? {
         let trigger: Trigger = triggerToUpdate?.copy() as? Trigger ?? Trigger()
         
-        guard trigger.setTriggerLogReactions(triggerLogReactions: selectedLogReactions) else {
+        guard trigger.setTriggerLogReactions(selectedLogReactions) else {
             if showErrorIfFailed {
                 HapticsManager.notification(.error)
                 logReactionsLabel.errorMessage = Constant.Error.TriggerError.logReactionMissing
@@ -332,27 +332,21 @@ final class DogsAddTriggerManagerView: HoundView,
         
         if segmentedControl.selectedSegmentIndex == SegmentedControlSection.timeDelay.rawValue {
             trigger.triggerType = .timeDelay
-            if !trigger.changeTriggerTimeDelay(forTimeDelay: timeDelayView.currentTimeDelay ?? Constant.Class.Trigger.defaultTriggerTimeDelay) {
-                if showErrorIfFailed {
-                    HapticsManager.notification(.error)
-                    timeDelayView.errorMessage = Constant.Error.TriggerError.timeDelayInvalid
-                }
-                return nil
-            }
+            let component = timeDelayView.currentComponent
+            if !trigger.timeDelayComponents.changeTriggerTimeDelay(forTimeDelay: component.triggerTimeDelay) {
+                            if showErrorIfFailed {
+                                HapticsManager.notification(.error)
+                                timeDelayView.errorMessage = Constant.Error.TriggerError.timeDelayInvalid
+                            }
+                            return nil
+                        }
         }
         else {
             trigger.triggerType = .fixedTime
-            // currently, trigger doesn't adapt to TZs, if you have automation for same day at 8:50PM, it will always be that no matter where hound is opened
-            let comps = Calendar.user.dateComponents([.hour, .minute], from: fixedTimeView.currentTimeOfDay)
-            guard let hour = comps.hour, let min = comps.minute else {
-                if showErrorIfFailed {
-                    HapticsManager.notification(.error)
-                    fixedTimeView.errorMessage = Constant.Error.TriggerError.fixedTimeTypeAmountInvalid
-                }
-                return nil
-            }
-            
-            if !trigger.changeFixedTimeHour(forHour: hour) || !trigger.changeFixedTimeMinute(forMinute: min) || !trigger.changeTriggerFixedTimeTypeAmount(forAmount: fixedTimeView.currentOffset) {
+            let component = fixedTimeView.currentComponent
+            if !trigger.fixedTimeComponents.changeFixedTimeHour(forHour: component.triggerFixedTimeHour) ||
+                !trigger.fixedTimeComponents.changeFixedTimeMinute(forMinute: component.triggerFixedTimeMinute) ||
+                !trigger.fixedTimeComponents.changeTriggerFixedTimeTypeAmount(forAmount: component.triggerFixedTimeTypeAmount) {
                 if showErrorIfFailed {
                     HapticsManager.notification(.error)
                     fixedTimeView.errorMessage = Constant.Error.TriggerError.fixedTimeTypeAmountInvalid
@@ -445,17 +439,17 @@ final class DogsAddTriggerManagerView: HoundView,
         }
         
         if forTriggerToUpdate?.triggerType == .timeDelay {
-            timeDelayView.setup(forDelegate: self, forTimeDelay: forTriggerToUpdate?.triggerTimeDelay)
+            timeDelayView.setup(forDelegate: self, forComponents: forTriggerToUpdate?.timeDelayComponents)
         }
         else {
-            timeDelayView.setup(forDelegate: self, forTimeDelay: nil)
+            timeDelayView.setup(forDelegate: self, forComponents: nil)
         }
         
         if forTriggerToUpdate?.triggerType == .fixedTime {
-            fixedTimeView.setup(forDelegate: self, forDaysOffset: forTriggerToUpdate?.triggerFixedTimeTypeAmount, forTimeOfDay: forTriggerToUpdate?.nextReminderDate(afterDate: Date()))
+            fixedTimeView.setup(forDelegate: self, forComponents: forTriggerToUpdate?.fixedTimeComponents)
         }
         else {
-            fixedTimeView.setup(forDelegate: self, forDaysOffset: nil, forTimeOfDay: nil)
+            fixedTimeView.setup(forDelegate: self, forComponents: nil)
         }
         
         updateDynamicUIElements()

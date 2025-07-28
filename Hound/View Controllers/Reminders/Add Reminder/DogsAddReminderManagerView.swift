@@ -318,13 +318,13 @@ final class DogsAddReminderManagerView: HoundView,
         
         switch segmentedControl.selectedSegmentIndex {
         case ReminderType.oneTime.segmentedControlIndex:
-            reminder.changeReminderType(forReminderType: .oneTime)
+            reminder.changeReminderType(.oneTime)
             reminder.oneTimeComponents.oneTimeDate = onceView.currentComponent.oneTimeDate
         case ReminderType.countdown.segmentedControlIndex:
-            reminder.changeReminderType(forReminderType: .countdown)
+            reminder.changeReminderType(.countdown)
             reminder.countdownComponents.executionInterval = countdownView.currentComponent.executionInterval
         case ReminderType.weekly.segmentedControlIndex:
-            reminder.changeReminderType(forReminderType: .weekly)
+            reminder.changeReminderType(.weekly)
             guard let component = weeklyView.currentComponent else {
                 if showErrorIfFailed {
                     HapticsManager.notification(.error)
@@ -336,7 +336,7 @@ final class DogsAddReminderManagerView: HoundView,
             reminder.weeklyComponents.zonedMinute = component.zonedMinute
             _ = reminder.weeklyComponents.setZonedWeekdays(component.zonedWeekdays)
         case ReminderType.monthly.segmentedControlIndex:
-            reminder.changeReminderType(forReminderType: .monthly)
+            reminder.changeReminderType(.monthly)
             let component = monthlyView.currentComponent
             reminder.monthlyComponents.apply(from: component)
         default: break
@@ -515,12 +515,14 @@ final class DogsAddReminderManagerView: HoundView,
     private func updateDisclaimerLabel() {
         let reminderEnabled = reminderIsEnabledSwitch.isOn
         let userIsRecipient = selectedRecipientUserIds.contains(UserInformation.userId ?? Constant.Visual.Text.unknownUserId)
+        let hasRecipients = !selectedRecipientUserIds.isEmpty
+        let shouldShowDisclaimer =
+            !reminderEnabled ||
+            !userIsRecipient ||
+            (hasRecipients && !UserConfiguration.isNotificationEnabled) ||
+            (hasRecipients && !UserConfiguration.isReminderNotificationEnabled)
         
-        // TODO UI this should show itself and have text if the current users isnt a recipient
-        notificationsDisabledLabel.isHidden = selectedRecipientUserIds.isEmpty
-        || (reminderEnabled &&
-            (!userIsRecipient || (UserConfiguration.isNotificationEnabled && UserConfiguration.isReminderNotificationEnabled))
-        )
+        notificationsDisabledLabel.isHidden = !shouldShowDisclaimer
         
         let precalculatedDynamicTextColor = UIColor.secondaryLabel
         
@@ -544,6 +546,29 @@ final class DogsAddReminderManagerView: HoundView,
                 ))
                 message.append(NSAttributedString(
                     string: ", so no alarms will sound.",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+            }
+            else if !userIsRecipient {
+                message.append(NSAttributedString(
+                    string: "You're ",
+                    attributes: [
+                        .font: Constant.Visual.Font.secondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                message.append(NSAttributedString(
+                    string: "not",
+                    attributes: [
+                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
+                        .foregroundColor: precalculatedDynamicTextColor as Any
+                    ]
+                ))
+                message.append(NSAttributedString(
+                    string: " a recipient for this reminder, so you won't be notified.",
                     attributes: [
                         .font: Constant.Visual.Font.secondaryColorDescLabel,
                         .foregroundColor: precalculatedDynamicTextColor as Any

@@ -164,7 +164,6 @@ final class DogsAddReminderWeeklyView: HoundView {
         timeOfDayDatePicker.timeZone = forTimeZone
         
         if let components = forComponents {
-            // TODO TIME we can do better than 2000, this will probably mess up some calclations
             let calendar = Calendar.fromZone(currentTimeZone)
             var dateComponents = calendar.dateComponents([.year, .month, .day], from: Date())
             dateComponents.hour = components.zonedHour

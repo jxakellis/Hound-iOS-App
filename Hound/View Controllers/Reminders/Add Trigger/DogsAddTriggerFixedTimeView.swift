@@ -52,7 +52,12 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         datePicker.datePickerMode = .time
         datePicker.minuteInterval = Constant.Development.minuteInterval
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.date = Date.roundDate(targetDate: Date(), roundingInterval: Double(60 * datePicker.minuteInterval), roundingMethod: .up)
+        datePicker.timeZone = UserConfiguration.timeZone
+        datePicker.date = Date.roundDate(
+            targetDate: Date(),
+            roundingInterval: Double(60 * datePicker.minuteInterval),
+            roundingMethod: .up
+        )
         datePicker.addTarget(self, action: #selector(didUpdateTimeOfDay), for: .valueChanged)
         return datePicker
     }()
@@ -96,13 +101,24 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
     }
     private let availableDayOffsets = [0, 1, 2, 3, 4, 5, 6, 7]
     
-    var currentComponents: TriggerFixedTimeComponents? {
-        
+    var currentComponent: TriggerFixedTimeComponents {
+        let comps = Calendar.user.dateComponents([.hour, .minute], from: timeOfDayPicker.date)
+        let hour = comps.hour ?? Constant.Class.Trigger.defaultTriggerFixedTimeHour
+        let minute = comps.minute ?? Constant.Class.Trigger.defaultTriggerFixedTimeMinute
+        return TriggerFixedTimeComponents(
+            triggerFixedTimeType: .day,
+            triggerFixedTimeTypeAmount: selectedDayOffset,
+            triggerFixedTimeHour: hour,
+            triggerFixedTimeMinute: minute
+        )
     }
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddTriggerFixedTimeViewDelegate, forComponents: TriggerFixedTimeComponents?) {
+    func setup(
+        forDelegate: DogsAddTriggerFixedTimeViewDelegate,
+        forComponents: TriggerFixedTimeComponents?
+    ) {
         // TODO TIME we need to make this NOT adapt to diff TZs. this is static regardless of TZs
         delegate = forDelegate
         
@@ -110,7 +126,17 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         selectedDayOffset = index
         dayOffsetLabel.text = textForOffset(index)
         
-        timeOfDayPicker.date = forTimeOfDay ?? timeOfDayPicker.date
+        if let components = forComponents {
+            var comps = DateComponents()
+            comps.year = 2000
+            comps.month = 1
+            comps.day = 1
+            comps.hour = components.triggerFixedTimeHour
+            comps.minute = components.triggerFixedTimeMinute
+            comps.second = 0
+            comps.timeZone = UserConfiguration.timeZone
+            timeOfDayPicker.date = Calendar.user.date(from: comps) ?? timeOfDayPicker.date
+        }
         
         updateDescriptionLabel()
     }
@@ -128,12 +154,14 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         default: text += "\(selectedDayOffset) days after the log "
         }
         
-        // TODO TIME make this time so it doesnt localize
-        text += "at \(timeOfDayPicker.date.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: TimeZone.current))"
+        let comps = Calendar.user.dateComponents([.hour, .minute], from: timeOfDayPicker.date)
+        let hour = comps.hour ?? Constant.Class.Trigger.defaultTriggerFixedTimeHour
+        let minute = comps.minute ?? Constant.Class.Trigger.defaultTriggerFixedTimeMinute
+        text += "at \(String.convert(hour: hour, minute: minute))"
         
         var emphasizedText: String?
         if selectedDayOffset == 0 {
-            emphasizedText = ""/* ". If the time has passed, reminder rolls over to the next day"*/
+            emphasizedText = "" /* ". If the time has passed, reminder rolls over to the next day"*/
         }
         let precalculatedDynamicTextColor = UIColor.label
         

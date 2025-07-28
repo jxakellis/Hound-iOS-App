@@ -31,7 +31,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         imageView.tintColor = UIColor.systemBlue
         return imageView
     }()
-        
+    
     private let reminderActionLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
@@ -64,7 +64,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     private let chevronImageView: HoundImageView = {
         let imageView = HoundImageView()
-
+        
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")
         imageView.tintColor = UIColor.systemGray4
@@ -72,7 +72,6 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return imageView
     }()
     
-    // TODO add indicator if reminder is in diff TZ than the user
     private let notificationBellImageView: HoundImageView = {
         let imageView = HoundImageView()
         
@@ -82,9 +81,19 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return imageView
     }()
     
+    private let timeZoneIndicatorImageView: HoundImageView = {
+        let imageView = HoundImageView()
+        
+        imageView.image = UIImage(systemName: "globe")
+        imageView.tintColor = UIColor.systemGray4
+        
+        return imageView
+    }()
+    
     private lazy var chevronSwitchStack: HoundStackView = {
         let stack = HoundStackView(huggingPriority: 300, compressionResistancePriority: 300)
         stack.addArrangedSubview(notificationBellImageView)
+        stack.addArrangedSubview(timeZoneIndicatorImageView)
         stack.addArrangedSubview(reminderIsEnabledSwitch)
         stack.addArrangedSubview(chevronImageView)
         stack.axis = .horizontal
@@ -109,7 +118,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     @objc private func didToggleReminderIsEnabled(_ sender: Any) {
         guard let reminder = reminder else { return }
         
-        updateNotificationBell()
+        updateIndicators()
         delegate?.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminder.reminderUUID, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
     }
     
@@ -128,21 +137,34 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         reminderIsEnabledSwitch.isOn = forReminder.reminderIsEnabled
         reminder = forReminder
         
-        triggerResultIndicatorImageView.isHidden = !forReminder.reminderIsTriggerResult
-        chevronSwitchStack.isHidden = forReminder.reminderIsTriggerResult
-        
-        updateNotificationBell()
-        
         reminderActionLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName, includeMatchingEmoji: true)
         
         intervalLabel.text = forReminder.readableRecurrance()
+        
+        triggerResultIndicatorImageView.isHidden = !forReminder.reminderIsTriggerResult
+        chevronSwitchStack.isHidden = forReminder.reminderIsTriggerResult
+        
+        updateIndicators()
     }
     
     // MARK: - Functions
     
-    private func updateNotificationBell() {
+    private func updateIndicators() {
         guard let reminder = reminder else { return }
-        notificationBellImageView.isHidden = !reminder.reminderIsEnabled || reminder.reminderRecipientUserIds.contains(where: { $0 == UserInformation.userId ?? Constant.Visual.Text.unknownUserId })
+        let reminderEnabled = reminder.reminderIsEnabled
+        let userIsRecipient = reminder.reminderRecipientUserIds.contains { $0 == UserInformation.userId ?? Constant.Visual.Text.unknownUserId }
+        let hasRecipients = !reminder.reminderRecipientUserIds.isEmpty
+        
+        let shouldShowBell =
+        reminderEnabled && (
+            !userIsRecipient ||
+            (hasRecipients && !UserConfiguration.isNotificationEnabled) ||
+            (hasRecipients && !UserConfiguration.isReminderNotificationEnabled)
+        )
+        
+        // TODO TIME TEST HOW THESE LOOK TOGETHER
+        notificationBellImageView.isHidden = !shouldShowBell
+        timeZoneIndicatorImageView.isHidden = !reminder.reminderIsEnabled || reminder.reminderTimeZone == UserConfiguration.timeZone
     }
     
     // MARK: - Setup Elements
@@ -189,10 +211,14 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         }
         
         notificationBellImageView.snp.makeConstraints { make in
-            make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
+            make.height.equalTo(chevronImageView.snp.width)
             make.width.equalTo(notificationBellImageView.snp.height)
         }
+        
+        timeZoneIndicatorImageView.snp.makeConstraints { make in
+            make.height.equalTo(chevronImageView.snp.width)
+            make.width.equalTo(timeZoneIndicatorImageView.snp.height)
+        }
     }
-
+    
 }

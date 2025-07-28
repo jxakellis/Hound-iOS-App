@@ -38,9 +38,9 @@ final class TriggerTimeDelayComponents: NSObject, NSCoding, NSCopying {
     // MARK: - Properties
     
     private(set) var triggerTimeDelay: Double = Constant.Class.Trigger.defaultTriggerTimeDelay
-    func changeTriggerTimeDelay(forTimeDelay: Double) -> Bool {
-        guard forTimeDelay > 0 else { return false }
-        triggerTimeDelay = forTimeDelay
+    func changeTriggerTimeDelay(_ newTimeDelay: Double) -> Bool {
+        guard newTimeDelay > 0 else { return false }
+        triggerTimeDelay = newTimeDelay
         return true
     }
     

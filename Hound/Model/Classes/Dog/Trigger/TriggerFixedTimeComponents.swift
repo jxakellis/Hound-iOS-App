@@ -81,23 +81,23 @@ final class TriggerFixedTimeComponents: NSObject, NSCoding, NSCopying {
     /// triggerFixedTimeType isn't used currently. leave as its default of .day
     private(set) var triggerFixedTimeType: TriggerFixedTimeType = Constant.Class.Trigger.defaultTriggerFixedTimeType
     private(set) var triggerFixedTimeTypeAmount: Int = Constant.Class.Trigger.defaultTriggerFixedTimeTypeAmount
-    func changeTriggerFixedTimeTypeAmount(forAmount: Int) -> Bool {
-        guard forAmount >= 0 else { return false }
-        triggerFixedTimeTypeAmount = forAmount
+    func changeTriggerFixedTimeTypeAmount(_ newAmount: Int) -> Bool {
+        guard newAmount >= 0 else { return false }
+        triggerFixedTimeTypeAmount = newAmount
         return true
     }
     /// 0-23
     private(set) var triggerFixedTimeHour: Int = Constant.Class.Trigger.defaultTriggerFixedTimeHour
-    func changeFixedTimeHour(forHour: Int) -> Bool {
-        guard (0...23).contains(forHour) else { return false }
-        triggerFixedTimeHour = forHour
+    func changeFixedTimeHour(_ newHour: Int) -> Bool {
+        guard (0...23).contains(newHour) else { return false }
+        triggerFixedTimeHour = newHour
         return true
     }
     /// 0-59
     private(set) var triggerFixedTimeMinute: Int = Constant.Class.Trigger.defaultTriggerFixedTimeMinute
-    func changeFixedTimeMinute(forMinute: Int) -> Bool {
-        guard (0...59).contains(forMinute) else { return false }
-        triggerFixedTimeMinute = forMinute
+    func changeFixedTimeMinute(_ newMinute: Int) -> Bool {
+        guard (0...59).contains(newMinute) else { return false }
+        triggerFixedTimeMinute = newMinute
         return true
     }
     

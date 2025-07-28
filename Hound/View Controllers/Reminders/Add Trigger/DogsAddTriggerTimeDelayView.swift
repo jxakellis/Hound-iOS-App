@@ -44,15 +44,18 @@ final class DogsAddTriggerTimeDelayView: HoundView {
     
     private weak var delegate: DogsAddTriggerTimeDelayViewDelegate?
     
-    var currentTimeDelay: Double? {
-        countdownDatePicker.countDownDuration
+    var currentComponent: TriggerTimeDelayComponents {
+        TriggerTimeDelayComponents(triggerTimeDelay: countdownDatePicker.countDownDuration)
     }
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddTriggerTimeDelayViewDelegate, forTimeDelay: Double?) {
+    func setup(
+        forDelegate: DogsAddTriggerTimeDelayViewDelegate,
+        forComponents: TriggerTimeDelayComponents?
+    ) {
         delegate = forDelegate
-        if let delay = forTimeDelay {
+        if let delay = forComponents?.triggerTimeDelay {
             countdownDatePicker.countDownDuration = delay
         }
         

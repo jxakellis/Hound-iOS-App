@@ -220,7 +220,7 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         self.logNote = forLogNote ?? logNote
         self.changeLogUnit(forLogUnitTypeId: forLogUnitTypeId, forLogNumberOfLogUnits: forLogNumberOfUnits)
         self.logCreatedByReminderUUID = forCreatedByReminderUUID ?? logCreatedByReminderUUID
-        self.offlineModeComponents = offlineModeComponents ?? offlineModeComponents
+        self.offlineModeComponents = offlineModeComponents ?? self.offlineModeComponents
     }
     
     /// Provide a dictionary literal of log properties to instantiate log. Optionally, provide a log to override with new properties from fromBody.

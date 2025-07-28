@@ -201,7 +201,7 @@ final class ReminderTests: XCTestCase {
     func testChangeTypeResetsExecutionBasis() {
         let rem = makeFullReminder(type: .countdown)
         let before = rem.reminderExecutionBasis
-        rem.changeReminderType(forReminderType: .weekly)
+        rem.changeReminderType(.weekly)
         XCTAssertEqual(rem.reminderType, .weekly)
         XCTAssertGreaterThan(rem.reminderExecutionBasis, before)
     }
@@ -253,5 +253,30 @@ final class ReminderTests: XCTestCase {
                            monthlyComponents: TestHelper.monthly(day: 15, hour: 9, minute: 0, skipped: nil))
         let next = rem.reminderExecutionDate
         XCTAssertEqual(next, TestHelper.date("2025-01-15T09:00:00Z"))
+    }
+    
+    func testWeeklyComparisonUsesLocalTime() {
+        let previousUsesDevice = UserConfiguration.usesDeviceTimeZone
+        let previousTZ = UserConfiguration.userTimeZone
+        UserConfiguration.usesDeviceTimeZone = false
+        UserConfiguration.userTimeZone = TestHelper.utc
+        defer {
+            UserConfiguration.usesDeviceTimeZone = previousUsesDevice
+            UserConfiguration.userTimeZone = previousTZ
+        }
+        
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let est = TimeZone(identifier: "America/New_York")!
+        
+        let lhs = Reminder(reminderId: 1,
+                           reminderType: .weekly,
+                           reminderTimeZone: pst,
+                           weeklyComponents: TestHelper.weekly(days: [.monday], hour: 8, minute: 0, skipped: nil))
+        let rhs = Reminder(reminderId: 2,
+                           reminderType: .weekly,
+                           reminderTimeZone: est,
+                           weeklyComponents: TestHelper.weekly(days: [.monday], hour: 9, minute: 0, skipped: nil))
+        
+        XCTAssertTrue(rhs < lhs)
     }
 }
