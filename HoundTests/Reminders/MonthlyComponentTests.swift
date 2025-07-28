@@ -121,12 +121,6 @@ final class MonthlyComponentsTests: XCTestCase {
     // MARK: - Readable Recurrence Tests
     
     func testLocalConversion() {
-        // Helper to replace all kinds of non-breaking/narrow spaces with regular spaces
-        func normalized(_ s: String) -> String {
-            s.replacingOccurrences(of: "\u{202F}", with: " ")
-             .replacingOccurrences(of: "\u{00A0}", with: " ")
-        }
-        
         let est = TimeZone(identifier: "America/New_York")!
         let gmt = TimeZone(identifier: "GMT")!
         // 2024-01-10 is always standard time (EST, UTC-5)
@@ -134,11 +128,11 @@ final class MonthlyComponentsTests: XCTestCase {
         let basis = TestHelper.date("2024-01-10T00:00:00-05:00")
 
         let estReadable = comp.readableRecurrence(reminderExecutionBasis: basis, reminderTimeZone: est, displayTimeZone: est)
-        XCTAssertEqual(normalized(estReadable), "Every 10th at 10:15 PM")
+        XCTAssertEqual(estReadable.normalizeSpaces(), "Every 10th at 10:15 PM")
         
         let local = comp.readableRecurrence(reminderExecutionBasis: basis, reminderTimeZone: est, displayTimeZone: gmt)
         // 10:15 PM EST converts to 3:15 AM GMT on the 11th
-        XCTAssertEqual(normalized(local), "Every 11th at 3:15 AM")
+        XCTAssertEqual(local.normalizeSpaces(), "Every 11th at 3:15 AM")
     }
     
     func testNotSkippingExecutionAcrossTimeZones() {

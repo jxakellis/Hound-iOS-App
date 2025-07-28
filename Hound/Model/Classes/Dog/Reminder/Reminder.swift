@@ -53,11 +53,9 @@ enum ReminderType: String, CaseIterable {
 
 final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
-    // TODO TIMING 3. default TZ to UTC for legacy in DB but locally make it current TZ
     // TODO TIMING 4. add TZ drop down to one time, weekly, and monthly views
     
     // TODO TIMING 7. when we detect a change in the user's TZ, we ask them if they want hound to switch their user setting to that new TZ
-    // TODO TIMING 8. triggers possible need TZs?
     
     // MARK: - NSCopying
     

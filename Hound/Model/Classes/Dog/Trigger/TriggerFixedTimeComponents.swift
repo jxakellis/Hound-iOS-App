@@ -151,7 +151,7 @@ final class TriggerFixedTimeComponents: NSObject, NSCoding, NSCopying {
     }
     
     func nextReminderDate(afterDate date: Date, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
-        var calendar = Calendar.fromZone(inTimeZone)
+        let calendar = Calendar.fromZone(inTimeZone)
 
         // Compute the start of day in the user's current time zone so the
         // "day" component aligns with local expectations.

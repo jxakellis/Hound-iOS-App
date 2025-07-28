@@ -83,8 +83,8 @@ final class UserConfiguration: UserDefaultPersistable {
             self.measurementSystem = measurementSystem
         }
         if let isHapticsEnabled = body[Constant.Key.userConfigurationIsHapticsEnabled.rawValue] as? Bool {
-                    self.isHapticsEnabled = isHapticsEnabled
-                }
+            self.isHapticsEnabled = isHapticsEnabled
+        }
         if let usesDeviceTimeZone = body[Constant.Key.userConfigurationUsesDeviceTimeZone.rawValue] as? Bool {
             self.usesDeviceTimeZone = usesDeviceTimeZone
         }
@@ -161,9 +161,21 @@ final class UserConfiguration: UserDefaultPersistable {
     
     static var isHapticsEnabled: Bool = true
     
-    static var usesDeviceTimeZone: Bool = true
+    static var usesDeviceTimeZone: Bool = true {
+        didSet {
+            if oldValue != usesDeviceTimeZone {
+                NotificationCenter.default.post(name: .didUpdateUserTimeZone, object: nil)
+            }
+        }
+    }
     
-    static var userTimeZone: TimeZone?
+    static var userTimeZone: TimeZone? {
+        didSet {
+            if oldValue != userTimeZone {
+                NotificationCenter.default.post(name: .didUpdateUserTimeZone, object: nil)
+            }
+        }
+    }
     
     static var deviceTimeZone: TimeZone {
         return TimeZone.current

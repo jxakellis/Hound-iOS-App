@@ -18,8 +18,8 @@ extension String {
         components.day = 1
         components.hour = hour
         components.minute = minute
-        let calendar = Calendar.utc
-        guard let date = calendar.date(from: components) else {
+        // leave as Calendar.curent. we already have the hour and minute, just need it in a readable time
+        guard let date = Calendar.current.date(from: components) else {
             return "\(hour):\(String(format: "%02d", minute))"
         }
 
@@ -75,5 +75,10 @@ extension String {
     
     func hasText() -> Bool {
         return self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+    }
+    
+    /// Helper to replace all kinds of non-breaking/narrow spaces with regular spaces
+    func normalizeSpaces() -> String {
+        self.replacingOccurrences(of: "\u{202F}", with: " ").replacingOccurrences(of: "\u{00A0}", with: " ")
     }
 }

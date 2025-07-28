@@ -24,7 +24,6 @@ final class OneTimeComponentsTests: XCTestCase {
     
     func testReadablePropertiesVariousDates() throws {
         let calendar = Calendar.user
-        let currentYear = calendar.component(.year, from: Date())
         let sameYear = TestHelper.date("2025-01-02T05:06:07Z")
         let diffYear = TestHelper.date("2024-12-31T23:59:59Z")
         let compSame = OneTimeComponents(oneTimeDate: sameYear)
@@ -67,7 +66,6 @@ final class OneTimeComponentsTests: XCTestCase {
     }
     
     func testExtremeDateValues() throws {
-        let utc = TimeZone(identifier: "UTC")!
         let early = Date.distantPast
         let late = Date.distantFuture
         let midnight = TestHelper.date("2024-01-01T00:00:00Z")

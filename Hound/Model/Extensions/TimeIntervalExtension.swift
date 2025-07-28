@@ -50,7 +50,7 @@ extension TimeInterval {
             if let maxComponents = maxComponents {
                 guard usedComponents < maxComponents else { break }
             }
-            guard value > 0 || components.isEmpty else { continue } // Always show at least one unit
+            guard value > 0 else { continue }
             
             let label: String
             switch abbreviationLevel {

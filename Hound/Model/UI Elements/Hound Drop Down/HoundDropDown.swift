@@ -113,7 +113,8 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         let originY: CGFloat
         if direction == .down {
             originY = viewPositionReference.maxY + offset
-        } else {
+        }
+        else {
             originY = viewPositionReference.minY - offset
         }
         self.frame = CGRect(x: viewPositionReference.minX, y: originY, width: 0, height: 0)
@@ -174,7 +175,8 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         let anchorY: CGFloat
         if direction == .down {
             anchorY = viewPositionReference.maxY + dropDownViewOffset
-        } else {
+        }
+        else {
             anchorY = viewPositionReference.minY - dropDownViewOffset
         }
         
@@ -186,7 +188,8 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         let availableSpace: CGFloat
         if direction == .down {
             availableSpace = max((self.superview?.frame.height ?? 0.0) - anchorY - shadowPad, 0.0)
-        } else {
+        }
+        else {
             availableSpace = max(anchorY - shadowPad, 0.0)
         }
         
@@ -206,7 +209,6 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
                 self.frame = CGRect(x: self.frame.minX, y: viewPositionReference.minY - self.dropDownViewOffset - height, width: self.dropDownViewWidth, height: height)
             }
             
-            
             dropDownTableView.frame.size = CGSize(width: self.dropDownViewWidth, height: height)
         })
         
@@ -222,10 +224,12 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         if let viewPositionReference = viewPositionReference {
             if direction == .down {
                 originY = viewPositionReference.maxY + dropDownViewOffset
-            } else {
+            }
+            else {
                 originY = viewPositionReference.minY - dropDownViewOffset
             }
-        } else {
+        }
+        else {
             originY = frame.minY
         }
         
@@ -236,7 +240,8 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
             //            self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
             if self.direction == .up, let viewPositionReference = self.viewPositionReference {
                 self.frame = CGRect(x: self.frame.minX, y: viewPositionReference.minY - self.dropDownViewOffset, width: self.dropDownViewWidth, height: 0)
-            } else {
+            }
+            else {
                 self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
             }
             self.dropDownTableView?.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
