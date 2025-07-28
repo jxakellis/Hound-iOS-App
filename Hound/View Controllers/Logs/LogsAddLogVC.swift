@@ -757,7 +757,6 @@ final class LogsAddLogVC: HoundScrollViewController,
             }
             updateLogStartEndDateErrors()
             
-            let format: String
             if Calendar.user.isDateInToday(start) {
                 // If the start date is today, show only time
                 // 7:53 AM

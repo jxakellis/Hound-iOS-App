@@ -119,7 +119,6 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         forDelegate: DogsAddTriggerFixedTimeViewDelegate,
         forComponents: TriggerFixedTimeComponents?
     ) {
-        // TODO TIME we need to make this NOT adapt to diff TZs. this is static regardless of TZs
         delegate = forDelegate
         
         let index = forComponents?.triggerFixedTimeTypeAmount ?? selectedDayOffset

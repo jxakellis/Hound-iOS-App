@@ -23,7 +23,6 @@ final class OneTimeComponentsTests: XCTestCase {
     }
     
     func testReadablePropertiesVariousDates() throws {
-        let calendar = Calendar.user
         let sameYear = TestHelper.date("2025-01-02T05:06:07Z")
         let diffYear = TestHelper.date("2024-12-31T23:59:59Z")
         let compSame = OneTimeComponents(oneTimeDate: sameYear)

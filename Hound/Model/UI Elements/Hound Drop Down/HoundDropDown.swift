@@ -234,16 +234,16 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         }
         
         UIView.animate(withDuration: animated ? 0.5 : 0, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .curveLinear, animations: {
-            //            if self.direction == .up {
-            //                self.frame.origin.y = originY
+            if self.direction == .up {
+                self.frame.origin.y = originY
+            }
+            self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
+            //            if self.direction == .up, let viewPositionReference = self.viewPositionReference {
+            //                self.frame = CGRect(x: self.frame.minX, y: viewPositionReference.minY - self.dropDownViewOffset, width: self.dropDownViewWidth, height: 0)
             //            }
-            //            self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
-            if self.direction == .up, let viewPositionReference = self.viewPositionReference {
-                self.frame = CGRect(x: self.frame.minX, y: viewPositionReference.minY - self.dropDownViewOffset, width: self.dropDownViewWidth, height: 0)
-            }
-            else {
-                self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
-            }
+            //            else {
+            //                self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
+            //            }
             self.dropDownTableView?.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
         })
     }

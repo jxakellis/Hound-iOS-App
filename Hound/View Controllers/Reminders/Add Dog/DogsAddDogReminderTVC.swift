@@ -162,7 +162,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
             (hasRecipients && !UserConfiguration.isReminderNotificationEnabled)
         )
         
-        // TODO TIME TEST HOW THESE LOOK TOGETHER
+        // TODO UI TEST HOW THESE LOOK TOGETHER
         notificationBellImageView.isHidden = !shouldShowBell
         timeZoneIndicatorImageView.isHidden = !reminder.reminderIsEnabled || reminder.reminderTimeZone == UserConfiguration.timeZone
     }

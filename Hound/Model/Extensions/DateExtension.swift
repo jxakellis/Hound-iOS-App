@@ -16,7 +16,7 @@ enum HoundDateFormat {
     func string(from date: Date, displayTimeZone: TimeZone) -> String {
         switch self {
         case let .formatStyle(dateStyle, timeStyle):
-            var style = Date.FormatStyle(date: dateStyle, time: timeStyle, timeZone: displayTimeZone)
+            let style = Date.FormatStyle(date: dateStyle, time: timeStyle, timeZone: displayTimeZone)
             return date.formatted(style)
         case let .template(template):
             let formatter = DateFormatter()

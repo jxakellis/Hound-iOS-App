@@ -245,7 +245,7 @@ final class DogsReminderTVC: HoundTableViewCell {
             make.width.equalTo(chevronImageView.snp.height).multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
         }
         
-        // TODO TIME TEST HOW THESE LOOK TOGETHER
+        // TODO UI TEST HOW THESE LOOK TOGETHER
         notificationBellImageView.snp.makeConstraints { make in
             make.centerX.equalTo(chevronImageView.snp.centerX)
             make.centerY.equalTo(reminderActionTextLabel.snp.centerY)
