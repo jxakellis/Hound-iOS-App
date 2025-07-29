@@ -62,7 +62,6 @@ public enum KeyConstant: String {
     
     case userConfigurationUsesDeviceTimeZone
     case userConfigurationUserTimeZone
-    // TODO TIME upon app launch or if a change in TimeZone.current is detected, updated the server with the new userConfigurationDeviceTimeZone
     case userConfigurationDeviceTimeZone
     
     case userConfigurationSnoozeLength

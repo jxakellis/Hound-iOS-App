@@ -12,7 +12,7 @@ import UIKit
 
 enum PersistenceManager {
     /// Called by App or Scene Delegate when setting up in didFinishLaunchingWithOptions, can be either the first time setup or a recurring setup (i.e. not the app isnt being opened for the first time)
-    static func applicationDidFinishLaunching() {
+    static func loadUserDefaults() {
         // MARK: Log Launch
         
         HoundLogger.general.notice("\n-----Device Info-----\n Model: \(UIDevice.current.model) \n Name: \(UIDevice.current.name) \n System Name: \(UIDevice.current.systemName) \n System Version: \(UIDevice.current.systemVersion)")

@@ -18,12 +18,15 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         // Override point for customization after application launch.
         HoundLogger.lifecycle.notice("Application Did Finish Launching with Options")
         
+        // MUST come first, as other things might rely on user defaults
+        PersistenceManager.loadUserDefaults()
+        
         // Get InAppPurchaseManager to pre-load products
-        InAppPurchaseManager.initializeInAppPurchaseManager()
+        InAppPurchaseManager.initialize()
         // Trigger the initialization of NetworkManager and start monitoring
         _ = NetworkManager.shared
-
-        PersistenceManager.applicationDidFinishLaunching()
+        // Monitor changes to the system time zone
+        _ = TimeZoneMonitor.shared
 
         return true
     }

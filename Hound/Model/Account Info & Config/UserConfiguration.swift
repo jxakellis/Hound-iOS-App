@@ -93,6 +93,7 @@ final class UserConfiguration: UserDefaultPersistable {
         if let userTimeZone = body[Constant.Key.userConfigurationUserTimeZone.rawValue] as? String {
             self.userTimeZone = TimeZone(identifier: userTimeZone)
         }
+        
         if let snoozeLength = body[Constant.Key.userConfigurationSnoozeLength.rawValue] as? Double {
             self.snoozeLength = snoozeLength
         }
@@ -180,7 +181,7 @@ final class UserConfiguration: UserDefaultPersistable {
     }
     
     static var deviceTimeZone: TimeZone {
-        return TimeZone.current
+        TimeZone.autoupdatingCurrent
     }
     /// If usesTimeZone is true, this simply returns the device timeZone. Otherwise, it attempts to use the userTimeZone (possibly configured) to load the TZ
     static var timeZone: TimeZone {
@@ -233,6 +234,7 @@ extension UserConfiguration {
         body[Constant.Key.userConfigurationIsHapticsEnabled.rawValue] = .bool(UserConfiguration.isHapticsEnabled)
         body[Constant.Key.userConfigurationUsesDeviceTimeZone.rawValue] = .bool(UserConfiguration.usesDeviceTimeZone)
         body[Constant.Key.userConfigurationUserTimeZone.rawValue] = .string(UserConfiguration.userTimeZone?.identifier)
+        body[Constant.Key.userConfigurationDeviceTimeZone.rawValue] = .string(UserConfiguration.deviceTimeZone.identifier)
         
         body[Constant.Key.userConfigurationSnoozeLength.rawValue] = .double(UserConfiguration.snoozeLength)
         
