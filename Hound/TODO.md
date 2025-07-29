@@ -16,6 +16,9 @@
 
 ## 🎯 Future
 
+- Multiple times of day for remidners
+    - e.g. a reminder could be for MWF, then a user instead of a single time of day 7:00AM they could make as many times as they want
+
 - Websockers
     - Use web sockets to update logs in real-time across devices
 

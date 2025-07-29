@@ -8,7 +8,7 @@
 
 import Foundation
 
-// TODO TIME TEST that this auto updates server and to tz change properly
+// TODO TEST TIME that this auto updates server and to tz change properly
 // TODO TIME when user TZ changes, we still need to update the UI
 final class TimeZoneMonitor {
     static let shared = TimeZoneMonitor()

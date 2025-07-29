@@ -14,6 +14,8 @@ protocol DogsAddDogReminderTVCDelegate: AnyObject {
     func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool)
 }
 
+// TODO BUG if i click didUpdateReminderIsEnabled for the first time, the correct cell/reminder updates. however on future clicks to any cell, no reminders update and the entire ui freezes and can't be interacted with
+
 final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     // MARK: - Elements
@@ -32,15 +34,18 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return imageView
     }()
     
+    // TODO BUG if this label requires more space, instead of expanding to a new line, it instead just compresses the text or adds an ellipsis
     private let reminderActionLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
+        label.numberOfLines = 0
         return label
     }()
     
     private let intervalLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.secondaryRegularLabel
+        label.numberOfLines = 0
         return label
     }()
     

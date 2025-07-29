@@ -25,6 +25,10 @@ enum ShowBonusInformationManager {
         // sudo apt-get install --only-upgrade ca-certificates
         // sudo update-ca-certificates
         
+        // TODO PRODUCTION make migration script to add all current family members as recipients for all reminders
+        
+        // TODO TEST click on a bunch of stuff and find things that need animations
+        
         PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.houndUpdatedTitle, forSubtitle: Constant.Visual.BannerText.houndUpdatedSubtitle, forStyle: .info) {
             let releaseNotesVC = ReleaseNotesVC()
             releaseNotesVC.setup(version: AppVersion.current)
