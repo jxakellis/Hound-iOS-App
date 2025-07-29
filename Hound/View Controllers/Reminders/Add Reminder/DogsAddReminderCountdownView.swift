@@ -10,6 +10,7 @@ import UIKit
 
 protocol DogsAddReminderCountdownViewDelegate: AnyObject {
     func willDismissKeyboard()
+    func didUpdateDescriptionLabel()
 }
 
 final class DogsAddReminderCountdownView: HoundView {
@@ -28,17 +29,9 @@ final class DogsAddReminderCountdownView: HoundView {
         return datePicker
     }()
     
-    private let countdownDescriptionLabel: HoundLabel = {
-        let label = HoundLabel()
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = Constant.Visual.Font.secondaryRegularLabel
-        label.textColor = UIColor.label
-        return label
-    }()
     @objc private func didUpdateCountdown(_ sender: Any) {
-        updateDescriptionLabel()
         delegate?.willDismissKeyboard()
+        delegate?.didUpdateDescriptionLabel()
     }
     
     // MARK: - Properties
@@ -49,6 +42,10 @@ final class DogsAddReminderCountdownView: HoundView {
         CountdownComponents(executionInterval: countdownDatePicker.countDownDuration)
     }
     
+    var descriptionLabelText: String {
+        return "Reminder will sound every \(countdownDatePicker.countDownDuration.readable(capitalizeWords: false, abbreviationLevel: .long)) then automatically restart"
+    }
+    
     // MARK: - Setup
     
     func setup(forDelegate: DogsAddReminderCountdownViewDelegate,
@@ -57,13 +54,7 @@ final class DogsAddReminderCountdownView: HoundView {
         
         countdownDatePicker.countDownDuration = forComponents?.executionInterval ??
         countdownDatePicker.countDownDuration
-        updateDescriptionLabel()
-    }
-    
-    // MARK: - Functions
-    
-    private func updateDescriptionLabel() {
-        countdownDescriptionLabel.text = "Reminder will sound every \(countdownDatePicker.countDownDuration.readable(capitalizeWords: false, abbreviationLevel: .long)) then automatically restart"
+        delegate?.didUpdateDescriptionLabel()
     }
     
     // MARK: - Setup Elements
@@ -71,22 +62,14 @@ final class DogsAddReminderCountdownView: HoundView {
     override func addSubViews() {
         super.addSubViews()
         addSubview(countdownDatePicker)
-        addSubview(countdownDescriptionLabel)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-        
-        // countdownDescriptionLabel
-        NSLayoutConstraint.activate([
-            countdownDescriptionLabel.topAnchor.constraint(equalTo: topAnchor),
-            countdownDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            countdownDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
-        
+    
         // countdownDatePicker
         NSLayoutConstraint.activate([
-            countdownDatePicker.topAnchor.constraint(equalTo: countdownDescriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            countdownDatePicker.topAnchor.constraint(equalTo: topAnchor),
             countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             countdownDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),

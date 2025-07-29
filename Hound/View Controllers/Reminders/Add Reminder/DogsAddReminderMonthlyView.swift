@@ -11,21 +11,12 @@ import UIKit
 
 protocol DogsAddReminderMonthlyViewDelegate: AnyObject {
     func willDismissKeyboard()
+    func didUpdateDescriptionLabel()
 }
 
 final class DogsAddReminderMonthlyView: HoundView {
     
     // MARK: - Elements
-    
-    private let monthlyDescriptionLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = Constant.Visual.Font.secondaryRegularLabel
-        label.textColor = UIColor.label
-        
-        return label
-    }()
     
     private lazy var timeOfDayDatePicker: HoundDatePicker = {
         let datePicker = HoundDatePicker(huggingPriority: 260, compressionResistancePriority: 260)
@@ -42,7 +33,6 @@ final class DogsAddReminderMonthlyView: HoundView {
     
     private let rollUnderDisclaimerLabel: HoundLabel = {
         let label = HoundLabel()
-        label.textAlignment = .center
         label.textColor = UIColor.secondaryLabel
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.numberOfLines = 0
@@ -52,7 +42,6 @@ final class DogsAddReminderMonthlyView: HoundView {
     
     private lazy var stack: HoundStackView = {
         let stack = HoundStackView()
-        stack.addArrangedSubview(monthlyDescriptionLabel)
         stack.addArrangedSubview(timeOfDayDatePicker)
         stack.addArrangedSubview(rollUnderDisclaimerLabel)
         stack.axis = .vertical
@@ -83,6 +72,25 @@ final class DogsAddReminderMonthlyView: HoundView {
         let hour = comps.hour ?? Constant.Class.ReminderComponent.defaultZonedHour
         let minute = comps.minute ?? Constant.Class.ReminderComponent.defaultZonedMinute
         return MonthlyComponents(zonedDay: day, zonedHour: hour, zonedMinute: minute)
+    }
+    
+    var descriptionLabelText: String {
+        let comps = Calendar.fromZone(currentTimeZone).dateComponents([.day], from: timeOfDayDatePicker.date)
+        let day = comps.day ?? 1
+        
+        let timeString = timeOfDayDatePicker.date.houndFormatted(
+            .formatStyle(date: .omitted, time: .shortened),
+            displayTimeZone: currentTimeZone
+        )
+        
+        return "Reminder will sound on the \(day)\(day.daySuffix()) of each month at \(timeString)"
+    }
+    
+    private var disclaimerLabelText: String? {
+        let comps = Calendar.fromZone(currentTimeZone).dateComponents([.day], from: timeOfDayDatePicker.date)
+        let day = comps.day ?? 1
+        
+        return day > 28 ? "If a month has less than \(day) days, the reminder will occur on the last day of that month." : nil
     }
     
     // MARK: - Setup
@@ -149,18 +157,10 @@ final class DogsAddReminderMonthlyView: HoundView {
     // MARK: - Functions
     
     private func updateDescriptionLabel() {
-        let comps = Calendar.fromZone(currentTimeZone).dateComponents([.day], from: timeOfDayDatePicker.date)
-        let day = comps.day ?? 1
+        delegate?.didUpdateDescriptionLabel()
         
-        rollUnderDisclaimerLabel.text = "If a month has less than \(day) days, the reminder will occur on the last day of that month."
-        rollUnderDisclaimerLabel.isHidden = day <= 28
-        
-        let timeString = timeOfDayDatePicker.date.houndFormatted(
-            .formatStyle(date: .omitted, time: .shortened),
-            displayTimeZone: currentTimeZone
-        )
-        
-        monthlyDescriptionLabel.text = "Reminder will sound on the \(day)\(day.daySuffix()) of each month at \(timeString)"
+        rollUnderDisclaimerLabel.text = disclaimerLabelText
+        rollUnderDisclaimerLabel.isHidden = disclaimerLabelText == nil
     }
     
     // MARK: - Setup Elements

@@ -10,6 +10,7 @@ import UIKit
 
 protocol DogsAddReminderOneTimeViewDelegate: AnyObject {
     func willDismissKeyboard()
+    func didUpdateDescriptionLabel()
 }
 
 final class DogsAddReminderOneTimeView: HoundView {
@@ -32,17 +33,8 @@ final class DogsAddReminderOneTimeView: HoundView {
         return datePicker
     }()
     
-    private let oneTimeDescriptionLabel: HoundLabel = {
-        let label = HoundLabel()
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = Constant.Visual.Font.secondaryRegularLabel
-        label.textColor = UIColor.label
-        return label
-    }()
-    
     @objc private func didUpdateOneTimeDatePicker(_ sender: Any) {
-        updateDescriptionLabel()
+        delegate?.didUpdateDescriptionLabel()
         delegate?.willDismissKeyboard()
     }
     
@@ -60,6 +52,15 @@ final class DogsAddReminderOneTimeView: HoundView {
         OneTimeComponents(oneTimeDate: oneTimeDate)
     }
     
+    var descriptionLabelText: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .short
+        formatter.timeZone = currentTimeZone
+        let dateString = formatter.string(from: oneTimeDatePicker.date)
+        return "Reminder will sound once on \(dateString) then automatically delete"
+    }
+    
     // MARK: - Setup
     
     func setup(
@@ -73,7 +74,7 @@ final class DogsAddReminderOneTimeView: HoundView {
         if let date = forComponents?.oneTimeDate {
             oneTimeDatePicker.date = date
         }
-        updateDescriptionLabel()
+        delegate?.didUpdateDescriptionLabel()
     }
     
     // MARK: - Time Zone
@@ -83,18 +84,7 @@ final class DogsAddReminderOneTimeView: HoundView {
         
         currentTimeZone = newTimeZone
         oneTimeDatePicker.timeZone = newTimeZone
-        updateDescriptionLabel()
-    }
-    
-    // MARK: - Functions
-    
-    private func updateDescriptionLabel() {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .short
-        formatter.timeZone = currentTimeZone
-        let dateString = formatter.string(from: oneTimeDatePicker.date)
-        oneTimeDescriptionLabel.text = "Reminder will sound once on \(dateString) then automatically delete"
+        delegate?.didUpdateDescriptionLabel()
     }
     
     // MARK: - Setup Elements
@@ -102,22 +92,14 @@ final class DogsAddReminderOneTimeView: HoundView {
     override func addSubViews() {
         super.addSubViews()
         addSubview(oneTimeDatePicker)
-        addSubview(oneTimeDescriptionLabel)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
-        // oneTimeDescriptionLabel
-        NSLayoutConstraint.activate([
-            oneTimeDescriptionLabel.topAnchor.constraint(equalTo: topAnchor),
-            oneTimeDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            oneTimeDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
-        
         // oneTimeDatePicker
         NSLayoutConstraint.activate([
-            oneTimeDatePicker.topAnchor.constraint(equalTo: oneTimeDescriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            oneTimeDatePicker.topAnchor.constraint(equalTo: topAnchor),
             oneTimeDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             oneTimeDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             oneTimeDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),

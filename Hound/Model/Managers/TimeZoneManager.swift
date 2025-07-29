@@ -9,6 +9,7 @@
 import Foundation
 
 // TODO TIME TEST that this auto updates server and to tz change properly
+// TODO TIME when user TZ changes, we still need to update the UI
 final class TimeZoneMonitor {
     static let shared = TimeZoneMonitor()
 
@@ -40,7 +41,7 @@ final class TimeZoneMonitor {
     func updateDeviceTimeZoneOnServer() {
         guard UserInformation.userId != nil && UserInformation.userIdentifier != nil else { return }
         let body: JSONRequestBody = [
-            Constant.Key.userConfigurationDeviceTimeZone.rawValue: .string(UserConfiguration.deviceTimeZone.identifier),
+            Constant.Key.userConfigurationDeviceTimeZone.rawValue: .string(UserConfiguration.deviceTimeZone.identifier)
         ]
         UserRequest.update(forErrorAlert: .automaticallyAlertForNone, forBody: body) { _, _ in }
     }

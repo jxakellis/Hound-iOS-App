@@ -12,6 +12,7 @@ import UIKit
 enum DogsAddReminderDropDownTypes: String, HoundDropDownType {
     case reminderAction = "DropDownReminderAction"
     case reminderRecipients = "DropDownReminderRecipients"
+    case reminderType = "DropDownReminderType"
     case reminderTimeZone = "DropDownReminderTimeZone"
 }
 
@@ -25,10 +26,14 @@ final class DogsAddReminderManagerView: HoundView,
                                         DogsAddReminderMonthlyViewDelegate,
                                         DogsAddReminderOneTimeViewDelegate {
     
-    // MARK: - DogsAddReminderCountdownVCDelegate and DogsAddReminderWeeklyViewDelegate
+    // MARK: - DogsAddReminderCountdownViewDelegate, DogsAddReminderWeeklyViewDelegate, DogsAddReminderMonthlyViewDelegate, DogsAddReminderOneTimeViewDelegate
     
     func willDismissKeyboard() {
         dismissKeyboard()
+    }
+    
+    func didUpdateDescriptionLabel() {
+        updateReminderTypeDescriptionLabel()
     }
     
     // MARK: - UIGestureRecognizerDelegate
@@ -159,7 +164,7 @@ final class DogsAddReminderManagerView: HoundView,
     private let notificationsDisabledLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.secondaryColorDescLabel
-        // label.textColor set in func
+        label.textColor = .secondaryLabel
         label.numberOfLines = 0
         
         return label
@@ -178,21 +183,47 @@ final class DogsAddReminderManagerView: HoundView,
         return stack
     }()
     
-    private lazy var segmentedControl: HoundSegmentedControl = {
-        let segmentedControl = HoundSegmentedControl()
-        segmentedControl.selectedSegmentTintColor = UIColor.systemBlue
-        
-        ReminderType.allCases.enumerated().forEach { index, option in
-            segmentedControl.insertSegment(withTitle: option.readableName, at: index, animated: false)
-        }
-        
-        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel, .foregroundColor: UIColor.systemBackground]
-        
-        segmentedControl.setTitleTextAttributes(attributes, for: .normal)
-        segmentedControl.backgroundColor = UIColor.systemGray4
-        segmentedControl.addTarget(self, action: #selector(didUpdateReminderType), for: .valueChanged)
-        
-        return segmentedControl
+    private let reminderTypeHeaderLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
+        label.textColor = .label
+        label.text = "How Often"
+        return label
+    }()
+    private lazy var reminderTypeLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.primaryRegularLabel
+        label.applyStyle(.thinGrayBorder)
+        label.shouldInsetText = true
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(
+            dropDownManager.showHideDropDownGesture(
+                identifier: DogsAddReminderDropDownTypes.reminderType,
+                delegate: self
+            )
+        )
+        dropDownManager.register(identifier: .reminderType, label: label, direction: .down, autoscroll: .firstOpen)
+        return label
+    }()
+    private let reminderTypeDescriptionLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 0
+        return label
+    }()
+    private lazy var nestedReminderTypeStack: HoundStackView = {
+        let stack = HoundStackView()
+        stack.addArrangedSubview(reminderTypeLabel)
+        stack.addArrangedSubview(reminderTypeDescriptionLabel)
+        stack.axis = .vertical
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        return stack
+    }()
+    private lazy var reminderTypeStack: HoundStackView = {
+        let stack = HoundStackView.inputFieldStack(reminderTypeHeaderLabel)
+        stack.addArrangedSubview(nestedReminderTypeStack)
+        return stack
     }()
     
     private let timeZoneHeaderLabel: HoundLabel = {
@@ -230,7 +261,7 @@ final class DogsAddReminderManagerView: HoundView,
     private let monthlyView = DogsAddReminderMonthlyView()
     
     private lazy var reminderViewsStack: HoundStackView = {
-        let stack = HoundStackView(arrangedSubviews: [onceView, countdownView, weeklyView, monthlyView, timeZoneStack])
+        let stack = HoundStackView(arrangedSubviews: [onceView, countdownView, weeklyView, monthlyView])
         stack.axis = .vertical
         stack.spacing = Constant.Constraint.Spacing.contentIntraVert
         return stack
@@ -249,15 +280,6 @@ final class DogsAddReminderManagerView: HoundView,
             let dropDown = dropDownManager.dropDown(for: .reminderRecipients)
             dropDown?.hideDropDown(animated: true)
         }
-    }
-    @objc private func didUpdateReminderType(_ sender: HoundSegmentedControl) {
-        onceView.isHidden = !(sender.selectedSegmentIndex == ReminderType.oneTime.segmentedControlIndex)
-        countdownView.isHidden = !(sender.selectedSegmentIndex == ReminderType.countdown.segmentedControlIndex)
-        weeklyView.isHidden = !(sender.selectedSegmentIndex == ReminderType.weekly.segmentedControlIndex)
-        monthlyView.isHidden = !(sender.selectedSegmentIndex == ReminderType.monthly.segmentedControlIndex)
-        
-        // hide if not any of the views that use TZ
-        timeZoneStack.isHidden = !(sender.selectedSegmentIndex == ReminderType.oneTime.segmentedControlIndex) && !(sender.selectedSegmentIndex == ReminderType.weekly.segmentedControlIndex) && !(sender.selectedSegmentIndex == ReminderType.monthly.segmentedControlIndex)
     }
     
     // MARK: - Properties
@@ -280,10 +302,19 @@ final class DogsAddReminderManagerView: HoundView,
     private var availableFamilyMembers: [FamilyMember] {
         FamilyInformation.familyMembers
     }
+    private var availableReminderTypes: [ReminderType] {
+        return ReminderType.allCases
+    }
     private var availableTimeZones = Array(TimeZone.houndTimeZones.reversed())
     private(set) var selectedReminderAction: ReminderActionType? {
         didSet {
             reminderActionLabel.text = selectedReminderAction?.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
+            
+            let customActionNameIsHidden = selectedReminderAction?.allowsCustom != true
+            if reminderCustomActionNameTextField.isHidden != customActionNameIsHidden {
+                reminderCustomActionNameTextField.isHidden = customActionNameIsHidden
+                remakeCustomActionNameConstraints()
+            }
         }
     }
     var selectedReminderActionIndexPath: IndexPath? {
@@ -326,6 +357,25 @@ final class DogsAddReminderManagerView: HoundView,
         return nil
     }
     private var selectedRecipientUserIds: Set<String> = []
+    private var selectedReminderType: ReminderType = Constant.Class.Reminder.defaultReminderType {
+        didSet {
+            reminderTypeLabel.text = selectedReminderType.readable
+            
+            onceView.isHidden = selectedReminderType != ReminderType.oneTime
+            countdownView.isHidden = selectedReminderType != ReminderType.countdown
+            weeklyView.isHidden = selectedReminderType != ReminderType.weekly
+            monthlyView.isHidden = selectedReminderType != ReminderType.monthly
+            
+            // hide if not any of the views that use TZ
+            let timeZoneIsHidden = selectedReminderType != ReminderType.oneTime && selectedReminderType != ReminderType.weekly && selectedReminderType != ReminderType.monthly
+            if timeZoneStack.isHidden != timeZoneIsHidden {
+                timeZoneStack.isHidden = timeZoneIsHidden
+                remakeTimeZoneConstraints()
+            }
+            
+            updateReminderTypeDescriptionLabel()
+        }
+    }
     private var selectedTimeZone: TimeZone? {
         didSet {
             timeZoneLabel.text = selectedTimeZone?.displayName()
@@ -354,8 +404,8 @@ final class DogsAddReminderManagerView: HoundView,
         reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
         reminder.reminderRecipientUserIds = Array(selectedRecipientUserIds)
         
-        switch segmentedControl.selectedSegmentIndex {
-        case ReminderType.oneTime.segmentedControlIndex, ReminderType.weekly.segmentedControlIndex, ReminderType.monthly.segmentedControlIndex:
+        switch selectedReminderType {
+        case .oneTime, .weekly, .monthly:
             guard let selectedTimeZone = selectedTimeZone else {
                    if showErrorIfFailed {
                        HapticsManager.notification(.error)
@@ -365,18 +415,18 @@ final class DogsAddReminderManagerView: HoundView,
                }
             
             reminder.reminderTimeZone = selectedTimeZone
-        default:
+        case .countdown:
             break
         }
         
-        switch segmentedControl.selectedSegmentIndex {
-        case ReminderType.oneTime.segmentedControlIndex:
+        switch selectedReminderType {
+        case .oneTime:
             reminder.changeReminderType(.oneTime)
             reminder.oneTimeComponents.oneTimeDate = onceView.currentComponent.oneTimeDate
-        case ReminderType.countdown.segmentedControlIndex:
+        case .countdown:
             reminder.changeReminderType(.countdown)
             reminder.countdownComponents.executionInterval = countdownView.currentComponent.executionInterval
-        case ReminderType.weekly.segmentedControlIndex:
+        case .weekly:
             reminder.changeReminderType(.weekly)
             guard let component = weeklyView.currentComponent else {
                 if showErrorIfFailed {
@@ -388,11 +438,10 @@ final class DogsAddReminderManagerView: HoundView,
             reminder.weeklyComponents.zonedHour = component.zonedHour
             reminder.weeklyComponents.zonedMinute = component.zonedMinute
             _ = reminder.weeklyComponents.setZonedWeekdays(component.zonedWeekdays)
-        case ReminderType.monthly.segmentedControlIndex:
+        case .monthly:
             reminder.changeReminderType(.monthly)
             let component = monthlyView.currentComponent
             reminder.monthlyComponents.apply(from: component)
-        default: break
         }
         
         // Check if we are updating a reminder
@@ -460,22 +509,11 @@ final class DogsAddReminderManagerView: HoundView,
         updateRecipientsLabel()
         updateDisclaimerLabel()
         
-        // segmentedControl
-        if let reminderToUpdate = reminderToUpdate {
-            segmentedControl.selectedSegmentIndex = reminderToUpdate.reminderType.segmentedControlIndex
-        }
-        else {
-            segmentedControl.selectedSegmentIndex = ReminderType.countdown.segmentedControlIndex
-        }
-        onceView.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.oneTime.segmentedControlIndex
-        countdownView.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.countdown.segmentedControlIndex
-        weeklyView.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.weekly.segmentedControlIndex
-        monthlyView.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.monthly.segmentedControlIndex
+        // reminderTypeLabel
+        selectedReminderType = reminderToUpdate?.reminderType ?? Constant.Class.Reminder.defaultReminderType
         
         let timeZone = reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
         selectedTimeZone = timeZone
-        // hide if not any of the views that use TZ
-        timeZoneStack.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.oneTime.segmentedControlIndex && segmentedControl.selectedSegmentIndex != ReminderType.weekly.segmentedControlIndex && segmentedControl.selectedSegmentIndex != ReminderType.monthly.segmentedControlIndex
         
         // onceView
         if reminderToUpdate?.reminderType == .oneTime {
@@ -525,27 +563,9 @@ final class DogsAddReminderManagerView: HoundView,
         else {
             monthlyView.setup(forDelegate: self, forComponents: nil, forTimeZone: timeZone)
         }
-        
-        updateDynamicUIElements()
     }
     
     // MARK: - Functions
-    
-    private func updateDynamicUIElements() {
-        let customActionNameIsHidden = selectedReminderAction?.allowsCustom != true
-        if reminderCustomActionNameTextField.isHidden != customActionNameIsHidden {
-            reminderCustomActionNameTextField.isHidden = customActionNameIsHidden
-            remakeCustomActionNameConstraints()
-        }
-        
-        updateRecipientsLabel()
-        updateDisclaimerLabel()
-        
-        UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
-            self.setNeedsLayout()
-            self.layoutIfNeeded()
-        }
-    }
     
     @objc override func dismissKeyboard() {
         super.dismissKeyboard()
@@ -643,6 +663,19 @@ final class DogsAddReminderManagerView: HoundView,
             return message
         }()
     }
+    private func updateReminderTypeDescriptionLabel() {
+        switch selectedReminderType {
+        case .oneTime:
+            reminderTypeDescriptionLabel.text = onceView.descriptionLabelText
+        case .countdown:
+            reminderTypeDescriptionLabel.text = countdownView.descriptionLabelText
+        case .weekly:
+            reminderTypeDescriptionLabel.text = nil
+        case .monthly:
+            reminderTypeDescriptionLabel.text = onceView.descriptionLabelText
+        }
+        reminderTypeDescriptionLabel.isHidden = reminderTypeDescriptionLabel.text == nil
+    }
     
     // MARK: - Drop Down Handling
     
@@ -672,6 +705,8 @@ final class DogsAddReminderManagerView: HoundView,
                 return CGFloat(availableReminderActions.count)
             case .reminderRecipients:
                 return CGFloat(availableFamilyMembers.count)
+            case .reminderType:
+                return CGFloat(availableReminderTypes.count)
             case .reminderTimeZone:
                 return CGFloat(availableTimeZones.count)
             }
@@ -703,6 +738,10 @@ final class DogsAddReminderManagerView: HoundView,
             let member = availableFamilyMembers[indexPath.row]
             cell.setCustomSelected(selectedRecipientUserIds.contains(member.userId), animated: false)
             cell.label.text = member.displayFullName ?? Constant.Visual.Text.unknownName
+        case .reminderType:
+            let type = availableReminderTypes[indexPath.row]
+            cell.setCustomSelected(selectedReminderType == type, animated: false)
+            cell.label.text = type.readable
         case .reminderTimeZone:
             let tz = availableTimeZones[indexPath.row]
             cell.setCustomSelected(selectedTimeZone == tz, animated: false)
@@ -720,6 +759,8 @@ final class DogsAddReminderManagerView: HoundView,
             return availableReminderActions.count
         case DogsAddReminderDropDownTypes.reminderRecipients:
             return availableFamilyMembers.count
+        case DogsAddReminderDropDownTypes.reminderType:
+            return availableReminderTypes.count
         case DogsAddReminderDropDownTypes.reminderTimeZone:
             return availableTimeZones.count
         }
@@ -738,7 +779,6 @@ final class DogsAddReminderManagerView: HoundView,
             guard !cell.isCustomSelected else {
                 cell.setCustomSelected(false)
                 selectedReminderAction = nil
-                updateDynamicUIElements()
                 return
             }
             
@@ -756,7 +796,6 @@ final class DogsAddReminderManagerView: HoundView,
             reminderActionLabel.errorMessage = nil
             
             dropDown.hideDropDown(animated: true)
-            updateDynamicUIElements()
             
             showNextRequiredDropDown(animated: true)
         case .reminderRecipients:
@@ -777,7 +816,19 @@ final class DogsAddReminderManagerView: HoundView,
             }
             
             // recipient label text changes and disclaimer label maybe appears/disappears
-            updateDynamicUIElements()
+            updateRecipientsLabel()
+            updateDisclaimerLabel()
+        case .reminderType:
+            let type = availableReminderTypes[indexPath.row]
+            
+            // prevent deselectiong of reminder type. we shuld always have one selected
+            guard type != selectedReminderType else {
+                return
+            }
+            
+            cell.setCustomSelected(true)
+            selectedReminderType = type
+            dropDown.hideDropDown(animated: true)
         case .reminderTimeZone:
             guard !cell.isCustomSelected else {
                 cell.setCustomSelected(false)
@@ -818,6 +869,10 @@ final class DogsAddReminderManagerView: HoundView,
                     .min() {
                     return IndexPath(row: idx, section: 0)
                 }
+            case .reminderType:
+                if let idx = availableReminderTypes.firstIndex(of: selectedReminderType) {
+                    return IndexPath(row: idx, section: 0)
+                }
             case .reminderTimeZone:
                 if let tz = selectedTimeZone,
                    let idx = availableTimeZones.firstIndex(of: tz) {
@@ -833,8 +888,9 @@ final class DogsAddReminderManagerView: HoundView,
         super.addSubViews()
         addSubview(reminderActionStack)
         addSubview(reminderRecipientsStack)
-        addSubview(segmentedControl)
+        addSubview(reminderTypeStack)
         addSubview(reminderViewsStack)
+        addSubview(timeZoneStack)
         
         let didTapScreenGesture = UITapGestureRecognizer(
             target: self,
@@ -848,6 +904,40 @@ final class DogsAddReminderManagerView: HoundView,
     private func remakeCustomActionNameConstraints() {
         reminderCustomActionNameTextField.snp.makeConstraints { make in
             if !reminderCustomActionNameTextField.isHidden {
+                make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
+            }
+        }
+    }
+    
+    private func remakeTimeZoneConstraints() {
+        let shouldHideTimeZone = timeZoneLabel.isHidden || timeZoneStack.isHidden
+        
+        // they might conflict in the process of updating
+        reminderViewsStack.snp.removeConstraints()
+        timeZoneStack.snp.removeConstraints()
+        timeZoneLabel.snp.removeConstraints()
+        
+        reminderViewsStack.snp.remakeConstraints { make in
+            make.top.equalTo(reminderTypeStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
+            if shouldHideTimeZone {
+                make.bottom.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteVertInset)
+            }
+        }
+        
+        timeZoneStack.snp.remakeConstraints { make in
+            if !shouldHideTimeZone {
+                make.top.equalTo(reminderViewsStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+                make.bottom.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteVertInset)
+                make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
+                make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
+            }
+        }
+        
+        timeZoneLabel.snp.remakeConstraints { make in
+            if !shouldHideTimeZone {
                 make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
                 make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
             }
@@ -879,25 +969,17 @@ final class DogsAddReminderManagerView: HoundView,
             make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         
-        segmentedControl.snp.makeConstraints { make in
+        reminderTypeStack.snp.makeConstraints { make in
             make.top.equalTo(reminderRecipientsStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
-            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
-            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
-            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.segmentedHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
-        
-        timeZoneLabel.snp.makeConstraints { make in
+        reminderTypeLabel.snp.makeConstraints { make in
             make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         
-        reminderViewsStack.snp.makeConstraints { make in
-            make.top.equalTo(segmentedControl.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
-            make.bottom.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteVertInset)
-            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
-            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
-        }
+        remakeTimeZoneConstraints()
     }
     
 }
