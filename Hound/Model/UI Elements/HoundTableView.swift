@@ -224,6 +224,8 @@ final class HoundTableView: UITableView, HoundUIProtocol, HoundDynamicBorder, Ho
             label.debugCheckForOversizedFrame = false
             label.textAlignment = .center
             label.numberOfLines = 0
+            label.lineBreakMode = .byWordWrapping
+            label.adjustsFontSizeToFitWidth = false
             label.text = emptyStateMessage
             label.textColor = emptyStateMessageColor
             

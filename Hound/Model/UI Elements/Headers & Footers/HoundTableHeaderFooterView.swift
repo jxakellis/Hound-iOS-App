@@ -15,6 +15,8 @@ class HoundTableHeaderFooterView: HoundHeaderFooterView {
     private let headerLabel: HoundLabel = {
         let label = HoundLabel()
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.emphasizedSecondaryHeaderLabel
         return label
     }()

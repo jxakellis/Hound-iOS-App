@@ -212,6 +212,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         label.text = "No dogs recorded! Try creating one..."
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryHeaderLabel
         label.textColor = UIColor.systemBlue
         return label

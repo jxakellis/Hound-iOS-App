@@ -23,6 +23,8 @@ final class SettingsNotifsCategoriesTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "By default, Hound will send notifications about your account, family, logs, and reminders."
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label

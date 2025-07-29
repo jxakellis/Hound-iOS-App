@@ -32,6 +32,8 @@ final class SettingsAccountVC: HoundScrollViewController {
     private let userNameLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
@@ -47,6 +49,8 @@ final class SettingsAccountVC: HoundScrollViewController {
     private let userEmailLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 310, compressionResistancePriority: 310)
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
@@ -78,6 +82,8 @@ final class SettingsAccountVC: HoundScrollViewController {
     private let userIdLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label
@@ -113,6 +119,8 @@ final class SettingsAccountVC: HoundScrollViewController {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.text = "Deletes local storage of all dogs, reminders, logs, and automations to fully redownload them from the Hound server, ensuring that the data displayed locally reflects the data stored server-side."
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         

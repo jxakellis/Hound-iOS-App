@@ -13,7 +13,7 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
     // MARK: - HoundUIProtocol
     
     var properties: JSONRequestBody = [:]
-
+    
     // MARK: - Properties
     
     var staticCornerRadius: CGFloat? = Constant.Visual.Layer.defaultCornerRadius
@@ -23,7 +23,7 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
             updateCornerRounding()
         }
     }
-
+    
     var borderWidth: Double {
         get {
             Double(self.layer.borderWidth)
@@ -32,7 +32,7 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
             self.layer.borderWidth = CGFloat(newValue)
         }
     }
-
+    
     var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
@@ -40,96 +40,37 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
             }
         }
     }
-
-    private let insetSpacing: String = "  "
-
-    /// If true, the text field's text will be inset with two spaces on both
-    /// the leading and trailing edge. The padding is stripped when accessing
-    /// `text` so external callers do not need to account for it.
-    var shouldInsetText: Bool = false {
-        didSet {
-            if oldValue != shouldInsetText {
-                self.text = self.text
-                self.placeholder = self.placeholder
-            }
-        }
-    }
-
-    // MARK: - Override Properties
     
     override var bounds: CGRect {
         didSet {
             updateCornerRounding()
         }
     }
-
-    // TODO CHANGE THIS TO PLACEHOLDER STYLE OF HOUNDLABEL
-    private var hasInsetApplied: Bool = false
-    override var text: String? {
-        get {
-            var text = super.text
-            if hasInsetApplied {
-                if text?.hasPrefix(insetSpacing) == true {
-                    text?.removeFirst(2)
-                }
-                if text?.hasSuffix(insetSpacing) == true {
-                    text?.removeLast(2)
-                }
-            }
-            return text
-        }
-        set {
-            hasInsetApplied = false
-            if let newValue = newValue {
-                var value = newValue
-                if shouldInsetText && !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    hasInsetApplied = true
-                    value = insetSpacing + value + insetSpacing
-                }
-                super.text = value
-            }
-            else {
-                super.text = nil
-            }
-        }
-    }
     
-    private var placeholderHasInsetApplied: Bool = false
-    override var placeholder: String? {
-        get {
-            var placeholder = super.placeholder
-            if hasInsetApplied {
-                if placeholder?.hasPrefix(insetSpacing) == true {
-                    placeholder?.removeFirst(2)
-                }
-                if placeholder?.hasSuffix(insetSpacing) == true {
-                    placeholder?.removeLast(2)
-                }
-            }
-            return placeholder
-        }
-        set {
-            hasInsetApplied = false
-            if let newValue = newValue {
-                var value = newValue
-                if shouldInsetText && !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    hasInsetApplied = true
-                    value = insetSpacing + value + insetSpacing
-                }
-                super.placeholder = value
-            }
-            else {
-                super.placeholder = nil
-            }
-        }
-    }
-
     override var isEnabled: Bool {
         didSet {
             self.alpha = isEnabled ? 1 : 0.5
         }
     }
-
+    
+    /// Insets for all text/placeholder content.
+    var textInsets: UIEdgeInsets = .zero {
+        didSet { setNeedsDisplay(); invalidateIntrinsicContentSize() }
+    }
+    
+    /// If true, standard insets are applied to text/placeholder; otherwise, no inset.
+    var shouldInsetText: Bool = false {
+        didSet {
+            textInsets = shouldInsetText
+            ? UIEdgeInsets(
+                top: ConstraintConstant.Spacing.contentTightIntraVert,
+                left: ConstraintConstant.Spacing.contentIntraHori,
+                bottom: ConstraintConstant.Spacing.contentTightIntraVert,
+                right: ConstraintConstant.Spacing.contentIntraHori)
+            : .zero
+        }
+    }
+    
     // MARK: - Main
     
     init(
@@ -143,12 +84,12 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
         self.setContentCompressionResistancePriority(UILayoutPriority(compressionResistancePriority), for: .vertical)
         applyDefaultSetup()
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         applyDefaultSetup()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
@@ -160,12 +101,24 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
     }
     
     // MARK: - Override Functions
-
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateDynamicBorderColor(using: previousTraitCollection)
     }
-
+    
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: textInsets)
+    }
+    
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: textInsets)
+    }
+    
+    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: textInsets)
+    }
+    
     // MARK: - Functions
     
     private func applyDefaultSetup() {
@@ -175,13 +128,11 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textAlignment = .natural
         self.clearsOnBeginEditing = true
-        
-        self.minimumFontSize = 15
         self.font = Constant.Visual.Font.primaryRegularLabel
         
         HoundSizeDebugView.install(on: self)
         
         updateCornerRounding()
     }
-
+    
 }

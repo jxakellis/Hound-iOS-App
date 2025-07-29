@@ -36,6 +36,8 @@ final class DogsAddReminderMonthlyView: HoundView {
         label.textColor = UIColor.secondaryLabel
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.isHidden = true
         return label
     }()

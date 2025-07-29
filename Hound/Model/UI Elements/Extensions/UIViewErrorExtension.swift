@@ -55,6 +55,8 @@ extension UIView {
             newLabel.font = Constant.Visual.Font.tertiaryRegularLabel
             newLabel.textColor = UIColor.systemRed
             newLabel.numberOfLines = 0
+            newLabel.lineBreakMode = .byWordWrapping
+            newLabel.adjustsFontSizeToFitWidth = false
             newLabel.translatesAutoresizingMaskIntoConstraints = false
             objc_setAssociatedObject(self, &houndErrorLabelKey, newLabel, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             label = newLabel

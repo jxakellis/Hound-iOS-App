@@ -20,6 +20,7 @@ final class HoundEditPageHeaderView: HoundView {
         label.font = Constant.Visual.Font.primaryHeaderLabel
         label.textColor = UIColor.systemBlue
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = false
         return label
     }()

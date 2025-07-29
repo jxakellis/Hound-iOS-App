@@ -22,6 +22,8 @@ class BluePawVC: HoundViewController {
         let label = HoundLabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.primaryHeaderLabel
         label.textColor = UIColor.systemBackground
         return label
@@ -31,6 +33,8 @@ class BluePawVC: HoundViewController {
         let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.tertiaryHeaderLabel
         label.textColor = UIColor.secondarySystemBackground
         return label

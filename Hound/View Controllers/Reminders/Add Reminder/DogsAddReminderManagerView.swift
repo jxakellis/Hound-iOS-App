@@ -166,6 +166,8 @@ final class DogsAddReminderManagerView: HoundView,
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         
         return label
     }()
@@ -210,6 +212,8 @@ final class DogsAddReminderManagerView: HoundView,
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = .secondaryLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         return label
     }()
     private lazy var nestedReminderTypeStack: HoundStackView = {

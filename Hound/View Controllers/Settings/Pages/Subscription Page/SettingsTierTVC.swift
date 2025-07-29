@@ -35,6 +35,8 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 350, compressionResistancePriority: 350)
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.backgroundColor = UIColor.systemGreen
         label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
         label.textColor = UIColor.systemBackground
@@ -62,6 +64,8 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
     private let monthlyPriceLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 330, compressionResistancePriority: 330)
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         // font set in attributed
         label.textColor = UIColor.secondaryLabel
         return label

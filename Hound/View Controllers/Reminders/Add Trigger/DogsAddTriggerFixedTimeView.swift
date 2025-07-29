@@ -31,6 +31,8 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryRegularLabel
         label.textColor = UIColor.label
         return label
@@ -69,6 +71,8 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.text = "If your family is spread across time zones, the reminder’s time will be based off whichever device handles this automation first."
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.isHidden = FamilyInformation.familyMembers.count <= 1
         return label
     }()

@@ -24,6 +24,8 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         return label
     }()
     
@@ -31,6 +33,8 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.secondaryRegularLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         return label
     }()
     

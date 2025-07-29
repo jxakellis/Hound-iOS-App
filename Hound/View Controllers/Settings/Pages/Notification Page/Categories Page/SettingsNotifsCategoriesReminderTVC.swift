@@ -24,6 +24,8 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         
         label.attributedText = {
             let message = NSMutableAttributedString(

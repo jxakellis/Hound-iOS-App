@@ -109,6 +109,8 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         label.text = "What could we do to improve?"
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryHeaderLabel
         label.textColor = UIColor.systemBackground
         return label

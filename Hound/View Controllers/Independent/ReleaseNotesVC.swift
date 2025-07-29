@@ -23,6 +23,8 @@ final class ReleaseNotesVC: HoundScrollViewController {
     private let notesLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.textColor = UIColor.label
         return label
     }()

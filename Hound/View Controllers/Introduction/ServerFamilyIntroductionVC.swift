@@ -109,6 +109,8 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
         label.text = "As the head of your own Hound family, you'll manage its members and any in-app purchases."
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.tertiaryColorDescLabel
         label.textColor = UIColor.tertiaryLabel
         return label

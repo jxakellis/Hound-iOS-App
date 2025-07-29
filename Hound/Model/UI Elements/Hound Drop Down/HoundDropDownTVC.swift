@@ -18,6 +18,8 @@ class HoundDropDownTVC: HoundTableViewCell {
         // if change this then change estimatedHeight too
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         return label
     }()
 

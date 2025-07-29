@@ -19,6 +19,8 @@ final class HoundPageSheetHeaderView: HoundView {
         label.text = "Default Page Header"
         label.font = Constant.Visual.Font.primaryHeaderLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         return label
     }()
     
@@ -42,6 +44,8 @@ final class HoundPageSheetHeaderView: HoundView {
         label.text = "Default Page Description"
         label.font = Constant.Visual.Font.tertiaryHeaderLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         return label
     }()
     

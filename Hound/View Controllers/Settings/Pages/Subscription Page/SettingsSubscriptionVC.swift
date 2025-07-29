@@ -48,6 +48,8 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         label.text = "Hound+"
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = UIFont.systemFont(ofSize: 47.5, weight: .bold)
         label.textColor = UIColor.systemBackground
         return label
@@ -58,6 +60,8 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         label.text = "Grow your family with up to six members"
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryHeaderLabel
         label.textColor = UIColor.secondarySystemBackground
         return label
@@ -174,6 +178,8 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         let label = HoundLabel()
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondarySystemBackground
         

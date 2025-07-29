@@ -38,23 +38,6 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
         }
     }
     
-    // TODO BUG this doesnt wrap down to multiple lines, it just goes off the edge
-    /// Placeholder label shown when text is empty.
-    private let placeholderLabel: HoundLabel = {
-        let label = HoundLabel()
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.textColor = UIColor.placeholderText
-        label.isUserInteractionEnabled = false
-        return label
-    }()
-    
-    private var placeholderTopConstraint: NSLayoutConstraint!
-    private var placeholderLeadingConstraint: NSLayoutConstraint!
-    private var placeholderTrailingConstraint: NSLayoutConstraint!
-    
-    // MARK: - Override Properties
-    
     override var bounds: CGRect {
         didSet {
             updateCornerRounding()
@@ -67,37 +50,53 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
         }
     }
     
-    /// Placeholder text (will show if text is empty).
+    // MARK: - Placeholder Label
+    
     var placeholder: String? {
         didSet {
-            placeholderLabel.text = placeholder
-            updatePlaceholderVisibility()
+            placeholderLabel?.text = placeholder
+            updatePlaceholderLabel()
+        }
+    }
+    private var placeholderLabel: UILabel?
+    
+    override var text: String? {
+        didSet {
+            if oldValue != text {
+                updatePlaceholderLabel()
+            }
         }
     }
     
-    override var text: String! {
-        didSet { updatePlaceholderVisibility() }
-    }
-    
-    override var attributedText: NSAttributedString! {
-        didSet { updatePlaceholderVisibility() }
-    }
-    
-    override var font: UIFont? {
+    override var attributedText: NSAttributedString? {
         didSet {
-            placeholderLabel.font = font
+            if oldValue != attributedText {
+                updatePlaceholderLabel()
+            }
+        }
+    }
+    
+    override var contentMode: UIView.ContentMode {
+        didSet {
+            placeholderLabel?.contentMode = contentMode
         }
     }
     
     override var textAlignment: NSTextAlignment {
         didSet {
-            placeholderLabel.textAlignment = textAlignment
+            placeholderLabel?.textAlignment = textAlignment
+        }
+    }
+    
+    override var font: UIFont! {
+        didSet {
+            placeholderLabel?.font = font
         }
     }
     
     override var textContainerInset: UIEdgeInsets {
         didSet {
-            updatePlaceholderConstraints()
+            updatePlaceholderLabel()
         }
     }
     
@@ -138,77 +137,99 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: UITextView.textDidChangeNotification, object: self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    // MARK: - Setup
+    // MARK: - Override Functions
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateDynamicBorderColor(using: previousTraitCollection)
+    }
+    
+    // MARK: - Functions
     
     private func applyDefaultSetup() {
         self.isMultipleTouchEnabled = true
         self.contentMode = .scaleToFill
         self.textAlignment = .natural
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
-        self.font = self.font ?? Constant.Visual.Font.primaryRegularLabel
+        self.textContainerInset = UIEdgeInsets(
+            top: ConstraintConstant.Spacing.contentIntraVert,
+            left: ConstraintConstant.Spacing.contentTightIntraHori,
+            bottom: ConstraintConstant.Spacing.contentIntraVert,
+            right: ConstraintConstant.Spacing.contentTightIntraHori)
+        self.font = Constant.Visual.Font.primaryRegularLabel
         self.isScrollEnabled = false
         
-        placeholderLabel.font = self.font
-        placeholderLabel.textAlignment = self.textAlignment
+        self.translatesAutoresizingMaskIntoConstraints = false
         
-        addSubview(placeholderLabel)
-        setupPlaceholderConstraints()
-        updatePlaceholderConstraints()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(textViewDidChangeNotification), name: UITextView.textDidChangeNotification, object: self)
+        NotificationCenter.default.addObserver(self, selector: #selector(textDidChangeNotification), name: UITextView.textDidChangeNotification, object: self)
         
         HoundSizeDebugView.install(on: self)
+        
         updateCornerRounding()
-        updatePlaceholderVisibility()
     }
     
-    /// Adds constraints for the placeholder label, relative to textContainerInset and lineFragmentPadding.
-    private func setupPlaceholderConstraints() {
-        // Remove old constraints if they exist (in case font/insets change)
-        if placeholderTopConstraint != nil { removeConstraint(placeholderTopConstraint) }
-        if placeholderLeadingConstraint != nil { removeConstraint(placeholderLeadingConstraint) }
-        if placeholderTrailingConstraint != nil { removeConstraint(placeholderTrailingConstraint) }
+    @objc private func textDidChangeNotification() {
+        updatePlaceholderLabel()
+    }
+    
+    private func updatePlaceholderLabel() {
+        let usesPlaceholderLabel = !(placeholder?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
         
-        let insets = textContainerInset
-        let padding = textContainer.lineFragmentPadding
+        guard usesPlaceholderLabel else {
+            placeholderLabel?.snp.removeConstraints()
+            placeholderLabel?.removeFromSuperview()
+            placeholderLabel = nil
+            return
+        }
         
-        placeholderTopConstraint = placeholderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: insets.top)
-        placeholderLeadingConstraint = placeholderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: insets.left + padding)
-        placeholderTrailingConstraint = placeholderLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -(insets.right + padding))
-        placeholderTopConstraint.isActive = true
-        placeholderLeadingConstraint.isActive = true
-        placeholderTrailingConstraint.isActive = true
-    }
-    
-    /// Updates the placeholder label's constraints if textContainerInset or lineFragmentPadding changes.
-    private func updatePlaceholderConstraints() {
-        if placeholderTopConstraint == nil || placeholderLeadingConstraint == nil || placeholderTrailingConstraint == nil { return }
+        if placeholderLabel == nil {
+            let label = UILabel()
+            label.textColor = .placeholderText
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.isUserInteractionEnabled = false
+            label.text = placeholder
+            placeholderLabel = label
+        }
         
-        let insets = textContainerInset
-        let padding = textContainer.lineFragmentPadding
+        guard let placeholderLabel = placeholderLabel else {
+            return
+        }
         
-        placeholderTopConstraint.constant = insets.top
-        placeholderLeadingConstraint.constant = insets.left + padding
-        placeholderTrailingConstraint.constant = -(insets.right + padding)
-        layoutIfNeeded()
-    }
-    
-    private func updatePlaceholderVisibility() {
-        placeholderLabel.isHidden = !(text?.isEmpty ?? true)
-    }
-    
-    @objc private func textViewDidChangeNotification(_ notification: Notification) {
-        updatePlaceholderVisibility()
-    }
-    
-    // MARK: - Trait/Appearance Overrides
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        updateDynamicBorderColor(using: previousTraitCollection)
+        let isEmpty: Bool = (text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
+        placeholderLabel.isHidden = !isEmpty
+        
+        placeholderLabel.numberOfLines = 0
+        placeholderLabel.contentMode = contentMode
+        placeholderLabel.textAlignment = textAlignment
+        placeholderLabel.lineBreakMode = .byWordWrapping
+        // placeholderLabel.baselineAdjustment = baselineAdjustment
+        placeholderLabel.adjustsFontSizeToFitWidth = false
+        // placeholderLabel.minimumScaleFactor = minimumScaleFactor
+        placeholderLabel.font = font
+        
+        if placeholderLabel.superview != self {
+            placeholderLabel.removeFromSuperview()
+            addSubview(placeholderLabel)
+        }
+        
+        placeholderLabel.snp.remakeConstraints { make in
+            make.top.equalTo(self.snp.top).inset(self.textContainerInset.top)
+            make.left.equalTo(self.snp.left).inset(self.textContainerInset.left + self.textContainer.lineFragmentPadding)
+            make.right.equalTo(self.snp.right).inset(self.textContainerInset.right + self.textContainer.lineFragmentPadding)
+            make.bottom.lessThanOrEqualTo(self.snp.bottom).inset(self.textContainerInset.bottom)
+        }
+        
+        // Ensures the placeholder label wraps text to multiple lines by setting
+        // `preferredMaxLayoutWidth` to the available width inside the text view.
+        // Without this, UILabel will not wrap and the placeholder will be clipped.
+        DispatchQueue.main.async {
+            let leftInset = self.textContainerInset.left + self.textContainer.lineFragmentPadding
+            let rightInset = self.textContainerInset.right + self.textContainer.lineFragmentPadding
+            let maxWidth = self.bounds.width - leftInset - rightInset
+            self.placeholderLabel?.preferredMaxLayoutWidth = maxWidth
+            self.placeholderLabel?.setNeedsLayout()
+        }
     }
 }

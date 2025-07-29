@@ -39,6 +39,8 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         return label
     }()
     
@@ -46,6 +48,8 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.secondaryRegularLabel
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         return label
     }()
     

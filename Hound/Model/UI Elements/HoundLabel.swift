@@ -17,6 +17,8 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     
     // MARK: - Properties
     
+    var debugCheckForOversizedFrame: Bool = true
+    
     var staticCornerRadius: CGFloat? = Constant.Visual.Layer.defaultCornerRadius
     var shouldRoundCorners: Bool = false {
         didSet {
@@ -41,30 +43,45 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         }
     }
     
+    override var bounds: CGRect {
+        didSet {
+            if oldValue != bounds {
+                updateCornerRounding()
+            }
+        }
+    }
+    
+    override var isEnabled: Bool {
+        didSet {
+            self.isUserInteractionEnabled = isEnabled
+            self.alpha = isEnabled ? 1 : 0.5
+        }
+    }
+    
     var textInsets: UIEdgeInsets = .zero {
         didSet { setNeedsDisplay(); invalidateIntrinsicContentSize() }
     }
     
     var shouldInsetText: Bool = false {
         didSet {
-            textInsets = shouldInsetText ? UIEdgeInsets(top: ConstraintConstant.Spacing.contentTightIntraVert, left: ConstraintConstant.Spacing.contentIntraHori, bottom: ConstraintConstant.Spacing.contentTightIntraVert, right: ConstraintConstant.Spacing.contentIntraHori) : .zero
+            textInsets = shouldInsetText ? UIEdgeInsets(
+                top: ConstraintConstant.Spacing.contentTightIntraVert,
+                left: ConstraintConstant.Spacing.contentIntraHori,
+                bottom: ConstraintConstant.Spacing.contentTightIntraVert,
+                right: ConstraintConstant.Spacing.contentIntraHori) : .zero
             updatePlaceholderLabel()
         }
     }
+    
+    // MARK: - Placeholder and Background Label
     
     var placeholder: String? {
         didSet {
-            placeholderLabel.text = placeholder
+            placeholderLabel?.text = placeholder
             updatePlaceholderLabel()
         }
     }
-    
-    private lazy var placeholderLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .placeholderText
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private var placeholderLabel: UILabel?
     
     /// Color of the outlined background label. When set, a duplicate label is
     /// inserted behind this label with an outline matching this color. Set to
@@ -74,16 +91,8 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             updateBackgroundLabel()
         }
     }
-    
-    // has to be optional to prevent infinite recursion, but need HoundLabel for attributed text closure
-    private var backgroundLabel: HoundLabel?
-    /// Multiplier used to determine the outline stroke width based on the
-    /// current font size.
-    private static let backgroundLabelStrokeWidthScale: CGFloat = 0.8
-    
-    var debugCheckForOversizedFrame: Bool = true
-    
-    // MARK: - Override Properties
+    private var backgroundLabel: UILabel?
+    private let backgroundLabelStrokeWidthScale: CGFloat = 0.8
     
     override func drawText(in rect: CGRect) {
         super.drawText(in: rect.inset(by: textInsets))
@@ -106,41 +115,94 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
                       height: size.height + textInsets.top + textInsets.bottom)
     }
     
-    override var bounds: CGRect {
-        didSet {
-            updateCornerRounding()
-        }
-    }
-    
     override var text: String? {
         didSet {
-            updatePlaceholderLabel()
+            if oldValue != text {
+                updatePlaceholderLabel()
+                updateBackgroundLabel()
+            }
         }
     }
     
-    override var font: UIFont! {
+    override var attributedText: NSAttributedString? {
         didSet {
-            updateBackgroundLabel()
-            updatePlaceholderLabel()
-        }
-    }
-    
-    override var textAlignment: NSTextAlignment {
-        didSet {
-            updateBackgroundLabel()
+            if oldValue != attributedText {
+                updatePlaceholderLabel()
+                updateBackgroundLabel()
+            }
         }
     }
     
     override var numberOfLines: Int {
         didSet {
-            updateBackgroundLabel()
+            if oldValue != numberOfLines {
+                placeholderLabel?.numberOfLines = numberOfLines
+                backgroundLabel?.numberOfLines = numberOfLines
+            }
         }
     }
     
-    override var isEnabled: Bool {
+    override var contentMode: UIView.ContentMode {
         didSet {
-            self.isUserInteractionEnabled = isEnabled
-            self.alpha = isEnabled ? 1 : 0.5
+            if oldValue != contentMode {
+                placeholderLabel?.contentMode = contentMode
+                backgroundLabel?.contentMode = contentMode
+            }
+        }
+    }
+    
+    override var textAlignment: NSTextAlignment {
+        didSet {
+            if oldValue != textAlignment {
+                placeholderLabel?.textAlignment = textAlignment
+                backgroundLabel?.textAlignment = textAlignment
+            }
+        }
+    }
+    
+    override var lineBreakMode: NSLineBreakMode {
+        didSet {
+            if oldValue != lineBreakMode {
+                placeholderLabel?.lineBreakMode = lineBreakMode
+                backgroundLabel?.lineBreakMode = lineBreakMode
+            }
+        }
+    }
+    
+    override var baselineAdjustment: UIBaselineAdjustment {
+        didSet {
+            if oldValue != baselineAdjustment {
+                placeholderLabel?.baselineAdjustment = baselineAdjustment
+                backgroundLabel?.baselineAdjustment = baselineAdjustment
+            }
+        }
+    }
+    
+    override var adjustsFontSizeToFitWidth: Bool {
+        didSet {
+            if oldValue != adjustsFontSizeToFitWidth {
+                placeholderLabel?.adjustsFontSizeToFitWidth = adjustsFontSizeToFitWidth
+                backgroundLabel?.adjustsFontSizeToFitWidth = adjustsFontSizeToFitWidth
+            }
+        }
+    }
+    
+    override var minimumScaleFactor: CGFloat {
+        didSet {
+            if oldValue != minimumScaleFactor {
+                placeholderLabel?.minimumScaleFactor = minimumScaleFactor
+                backgroundLabel?.minimumScaleFactor = minimumScaleFactor
+            }
+        }
+    }
+    
+    override var font: UIFont! {
+        didSet {
+            if oldValue != font {
+                placeholderLabel?.font = font
+                // need to recalculate the attributed text for the background label
+                updateBackgroundLabel()
+            }
         }
     }
     
@@ -203,33 +265,57 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
     // MARK: - Functions
     
     private func applyDefaultSetup() {
+        self.numberOfLines = 1
         self.contentMode = .left
         self.textAlignment = .natural
         self.lineBreakMode = .byTruncatingTail
         self.baselineAdjustment = .alignBaselines
         self.adjustsFontSizeToFitWidth = true
-        self.translatesAutoresizingMaskIntoConstraints = false
         self.minimumScaleFactor = 0.825
         self.font = Constant.Visual.Font.primaryRegularLabel
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
         
         HoundSizeDebugView.install(on: self)
         
         updateCornerRounding()
     }
     
-    // MARK: - Background Label
-    
     private func updatePlaceholderLabel() {
-        let usesPlaceholderLabel = !(placeholderLabel.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
+        
+        let usesPlaceholderLabel = !(placeholder?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
         
         guard usesPlaceholderLabel else {
-            // if theres no placeholder text but we try to constrain it, the whole houndlabel gets fucked and lays itself upon the 0 size view
-            placeholderLabel.snp.removeConstraints()
-            placeholderLabel.removeFromSuperview()
+            placeholderLabel?.snp.removeConstraints()
+            placeholderLabel?.removeFromSuperview()
+            placeholderLabel = nil
             return
         }
         
-        placeholderLabel.isHidden = !(text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
+        if placeholderLabel == nil {
+            let label = UILabel()
+            label.textColor = .placeholderText
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.isUserInteractionEnabled = false
+            label.text = placeholder
+            placeholderLabel = label
+        }
+        
+        guard let placeholderLabel = placeholderLabel else {
+            return
+        }
+        
+        let isEmpty: Bool = (text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
+        
+        placeholderLabel.isHidden = !isEmpty
+        
+        placeholderLabel.numberOfLines = numberOfLines
+        placeholderLabel.contentMode = contentMode
+        placeholderLabel.textAlignment = textAlignment
+        placeholderLabel.lineBreakMode = lineBreakMode
+        placeholderLabel.baselineAdjustment = baselineAdjustment
+        placeholderLabel.adjustsFontSizeToFitWidth = adjustsFontSizeToFitWidth
+        placeholderLabel.minimumScaleFactor = minimumScaleFactor
         placeholderLabel.font = font
         
         if placeholderLabel.superview != self {
@@ -247,7 +333,6 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         }
     }
     
-    /// Adds or removes the outlined background label as needed.
     private func updateBackgroundLabel() {
         guard let color = backgroundLabelColor else {
             backgroundLabel?.snp.removeConstraints()
@@ -257,10 +342,8 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         }
         
         if backgroundLabel == nil {
-            let label = HoundLabel()
-            label.debugCheckForOversizedFrame = false
-            // Important to prevent recursive insets
-            label.shouldInsetText = false
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
             backgroundLabel = label
         }
         
@@ -277,15 +360,19 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
             }
         }
         
-        backgroundLabel.minimumScaleFactor = minimumScaleFactor
         backgroundLabel.numberOfLines = numberOfLines
+        backgroundLabel.contentMode = contentMode
         backgroundLabel.textAlignment = textAlignment
+        backgroundLabel.lineBreakMode = lineBreakMode
+        backgroundLabel.baselineAdjustment = baselineAdjustment
+        backgroundLabel.adjustsFontSizeToFitWidth = adjustsFontSizeToFitWidth
+        backgroundLabel.minimumScaleFactor = minimumScaleFactor
+        backgroundLabel.font = font
         
         backgroundLabel.attributedText = NSAttributedString(string: self.text ?? "", attributes: [
             .strokeColor: color as Any,
             .foregroundColor: color as Any,
-            .strokeWidth: self.font.pointSize * Self.backgroundLabelStrokeWidthScale,
-            .font: self.font as Any
+            .strokeWidth: self.font.pointSize * self.backgroundLabelStrokeWidthScale
         ])
     }
     

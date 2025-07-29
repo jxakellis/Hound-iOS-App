@@ -108,6 +108,8 @@ final class LogsVC: HoundViewController,
         label.isHidden = true
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryHeaderLabel
         label.textColor = UIColor.systemBlue
         return label

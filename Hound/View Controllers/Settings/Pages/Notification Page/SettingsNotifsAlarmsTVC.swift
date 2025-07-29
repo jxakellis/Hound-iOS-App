@@ -20,6 +20,8 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.text = "By default, your reminder alarms will repeatedly ring, play the 'Radar' sound effect, and snooze for five minutes"
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         return label

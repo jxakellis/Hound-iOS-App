@@ -39,6 +39,8 @@ final class HoundIntroductionView: HoundView {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.textColor = UIColor.secondaryLabel
         return label
