@@ -62,7 +62,7 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
         self.delegate = forDelegate
         self.cancellationReason = forCancellationReason
         
-        setCustomSelected(selected: forIsCustomSelected, animated: false)
+        setCustomSelected(forIsCustomSelected, animated: false)
     }
     
     // MARK: - Functions

@@ -74,7 +74,7 @@ final class HoundEditPageHeaderView: HoundView {
             if leadingButton.isHidden && trailingButton.isHidden {
                 make.top.equalTo(self.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)
                 make.leading.equalTo(self.snp.leading).offset(Constant.Constraint.Spacing.absoluteHoriInset)
-                make.trailing.equalTo(self.snp.leading).inset(Constant.Constraint.Spacing.absoluteHoriInset)
+                make.trailing.equalTo(self.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
             }
             else {
                 make.top.greaterThanOrEqualTo(self.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)

@@ -175,7 +175,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         }
         
         let precalculatedDynamicIsSnoozing = reminder.snoozeComponents.executionInterval != nil
-        let precalculatedDynamicText = Date().distance(to: executionDate).readable(capitalizeWords: false, abbreviationLevel: .short, maxComponents: 2)
+        let precalculatedDynamicText = Date().distance(to: executionDate).readable(capitalizeWords: false, abbreviationLevel: .short, maxComponents: 2, enforceSequentialComponents: true)
         
         nextAlarmLabel.attributedTextClosure = {
             // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated

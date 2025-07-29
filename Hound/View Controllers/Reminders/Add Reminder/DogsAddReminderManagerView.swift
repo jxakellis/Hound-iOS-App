@@ -12,6 +12,7 @@ import UIKit
 enum DogsAddReminderDropDownTypes: String, HoundDropDownType {
     case reminderAction = "DropDownReminderAction"
     case reminderRecipients = "DropDownReminderRecipients"
+    case reminderTimeZone = "DropDownReminderTimeZone"
 }
 
 // TODO TIMING Add a TZ dropdown. this should live at the bottom of the reminderViewsStack. should become visible if onetime, weekly, or monthly page is selected. it should use the globe icon to contextualize wtf the globe icon means in other views. maybe even add a disclaimer label below the dropdown to be like: yo this reminder is in a diff TZ than your are in. if they are diff
@@ -196,13 +197,41 @@ final class DogsAddReminderManagerView: HoundView,
         return segmentedControl
     }()
     
+    private let timeZoneHeaderLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
+        label.textColor = .label
+        label.text = "Time Zone"
+        return label
+    }()
+    private lazy var timeZoneLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.primaryRegularLabel
+        label.applyStyle(.thinGrayBorder)
+        label.shouldInsetText = true
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(
+            dropDownManager.showHideDropDownGesture(
+                identifier: DogsAddReminderDropDownTypes.reminderTimeZone,
+                delegate: self
+            )
+        )
+        dropDownManager.register(identifier: .reminderTimeZone, label: label, direction: .up)
+        return label
+    }()
+    private lazy var timeZoneStack: HoundStackView = {
+        let stack = HoundStackView.inputFieldStack(timeZoneHeaderLabel)
+        stack.addArrangedSubview(timeZoneLabel)
+        return stack
+    }()
+    
     private let onceView = DogsAddReminderOneTimeView()
     private let countdownView = DogsAddReminderCountdownView()
     private let weeklyView = DogsAddReminderWeeklyView()
     private let monthlyView = DogsAddReminderMonthlyView()
     
     private lazy var reminderViewsStack: HoundStackView = {
-        let stack = HoundStackView(arrangedSubviews: [onceView, countdownView, weeklyView, monthlyView])
+        let stack = HoundStackView(arrangedSubviews: [onceView, countdownView, weeklyView, monthlyView, timeZoneStack])
         stack.axis = .vertical
         stack.spacing = Constant.Constraint.Spacing.contentIntraVert
         return stack
@@ -227,6 +256,9 @@ final class DogsAddReminderManagerView: HoundView,
         countdownView.isHidden = !(sender.selectedSegmentIndex == ReminderType.countdown.segmentedControlIndex)
         weeklyView.isHidden = !(sender.selectedSegmentIndex == ReminderType.weekly.segmentedControlIndex)
         monthlyView.isHidden = !(sender.selectedSegmentIndex == ReminderType.monthly.segmentedControlIndex)
+        
+        // hide if not any of the views that use TZ
+        timeZoneStack.isHidden = !(sender.selectedSegmentIndex == ReminderType.oneTime.segmentedControlIndex) && !(sender.selectedSegmentIndex == ReminderType.weekly.segmentedControlIndex) && !(sender.selectedSegmentIndex == ReminderType.monthly.segmentedControlIndex)
     }
     
     // MARK: - Properties
@@ -234,6 +266,21 @@ final class DogsAddReminderManagerView: HoundView,
     private var reminderToUpdate: Reminder?
     private var initialReminder: Reminder?
     
+    /// Options for the reminder action drop down consisting of base types and their previous custom names
+    private var availableReminderActions: [(ReminderActionType, String?)] {
+        var options: [(ReminderActionType, String?)] = []
+        for type in GlobalTypes.shared.reminderActionTypes {
+            options.append((type, nil))
+            let matching = LocalConfiguration.localPreviousReminderCustomActionNames.filter { $0.reminderActionTypeId == type.reminderActionTypeId }
+            for prev in matching {
+                options.append((type, prev.reminderCustomActionName))
+            }
+        }
+        return options
+    }
+    private var availableFamilyMembers: [FamilyMember] {
+        FamilyInformation.familyMembers
+    }
     private(set) var selectedReminderAction: ReminderActionType? {
         didSet {
             reminderActionLabel.text = selectedReminderAction?.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
@@ -278,23 +325,12 @@ final class DogsAddReminderManagerView: HoundView,
         }
         return nil
     }
-    /// Options for the reminder action drop down consisting of base types and their previous custom names
-    private var availableReminderActions: [(ReminderActionType, String?)] {
-        var options: [(ReminderActionType, String?)] = []
-        for type in GlobalTypes.shared.reminderActionTypes {
-            options.append((type, nil))
-            let matching = LocalConfiguration.localPreviousReminderCustomActionNames.filter { $0.reminderActionTypeId == type.reminderActionTypeId }
-            for prev in matching {
-                options.append((type, prev.reminderCustomActionName))
-            }
-        }
-        return options
-    }
-    private var availableFamilyMembers: [FamilyMember] {
-        FamilyInformation.familyMembers
-    }
-    
     private var selectedRecipientUserIds: Set<String> = []
+    private var selectedTimeZone: TimeZone? {
+        didSet {
+            timeZoneLabel.text = selectedTimeZone?.displayName()
+        }
+    }
     
     func constructReminder(showErrorIfFailed: Bool) -> Reminder? {
         guard let selectedReminderAction = selectedReminderAction else {
@@ -421,6 +457,11 @@ final class DogsAddReminderManagerView: HoundView,
         weeklyView.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.weekly.segmentedControlIndex
         monthlyView.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.monthly.segmentedControlIndex
         
+        let timeZone = reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
+        selectedTimeZone = timeZone
+        // hide if not any of the views that use TZ
+        timeZoneStack.isHidden = segmentedControl.selectedSegmentIndex != ReminderType.oneTime.segmentedControlIndex && segmentedControl.selectedSegmentIndex != ReminderType.weekly.segmentedControlIndex && segmentedControl.selectedSegmentIndex != ReminderType.monthly.segmentedControlIndex
+        
         // onceView
         if reminderToUpdate?.reminderType == .oneTime {
             let date = Date().distance(to: reminderToUpdate?.oneTimeComponents.oneTimeDate ?? Date()) > 0 ?
@@ -428,11 +469,11 @@ final class DogsAddReminderManagerView: HoundView,
             onceView.setup(
                 forDelegate: self,
                 forComponents: date != nil ? OneTimeComponents(oneTimeDate: date) : nil,
-                forTimeZone: reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
+                forTimeZone: timeZone
             )
         }
         else {
-            onceView.setup(forDelegate: self, forComponents: nil, forTimeZone: UserConfiguration.timeZone)
+            onceView.setup(forDelegate: self, forComponents: nil, forTimeZone: timeZone)
         }
         
         // countdownView
@@ -451,11 +492,11 @@ final class DogsAddReminderManagerView: HoundView,
             weeklyView.setup(
                 forDelegate: self,
                 forComponents: reminderToUpdate?.weeklyComponents,
-                forTimeZone: reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
+                forTimeZone: timeZone
             )
         }
         else {
-            weeklyView.setup(forDelegate: self, forComponents: nil, forTimeZone: UserConfiguration.timeZone)
+            weeklyView.setup(forDelegate: self, forComponents: nil, forTimeZone: timeZone)
         }
         
         // monthlyView
@@ -463,11 +504,11 @@ final class DogsAddReminderManagerView: HoundView,
             monthlyView.setup(
                 forDelegate: self,
                 forComponents: reminderToUpdate?.monthlyComponents,
-                forTimeZone: reminderToUpdate?.reminderTimeZone ?? UserConfiguration.timeZone
+                forTimeZone: timeZone
             )
         }
         else {
-            monthlyView.setup(forDelegate: self, forComponents: nil, forTimeZone: UserConfiguration.timeZone)
+            monthlyView.setup(forDelegate: self, forComponents: nil, forTimeZone: timeZone)
         }
         
         updateDynamicUIElements()
@@ -655,6 +696,8 @@ final class DogsAddReminderManagerView: HoundView,
                 return CGFloat(availableReminderActions.count)
             case .reminderRecipients:
                 return CGFloat(availableFamilyMembers.count)
+            case .reminderTimeZone:
+                return CGFloat(TimeZone.houndTimeZones.count)
             }
         }()
         
@@ -684,6 +727,10 @@ final class DogsAddReminderManagerView: HoundView,
             let member = availableFamilyMembers[indexPath.row]
             cell.setCustomSelected(selectedRecipientUserIds.contains(member.userId), animated: false)
             cell.label.text = member.displayFullName ?? Constant.Visual.Text.unknownName
+        case .reminderTimeZone:
+            let tz = TimeZone.houndTimeZones[indexPath.row]
+            cell.setCustomSelected(selectedTimeZone == tz, animated: false)
+            cell.label.text = tz.displayName(currentTimeZone: UserConfiguration.timeZone)
         }
     }
     
@@ -697,6 +744,8 @@ final class DogsAddReminderManagerView: HoundView,
             return availableReminderActions.count
         case DogsAddReminderDropDownTypes.reminderRecipients:
             return availableFamilyMembers.count
+        case DogsAddReminderDropDownTypes.reminderTimeZone:
+            return TimeZone.houndTimeZones.count
         }
     }
     
@@ -709,7 +758,7 @@ final class DogsAddReminderManagerView: HoundView,
         guard let dropDown = dropDownManager.dropDown(for: identifier), let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
         
         switch identifier {
-        case DogsAddReminderDropDownTypes.reminderAction:
+        case .reminderAction:
             guard !cell.isCustomSelected else {
                 cell.setCustomSelected(false)
                 selectedReminderAction = nil
@@ -734,7 +783,7 @@ final class DogsAddReminderManagerView: HoundView,
             updateDynamicUIElements()
             
             showNextRequiredDropDown(animated: true)
-        case DogsAddReminderDropDownTypes.reminderRecipients:
+        case .reminderRecipients:
             let member = availableFamilyMembers[indexPath.row]
             
             if cell.isCustomSelected {
@@ -753,6 +802,32 @@ final class DogsAddReminderManagerView: HoundView,
             
             // recipient label text changes and disclaimer label maybe appears/disappears
             updateDynamicUIElements()
+        case .reminderTimeZone:
+            guard !cell.isCustomSelected else {
+                cell.setCustomSelected(false)
+                selectedTimeZone = nil
+                return
+            }
+            
+            if let selectedTimeZone = selectedTimeZone,
+               let previouslySelectedIndexPath = TimeZone.houndTimeZones.firstIndex(of: selectedTimeZone),
+               let previousSelectedCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: previouslySelectedIndexPath, section: 0)) as? HoundDropDownTVC {
+                previousSelectedCell.setCustomSelected(false)
+            }
+            
+            cell.setCustomSelected(true)
+            
+            let timeZone = TimeZone.houndTimeZones[indexPath.row]
+            selectedTimeZone = timeZone
+            
+            timeZoneLabel.errorMessage = nil
+            
+            onceView.updateDisplayedTimeZone(timeZone)
+            // nothing for countdown view
+            weeklyView.updateDisplayedTimeZone(timeZone)
+            monthlyView.updateDisplayedTimeZone(timeZone)
+            
+            dropDown.hideDropDown(animated: true)
         }
     }
     
@@ -813,6 +888,11 @@ final class DogsAddReminderManagerView: HoundView,
             make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
             make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
             make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.segmentedHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
+        }
+        
+        timeZoneLabel.snp.makeConstraints { make in
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         

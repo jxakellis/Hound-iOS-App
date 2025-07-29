@@ -273,7 +273,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         guard let type = identifier as? SettingsAppearanceDropDownTypes else { return }
         switch type {
         case .timeZone:
-            dropDownManager.show(identifier: .timeZone, numberOfRowsToShow: min(6.5, CGFloat(TimeZone.uniqueHoundTimeZones.count)), animated: animated)
+            dropDownManager.show(identifier: .timeZone, numberOfRowsToShow: min(6.5, CGFloat(TimeZone.houndTimeZones.count)), animated: animated)
         }
     }
     
@@ -283,7 +283,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         guard let type = identifier as? SettingsAppearanceDropDownTypes else { return }
         switch type {
         case .timeZone:
-            let tz = TimeZone.uniqueHoundTimeZones[indexPath.row]
+            let tz = TimeZone.houndTimeZones[indexPath.row]
             cell.label.text = tz.displayName(currentTimeZone: TimeZone.current)
             // use UserConfiguration.timeZone b/c if no UserConfiguration.userTimeZone, then this defaults to current TZ
             cell.setCustomSelected(tz == UserConfiguration.timeZone, animated: false)
@@ -294,7 +294,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         guard let type = identifier as? SettingsAppearanceDropDownTypes else { return 0 }
         switch type {
         case .timeZone:
-            return TimeZone.uniqueHoundTimeZones.count
+            return TimeZone.houndTimeZones.count
         }
     }
     
@@ -302,14 +302,13 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         1
     }
     
-    // TODO BUG selecting shit maybe broken
     func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
         guard let type = identifier as? SettingsAppearanceDropDownTypes else { return }
         guard let dropDown = dropDownManager.dropDown(for: type), let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
         switch type {
         case .timeZone:
             if let prevTz = UserConfiguration.userTimeZone,
-               let prevIndex = TimeZone.uniqueHoundTimeZones.firstIndex(where: { $0.identifier == prevTz.identifier }),
+               let prevIndex = TimeZone.houndTimeZones.firstIndex(where: { $0.identifier == prevTz.identifier }),
                prevIndex != indexPath.row {
                 let prevIndexPath = IndexPath(row: prevIndex, section: 0)
                 if let prevCell = dropDown.dropDownTableView?.cellForRow(at: prevIndexPath) as? HoundDropDownTVC {
@@ -319,7 +318,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
             
             let beforeUpdateTz = UserConfiguration.userTimeZone
             
-            let newTz = TimeZone.uniqueHoundTimeZones[indexPath.row]
+            let newTz = TimeZone.houndTimeZones[indexPath.row]
             cell.setCustomSelected(true)
             UserConfiguration.userTimeZone = newTz
             // set currentTimeZone to nil so it doesn't append (current) to the end
@@ -442,7 +441,8 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         // hapticsHeaderLabel
         NSLayoutConstraint.activate([
             hapticsHeaderLabel.topAnchor.constraint(equalTo: timeZoneLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
-            hapticsHeaderLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
+            // TEMP extra spacing for timeZoneLabel dropdown
+            hapticsHeaderLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -250.0),
             hapticsHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         

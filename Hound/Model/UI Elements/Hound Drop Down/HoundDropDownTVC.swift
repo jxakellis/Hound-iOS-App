@@ -17,6 +17,7 @@ class HoundDropDownTVC: HoundTableViewCell {
         let label = HoundLabel()
         // if change this then change estimatedHeight too
         label.font = Constant.Visual.Font.primaryRegularLabel
+        label.numberOfLines = 0
         return label
     }()
 
@@ -25,7 +26,7 @@ class HoundDropDownTVC: HoundTableViewCell {
 
     // MARK: - Properties
     
-    static let height = (Constant.Constraint.Spacing.absoluteVertInset * 1.25) + Constant.Visual.Font.primaryRegularLabel.lineHeight + (Constant.Constraint.Spacing.absoluteVertInset * 1.25)
+    static let singleLineHeight = (Constant.Constraint.Spacing.absoluteVertInset * 1.25) + Constant.Visual.Font.primaryRegularLabel.lineHeight + (Constant.Constraint.Spacing.absoluteVertInset * 1.25)
     static let reuseIdentifier = "HoundDropDownTVC"
 
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
@@ -67,10 +68,9 @@ class HoundDropDownTVC: HoundTableViewCell {
     override func setupConstraints() {
         super.setupConstraints()
         label.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top)
+            make.top.equalTo(contentView.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset * 1.25)
             // Use .high priority to avoid breaking during table view height estimation
-            make.bottom.equalTo(contentView.snp.bottom).priority(.high)
-            make.height.equalTo(HoundDropDownTVC.height)
+            make.bottom.equalTo(contentView.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset * 1.25).priority(.high)
             make.horizontalEdges.equalTo(contentView.snp.horizontalEdges).inset(Constant.Constraint.Spacing.contentIntraHori)
         }
     }

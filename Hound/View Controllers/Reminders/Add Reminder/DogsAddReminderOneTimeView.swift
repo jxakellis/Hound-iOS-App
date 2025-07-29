@@ -78,7 +78,9 @@ final class DogsAddReminderOneTimeView: HoundView {
     
     // MARK: - Time Zone
     
-    func updateDisplayedTimeZone(from _: TimeZone, to newTimeZone: TimeZone) {
+    func updateDisplayedTimeZone(_ newTimeZone: TimeZone) {
+        guard newTimeZone != currentTimeZone else { return }
+        
         currentTimeZone = newTimeZone
         oneTimeDatePicker.timeZone = newTimeZone
         updateDescriptionLabel()

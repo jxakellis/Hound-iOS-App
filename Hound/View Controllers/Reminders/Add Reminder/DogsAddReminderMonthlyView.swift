@@ -6,6 +6,7 @@
 //  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
+import SnapKit
 import UIKit
 
 protocol DogsAddReminderMonthlyViewDelegate: AnyObject {
@@ -47,6 +48,16 @@ final class DogsAddReminderMonthlyView: HoundView {
         label.numberOfLines = 0
         label.isHidden = true
         return label
+    }()
+    
+    private lazy var stack: HoundStackView = {
+        let stack = HoundStackView()
+        stack.addArrangedSubview(monthlyDescriptionLabel)
+        stack.addArrangedSubview(timeOfDayDatePicker)
+        stack.addArrangedSubview(rollUnderDisclaimerLabel)
+        stack.axis = .vertical
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        return stack
     }()
     
     @objc private func didUpdateTimeOfDay(_ sender: Any) {
@@ -100,22 +111,30 @@ final class DogsAddReminderMonthlyView: HoundView {
     
     // MARK: - Time Zone
     
-    func updateDisplayedTimeZone(from oldTimeZone: TimeZone, to newTimeZone: TimeZone) {
-        guard oldTimeZone != newTimeZone else { return }
+    func updateDisplayedTimeZone(_ newTimeZone: TimeZone) {
+        guard newTimeZone != currentTimeZone else { return }
         
-        let calendar = Calendar.fromZone(oldTimeZone)
-        let oldComps = calendar.dateComponents([.day, .hour, .minute], from: timeOfDayDatePicker.date)
+        print("Updating displayed time zone from \(currentTimeZone.identifier) to \(newTimeZone.identifier)")
+        
+        let calendar = Calendar.fromZone(currentTimeZone)
+        let oldComps = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: timeOfDayDatePicker.date)
         let day = oldComps.day ?? 1
         let hour = oldComps.hour ?? 0
         let minute = oldComps.minute ?? 0
         
-        let converted = oldTimeZone.convert(
+        let converted = currentTimeZone.convert(
             day: day,
             hour: hour,
             minute: minute,
             to: newTimeZone,
             referenceDate: timeOfDayDatePicker.date
         )
+        
+        let srcOffset = currentTimeZone.secondsFromGMT(for: timeOfDayDatePicker.date)
+        let destOffset = newTimeZone.secondsFromGMT(for: timeOfDayDatePicker.date)
+        print("Source offset: \(srcOffset)h, Destination offset: \(destOffset)h")
+        print("Original time: \(day) day, \(hour) hour, \(minute) minute")
+        print("Converted time: \(converted.day) day, \(converted.hour) hour, \(converted.minute) minute")
         
         var newComps = DateComponents()
         newComps.year = oldComps.year
@@ -125,6 +144,8 @@ final class DogsAddReminderMonthlyView: HoundView {
         newComps.minute = converted.minute
         newComps.second = 0
         newComps.timeZone = newTimeZone
+        
+        print("new date \(calendar.date(from: newComps))")
         if let newDate = calendar.date(from: newComps) {
             timeOfDayDatePicker.timeZone = newTimeZone
             timeOfDayDatePicker.date = newDate
@@ -155,36 +176,20 @@ final class DogsAddReminderMonthlyView: HoundView {
     
     override func addSubViews() {
         super.addSubViews()
-        addSubview(timeOfDayDatePicker)
-        addSubview(monthlyDescriptionLabel)
-        addSubview(rollUnderDisclaimerLabel)
+        addSubview(stack)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
-        // monthlyDescriptionLabel
-        NSLayoutConstraint.activate([
-            monthlyDescriptionLabel.topAnchor.constraint(equalTo: topAnchor),
-            monthlyDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            monthlyDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
+        stack.snp.makeConstraints { make in
+            make.edges.equalTo(self.snp.edges)
+        }
         
-        NSLayoutConstraint.activate([
-            timeOfDayDatePicker.topAnchor.constraint(equalTo: monthlyDescriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            timeOfDayDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
-            timeOfDayDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
-            timeOfDayDatePicker.createHeightMultiplier(Constant.Constraint.Input.megaDatePickerHeightMultiplier, relativeToWidthOf: self),
-            timeOfDayDatePicker.createMaxHeight(Constant.Constraint.Input.megaDatePickerMaxHeight)
-        ])
-        
-        NSLayoutConstraint.activate([
-            rollUnderDisclaimerLabel.topAnchor.constraint(equalTo: timeOfDayDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            rollUnderDisclaimerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            rollUnderDisclaimerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            rollUnderDisclaimerLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-        
+        timeOfDayDatePicker.snp.makeConstraints { make in
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.megaDatePickerHeightMultiplier)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.megaDatePickerMaxHeight)
+        }
     }
     
 }

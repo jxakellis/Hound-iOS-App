@@ -188,15 +188,15 @@ final class DogsAddReminderWeeklyView: HoundView {
         }
     }
     
-    func updateDisplayedTimeZone(from oldTimeZone: TimeZone, to newTimeZone: TimeZone) {
-        guard oldTimeZone != newTimeZone else { return }
+    func updateDisplayedTimeZone(_ newTimeZone: TimeZone) {
+        guard newTimeZone != currentTimeZone else { return }
         
-        let calendar = Calendar.fromZone(oldTimeZone)
+        let calendar = Calendar.fromZone(currentTimeZone)
         let oldComponents = calendar.dateComponents([.hour, .minute], from: timeOfDayDatePicker.date)
         let hour = oldComponents.hour ?? 0
         let minute = oldComponents.minute ?? 0
         
-        let converted = oldTimeZone.convert(hour: hour, minute: minute, to: newTimeZone)
+        let converted = currentTimeZone.convert(hour: hour, minute: minute, to: newTimeZone)
         var newDateComponents = calendar.dateComponents([.year, .month, .day], from: timeOfDayDatePicker.date)
         newDateComponents.hour = converted.hour
         newDateComponents.minute = converted.minute
@@ -207,7 +207,7 @@ final class DogsAddReminderWeeklyView: HoundView {
             timeOfDayDatePicker.date = newDate
         }
         
-        let newWeekdays = oldTimeZone.convert(
+        let newWeekdays = currentTimeZone.convert(
             weekdays: currentWeekdays,
             hour: hour,
             minute: minute,

@@ -1139,7 +1139,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         switch identifier {
         case .parentDog:
             let dog = dogManager.dogs[indexPath.row]
-            cell.setCustomSelected(forSelected: selectedDogUUIDs.contains(dog.dogUUID), animated: false)
+            cell.setCustomSelected(selectedDogUUIDs.contains(dog.dogUUID), animated: false)
             cell.label.text = dog.dogName
         case .logActionType:
             let option = availableLogActions[indexPath.row]
