@@ -26,7 +26,7 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
     
     private let cancellationReasonLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
-        // attributes set in setupCancellationLabel
+        label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
         return label
     }()
     
@@ -78,31 +78,7 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
             
             self.containerView.applyStyle(self.isCustomSelected ? .greenSelectionBorder : .labelBorder)
             
-            self.setupCancellationLabel()
-        }
-    }
-    
-    /// Attempts to set the attributedText for cancellationReasonLabel given the cancellationReason and isCustomSelected
-    private func setupCancellationLabel() {
-        guard let cancellationReason = cancellationReason else {
-            cancellationReasonLabel.text = Constant.Visual.Text.unknownText
-            return
-        }
-        
-        // If the cell isn't selected, all of the text is the tertiary label color
-        let cancellationReasonTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: Constant.Visual.Font.emphasizedPrimaryRegularLabel,
-            .foregroundColor: UIColor.label
-        ]
-        
-        cancellationReasonLabel.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
-            // "" -> "6 months - $59.99"
-            let message: NSMutableAttributedString = NSMutableAttributedString(
-                string: cancellationReason.readableValue,
-                attributes: cancellationReasonTextAttributes)
-            
-            return message
+            self.cancellationReasonLabel.text = self.cancellationReason?.readableValue ?? Constant.Visual.Text.unknownText
         }
     }
     // MARK: - Setup Elements

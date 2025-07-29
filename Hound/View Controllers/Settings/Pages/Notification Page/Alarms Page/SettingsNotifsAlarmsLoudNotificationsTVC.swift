@@ -33,26 +33,19 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
         label.textColor = UIColor.secondaryLabel
         let precalculatedDynamicTextColor = label.textColor
         
-        label.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+        label.attributedText = {
             let message = NSMutableAttributedString(
                 string: "Alarms will ring and repeatedly vibrate despite your phone being silenced, locked, or in focus mode. ",
-                attributes: [
-                    .font: Constant.Visual.Font.secondaryColorDescLabel,
-                    .foregroundColor: precalculatedDynamicTextColor as Any
-                ]
+                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
             )
             
             message.append(NSAttributedString(
                 string: "If Hound is terminated, Loud Alarms will not work properly.",
-                attributes: [
-                    .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
-                    .foregroundColor: precalculatedDynamicTextColor as Any
-                ])
+                attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel])
             )
             
             return message
-        }
+        }()
         return label
     }()
     

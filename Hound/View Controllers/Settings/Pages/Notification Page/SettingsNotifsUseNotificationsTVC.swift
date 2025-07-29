@@ -143,26 +143,21 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
     private func synchronizeUseNotificationsDescriptionLabel() {
         let dogCount = DogManager.globalDogManager?.dogs.count ?? 1
         
-        let precalculatedDynamicNotificationsText = "Notifications help you stay up to date about both the status of your dog\(dogCount <= 1 ? "" : "s") and Hound family. "
-        let precalculatedDynamicTextColor = descriptionLabel.textColor
-        let precaulculatedDynamicIsNotificationsEnabled = UserConfiguration.isNotificationEnabled == false
-        
-        descriptionLabel.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+        descriptionLabel.attributedText = {
             let message = NSMutableAttributedString(
-                string: precalculatedDynamicNotificationsText,
-                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                string: "Notifications help you stay up to date about both the status of your dog\(dogCount <= 1 ? "" : "s") and Hound family. ",
+                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
             )
             
-            if precaulculatedDynamicIsNotificationsEnabled {
+            if UserConfiguration.isNotificationEnabled == false {
                 message.append(NSMutableAttributedString(
                     string: "You can't modify the settings below until you enable notifications.",
-                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel])
                 )
             }
             
             return message
-        }
+        }()
     }
     
     // MARK: - Setup Elements

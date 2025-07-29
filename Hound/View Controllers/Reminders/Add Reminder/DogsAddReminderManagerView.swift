@@ -15,8 +15,6 @@ enum DogsAddReminderDropDownTypes: String, HoundDropDownType {
     case reminderTimeZone = "DropDownReminderTimeZone"
 }
 
-// TODO TIMING Add a TZ dropdown. this should live at the bottom of the reminderViewsStack. should become visible if onetime, weekly, or monthly page is selected. it should use the globe icon to contextualize wtf the globe icon means in other views. maybe even add a disclaimer label below the dropdown to be like: yo this reminder is in a diff TZ than your are in. if they are diff
-
 final class DogsAddReminderManagerView: HoundView,
                                         UITextFieldDelegate,
                                         UIGestureRecognizerDelegate,
@@ -584,105 +582,66 @@ final class DogsAddReminderManagerView: HoundView,
         
         notificationsDisabledLabel.isHidden = !shouldShowDisclaimer
         
-        let precalculatedDynamicTextColor = UIColor.secondaryLabel
-        
-        notificationsDisabledLabel.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+        notificationsDisabledLabel.attributedText = {
             let message = NSMutableAttributedString()
             if !reminderEnabled {
                 message.append(NSAttributedString(
                     string: "Your reminder is currently ",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
                 ))
                 message.append(NSAttributedString(
                     string: "off",
-                    attributes: [
-                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel]
                 ))
                 message.append(NSAttributedString(
                     string: ", so no alarms will sound.",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
                 ))
             }
             else if !userIsRecipient {
                 message.append(NSAttributedString(
                     string: "You're ",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
                 ))
                 message.append(NSAttributedString(
                     string: "not",
-                    attributes: [
-                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel]
                 ))
                 message.append(NSAttributedString(
                     string: " a recipient for this reminder, so you won't be notified.",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
                 ))
             }
             else if !UserConfiguration.isNotificationEnabled {
                 message.append(NSAttributedString(
                     string: "Your notifications are ",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
                 ))
                 message.append(NSAttributedString(
                     string: "disabled",
-                    attributes: [
-                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel]
                 ))
                 message.append(NSAttributedString(
                     string: ", so you won't receive any push notifications (you can change this in Hound's settings).",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
                 ))
             }
             else if !UserConfiguration.isReminderNotificationEnabled {
                 message.append(NSAttributedString(
                     string: "Your reminder notifications are ",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
                 ))
                 message.append(NSAttributedString(
                     string: "disabled",
-                    attributes: [
-                        .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel]
                 ))
                 message.append(NSAttributedString(
                     string: ", so you won’t get push notifications for reminders (you can change this in Hound's settings).",
-                    attributes: [
-                        .font: Constant.Visual.Font.secondaryColorDescLabel,
-                        .foregroundColor: precalculatedDynamicTextColor as Any
-                    ]
+                    attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
                 ))
             }
             return message
-        }
+        }()
     }
     
     // MARK: - Drop Down Handling

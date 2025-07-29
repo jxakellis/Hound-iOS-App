@@ -71,39 +71,27 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
         introductionView.backgroundImageView.image = UIImage(named: "darkGreenForestWithMountainsFamilyWalkingDog")
         introductionView.pageHeaderLabel.text = "Family"
 
-        introductionView.pageDescriptionLabel.attributedTextClosure = {
+        introductionView.pageDescriptionLabel.attributedText = {
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "No need to go it alone! Grow your Hound family to ",
-                attributes: [
-                    .font: Constant.Visual.Font.primaryRegularLabel,
-                    .foregroundColor: UIColor.secondaryLabel
-                ])
+                attributes: [.font: Constant.Visual.Font.primaryRegularLabel])
 
             message.append(NSAttributedString(
                 string: "six members",
-                attributes: [
-                    .font: Constant.Visual.Font.emphasizedPrimaryRegularLabel,
-                    .foregroundColor: UIColor.secondaryLabel
-                ]))
+                attributes: [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel]))
 
             message.append(NSAttributedString(
                 string: " with Hound+. ",
-                attributes: [
-                    .font: Constant.Visual.Font.primaryRegularLabel,
-                    .foregroundColor: UIColor.secondaryLabel
-                ]))
+                attributes: [.font: Constant.Visual.Font.primaryRegularLabel]))
 
             if self.userPurchasedProductFromSubscriptionGroup20965379 == false {
                 message.append(NSAttributedString(
                     string: "Try it out today with a one week free trial.",
-                    attributes: [
-                        .font: Constant.Visual.Font.primaryRegularLabel,
-                        .foregroundColor: UIColor.secondaryLabel
-                    ]))
+                    attributes: [.font: Constant.Visual.Font.primaryRegularLabel]))
             }
 
             return message
-        }
+        }()
     }
 
     override func viewWillDisappear(_ animated: Bool) {

@@ -163,33 +163,21 @@ final class DogsReminderTVC: HoundTableViewCell {
         
         nextAlarmLabel.isHidden = false
         
-        let nextAlarmHeaderFont = Constant.Visual.Font.emphasizedSecondaryRegularLabel
-        let nextAlarmBodyFont = Constant.Visual.Font.secondaryRegularLabel
-        
         guard Date().distance(to: executionDate) > 0 else {
-            nextAlarmLabel.attributedTextClosure = {
-                // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
-                return NSAttributedString(string: "No More Time Left", attributes: [.font: nextAlarmHeaderFont])
-            }
+            nextAlarmLabel.attributedText = NSAttributedString(string: "No More Time Left", attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel])
             return
         }
         
-        let precalculatedDynamicIsSnoozing = reminder.snoozeComponents.executionInterval != nil
-        let precalculatedDynamicText = Date().distance(to: executionDate).readable(capitalizeWords: false, abbreviationLevel: .short, maxComponents: 2, enforceSequentialComponents: true)
-        
-        nextAlarmLabel.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
-            
+        nextAlarmLabel.attributedText = {
             let message = NSMutableAttributedString(
-                string: precalculatedDynamicIsSnoozing ? "Finish Snoozing In: " : "Remind In: ",
-                attributes: [.font: nextAlarmHeaderFont]
+                string: reminder.snoozeComponents.executionInterval != nil ? "Finish Snoozing In: " : "Remind In: ",
+                attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel]
             )
             
-            message.append(NSAttributedString(string: precalculatedDynamicText, attributes: [.font: nextAlarmBodyFont]))
+            message.append(NSAttributedString(string: Date().distance(to: executionDate).readable(capitalizeWords: false, abbreviationLevel: .short, maxComponents: 2, enforceSequentialComponents: true), attributes: [.font: Constant.Visual.Font.secondaryRegularLabel]))
             
             return message
-            
-        }
+        }()
     }
     
     // MARK: - Setup Elements

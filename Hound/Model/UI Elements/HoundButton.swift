@@ -52,15 +52,6 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
         }
     }
     
-    /// When set, this closure will create the NSAttributedString for attributedText and set attributedTitle equal to that. This is necessary because attributedText doesn't support dynamic colors and therefore doesn't change its colors when the UITraitCollection updates. Additionally, this closure is invoked when the UITraitCollection updates to manually make the attributedText support dynamic colors.
-    var attributedTextClosure: (() -> NSAttributedString)? {
-        didSet {
-            if let attributedText = attributedTextClosure?() {
-                self.setAttributedTitle(attributedText, for: .normal)
-            }
-        }
-    }
-    
     var backgroundCircleTintColor: UIColor? {
         didSet {
             updateBackgroundCircle()
@@ -152,12 +143,6 @@ class HoundButton: UIButton, HoundUIProtocol, HoundDynamicBorder, HoundDynamicCo
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateDynamicBorderColor(using: previousTraitCollection)
-        // UI has changed its appearance to dark/light mode
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if let attributedText = attributedTextClosure?() {
-                self.setAttributedTitle(attributedText, for: .normal)
-            }
-        }
     }
     
     // MARK: - Functions

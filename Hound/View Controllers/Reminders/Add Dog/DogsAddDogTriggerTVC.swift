@@ -62,9 +62,7 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     // MARK: - Setup
     
     func setup(forTrigger: Trigger) {
-        let precalcLogTextColor = logReactionsLabel.textColor
-        logReactionsLabel.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+        logReactionsLabel.attributedText = {
             let logs = forTrigger.triggerLogReactions.map { $0.readableName(includeMatchingEmoji: true) }
             let logNames = logs.joined(separator: ", ", endingSeparator: " or ")
             
@@ -84,42 +82,34 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
             }
             
             // Find ranges for emphasis styling (log names)
-            let attributed = NSMutableAttributedString(string: text, attributes: [
-                .font: Constant.Visual.Font.primaryRegularLabel,
-                .foregroundColor: precalcLogTextColor as Any
-            ])
+            let attributed = NSMutableAttributedString(string: text, attributes: [.font: Constant.Visual.Font.primaryRegularLabel])
             
             // Find and emphasize log names within the text
             if let range = attributed.string.range(of: logNames) {
                 let nsRange = NSRange(range, in: attributed.string)
-                attributed.addAttributes([
-                    .font: Constant.Visual.Font.emphasizedPrimaryRegularLabel,
-                    .foregroundColor: precalcLogTextColor as Any
-                ], range: nsRange)
+                attributed.addAttributes([.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel], range: nsRange)
             }
             return attributed
-        }
+        }()
         
-        let precalcReminderTextColor = reminderResultLabel.textColor
-        reminderResultLabel.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+        reminderResultLabel.attributedText = {
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "Create ",
-                attributes: [.font: Constant.Visual.Font.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any])
+                attributes: [.font: Constant.Visual.Font.secondaryRegularLabel])
             message.append(
                 NSAttributedString(
                     string: forTrigger.triggerReminderResult.readableName,
-                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
+                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel]
                 )
             )
             message.append(
                 NSAttributedString(
                     string: " for \(forTrigger.readableTime())",
-                    attributes: [.font: Constant.Visual.Font.secondaryRegularLabel, .foregroundColor: precalcReminderTextColor as Any]
+                    attributes: [.font: Constant.Visual.Font.secondaryRegularLabel]
                 )
             )
             return message
-        }
+        }()
     }
     
     // MARK: - Setup Elements

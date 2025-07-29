@@ -25,35 +25,24 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
         label.textColor = UIColor.secondaryLabel
         label.numberOfLines = 0
         
-        let precalculatedDynamicTextColor = label.textColor
-        label.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+        label.attributedText = {
             let message = NSMutableAttributedString(
                 string: "Recieve notifications about any of your family's reminders. ",
-                attributes: [
-                    .font: Constant.Visual.Font.secondaryColorDescLabel,
-                    .foregroundColor: precalculatedDynamicTextColor as Any
-                ]
+                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
             )
             
             message.append(NSAttributedString(
                 string: "Notifications are also customizable for each individual reminder.",
-                attributes: [
-                    .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
-                    .foregroundColor: precalculatedDynamicTextColor as Any
-                ])
+                attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel])
             )
             
             message.append(NSAttributedString(
                 string: " Examples include: a reminder's alarm sounding.",
-                attributes: [
-                    .font: Constant.Visual.Font.secondaryColorDescLabel,
-                    .foregroundColor: precalculatedDynamicTextColor as Any
-                ])
+                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel])
             )
             
             return message
-        }
+        }()
         
         return label
     }()

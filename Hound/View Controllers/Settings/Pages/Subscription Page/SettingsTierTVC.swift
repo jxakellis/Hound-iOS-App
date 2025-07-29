@@ -159,7 +159,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
 
         // "1 month - $19.99 " -> "1 months - $19.99" (NO-OP)
         // "6 months - $59.99 " -> "6 months - $59.99 $119.99"
-        var precalculatedDynamicFullPriceText: String?
+        var fullPriceText: String?
         if let fullPrice = product.fullPrice, fullPrice != Double(truncating: product.price) {
             // e.g. 78.5 product.price / 100.0 fullPrice -> 0.785 -> 1 - 0.785 -> 0.225 -> 0.225 * 100 -> 22.5 -> 23
             var unroundedPercentageSaved = Int(
@@ -179,14 +179,13 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
             // Make the number more visually appealing by rounding up to the nearest x.99. The important calculations are done so we can perform this rounding
             let fullPriceRoundedUpToNearest99 = ceil(fullPrice) > 0.0 ? ceil(fullPrice) - 0.01 : 0.0
 
-            precalculatedDynamicFullPriceText = "\(product.priceLocale.currencySymbol ?? "")\(fullPriceRoundedUpToNearest99)"
+            fullPriceText = "\(product.priceLocale.currencySymbol ?? "")\(fullPriceRoundedUpToNearest99)"
         }
         else {
             savePercentLabel.text = nil
         }
 
-        totalPriceLabel.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+        totalPriceLabel.attributedText = {
             // "" -> "6 months - $59.99"
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: precalculatedDynamicSubscriptionLengthAndPriceText,
@@ -194,7 +193,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
 
             // "1 month - $19.99 " -> "1 months - $19.99" (NO-OP)
             // "6 months - $59.99 " -> "6 months - $59.99 $119.99"
-            if let precalculatedDynamicFullPriceText = precalculatedDynamicFullPriceText {
+            if let fullPriceText = fullPriceText {
                 // We need a space between the original text and the new text
                 message.append(
                     NSAttributedString(string: " ")
@@ -202,14 +201,14 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
 
                 message.append(
                     NSAttributedString(
-                    string: precalculatedDynamicFullPriceText,
+                    string: fullPriceText,
                     attributes: fullTotalPricePrimaryTextAttributes
                     )
                 )
             }
 
             return message
-        }
+        }()
 
         // If the prodcut displayed by this cell is the active subscription, have this cell also show the active subscriptions expiration date
         let activeSubscriptionExpirationText: String = {
@@ -235,14 +234,12 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
             return ", \(FamilyInformation.familyActiveSubscription.autoRenewStatus == true && FamilyInformation.familyActiveSubscription.autoRenewProductId == product.productIdentifier ? "renewing" : "expiring") \(expiresDate.houndFormatted(.template(template), displayTimeZone: UserConfiguration.timeZone))"
         }()
 
-        let precalculatedDynamicMonthlyPriceText = "\(roundedMonthlyPriceWithCurrencySymbol) / month\(activeSubscriptionExpirationText)"
-
-        monthlyPriceLabel.attributedTextClosure = {
+        monthlyPriceLabel.attributedText = {
             NSAttributedString(
-                string: precalculatedDynamicMonthlyPriceText,
+                string: "\(roundedMonthlyPriceWithCurrencySymbol) / month\(activeSubscriptionExpirationText)",
                 attributes: monthlyPriceTextAttributes
             )
-        }
+        }()
     }
 
     /// Converts period unit and numberOfUnits into string, e.g. "3 days", "1 week", "6 months"

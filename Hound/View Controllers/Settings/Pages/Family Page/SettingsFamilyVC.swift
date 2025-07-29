@@ -30,27 +30,23 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         
-        let activeSubscriptionNumberOfFamilyMembers = FamilyInformation.familyActiveSubscription.numberOfFamilyMembers
-        let precalculatedDynamicTextColor = label.textColor
-        
-        label.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+        label.attributedText = {
             let message: NSMutableAttributedString = NSMutableAttributedString(
                 string: "The family code is the key your family. Have a prospective family member input the code above to join your family (case-insensitive).",
-                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
+                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel])
             
             // Add a disclaimer for the user that they
-            if activeSubscriptionNumberOfFamilyMembers <= 1 {
+            if FamilyInformation.familyActiveSubscription.numberOfFamilyMembers <= 1 {
                 message.append(
                     NSAttributedString(
                         string: " Currently, your Hound plan is for individual use only. To add family members, try out a free trial of Hound+!",
-                        attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                        attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel]
                     )
                 )
             }
             
             return message
-        }
+        }()
         
         return label
     }()

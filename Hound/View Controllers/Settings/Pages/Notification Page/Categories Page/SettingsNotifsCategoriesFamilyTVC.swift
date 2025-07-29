@@ -32,35 +32,24 @@ final class SettingsNotifsCategoriesFamilyTVC: HoundTableViewCell {
         label.font = Constant.Visual.Font.secondaryColorDescLabel
         label.textColor = UIColor.secondaryLabel
         
-        let precalculatedDynamicTextColor = label.textColor
-        label.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+        label.attributedText = {
             let message = NSMutableAttributedString(
                 string: "Receive notifications about your Hound family. ",
-                attributes: [
-                    .font: Constant.Visual.Font.secondaryColorDescLabel,
-                    .foregroundColor: precalculatedDynamicTextColor as Any
-                ]
+                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel]
             )
             
             message.append(NSAttributedString(
                 string: "This category cannot be turned off.",
-                attributes: [
-                    .font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel,
-                    .foregroundColor: precalculatedDynamicTextColor as Any
-                ])
+                attributes: [.font: Constant.Visual.Font.emphasizedSecondaryColorDescLabel])
             )
             
             message.append(NSAttributedString(
                 string: " Examples include: a user joining, leaving, or locking your family.",
-                attributes: [
-                    .font: Constant.Visual.Font.secondaryColorDescLabel,
-                    .foregroundColor: precalculatedDynamicTextColor as Any
-                ])
+                attributes: [.font: Constant.Visual.Font.secondaryColorDescLabel])
             )
             
             return message
-        }
+        }()
         
         return label
     }()

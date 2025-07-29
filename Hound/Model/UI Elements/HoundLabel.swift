@@ -66,16 +66,6 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         return label
     }()
     
-    // TODO ATTR TEXT I dont think this is needed UIColor should adapt to light/dark mode.
-    /// When set, this closure will create the NSAttributedString for attributedText and set attributedTet equal to that. This is necessary because attributedText doesn't support dynamic colors and therefore doesn't change its colors when the UITraitCollection updates. Additionally, this closure is invoke when the UITraitCollection updates to manually make the attributedText support dynamic colors
-    var attributedTextClosure: (() -> NSAttributedString)? {
-        didSet {
-            if let attributedText = attributedTextClosure?() {
-                self.attributedText = attributedText
-            }
-        }
-    }
-    
     /// Color of the outlined background label. When set, a duplicate label is
     /// inserted behind this label with an outline matching this color. Set to
     /// `nil` to remove the background label.
@@ -206,9 +196,6 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         
         // UI has changed its appearance to dark/light mode
         if #available(iOS 13.0, *), traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            if let attributedText = attributedTextClosure?() {
-                self.attributedText = attributedText
-            }
             updateBackgroundLabel()
         }
     }
@@ -294,15 +281,12 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         backgroundLabel.numberOfLines = numberOfLines
         backgroundLabel.textAlignment = textAlignment
         
-        backgroundLabel.attributedTextClosure = { [weak self] in
-            guard let self = self else { return NSAttributedString(string: "") }
-            return NSAttributedString(string: self.text ?? "", attributes: [
-                .strokeColor: color as Any,
-                .foregroundColor: color as Any,
-                .strokeWidth: self.font.pointSize * Self.backgroundLabelStrokeWidthScale,
-                .font: self.font as Any
-            ])
-        }
+        backgroundLabel.attributedText = NSAttributedString(string: self.text ?? "", attributes: [
+            .strokeColor: color as Any,
+            .foregroundColor: color as Any,
+            .strokeWidth: self.font.pointSize * Self.backgroundLabelStrokeWidthScale,
+            .font: self.font as Any
+        ])
     }
     
 }

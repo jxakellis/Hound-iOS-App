@@ -162,23 +162,21 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         if selectedDayOffset == 0 {
             emphasizedText = "" /* ". If the time has passed, reminder rolls over to the next day"*/
         }
-        let precalculatedDynamicTextColor = UIColor.label
         
-        descriptionLabel.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
+        descriptionLabel.attributedText = {
             let message = NSMutableAttributedString(
                 string: text,
-                attributes: [.font: Constant.Visual.Font.secondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any]
+                attributes: [.font: Constant.Visual.Font.secondaryRegularLabel]
             )
             
             if let emphasizedText = emphasizedText {
                 message.append(NSMutableAttributedString(
                     string: emphasizedText,
-                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel, .foregroundColor: precalculatedDynamicTextColor as Any])
-                )
+                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel]
+                ))
             }
             return message
-        }
+        }()
     }
     
     private func textForOffset(_ offset: Int) -> String {

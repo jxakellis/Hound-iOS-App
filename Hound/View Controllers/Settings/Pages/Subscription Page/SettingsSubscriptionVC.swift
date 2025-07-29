@@ -102,18 +102,10 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         
         label.isHidden = userPurchasedProductFrom20965379
         
-        label.attributedTextClosure = {
-            // NOTE: ANY VARIABLES WHICH CAN CHANGE BASED UPON EXTERNAL FACTORS MUST BE PRECALCULATED. Code is re-run everytime the UITraitCollection is updated
-            let message = NSMutableAttributedString(
-                string: "Start with a 1 week free trial",
-                attributes: [
-                    .font: UIFont.italicSystemFont(ofSize: Constant.Visual.Font.primaryRegularLabel.pointSize),
-                    .foregroundColor: UIColor.systemBackground
-                ]
-            )
-            
-            return message
-        }
+        label.attributedText = NSMutableAttributedString(
+            string: "Start with a 1 week free trial",
+            attributes: [.font: UIFont.italicSystemFont(ofSize: Constant.Visual.Font.primaryRegularLabel.pointSize)]
+        )
         
         return label
     }()
