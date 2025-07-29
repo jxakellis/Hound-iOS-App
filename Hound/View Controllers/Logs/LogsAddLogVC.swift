@@ -227,7 +227,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.parentDog, delegate: self))
-        dropDownManager.register(identifier: .parentDog, label: label)
+        dropDownManager.register(identifier: .parentDog, label: label, autoscroll: .firstOpen)
         
         return label
     }()
@@ -255,7 +255,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logActionType, delegate: self))
-        dropDownManager.register(identifier: .logActionType, label: label)
+        dropDownManager.register(identifier: .logActionType, label: label, autoscroll: .firstOpen)
         
         return label
     }()
@@ -308,7 +308,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logStartDate, delegate: self))
-        dropDownManager.register(identifier: .logStartDate, label: label)
+        dropDownManager.register(identifier: .logStartDate, label: label, autoscroll: .firstOpen)
         
         return label
     }()
@@ -354,7 +354,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logEndDate, delegate: self))
-        dropDownManager.register(identifier: .logEndDate, label: label)
+        dropDownManager.register(identifier: .logEndDate, label: label, autoscroll: .firstOpen)
         
         return label
     }()
@@ -413,7 +413,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: LogsAddLogDropDownTypes.logUnit, delegate: self))
-        dropDownManager.register(identifier: .logUnit, label: label)
+        dropDownManager.register(identifier: .logUnit, label: label, autoscroll: .firstOpen)
         
         return label
     }()
@@ -1314,6 +1314,31 @@ final class LogsAddLogVC: HoundScrollViewController,
             
             dropDown.hideDropDown(animated: true)
         }
+    }
+    
+    func firstSelectedIndexPath(identifier: any HoundDropDownType) -> IndexPath? {
+        guard let identifier = identifier as? LogsAddLogDropDownTypes else { return nil }
+        switch identifier {
+        case .parentDog:
+            if let idx = selectedDogUUIDs
+                .compactMap({ uuid in dogManager.dogs.firstIndex(where: { $0.dogUUID == uuid }) })
+                .min() {
+                return IndexPath(row: idx, section: 0)
+            }
+        case .logActionType:
+            if let action = selectedLogAction,
+               let idx = availableLogActions.firstIndex(where: { $0.0.logActionTypeId == action.logActionTypeId && $0.1 == nil }) {
+                return IndexPath(row: idx, section: 0)
+            }
+        case .logUnit:
+            if let unit = selectedLogUnitType,
+               let idx = selectedLogAction?.associatedLogUnitTypes.firstIndex(of: unit) {
+                return IndexPath(row: idx, section: 0)
+            }
+        case .logStartDate, .logEndDate:
+            return nil
+        }
+        return nil
     }
     
     // MARK: - Add / Update Log Tasks

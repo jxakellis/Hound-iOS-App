@@ -57,7 +57,7 @@ final class DogsAddTriggerManagerView: HoundView,
                 delegate: self
             )
         )
-        dropDownManager.register(identifier: .logReactions, label: label)
+        dropDownManager.register(identifier: .logReactions, label: label, autoscroll: .firstOpen)
         return label
     }()
     private lazy var logReactionStack: HoundStackView = {
@@ -151,7 +151,7 @@ final class DogsAddTriggerManagerView: HoundView,
                 delegate: self
             )
         )
-        dropDownManager.register(identifier: .reminderResult, label: label)
+        dropDownManager.register(identifier: .reminderResult, label: label, autoscroll: .firstOpen)
         return label
     }()
     private lazy var reminderCustomActionNameTextField: HoundTextField = {
@@ -634,6 +634,24 @@ final class DogsAddTriggerManagerView: HoundView,
             }
         }
     }
+    
+    func firstSelectedIndexPath(identifier: any HoundDropDownType) -> IndexPath? {
+            guard let type = identifier as? DogsAddTriggerDropDownTypes else { return nil }
+            switch type {
+            case .logReactions:
+                if let idx = selectedLogReactions
+                    .compactMap({ reaction in availableLogReactions.firstIndex(where: { $0.isSame(as: reaction)}) })
+                    .min() {
+                    return IndexPath(row: idx, section: 0)
+                }
+            case .reminderResult:
+                if let result = selectedReminderResult,
+                   let idx = availableReminderResults.firstIndex(where: { $0.isSame(as: result) }) {
+                    return IndexPath(row: idx, section: 0)
+                }
+            }
+            return nil
+        }
     
     // MARK: - Setup Elements
     

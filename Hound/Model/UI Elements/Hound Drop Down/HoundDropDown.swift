@@ -13,6 +13,15 @@ enum HoundDropDownDirection {
     case up
 }
 
+enum HoundDropDownAutoscroll {
+    /// Never autoscroll to a selected item
+    case never
+    /// Autoscroll only the first time the dropdown is opened
+    case firstOpen
+    /// Autoscroll every time the dropdown is opened
+    case always
+}
+
 protocol HoundDropDownDataSource {
     func setupCellForDropDown(cell: HoundDropDownTVC, indexPath: IndexPath, identifier: any HoundDropDownType)
     /// Returns number of rows in a given section of the dropDownMenu
@@ -22,6 +31,9 @@ protocol HoundDropDownDataSource {
     
     /// Called when an item is selected in the dropdown menu
     func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType)
+    
+    /// Returns index path of the first selected item if it exists
+    func firstSelectedIndexPath(identifier: any HoundDropDownType) -> IndexPath?
 }
 
 final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate, UITableViewDataSource {
@@ -76,6 +88,8 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
     private var dropDownViewOffset: CGFloat = 0
     private var dropDownDataSource: HoundDropDownDataSource?
     private var direction: HoundDropDownDirection = .down
+    private var autoscrollBehavior: HoundDropDownAutoscroll = .never
+    private var didAutoScroll: Bool = false
     
     // Other Variables
     private var viewPositionReference: CGRect?
@@ -89,7 +103,8 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         dataSource: HoundDropDownDataSource,
         viewPositionReference: CGRect,
         offset: CGFloat = Constant.Constraint.Spacing.contentTightIntraVert,
-        direction: HoundDropDownDirection = .down
+        direction: HoundDropDownDirection = .down,
+        autoscrollBehavior: HoundDropDownAutoscroll = .never
     ) {
         self.identifier = identifier
         self.dropDownDataSource = dataSource
@@ -97,6 +112,8 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         self.dropDownViewWidth = viewPositionReference.width
         self.dropDownViewOffset = offset
         self.direction = direction
+        self.autoscrollBehavior = autoscrollBehavior
+        self.didAutoScroll = false
         
         // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.
         self.shadowColor = UIColor.label
@@ -165,6 +182,7 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         self.dropDownTableView?.isScrollEnabled = heightNeededToDisplayAllRows > heightSpecifiedForNumberOfRows
         
         self.dropDownTableView?.reloadData()
+        self.dropDownTableView?.layoutIfNeeded()
         
         isDown = true
         let anchorY: CGFloat
@@ -192,16 +210,26 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         // Second, we don't want the drop down larger than the available space in the superview. So we cap its size at the available vertical space.
         let height = min(min(heightSpecifiedForNumberOfRows, heightNeededToDisplayAllRows), availableSpace)
         
+        let maxOffset = max(dropDownTableView.contentSize.height - height, 0)
+        
+        if autoscrollBehavior == .always || (autoscrollBehavior == .firstOpen && !didAutoScroll) {
+            if let indexPath = dropDownDataSource?.firstSelectedIndexPath(identifier: identifier),
+               indexPath.section < dropDownTableView.numberOfSections,
+               indexPath.row < dropDownTableView.numberOfRows(inSection: indexPath.section) {
+                let rect = dropDownTableView.rectForRow(at: indexPath)
+                var offset = rect.midY - (height / 2.0)
+                offset = max(min(offset, maxOffset), 0)
+                dropDownTableView.setContentOffset(CGPoint(x: 0, y: offset), animated: false)
+                didAutoScroll = true
+            }
+        }
+        
         if self.direction == .up {
-            let bottomOffset = max(dropDownTableView.contentSize.height - height, 0)
+            let bottomOffset = maxOffset
             dropDownTableView.setContentOffset(CGPoint(x: 0, y: bottomOffset), animated: false)
         }
         
         UIView.animate(withDuration: animated ? 0.7 : 0.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.05, options: .curveLinear, animations: {
-            //            if self.direction == .up {
-            //                self.frame.origin.y = anchorY - height
-            //            }
-            //            self.frame.size = CGSize(width: self.dropDownViewWidth, height: height)
             if self.direction == .down {
                 self.frame.size = CGSize(width: self.dropDownViewWidth, height: height)
             }

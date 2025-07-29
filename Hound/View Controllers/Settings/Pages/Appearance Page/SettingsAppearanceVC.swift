@@ -143,7 +143,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: .timeZone, delegate: self))
-        dropDownManager.register(identifier: .timeZone, label: label)
+        dropDownManager.register(identifier: .timeZone, label: label, autoscroll: .firstOpen)
         return label
     }()
     
@@ -338,6 +338,18 @@ final class SettingsAppearanceVC: HoundScrollViewController,
             }
         }
     }
+    
+    func firstSelectedIndexPath(identifier: any HoundDropDownType) -> IndexPath? {
+            guard let type = identifier as? SettingsAppearanceDropDownTypes else { return nil }
+            switch type {
+            case .timeZone:
+                let tz = UserConfiguration.timeZone
+                if let idx = TimeZone.houndTimeZones.firstIndex(of: tz) {
+                    return IndexPath(row: idx, section: 0)
+                }
+            }
+            return nil
+        }
     
     // MARK: - Setup Elements
     

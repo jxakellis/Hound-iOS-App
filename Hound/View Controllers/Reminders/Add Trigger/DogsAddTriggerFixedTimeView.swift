@@ -43,7 +43,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: .dayOffset, delegate: self))
-        dropDownManager.register(identifier: .dayOffset, label: label)
+        dropDownManager.register(identifier: .dayOffset, label: label, autoscroll: .firstOpen)
         return label
     }()
     
@@ -256,6 +256,17 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
             updateDescriptionLabel()
         }
     }
+    
+    func firstSelectedIndexPath(identifier: any HoundDropDownType) -> IndexPath? {
+            guard let type = identifier as? DogsAddTriggerFixedTimeDropDownTypes else { return nil }
+            switch type {
+            case .dayOffset:
+                if let idx = availableDayOffsets.firstIndex(of: selectedDayOffset) {
+                    return IndexPath(row: idx, section: 0)
+                }
+            }
+            return nil
+        }
     
     // MARK: - Setup Elements
     

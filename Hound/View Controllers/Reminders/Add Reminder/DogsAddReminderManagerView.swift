@@ -82,7 +82,7 @@ final class DogsAddReminderManagerView: HoundView,
                 delegate: self
             )
         )
-        dropDownManager.register(identifier: .reminderAction, label: label)
+        dropDownManager.register(identifier: .reminderAction, label: label, autoscroll: .firstOpen)
         
         return label
     }()
@@ -155,7 +155,7 @@ final class DogsAddReminderManagerView: HoundView,
                 delegate: self
             )
         )
-        dropDownManager.register(identifier: .reminderRecipients, label: label)
+        dropDownManager.register(identifier: .reminderRecipients, label: label, autoscroll: .firstOpen)
         return label
     }()
     private let notificationsDisabledLabel: HoundLabel = {
@@ -217,7 +217,7 @@ final class DogsAddReminderManagerView: HoundView,
                 delegate: self
             )
         )
-        dropDownManager.register(identifier: .reminderTimeZone, label: label, direction: .up)
+        dropDownManager.register(identifier: .reminderTimeZone, label: label, direction: .up, autoscroll: .firstOpen)
         return label
     }()
     private lazy var timeZoneStack: HoundStackView = {
@@ -846,6 +846,26 @@ final class DogsAddReminderManagerView: HoundView,
             dropDown.hideDropDown(animated: true)
         }
     }
+    
+    func firstSelectedIndexPath(identifier: any HoundDropDownType) -> IndexPath? {
+            guard let identifier = identifier as? DogsAddReminderDropDownTypes else { return nil }
+            switch identifier {
+            case .reminderAction:
+                return selectedReminderActionIndexPath
+            case .reminderRecipients:
+                if let idx = selectedRecipientUserIds
+                    .compactMap({ userId in availableFamilyMembers.firstIndex(where: { $0.userId == userId }) })
+                    .min() {
+                    return IndexPath(row: idx, section: 0)
+                }
+            case .reminderTimeZone:
+                if let tz = selectedTimeZone,
+                   let idx = TimeZone.houndTimeZones.firstIndex(of: tz) {
+                    return IndexPath(row: idx, section: 0)
+                }
+            }
+            return nil
+        }
     
     // MARK: - Setup Elements
     

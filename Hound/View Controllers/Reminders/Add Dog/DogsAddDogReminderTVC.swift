@@ -72,7 +72,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return imageView
     }()
     
-    private let notificationBellImageView: HoundImageView = {
+    private let noNotificationIndicator: HoundImageView = {
         let imageView = HoundImageView()
         
         imageView.image = UIImage(systemName: "bell.slash")
@@ -81,7 +81,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return imageView
     }()
     
-    private let timeZoneIndicatorImageView: HoundImageView = {
+    private let differentTimeZoneIndicator: HoundImageView = {
         let imageView = HoundImageView()
         
         imageView.image = UIImage(systemName: "globe")
@@ -94,8 +94,8 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         let stack = HoundStackView(huggingPriority: 300, compressionResistancePriority: 300)
         
         let imageStack = HoundStackView()
-        imageStack.addArrangedSubview(notificationBellImageView)
-        imageStack.addArrangedSubview(timeZoneIndicatorImageView)
+        imageStack.addArrangedSubview(noNotificationIndicator)
+        imageStack.addArrangedSubview(differentTimeZoneIndicator)
         imageStack.axis = .vertical
         imageStack.spacing = Constant.Constraint.Spacing.contentIntraVert
         
@@ -167,10 +167,16 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
             (hasRecipients && !UserConfiguration.isNotificationEnabled) ||
             (hasRecipients && !UserConfiguration.isReminderNotificationEnabled)
         )
+        if noNotificationIndicator.isHidden != !shouldShowBell {
+            noNotificationIndicator.isHidden = !shouldShowBell
+            remakeNoNotificationIndicatorConstraints()
+        }
         
-        // TODO UI timeZoneIndicatorImageView is just not showing/disappearing when it should be. review and see whats up with it after adding tz selection to reminder page
-        notificationBellImageView.isHidden = !shouldShowBell
-        timeZoneIndicatorImageView.isHidden = !reminderEnabled || reminder.reminderTimeZone == UserConfiguration.timeZone
+        let shouldShowDiffTZ = reminderEnabled && reminder.reminderTimeZone != UserConfiguration.timeZone
+        if differentTimeZoneIndicator.isHidden != !shouldShowDiffTZ {
+            differentTimeZoneIndicator.isHidden = !shouldShowDiffTZ
+            remakeDifferentTimeZoneIndicatorConstraints()
+        }
     }
     
     // MARK: - Setup Elements
@@ -184,6 +190,26 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         contentView.addSubview(containerView)
         
         containerView.addSubview(finalStack)
+    }
+    
+    private func remakeNoNotificationIndicatorConstraints() {
+        noNotificationIndicator.snp.remakeConstraints { make in
+            if !noNotificationIndicator.isHidden {
+                make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
+                make.width.equalTo(noNotificationIndicator.snp.height)
+            }
+        }
+    }
+    
+    private func remakeDifferentTimeZoneIndicatorConstraints() {
+        differentTimeZoneIndicator.snp.remakeConstraints { make in
+            if !differentTimeZoneIndicator.isHidden {
+                make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
+                make.width.equalTo(differentTimeZoneIndicator.snp.height)
+            }
+        }
     }
     
     override func setupConstraints() {
@@ -216,17 +242,8 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
             make.width.equalTo(chevronImageView.snp.height).multipliedBy(Constant.Constraint.Button.chevronAspectRatio)
         }
         
-        notificationBellImageView.snp.makeConstraints { make in
-            make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
-            make.width.equalTo(notificationBellImageView.snp.height)
-        }
-        
-        timeZoneIndicatorImageView.snp.makeConstraints { make in
-            make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
-            make.width.equalTo(timeZoneIndicatorImageView.snp.height)
-        }
+        remakeNoNotificationIndicatorConstraints()
+        remakeDifferentTimeZoneIndicatorConstraints()
     }
     
 }

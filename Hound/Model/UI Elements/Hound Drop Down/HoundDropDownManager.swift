@@ -22,6 +22,7 @@ final class HoundDropDownManager<T: HoundDropDownType> {
         weak var label: HoundLabel?
         var dropDown: HoundDropDown<T>?
         var direction: HoundDropDownDirection
+        var autoscroll: HoundDropDownAutoscroll
     }
     
     // MARK: - Properties
@@ -50,7 +51,8 @@ final class HoundDropDownManager<T: HoundDropDownType> {
     func register(
         identifier: Identifier,
         label: HoundLabel,
-        direction: HoundDropDownDirection = .down
+        direction: HoundDropDownDirection = .down,
+        autoscroll: HoundDropDownAutoscroll = .never
     ) {
         if entries[identifier] == nil {
             order.append(identifier)
@@ -58,7 +60,8 @@ final class HoundDropDownManager<T: HoundDropDownType> {
         entries[identifier] = Entry(
             label: label,
             dropDown: entries[identifier]?.dropDown,
-            direction: direction
+            direction: direction,
+            autoscroll: autoscroll
         )
     }
     
@@ -75,7 +78,7 @@ final class HoundDropDownManager<T: HoundDropDownType> {
     /// If a drop down hasn't been created yet one will be lazily instantiated.
     func show(identifier: Identifier, numberOfRowsToShow numberOfRows: CGFloat, animated: Bool) {
         guard let label = entries[identifier]?.label else { return }
-        var entry = entries[identifier] ?? Entry(label: label, dropDown: nil, direction: .down)
+        var entry = entries[identifier] ?? Entry(label: label, dropDown: nil, direction: .down, autoscroll: .never)
         
         let referenceFrame = label.superview?.convert(label.frame, to: rootView) ?? label.frame
         
@@ -86,7 +89,8 @@ final class HoundDropDownManager<T: HoundDropDownType> {
                 dataSource: dataSource,
                 viewPositionReference: referenceFrame,
                 offset: offset,
-                direction: entry.direction
+                direction: entry.direction,
+                autoscrollBehavior: entry.autoscroll,
             )
             entry.dropDown = drop
             entries[identifier] = entry

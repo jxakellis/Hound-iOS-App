@@ -135,7 +135,7 @@ class LogsFilterVC: HoundScrollViewController,
                 delegate: self
             )
         )
-        dropDownManager.register(identifier: .filterDogs, label: label)
+        dropDownManager.register(identifier: .filterDogs, label: label, autoscroll: .firstOpen)
         
         return label
     }()
@@ -161,7 +161,7 @@ class LogsFilterVC: HoundScrollViewController,
                 delegate: self
             )
         )
-        dropDownManager.register(identifier: .filterLogActions, label: label)
+        dropDownManager.register(identifier: .filterLogActions, label: label, autoscroll: .firstOpen)
         
         return label
     }()
@@ -187,7 +187,7 @@ class LogsFilterVC: HoundScrollViewController,
                 delegate: self
             )
         )
-        dropDownManager.register(identifier: .filterFamilyMembers, label: label)
+        dropDownManager.register(identifier: .filterFamilyMembers, label: label, autoscroll: .firstOpen)
         
         return label
     }()
@@ -532,6 +532,32 @@ class LogsFilterVC: HoundScrollViewController,
         }
         updateDynamicUIElements()
     }
+    
+    func firstSelectedIndexPath(identifier: any HoundDropDownType) -> IndexPath? {
+            guard let filter = filter else { return nil }
+            guard let type = identifier as? LogsFilterDropDownTypes else { return nil }
+            switch type {
+            case .filterDogs:
+                if let idx = filter.filteredDogsUUIDs
+                    .compactMap({ uuid in filter.availableDogs.firstIndex(where: { $0.dogUUID == uuid }) })
+                    .min() {
+                    return IndexPath(row: idx, section: 0)
+                }
+            case .filterLogActions:
+                if let idx = filter.filteredLogActionActionTypeIds
+                    .compactMap({ id in filter.availableLogActions.firstIndex(where: { $0.logActionTypeId == id }) })
+                    .min() {
+                    return IndexPath(row: idx, section: 0)
+                }
+            case .filterFamilyMembers:
+                if let idx = filter.filteredFamilyMemberUserIds
+                    .compactMap({ userId in filter.availableFamilyMembers.firstIndex(where: { $0.userId == userId }) })
+                    .min() {
+                    return IndexPath(row: idx, section: 0)
+                }
+            }
+            return nil
+        }
     
     // MARK: - Setup Elements
     
