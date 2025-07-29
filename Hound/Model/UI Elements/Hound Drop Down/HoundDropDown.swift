@@ -126,7 +126,7 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         
         // The shadow on self so it can expand as much as it wants, border on dropDownTableView so it and the subviews can be masked / clipped.
         self.shadowColor = UIColor.label
-        self.shadowOffset = CGSize(width: 0, height: 2.5)
+        self.shadowOffset = CGSize(width: 0, height: direction == .down ? 2.5 : -2.5)
         self.shadowRadius = 5.0
         self.shadowOpacity = 0.5
         
@@ -205,7 +205,7 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         self.frame = CGRect(x: viewPositionReference.minX, y: anchorY, width: dropDownViewWidth, height: 0)
         dropDownTableView.frame = CGRect(x: 0, y: 0, width: dropDownViewWidth, height: 0)
         
-        let shadowPad = max((self.shadowRadius ?? 0.0) + (self.shadowOffset?.height ?? 0.0), 0.0)
+        let shadowPad = max((self.shadowRadius ?? 0.0) + abs(self.shadowOffset?.height ?? 0.0), 0.0)
         
         let availableSpace: CGFloat
         if direction == .down {
@@ -275,12 +275,6 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
                 self.frame.origin.y = originY
             }
             self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
-            //            if self.direction == .up, let viewPositionReference = self.viewPositionReference {
-            //                self.frame = CGRect(x: self.frame.minX, y: viewPositionReference.minY - self.dropDownViewOffset, width: self.dropDownViewWidth, height: 0)
-            //            }
-            //            else {
-            //                self.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
-            //            }
             self.dropDownTableView?.frame.size = CGSize(width: self.dropDownViewWidth, height: 0)
         })
     }
