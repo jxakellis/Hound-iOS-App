@@ -25,7 +25,7 @@ final class TimeZoneExtensionTests: XCTestCase {
         XCTAssertEqual(result.hour, expected.hour)
         XCTAssertEqual(result.minute, expected.minute)
     }
-
+    
     func testWeekdayConversion() {
         let gmt = TimeZone(identifier: "GMT")!
         let tokyo = TimeZone(identifier: "Asia/Tokyo")!
@@ -44,11 +44,11 @@ final class TimeZoneExtensionTests: XCTestCase {
         }
         XCTAssertEqual(Set(result), expected)
     }
-
+    
     func testDayHourMinuteConversion() {
         let est = TimeZone(identifier: "America/New_York")!
         let berlin = TimeZone(identifier: "Europe/Berlin")!
-        let reference = ISO8601DateFormatter().date(from: "2024-03-30T00:00:00Z")!
+        let reference = TestHelper.date("2024-03-30T00:00:00Z")
         let (d,h,m) = est.convert(day: 31, hour: 1, minute: 45, to: berlin, referenceDate: reference)
         let cal = Calendar(identifier: .gregorian)
         var comps = cal.dateComponents(in: est, from: reference)
@@ -63,7 +63,7 @@ final class TimeZoneExtensionTests: XCTestCase {
         XCTAssertEqual(h, expComp.hour)
         XCTAssertEqual(m, expComp.minute)
     }
-
+    
     func testHalfHourOffsetConversion() {
         let ist = TimeZone(identifier: "Asia/Kolkata")! // GMT+5:30
         let gmt = TimeZone(identifier: "GMT")!
@@ -77,5 +77,139 @@ final class TimeZoneExtensionTests: XCTestCase {
         let expected = cal.dateComponents(in: gmt, from: date)
         XCTAssertEqual(result.hour, expected.hour)
         XCTAssertEqual(result.minute, expected.minute)
+    }
+    
+    func testHourMinuteCrossMidnight() {
+        let tokyo = TimeZone(identifier: "Asia/Tokyo")!
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let result = tokyo.convert(hour: 0, minute: 30, to: pst)
+        XCTAssertEqual(result.hour, 7)
+        XCTAssertEqual(result.minute, 30)
+    }
+    
+    func testWeekdayNextDayConversion() {
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let utc = TimeZone.utc
+        let out = pst.convert(weekdays: [.saturday], hour: 23, minute: 0, to: utc)
+        XCTAssertEqual(out, [.sunday])
+    }
+    
+    func testWeekdayPreviousDayConversion() {
+        let tokyo = TimeZone(identifier: "Asia/Tokyo")!
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let out = tokyo.convert(weekdays: [.monday], hour: 0, minute: 30, to: pst)
+        XCTAssertEqual(out, [.sunday])
+    }
+    
+    func testDayHourMinuteDSTSpringForward() {
+        let est = TimeZone(identifier: "America/New_York")!
+        let utc = TimeZone.utc
+        let ref = TestHelper.date("2024-03-01T00:00:00Z")
+        let result = est.convert(day: 10, hour: 2, minute: 30, to: utc, referenceDate: ref)
+        XCTAssertEqual(result.day, 10)
+        XCTAssertEqual(result.hour, 7)
+        XCTAssertEqual(result.minute, 30)
+    }
+    
+    func testDayHourMinuteDSTFallBack() {
+        let est = TimeZone(identifier: "America/New_York")!
+        let utc = TimeZone.utc
+        let ref = TestHelper.date("2024-11-01T00:00:00Z")
+        let result = est.convert(day: 3, hour: 1, minute: 30, to: utc, referenceDate: ref)
+        XCTAssertEqual(result.day, 3)
+        XCTAssertEqual(result.hour, 5)
+        XCTAssertEqual(result.minute, 30)
+    }
+    
+    func testDayOverflowConversion() {
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let utc = TimeZone.utc
+        let ref = TestHelper.date("2024-04-15T00:00:00Z")
+        let result = pst.convert(day: 31, hour: 0, minute: 0, to: utc, referenceDate: ref)
+        // april 31st doesnt exist, so we roll under to num days in ref month
+        XCTAssertEqual(result.day, 30)
+        XCTAssertEqual(result.hour, 7)
+        XCTAssertEqual(result.minute, 0)
+    }
+    
+    func testDayNoOverflowConversion() {
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let utc = TimeZone.utc
+        let ref = TestHelper.date("2024-05-15T00:00:00Z")
+        let result = pst.convert(day: 31, hour: 0, minute: 0, to: utc, referenceDate: ref)
+        // may 31st does exist, so no roll under
+        XCTAssertEqual(result.day, 31)
+        XCTAssertEqual(result.hour, 7)
+        XCTAssertEqual(result.minute, 0)
+    }
+    
+    func testHourMinuteConversionCrossDayForward() {
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let tokyo = TimeZone(identifier: "Asia/Tokyo")!
+        let result = pst.convert(hour: 18, minute: 45, to: tokyo)
+        XCTAssertEqual(result.hour, 11)
+        XCTAssertEqual(result.minute, 45)
+    }
+    
+    func testHourMinuteConversionCrossDayBackward() {
+        let ist = TimeZone(identifier: "Asia/Kolkata")!
+        let est = TimeZone(identifier: "America/New_York")!
+        let result = ist.convert(hour: 5, minute: 15, to: est)
+        XCTAssertEqual(result.hour, 18)
+        XCTAssertEqual(result.minute, 45)
+    }
+    
+    func testWeekdayConversionCrossMidnightForward() {
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let utc = TimeZone(identifier: "UTC")!
+        let result = pst.convert(weekdays: [.saturday], hour: 23, minute: 30, to: utc)
+        XCTAssertEqual(result, [.sunday])
+    }
+    
+    func testWeekdayConversionCrossMidnightBackward() {
+        let tokyo = TimeZone(identifier: "Asia/Tokyo")!
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let result = tokyo.convert(weekdays: [.monday, .wednesday], hour: 2, minute: 0, to: pst)
+        XCTAssertEqual(Set(result), Set([.sunday, .tuesday]))
+    }
+    
+    func testDayHourMinuteConversionNextMonth() {
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let tokyo = TimeZone(identifier: "Asia/Tokyo")!
+        let reference = TestHelper.date("2024-02-01T00:00:00Z")
+        let (d, h, m) = pst.convert(day: 31, hour: 18, minute: 0, to: tokyo, referenceDate: reference)
+        XCTAssertEqual(d, 1)
+        XCTAssertEqual(h, 11)
+        XCTAssertEqual(m, 0)
+    }
+    
+    func testDayHourMinuteConversionPreviousMonth() {
+        let berlin = TimeZone(identifier: "Europe/Berlin")!
+        let est = TimeZone(identifier: "America/New_York")!
+        let reference = TestHelper.date("2024-03-01T00:00:00Z")
+        let (d, h, m) = berlin.convert(day: 1, hour: 0, minute: 30, to: est, referenceDate: reference)
+        XCTAssertEqual(d, 29)
+        XCTAssertEqual(h, 18)
+        XCTAssertEqual(m, 30)
+    }
+    
+    func testDayHourMinuteConversionDSTSpringForward() {
+        let est = TimeZone(identifier: "America/New_York")!
+        let utc = TimeZone(identifier: "UTC")!
+        let reference = TestHelper.date("2024-03-01T12:00:00Z")
+        let (d, h, m) = est.convert(day: 10, hour: 2, minute: 30, to: utc, referenceDate: reference)
+        XCTAssertEqual(d, 10)
+        XCTAssertEqual(h, 7)
+        XCTAssertEqual(m, 30)
+    }
+    
+    func testDayHourMinuteConversionDSTFallBack() {
+        let est = TimeZone(identifier: "America/New_York")!
+        let utc = TimeZone(identifier: "UTC")!
+        let reference = TestHelper.date("2024-11-01T12:00:00Z")
+        let (d, h, m) = est.convert(day: 3, hour: 1, minute: 30, to: utc, referenceDate: reference)
+        XCTAssertEqual(d, 3)
+        XCTAssertEqual(h, 5)
+        XCTAssertEqual(m, 30)
     }
 }
