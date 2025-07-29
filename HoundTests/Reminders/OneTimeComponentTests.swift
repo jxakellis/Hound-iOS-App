@@ -28,24 +28,24 @@ final class OneTimeComponentsTests: XCTestCase {
         let compSame = OneTimeComponents(oneTimeDate: sameYear)
         let compDiff = OneTimeComponents(oneTimeDate: diffYear)
         XCTAssertEqual(
-            compSame.readableDayOfYear(displayTimeZone: .utc),
+            compSame.readableDayOfYear(displayTimeZone: TestHelper.utc),
             sameYear.houndFormatted(
                 .template("MMMMd"),
-                displayTimeZone: .utc
+                displayTimeZone: TestHelper.utc
             )
         )
         XCTAssertEqual(
-            compDiff.readableDayOfYear(displayTimeZone: .utc),
+            compDiff.readableDayOfYear(displayTimeZone: TestHelper.utc),
             diffYear.houndFormatted(
                 .template("MMMMdyyyy"),
-                displayTimeZone: .utc
+                displayTimeZone: TestHelper.utc
             )
         )
         XCTAssertEqual(
-            compSame.readableTimeOfDay(displayTimeZone: .utc),
+            compSame.readableTimeOfDay(displayTimeZone: TestHelper.utc),
             sameYear.houndFormatted(
                 .template("hma"),
-                displayTimeZone: .utc
+                displayTimeZone: TestHelper.utc
             )
         )
     }

@@ -352,7 +352,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         return false
     }
     
-    private func nextReminderDate(afterDate date: Date, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
+    func nextReminderDate(afterDate date: Date, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
         switch triggerType {
         case .timeDelay:
             return timeDelayComponents.nextReminderDate(afterDate: date)
@@ -361,7 +361,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         }
     }
     
-    private func nextReminderDate(afterLog log: Log, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
+    func nextReminderDate(afterLog log: Log, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
         let date = log.logEndDate ?? log.logStartDate
         
         return nextReminderDate(afterDate: date, in: inTimeZone)

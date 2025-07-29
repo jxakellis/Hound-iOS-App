@@ -177,21 +177,27 @@ final class TriggerFixedTimeComponents: NSObject, NSCoding, NSCopying {
             return executionDate
         }
         
-        // specified trigger has already happpened e.g. its 6:00pm and trigger is for 5:00PM today, so roll over to next day
+        // specified trigger is before the date it should be after
         
-        // Compute a fallback to the next day
-        let nextDay = calendar.date(byAdding: .day, value: 1, to: advanced) ?? advanced
-        let nextDayDate = calendar.date(
-            bySettingHour: triggerFixedTimeHour,
-            minute: triggerFixedTimeMinute,
-            second: 0,
-            of: nextDay,
-            matchingPolicy: .nextTime,
-            repeatedTimePolicy: .first,
-            direction: .forward
-        )
-
-        return nextDayDate
+        if triggerFixedTimeTypeAmount == 0 {
+            // if the reminder is set for same day/week/month etc, then roll over to next day
+            // e.g. its 6:00pm and trigger is for 5:00PM today, so roll over to next day
+            
+            let nextDay = calendar.date(byAdding: .day, value: 1, to: advanced) ?? advanced
+            let nextDayDate = calendar.date(
+                bySettingHour: triggerFixedTimeHour,
+                minute: triggerFixedTimeMinute,
+                second: 0,
+                of: nextDay,
+                matchingPolicy: .nextTime,
+                repeatedTimePolicy: .first,
+                direction: .forward
+            )
+            return nextDayDate
+        }
+        
+        // this really shouldn't happen, triggerFixedTimeTypeAmount is >= 1, so (executionDate > date) should've been true as it added x number of days/weeks/months to the start of day.
+        return nil
     }
     
     func createBody() -> JSONRequestBody {

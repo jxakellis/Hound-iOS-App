@@ -89,7 +89,7 @@ final class TimeZoneExtensionTests: XCTestCase {
     
     func testWeekdayNextDayConversion() {
         let pst = TimeZone(identifier: "America/Los_Angeles")!
-        let utc = TimeZone.utc
+        let utc = TestHelper.utc
         let out = pst.convert(weekdays: [.saturday], hour: 23, minute: 0, to: utc)
         XCTAssertEqual(out, [.sunday])
     }
@@ -103,7 +103,7 @@ final class TimeZoneExtensionTests: XCTestCase {
     
     func testDayHourMinuteDSTSpringForward() {
         let est = TimeZone(identifier: "America/New_York")!
-        let utc = TimeZone.utc
+        let utc = TestHelper.utc
         let ref = TestHelper.date("2024-03-01T00:00:00Z")
         let result = est.convert(day: 10, hour: 2, minute: 30, to: utc, referenceDate: ref)
         XCTAssertEqual(result.day, 10)
@@ -113,7 +113,7 @@ final class TimeZoneExtensionTests: XCTestCase {
     
     func testDayHourMinuteDSTFallBack() {
         let est = TimeZone(identifier: "America/New_York")!
-        let utc = TimeZone.utc
+        let utc = TestHelper.utc
         let ref = TestHelper.date("2024-11-01T00:00:00Z")
         let result = est.convert(day: 3, hour: 1, minute: 30, to: utc, referenceDate: ref)
         XCTAssertEqual(result.day, 3)
@@ -123,7 +123,7 @@ final class TimeZoneExtensionTests: XCTestCase {
     
     func testDayOverflowConversion() {
         let pst = TimeZone(identifier: "America/Los_Angeles")!
-        let utc = TimeZone.utc
+        let utc = TestHelper.utc
         let ref = TestHelper.date("2024-04-15T00:00:00Z")
         let result = pst.convert(day: 31, hour: 0, minute: 0, to: utc, referenceDate: ref)
         // april 31st doesnt exist, so we roll under to num days in ref month
@@ -134,7 +134,7 @@ final class TimeZoneExtensionTests: XCTestCase {
     
     func testDayNoOverflowConversion() {
         let pst = TimeZone(identifier: "America/Los_Angeles")!
-        let utc = TimeZone.utc
+        let utc = TestHelper.utc
         let ref = TestHelper.date("2024-05-15T00:00:00Z")
         let result = pst.convert(day: 31, hour: 0, minute: 0, to: utc, referenceDate: ref)
         // may 31st does exist, so no roll under
