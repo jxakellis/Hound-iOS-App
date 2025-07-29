@@ -221,7 +221,9 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         
         let body: JSONRequestBody = [
             Constant.Key.userConfigurationUsesDeviceTimeZone.rawValue: .bool(newUses),
-            Constant.Key.userConfigurationUserTimeZone.rawValue: .string(newTz?.identifier)
+            Constant.Key.userConfigurationUserTimeZone.rawValue: .string(newTz?.identifier),
+            /// userConfigurationDeviceTimeZone is unique in the fact that it is a read-only property that can update, so we must notify server of changes to it. TimeZoneManager should do that, but we send it here as well just in case
+            Constant.Key.userConfigurationDeviceTimeZone.rawValue: .string(UserConfiguration.deviceTimeZone.identifier)
         ]
         
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
@@ -285,7 +287,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         case .timeZone:
             let tz = TimeZone.houndTimeZones[indexPath.row]
             // we only want to show (current) if the cell's tz genuinely matches the current device tz (not just the selected one)
-            cell.label.text = tz.displayName(currentTimeZone: TimeZone.current)
+            cell.label.text = tz.displayName(currentTimeZone: UserConfiguration.deviceTimeZone)
             // use UserConfiguration.timeZone b/c if no UserConfiguration.userTimeZone, then this defaults to current TZ
             cell.setCustomSelected(tz == UserConfiguration.timeZone, animated: false)
         }

@@ -59,12 +59,6 @@ enum AppVersion: String, CaseIterable, Comparable {
     var releaseNotes: NSAttributedString {
         switch self {
         case .v4_0_0:
-            // TODO RELEASE NOTES
-            // ability to enable / disable haptics (this is minor)
-            // reminder timing calculation fixes (this is minor)
-            // per reminder notification settings (useful!!!)
-            // time zone configuration for user and remindesr (somewhere between useful and minor)
-
             var builder = ReleaseNotesBuilder()
             builder.addFeature(
                 title: "Automations",
@@ -77,8 +71,8 @@ enum AppVersion: String, CaseIterable, Comparable {
             )
             
             builder.addFeature(
-                title: "More Filter Options",
-                description: "Filter your logs by text or time range to fetch just what you need"
+                title: "Per‑Reminder Notifications",
+                description: "Want to be notified for certain reminders but not others? Now you can choose which reminders send notifications and to who."
             )
             
             builder.addFeature(
@@ -92,6 +86,21 @@ enum AppVersion: String, CaseIterable, Comparable {
             )
             
             builder.addFeature(
+                title: "More Filter Options",
+                description: "Filter your logs by text or time range to fetch just what you need"
+            )
+            
+            builder.addFeature(
+                title: "Haptics",
+                description: "Give your fingertips a break or feel each tap - flip haptics on or off in Settings."
+            )
+            
+            builder.addFeature(
+                title: "Time Zones",
+                description: "Hound can now adjust to your desired time zone, allowing you to collaborate from anywhere in the world."
+            )
+            
+            builder.addFeature(
                 title: "Duplicate Reminders",
                 description: "Copy a reminder and tweak the details in seconds."
             )
@@ -99,6 +108,11 @@ enum AppVersion: String, CaseIterable, Comparable {
             builder.addFeature(
                 title: "Release Notes",
                 description: "This page keeps you up to date on every new trick."
+            )
+            
+            builder.addFeature(
+                title: "Reliable Timing",
+                description: "We tuned up our calculations so reminders pop up right on cue."
             )
             
             builder.addFeature(

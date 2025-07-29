@@ -40,7 +40,7 @@ final class TimeZoneMonitor {
     func updateDeviceTimeZoneOnServer() {
         guard UserInformation.userId != nil && UserInformation.userIdentifier != nil else { return }
         let body: JSONRequestBody = [
-            Constant.Key.userConfigurationDeviceTimeZone.rawValue: .string(TimeZone.current.identifier)
+            Constant.Key.userConfigurationDeviceTimeZone.rawValue: .string(UserConfiguration.deviceTimeZone.identifier),
         ]
         UserRequest.update(forErrorAlert: .automaticallyAlertForNone, forBody: body) { _, _ in }
     }
