@@ -34,7 +34,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return imageView
     }()
     
-    // TODO BUG if this label requires more space, instead of expanding to a new line, it instead just compresses the text or adds an ellipsis
+    // TODO BUG if this label requires more space, instead of expanding to a new line, it instead just compresses the text and adds an ellipsis. it should expand to use more lines
     private let reminderActionLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
