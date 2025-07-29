@@ -34,6 +34,12 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         return tableView
     }()
     
+    private lazy var disabledTapGesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(showDisabledBanner))
+        gesture.cancelsTouchesInView = false
+        return gesture
+    }()
+    
     private let descriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Changes the sound your alarms play. Tap on one of them to hear what it sounds like!"
@@ -42,6 +48,15 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         label.textColor = UIColor.secondaryLabel
         return label
     }()
+    
+    @objc private func showDisabledBanner(_ sender: Any) {
+        guard UserConfiguration.isNotificationEnabled == false else { return }
+        PresentationManager.enqueueBanner(
+            forTitle: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
+            forSubtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
+            forStyle: .warning
+        )
+    }
     
     // MARK: - Properties
     
@@ -168,6 +183,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         contentView.addSubview(headerLabel)
         contentView.addSubview(tableView)
         contentView.addSubview(descriptionLabel)
+        contentView.addGestureRecognizer(disabledTapGesture)
     }
     
     override func setupConstraints() {
@@ -197,5 +213,5 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
-
+    
 }

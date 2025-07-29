@@ -284,6 +284,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         switch type {
         case .timeZone:
             let tz = TimeZone.houndTimeZones[indexPath.row]
+            // we only want to show (current) if the cell's tz genuinely matches the current device tz (not just the selected one)
             cell.label.text = tz.displayName(currentTimeZone: TimeZone.current)
             // use UserConfiguration.timeZone b/c if no UserConfiguration.userTimeZone, then this defaults to current TZ
             cell.setCustomSelected(tz == UserConfiguration.timeZone, animated: false)

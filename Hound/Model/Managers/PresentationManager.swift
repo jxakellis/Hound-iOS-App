@@ -56,8 +56,11 @@ enum PresentationManager {
     /// The presenter used for an alert. Sometimes we need to present an alert but the alert to be shown is called from a non UIAlertController class as that is not in the view heirarchy and physically cannot present a view, so this is used instead.
     static func addGlobalPresenterToStack(_ forViewController: UIViewController) {
         globalPresenterStack.removeAll { viewController in
-            // Make sure the same instance isn't in our stack twice
-            return viewController === forViewController
+            // Remove stale presenters that are no longer in the window or
+            // duplicate references to the same instance.
+            let isDuplicate = viewController === forViewController
+            let isStale = viewController.viewIfLoaded?.window == nil
+            return isDuplicate || isStale
         }
         
         globalPresenterStack.append(forViewController)

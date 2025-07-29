@@ -9,7 +9,7 @@
 import UIKit
 
 final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
-
+    
     // MARK: - Elements
     
     private let headerLabel: HoundLabel = {
@@ -46,7 +46,7 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
         
         return label
     }()
-
+    
     private lazy var isReminderNotificationEnabledSwitch: HoundSwitch = {
         let uiSwitch = HoundSwitch(huggingPriority: 255, compressionResistancePriority: 255)
         uiSwitch.isOn = true
@@ -54,13 +54,19 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
         return uiSwitch
     }()
     
+    private lazy var disabledTapGesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(showDisabledBanner))
+        gesture.cancelsTouchesInView = false
+        return gesture
+    }()
+    
     @objc private func didToggleIsReminderNotificationEnabled(_ sender: Any) {
         let beforeUpdatesReminderNotificationEnabled = UserConfiguration.isReminderNotificationEnabled
-
+        
         UserConfiguration.isReminderNotificationEnabled = isReminderNotificationEnabledSwitch.isOn
-
+        
         let body: JSONRequestBody = [Constant.Key.userConfigurationIsReminderNotificationEnabled.rawValue: .bool(UserConfiguration.isReminderNotificationEnabled)]
-
+        
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
@@ -71,10 +77,19 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
         }
     }
     
+    @objc private func showDisabledBanner(_ sender: Any) {
+        guard UserConfiguration.isNotificationEnabled == false else { return }
+        PresentationManager.enqueueBanner(
+            forTitle: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
+            forSubtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
+            forStyle: .warning
+        )
+    }
+    
     // MARK: - Properties
     
     static let reuseIdentifier = "SettingsNotifsCategoriesReminderTVC"
-
+    
     // MARK: - Main
     
     override func prepareForReuse() {
@@ -91,16 +106,16 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
     }
-
+    
     // MARK: - Functions
-
+    
     /// Updates the displayed values to reflect the values stored.
     private func synchronizeValues(animated: Bool) {
         isReminderNotificationEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
-
+        
         isReminderNotificationEnabledSwitch.setOn(UserConfiguration.isReminderNotificationEnabled, animated: animated)
     }
-
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -112,11 +127,12 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
         contentView.addSubview(headerLabel)
         contentView.addSubview(isReminderNotificationEnabledSwitch)
         contentView.addSubview(descriptionLabel)
+        contentView.addGestureRecognizer(disabledTapGesture)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-
+        
         // headerLabel
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
@@ -124,14 +140,14 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
             headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
             headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
-
+        
         // isReminderNotificationEnabledSwitch
         NSLayoutConstraint.activate([
             isReminderNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
             isReminderNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
             isReminderNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
-
+        
         // descriptionLabel
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
@@ -140,5 +156,5 @@ final class SettingsNotifsCategoriesReminderTVC: HoundTableViewCell {
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
-
+    
 }

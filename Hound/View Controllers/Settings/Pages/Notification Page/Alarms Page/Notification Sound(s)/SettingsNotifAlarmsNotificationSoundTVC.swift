@@ -9,9 +9,9 @@
 import UIKit
 
 final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
-
+    
     // MARK: - Elements
-
+    
     private let notificationSoundLabel: HoundLabel = {
         let label = HoundLabel()
         label.contentMode = .left
@@ -19,29 +19,29 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
         label.font = Constant.Visual.Font.weakSecondaryRegularLabel
         return label
     }()
-
+    
     // MARK: - Properties
     
     static let reuseIdentifier = "SettingsNotifsAlarmsNotificationSoundTVC"
-
+    
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     private(set) var isCustomSelected: Bool = false
     
     // MARK: - Setup
-
+    
     func setup(forNotificationSound notificationSound: String) {
         notificationSoundLabel.text = notificationSound
     }
     
     // MARK: - Functions
-
+    
     /// isSelected and setSelected are used and modified by the system when a user physically taps on a cell. If we use either of these, this will mess up our own tracking and processes for the selection process
     func setCustomSelected(_ selected: Bool, animated: Bool) {
         // DO NOT INVOKE DEFAULT IMPLEMENTATION OF super.setSelected(selected, animated: animated)
         guard selected != isCustomSelected else { return }
-
+        
         isCustomSelected = selected
-
+        
         UIView.animate(withDuration: animated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
             self.contentView.backgroundColor = selected ? UIColor.systemBlue : UIColor.systemBackground
             self.notificationSoundLabel.textColor = selected ? UIColor.systemBackground : UIColor.label
@@ -54,15 +54,15 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
         
         super.setupGeneratedViews()
     }
-
+    
     override func addSubViews() {
         super.addSubViews()
         contentView.addSubview(notificationSoundLabel)
     }
-
+    
     override func setupConstraints() {
         super.setupConstraints()
-
+        
         // notificationSoundLabel
         NSLayoutConstraint.activate([
             notificationSoundLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
@@ -71,5 +71,5 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
             notificationSoundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
-
+    
 }

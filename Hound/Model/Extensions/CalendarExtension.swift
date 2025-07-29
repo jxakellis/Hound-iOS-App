@@ -24,8 +24,4 @@ extension Calendar {
     static var user: Calendar {
         return Calendar.fromZone(UserConfiguration.timeZone)
     }
-    
-    static var utc: Calendar {
-        return Calendar.fromZone(TimeZone.utc)
-    }
 }

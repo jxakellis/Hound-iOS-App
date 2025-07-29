@@ -308,7 +308,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
     var reminderRecipientUserIds: [String] = Constant.Class.Reminder.defaultReminderRecipientUserIds
     
-    var reminderTimeZone: TimeZone = TimeZone.current
+    var reminderTimeZone: TimeZone = UserConfiguration.timeZone
     
     // Reminder Components
     

@@ -8,6 +8,8 @@
 
 import UIKit
 
+// TODO TEST TIME test that new silent mode calculations on the server actually work
+
 /// Configuration that is local to the app only. If the app is reinstalled then this data should be pulled down from the cloud
 final class UserConfiguration: UserDefaultPersistable {
     
@@ -28,10 +30,10 @@ final class UserConfiguration: UserDefaultPersistable {
         toUserDefaults.set(UserConfiguration.isReminderNotificationEnabled, forKey: Constant.Key.userConfigurationIsReminderNotificationEnabled.rawValue)
         
         toUserDefaults.set(UserConfiguration.isSilentModeEnabled, forKey: Constant.Key.userConfigurationIsSilentModeEnabled.rawValue)
-        toUserDefaults.set(UserConfiguration.silentModeStartUTCHour, forKey: Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue)
-        toUserDefaults.set(UserConfiguration.silentModeEndUTCHour, forKey: Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue)
-        toUserDefaults.set(UserConfiguration.silentModeStartUTCMinute, forKey: Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue)
-        toUserDefaults.set(UserConfiguration.silentModeEndUTCMinute, forKey: Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeStartHour, forKey: Constant.Key.userConfigurationSilentModeStartHour.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeEndHour, forKey: Constant.Key.userConfigurationSilentModeEndHour.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeStartMinute, forKey: Constant.Key.userConfigurationSilentModeStartMinute.rawValue)
+        toUserDefaults.set(UserConfiguration.silentModeEndMinute, forKey: Constant.Key.userConfigurationSilentModeEndMinute.rawValue)
     }
     
     static func load(fromUserDefaults: UserDefaults) {
@@ -63,10 +65,10 @@ final class UserConfiguration: UserDefaultPersistable {
         }
         
         UserConfiguration.isSilentModeEnabled = fromUserDefaults.value(forKey: Constant.Key.userConfigurationIsSilentModeEnabled.rawValue) as? Bool ?? UserConfiguration.isSilentModeEnabled
-        UserConfiguration.silentModeStartUTCHour = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue) as? Int ?? UserConfiguration.silentModeStartUTCHour
-        UserConfiguration.silentModeEndUTCHour = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue) as? Int ?? UserConfiguration.silentModeEndUTCHour
-        UserConfiguration.silentModeStartUTCMinute = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue) as? Int ?? UserConfiguration.silentModeStartUTCMinute
-        UserConfiguration.silentModeEndUTCMinute = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue) as? Int ?? UserConfiguration.silentModeEndUTCMinute
+        UserConfiguration.silentModeStartHour = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeStartHour.rawValue) as? Int ?? UserConfiguration.silentModeStartHour
+        UserConfiguration.silentModeEndHour = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeEndHour.rawValue) as? Int ?? UserConfiguration.silentModeEndHour
+        UserConfiguration.silentModeStartMinute = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeStartMinute.rawValue) as? Int ?? UserConfiguration.silentModeStartMinute
+        UserConfiguration.silentModeEndMinute = fromUserDefaults.value(forKey: Constant.Key.userConfigurationSilentModeEndMinute.rawValue) as? Int ?? UserConfiguration.silentModeEndMinute
     }
     
     // MARK: - Main
@@ -114,17 +116,17 @@ final class UserConfiguration: UserDefaultPersistable {
         if let isSilentModeEnabled = body[Constant.Key.userConfigurationIsSilentModeEnabled.rawValue] as? Bool {
             self.isSilentModeEnabled = isSilentModeEnabled
         }
-        if let silentModeStartUTCHour = body[Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue] as? Int {
-            self.silentModeStartUTCHour = silentModeStartUTCHour
+        if let silentModeStartHour = body[Constant.Key.userConfigurationSilentModeStartHour.rawValue] as? Int {
+            self.silentModeStartHour = silentModeStartHour
         }
-        if let silentModeEndUTCHour = body[Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue] as? Int {
-            self.silentModeEndUTCHour = silentModeEndUTCHour
+        if let silentModeEndHour = body[Constant.Key.userConfigurationSilentModeEndHour.rawValue] as? Int {
+            self.silentModeEndHour = silentModeEndHour
         }
-        if let silentModeStartUTCMinute = body[Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue] as? Int {
-            self.silentModeStartUTCMinute = silentModeStartUTCMinute
+        if let silentModeStartMinute = body[Constant.Key.userConfigurationSilentModeStartMinute.rawValue] as? Int {
+            self.silentModeStartMinute = silentModeStartMinute
         }
-        if let silentModeEndUTCMinute = body[Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue] as? Int {
-            self.silentModeEndUTCMinute = silentModeEndUTCMinute
+        if let silentModeEndMinute = body[Constant.Key.userConfigurationSilentModeEndMinute.rawValue] as? Int {
+            self.silentModeEndMinute = silentModeEndMinute
         }
     }
     
@@ -208,75 +210,15 @@ final class UserConfiguration: UserDefaultPersistable {
     
     static var isSilentModeEnabled: Bool = false
     
-    /// Hour of the day, in UTC, that silent mode will start. During silent mode, no notifications will be sent to the user
-    static var silentModeStartUTCHour: Int = {
-        // We want hour 22 of the day in the users local timezone (10:__ PM)
-        let defaultUTCHour = 22
-        let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
-        
-        // UTCHour + hoursFromUTC = localHour
-        // UTCHour = localHour - hoursFromUTC
-        
-        var localHour = defaultUTCHour - hoursFromUTC
-        // localHour could be negative, so roll over into positive
-        localHour += 24
-        // Make sure localHour [0, 23]
-        localHour = localHour % 24
-        
-        return localHour
-    }()
+    /// Hour of the day, in UTC, that silent mode will start. During silent mode, no notifications will be sent to the user. Default 10 PM
+    static var silentModeStartHour: Int = 22
     
-    /// Hour of the day, in UTC, that silent mode will end. During silent mode, no notifications will be sent to the user
-    static var silentModeEndUTCHour: Int = {
-        // We want hour 5 of the day in the users local timezone (5:__ AM)
-        let defaultUTCHour = 5
-        let hoursFromUTC = TimeZone.current.secondsFromGMT() / 3600
-        
-        // UTCHour + hoursFromUTC = localHour
-        // UTCHour = localHour - hoursFromUTC
-        
-        var localHour = defaultUTCHour - hoursFromUTC
-        // localHour could be negative, so roll over into positive
-        localHour += 24
-        // Make sure localHour [0, 23]
-        localHour = localHour % 24
-        
-        return localHour
-    }()
+    /// Hour of the day, in UTC, that silent mode will end. During silent mode, no notifications will be sent to the user. Default 5 AM
+    static var silentModeEndHour: Int = 5
     
-    static var silentModeStartUTCMinute: Int = {
-        // We want minute 0 of the day in the users local timezone (_:?? AM)
-        let defaultUTCMinute = 0
-        let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
-        
-        // UTCMinute + minuteFromUTC = localMinute
-        // UTCMinute = localMinute - minuteFromUTC
-        
-        var localMinute = defaultUTCMinute - minutesFromUTC
-        // localMinute could be negative, so roll over into positive
-        localMinute += 60
-        // Make sure localMinute [0, 59]
-        localMinute = localMinute % 60
-        
-        return localMinute
-    }()
+    static var silentModeStartMinute: Int = 0
     
-    static var silentModeEndUTCMinute: Int = {
-        // We want minute 0 of the day in the users local timezone (_:?? AM)
-        let defaultUTCMinute = 0
-        let minutesFromUTC = (TimeZone.current.secondsFromGMT() % 3600) / 60
-        
-        // UTCMinute + minuteFromUTC = localMinute
-        // UTCMinute = localMinute - minuteFromUTC
-        
-        var localMinute = defaultUTCMinute - minutesFromUTC
-        // localMinute could be negative, so roll over into positive
-        localMinute += 60
-        // Make sure localMinute [0, 59]
-        localMinute = localMinute % 60
-        
-        return localMinute
-    }()
+    static var silentModeEndMinute: Int = 0
 }
 
 extension UserConfiguration {
@@ -301,10 +243,10 @@ extension UserConfiguration {
         body[Constant.Key.userConfigurationNotificationSound.rawValue] = .string(UserConfiguration.notificationSound.rawValue)
         
         body[Constant.Key.userConfigurationIsSilentModeEnabled.rawValue] = .bool(UserConfiguration.isSilentModeEnabled)
-        body[Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue] = .int(UserConfiguration.silentModeStartUTCHour)
-        body[Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue] = .int(UserConfiguration.silentModeEndUTCHour)
-        body[Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue] = .int(UserConfiguration.silentModeStartUTCMinute)
-        body[Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue] = .int(UserConfiguration.silentModeEndUTCMinute)
+        body[Constant.Key.userConfigurationSilentModeStartHour.rawValue] = .int(UserConfiguration.silentModeStartHour)
+        body[Constant.Key.userConfigurationSilentModeEndHour.rawValue] = .int(UserConfiguration.silentModeEndHour)
+        body[Constant.Key.userConfigurationSilentModeStartMinute.rawValue] = .int(UserConfiguration.silentModeStartMinute)
+        body[Constant.Key.userConfigurationSilentModeEndMinute.rawValue] = .int(UserConfiguration.silentModeEndMinute)
         
         // userNotificationToken is synced through UserRequest.update. Therefore, include it in the UserConfiguration body with the rest of the information that is updated. This is especially important for offline mode, which, if it detects a noResponse in UserRequest.update, re-syncs all of the UserConfiguration.
         body[Constant.Key.userNotificationToken.rawValue] = .string(UserInformation.userNotificationToken)

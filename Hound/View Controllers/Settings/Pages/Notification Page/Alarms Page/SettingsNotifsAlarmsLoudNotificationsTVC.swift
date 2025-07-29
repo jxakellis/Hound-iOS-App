@@ -26,6 +26,12 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
         return uiSwitch
     }()
     
+    private lazy var disabledTapGesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(showDisabledBanner))
+        gesture.cancelsTouchesInView = false
+        return gesture
+    }()
+    
     private let descriptionLabel: HoundLabel = {
         let label = HoundLabel()
         label.numberOfLines = 0
@@ -64,6 +70,15 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
                 return
             }
         }
+    }
+    
+    @objc private func showDisabledBanner(_ sender: Any) {
+        guard UserConfiguration.isNotificationEnabled == false else { return }
+        PresentationManager.enqueueBanner(
+            forTitle: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
+            forSubtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
+            forStyle: .warning
+        )
     }
     
     // MARK: - Properties
@@ -107,11 +122,12 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
         contentView.addSubview(headerLabel)
         contentView.addSubview(isLoudNotificationEnabledSwitch)
         contentView.addSubview(descriptionLabel)
+        contentView.addGestureRecognizer(disabledTapGesture)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-
+        
         // headerLabel
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
@@ -119,14 +135,14 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
             headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
             headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
-
+        
         // isLoudNotificationEnabledSwitch
         NSLayoutConstraint.activate([
             isLoudNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
             isLoudNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
             isLoudNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
-
+        
         // descriptionLabel
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
@@ -135,5 +151,5 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
-
+    
 }

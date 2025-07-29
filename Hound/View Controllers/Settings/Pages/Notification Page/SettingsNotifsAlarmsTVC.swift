@@ -54,7 +54,7 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
-
+        
         // headerLabel
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
@@ -70,7 +70,7 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
             descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
         ])
-
+        
         // chevronImageView
         NSLayoutConstraint.activate([
             chevronImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
@@ -82,5 +82,5 @@ final class SettingsNotifsAlarmsTVC: HoundTableViewCell {
         ])
         
     }
-
+    
 }

@@ -30,7 +30,7 @@ final class SettingsNotifsCategoriesTVC: HoundTableViewCell {
     
     private let chevronImageView: HoundImageView = {
         let imageView = HoundImageView(huggingPriority: 300, compressionResistancePriority: 300)
-
+        
         imageView.alpha = 0.75
         imageView.image = UIImage(systemName: "chevron.right")
         imageView.tintColor = UIColor.systemGray4
@@ -57,7 +57,7 @@ final class SettingsNotifsCategoriesTVC: HoundTableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
-
+        
         // headerLabel
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
@@ -73,7 +73,7 @@ final class SettingsNotifsCategoriesTVC: HoundTableViewCell {
             descriptionLabel.leadingAnchor.constraint(equalTo: headerLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: headerLabel.trailingAnchor)
         ])
-
+        
         // chevronImageView
         NSLayoutConstraint.activate([
             chevronImageView.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
@@ -85,5 +85,5 @@ final class SettingsNotifsCategoriesTVC: HoundTableViewCell {
         ])
         
     }
-
+    
 }

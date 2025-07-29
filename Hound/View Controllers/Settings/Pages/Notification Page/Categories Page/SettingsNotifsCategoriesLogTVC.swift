@@ -26,6 +26,12 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
         return uiSwitch
     }()
     
+    private lazy var disabledTapGesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(showDisabledBanner))
+        gesture.cancelsTouchesInView = false
+        return gesture
+    }()
+    
     private let descriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 230, compressionResistancePriority: 230)
         label.text = "Receive notifications about your family's logs. Examples include: a user creating a log."
@@ -82,6 +88,15 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
         isLogNotificationEnabledSwitch.setOn(UserConfiguration.isLogNotificationEnabled, animated: animated)
     }
     
+    @objc private func showDisabledBanner(_ sender: Any) {
+        guard UserConfiguration.isNotificationEnabled == false else { return }
+        PresentationManager.enqueueBanner(
+            forTitle: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
+            forSubtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
+            forStyle: .warning
+        )
+    }
+    
     // MARK: - Setup Elements
     
     override func setupGeneratedViews() {
@@ -93,11 +108,12 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
         contentView.addSubview(headerLabel)
         contentView.addSubview(isLogNotificationEnabledSwitch)
         contentView.addSubview(descriptionLabel)
+        contentView.addGestureRecognizer(disabledTapGesture)
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-
+        
         // headerLabel
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
@@ -105,14 +121,14 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
             headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
             headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
-
+        
         // isLogNotificationEnabledSwitch
         NSLayoutConstraint.activate([
             isLogNotificationEnabledSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
             isLogNotificationEnabledSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
             isLogNotificationEnabledSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
-
+        
         // descriptionLabel
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
@@ -121,5 +137,5 @@ final class SettingsNotifsCategoriesLogTVC: HoundTableViewCell {
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
-
+    
 }

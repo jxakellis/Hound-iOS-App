@@ -2,18 +2,16 @@ import UIKit
 
 final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableViewDataSource, SettingsNotifsUseNotificationsTVCDelegate {
     
-    // TODO NOTIFS for all pages where we set isEnabled to false when notifs disabled, have a banner appear if trying to change a notif setting while notifs disabled
-
     // MARK: - SettingsNotifsUseNotificationsTVCDelegate
-
+    
     func didToggleIsNotificationEnabled() {
         synchronizeAllIsEnabled()
     }
-
+    
     // MARK: - Properties
-
+    
     private static var settingsNotifsVC: SettingsNotifsVC?
-
+    
     private var settingsNotifsCategoriesVC: SettingsNotifsCategoriesVC?
     
     private var settingsNotifsAlarmsVC: SettingsNotifsAlarmsVC?
@@ -40,14 +38,14 @@ final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableV
         
         return tableView
     }()
-
+    
     private let settingsNotifsTVCReuseIdentifiers = [
         SettingsNotifsUseNotificationsTVC.reuseIdentifier,
         SettingsNotifsSilentModeTVC.reuseIdentifier,
         SettingsNotifsCategoriesTVC.reuseIdentifier,
         SettingsNotifsAlarmsTVC.reuseIdentifier
     ]
-
+    
     // MARK: - Main
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -59,15 +57,15 @@ final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableV
         super.init(coder: coder)
         fatalError("NIB/Storyboard is not supported")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         SettingsNotifsVC.settingsNotifsVC = self
     }
-
+    
     // MARK: - Functions
-
+    
     func synchronizeAllIsEnabled() {
         if let silentModeRow = settingsNotifsTVCReuseIdentifiers.firstIndex(of: SettingsNotifsSilentModeTVC.reuseIdentifier) {
             let silentModeCellIndexPath = IndexPath(row: silentModeRow, section: 0)
@@ -76,7 +74,7 @@ final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableV
         settingsNotifsCategoriesVC?.synchronizeAllIsEnabled()
         settingsNotifsAlarmsVC?.synchronizeAllIsEnabled()
     }
-
+    
     func synchronizeAllValues(animated: Bool) {
         synchronizeAllIsEnabled()
         if let useNotificationsRow = settingsNotifsTVCReuseIdentifiers.firstIndex(of: SettingsNotifsUseNotificationsTVC.reuseIdentifier) {
@@ -91,27 +89,27 @@ final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableV
         settingsNotifsCategoriesVC?.synchronizeAllValues(animated: animated)
         settingsNotifsAlarmsVC?.synchronizeAllValues(animated: animated)
     }
-
+    
     static func didSynchronizeNotificationAuthorization() {
         SettingsNotifsVC.settingsNotifsVC?.synchronizeAllValues(animated: true)
     }
-
+    
     // MARK: - Table View Data Source
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         settingsNotifsTVCReuseIdentifiers.count
     }
-
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = PageSheetHeaderFooterView()
         headerView.setup(forTitle: "Notifications")
         return headerView
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard indexPath.row < settingsNotifsTVCReuseIdentifiers.count else {
             return HoundTableViewCell()
@@ -123,7 +121,7 @@ final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableV
         }
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let identifier = settingsNotifsTVCReuseIdentifiers[indexPath.row]
@@ -138,19 +136,19 @@ final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableV
             break
         }
     }
-
+    
     // MARK: - Setup Elements
-
+    
     override func setupGeneratedViews() {
         view.backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
-
+    
     override func addSubViews() {
         super.addSubViews()
         view.addSubview(tableView)
     }
-
+    
     override func setupConstraints() {
         super.setupConstraints()
         NSLayoutConstraint.activate([

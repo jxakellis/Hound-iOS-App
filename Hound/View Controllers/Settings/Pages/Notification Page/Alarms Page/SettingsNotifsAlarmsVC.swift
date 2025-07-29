@@ -9,9 +9,9 @@
 import UIKit
 
 final class SettingsNotifsAlarmsVC: HoundViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     // MARK: - Properties
-
+    
     private lazy var tableView = {
         let tableView = HoundTableView(style: .grouped)
         tableView.backgroundColor = .systemBackground
@@ -38,28 +38,28 @@ final class SettingsNotifsAlarmsVC: HoundViewController, UITableViewDelegate, UI
         SettingsNotifsAlarmsSnoozeLengthTVC.reuseIdentifier,
         SettingsNotifsAlarmsNotificationSoundsTVC.reuseIdentifier
     ]
-
+    
     // MARK: - Main
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         AudioManager.stopAudio()
     }
-
+    
     // MARK: - Functions
-
+    
     func synchronizeAllIsEnabled() {
         for index in settingsNotifsCategoriesTVCReuseIdentifiers.indices {
             let indexPath = IndexPath(row: index, section: 0)
             tableView.reloadRows(at: [indexPath], with: .fade)
         }
     }
-
+    
     func synchronizeAllValues(animated: Bool) {
         synchronizeAllIsEnabled()
         for index in settingsNotifsCategoriesTVCReuseIdentifiers.indices {
@@ -67,23 +67,23 @@ final class SettingsNotifsAlarmsVC: HoundViewController, UITableViewDelegate, UI
             tableView.reloadRows(at: [indexPath], with: .fade)
         }
     }
-
+    
     // MARK: - Table View Data Source
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return settingsNotifsCategoriesTVCReuseIdentifiers.count
     }
-
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = PageSheetHeaderFooterView()
         headerView.setup(forTitle: "Alarms")
         return headerView
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard indexPath.row < settingsNotifsCategoriesTVCReuseIdentifiers.count else {
             return HoundTableViewCell()
@@ -92,19 +92,19 @@ final class SettingsNotifsAlarmsVC: HoundViewController, UITableViewDelegate, UI
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         return cell
     }
-
+    
     // MARK: - Setup Elements
-
+    
     override func setupGeneratedViews() {
         view.backgroundColor = UIColor.systemBackground
         super.setupGeneratedViews()
     }
-
+    
     override func addSubViews() {
         super.addSubViews()
         view.addSubview(tableView)
     }
-
+    
     override func setupConstraints() {
         super.setupConstraints()
         NSLayoutConstraint.activate([

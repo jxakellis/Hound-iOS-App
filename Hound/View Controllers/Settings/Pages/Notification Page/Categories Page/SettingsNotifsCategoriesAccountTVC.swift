@@ -73,7 +73,7 @@ final class SettingsNotifsCategoriesAccountTVC: HoundTableViewCell {
     
     override func setupConstraints() {
         super.setupConstraints()
-
+        
         // headerLabel
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
@@ -81,14 +81,14 @@ final class SettingsNotifsCategoriesAccountTVC: HoundTableViewCell {
             headerLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
             headerLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: contentView)
         ])
-
+        
         // alwaysOnSwitch
         NSLayoutConstraint.activate([
             alwaysOnSwitch.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
             alwaysOnSwitch.leadingAnchor.constraint(equalTo: headerLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentIntraHori),
             alwaysOnSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
-
+        
         // descriptionLabel
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
@@ -97,5 +97,5 @@ final class SettingsNotifsCategoriesAccountTVC: HoundTableViewCell {
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
-
+    
 }

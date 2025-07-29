@@ -74,10 +74,6 @@ extension TimeZone {
         return TimeZone(identifier: str)
     }
     
-    static var utc: TimeZone {
-        return TimeZone.from("UTC")! // swiftlint:disable:this force_unwrapping
-    }
-    
     // MARK: - Conversions
     
     /// Converts a (hour, minute) in this time zone to the same wall time in a target time zone, for display.

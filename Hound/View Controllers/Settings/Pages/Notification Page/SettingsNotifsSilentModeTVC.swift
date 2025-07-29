@@ -31,6 +31,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         datePicker.datePickerMode = .time
         datePicker.minuteInterval = Constant.Development.minuteInterval
         datePicker.preferredDatePickerStyle = .compact
+        datePicker.timeZone = Calendar.user.timeZone
         datePicker.addTarget(self, action: #selector(didUpdateSilentModeStartHours), for: .valueChanged)
         return datePicker
     }()
@@ -40,6 +41,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         datePicker.datePickerMode = .time
         datePicker.minuteInterval = Constant.Development.minuteInterval
         datePicker.preferredDatePickerStyle = .compact
+        datePicker.timeZone = Calendar.user.timeZone
         datePicker.addTarget(self, action: #selector(didUpdateSilentModeEndHours), for: .valueChanged)
         return datePicker
     }()
@@ -60,6 +62,21 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         return label
     }()
     
+    private lazy var disabledTapGesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(showDisabledBanner))
+        gesture.cancelsTouchesInView = false
+        return gesture
+    }()
+    
+    @objc private func showDisabledBanner(_ sender: Any) {
+        guard UserConfiguration.isNotificationEnabled == false else { return }
+        PresentationManager.enqueueBanner(
+            forTitle: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
+            forSubtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
+            forStyle: .warning
+        )
+    }
+    
     @objc private func didToggleIsSilentModeEnabled(_ sender: Any) {
         let beforeUpdateIsSilentModeEnabled = UserConfiguration.isSilentModeEnabled
         
@@ -78,20 +95,22 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
     }
     
     @objc private func didUpdateSilentModeStartHours(_ sender: Any) {
-        let beforeUpdateSilentModeStartUTCHour = UserConfiguration.silentModeStartUTCHour
-        let beforeUpdateSilentModeStartUTCMinute = UserConfiguration.silentModeStartUTCMinute
-        
-        UserConfiguration.silentModeStartUTCHour = Calendar.utc.component(.hour, from: silentModeStartHoursDatePicker.date)
-        UserConfiguration.silentModeStartUTCMinute = Calendar.utc.component(.minute, from: silentModeStartHoursDatePicker.date)
-        
-        let body: JSONRequestBody = [Constant.Key.userConfigurationSilentModeStartUTCHour.rawValue: .int(UserConfiguration.silentModeStartUTCHour),
-                                     Constant.Key.userConfigurationSilentModeStartUTCMinute.rawValue: .int(UserConfiguration.silentModeStartUTCMinute)]
-        
+        let beforeUpdateSilentModeStartHour = UserConfiguration.silentModeStartHour
+        let beforeUpdateSilentModeStartMinute = UserConfiguration.silentModeStartMinute
+
+        let calendar = Calendar.user
+        UserConfiguration.silentModeStartHour = calendar.component(.hour, from: silentModeStartHoursDatePicker.date)
+        UserConfiguration.silentModeStartMinute = calendar.component(.minute, from: silentModeStartHoursDatePicker.date)
+
+        let body: JSONRequestBody = [
+            Constant.Key.userConfigurationSilentModeStartHour.rawValue: .int(UserConfiguration.silentModeStartHour),
+            Constant.Key.userConfigurationSilentModeStartMinute.rawValue: .int(UserConfiguration.silentModeStartMinute)
+        ]
+
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
-                // Revert local values to previous state due to an error
-                UserConfiguration.silentModeStartUTCHour = beforeUpdateSilentModeStartUTCHour
-                UserConfiguration.silentModeStartUTCMinute = beforeUpdateSilentModeStartUTCMinute
+                UserConfiguration.silentModeStartHour = beforeUpdateSilentModeStartHour
+                UserConfiguration.silentModeStartMinute = beforeUpdateSilentModeStartMinute
                 self.synchronizeValues(animated: true)
                 return
             }
@@ -99,20 +118,22 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
     }
     
     @objc private func didUpdateSilentModeEndHours(_ sender: Any) {
-        let beforeUpdateSilentModeEndUTCHour = UserConfiguration.silentModeEndUTCHour
-        let beforeUpdateSilentModeEndUTCMinute = UserConfiguration.silentModeEndUTCMinute
-        
-        UserConfiguration.silentModeEndUTCHour = Calendar.utc.component(.hour, from: silentModeEndHoursDatePicker.date)
-        UserConfiguration.silentModeEndUTCMinute = Calendar.utc.component(.minute, from: silentModeEndHoursDatePicker.date)
-        
-        let body: JSONRequestBody = [Constant.Key.userConfigurationSilentModeEndUTCHour.rawValue: .int(UserConfiguration.silentModeEndUTCHour),
-                                     Constant.Key.userConfigurationSilentModeEndUTCMinute.rawValue: .int(UserConfiguration.silentModeEndUTCMinute)]
-        
+        let beforeUpdateSilentModeEndHour = UserConfiguration.silentModeEndHour
+        let beforeUpdateSilentModeEndMinute = UserConfiguration.silentModeEndMinute
+
+        let calendar = Calendar.user
+        UserConfiguration.silentModeEndHour = calendar.component(.hour, from: silentModeEndHoursDatePicker.date)
+        UserConfiguration.silentModeEndMinute = calendar.component(.minute, from: silentModeEndHoursDatePicker.date)
+
+        let body: JSONRequestBody = [
+            Constant.Key.userConfigurationSilentModeEndHour.rawValue: .int(UserConfiguration.silentModeEndHour),
+            Constant.Key.userConfigurationSilentModeEndMinute.rawValue: .int(UserConfiguration.silentModeEndMinute)
+        ]
+
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
-                // Revert local values to previous state due to an error
-                UserConfiguration.silentModeEndUTCHour = beforeUpdateSilentModeEndUTCHour
-                UserConfiguration.silentModeEndUTCMinute = beforeUpdateSilentModeEndUTCMinute
+                UserConfiguration.silentModeEndHour = beforeUpdateSilentModeEndHour
+                UserConfiguration.silentModeEndMinute = beforeUpdateSilentModeEndMinute
                 self.synchronizeValues(animated: true)
                 return
             }
@@ -147,20 +168,26 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         isSilentModeEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
         silentModeStartHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
         silentModeEndHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
-        
+
         isSilentModeEnabledSwitch.setOn(UserConfiguration.isSilentModeEnabled, animated: animated)
+
+        let calendar = Calendar.user
         silentModeStartHoursDatePicker.setDate(
-            Calendar.utc.date(
-                bySettingHour: UserConfiguration.silentModeStartUTCHour,
-                minute: UserConfiguration.silentModeStartUTCMinute,
-                second: 0, of: Date()) ?? Date(),
-            animated: animated)
+            calendar.date(
+                bySettingHour: UserConfiguration.silentModeStartHour,
+                minute: UserConfiguration.silentModeStartMinute,
+                second: 0, of: Date()
+            ) ?? Date(),
+            animated: animated
+        )
         silentModeEndHoursDatePicker.setDate(
-            Calendar.utc.date(
-                bySettingHour: UserConfiguration.silentModeEndUTCHour,
-                minute: UserConfiguration.silentModeEndUTCMinute,
-                second: 0, of: Date()) ?? Date(),
-            animated: animated)
+            calendar.date(
+                bySettingHour: UserConfiguration.silentModeEndHour,
+                minute: UserConfiguration.silentModeEndMinute,
+                second: 0, of: Date()
+            ) ?? Date(),
+            animated: animated
+        )
     }
     
     // MARK: - Setup Elements
@@ -177,6 +204,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         contentView.addSubview(timeRangeToLabel)
         contentView.addSubview(silentModeEndHoursDatePicker)
         contentView.addSubview(descriptionLabel)
+        contentView.addGestureRecognizer(disabledTapGesture)
     }
     
     override func setupConstraints() {
@@ -230,5 +258,5 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset)
         ])
     }
-
+    
 }

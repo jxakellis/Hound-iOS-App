@@ -127,7 +127,7 @@ public enum VisualConstant {
         // MARK: .warning (banner style)
         
         static let noEditNotificationSettingsTitle = "Heads Up!"
-        static let noEditNotificationSettingsSubtitle = "Your notifications are curr"
+        static let noEditNotificationSettingsSubtitle = "Notifications are turned off, so you'll need to enable them before you can make any changes"
 
         static let noEditTriggerResultRemindersTitle = "Heads Up!"
         static let noEditTriggerResultRemindersSubtitle = "Reminders created by automations can't be edited (only deleted)"
