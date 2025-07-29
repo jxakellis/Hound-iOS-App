@@ -15,9 +15,6 @@ protocol SettingsPagesTableVCDelegate: AnyObject {
 
 final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDelegate, FamilyUpgradeIntroductionVCDelegate {
     
-    // TODO RELEASE NOTES make a release notes tab
-    // TODO RELEASE NOTES make hound versions an enum. when trying to open release notes, have a setup func that takes enum and builds notes dynamically.sort by most recent version (we have comparator build somewhere) and give option to find 5 more recent
-    
     // MARK: - SettingsAccountVCDelegate
     
     func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
@@ -82,7 +79,7 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
             switch settingsPage {
             case .account, .family, .subscription, .appearance, .notifications:
                 numberOfRows += (section == 0 ? 1 : 0)
-            case .website, .feedback, .support, .eula, .privacyPolicy, .termsAndConditions:
+            case .website, .feedback, .support, .releaseNotes, .eula, .privacyPolicy, .termsAndConditions:
                 numberOfRows += (section == 1 ? 1 : 0)
             }
         }
@@ -162,6 +159,10 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
             }
         case .feedback:
             let vc = SurveyAppExperienceVC()
+            PresentationManager.enqueueViewController(vc)
+        case .releaseNotes:
+            let vc = ReleaseNotesVC()
+            vc.setup(version: AppVersion.current)
             PresentationManager.enqueueViewController(vc)
         }
     }

@@ -35,7 +35,8 @@ final class LocalConfiguration: UserDefaultPersistable {
         
         toUserDefaults.set(LocalConfiguration.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted, forKey: Constant.Key.localPreviousDatesUserSurveyFeedbackAppExperienceSubmitted.rawValue)
         
-        toUserDefaults.set(LocalConfiguration.localAppVersionsWithReleaseNotesShown, forKey: Constant.Key.localAppVersionsWithReleaseNotesShown.rawValue)
+        let versionsRaw = LocalConfiguration.localAppVersionsWithReleaseNotesShown.map { $0.rawValue }
+        toUserDefaults.set(versionsRaw, forKey: Constant.Key.localAppVersionsWithReleaseNotesShown.rawValue)
         
         toUserDefaults.set(LocalConfiguration.localHasCompletedHoundIntroductionViewController, forKey: Constant.Key.localHasCompletedHoundIntroductionViewController.rawValue)
         toUserDefaults.set(LocalConfiguration.localHasCompletedRemindersIntroductionViewController, forKey: Constant.Key.localHasCompletedRemindersIntroductionViewController.rawValue)
@@ -94,9 +95,11 @@ final class LocalConfiguration: UserDefaultPersistable {
         LocalConfiguration.localPreviousDatesUserReviewRequested =
         fromUserDefaults.value(forKey: Constant.Key.localPreviousDatesUserReviewRequested.rawValue) as? [Date] ?? LocalConfiguration.localPreviousDatesUserReviewRequested
         
-        LocalConfiguration.localAppVersionsWithReleaseNotesShown =
-        fromUserDefaults.value(forKey: Constant.Key.localAppVersionsWithReleaseNotesShown.rawValue) as? [String]
-        ?? LocalConfiguration.localAppVersionsWithReleaseNotesShown
+        if let rawStrings = fromUserDefaults.value(forKey: Constant.Key.localAppVersionsWithReleaseNotesShown.rawValue) as? [String] {
+            LocalConfiguration.localAppVersionsWithReleaseNotesShown = rawStrings.map { AppVersion(from: $0) }.compactMap({ v in
+                return v
+            })
+        }
         
         LocalConfiguration.localHasCompletedHoundIntroductionViewController =
         fromUserDefaults.value(forKey: Constant.Key.localHasCompletedHoundIntroductionViewController.rawValue) as? Bool
@@ -211,7 +214,7 @@ final class LocalConfiguration: UserDefaultPersistable {
     static var localPreviousDatesUserReviewRequested: [Date] = []
     
     /// Keeps track of what Hound versions the release notes have been shown for. For example, if we show the release notes for Hound 2.0.0, then we will store 2.0.0 in the array. This makes sure the release notes are only shown once for a given update
-    static var localAppVersionsWithReleaseNotesShown: [String] = []
+    static var localAppVersionsWithReleaseNotesShown: [AppVersion] = []
     
     /// Keeps track of if the user has viewed AND completed the family introduction view controller (which helps the user setup their first dog)
     static var localHasCompletedHoundIntroductionViewController: Bool = false

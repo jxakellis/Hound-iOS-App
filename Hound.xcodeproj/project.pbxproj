@@ -13,6 +13,8 @@
 		A207F7A0280610D6003248E8 /* DogIconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A207F79F280610D6003248E8 /* DogIconManager.swift */; };
 		A20C8E3A2E370BF0000837DA /* TriggerFixedTimeComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C8E392E370BE9000837DA /* TriggerFixedTimeComponents.swift */; };
 		A20C8E3C2E370D54000837DA /* TriggerTimeDelayComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C8E3B2E370D4C000837DA /* TriggerTimeDelayComponents.swift */; };
+		A20C8E3E2E388AA3000837DA /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C8E3D2E388AA0000837DA /* AppVersion.swift */; };
+		A20C8E402E388B40000837DA /* ReleaseNoteBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C8E3F2E388B3C000837DA /* ReleaseNoteBuilder.swift */; };
 		A20C99972568671F00E2C9C8 /* DogReminderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C99962568671F00E2C9C8 /* DogReminderManager.swift */; };
 		A20C999925686B7600E2C9C8 /* ReminderTimingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20C999825686B7600E2C9C8 /* ReminderTimingManager.swift */; };
 		A20D64A42880E0CD001BDC9B /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20D64A32880E0CD001BDC9B /* Subscription.swift */; };
@@ -260,6 +262,8 @@
 		A207F79F280610D6003248E8 /* DogIconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogIconManager.swift; sourceTree = "<group>"; };
 		A20C8E392E370BE9000837DA /* TriggerFixedTimeComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerFixedTimeComponents.swift; sourceTree = "<group>"; };
 		A20C8E3B2E370D4C000837DA /* TriggerTimeDelayComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerTimeDelayComponents.swift; sourceTree = "<group>"; };
+		A20C8E3D2E388AA0000837DA /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
+		A20C8E3F2E388B3C000837DA /* ReleaseNoteBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseNoteBuilder.swift; sourceTree = "<group>"; };
 		A20C99962568671F00E2C9C8 /* DogReminderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogReminderManager.swift; sourceTree = "<group>"; };
 		A20C999825686B7600E2C9C8 /* ReminderTimingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTimingManager.swift; sourceTree = "<group>"; };
 		A20D64A32880E0CD001BDC9B /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
@@ -909,6 +913,8 @@
 		A286934725769D4E00C0C06E /* Enums */ = {
 			isa = PBXGroup;
 			children = (
+				A20C8E3F2E388B3C000837DA /* ReleaseNoteBuilder.swift */,
+				A20C8E3D2E388AA0000837DA /* AppVersion.swift */,
 				A2EA864C28E22176009148EC /* Constant */,
 				A2581B7527FDDF350099AFB8 /* NotificationSound.swift */,
 				A2173DA92B07E64D0000C08A /* TimeQuickSelect.swift */,
@@ -1487,6 +1493,7 @@
 				A29390732608480800879C79 /* DogManager.swift in Sources */,
 				A254337B28CFC7AF00B6C199 /* ExportActivityViewManager.swift in Sources */,
 				A2EBFB9E264F6A1A001AAF18 /* AudioManager.swift in Sources */,
+				A20C8E3E2E388AA3000837DA /* AppVersion.swift in Sources */,
 				A2588B9529306A7800B0ACB2 /* SettingsNotifsVC.swift in Sources */,
 				A2FAB3F22E1756B200E85392 /* HoundBorderStyle.swift in Sources */,
 				A2588BA12930875B00B0ACB2 /* SettingsNotifsCategoriesAccountTVC.swift in Sources */,
@@ -1599,6 +1606,7 @@
 				A2101E612A69B03E00A65396 /* UIViewExtension.swift in Sources */,
 				A2AC89FC27D2781600115831 /* MonthlyComponents.swift in Sources */,
 				A2A29D4B287A893A00770993 /* NetworkManager.swift in Sources */,
+				A20C8E402E388B40000837DA /* ReleaseNoteBuilder.swift in Sources */,
 				A2FAB4072E1B547F00E85392 /* HoundLogger.swift in Sources */,
 				A2FAB3FA2E1B08FF00E85392 /* HoundDynamicBorder.swift in Sources */,
 				A27310FE2B200E4300185C8D /* GenerationManager.swift in Sources */,

@@ -38,6 +38,7 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
         }
     }
     
+    // TODO BUG this doesnt wrap down to multiple lines, it just goes off the edge
     /// Placeholder label shown when text is empty.
     private let placeholderLabel: HoundLabel = {
         let label = HoundLabel()

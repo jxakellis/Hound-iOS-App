@@ -14,9 +14,11 @@ enum SettingsPages: String, CaseIterable {
     case subscription = "Subscription"
     case appearance = "Appearance"
     case notifications = "Notifications"
+    
     case website = "Website"
     case feedback = "Feedback"
     case support = "Support"
+    case releaseNotes = "Release Notes"
     case eula = "EULA"
     case privacyPolicy = "Privacy Policy"
     case termsAndConditions = "Terms and Conditions"
@@ -32,6 +34,8 @@ enum SettingsPages: String, CaseIterable {
         case .appearance:
             return nil
         case .notifications:
+            return nil
+        case .releaseNotes:
             return nil
         case .website:
             return URL(string: "https://www.houndorganizer.com")
@@ -60,6 +64,8 @@ enum SettingsPages: String, CaseIterable {
             return UIImage(systemName: "textformat")
         case .notifications:
             return UIImage(systemName: "iphone.radiowaves.left.and.right")
+        case .releaseNotes:
+            return UIImage(systemName: "doc.text")
         case .website:
             return UIImage(systemName: "globe")
         case .feedback:
@@ -146,7 +152,7 @@ final class SettingsPagesTVC: HoundTableViewCell {
         let pageImageViewInset: CGFloat = 5.0
         // pageImageView inset relative to headerLabel inset
         let pageViewRelativeVertInset = -Constant.Constraint.Spacing.absoluteVertInset + pageImageViewInset
-
+        
         // containerView
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -154,7 +160,7 @@ final class SettingsPagesTVC: HoundTableViewCell {
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
-
+        
         // pageImageView
         NSLayoutConstraint.activate([
             pageImageView.topAnchor.constraint(equalTo: headerLabel.topAnchor, constant: pageViewRelativeVertInset),
@@ -162,7 +168,7 @@ final class SettingsPagesTVC: HoundTableViewCell {
             pageImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: pageImageViewInset),
             pageImageView.createAspectRatio(1.0)
         ])
-
+        
         // headerLabel
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
@@ -182,5 +188,5 @@ final class SettingsPagesTVC: HoundTableViewCell {
             chevronImageView.createMaxHeight(Constant.Constraint.Button.chevronMaxHeight)
         ])
     }
-
+    
 }

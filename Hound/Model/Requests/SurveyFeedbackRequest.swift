@@ -80,7 +80,7 @@ enum SurveyFeedbackRequest {
         var forBodyWithDeviceMetrics = forBody
         forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricModel.rawValue] = .string(UIDevice.current.model)
         forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricSystemVersion.rawValue] = .string(UIDevice.current.systemVersion)
-        forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricAppVersion.rawValue] = .string(UIApplication.appVersion)
+        forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricAppVersion.rawValue] = .string(AppVersion.current.rawValue)
         forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricLocale.rawValue] = .string(Locale.current.identifier)
         
         // All of the previous body should be encapsulated inside a surveyFeedback body

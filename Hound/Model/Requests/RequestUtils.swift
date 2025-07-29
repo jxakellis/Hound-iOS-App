@@ -74,7 +74,7 @@ enum RequestUtils {
         if let userIdentifier = UserInformation.userIdentifier {
             request.setValue(userIdentifier, forHTTPHeaderField: "houndheader-useridentifier")
         }
-        request.setValue(UIApplication.appVersion, forHTTPHeaderField: "houndheader-appversion")
+        request.setValue(AppVersion.current.rawValue, forHTTPHeaderField: "houndheader-appversion")
         
         HoundLogger.apiRequest.notice("\(request.httpMethod ?? Constant.Visual.Text.unknownText) Request for \(request.url?.description ?? Constant.Visual.Text.unknownText)")
         //        HoundLogger.apiRequest.debug("\tRequest Body: \(String(data: request.httpBody ?? Data(), encoding: .utf8) ?? Constant.Visual.Text.unknownText)")

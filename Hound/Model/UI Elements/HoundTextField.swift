@@ -63,6 +63,7 @@ final class HoundTextField: UITextField, HoundUIProtocol, HoundDynamicBorder, Ho
         }
     }
 
+    // TODO CHANGE THIS TO PLACEHOLDER STYLE OF HOUNDLABEL
     private var hasInsetApplied: Bool = false
     override var text: String? {
         get {

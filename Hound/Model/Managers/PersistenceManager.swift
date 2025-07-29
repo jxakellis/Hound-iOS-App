@@ -19,16 +19,21 @@ enum PersistenceManager {
         
         // MARK: Save App State Values
         
-        UIApplication.previousAppVersion = UserDefaults.standard.object(forKey: Constant.Key.localAppVersion.rawValue) as? String
+        if let stored = UserDefaults.standard.object(forKey: Constant.Key.localAppVersion.rawValue) as? String {
+            AppVersion.previousAppVersion = AppVersion(from: stored)
+        }
+        else {
+            AppVersion.previousAppVersion = nil
+        }
         
         // If the previousAppVersion is less than the oldestCompatibleAppVersion, the user's data is no longer compatible and therefore should be redownloaded.
-        if UIApplication.isPreviousAppVersionCompatible == false {
+        if AppVersion.isCompatible(previous: AppVersion.previousAppVersion) {
             // Clear out this stored data so the user can redownload from the server
             UserDefaults.standard.set(nil, forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
             UserDefaults.standard.set(nil, forKey: Constant.Key.dogManager.rawValue)
         }
         
-        UserDefaults.standard.set(UIApplication.appVersion, forKey: Constant.Key.localAppVersion.rawValue)
+        UserDefaults.standard.set(AppVersion.current.rawValue, forKey: Constant.Key.localAppVersion.rawValue)
         
         UserDefaults.standard.set(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
         
@@ -70,7 +75,7 @@ enum PersistenceManager {
         // MARK: Save App Information
         
         GlobalTypes.persist(toUserDefaults: UserDefaults.standard)
-    
+        
         UserInformation.persist(toUserDefaults: UserDefaults.standard)
         
         FamilyInformation.persist(toUserDefaults: UserDefaults.standard)

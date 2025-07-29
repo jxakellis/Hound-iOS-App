@@ -15,10 +15,10 @@ enum ShowBonusInformationManager {
     static func showReleaseNotesBannerIfNeeded() {
         // Check that the app was opened before, as we don't want to show the user release notes on their first launch
         // Then, check that the current version doesn't match the previous version, meaning an upgrade or downgrade. The latter shouldnt be possible
-        guard let previousAppVersion = UIApplication.previousAppVersion, previousAppVersion != UIApplication.appVersion else { return }
+        guard let previousAppVersion = AppVersion.previousAppVersion, previousAppVersion != AppVersion.current else { return }
         
         // make sure we haven't shown the release notes for this version before. To do this, we check to see if our array of app versions that we showed release notes for contains the app version of the current version. If the array does not contain the current app version, then we haven't shown release notes for this new version and we are ok to proceed.
-        guard LocalConfiguration.localAppVersionsWithReleaseNotesShown.contains(UIApplication.appVersion) == false else { return }
+        guard LocalConfiguration.localAppVersionsWithReleaseNotesShown.contains(AppVersion.current) == false else { return }
         
         // TODO PRODUCTION run these scripts below
         // sudo apt-get update
@@ -27,11 +27,12 @@ enum ShowBonusInformationManager {
         
         PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.houndUpdatedTitle, forSubtitle: Constant.Visual.BannerText.houndUpdatedSubtitle, forStyle: .info) {
             let releaseNotesVC = ReleaseNotesVC()
+            releaseNotesVC.setup(version: AppVersion.current)
             PresentationManager.enqueueViewController(releaseNotesVC)
         }
         
         // we successfully showed the banner, so store the version we showed it for
-        LocalConfiguration.localAppVersionsWithReleaseNotesShown.append(UIApplication.appVersion)
+        LocalConfiguration.localAppVersionsWithReleaseNotesShown.append(AppVersion.current)
     }
     
     /// This is the number of seconds in a day
