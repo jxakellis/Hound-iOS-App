@@ -192,17 +192,29 @@ final class DogsAddReminderWeeklyView: HoundView {
         guard newTimeZone != currentTimeZone else { return }
         
         let calendar = Calendar.fromZone(currentTimeZone)
-        let oldComponents = calendar.dateComponents([.hour, .minute], from: timeOfDayDatePicker.date)
-        let hour = oldComponents.hour ?? 0
-        let minute = oldComponents.minute ?? 0
+        let oldComps = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: timeOfDayDatePicker.date)
+        let day = oldComps.day ?? 1
+        let hour = oldComps.hour ?? 0
+        let minute = oldComps.minute ?? 0
         
-        let converted = currentTimeZone.convert(hour: hour, minute: minute, to: newTimeZone)
-        var newDateComponents = calendar.dateComponents([.year, .month, .day], from: timeOfDayDatePicker.date)
-        newDateComponents.hour = converted.hour
-        newDateComponents.minute = converted.minute
-        newDateComponents.second = 0
-        newDateComponents.timeZone = newTimeZone
-        if let newDate = calendar.date(from: newDateComponents) {
+        let converted = currentTimeZone.convert(
+            day: day,
+            hour: hour,
+            minute: minute,
+            to: newTimeZone,
+            referenceDate: timeOfDayDatePicker.date
+        )
+        
+        var newComps = DateComponents()
+        newComps.year = oldComps.year
+        newComps.month = oldComps.month
+        newComps.day = converted.day
+        newComps.hour = converted.hour
+        newComps.minute = converted.minute
+        newComps.second = 0
+        newComps.timeZone = newTimeZone
+        
+        if let newDate = calendar.date(from: newComps) {
             timeOfDayDatePicker.timeZone = newTimeZone
             timeOfDayDatePicker.date = newDate
         }

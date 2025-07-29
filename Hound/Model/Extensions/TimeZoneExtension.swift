@@ -10,33 +10,38 @@ import Foundation
 
 extension TimeZone {
     
-    static var houndTimeZones: [TimeZone] {
-        var seenNames = Set<String>()
-        return TimeZone.knownTimeZoneIdentifiers
-            .compactMap { TimeZone(identifier: $0) }
-//            .filter {
-//                let name = $0.localizedName(for: .generic, locale: .current) ?? $0.identifier
-//                if seenNames.contains(name) {
-//                    return false
-//                }
-//                else {
-//                    seenNames.insert(name)
-//                    return true
-//                }
-//            }
-            .sorted { $0.secondsFromGMT() < $1.secondsFromGMT() }
+    // Prevent repetitive recalculation of these static properties by caching them
+    private struct Cache {
+        static let houndTimeZones: [TimeZone] = {
+            TimeZone.knownTimeZoneIdentifiers
+                .compactMap { TimeZone(identifier: $0) }
+                .sorted {
+                    let gmtA = $0.secondsFromGMT()
+                    let gmtB = $1.secondsFromGMT()
+                    if gmtA != gmtB {
+                        return gmtA < gmtB
+                    }
+                    else {
+                        return $0.displayName().localizedCaseInsensitiveCompare($1.displayName()) == .orderedAscending
+                    }
+                }
+        }()
+        
+        static let genericNameCounts: [String: Int] = {
+            var counts = [String: Int]()
+            for id in TimeZone.knownTimeZoneIdentifiers {
+                if let tz = TimeZone(identifier: id) {
+                    let name = tz.localizedName(for: .generic, locale: .current) ?? tz.identifier
+                    counts[name, default: 0] += 1
+                }
+            }
+            return counts
+        }()
     }
     
-    private static var genericNameCounts: [String: Int] = {
-        var counts = [String: Int]()
-        for id in TimeZone.knownTimeZoneIdentifiers {
-            if let tz = TimeZone(identifier: id) {
-                let name = tz.localizedName(for: .generic, locale: .current) ?? tz.identifier
-                counts[name, default: 0] += 1
-            }
-        }
-        return counts
-    }()
+    static var houndTimeZones: [TimeZone] {
+        return Cache.houndTimeZones
+    }
     
     func displayName(currentTimeZone: TimeZone? = nil) -> String {
         let genericName = self.localizedName(for: .generic, locale: .current) ?? ""
@@ -48,17 +53,17 @@ extension TimeZone {
         let sign = seconds >= 0 ? "+" : "-"
         let offsetString = String(format: "%@%02d:%02d", sign, hours, minutes)
         
-        let currentSuffix = (self.identifier == currentTimeZone?.identifier) ? " (current)" : ""
+        let currentSuffix = (self.identifier == currentTimeZone?.identifier) ? " (Current)" : ""
         // Example: "Pacific Time (Los Angeles) -08:00"
         // Only show city if genericName is not unique
-            let needsCity = (TimeZone.genericNameCounts[genericName] ?? 0) > 1
-
-            if needsCity {
-                return "\(genericName) (\(cityName)) \(offsetString)\(currentSuffix)"
-            }
+        let needsCity = (Cache.genericNameCounts[genericName] ?? 0) > 1
+        
+        if needsCity {
+            return "\(genericName) (\(cityName)) \(offsetString)\(currentSuffix)"
+        }
         else {
-                return "\(genericName) \(offsetString)\(currentSuffix)"
-            }
+            return "\(genericName) \(offsetString)\(currentSuffix)"
+        }
     }
     
     // MARK: - Time Zone Constructions
@@ -77,9 +82,9 @@ extension TimeZone {
     
     /// Converts a (hour, minute) in this time zone to the same wall time in a target time zone, for display.
     /// Always uses a fixed reference date (2000-01-01) to avoid DST edge cases.
-    func convert(hour: Int, minute: Int, to displayTimeZone: TimeZone) -> (hour: Int, minute: Int) {
-        guard self != displayTimeZone else {
-            return (hour, minute) // No conversion needed
+    func convert(hour: Int, minute: Int, to destinationTimeZone: TimeZone) -> (hour: Int, minute: Int) {
+        guard self != destinationTimeZone else {
+            return (hour, minute)
         }
         var components = DateComponents()
         components.year = 2000
@@ -88,36 +93,39 @@ extension TimeZone {
         components.hour = hour
         components.minute = minute
         components.second = 0
-        components.timeZone = self
-        
-        let calendar = Calendar.fromZone(displayTimeZone)
-        guard let dateInSource = calendar.date(from: components) else {
-            return (hour, minute) // Defensive fallback
+
+        // 1. Use a calendar in the source time zone to build the date.
+        let sourceCalendar = Calendar.fromZone(self)
+        guard let dateInSource = sourceCalendar.date(from: components) else {
+            return (hour, minute)
         }
-        let targetComponents = calendar.dateComponents(in: displayTimeZone, from: dateInSource)
+
+        // 2. Use destination calendar to extract the new hour/minute.
+        let destCalendar = Calendar.fromZone(destinationTimeZone)
+        let targetComponents = destCalendar.dateComponents([.hour, .minute], from: dateInSource)
         return (targetComponents.hour ?? hour, targetComponents.minute ?? minute)
     }
     
     /// Converts a list of weekdays (from this time zone) to their equivalents in the target time zone, for a given hour/minute.
     /// Always uses a fixed reference week (starting 2000-01-02) to ensure the weekday value is deterministic.
-    func convert(weekdays: [Weekday], hour: Int, minute: Int, to displayTimeZone: TimeZone) -> [Weekday] {
-        guard self != displayTimeZone else {
+    func convert(weekdays: [Weekday], hour: Int, minute: Int, to destinationTimeZone: TimeZone) -> [Weekday] {
+        guard self != destinationTimeZone else {
             return weekdays // No conversion needed
         }
         var targetWeekdays = Set<Weekday>()
-        let calendar = Calendar.fromZone(displayTimeZone)
+        let sourceCalendar = Calendar.fromZone(self)
+        let destCalendar = Calendar.fromZone(destinationTimeZone)
         for weekday in weekdays {
             var components = DateComponents()
             components.year = 2000
             components.month = 1
-            components.day = 2 + (weekday.rawValue - 1) // Jan 2, 2000 is a Sunday
+            components.day = 2 + (weekday.rawValue - 1)
             components.hour = hour
             components.minute = minute
             components.second = 0
-            components.timeZone = self
-            
-            guard let dateInSource = calendar.date(from: components) else { continue }
-            let targetComponents = calendar.dateComponents(in: displayTimeZone, from: dateInSource)
+
+            guard let dateInSource = sourceCalendar.date(from: components) else { continue }
+            let targetComponents = destCalendar.dateComponents([.weekday], from: dateInSource)
             if let targetWeekdayValue = targetComponents.weekday,
                let targetWeekday = Weekday(rawValue: targetWeekdayValue) {
                 targetWeekdays.insert(targetWeekday)
@@ -125,7 +133,7 @@ extension TimeZone {
         }
         return Array(targetWeekdays).sorted()
     }
-    
+
     /// Converts a day-of-month/hour/minute from this (zoned/source) time zone into the destination time zone,
     /// including roll-under for months with fewer days, and proper handling of DST/cross-midnight transitions.
     /// - Parameters:

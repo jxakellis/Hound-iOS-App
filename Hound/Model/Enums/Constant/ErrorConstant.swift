@@ -648,6 +648,7 @@ public enum ErrorConstant {
 
     enum ReminderError {
         static let reminderActionMissing = "Choose an action for your reminder"
+        static let reminderTimeZoneMissing = "Choose a time zone for your reminder"
     }
     
     enum TriggerError {

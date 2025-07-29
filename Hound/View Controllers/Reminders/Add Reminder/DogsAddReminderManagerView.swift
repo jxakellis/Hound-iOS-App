@@ -208,6 +208,7 @@ final class DogsAddReminderManagerView: HoundView,
         let label = HoundLabel()
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
+        label.placeholder = "Select time zone..."
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(
@@ -353,6 +354,21 @@ final class DogsAddReminderManagerView: HoundView,
         }
         reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
         reminder.reminderRecipientUserIds = Array(selectedRecipientUserIds)
+        
+        switch segmentedControl.selectedSegmentIndex {
+        case ReminderType.oneTime.segmentedControlIndex, ReminderType.weekly.segmentedControlIndex, ReminderType.monthly.segmentedControlIndex:
+            guard let selectedTimeZone = selectedTimeZone else {
+                   if showErrorIfFailed {
+                       HapticsManager.notification(.error)
+                       timeZoneLabel.errorMessage = Constant.Error.ReminderError.reminderTimeZoneMissing
+                   }
+                   return nil
+               }
+            
+            reminder.reminderTimeZone = selectedTimeZone
+        default:
+            break
+        }
         
         switch segmentedControl.selectedSegmentIndex {
         case ReminderType.oneTime.segmentedControlIndex:
@@ -670,7 +686,7 @@ final class DogsAddReminderManagerView: HoundView,
     
     // MARK: - Drop Down Handling
     
-    @objc private func didTapScreen(sender: UITapGestureRecognizer) {
+    @objc func didTapScreen(sender: UITapGestureRecognizer) {
         dropDownManager.hideDropDownIfNotTapped(sender: sender)
         if let senderView = sender.view {
             let point = sender.location(in: senderView)

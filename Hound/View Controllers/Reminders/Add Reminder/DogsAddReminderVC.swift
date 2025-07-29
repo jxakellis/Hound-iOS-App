@@ -62,6 +62,10 @@ final class DogsAddReminderVC: HoundScrollViewController {
         return button
     }()
     
+    @objc private func didTapScreen(sender: UITapGestureRecognizer) {
+        dogsAddReminderManagerView.didTapScreen(sender: sender)
+    }
+    
     // MARK: - Properties
     
     private weak var delegate: DogsAddReminderVCDelegate?
@@ -316,6 +320,14 @@ final class DogsAddReminderVC: HoundScrollViewController {
         
         containerView.addSubview(editPageHeaderView)
         containerView.addSubview(dogsAddReminderManagerView)
+        
+        let didTapScreenGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapScreen(sender:))
+        )
+        didTapScreenGesture.delegate = self
+        didTapScreenGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(didTapScreenGesture)
     }
     
     override func setupConstraints() {

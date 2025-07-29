@@ -114,8 +114,6 @@ final class DogsAddReminderMonthlyView: HoundView {
     func updateDisplayedTimeZone(_ newTimeZone: TimeZone) {
         guard newTimeZone != currentTimeZone else { return }
         
-        print("Updating displayed time zone from \(currentTimeZone.identifier) to \(newTimeZone.identifier)")
-        
         let calendar = Calendar.fromZone(currentTimeZone)
         let oldComps = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: timeOfDayDatePicker.date)
         let day = oldComps.day ?? 1
@@ -130,12 +128,6 @@ final class DogsAddReminderMonthlyView: HoundView {
             referenceDate: timeOfDayDatePicker.date
         )
         
-        let srcOffset = currentTimeZone.secondsFromGMT(for: timeOfDayDatePicker.date)
-        let destOffset = newTimeZone.secondsFromGMT(for: timeOfDayDatePicker.date)
-        print("Source offset: \(srcOffset)h, Destination offset: \(destOffset)h")
-        print("Original time: \(day) day, \(hour) hour, \(minute) minute")
-        print("Converted time: \(converted.day) day, \(converted.hour) hour, \(converted.minute) minute")
-        
         var newComps = DateComponents()
         newComps.year = oldComps.year
         newComps.month = oldComps.month
@@ -145,7 +137,6 @@ final class DogsAddReminderMonthlyView: HoundView {
         newComps.second = 0
         newComps.timeZone = newTimeZone
         
-        print("new date \(calendar.date(from: newComps))")
         if let newDate = calendar.date(from: newComps) {
             timeOfDayDatePicker.timeZone = newTimeZone
             timeOfDayDatePicker.date = newDate
