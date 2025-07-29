@@ -282,6 +282,7 @@ final class DogsAddReminderManagerView: HoundView,
     private var availableFamilyMembers: [FamilyMember] {
         FamilyInformation.familyMembers
     }
+    private var availableTimeZones = Array(TimeZone.houndTimeZones.reversed())
     private(set) var selectedReminderAction: ReminderActionType? {
         didSet {
             reminderActionLabel.text = selectedReminderAction?.convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
@@ -713,7 +714,7 @@ final class DogsAddReminderManagerView: HoundView,
             case .reminderRecipients:
                 return CGFloat(availableFamilyMembers.count)
             case .reminderTimeZone:
-                return CGFloat(TimeZone.houndTimeZones.count)
+                return CGFloat(availableTimeZones.count)
             }
         }()
         
@@ -744,7 +745,7 @@ final class DogsAddReminderManagerView: HoundView,
             cell.setCustomSelected(selectedRecipientUserIds.contains(member.userId), animated: false)
             cell.label.text = member.displayFullName ?? Constant.Visual.Text.unknownName
         case .reminderTimeZone:
-            let tz = TimeZone.houndTimeZones[indexPath.row]
+            let tz = availableTimeZones[indexPath.row]
             cell.setCustomSelected(selectedTimeZone == tz, animated: false)
             cell.label.text = tz.displayName(currentTimeZone: UserConfiguration.timeZone)
         }
@@ -761,7 +762,7 @@ final class DogsAddReminderManagerView: HoundView,
         case DogsAddReminderDropDownTypes.reminderRecipients:
             return availableFamilyMembers.count
         case DogsAddReminderDropDownTypes.reminderTimeZone:
-            return TimeZone.houndTimeZones.count
+            return availableTimeZones.count
         }
     }
     
@@ -772,7 +773,7 @@ final class DogsAddReminderManagerView: HoundView,
     func selectItemInDropDown(indexPath: IndexPath, identifier: any HoundDropDownType) {
         guard let identifier = identifier as? DogsAddReminderDropDownTypes else { return }
         guard let dropDown = dropDownManager.dropDown(for: identifier), let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
-        
+  
         switch identifier {
         case .reminderAction:
             guard !cell.isCustomSelected else {
@@ -826,14 +827,14 @@ final class DogsAddReminderManagerView: HoundView,
             }
             
             if let selectedTimeZone = selectedTimeZone,
-               let previouslySelectedIndexPath = TimeZone.houndTimeZones.firstIndex(of: selectedTimeZone),
+               let previouslySelectedIndexPath = availableTimeZones.firstIndex(of: selectedTimeZone),
                let previousSelectedCell = dropDown.dropDownTableView?.cellForRow(at: IndexPath(row: previouslySelectedIndexPath, section: 0)) as? HoundDropDownTVC {
                 previousSelectedCell.setCustomSelected(false)
             }
             
             cell.setCustomSelected(true)
             
-            let timeZone = TimeZone.houndTimeZones[indexPath.row]
+            let timeZone = availableTimeZones[indexPath.row]
             selectedTimeZone = timeZone
             
             timeZoneLabel.errorMessage = nil
@@ -860,7 +861,7 @@ final class DogsAddReminderManagerView: HoundView,
                 }
             case .reminderTimeZone:
                 if let tz = selectedTimeZone,
-                   let idx = TimeZone.houndTimeZones.firstIndex(of: tz) {
+                   let idx = availableTimeZones.firstIndex(of: tz) {
                     return IndexPath(row: idx, section: 0)
                 }
             }

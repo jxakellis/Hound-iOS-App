@@ -78,6 +78,15 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
         dropDownDataSource?.selectItemInDropDown(indexPath: indexPath, identifier: identifier)
     }
     
+    // Converts `indexPath` into the index path expected by the data source when the dropdown is displayed in `.up` direction.
+//    private func translatedIndexPath(_ indexPath: IndexPath) -> IndexPath {
+//        guard direction == .up, let identifier = identifier else { return indexPath }
+//        let totalRows = dropDownDataSource?.numberOfRows(forSection: indexPath.section, identifier: identifier) ?? 0
+//        let newRow = max(totalRows - 1 - indexPath.row, 0)
+//        print("Translating indexPath \(indexPath) to new row \(newRow) in section \(indexPath.section)")
+//        return IndexPath(row: newRow, section: indexPath.section)
+//    }
+    
     // MARK: - Properties
     
     /// The DropDownIdentifier is to differentiate if you are using multiple Xibs
@@ -224,7 +233,7 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
             }
         }
         
-        if self.direction == .up {
+        if self.direction == .up && !didAutoScroll {
             let bottomOffset = maxOffset
             dropDownTableView.setContentOffset(CGPoint(x: 0, y: bottomOffset), animated: false)
         }
