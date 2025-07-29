@@ -96,7 +96,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
             hour: zonedHour,
             minute: zonedMinute,
             to: displayTimeZone ?? reminderTimeZone,
-            referenceDate: referenceDate ?? Constant.Class.Date.default1970Date
+            referenceDate: referenceDate ?? Date()
         )
         return day
     }

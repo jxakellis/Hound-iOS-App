@@ -352,7 +352,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         return false
     }
     
-    func nextReminderDate(afterDate date: Date, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
+    private func nextReminderDate(afterDate date: Date, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
         switch triggerType {
         case .timeDelay:
             return timeDelayComponents.nextReminderDate(afterDate: date)
@@ -361,27 +361,33 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         }
     }
     
-    func nextReminderDate(afterLog log: Log, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
+    private func nextReminderDate(afterLog log: Log, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Date? {
         let date = log.logEndDate ?? log.logStartDate
         
         return nextReminderDate(afterDate: date, in: inTimeZone)
     }
     
+    /// Attempts to construct a reminder for the trigger result of this trigger, after the given log's end date (or start date). However, if this reminder is in the past, return nil as we don't want to create a reminder that is already overdue.
     func createTriggerResultReminder(afterLog log: Log, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Reminder? {
         guard let executionDate = nextReminderDate(afterLog: log, in: inTimeZone) else {
-                return nil
-            }
-
-            return Reminder(
-                reminderActionTypeId: triggerReminderResult.reminderActionTypeId,
-                reminderCustomActionName: triggerReminderResult.reminderCustomActionName,
-                reminderType: .oneTime,
-                reminderExecutionBasis: Date(),
-                reminderIsTriggerResult: true,
-                reminderRecipientUserIds: Constant.Class.Reminder.defaultReminderRecipientUserIds,
-                oneTimeComponents: OneTimeComponents(oneTimeDate: executionDate)
-            )
+            return nil
         }
+        
+        // Allow for proper construction of the reminder result and if it already happened, then we don't need it
+        guard executionDate > Date() else {
+            return nil
+        }
+        
+        return Reminder(
+            reminderActionTypeId: triggerReminderResult.reminderActionTypeId,
+            reminderCustomActionName: triggerReminderResult.reminderCustomActionName,
+            reminderType: .oneTime,
+            reminderExecutionBasis: Date(),
+            reminderIsTriggerResult: true,
+            reminderRecipientUserIds: Constant.Class.Reminder.defaultReminderRecipientUserIds,
+            oneTimeComponents: OneTimeComponents(oneTimeDate: executionDate)
+        )
+    }
     
     func createBody(forDogUUID: UUID) -> JSONRequestBody {
         var body: JSONRequestBody = [:]

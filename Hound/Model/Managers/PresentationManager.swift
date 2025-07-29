@@ -124,6 +124,19 @@ enum PresentationManager {
     }
     
     static func enqueueBanner(forTitle title: String, forSubtitle subtitle: String?, forStyle: BannerStyle, onTap: (() -> Void)? = nil) {
+        let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedSubtitle = subtitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        
+        let duplicateExists = NotificationBannerQueue.default.banners.contains { (banner: BaseNotificationBanner) in
+            let bannerTitle = banner.titleLabel?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            if let floatingBanner = banner as? FloatingNotificationBanner {
+                let bannerSubtitle = floatingBanner.subtitleLabel?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                return bannerTitle == trimmedTitle && bannerSubtitle == trimmedSubtitle
+            }
+            return bannerTitle == trimmedTitle
+        }
+        guard duplicateExists == false else { return }
+        
         // Reduce the availble styles into a smaller 3 tier group
         // Success
         // Info

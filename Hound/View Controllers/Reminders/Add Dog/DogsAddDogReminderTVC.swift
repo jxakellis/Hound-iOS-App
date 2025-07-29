@@ -9,7 +9,6 @@
 import SnapKit
 import UIKit
 
-// TODO BUG the no notif/diff tz indicators either both appear or neither appear
 protocol DogsAddDogReminderTVCDelegate: AnyObject {
     /// The reminder switch to toggle the enable status was flipped. The reminder was updated and the server was NOT queried.
     func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool)

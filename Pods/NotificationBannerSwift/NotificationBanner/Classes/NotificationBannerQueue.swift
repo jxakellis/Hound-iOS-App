@@ -31,7 +31,7 @@ open class NotificationBannerQueue: NSObject {
     public static let `default` = NotificationBannerQueue()
 
     /// The notification banners currently placed on the queue
-    private(set) var banners: [BaseNotificationBanner] = []
+    public private(set) var banners: [BaseNotificationBanner] = []
 
     /// The notification banners currently placed on the queue
     private(set) var maxBannersOnScreenSimultaneously: Int = 1

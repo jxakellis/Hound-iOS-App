@@ -14,7 +14,6 @@ public enum ClassConstant {
     public typealias Reminder = ReminderConstant
     public typealias ReminderComponent = ReminderComponentConstant
     public typealias Trigger = TriggerConstant
-    public typealias Date = DateConstant
     public typealias Feedback = FeedbackConstant
     public typealias Subscription = SubscriptionConstant
 }
@@ -99,7 +98,7 @@ public enum ReminderConstant {
         reminder.reminderActionTypeId = 1
         reminder.changeReminderType(.weekly)
         // 5:00 PM
-        reminder.weeklyComponents.zonedHour = 16
+        reminder.weeklyComponents.zonedHour = 17
         return reminder
     }
 }
@@ -134,10 +133,6 @@ public enum TriggerConstant {
             )
         return [trigger]
     }()
-}
-
-public enum DateConstant {
-    static let default1970Date = Date(timeIntervalSince1970: 0.0)
 }
 
 public enum FeedbackConstant {

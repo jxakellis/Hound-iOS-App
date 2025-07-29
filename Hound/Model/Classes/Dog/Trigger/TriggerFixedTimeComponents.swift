@@ -160,7 +160,7 @@ final class TriggerFixedTimeComponents: NSObject, NSCoding, NSCopying {
         // Advance by the configured component (e.g., day, week, month)
         let advanced = calendar.date(byAdding: triggerFixedTimeType.calendarComponent,
                                      value: triggerFixedTimeTypeAmount,
-                                     to: startOfDay) ?? Constant.Class.Date.default1970Date
+                                     to: startOfDay) ?? Date()
 
         // Set the hour/minute in the provided TZ
         let executionDate = calendar.date(

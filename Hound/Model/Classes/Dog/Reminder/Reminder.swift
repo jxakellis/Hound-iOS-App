@@ -53,8 +53,6 @@ enum ReminderType: String, CaseIterable {
 
 final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
-    // TODO TIMING 7. when we detect a change in the user's TZ, we ask them if they want hound to switch their user setting to that new TZ
-    
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {
