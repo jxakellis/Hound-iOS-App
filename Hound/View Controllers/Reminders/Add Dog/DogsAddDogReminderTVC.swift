@@ -133,7 +133,9 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     @objc private func didToggleReminderIsEnabled(_ sender: Any) {
         guard let reminder = reminder else { return }
         
+        reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
         updateIndicators()
+
         delegate?.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminder.reminderUUID, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
     }
     
@@ -166,12 +168,11 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     private func updateIndicators() {
         guard let reminder = reminder else { return }
-        let reminderEnabled = reminderIsEnabledSwitch.isOn
         let userIsRecipient = reminder.reminderRecipientUserIds.contains { $0 == UserInformation.userId ?? Constant.Visual.Text.unknownUserId }
         let hasRecipients = !reminder.reminderRecipientUserIds.isEmpty
         
         let shouldShowBell =
-        reminderEnabled && (
+        reminder.reminderIsEnabled && (
             !userIsRecipient ||
             (hasRecipients && !UserConfiguration.isNotificationEnabled) ||
             (hasRecipients && !UserConfiguration.isReminderNotificationEnabled)
@@ -179,9 +180,10 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         if noNotificationIndicator.isHidden != !shouldShowBell {
             noNotificationIndicator.isHidden = !shouldShowBell
             remakeNoNotificationIndicatorConstraints()
+            setNeedsLayout()
         }
         
-        let shouldShowDiffTZ = reminderEnabled && reminder.reminderTimeZone != UserConfiguration.timeZone
+        let shouldShowDiffTZ = reminder.reminderIsEnabled && reminder.reminderTimeZone != UserConfiguration.timeZone
         if differentTimeZoneIndicator.isHidden != !shouldShowDiffTZ {
             differentTimeZoneIndicator.isHidden = !shouldShowDiffTZ
             remakeDifferentTimeZoneIndicatorConstraints()
