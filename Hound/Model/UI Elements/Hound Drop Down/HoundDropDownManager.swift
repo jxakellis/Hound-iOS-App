@@ -145,6 +145,7 @@ final class HoundDropDownManager<T: HoundDropDownType> {
         }
     }
     
+    @discardableResult
     func hideDropDownIfNotTapped(sender: UITapGestureRecognizer) -> [HoundDropDown<T>] {
         guard let senderView = sender.view else { return [] }
         

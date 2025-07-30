@@ -51,7 +51,7 @@ public enum DevelopmentConstant {
     /// All Hound servers, development or producton, support HTTPS only
     private static let urlScheme: String = isProductionAWSServer ? "https://" : "http://"
     /// The production server is attached to a real domain name, whereas our development server is off the local network
-    private static let urlDomainName: String = { 
+    private static let urlDomainName: String = {
         if isProductionAWSServer && isProductionDatabase {
             return "api.houndorganizer.com"
         }

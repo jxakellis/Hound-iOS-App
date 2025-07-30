@@ -268,11 +268,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
     // MARK: - HoundDropDownManagerDelegate
     
     @objc func didTapScreen(sender: UITapGestureRecognizer) {
-        let dropDownsHidden = dropDownManager.hideDropDownIfNotTapped(sender: sender)
-        
-        if let tzDropDown = dropDownManager.dropDown(for: .timeZone), dropDownsHidden.contains(tzDropDown) {
-            resetBottomPadding()
-        }
+        dropDownManager.hideDropDownIfNotTapped(sender: sender)
     }
     
     func willShowDropDown(_ identifier: any HoundDropDownType, animated: Bool) {
@@ -280,8 +276,6 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         switch type {
         case .timeZone:
             let rows = min(6.5, CGFloat(TimeZone.houndTimeZones.count))
-            let requiredHeight = Constant.Constraint.Spacing.contentTightIntraVert + (rows * HoundDropDownTVC.singleLineHeight)
-            ensureSpace(below: timeZoneLabel, requiredSpace: requiredHeight, animated: animated)
             dropDownManager.show(identifier: .timeZone, numberOfRowsToShow: rows, animated: animated)
         }
     }
@@ -334,7 +328,6 @@ final class SettingsAppearanceVC: HoundScrollViewController,
             // set currentTimeZone to nil so it doesn't append (current) to the end
             timeZoneLabel.text = newTz.displayName(currentTimeZone: nil)
             dropDown.hideDropDown(animated: true)
-            resetBottomPadding()
             
             let body: JSONRequestBody = [
                 Constant.Key.userConfigurationUserTimeZone.rawValue: .string(newTz.identifier)
@@ -464,7 +457,8 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         // hapticsHeaderLabel
         NSLayoutConstraint.activate([
             hapticsHeaderLabel.topAnchor.constraint(equalTo: timeZoneLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
-            hapticsHeaderLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            // extra space for dropdown to fully extend
+            hapticsHeaderLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset - 250.0),
             hapticsHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
