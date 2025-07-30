@@ -46,12 +46,12 @@ public enum DevelopmentConstant {
     static let developmentDatabaseTestUserId: String? = isProductionDatabase ? nil : nil // "3314e13ce7fab539591cfa2d5c8e4a29105befdd9bc3398bbe457ef30448aa0c"
 
     /// If testing the development of Hound with its development database, then use this user identifier for a test account.
-    static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : nil // "000228.36153ca1c4604ee9b7c1614e7ce7b971.2208"
+    static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : "000228.36153ca1c4604ee9b7c1614e7ce7b971.2208"
 
     /// All Hound servers, development or producton, support HTTPS only
     private static let urlScheme: String = isProductionAWSServer ? "https://" : "http://"
     /// The production server is attached to a real domain name, whereas our development server is off the local network
-    private static let urlDomainName: String = {
+    private static let urlDomainName: String = { 
         if isProductionAWSServer && isProductionDatabase {
             return "api.houndorganizer.com"
         }

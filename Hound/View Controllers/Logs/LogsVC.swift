@@ -52,18 +52,18 @@ final class LogsVC: HoundViewController,
     func shouldUpdateNoLogsRecorded(forIsHidden: Bool) {
         noLogsRecordedLabel.isHidden = forIsHidden
         guard !dogManager.dogs.isEmpty else {
-            noLogsRecordedLabel.text = "No logs created! Try creating a dog and adding some logs to it..."
+            noLogsRecordedLabel.text = "No logs created yet!\n\nTry creating a dog and adding some logs to it..."
             return
         }
         
         if logsTableViewController.logsFilter.hasActiveFilter && familyHasAtLeastOneLog {
-            noLogsRecordedLabel.text = "No logs found with the current filter! Try changing or clearing it..."
+            noLogsRecordedLabel.text = "No logs found with the current filter!\n\nTry changing or clearing it..."
         }
         else if dogManager.dogs.count == 1, let dog = dogManager.dogs.first {
-            noLogsRecordedLabel.text = "No logs created! Try adding some to \(dog.dogName)..."
+            noLogsRecordedLabel.text = "No logs created yet!\n\nTry adding some to \(dog.dogName)..."
         }
         else {
-            noLogsRecordedLabel.text = "No logs created! Try adding some to one of your dogs..."
+            noLogsRecordedLabel.text = "No logs created yet!\n\nTry adding some to one of your dogs..."
         }
     }
     

@@ -195,10 +195,10 @@ final class ServerLoginIntroductionVC: HoundViewController,
         
         // introductionView
         NSLayoutConstraint.activate([
-            introductionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            introductionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            introductionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            introductionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            introductionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            introductionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            introductionView.topAnchor.constraint(equalTo: view.topAnchor),
+            introductionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
         // signInStack

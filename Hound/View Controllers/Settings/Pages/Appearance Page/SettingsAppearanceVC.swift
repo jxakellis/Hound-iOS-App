@@ -268,14 +268,21 @@ final class SettingsAppearanceVC: HoundScrollViewController,
     // MARK: - HoundDropDownManagerDelegate
     
     @objc func didTapScreen(sender: UITapGestureRecognizer) {
-        dropDownManager.hideDropDownIfNotTapped(sender: sender)
+        let dropDownsHidden = dropDownManager.hideDropDownIfNotTapped(sender: sender)
+        
+        if let tzDropDown = dropDownManager.dropDown(for: .timeZone), dropDownsHidden.contains(tzDropDown) {
+            resetBottomPadding()
+        }
     }
     
     func willShowDropDown(_ identifier: any HoundDropDownType, animated: Bool) {
         guard let type = identifier as? SettingsAppearanceDropDownTypes else { return }
         switch type {
         case .timeZone:
-            dropDownManager.show(identifier: .timeZone, numberOfRowsToShow: min(6.5, CGFloat(TimeZone.houndTimeZones.count)), animated: animated)
+            let rows = min(6.5, CGFloat(TimeZone.houndTimeZones.count))
+            let requiredHeight = Constant.Constraint.Spacing.contentTightIntraVert + (rows * HoundDropDownTVC.singleLineHeight)
+            ensureSpace(below: timeZoneLabel, requiredSpace: requiredHeight, animated: animated)
+            dropDownManager.show(identifier: .timeZone, numberOfRowsToShow: rows, animated: animated)
         }
     }
     
@@ -327,6 +334,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
             // set currentTimeZone to nil so it doesn't append (current) to the end
             timeZoneLabel.text = newTz.displayName(currentTimeZone: nil)
             dropDown.hideDropDown(animated: true)
+            resetBottomPadding()
             
             let body: JSONRequestBody = [
                 Constant.Key.userConfigurationUserTimeZone.rawValue: .string(newTz.identifier)
@@ -343,16 +351,16 @@ final class SettingsAppearanceVC: HoundScrollViewController,
     }
     
     func firstSelectedIndexPath(identifier: any HoundDropDownType) -> IndexPath? {
-            guard let type = identifier as? SettingsAppearanceDropDownTypes else { return nil }
-            switch type {
-            case .timeZone:
-                let tz = UserConfiguration.timeZone
-                if let idx = TimeZone.houndTimeZones.firstIndex(of: tz) {
-                    return IndexPath(row: idx, section: 0)
-                }
+        guard let type = identifier as? SettingsAppearanceDropDownTypes else { return nil }
+        switch type {
+        case .timeZone:
+            let tz = UserConfiguration.timeZone
+            if let idx = TimeZone.houndTimeZones.firstIndex(of: tz) {
+                return IndexPath(row: idx, section: 0)
             }
-            return nil
         }
+        return nil
+    }
     
     // MARK: - Setup Elements
     
@@ -456,8 +464,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         // hapticsHeaderLabel
         NSLayoutConstraint.activate([
             hapticsHeaderLabel.topAnchor.constraint(equalTo: timeZoneLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
-            // TEMP extra spacing for timeZoneLabel dropdown
-            hapticsHeaderLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -250.0),
+            hapticsHeaderLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
             hapticsHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         

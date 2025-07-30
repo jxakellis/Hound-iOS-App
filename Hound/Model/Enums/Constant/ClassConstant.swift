@@ -37,7 +37,7 @@ public enum SubscriptionConstant {
 
 public enum DogConstant {
     static let defaultDogName: String = "Bella"
-
+    
     static let dogNameCharacterLimit: Int = 32
     // IMPORTANT: If you modify this value, change the value on Hound server's globalConstant LIMIT
     static let maximumNumberOfDogs = 10
@@ -65,8 +65,8 @@ public enum ReminderConstant {
     static var defaultReminderExecutionBasis: Date { Date() }
     static let defaultReminderIsEnabled = true
     static var defaultReminderRecipientUserIds: [String] {
-            FamilyInformation.familyMembers.map { $0.userId }
-        }
+        FamilyInformation.familyMembers.map { $0.userId }
+    }
     static let reminderCustomActionNameCharacterLimit: Int = 32
     static var defaultReminders: [Reminder] {
         [ defaultReminderOne, defaultReminderTwo, defaultReminderThree, defaultReminderFour ]
@@ -105,7 +105,7 @@ public enum ReminderConstant {
 
 public enum ReminderComponentConstant {
     static let defaultCountdownExecutionInterval: Double = 60 * 60 * 2
-
+    
     static let defaultZonedDay: Int = 1
     static var defaultZonedHour: Int = 7
     static var defaultZonedMinute: Int = 0
@@ -120,7 +120,7 @@ public enum TriggerConstant {
     static let defaultTriggerAlarmCreatedCondition = true
     static let defaultTriggerFixedTimeHour = 16
     static let defaultTriggerFixedTimeMinute = 5
-    static let defaultTriggers: [Trigger] = {
+    static var defaultTriggers: [Trigger] {
         // forLogActionTypeId 1 == feed
         let logReaction = TriggerLogReaction(forLogActionTypeId: 1, forLogCustomActionName: nil)
         // forReminderActionTypeId 3 == potty
@@ -130,9 +130,9 @@ public enum TriggerConstant {
             triggerReminderResult: reminderResult,
             triggerType: .timeDelay,
             triggerTimeDelayComponents: TriggerTimeDelayComponents(triggerTimeDelay: 60.0 * 30.0)
-            )
+        )
         return [trigger]
-    }()
+    }
 }
 
 public enum FeedbackConstant {

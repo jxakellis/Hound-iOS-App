@@ -209,7 +209,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     private let noDogsRecordedLabel: HoundLabel = {
         let label = HoundLabel()
         label.isHidden = true
-        label.text = "No dogs recorded! Try creating one..."
+        label.text = "No dogs created yet!\n\nTry creating one..."
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping

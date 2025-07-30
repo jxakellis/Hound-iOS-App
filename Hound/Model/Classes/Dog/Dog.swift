@@ -82,6 +82,14 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         guard let lhsDogId = lhs.dogId else {
             guard rhs.dogId != nil else {
                 // Neither have an id
+                let compare = lhs.dogName.localizedCaseInsensitiveCompare(rhs.dogName)
+                if compare == .orderedAscending {
+                    return true
+                }
+                if compare == .orderedDescending {
+                    return false
+                }
+                
                 return lhs.dogUUID.uuidString < rhs.dogUUID.uuidString
             }
             

@@ -6,6 +6,7 @@
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
+import SnapKit
 import UIKit
 
 class HoundScrollViewController: HoundViewController {
@@ -22,6 +23,8 @@ class HoundScrollViewController: HoundViewController {
     }()
     
     let containerView: HoundView = HoundView()
+    
+    var containerViewBottomConstraint: Constraint?
     
     // MARK: - Main
     
@@ -54,6 +57,38 @@ class HoundScrollViewController: HoundViewController {
             scrollView.scrollRectToVisible(paddedRect, animated: true)
         }
     }
+    
+    /// Adjust ``containerView``'s bottom padding so there is at least `requiredSpace` points
+    /// below `anchorView` inside the container. Useful to ensure elements like dropdowns
+    /// have room to fully expand within the scroll view.
+    func ensureSpace(below anchorView: UIView, requiredSpace: CGFloat, animated: Bool = true) {
+        view.layoutIfNeeded()
+        let anchorFrame = containerView.convert(anchorView.frame, from: anchorView.superview)
+        let available = containerView.bounds.height - anchorFrame.maxY
+        guard available < requiredSpace else { return }
+        
+        let padding = requiredSpace - available
+        containerViewBottomConstraint?.update(offset: padding)
+        if animated {
+            UIView.animate(withDuration: 0.25) { self.view.layoutIfNeeded() }
+        }
+        else {
+            view.layoutIfNeeded()
+        }
+    }
+    
+    /// Reset any additional bottom padding applied via ``ensureSpace``.
+    func resetBottomPadding(animated: Bool = true) {
+        guard let constraint = containerViewBottomConstraint, constraint.layoutConstraints.first?.constant != 0 else { return }
+        containerViewBottomConstraint?.update(offset: 0)
+        if animated {
+            UIView.animate(withDuration: 0.25) { self.view.layoutIfNeeded() }
+        }
+        else {
+            view.layoutIfNeeded()
+        }
+    }
+    
     // MARK: - Setup
     
     override func addSubViews() {
@@ -62,21 +97,15 @@ class HoundScrollViewController: HoundViewController {
     }
     
     override func setupConstraints() {
-        // scrollView
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.snp.edges)
+        }
         
-        // containerView
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
-        ])
+        containerView.snp.makeConstraints { make in
+            make.top.equalTo(scrollView.contentLayoutGuide.snp.top)
+            containerViewBottomConstraint = make.bottom.equalTo(scrollView.contentLayoutGuide.snp.bottom).constraint
+            make.horizontalEdges.equalTo(scrollView.contentLayoutGuide.snp.horizontalEdges)
+            make.width.equalTo(scrollView.frameLayoutGuide.snp.width)
+        }
     }
 }

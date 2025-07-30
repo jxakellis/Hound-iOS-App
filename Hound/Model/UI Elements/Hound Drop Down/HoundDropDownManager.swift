@@ -145,18 +145,21 @@ final class HoundDropDownManager<T: HoundDropDownType> {
         }
     }
     
-    @objc func hideDropDownIfNotTapped(sender: UITapGestureRecognizer) {
-        guard let senderView = sender.view else { return }
+    func hideDropDownIfNotTapped(sender: UITapGestureRecognizer) -> [HoundDropDown<T>] {
+        guard let senderView = sender.view else { return [] }
         
         let point = sender.location(in: senderView)
-        guard let touched = senderView.hitTest(point, with: nil) else { return }
+        guard let touched = senderView.hitTest(point, with: nil) else { return [] }
         
+        var dropDownsHidden: [HoundDropDown<T>] = []
         for (_, entry) in entries {
             guard let dd = entry.dropDown, let label = entry.label else { continue }
             
             if !touched.isDescendant(of: label) && !touched.isDescendant(of: dd) {
                 dd.hideDropDown(animated: true)
+                dropDownsHidden.append(dd)
             }
         }
+        return dropDownsHidden
     }
 }

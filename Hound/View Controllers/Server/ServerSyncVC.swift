@@ -282,6 +282,9 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
             
             DogManager.globalDogManager = newDogManager
             
+            // TODO TEMP REMOVE ME
+            DogManager.globalDogManager = GenerationManager.generateScreenshotDogManager()
+            
             // hasn't shown configuration to create/update dog
             if LocalConfiguration.localHasCompletedHoundIntroductionViewController == false {
                 // Created family, no dogs present
