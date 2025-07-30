@@ -302,12 +302,13 @@ final class DogsAddTriggerManagerView: HoundView,
             return true
         }
         
-        guard let triggerToUpdate = triggerToUpdate else {
-            // should never happen, if have initialTrigger, then should have triggerToUpdate
-            return true
+        guard let newTrigger = constructTrigger(showErrorIfFailed: false) else {
+            // new trigger has invalid settings so show warning abt exiting
+            // we have an initialTrigger, so user HAS to be editing, and if newTrigger couldn't be saved then user input an invalid setting
+            return false
         }
         
-        return !initialTrigger.isSame(as: triggerToUpdate)
+        return !initialTrigger.isSame(as: newTrigger)
     }
     
     // MARK: - Function

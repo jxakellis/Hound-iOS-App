@@ -101,7 +101,7 @@ enum AppVersion: String, CaseIterable, Comparable {
             )
             
             builder.addFeature(
-                title: "Duplicate Reminders",
+                title: "Duplicate-able Reminders",
                 description: "Copy a reminder and tweak the details in seconds."
             )
             

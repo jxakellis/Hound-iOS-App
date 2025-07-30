@@ -194,9 +194,22 @@ final class TriggerTests: XCTestCase {
                             triggerFixedTimeHour: 6,
                             triggerFixedTimeMinute: 0))
         let log = Log(forLogActionTypeId: 1, forLogStartDate: TestHelper.date("2024-05-01T00:00:00Z"))
-        guard let rem = trig.createTriggerResultReminder(afterLog: log, in: TestHelper.utc) else { return XCTFail("nil") }
+        let rem = trig.createTriggerResultReminder(afterLog: log, in: TestHelper.utc, currentDate: TestHelper.date("2024-05-01T00:00:00Z"))
+        XCTAssertNotNil(rem)
+        guard let rem = rem else { return }
         let expected = trig.fixedTimeComponents.nextReminderDate(afterDate: log.logStartDate, in: TestHelper.utc)!
         XCTAssertEqual(rem.oneTimeComponents.oneTimeDate, expected)
+    }
+    
+    func testFailCreateTriggerResultReminderFixedTime() {
+        let trig = Trigger(triggerType: .fixedTime,
+                           triggerFixedTimeComponents: TriggerFixedTimeComponents(
+                            triggerFixedTimeTypeAmount: 1,
+                            triggerFixedTimeHour: 6,
+                            triggerFixedTimeMinute: 0))
+        let log = Log(forLogActionTypeId: 1, forLogStartDate: TestHelper.date("2024-05-01T00:00:00Z"))
+        let rem = trig.createTriggerResultReminder(afterLog: log, in: TestHelper.utc, currentDate: TestHelper.date("2024-05-04T00:00:00Z"))
+        XCTAssertNil(rem)
     }
     
     func testReadableTimeOutputs() {

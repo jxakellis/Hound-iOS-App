@@ -519,12 +519,13 @@ final class DogsAddReminderManagerView: HoundView,
             return true
         }
         
-        guard let reminderToUpdate = reminderToUpdate else {
-            // should never happen, if have initialReminder, then should have reminderToUpdate
-            return true
+        guard let newReminder = constructReminder(showErrorIfFailed: false) else {
+            // new reminder has invalid settings so show warning abt exiting
+            // we have an initialReminder, so user HAS to be editing, and if newReminder couldn't be saved then user input an invalid setting
+            return false
         }
         
-        return !initialReminder.isSame(as: reminderToUpdate)
+        return !initialReminder.isSame(as: newReminder)
     }
     
     // MARK: - Setup

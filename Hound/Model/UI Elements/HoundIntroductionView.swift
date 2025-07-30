@@ -31,6 +31,7 @@ final class HoundIntroductionView: HoundView {
     let pageHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 280, compressionResistancePriority: 280)
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.font = Constant.Visual.Font.primaryHeaderLabel
         return label
     }()
@@ -93,9 +94,7 @@ final class HoundIntroductionView: HoundView {
         NSLayoutConstraint.activate([
             pageHeaderLabel.topAnchor.constraint(equalTo: whiteBackgroundView.topAnchor, constant: overlap),
             pageHeaderLabel.leadingAnchor.constraint(equalTo: whiteBackgroundView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            pageHeaderLabel.trailingAnchor.constraint(equalTo: whiteBackgroundView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            pageHeaderLabel.createMaxHeight(Constant.Constraint.Text.primaryHeaderLabelMaxHeight),
-            pageHeaderLabel.createHeightMultiplier(Constant.Constraint.Text.primaryHeaderLabelHeightMultipler, relativeToWidthOf: self)
+            pageHeaderLabel.trailingAnchor.constraint(equalTo: whiteBackgroundView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
         // pageDescriptionLabel

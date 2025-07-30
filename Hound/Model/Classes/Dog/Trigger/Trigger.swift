@@ -375,13 +375,13 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     }
     
     /// Attempts to construct a reminder for the trigger result of this trigger, after the given log's end date (or start date). However, if this reminder is in the past, return nil as we don't want to create a reminder that is already overdue.
-    func createTriggerResultReminder(afterLog log: Log, in inTimeZone: TimeZone = UserConfiguration.timeZone) -> Reminder? {
+    func createTriggerResultReminder(afterLog log: Log, in inTimeZone: TimeZone = UserConfiguration.timeZone, currentDate: Date = Date()) -> Reminder? {
         guard let executionDate = nextReminderDate(afterLog: log, in: inTimeZone) else {
             return nil
         }
         
         // Allow for proper construction of the reminder result and if it already happened, then we don't need it
-        guard executionDate > Date() else {
+        guard executionDate > currentDate else {
             return nil
         }
         

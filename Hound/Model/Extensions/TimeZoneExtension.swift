@@ -91,7 +91,7 @@ extension TimeZone {
         guard let dateInSource = sourceCalendar.date(from: components) else {
             return (hour, minute)
         }
-
+        
         let destCalendar = Calendar.fromZone(destinationTimeZone)
         let targetComponents = destCalendar.dateComponents([.hour, .minute], from: dateInSource)
         return (targetComponents.hour ?? hour, targetComponents.minute ?? minute)
@@ -106,13 +106,24 @@ extension TimeZone {
         var targetWeekdays = Set<Weekday>()
         let sourceCalendar = Calendar.fromZone(self)
         let destCalendar = Calendar.fromZone(destinationTimeZone)
+        
+        let referenceSunday = sourceCalendar.nextDate(
+                after: referenceDate,
+                matching: DateComponents(weekday: 1), // 1 = Sunday in Foundation
+                matchingPolicy: .nextTime,
+                direction: .backward
+            ) ?? referenceDate
+        
         for weekday in weekdays {
-            var components = sourceCalendar.dateComponents([.year, .month], from: referenceDate)
-            components.day = 2 + (weekday.rawValue - 1)
+            // Compute the offset from Sunday to the target weekday
+            let offset = (weekday.rawValue - 1) // 1=Sunday, 2=Monday, etc.
+            guard let dateForWeekday = sourceCalendar.date(byAdding: .day, value: offset, to: referenceSunday) else { continue }
+            
+            var components = sourceCalendar.dateComponents([.year, .month, .day], from: dateForWeekday)
             components.hour = hour
             components.minute = minute
             components.second = 0
-
+            
             guard let dateInSource = sourceCalendar.date(from: components) else { continue }
             let targetComponents = destCalendar.dateComponents([.weekday], from: dateInSource)
             if let targetWeekdayValue = targetComponents.weekday,
@@ -122,7 +133,7 @@ extension TimeZone {
         }
         return Array(targetWeekdays).sorted()
     }
-
+    
     /// Converts a day-of-month/hour/minute from this (zoned/source) time zone into the destination time zone,
     /// including roll-under for months with fewer days, and proper handling of DST/cross-midnight transitions.
     /// - Parameters:
