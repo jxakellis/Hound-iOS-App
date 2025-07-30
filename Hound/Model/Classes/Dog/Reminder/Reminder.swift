@@ -189,8 +189,8 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         case .weekly:
             // both weekly
             // earlier in the day is listed first
-            let lhsTime = lhs.weeklyComponents.localTimeOfDay(reminderTimeZone: lhs.reminderTimeZone, displayTimeZone: displayTZ)
-            let rhsTime = rhs.weeklyComponents.localTimeOfDay(reminderTimeZone: rhs.reminderTimeZone, displayTimeZone: displayTZ)
+            let lhsTime = lhs.weeklyComponents.localTimeOfDay(reminderExecutionBasis: lhs.reminderExecutionBasis, reminderTimeZone: lhs.reminderTimeZone, displayTimeZone: displayTZ)
+            let rhsTime = rhs.weeklyComponents.localTimeOfDay(reminderExecutionBasis: rhs.reminderExecutionBasis, reminderTimeZone: rhs.reminderTimeZone, displayTimeZone: displayTZ)
             
             if lhsTime.hour != rhsTime.hour {
                 return lhsTime.hour < rhsTime.hour
@@ -202,14 +202,14 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             return isLHSBeforeRHS(lhs: lhs, rhs: rhs)
         case .monthly:
             // both monthly
-            let lhsDay = lhs.monthlyComponents.localDayOfMonth(reminderTimeZone: lhs.reminderTimeZone, displayTimeZone: displayTZ)
-            let rhsDay = rhs.monthlyComponents.localDayOfMonth(reminderTimeZone: rhs.reminderTimeZone, displayTimeZone: displayTZ)
+            let lhsDay = lhs.monthlyComponents.localDayOfMonth(reminderExecutionBasis: lhs.reminderExecutionBasis, reminderTimeZone: lhs.reminderTimeZone, displayTimeZone: displayTZ)
+            let rhsDay = rhs.monthlyComponents.localDayOfMonth(reminderExecutionBasis: rhs.reminderExecutionBasis, reminderTimeZone: rhs.reminderTimeZone, displayTimeZone: displayTZ)
             if lhsDay != rhsDay {
                 return lhsDay < rhsDay
             }
             
-            let lhsTime = lhs.monthlyComponents.localTimeOfDay(reminderTimeZone: lhs.reminderTimeZone, displayTimeZone: displayTZ)
-            let rhsTime = rhs.monthlyComponents.localTimeOfDay(reminderTimeZone: rhs.reminderTimeZone, displayTimeZone: displayTZ)
+            let lhsTime = lhs.monthlyComponents.localTimeOfDay(reminderExecutionBasis: lhs.reminderExecutionBasis, reminderTimeZone: lhs.reminderTimeZone, displayTimeZone: displayTZ)
+            let rhsTime = rhs.monthlyComponents.localTimeOfDay(reminderExecutionBasis: rhs.reminderExecutionBasis, reminderTimeZone: rhs.reminderTimeZone, displayTimeZone: displayTZ)
             
             if lhsTime.hour != rhsTime.hour {
                 return lhsTime.hour < rhsTime.hour
@@ -453,7 +453,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         case .countdown:
             return countdownComponents.readableRecurrance
         case .weekly:
-            return weeklyComponents.readableRecurrance(reminderTimeZone: reminderTimeZone, displayTimeZone: displayTimeZone)
+            return weeklyComponents.readableRecurrance(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone, displayTimeZone: displayTimeZone)
         case .monthly:
             return monthlyComponents.readableRecurrence(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone, displayTimeZone: displayTimeZone)
         case .oneTime:

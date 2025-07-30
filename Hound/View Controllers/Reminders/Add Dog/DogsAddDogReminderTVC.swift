@@ -14,8 +14,6 @@ protocol DogsAddDogReminderTVCDelegate: AnyObject {
     func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool)
 }
 
-// TODO BUG if i click didUpdateReminderIsEnabled for the first time, the correct cell/reminder updates. however on future clicks to any cell, no reminders update and the entire ui freezes and can't be interacted with
-
 final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     // MARK: - Elements
@@ -34,7 +32,6 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         return imageView
     }()
     
-    // TODO BUG if this label requires more space, instead of expanding to a new line, it instead just compresses the text and adds an ellipsis. it should expand to use more lines
     private let reminderActionLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedPrimaryRegularLabel
@@ -106,6 +103,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         imageStack.addArrangedSubview(noNotificationIndicator)
         imageStack.addArrangedSubview(differentTimeZoneIndicator)
         imageStack.axis = .vertical
+        imageStack.alignment = .trailing
         imageStack.spacing = Constant.Constraint.Spacing.contentIntraVert
         
         stack.addArrangedSubview(imageStack)
@@ -135,7 +133,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         
         reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
         updateIndicators()
-
+        
         delegate?.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminder.reminderUUID, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
     }
     
@@ -159,7 +157,8 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         intervalLabel.text = forReminder.readableRecurrance()
         
         triggerResultIndicatorImageView.isHidden = !forReminder.reminderIsTriggerResult
-        chevronSwitchStack.isHidden = forReminder.reminderIsTriggerResult
+        chevronImageView.isHidden = forReminder.reminderIsTriggerResult
+        reminderIsEnabledSwitch.isHidden = forReminder.reminderIsTriggerResult
         
         updateIndicators()
     }
@@ -180,7 +179,6 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         if noNotificationIndicator.isHidden != !shouldShowBell {
             noNotificationIndicator.isHidden = !shouldShowBell
             remakeNoNotificationIndicatorConstraints()
-            setNeedsLayout()
         }
         
         let shouldShowDiffTZ = reminder.reminderIsEnabled && reminder.reminderTimeZone != UserConfiguration.timeZone
@@ -205,7 +203,12 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     private func remakeNoNotificationIndicatorConstraints() {
         noNotificationIndicator.snp.remakeConstraints { make in
-            if !noNotificationIndicator.isHidden {
+            // the entire ui becomes unresponsive if we dont do these 0 constraints
+            if noNotificationIndicator.isHidden {
+                make.height.equalTo(0)
+                make.width.equalTo(0)
+            }
+            else {
                 make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
                 make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
                 make.width.equalTo(noNotificationIndicator.snp.height)
@@ -215,7 +218,12 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     private func remakeDifferentTimeZoneIndicatorConstraints() {
         differentTimeZoneIndicator.snp.remakeConstraints { make in
-            if !differentTimeZoneIndicator.isHidden {
+            // the entire ui becomes unresponsive if we dont do these 0 constraints
+            if differentTimeZoneIndicator.isHidden {
+                make.height.equalTo(0)
+                make.width.equalTo(0)
+            }
+            else {
                 make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.chevronHeightMultiplier).priority(.high)
                 make.height.lessThanOrEqualTo(Constant.Constraint.Button.chevronMaxHeight)
                 make.width.equalTo(differentTimeZoneIndicator.snp.height)

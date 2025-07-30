@@ -66,12 +66,25 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
     
     private var customSwipeGesture: UIScreenEdgePanGestureRecognizer?
     
+    private var timeZoneObserver: NSObjectProtocol?
+    
     // MARK: - Main
     
     override func loadView() {
         super.loadView()
         view.backgroundColor = UIColor.systemBackground
         setupGeneratedViews()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        timeZoneObserver = NotificationCenter.default.addObserver(
+            forName: .didUpdateUserTimeZone,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.didUpdateUserTimeZone()
+        }
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -85,6 +98,12 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
         super.viewDidDisappear(animated)
         if eligibleForGlobalPresenter {
             PresentationManager.removeGlobalPresenterFromStack(self)
+        }
+    }
+    
+    deinit {
+        if let timeZoneObserver = timeZoneObserver {
+            NotificationCenter.default.removeObserver(timeZoneObserver)
         }
     }
     
@@ -119,4 +138,5 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
         }
     }
     
+    func didUpdateUserTimeZone() { }
 }

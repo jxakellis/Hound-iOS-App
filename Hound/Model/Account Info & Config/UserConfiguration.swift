@@ -8,8 +8,6 @@
 
 import UIKit
 
-// TODO TEST TIME test that new silent mode calculations on the server actually work
-
 /// Configuration that is local to the app only. If the app is reinstalled then this data should be pulled down from the cloud
 final class UserConfiguration: UserDefaultPersistable {
     

@@ -21,6 +21,13 @@ enum TriggerType: String, CaseIterable {
     }
     case timeDelay
     case fixedTime
+    
+    var readable: String {
+        switch self {
+        case .timeDelay: return "After a Delay"
+        case .fixedTime: return "At a Specific Time"
+        }
+    }
 }
 
 final class Trigger: NSObject, NSCoding, NSCopying, Comparable {

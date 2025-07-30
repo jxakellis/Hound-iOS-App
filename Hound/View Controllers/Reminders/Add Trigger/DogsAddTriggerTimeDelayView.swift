@@ -10,6 +10,7 @@ import UIKit
 
 protocol DogsAddTriggerTimeDelayViewDelegate: AnyObject {
     func willDismissKeyboard()
+    func didUpdateDescriptionLabel()
 }
 
 final class DogsAddTriggerTimeDelayView: HoundView {
@@ -25,21 +26,10 @@ final class DogsAddTriggerTimeDelayView: HoundView {
         return datePicker
     }()
     
-    private let descriptionLabel: HoundLabel = {
-        let label = HoundLabel()
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.adjustsFontSizeToFitWidth = false
-        label.font = Constant.Visual.Font.secondaryRegularLabel
-        label.textColor = UIColor.label
-        return label
-    }()
-    
     @objc private func didUpdateCountdown(_ sender: Any) {
         self.errorMessage = nil
-        updateDescriptionLabel()
         delegate?.willDismissKeyboard()
+        delegate?.didUpdateDescriptionLabel()
     }
     
     // MARK: - Properties
@@ -61,20 +51,19 @@ final class DogsAddTriggerTimeDelayView: HoundView {
             countdownDatePicker.countDownDuration = delay
         }
         
-        updateDescriptionLabel()
+        delegate?.didUpdateDescriptionLabel()
     }
     
     // MARK: - Functions
     
-    private func updateDescriptionLabel() {
-        descriptionLabel.text = "Reminder will go off \(countdownDatePicker.countDownDuration.readable(capitalizeWords: false, abbreviationLevel: .long)) after the log is added"
-    }
+    var descriptionLabelText: String {
+            "Reminder will be sent \(countdownDatePicker.countDownDuration.readable(capitalizeWords: false, abbreviationLevel: .long)) after the log is added"
+        }
     
     // MARK: - Setup Elements
     
     override func addSubViews() {
         super.addSubViews()
-        addSubview(descriptionLabel)
         addSubview(countdownDatePicker)
     }
     
@@ -82,13 +71,7 @@ final class DogsAddTriggerTimeDelayView: HoundView {
         super.setupConstraints()
         
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: topAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
-        ])
-        
-        NSLayoutConstraint.activate([
-            countdownDatePicker.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            countdownDatePicker.topAnchor.constraint(equalTo: topAnchor),
             countdownDatePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             countdownDatePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             countdownDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor),

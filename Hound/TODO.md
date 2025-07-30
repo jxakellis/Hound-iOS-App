@@ -53,6 +53,9 @@
     - whenever a user submits feedback about the app, send me an email
     - later we can do actual email that go to users about stuff but thats a whole thing
 
+- caching of local day/minute/hour for a reminder component
+    - we do a lot of calculations for it and when doing things like comparison, we call it lots of time. not very performant
+
 ### Metrics & Analytics
 - **Integrate SwiftMetrics** to track:  
   - Daily/weekly active users  

@@ -57,6 +57,7 @@ final class HoundDatePicker: UIDatePicker, HoundUIProtocol {
         self.contentHorizontalAlignment = .center
         self.contentVerticalAlignment = .center
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.timeZone = UserConfiguration.timeZone
         
         HoundSizeDebugView.install(on: self)
     }

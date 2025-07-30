@@ -543,6 +543,10 @@ final class DogsTableVC: HoundTableViewController {
         }
     }
     
+    override func didUpdateUserTimeZone() {
+        self.tableView.reloadData()
+    }
+    
     // MARK: - Table View Data Source
     
     override func numberOfSections(in tableView: UITableView) -> Int {

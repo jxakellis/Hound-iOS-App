@@ -223,7 +223,8 @@ final class DogsAddReminderWeeklyView: HoundView {
             weekdays: currentWeekdays,
             hour: hour,
             minute: minute,
-            to: newTimeZone
+            to: newTimeZone,
+            referenceDate: timeOfDayDatePicker.date
         )
         weekdayButtons.forEach { button in
             let value = valueForWeekdayButton(button)

@@ -93,8 +93,13 @@ final class LogsVC: HoundViewController,
     /// Pass updated filter to the logs table view controller
     func didUpdateLogsFilter(forLogsFilter: LogsFilter) {
         logsTableViewController.logsFilter = forLogsFilter
-        filterLogsButton.badgeValue = forLogsFilter.numActiveFilters
-        shouldUpdateClearFilterButton()
+        UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) { [weak self] in
+            guard let self = self else {
+                return
+            }
+            filterLogsButton.badgeValue = forLogsFilter.numActiveFilters
+            shouldUpdateClearFilterButton()
+        }
     }
     
     // MARK: - Elements

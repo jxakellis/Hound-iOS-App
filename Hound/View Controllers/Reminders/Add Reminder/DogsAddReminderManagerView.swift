@@ -76,7 +76,7 @@ final class DogsAddReminderManagerView: HoundView,
         let label = HoundLabel()
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
-        label.placeholder = "Select an action..."
+        label.placeholder = "Select a reminder type..."
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(
@@ -241,7 +241,7 @@ final class DogsAddReminderManagerView: HoundView,
         let label = HoundLabel()
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
-        label.placeholder = "Select time zone..."
+        label.placeholder = "Select a time zone..."
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(
@@ -253,9 +253,26 @@ final class DogsAddReminderManagerView: HoundView,
         dropDownManager.register(identifier: .reminderTimeZone, label: label, direction: .up, autoscroll: .firstOpen)
         return label
     }()
+    private let timeZoneDisclaimerLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
+        return label
+    }()
+    private lazy var nestedTimeZoneStack: HoundStackView = {
+        let stack = HoundStackView()
+        stack.addArrangedSubview(timeZoneLabel)
+        stack.addArrangedSubview(timeZoneDisclaimerLabel)
+        stack.axis = .vertical
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        return stack
+    }()
     private lazy var timeZoneStack: HoundStackView = {
         let stack = HoundStackView.inputFieldStack(timeZoneHeaderLabel)
-        stack.addArrangedSubview(timeZoneLabel)
+        stack.addArrangedSubview(nestedTimeZoneStack)
         return stack
     }()
     
@@ -316,8 +333,10 @@ final class DogsAddReminderManagerView: HoundView,
             
             let customActionNameIsHidden = selectedReminderAction?.allowsCustom != true
             if reminderCustomActionNameTextField.isHidden != customActionNameIsHidden {
-                reminderCustomActionNameTextField.isHidden = customActionNameIsHidden
-                remakeCustomActionNameConstraints()
+                UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
+                    self.reminderCustomActionNameTextField.isHidden = customActionNameIsHidden
+                    self.remakeCustomActionNameConstraints()
+                }
             }
         }
     }
@@ -383,6 +402,19 @@ final class DogsAddReminderManagerView: HoundView,
     private var selectedTimeZone: TimeZone? {
         didSet {
             timeZoneLabel.text = selectedTimeZone?.displayName()
+            
+            if let selectedTimeZone = selectedTimeZone, selectedTimeZone.identifier != UserConfiguration.timeZone.identifier {
+                let timeDiff = selectedTimeZone.secondsFromGMT() - UserConfiguration.timeZone.secondsFromGMT()
+                var text = "Your device's time zone is \(UserConfiguration.timeZone.displayName())"
+                if timeDiff != 0 {
+                    text += " which is \(timeDiff.readable(abbreviationLevel: .short, maxComponents: 3, enforceSequentialComponents: true)) \(timeDiff >= 0 ? "behind" : "ahead")."
+                }
+                timeZoneDisclaimerLabel.text = text
+            }
+            else {
+                timeZoneDisclaimerLabel.text = nil
+            }
+            timeZoneDisclaimerLabel.isHidden = timeZoneDisclaimerLabel.text == nil
         }
     }
     
@@ -676,7 +708,7 @@ final class DogsAddReminderManagerView: HoundView,
         case .weekly:
             reminderTypeDescriptionLabel.text = nil
         case .monthly:
-            reminderTypeDescriptionLabel.text = onceView.descriptionLabelText
+            reminderTypeDescriptionLabel.text = monthlyView.descriptionLabelText
         }
         reminderTypeDescriptionLabel.isHidden = reminderTypeDescriptionLabel.text == nil
     }
@@ -748,7 +780,7 @@ final class DogsAddReminderManagerView: HoundView,
             cell.label.text = type.readable
         case .reminderTimeZone:
             let tz = availableTimeZones[indexPath.row]
-            cell.setCustomSelected(selectedTimeZone == tz, animated: false)
+            cell.setCustomSelected(selectedTimeZone?.identifier == tz.identifier, animated: false)
             cell.label.text = tz.displayName(currentTimeZone: UserConfiguration.timeZone)
         }
     }
@@ -878,8 +910,10 @@ final class DogsAddReminderManagerView: HoundView,
                     return IndexPath(row: idx, section: 0)
                 }
             case .reminderTimeZone:
-                if let tz = selectedTimeZone,
-                   let idx = availableTimeZones.firstIndex(of: tz) {
+                if let selectedTZ = selectedTimeZone,
+                   let idx = availableTimeZones.firstIndex(where: { tz in
+                       return tz.identifier == selectedTZ.identifier
+                   }) {
                     return IndexPath(row: idx, section: 0)
                 }
             }

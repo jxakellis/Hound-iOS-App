@@ -342,6 +342,10 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         }
     }
     
+    override func didUpdateUserTimeZone() {
+        self.tableView.reloadData()
+    }
+    
     // MARK: - Table View Data Source
     
     // Make each cell its own section, allows us to easily space the cells

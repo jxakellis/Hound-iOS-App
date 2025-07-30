@@ -5,22 +5,19 @@
 //  Created by Jonathan Xakellis on 7/8/25.
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
-
 import SnapKit
 import UIKit
-
-enum DogsAddTriggerDropDownTypes: String, HoundDropDownType {
+    enum DogsAddTriggerDropDownTypes: String, HoundDropDownType {
     case logReactions = "DropDownLogReactions"
     case reminderResult = "DropDownReminderResult"
+    case triggerType = "DropDownTriggerType"
 }
-
 final class DogsAddTriggerManagerView: HoundView,
                                        UIGestureRecognizerDelegate,
                                        DogsAddTriggerTimeDelayViewDelegate,
                                        DogsAddTriggerFixedTimeViewDelegate,
                                        HoundDropDownDataSource,
                                        HoundDropDownManagerDelegate {
-    
     // MARK: - UIGestureRecognizerDelegate
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -31,6 +28,10 @@ final class DogsAddTriggerManagerView: HoundView,
     
     func willDismissKeyboard() {
         dismissKeyboard()
+    }
+
+    func didUpdateDescriptionLabel() {
+        updateTriggerTypeDescriptionLabel()
     }
     
     // MARK: - Elements
@@ -46,7 +47,7 @@ final class DogsAddTriggerManagerView: HoundView,
         let label = HoundLabel()
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
-        label.placeholder = "Select log type(s)..."
+        label.placeholder = "Select one or more log types..."
         label.shouldInsetText = true
         label.adjustsFontSizeToFitWidth = false
         
@@ -70,7 +71,7 @@ final class DogsAddTriggerManagerView: HoundView,
         let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = .label
-        label.text = "Matching These Conditions"
+        label.text = "If This Log Was..."
         return label
     }()
     private let manuallyCreatedLabel: HoundLabel = {
@@ -133,14 +134,14 @@ final class DogsAddTriggerManagerView: HoundView,
         let label = HoundLabel()
         label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
         label.textColor = .label
-        label.text = "Then Create Reminder"
+        label.text = "Then Create This Reminder"
         return label
     }()
     private lazy var reminderResultLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
-        label.placeholder = "Select reminder action..."
+        label.placeholder = "Select a reminder type..."
         label.shouldInsetText = true
         label.adjustsFontSizeToFitWidth = false
         
@@ -175,41 +176,53 @@ final class DogsAddTriggerManagerView: HoundView,
         
         return stack
     }()
-    
-    private enum SegmentedControlSection: Int, CaseIterable {
-        case timeDelay
-        case fixedTime
-        
-        var title: String {
-            switch self {
-            case .timeDelay: return "After a Delay"
-            case .fixedTime: return "At a Specific Time"
-            }
-        }
-        
-        static func index(of section: SegmentedControlSection) -> Int { section.rawValue }
-    }
-    
-    private lazy var segmentedControl: HoundSegmentedControl = {
-        let segmentedControl = HoundSegmentedControl()
-        segmentedControl.selectedSegmentTintColor = UIColor.systemBlue
-        SegmentedControlSection.allCases.enumerated().forEach { index, section in
-            segmentedControl.insertSegment(withTitle: section.title, at: index, animated: false)
-        }
-        
-        let attributes: [NSAttributedString.Key: Any] = [.font: Constant.Visual.Font.emphasizedPrimaryRegularLabel, .foregroundColor: UIColor.systemBackground]
-        segmentedControl.setTitleTextAttributes(attributes, for: .normal)
-        segmentedControl.backgroundColor = UIColor.systemGray4
-        
-        segmentedControl.selectedSegmentIndex = SegmentedControlSection.timeDelay.rawValue
-        
-        segmentedControl.addTarget(self, action: #selector(didUpdateTriggerType), for: .valueChanged)
-        return segmentedControl
+
+    private let triggerTypeHeaderLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.emphasizedSecondaryRegularLabel
+        label.textColor = .label
+        label.text = "When Should the Reminder Be Sent?"
+        return label
+    }()
+    private lazy var triggerTypeLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.primaryRegularLabel
+        label.applyStyle(.thinGrayBorder)
+        label.shouldInsetText = true
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(
+            dropDownManager.showHideDropDownGesture(
+                identifier: DogsAddTriggerDropDownTypes.triggerType,
+                delegate: self
+            )
+        )
+        dropDownManager.register(identifier: .triggerType, label: label, autoscroll: .firstOpen)
+        return label
+    }()
+    private let triggerTypeDescriptionLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 0
+        return label
+    }()
+    private lazy var nestedTriggerTypeStack: HoundStackView = {
+        let stack = HoundStackView()
+        stack.addArrangedSubview(triggerTypeLabel)
+        stack.addArrangedSubview(triggerTypeDescriptionLabel)
+        stack.axis = .vertical
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        return stack
+    }()
+    private lazy var triggerTypeStack: HoundStackView = {
+        let stack = HoundStackView.inputFieldStack(triggerTypeHeaderLabel)
+        stack.addArrangedSubview(nestedTriggerTypeStack)
+        return stack
     }()
     
-    private lazy var timeDelayView: DogsAddTriggerTimeDelayView = {
+     private lazy var timeDelayView: DogsAddTriggerTimeDelayView = {
         let view = DogsAddTriggerTimeDelayView()
-        view.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.timeDelay.rawValue
+        view.isHidden = selectedTriggerType != .timeDelay
         
         let timeDelayTap = UITapGestureRecognizer(target: self, action: #selector(didInteractWithTimeDelayView))
         timeDelayTap.delegate = self
@@ -222,7 +235,7 @@ final class DogsAddTriggerManagerView: HoundView,
     
     private lazy var fixedTimeView: DogsAddTriggerFixedTimeView = {
         let view = DogsAddTriggerFixedTimeView()
-        view.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.fixedTime.rawValue
+        view.isHidden = selectedTriggerType != .fixedTime
         
         let fixedTimeTap = UITapGestureRecognizer(target: self, action: #selector(didInteractWithFixedTimeView))
         fixedTimeTap.delegate = self
@@ -254,11 +267,6 @@ final class DogsAddTriggerManagerView: HoundView,
         }
     }
     
-    @objc private func didUpdateTriggerType(_ sender: HoundSegmentedControl) {
-        timeDelayView.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.timeDelay.rawValue
-        fixedTimeView.isHidden = segmentedControl.selectedSegmentIndex != SegmentedControlSection.fixedTime.rawValue
-    }
-    
     @objc private func didInteractWithTimeDelayView() {
         timeDelayView.errorMessage = nil
     }
@@ -278,6 +286,15 @@ final class DogsAddTriggerManagerView: HoundView,
     
     private var availableReminderResults: [TriggerReminderResult] = []
     private var selectedReminderResult: TriggerReminderResult?
+    private let availableTriggerTypes: [TriggerType] = TriggerType.allCases
+    private var selectedTriggerType: TriggerType = Constant.Class.Trigger.defaultTriggerType {
+        didSet {
+            triggerTypeLabel.text = selectedTriggerType.readable
+            timeDelayView.isHidden = selectedTriggerType != .timeDelay
+            fixedTimeView.isHidden = selectedTriggerType != .fixedTime
+            updateTriggerTypeDescriptionLabel()
+        }
+    }
     
     var didUpdateInitialValues: Bool {
         guard let initialTrigger = initialTrigger else {
@@ -330,7 +347,7 @@ final class DogsAddTriggerManagerView: HoundView,
         let customName = reminderActionType.allowsCustom ? (reminderCustomActionNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "") : ""
         trigger.triggerReminderResult = TriggerReminderResult(forReminderActionTypeId: selectedReminderResult.reminderActionTypeId, forReminderCustomActionName: customName)
         
-        if segmentedControl.selectedSegmentIndex == SegmentedControlSection.timeDelay.rawValue {
+        if selectedTriggerType == .timeDelay {
             trigger.triggerType = .timeDelay
             let component = timeDelayView.currentComponent
             if !trigger.timeDelayComponents.changeTriggerTimeDelay(component.triggerTimeDelay) {
@@ -361,6 +378,7 @@ final class DogsAddTriggerManagerView: HoundView,
         logReactionsLabel.text = selectedLogReactions.map({ $0.readableName(includeMatchingEmoji: true) }).joined(separator: ", ")
         reminderResultLabel.text = selectedReminderResult?.readableName
         reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
+        updateTriggerTypeDescriptionLabel()
         
         let customActionNameIsHidden = !(selectedReminderResult.map { ReminderActionType.find(forReminderActionTypeId: $0.reminderActionTypeId).allowsCustom } ?? false)
         if reminderCustomActionNameTextField.isHidden != customActionNameIsHidden {
@@ -371,6 +389,15 @@ final class DogsAddTriggerManagerView: HoundView,
         UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) {
             self.setNeedsLayout()
             self.layoutIfNeeded()
+        }
+    }
+
+    private func updateTriggerTypeDescriptionLabel() {
+        switch selectedTriggerType {
+        case .timeDelay:
+            triggerTypeDescriptionLabel.text = timeDelayView.descriptionLabelText
+        case .fixedTime:
+            triggerTypeDescriptionLabel.text = fixedTimeView.descriptionLabelText
         }
     }
     
@@ -432,10 +459,10 @@ final class DogsAddTriggerManagerView: HoundView,
         if let trigger = forTriggerToUpdate {
             selectedLogReactions = trigger.triggerLogReactions
             selectedReminderResult = trigger.triggerReminderResult
-            segmentedControl.selectedSegmentIndex = trigger.triggerType == .timeDelay ? SegmentedControlSection.timeDelay.rawValue : SegmentedControlSection.fixedTime.rawValue
+            selectedTriggerType = trigger.triggerType
         }
         else {
-            segmentedControl.selectedSegmentIndex = SegmentedControlSection.timeDelay.rawValue
+            selectedTriggerType = Constant.Class.Trigger.defaultTriggerType
         }
         
         if forTriggerToUpdate?.triggerType == .timeDelay {
@@ -481,8 +508,12 @@ final class DogsAddTriggerManagerView: HoundView,
         
         let numberOfRows: CGFloat = {
             switch type {
-            case .logReactions: return CGFloat(availableLogReactions.count)
-            case .reminderResult: return CGFloat(availableReminderResults.count)
+            case .logReactions:
+                return CGFloat(availableLogReactions.count)
+            case .reminderResult:
+                return CGFloat(availableReminderResults.count)
+            case .triggerType:
+                return CGFloat(availableTriggerTypes.count)
             }
         }()
         
@@ -509,6 +540,10 @@ final class DogsAddTriggerManagerView: HoundView,
             cell.label.text = item.readableName
             let selected = selectedReminderResult?.isSame(as: item) ?? false
             cell.setCustomSelected(selected, animated: false)
+        case .triggerType:
+            let type = availableTriggerTypes[indexPath.row]
+            cell.label.text = type.readable
+            cell.setCustomSelected(selectedTriggerType == type, animated: false)
         }
     }
     
@@ -519,6 +554,8 @@ final class DogsAddTriggerManagerView: HoundView,
             return availableLogReactions.count
         case .reminderResult:
             return availableReminderResults.count
+        case .triggerType:
+            return availableTriggerTypes.count
         }
     }
     
@@ -632,6 +669,17 @@ final class DogsAddTriggerManagerView: HoundView,
                 // First-time selection of reminder result, so open next dropdown
                 showNextRequiredDropDown(animated: true)
             }
+        case .triggerType:
+            let type = availableTriggerTypes[indexPath.row]
+            
+            // prevent deselectiong of trigger type. we shuld always have one selected
+            guard type != selectedTriggerType else {
+                return
+            }
+            
+            cell.setCustomSelected(true)
+            selectedTriggerType = type
+            dropDown.hideDropDown(animated: true)
         }
     }
     
@@ -649,6 +697,10 @@ final class DogsAddTriggerManagerView: HoundView,
                    let idx = availableReminderResults.firstIndex(where: { $0.isSame(as: result) }) {
                     return IndexPath(row: idx, section: 0)
                 }
+            case .triggerType:
+                if let idx = TriggerType.allCases.firstIndex(of: selectedTriggerType) {
+                    return IndexPath(row: idx, section: 0)
+                }
             }
             return nil
         }
@@ -660,7 +712,7 @@ final class DogsAddTriggerManagerView: HoundView,
         addSubview(logReactionStack)
         addSubview(conditionsStack)
         addSubview(reminderResultStack)
-        addSubview(segmentedControl)
+        addSubview(triggerTypeStack)
         addSubview(triggerViewsStack)
         
         let didTapScreenGesture = UITapGestureRecognizer(
@@ -711,17 +763,19 @@ final class DogsAddTriggerManagerView: HoundView,
             make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         remakeCustomActionNameConstraints()
-        
-        segmentedControl.snp.makeConstraints { make in
+
+        triggerTypeStack.snp.makeConstraints { make in
             make.top.equalTo(reminderResultStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
-            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
-            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset / 2.0)
-            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.segmentedHeightMultiplier).priority(.high)
+            make.leading.equalToSuperview().offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            make.trailing.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
+        triggerTypeLabel.snp.makeConstraints { make in
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         
         triggerViewsStack.snp.makeConstraints { make in
-            make.top.equalTo(segmentedControl.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.top.equalTo(triggerTypeStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
             make.bottom.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteVertInset)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()

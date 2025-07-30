@@ -8,15 +8,15 @@
 
 import Foundation
 
-extension TimeInterval {
-    enum AbbreviationLevel {
-        case short   // e.g. "5s"
-        case medium  // e.g. "5 sec"
-        case long    // e.g. "5 seconds"
-    }
-    
+enum AbbreviationLevel {
+    case short   // e.g. "5s"
+    case medium  // e.g. "5 sec"
+    case long    // e.g. "5 seconds"
+}
+
+extension Double {
     /**
-     Converts a `TimeInterval` to a human-readable string.
+     Converts a `Double` to a human-readable string.
      
      - Parameters:
        - capitalizeWords: If `true`, capitalizes the first letter of each time component.

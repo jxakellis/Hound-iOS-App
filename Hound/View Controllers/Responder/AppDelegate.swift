@@ -61,51 +61,30 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
         PersistenceManager.didEnterBackground(isTerminating: true)
     }
 
-    /// If the application performs didRegisterForRemoteNotificationsWithDeviceToken while a userId and/or userIdentifier are not established or loaded into memory, then the request will fail. Therefore, we check that these variables are valid. If this check fails, we set a timer to recheck every minute. We must keep track of this timer incase we need to invalidate it..
-    private var userNotificationTokenTimer: Timer?
-    /// The interval at which the userNotificationTokenTimer will invoke updateUserNotificationToken to attempt to update the API with the new deviceToken
-    private let userNotificationTokenTimerRetryInterval: Double = 5.0
-    private var userNotificationTokenTimerNumberOfRetrys: Double = 1.0
-
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
-        HoundLogger.general.notice("didRegisterForRemoteNotificationsWithDeviceToken: Successfully registered for remote notifications for token: \(token)")
+        
+        HoundLogger.general.notice("AppDelegate.didRegisterForRemoteNotificationsWithDeviceToken: Registered for remote notifications for token: \(token)")
 
         // If the new deviceToken is different from the saved deviceToken (i.e. there is a new token or there was no token saved), then we should attempt to update the server
         guard token != UserInformation.userNotificationToken else { return }
+        
+        guard UserInformation.userId != nil && UserInformation.userIdentifier != nil else {
+            HoundLogger.general.error("AppDelegate.didRegisterForRemoteNotificationsWithDeviceToken: Unable to send token to server")
+            return
+        }
 
-        updateUserNotificationToken()
-
-        func updateUserNotificationToken() {
-            // clear any existing timer for this new invocation
-            userNotificationTokenTimer?.invalidate()
-            userNotificationTokenTimer = nil
-
-            // Check to make sure userId and userIdentifier are established. If they are not, then keep waiting userNotificationTokenTimerRetryInterval to check again. Once they are established, we send the request.
-            guard UserInformation.userId != nil && UserInformation.userIdentifier != nil else {
-                userNotificationTokenTimer = Timer(fire: Date().addingTimeInterval(userNotificationTokenTimerRetryInterval * userNotificationTokenTimerNumberOfRetrys), interval: -1, repeats: false) { _ in
-                    updateUserNotificationToken()
-                }
-                if let userNotificationTokenTimer = userNotificationTokenTimer {
-                    RunLoop.main.add(userNotificationTokenTimer, forMode: .common)
-                }
-
-                userNotificationTokenTimerNumberOfRetrys += 1.0
+        let body: JSONRequestBody = [Constant.Key.userNotificationToken.rawValue: .string(token)]
+        UserRequest.update(
+            forErrorAlert: .automaticallyAlertForNone,
+            forBody: body
+        ) { responseStatus, _ in
+            guard responseStatus != .failureResponse else {
                 return
             }
-
-            let body: JSONRequestBody = [Constant.Key.userNotificationToken.rawValue: .string(token)]
-            UserRequest.update(
-                forErrorAlert: .automaticallyAlertForNone,
-                forBody: body
-            ) { responseStatus, _ in
-                guard responseStatus != .failureResponse else {
-                    return
-                }
-                
-                UserInformation.userNotificationToken = token
-            }
+            
+            UserInformation.userNotificationToken = token
         }
     }
 

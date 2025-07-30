@@ -113,7 +113,6 @@ final class DogsReminderTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    // Setup function that sets up the different IBOutlet properties
     func setup(forDogUUID: UUID, forReminder: Reminder) {
         self.dogUUID = forDogUUID
         self.reminder = forReminder
@@ -170,7 +169,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         
         nextAlarmLabel.attributedText = {
             let message = NSMutableAttributedString(
-                string: reminder.snoozeComponents.executionInterval != nil ? "Finish Snoozing In: " : "Remind In: ",
+                string: reminder.snoozeComponents.executionInterval != nil ? "Snoozing: " : "Remind In: ",
                 attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel]
             )
             

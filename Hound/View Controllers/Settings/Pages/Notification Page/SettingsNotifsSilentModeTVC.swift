@@ -86,6 +86,9 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         
         let body: JSONRequestBody = [Constant.Key.userConfigurationIsSilentModeEnabled.rawValue: .bool(UserConfiguration.isSilentModeEnabled)]
         
+        // cant choose silent mode time when silent mode is disabled
+        synchronizeDatePickers(animated: true)
+        
         UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
@@ -168,10 +171,13 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
     /// Updates the displayed values to reflect the values stored.
     private func synchronizeValues(animated: Bool) {
         isSilentModeEnabledSwitch.isEnabled = UserConfiguration.isNotificationEnabled
-        silentModeStartHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
-        silentModeEndHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled
-
         isSilentModeEnabledSwitch.setOn(UserConfiguration.isSilentModeEnabled, animated: animated)
+        synchronizeDatePickers(animated: animated)
+    }
+    
+    private func synchronizeDatePickers(animated: Bool) {
+        silentModeStartHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled && UserConfiguration.isSilentModeEnabled
+        silentModeEndHoursDatePicker.isEnabled = UserConfiguration.isNotificationEnabled && UserConfiguration.isSilentModeEnabled
 
         let calendar = Calendar.user
         silentModeStartHoursDatePicker.setDate(

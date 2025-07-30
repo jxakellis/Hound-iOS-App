@@ -81,13 +81,18 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Functions
     
-    func localTimeOfDay(reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> (hour: Int, minute: Int) {
-        return reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: displayTimeZone ?? reminderTimeZone)
+    func localTimeOfDay(reminderExecutionBasis: Date, reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> (hour: Int, minute: Int) {
+        let referenceDate = notSkippingExecutionDate(
+            reminderExecutionBasis: reminderExecutionBasis,
+            reminderTimeZone: reminderTimeZone
+        )
+        
+        return reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: displayTimeZone ?? reminderTimeZone, referenceDate: referenceDate ?? Date())
     }
     
-    func localDayOfMonth(reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> Int {
+    func localDayOfMonth(reminderExecutionBasis: Date, reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> Int {
         let referenceDate = notSkippingExecutionDate(
-            reminderExecutionBasis: Date(),
+            reminderExecutionBasis: reminderExecutionBasis,
             reminderTimeZone: reminderTimeZone
         )
         
@@ -96,7 +101,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
             hour: zonedHour,
             minute: zonedMinute,
             to: displayTimeZone ?? reminderTimeZone,
-            referenceDate: referenceDate ?? Date()
+            referenceDate: referenceDate ?? reminderExecutionBasis
         )
         return day
     }
@@ -117,6 +122,7 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
             to: displayTimeZone ?? reminderTimeZone,
             referenceDate: referenceDate ?? reminderExecutionBasis
         )
+        
         return "Every \(day)\(day.daySuffix()) at \(String.convert(hour: hour, minute: minute))"
     }
     

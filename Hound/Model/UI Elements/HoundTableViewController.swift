@@ -61,11 +61,24 @@ class HoundTableViewController: UITableViewController, HoundUIProtocol, HoundUIK
     
     var referenceContentOffsetY: CGFloat?
     
+    private var timeZoneObserver: NSObjectProtocol?
+    
     // MARK: - Main
     
     override func loadView() {
         super.loadView()
         applyDefaultSetup()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        timeZoneObserver = NotificationCenter.default.addObserver(
+            forName: .didUpdateUserTimeZone,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.didUpdateUserTimeZone()
+        }
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -86,6 +99,12 @@ class HoundTableViewController: UITableViewController, HoundUIProtocol, HoundUIK
         }
     }
     
+    deinit {
+        if let timeZoneObserver = timeZoneObserver {
+            NotificationCenter.default.removeObserver(timeZoneObserver)
+        }
+    }
+    
     // MARK: - Functions
     
     private func applyDefaultSetup() {
@@ -97,5 +116,7 @@ class HoundTableViewController: UITableViewController, HoundUIProtocol, HoundUIK
         
         setupGeneratedViews()
     }
+    
+    func didUpdateUserTimeZone() { }
     
 }

@@ -22,4 +22,22 @@ extension Int {
             return "th"
         }
     }
+    
+    /**
+     Converts a `TimeInterval` to a human-readable string.
+     
+     - Parameters:
+       - capitalizeWords: If `true`, capitalizes the first letter of each time component.
+       - abbreviationLevel: The abbreviation level to use (`.short`, `.medium`, or `.long`).
+       - maxComponents: The maximum number of time components to display.
+       - enforceSequentialComponents: If `true`, only display adjacent nonzero time units (e.g., "2h 5m", never "2h 0m").
+     */
+    func readable(
+        capitalizeWords: Bool = false,
+        abbreviationLevel: AbbreviationLevel = .medium,
+        maxComponents: Int? = nil,
+        enforceSequentialComponents: Bool = false
+    ) -> String {
+        return Double(self).readable(capitalizeWords: capitalizeWords, abbreviationLevel: abbreviationLevel, maxComponents: maxComponents, enforceSequentialComponents: enforceSequentialComponents)
+    }
 }

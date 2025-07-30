@@ -211,16 +211,37 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
     
     // MARK: - Functions
     
-    func localTimeOfDay(reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> (hour: Int, minute: Int) {
-        return reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: displayTimeZone ?? reminderTimeZone)
+    func localTimeOfDay(reminderExecutionBasis: Date, reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> (hour: Int, minute: Int) {
+        let referenceDate = notSkippingExecutionDate(
+            reminderExecutionBasis: reminderExecutionBasis,
+            reminderTimeZone: reminderTimeZone
+        )
+        
+        return reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: displayTimeZone ?? reminderTimeZone, referenceDate: referenceDate ?? reminderExecutionBasis)
     }
     
-    func localWeekdays(reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> [Weekday] {
-        return reminderTimeZone.convert(weekdays: zonedWeekdays, hour: zonedHour, minute: zonedMinute, to: displayTimeZone ?? reminderTimeZone)
+    func localWeekdays(reminderExecutionBasis: Date, reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> [Weekday] {
+        let referenceDate = notSkippingExecutionDate(
+            reminderExecutionBasis: reminderExecutionBasis,
+            reminderTimeZone: reminderTimeZone
+        )
+        
+        return reminderTimeZone.convert(weekdays: zonedWeekdays, hour: zonedHour, minute: zonedMinute, to: displayTimeZone ?? reminderTimeZone, referenceDate: referenceDate ?? reminderExecutionBasis)
     }
     
-    func readableDaysOfWeek(reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> String {
-        let mappedWeekdays = reminderTimeZone.convert(weekdays: zonedWeekdays, hour: zonedHour, minute: zonedMinute, to: displayTimeZone ?? reminderTimeZone)
+    func readableDaysOfWeek(reminderExecutionBasis: Date, reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> String {
+        let referenceDate = notSkippingExecutionDate(
+            reminderExecutionBasis: reminderExecutionBasis,
+            reminderTimeZone: reminderTimeZone
+        )
+        
+        let mappedWeekdays = reminderTimeZone.convert(
+            weekdays: zonedWeekdays,
+            hour: zonedHour,
+            minute: zonedMinute,
+            to: displayTimeZone ?? reminderTimeZone,
+            referenceDate: referenceDate ?? reminderExecutionBasis
+        )
         switch Set(mappedWeekdays) {
         case Set(Weekday.allCases): return "Everyday"
         case [.sunday, .saturday]: return "Weekends"
@@ -231,14 +252,20 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         }
     }
     
-    func readableTimeOfDay(reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> String {
-        let (hour, minute) = reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: displayTimeZone ?? reminderTimeZone)
+    func readableTimeOfDay(reminderExecutionBasis: Date, reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> String {
+        let referenceDate = notSkippingExecutionDate(
+            reminderExecutionBasis: reminderExecutionBasis,
+            reminderTimeZone: reminderTimeZone
+        )
+        
+        let (hour, minute) = reminderTimeZone.convert(hour: zonedHour, minute: zonedMinute, to: displayTimeZone ?? reminderTimeZone, referenceDate: referenceDate ?? reminderExecutionBasis)
         return String.convert(hour: hour, minute: minute)
     }
     
-    func readableRecurrance(reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> String {
-        let readableDaysOfWeek = readableDaysOfWeek(reminderTimeZone: reminderTimeZone, displayTimeZone: displayTimeZone)
-        let readableTimeOfDay = readableTimeOfDay(reminderTimeZone: reminderTimeZone, displayTimeZone: displayTimeZone)
+    func readableRecurrance(reminderExecutionBasis: Date, reminderTimeZone: TimeZone, displayTimeZone: TimeZone? = nil) -> String {
+        let readableDaysOfWeek = readableDaysOfWeek(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone, displayTimeZone: displayTimeZone)
+        let readableTimeOfDay = readableTimeOfDay(reminderExecutionBasis: reminderExecutionBasis, reminderTimeZone: reminderTimeZone, displayTimeZone: displayTimeZone)
+    
         return readableDaysOfWeek.appending(" at \(readableTimeOfDay)")
     }
     

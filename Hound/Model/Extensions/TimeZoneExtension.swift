@@ -78,25 +78,20 @@ extension TimeZone {
     
     /// Converts a (hour, minute) in this time zone to the same wall time in a target time zone, for display.
     /// Always uses a fixed reference date (2000-01-01) to avoid DST edge cases.
-    func convert(hour: Int, minute: Int, to destinationTimeZone: TimeZone) -> (hour: Int, minute: Int) {
+    func convert(hour: Int, minute: Int, to destinationTimeZone: TimeZone, referenceDate: Date) -> (hour: Int, minute: Int) {
         guard self != destinationTimeZone else {
             return (hour, minute)
         }
-        var components = DateComponents()
-        components.year = 2000
-        components.month = 1
-        components.day = 1
+        let sourceCalendar = Calendar.fromZone(self)
+        var components = sourceCalendar.dateComponents([.year, .month, .day], from: referenceDate)
         components.hour = hour
         components.minute = minute
         components.second = 0
-
-        // 1. Use a calendar in the source time zone to build the date.
-        let sourceCalendar = Calendar.fromZone(self)
+        
         guard let dateInSource = sourceCalendar.date(from: components) else {
             return (hour, minute)
         }
 
-        // 2. Use destination calendar to extract the new hour/minute.
         let destCalendar = Calendar.fromZone(destinationTimeZone)
         let targetComponents = destCalendar.dateComponents([.hour, .minute], from: dateInSource)
         return (targetComponents.hour ?? hour, targetComponents.minute ?? minute)
@@ -104,7 +99,7 @@ extension TimeZone {
     
     /// Converts a list of weekdays (from this time zone) to their equivalents in the target time zone, for a given hour/minute.
     /// Always uses a fixed reference week (starting 2000-01-02) to ensure the weekday value is deterministic.
-    func convert(weekdays: [Weekday], hour: Int, minute: Int, to destinationTimeZone: TimeZone) -> [Weekday] {
+    func convert(weekdays: [Weekday], hour: Int, minute: Int, to destinationTimeZone: TimeZone, referenceDate: Date) -> [Weekday] {
         guard self != destinationTimeZone else {
             return weekdays // No conversion needed
         }
@@ -112,9 +107,7 @@ extension TimeZone {
         let sourceCalendar = Calendar.fromZone(self)
         let destCalendar = Calendar.fromZone(destinationTimeZone)
         for weekday in weekdays {
-            var components = DateComponents()
-            components.year = 2000
-            components.month = 1
+            var components = sourceCalendar.dateComponents([.year, .month], from: referenceDate)
             components.day = 2 + (weekday.rawValue - 1)
             components.hour = hour
             components.minute = minute

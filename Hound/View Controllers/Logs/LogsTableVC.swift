@@ -182,6 +182,10 @@ final class LogsTableVC: HoundTableViewController {
         tableView.setContentOffset(CGPoint(x: 0, y: referenceContentOffsetY), animated: animated)
     }
     
+    override func didUpdateUserTimeZone() {
+        reloadTable()
+    }
+    
     // MARK: - Table View Data Source
     
     override func numberOfSections(in tableView: UITableView) -> Int {

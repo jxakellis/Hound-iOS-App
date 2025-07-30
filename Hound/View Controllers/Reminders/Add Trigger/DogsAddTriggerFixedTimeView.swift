@@ -11,6 +11,7 @@ import UIKit
 
 protocol DogsAddTriggerFixedTimeViewDelegate: AnyObject {
     func willDismissKeyboard()
+    func didUpdateDescriptionLabel()
 }
 
 enum DogsAddTriggerFixedTimeDropDownTypes: String, HoundDropDownType {
@@ -27,21 +28,10 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
     
     // MARK: - Elements
     
-    private let descriptionLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.adjustsFontSizeToFitWidth = false
-        label.font = Constant.Visual.Font.secondaryRegularLabel
-        label.textColor = UIColor.label
-        return label
-    }()
-    
     private lazy var dayOffsetLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.applyStyle(.thinGrayBorder)
-        label.placeholder = "Select the day offset..."
+        label.placeholder = "Select a day offset..."
         label.shouldInsetText = true
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(dropDownManager.showHideDropDownGesture(identifier: .dayOffset, delegate: self))
@@ -89,7 +79,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
     
     @objc private func didUpdateTimeOfDay(_ sender: Any) {
         self.errorMessage = nil
-        updateDescriptionLabel()
+        delegate?.didUpdateDescriptionLabel()
         delegate?.willDismissKeyboard()
     }
     
@@ -141,15 +131,13 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
             timeOfDayPicker.date = Calendar.user.date(from: comps) ?? timeOfDayPicker.date
         }
         
-        updateDescriptionLabel()
+        delegate?.didUpdateDescriptionLabel()
     }
     
     // MARK: - Functions
     
-    private func updateDescriptionLabel() {
-        // Reminder will go off on the same day as the matching log at
-        // Reminder will go off 2 days after the matching log
-        var text = "Reminder will go off "
+    var descriptionLabelText: String {
+        var text = "Reminder be sent "
         
         switch selectedDayOffset {
         case 0: text += "on the same day as the log "
@@ -162,25 +150,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         let minute = comps.minute ?? Constant.Class.Trigger.defaultTriggerFixedTimeMinute
         text += "at \(String.convert(hour: hour, minute: minute))"
         
-        var emphasizedText: String?
-        if selectedDayOffset == 0 {
-            emphasizedText = "" /* ". If the time has passed, reminder rolls over to the next day"*/
-        }
-        
-        descriptionLabel.attributedText = {
-            let message = NSMutableAttributedString(
-                string: text,
-                attributes: [.font: Constant.Visual.Font.secondaryRegularLabel]
-            )
-            
-            if let emphasizedText = emphasizedText {
-                message.append(NSMutableAttributedString(
-                    string: emphasizedText,
-                    attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel]
-                ))
-            }
-            return message
-        }()
+        return text
     }
     
     private func textForOffset(_ offset: Int) -> String {
@@ -255,7 +225,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
             dropDown.hideDropDown(animated: true)
             delegate?.willDismissKeyboard()
             
-            updateDescriptionLabel()
+            delegate?.didUpdateDescriptionLabel()
         }
     }
     
@@ -274,7 +244,6 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
     
     override func addSubViews() {
         super.addSubViews()
-        addSubview(descriptionLabel)
         addSubview(dayOffsetLabel)
         addSubview(disclaimerStack)
     }
@@ -282,13 +251,8 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
     override func setupConstraints() {
         super.setupConstraints()
         
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.horizontalEdges.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
-        }
-        
         dayOffsetLabel.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview().inset(Constant.Constraint.Spacing.absoluteHoriInset)
             make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)

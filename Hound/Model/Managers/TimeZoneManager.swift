@@ -8,8 +8,6 @@
 
 import Foundation
 
-// TODO TEST TIME that this auto updates server and to tz change properly
-// TODO TIME when user TZ changes, we still need to update the UI
 final class TimeZoneMonitor {
     static let shared = TimeZoneMonitor()
 
@@ -39,7 +37,10 @@ final class TimeZoneMonitor {
     }
 
     func updateDeviceTimeZoneOnServer() {
-        guard UserInformation.userId != nil && UserInformation.userIdentifier != nil else { return }
+        guard UserInformation.userId != nil && UserInformation.userIdentifier != nil else {
+            HoundLogger.general.error("TimeZoneMonitor.updateDeviceTimeZoneOnServer: Unable to send time zone to server")
+            return
+        }
         let body: JSONRequestBody = [
             Constant.Key.userConfigurationDeviceTimeZone.rawValue: .string(UserConfiguration.deviceTimeZone.identifier)
         ]
