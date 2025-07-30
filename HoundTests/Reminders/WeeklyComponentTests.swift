@@ -149,7 +149,7 @@ final class WeeklyComponentsTests: XCTestCase {
         // first execution 2024-06-02T08:00:00Z was skipped so new execution is 2024-06-09T08:00:00Z
         XCTAssertEqual(next, TestHelper.date("2024-06-09T08:00:00Z"))
     }
-
+    
     func testNoWeekdaysProducesNil() {
         let comp = WeeklyComponents(zonedSunday: false, zonedMonday: false,
                                     zonedTuesday: false, zonedWednesday: false,
@@ -162,19 +162,47 @@ final class WeeklyComponentsTests: XCTestCase {
     }
     
     func testReadableDaysOfWeekAggregations() {
-            let tz = TestHelper.utc
-            let basis = TestHelper.date("2024-05-01T00:00:00Z")
-
-            let everyday = TestHelper.weekly(days: Weekday.allCases, hour: 0, minute: 0, skipped: nil)
-            XCTAssertEqual(everyday.readableDaysOfWeek(reminderExecutionBasis: basis, reminderTimeZone: tz), "Everyday")
-
-            let weekdays = TestHelper.weekly(days: [.monday, .tuesday, .wednesday, .thursday, .friday], hour: 0, minute: 0, skipped: nil)
-            XCTAssertEqual(weekdays.readableDaysOfWeek(reminderExecutionBasis: basis, reminderTimeZone: tz), "Weekdays")
-
-            let weekends = TestHelper.weekly(days: [.sunday, .saturday], hour: 0, minute: 0, skipped: nil)
-            XCTAssertEqual(weekends.readableDaysOfWeek(reminderExecutionBasis: basis, reminderTimeZone: tz), "Weekends")
-
-            let abbrev = TestHelper.weekly(days: [.tuesday, .thursday], hour: 0, minute: 0, skipped: nil)
-            XCTAssertEqual(abbrev.readableDaysOfWeek(reminderExecutionBasis: basis, reminderTimeZone: tz), "Tu, Th")
-        }
+        let tz = TestHelper.utc
+        let basis = TestHelper.date("2024-05-01T00:00:00Z")
+        
+        let everyday = TestHelper.weekly(days: Weekday.allCases, hour: 0, minute: 0, skipped: nil)
+        XCTAssertEqual(everyday.readableDaysOfWeek(reminderExecutionBasis: basis, reminderTimeZone: tz), "Everyday")
+        
+        let weekdays = TestHelper.weekly(days: [.monday, .tuesday, .wednesday, .thursday, .friday], hour: 0, minute: 0, skipped: nil)
+        XCTAssertEqual(weekdays.readableDaysOfWeek(reminderExecutionBasis: basis, reminderTimeZone: tz), "Weekdays")
+        
+        let weekends = TestHelper.weekly(days: [.sunday, .saturday], hour: 0, minute: 0, skipped: nil)
+        XCTAssertEqual(weekends.readableDaysOfWeek(reminderExecutionBasis: basis, reminderTimeZone: tz), "Weekends")
+        
+        let abbrev = TestHelper.weekly(days: [.tuesday, .thursday], hour: 0, minute: 0, skipped: nil)
+        XCTAssertEqual(abbrev.readableDaysOfWeek(reminderExecutionBasis: basis, reminderTimeZone: tz), "Tu, Th")
+    }
+    
+    func testReadableRecurranceReferenceDateDSTDifference() {
+        let comp = TestHelper.weekly(days: [.monday], hour: 9, minute: 0, skipped: nil)
+        let newYork = TimeZone(identifier: "America/New_York")!
+        let utc = TestHelper.utc
+        let winter = TestHelper.date("2024-01-15T00:00:00Z")
+        let summer = TestHelper.date("2024-07-15T00:00:00Z")
+        let winterRec = comp.readableRecurrance(reminderExecutionBasis: winter, reminderTimeZone: newYork, displayTimeZone: utc)
+        let summerRec = comp.readableRecurrance(reminderExecutionBasis: summer, reminderTimeZone: newYork, displayTimeZone: utc)
+        XCTAssertEqual(winterRec.normalizeSpaces(), "Monday at 2:00 PM")
+        XCTAssertEqual(summerRec.normalizeSpaces(), "Monday at 1:00 PM")
+        XCTAssertNotEqual(winterRec, summerRec)
+    }
+    
+    func testReferenceDateChangesWeekdayOutput() {
+        let comp = TestHelper.weekly(days: [.monday], hour: 7, minute: 0, skipped: nil)
+        let pst = TimeZone(identifier: "America/Los_Angeles")!
+        let tokyo = TimeZone(identifier: "Asia/Tokyo")!
+        
+        let winter = TestHelper.date("2024-01-15T00:00:00Z")
+        let summer = TestHelper.date("2024-07-15T00:00:00Z")
+        
+        let winterReadable = comp.readableDaysOfWeek(reminderExecutionBasis: winter, reminderTimeZone: pst, displayTimeZone: tokyo)
+        let summerReadable = comp.readableDaysOfWeek(reminderExecutionBasis: summer, reminderTimeZone: pst, displayTimeZone: tokyo)
+        
+        XCTAssertEqual(winterReadable, "Tuesday")
+        XCTAssertEqual(summerReadable, "Monday")
+    }
 }

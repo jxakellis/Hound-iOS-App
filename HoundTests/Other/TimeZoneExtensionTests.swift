@@ -166,7 +166,7 @@ final class TimeZoneExtensionTests: XCTestCase {
         XCTAssertEqual(result.hour, 18)
         XCTAssertEqual(result.minute, 45)
     }
-
+    
     func testReferenceDateAffectsHourMinuteConversion() {
         let ny = TimeZone(identifier: "America/New_York")!
         let syd = TimeZone(identifier: "Australia/Sydney")!
@@ -178,7 +178,7 @@ final class TimeZoneExtensionTests: XCTestCase {
         XCTAssertEqual(s.hour, 10)
         XCTAssertNotEqual(w.hour, s.hour)
     }
-
+    
     func testReferenceDateAffectsWeekdayConversion() {
         let la = TimeZone(identifier: "America/Los_Angeles")!
         let syd = TimeZone(identifier: "Australia/Sydney")!
@@ -244,5 +244,42 @@ final class TimeZoneExtensionTests: XCTestCase {
         XCTAssertEqual(d, 3)
         XCTAssertEqual(h, 5)
         XCTAssertEqual(m, 30)
+    }
+    
+    func testHourMinuteReferenceDateDSTDifference() {
+        let ny = TimeZone(identifier: "America/New_York")!
+        let utc = TestHelper.utc
+        let winter = TestHelper.date("2024-01-15T00:00:00Z")
+        let summer = TestHelper.date("2024-07-15T00:00:00Z")
+        let winterResult = ny.convert(hour: 9, minute: 0, to: utc, referenceDate: winter)
+        let summerResult = ny.convert(hour: 9, minute: 0, to: utc, referenceDate: summer)
+        XCTAssertEqual(winterResult.hour, 14)
+        XCTAssertEqual(summerResult.hour, 13)
+        XCTAssertNotEqual(winterResult.hour, summerResult.hour)
+    }
+    
+    func testDayHourMinuteReferenceDateDSTDifference() {
+        let ny = TimeZone(identifier: "America/New_York")!
+        let utc = TestHelper.utc
+        let winter = TestHelper.date("2024-01-15T00:00:00Z")
+        let summer = TestHelper.date("2024-07-15T00:00:00Z")
+        let winterResult = ny.convert(day: 10, hour: 2, minute: 30, to: utc, referenceDate: winter)
+        let summerResult = ny.convert(day: 10, hour: 2, minute: 30, to: utc, referenceDate: summer)
+        XCTAssertEqual(winterResult.hour, 7)
+        XCTAssertEqual(summerResult.hour, 6)
+        XCTAssertNotEqual(winterResult.hour, summerResult.hour)
+    }
+    
+    func testReferenceDateAdjustsHourMinute() {
+        let ny = TimeZone(identifier: "America/New_York")!
+        let berlin = TimeZone(identifier: "Europe/Berlin")!
+        let march = TestHelper.date("2024-03-15T00:00:00Z") // NY DST, Berlin not
+        let april = TestHelper.date("2024-04-15T00:00:00Z") // Both DST
+        
+        let marchResult = ny.convert(hour: 12, minute: 0, to: berlin, referenceDate: march)
+        let aprilResult = ny.convert(hour: 12, minute: 0, to: berlin, referenceDate: april)
+        
+        XCTAssertEqual(marchResult.hour, 17)
+        XCTAssertEqual(aprilResult.hour, 18)
     }
 }
