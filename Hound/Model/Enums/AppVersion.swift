@@ -11,6 +11,8 @@ import UIKit
 enum AppVersion: String, CaseIterable, Comparable {
 
     case v4_0_0 = "4.0.0"
+    
+    case v4_0_1 = "4.0.1"
 
     // MARK: - Init
     /// Creates an AppVersion from a raw value. If the raw value does not match a known
@@ -46,7 +48,7 @@ enum AppVersion: String, CaseIterable, Comparable {
     
     /// Oldest compatible version of the app. Any version older than this should
     /// have its data considered incompatible.
-    static var oldestCompatible: AppVersion { .v4_0_0 }
+    static var oldestCompatible: AppVersion { .v4_0_1 }
 
     static func isCompatible(previous: AppVersion?) -> Bool {
         guard let prev = previous else {
@@ -58,7 +60,7 @@ enum AppVersion: String, CaseIterable, Comparable {
     // MARK: - Release Notes
     var releaseNotes: NSAttributedString {
         switch self {
-        case .v4_0_0:
+        case .v4_0_0, .v4_0_1:
             var builder = ReleaseNotesBuilder()
             builder.addFeature(
                 title: "Automations",

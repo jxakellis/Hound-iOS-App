@@ -11,21 +11,7 @@
 - Batch updates for logs
   - Convert LogsRequest into a batch updater (like RemindersRequest).  
   - Update offline-mode manager to send log and reminder changes in batches per dog
-
----
-
-## 🎯 Future
-
-- Multiple times of day for remidners
-    - e.g. a reminder could be for MWF, then a user instead of a single time of day 7:00AM they could make as many times as they want
-
-- Websockers
-    - Use web sockets to update logs in real-time across devices
-
-- About Page
-    - Brief description of me and how hound came to be
-    - Picture or two
-    
+  
 - Log favoriting
     - Mimic feature from DogNote
     - Have a heart in the bottom right of each log cell that can be tapped to favorite log
@@ -40,6 +26,20 @@
     
 - Google Sign-In
     - Add “Sign in with Google” alongside Apple ID.
+
+---
+
+## 🎯 Future
+
+- Multiple times of day for remidners
+    - e.g. a reminder could be for MWF, then a user instead of a single time of day 7:00AM they could make as many times as they want
+
+- Websockers
+    - Use web sockets to update logs in real-time across devices
+
+- About Page
+    - Brief description of me and how hound came to be
+    - Picture or two
     
 - 24-hour clock setting
 
@@ -61,11 +61,6 @@
   - Daily/weekly active users  
   - Feature usage  
   - Crash and performance data
-
-### Time & Timezones
-- ****  
-- **DST detection**  
-  When timezone changes (DST start/end), prompt user to adjust reminders. Track per family to avoid repeat prompts.
 
 ### Notifications & Alarms
 - **Custom alarm UI**  

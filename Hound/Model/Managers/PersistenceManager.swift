@@ -27,10 +27,8 @@ enum PersistenceManager {
         }
         
         // If the previousAppVersion is less than the oldestCompatibleAppVersion, the user's data is no longer compatible and therefore should be redownloaded.
-        if AppVersion.isCompatible(previous: AppVersion.previousAppVersion) {
-            // Clear out this stored data so the user can redownload from the server
-            UserDefaults.standard.set(nil, forKey: Constant.Key.previousDogManagerSynchronization.rawValue)
-            UserDefaults.standard.set(nil, forKey: Constant.Key.dogManager.rawValue)
+        if !AppVersion.isCompatible(previous: AppVersion.previousAppVersion) {
+            clearDogManagerStorage()
         }
         
         UserDefaults.standard.set(AppVersion.current.rawValue, forKey: Constant.Key.localAppVersion.rawValue)

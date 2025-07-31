@@ -47,7 +47,7 @@ final class DogsAddTriggerManagerView: HoundView,
         let label = HoundLabel()
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
-        label.placeholder = "Select one or more log types..."
+        label.placeholder = "Select one or more types..."
         label.shouldInsetText = true
         label.adjustsFontSizeToFitWidth = false
         

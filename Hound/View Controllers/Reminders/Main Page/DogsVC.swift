@@ -503,7 +503,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             return
         }
         
-        let alert = UIAlertController(title: forAction == .reminder ? "Add Reminder to Dog" : "Add Automation to Dog", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: forAction == .reminder ? "Add Reminder" : "Add Automation", message: nil, preferredStyle: .alert)
         for dog in dogManager.dogs {
             alert.addAction(UIAlertAction(title: dog.dogName, style: .default) { _ in
                 openForDog(dog)
