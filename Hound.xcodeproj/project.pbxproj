@@ -1861,7 +1861,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 40002;
+				CURRENT_PROJECT_VERSION = 40003;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Hound;
@@ -1892,7 +1892,7 @@
 				CODE_SIGN_ENTITLEMENTS = Hound/HoundDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 40002;
+				CURRENT_PROJECT_VERSION = 40003;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Hound/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Hound;
