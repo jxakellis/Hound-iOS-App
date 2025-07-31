@@ -132,6 +132,17 @@ enum GenerationManager {
         else { return nil }
         
         // --- 2. Reminders ---
+        if let pottyId = reminderTypeId("potty") {
+            let countdown = CountdownComponents()
+            countdown.executionInterval = 60 * 60 * 2
+            let reminder = Reminder(
+                reminderActionTypeId: pottyId,
+                reminderType: .countdown,
+                reminderTimeZone: UserConfiguration.timeZone,
+                countdownComponents: countdown
+            )
+            bella.dogReminders.addReminder(forReminder: reminder)
+        }
         if let feedId = reminderTypeId("feed") {
             let weekly = WeeklyComponents()
             weekly.setZonedWeekdays(Weekday.allCases)
@@ -145,16 +156,13 @@ enum GenerationManager {
             )
             bella.dogReminders.addReminder(forReminder: reminder)
         }
-        if let walkId = reminderTypeId("walk") {
-            let weekly = WeeklyComponents()
-            weekly.setZonedWeekdays(Weekday.allCases)
-            weekly.zonedHour = 17
-            weekly.zonedMinute = 0
+        if let medicineId = reminderTypeId("medicine") {
+            let monthly = MonthlyComponents(zonedDay: 1, zonedHour: 9, zonedMinute: 0, skippedDate: nil)
             let reminder = Reminder(
-                reminderActionTypeId: walkId,
-                reminderType: .weekly,
+                reminderActionTypeId: medicineId,
+                reminderType: .monthly,
                 reminderTimeZone: UserConfiguration.timeZone,
-                weeklyComponents: weekly
+                monthlyComponents: monthly
             )
             bella.dogReminders.addReminder(forReminder: reminder)
         }

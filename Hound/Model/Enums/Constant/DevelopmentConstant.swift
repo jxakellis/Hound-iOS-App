@@ -46,7 +46,7 @@ public enum DevelopmentConstant {
     static let developmentDatabaseTestUserId: String? = isProductionDatabase ? nil : nil // "3314e13ce7fab539591cfa2d5c8e4a29105befdd9bc3398bbe457ef30448aa0c"
 
     /// If testing the development of Hound with its development database, then use this user identifier for a test account.
-    static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : "000228.36153ca1c4604ee9b7c1614e7ce7b971.2208"
+    static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : "001473.77422360ac5b4f8aabf48f816149efe8.1644"
 
     /// All Hound servers, development or producton, support HTTPS only
     private static let urlScheme: String = isProductionAWSServer ? "https://" : "http://"
@@ -69,5 +69,4 @@ public enum DevelopmentConstant {
     /// The base url that api requests go to
     static let url: String = urlScheme + urlDomainName + urlPort + urlAppPath
     /// The interval at which the date picker should display minutes. Use this property to set the interval displayed by the minutes wheel (for example, 15 minutes). The interval value must be evenly divided into 60; if it is not, the default value is used. The default and minimum values are 1; the maximum value is 30.
-    static let minuteInterval = isProductionDatabase ? 5 : 1
 }
