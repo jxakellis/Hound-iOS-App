@@ -2,10 +2,6 @@
 
 ## 🚀 Now
 
-- BATCH LOG UPDATES
-  - Convert LogsRequest into a batch updater (like RemindersRequest).  
-  - Update offline-mode manager to send log and reminder changes in batches per dog
-  
 - LOG FAVORITING
     - Mimic feature from DogNote
     - Have a heart in the bottom right of each log cell that can be tapped to favorite log
@@ -105,6 +101,10 @@
 
 - SERVER SIDE APPLE ID VERIFICATION
     - Send `identityToken` + `authorizationCode` to backend for validation and secure user extraction.
+
+- BATCH LOG UPDATES
+  - Convert LogsRequest into a batch updater (like RemindersRequest).  
+  - Update offline-mode manager to send log and reminder changes in batches per dog
     
 - MEDIA SYNC
     - Sync icons and photos across devices
