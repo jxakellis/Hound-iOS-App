@@ -109,8 +109,7 @@ final class LogActionType: NSObject, Comparable, NSCoding {
             case .metric:
                 return logUnitType.isMetric
             case .both:
-                // .both should never happen, but if it does, fall through to metric
-                return logUnitType.isMetric
+                return logUnitType.isMetric || logUnitType.isImperial
             }
         }
         

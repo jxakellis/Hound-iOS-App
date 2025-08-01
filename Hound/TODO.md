@@ -27,6 +27,8 @@
 - Google Sign-In
     - Add “Sign in with Google” alongside Apple ID.
 
+- Poop stool quality
+
 ---
 
 ## 🎯 Future
@@ -56,6 +58,41 @@
 - caching of local day/minute/hour for a reminder component
     - we do a lot of calculations for it and when doing things like comparison, we call it lots of time. not very performant
 
+- multiple family / pack support
+    - you should be able to invite users (e.g. dog walker or sitter) to your family temporarily and possible limit permissions or visibility
+    - need a way to manage multiple families at once
+        - create page for multiple navigation.
+        - if you open the app and you have multiple families, then you can select which family to view
+        - in settings page, nexxt to delete/leave family, would be "create another family" and "join another family"
+        - permissions would need to be revamped. lock a user's subscption to a single family, but still allow them to navigate to diff families
+    - revamp family invitations
+        - add inviting by: username, email, and invitation links
+
+- Analytics on Logs (similar to DogLog)
+    - e.g. for the past 14 days for feed, you've had this many logs for each days
+    - further, you could aggregate this data then bin it by hour, so over the past 14 days youve had x logs between 6-7am, x logs between 7-8am, etc.
+
+- Additional dog fields
+    - There should be static 1:1 fields on a dog itself
+        - Date of birth  
+        - Sex  
+        - Microchip #  
+        - License #  
+        - Rabies vaccine #  
+        - Insurance provider & #  
+        - Notes  
+    - there should also be dynamic fields
+        - weight
+        - temperature
+        - etc.
+        - you could view statistics on these fields over time, see how your dog is envolving. tie into "Analytics on Dogs"
+
+- **UI restructuring options**  
+  1. Move reminders off the dog-edit page  
+  2. Nest dog info under a sub-page  
+  3. Use a single scrolling layout with clear sections
+        
+
 ### Metrics & Analytics
 - **Integrate SwiftMetrics** to track:  
   - Daily/weekly active users  
@@ -82,20 +119,7 @@
 - **Server-side Apple ID verification**  
   Send `identityToken` + `authorizationCode` to backend for validation and secure user extraction.
 
-### Dog Profiles
-- **Additional dog fields**  
-  - Photo  
-  - Date of birth  
-  - Sex  
-  - Microchip #  
-  - License #  
-  - Rabies vaccine #  
-  - Insurance provider & #  
-  - Notes  
-- **UI restructuring options**  
-  1. Move reminders off the dog-edit page  
-  2. Nest dog info under a sub-page  
-  3. Use a single scrolling layout with clear sections
+
 
 ### Media Sync
 - **Sync icons and photos**  

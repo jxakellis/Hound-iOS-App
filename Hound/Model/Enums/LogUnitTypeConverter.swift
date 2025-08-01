@@ -47,8 +47,7 @@ enum LogUnitTypeConverter {
                 switch targetSystem {
                 case .imperial: return logUnitType.isImperial
                 case .metric: return logUnitType.isMetric
-                    // .both should never happen, but if it does, fall through to metric
-                case .both: return logUnitType.isMetric
+                case .both: return logUnitType.isMetric || logUnitType.isImperial
                 }
             }
             .compactMap { lut in
@@ -84,8 +83,7 @@ enum LogUnitTypeConverter {
                 switch targetSystem {
                 case .imperial: return logUnitType.isImperial
                 case .metric: return logUnitType.isMetric
-                    // .both should never happen, but if it does, fall through to metric
-                case .both: return logUnitType.isMetric
+                case .both: return logUnitType.isMetric || logUnitType.isImperial
                 }
             }
             .compactMap { lut in
@@ -121,8 +119,7 @@ enum LogUnitTypeConverter {
                 switch targetSystem {
                 case .imperial: return logUnitType.isImperial
                 case .metric: return logUnitType.isMetric
-                    // .both should never happen, but if it does, fall through to metric
-                case .both: return logUnitType.isMetric
+                case .both: return logUnitType.isMetric || logUnitType.isImperial
                 }
             }
             .compactMap { lut in

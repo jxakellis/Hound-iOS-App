@@ -134,6 +134,7 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
     override func layoutSubviews() {
         super.layoutSubviews()
         checkForOversizedFrame()
+        updatePlaceholderPreferredWidth()
     }
     
     deinit {
@@ -221,15 +222,22 @@ final class HoundTextView: UITextView, HoundUIProtocol, HoundDynamicBorder, Houn
             make.bottom.lessThanOrEqualTo(self.snp.bottom).inset(self.textContainerInset.bottom)
         }
         
-        // Ensures the placeholder label wraps text to multiple lines by setting
-        // `preferredMaxLayoutWidth` to the available width inside the text view.
-        // Without this, UILabel will not wrap and the placeholder will be clipped.
-        DispatchQueue.main.async {
-            let leftInset = self.textContainerInset.left + self.textContainer.lineFragmentPadding
-            let rightInset = self.textContainerInset.right + self.textContainer.lineFragmentPadding
-            let maxWidth = self.bounds.width - leftInset - rightInset
-            self.placeholderLabel?.preferredMaxLayoutWidth = maxWidth
-            self.placeholderLabel?.setNeedsLayout()
-        }
+        updatePlaceholderPreferredWidth()
+    }
+    
+    // Ensures the placeholder label wraps text to multiple lines by setting
+    // `preferredMaxLayoutWidth` to the available width inside the text view.
+    // Without this, UILabel will not wrap and the placeholder will be clipped.
+    private func updatePlaceholderPreferredWidth() {
+        guard let placeholderLabel = placeholderLabel else { return }
+        
+        let leftInset = self.textContainerInset.left + self.textContainer.lineFragmentPadding
+        let rightInset = self.textContainerInset.right + self.textContainer.lineFragmentPadding
+        let maxWidth = self.bounds.width - leftInset - rightInset
+        
+        guard placeholderLabel.preferredMaxLayoutWidth != maxWidth else { return }
+        
+        placeholderLabel.preferredMaxLayoutWidth = maxWidth
+        placeholderLabel.setNeedsLayout()
     }
 }

@@ -51,7 +51,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     private lazy var oneStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.tintColor = UIColor.systemBackground
+        button.tintColor = UIColor.white
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
@@ -59,7 +59,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     private lazy var twoStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.tintColor = UIColor.systemBackground
+        button.tintColor = UIColor.white
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
@@ -67,7 +67,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     private lazy var threeStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.tintColor = UIColor.systemBackground
+        button.tintColor = UIColor.white
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
@@ -75,7 +75,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     private lazy var fourStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.tintColor = UIColor.systemBackground
+        button.tintColor = UIColor.white
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
@@ -83,7 +83,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
     private lazy var fiveStarButton: HoundButton = {
         let button = HoundButton(huggingPriority: 280, compressionResistancePriority: 280)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.tintColor = UIColor.systemBackground
+        button.tintColor = UIColor.white
         button.addTarget(self, action: #selector(didTapStar), for: .touchUpInside)
         return button
     }()
