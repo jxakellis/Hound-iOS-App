@@ -2,66 +2,70 @@
 
 ## 🚀 Now
 
-- Batch updates for logs
+- BATCH LOG UPDATES
   - Convert LogsRequest into a batch updater (like RemindersRequest).  
   - Update offline-mode manager to send log and reminder changes in batches per dog
   
-- Log favoriting
+- LOG FAVORITING
     - Mimic feature from DogNote
     - Have a heart in the bottom right of each log cell that can be tapped to favorite log
     - if log is liked by any person, then this whole element has a rounded background added to it (similar to how we display log note/log unit). in this whole background highlight, there is the heart on the RHS (either selected or not), then on the LHS is the initials (in little bubbles/circle) of the people who liked it
     - add ability to filter logs by favorites
     
-- Referral program
+- REFERRAL PROGRAM
     - “Give a Month, Get a Month”: users share a code; when a friend signs up and completes 30 days, both receive a free month. See how Monarch Money does it  
     - Build referral page that users can get a code to share with other users
     - They can also track the progress of their rewards
     - Only get reward if user actually buys subscription
     
-- Google Sign-In
+- GOOGLE SIGN-IN
     - Add “Sign in with Google” alongside Apple ID.
-
-- new fields to logs
-    - Poop stool quality
-    - logCreated
-    - logCreatedBy (RENAME userId to this)
-    - logLastModifiedBy (update upon modification)
-
-- enable diff sorting methods for logs page
-    - start date asc/desc
-    - end date asc/desc
-    - modified date asc/desc
 
 ---
 
 ## 🎯 Future
 
-- Multiple times of day for remidners
+- NEW LOG FIELDS
+    - Poop stool quality
+    - logCreated
+    - logCreatedBy (RENAME userId to this)
+    - logLastModifiedBy (update upon modification)
+
+- DIFFERENT LOG SORTING METHODS 
+    - start date asc/desc
+    - end date asc/desc
+    - modified date asc/desc
+    
+- LOG ANALYTICS PAGE (like DogLog)
+    - e.g. for the past 14 days for feed, you've had this many logs for each days
+    - further, you could aggregate this data then bin it by hour, so over the past 14 days youve had x logs between 6-7am, x logs between 7-8am, etc.
+
+- MULTIPLE TIMES OF DAY FOR SINGLE REMINDERS
     - e.g. a reminder could be for MWF, then a user instead of a single time of day 7:00AM they could make as many times as they want
 
-- Websockers
+- WEBSOCKETS
     - Use web sockets to update logs in real-time across devices
 
-- About Page
+- ABOUT PAGE
     - Brief description of me and how hound came to be
     - Picture or two
     
-- 24-hour clock setting
+- 24 HOUR TIME/CLOCK SETTING
 
-- dynamic error messages
+- DYNAMIC ERROR MESSAGES
     - if an error cannot be matched to one defined in Constant.Error / ErrorConstant, then create a custom one. This should pull all available info from the error returned by the server.
 
-- Calendar view
+- CALENDAR VIEW
     - Visualize logs on a calendar grid in addition to the daily scroll.
     
-- email service
+- EMAIL SERVICE
     - whenever a user submits feedback about the app, send me an email
     - later we can do actual email that go to users about stuff but thats a whole thing
 
-- caching of local day/minute/hour for a reminder component
+- CACHE LOCAL HOUR/MINUTE/DAY FOR REMINDER COMPONENT
     - we do a lot of calculations for it and when doing things like comparison, we call it lots of time. not very performant
 
-- multiple family / pack support
+- MULTIPLE FAMILIES SIMULTANOUESLY
     - you should be able to invite users (e.g. dog walker or sitter) to your family temporarily and possible limit permissions or visibility
     - need a way to manage multiple families at once
         - create page for multiple navigation.
@@ -71,11 +75,7 @@
     - revamp family invitations
         - add inviting by: username, email, and invitation links
 
-- Analytics on Logs (similar to DogLog)
-    - e.g. for the past 14 days for feed, you've had this many logs for each days
-    - further, you could aggregate this data then bin it by hour, so over the past 14 days youve had x logs between 6-7am, x logs between 7-8am, etc.
-
-- Additional dog fields
+- ADDITIONAL DOG FIELDS
     - There should be static 1:1 fields on a dog itself
         - Date of birth  
         - Sex  
@@ -90,41 +90,38 @@
         - etc.
         - you could view statistics on these fields over time, see how your dog is envolving. tie into "Analytics on Dogs"
 
-### Metrics & Analytics
-- **Integrate SwiftMetrics** to track:  
-  - Daily/weekly active users  
-  - Feature usage  
-  - Crash and performance data
+- CUSTOM ALARM UI
+    - Replace default alerts with a branded, Hound-styled view
+    - Also, if there are a lot of pending reminders, offer a view that allows for bulk actions (e.g. See all, snooze all, dismiss all)
+    
+- LIVE ACTIVITIES (similar to Pup-To-Date)
+    - Add live activities for tracking walks or other activities in real-time
+    - Show on lock screen and notification center
+      - Tap to stop and save duration as a log.
 
-### Notifications & Alarms
-- **Custom alarm UI**  
-  Replace default alerts with a branded, Hound-styled view.  Also,
-- **Bulk reminder actions**  
-  If there are a lot of pending reminders at once, offer a view that allows for bulk actions (e.g. See all, snooze all, dismiss all)
+- NOTIFICATION ACTIONS
+    - Rich actions for reminders  
+    - In the iOS notification, dynamically offer “Log Now,” “Snooze,” or “Dismiss,” matching in-app options.
 
-### Live Activities
-- **Activity timers (Pup-To-Date)**  
-  - Start a live Activity (e.g. “Walk Timer”) from the log screen.  
-  - Display it on Lock Screen and Notification Center.  
-  - Tap to stop and save duration as a log.
+- SERVER SIDE APPLE ID VERIFICATION
+    - Send `identityToken` + `authorizationCode` to backend for validation and secure user extraction.
+    
+- MEDIA SYNC
+    - Sync icons and photos across devices
+    - family member icons, dog icons, log photos
+    - Show dog photo + name and family-member icon + name in each log cell; tap to view full-size images.
 
-### Notification Actions
-- **Rich actions for reminders**  
-  In the notification, dynamically offer “Log Now,” “Snooze,” or “Dismiss,” matching in-app options.
+- SWIFT METRICS
+    - Integrate SwiftMetrics to track app usage and performance
+    - Monitor daily/weekly active users, feature usage, and crash data
+    - Helpful for understanding user engagement and app health
 
-### Authentication Security
-- **Server-side Apple ID verification**  
-  Send `identityToken` + `authorizationCode` to backend for validation and secure user extraction.
-
-
-
-### Media Sync
-- **Sync icons and photos**  
-  - Family-member icons  
-  - Dog icons  
-  - Log photos  
-- **Display in feeds**  
-  Show dog photo + name and family-member icon + name in each log cell; tap to view full-size images.
+- COMMENTING SYSTEM
+    - Allow users to comment on logs
+    - Comment has: text, user, timestamp
+    - You could also go indepth and allow editing of comment 
+    - Allow comment delete but then show deleted comment in log
+    - Show comments in a collapsible section below each log
 
 ---
 
