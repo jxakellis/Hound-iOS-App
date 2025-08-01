@@ -27,7 +27,19 @@
 - Google Sign-In
     - Add “Sign in with Google” alongside Apple ID.
 
-- Poop stool quality
+- 
+
+- new fields to logs
+    - Poop stool quality
+    - logCreated
+    - logCreatedBy (RENAME userId to this)
+    - logLastModifiedBy (update upon modification)
+
+- enable diff sorting methods for logs page
+    - start date asc/desc
+    - end date asc/desc
+    - modified date asc/desc
+    
 
 ---
 
