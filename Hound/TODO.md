@@ -1,11 +1,5 @@
 # Hound TODOs
 
-## 📋 General (Non–iOS Related)
-- **Create a Facebook page** and join relevant pet-care groups.  
-- **Redesign the website** for a more modern look and clearer messaging.  
-
----
-
 ## 🚀 Now
 
 - Batch updates for logs
@@ -27,8 +21,6 @@
 - Google Sign-In
     - Add “Sign in with Google” alongside Apple ID.
 
-- 
-
 - new fields to logs
     - Poop stool quality
     - logCreated
@@ -39,7 +31,6 @@
     - start date asc/desc
     - end date asc/desc
     - modified date asc/desc
-    
 
 ---
 
@@ -98,12 +89,6 @@
         - temperature
         - etc.
         - you could view statistics on these fields over time, see how your dog is envolving. tie into "Analytics on Dogs"
-
-- **UI restructuring options**  
-  1. Move reminders off the dog-edit page  
-  2. Nest dog info under a sub-page  
-  3. Use a single scrolling layout with clear sections
-        
 
 ### Metrics & Analytics
 - **Integrate SwiftMetrics** to track:  
