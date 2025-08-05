@@ -8,7 +8,9 @@
 
 import UIKit
 
-final class Log: NSObject, NSCoding, NSCopying, Comparable {
+// TODO logCreated, logCreatedBy (rename userId), logLastModified, logLastModifiedBy
+
+final class Log: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
     
@@ -17,7 +19,10 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
         copy.logId = self.logId
         copy.logUUID = self.logUUID
-        copy.userId = self.userId
+        copy.logCreated = self.logCreated
+        copy.logCreatedBy = self.logCreatedBy
+        copy.logLastModified = self.logLastModified
+        copy.logLastModifiedBy = self.logLastModifiedBy
         copy.logActionTypeId = self.logActionTypeId
         copy.storedLogCustomActionName = self.logCustomActionName
         copy.logStartDate = self.logStartDate
@@ -36,7 +41,10 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedLogId: Int? = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logId.rawValue)
         let decodedLogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.logUUID.rawValue))
-        let decodedUserId: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.userId.rawValue)
+        let decodedLogCreated: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.logCreated.rawValue)?.formatISO8601IntoDate())
+        let decodedLogCreatedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.logCreatedBy.rawValue) ?? Constant.Class.Log.defaultUserId
+        let decodedLogLastModified: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.logLastModified.rawValue)?.formatISO8601IntoDate())
+        let decodedLogLastModifiedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.logLastModifiedBy.rawValue)
         let decodedLogActionTypeId: Int = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logActionTypeId.rawValue) ?? Constant.Class.Log.defaultLogActionTypeId
         let decodedLogCustomActionName: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.logCustomActionName.rawValue)
         let decodedLogStartDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.logStartDate.rawValue)
@@ -48,17 +56,20 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
         
         self.init(
-            forLogId: decodedLogId,
-            forLogUUID: decodedLogUUID,
-            forUserId: decodedUserId,
-            forLogActionTypeId: decodedLogActionTypeId,
-            forLogCustomActionName: decodedLogCustomActionName,
-            forLogStartDate: decodedLogStartDate,
-            forLogEndDate: decodedLogEndDate,
-            forLogNote: decodedLogNote,
-            forLogUnitTypeId: decodedLogUnitTypeId,
-            forLogNumberOfUnits: decodedLogNumberOfLogUnits,
-            forCreatedByReminderUUID: decodedLogCreatedByReminderUUID,
+            logId: decodedLogId,
+            logUUID: decodedLogUUID,
+            logCreated: decodedLogCreated,
+            logCreatedBy: decodedLogCreatedBy,
+            logLastModified: decodedLogLastModified,
+            logLastModifiedBy: decodedLogLastModifiedBy,
+            logActionTypeId: decodedLogActionTypeId,
+            logCustomActionName: decodedLogCustomActionName,
+            logStartDate: decodedLogStartDate,
+            logEndDate: decodedLogEndDate,
+            logNote: decodedLogNote,
+            logUnitTypeId: decodedLogUnitTypeId,
+            logNumberOfUnits: decodedLogNumberOfLogUnits,
+            logCreatedByReminderUUID: decodedLogCreatedByReminderUUID,
             offlineModeComponents: decodedOfflineModeComponents
         )
     }
@@ -70,7 +81,14 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
             aCoder.encode(logId, forKey: Constant.Key.logId.rawValue)
         }
         aCoder.encode(logUUID.uuidString, forKey: Constant.Key.logUUID.rawValue)
-        aCoder.encode(userId, forKey: Constant.Key.userId.rawValue)
+        aCoder.encode(logCreated.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.logCreated.rawValue)
+        aCoder.encode(logCreatedBy, forKey: Constant.Key.logCreatedBy.rawValue)
+        if let logLastModified = logLastModified {
+            aCoder.encode(logLastModified.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.logLastModified.rawValue)
+        }
+        if let logLastModifiedBy = logLastModifiedBy {
+            aCoder.encode(logLastModifiedBy, forKey: Constant.Key.logLastModifiedBy.rawValue)
+        }
         aCoder.encode(logActionTypeId, forKey: Constant.Key.logActionTypeId.rawValue)
         aCoder.encode(logCustomActionName, forKey: Constant.Key.logCustomActionName.rawValue)
         aCoder.encode(logStartDate, forKey: Constant.Key.logStartDate.rawValue)
@@ -90,47 +108,18 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
     }
     
-    // MARK: - Comparable
-    
-    static func < (lhs: Log, rhs: Log) -> Bool {
-        guard lhs.logStartDate != rhs.logStartDate else {
-            // If same logStartDate, then one with lesser logId comes first
-            guard let lhsLogId = lhs.logId else {
-                guard rhs.logId != nil else {
-                    // Neither have an id
-                    return lhs.logUUID.uuidString < rhs.logUUID.uuidString
-                }
-                
-                // lhs doesn't have a logId but rhs does. rhs should come first
-                return false
-            }
-            
-            guard let rhsLogId = rhs.logId else {
-                // lhs has a logId but rhs doesn't. lhs should come first
-                return true
-            }
-            
-            return lhsLogId <= rhsLogId
-        }
-        // Returning true means item1 comes before item2, false means item2 before item1
-        
-        // Returns true if lhs is earlier in time than rhs
-        
-        // If lhs's distance to date2 is positive, i.e. rhs is later in time, returns false as date2 should be ordered first (most recent (to current Date()) dates first)
-        // If date1 is later in time than date2, returns true as it should come before date2
-        return lhs.logStartDate.distance(to: rhs.logStartDate) <= 0
-    }
-    
     // MARK: - Properties
     
     /// The logId given to this log from the Hound database
     var logId: Int?
     
     /// The UUID of this log that is generated locally upon creation. Useful in identifying the log before/in the process of creating it
-    var logUUID: UUID = UUID()
+    private(set) var logUUID: UUID = UUID()
     
-    /// The userId of the user that created this log
-    var userId: String = Constant.Class.Log.defaultUserId
+    private(set) var logCreated: Date = Date()
+    private(set) var logCreatedBy: String = Constant.Class.Log.defaultUserId
+    private(set) var logLastModified: Date?
+    private(set) var logLastModifiedBy: String?
     
     var logActionTypeId: Int = Constant.Class.Log.defaultLogActionTypeId {
         didSet {
@@ -196,30 +185,36 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
     // MARK: - Main
     
     init(
-        forLogId: Int? = nil,
-        forLogUUID: UUID? = nil,
-        forUserId: String? = nil,
-        forLogActionTypeId: Int? = nil,
-        forLogCustomActionName: String? = nil,
-        forLogStartDate: Date? = nil,
-        forLogEndDate: Date? = nil,
-        forLogNote: String? = nil,
-        forLogUnitTypeId: Int? = nil,
-        forLogNumberOfUnits: Double? = nil,
-        forCreatedByReminderUUID: UUID? = nil,
+        logId: Int? = nil,
+        logUUID: UUID? = nil,
+        logCreated: Date? = nil,
+        logCreatedBy: String? = nil,
+        logLastModified: Date? = nil,
+        logLastModifiedBy: String? = nil,
+        logActionTypeId: Int? = nil,
+        logCustomActionName: String? = nil,
+        logStartDate: Date? = nil,
+        logEndDate: Date? = nil,
+        logNote: String? = nil,
+        logUnitTypeId: Int? = nil,
+        logNumberOfUnits: Double? = nil,
+        logCreatedByReminderUUID: UUID? = nil,
         offlineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
-        self.logId = forLogId ?? logId
-        self.logUUID = forLogUUID ?? logUUID
-        self.userId = forUserId ?? userId
-        self.logActionTypeId = forLogActionTypeId ?? logActionTypeId
-        self.logCustomActionName = forLogCustomActionName ?? logCustomActionName
-        self.logStartDate = forLogStartDate ?? logStartDate
-        self.logEndDate = forLogEndDate ?? logEndDate
-        self.logNote = forLogNote ?? logNote
-        self.changeLogUnit(forLogUnitTypeId: forLogUnitTypeId, forLogNumberOfLogUnits: forLogNumberOfUnits)
-        self.logCreatedByReminderUUID = forCreatedByReminderUUID ?? logCreatedByReminderUUID
+        self.logId = logId ?? self.logId
+        self.logUUID = logUUID ?? self.logUUID
+        self.logCreated = logCreated ?? self.logCreated
+        self.logCreatedBy = logCreatedBy ?? self.logCreatedBy
+        self.logLastModified = logLastModified ?? self.logLastModified
+        self.logLastModifiedBy = logLastModifiedBy ?? self.logLastModifiedBy
+        self.logActionTypeId = logActionTypeId ?? self.logActionTypeId
+        self.logCustomActionName = logCustomActionName ?? self.logCustomActionName
+        self.logStartDate = logStartDate ?? self.logStartDate
+        self.logEndDate = logEndDate ?? self.logEndDate
+        self.logNote = logNote ?? self.logNote
+        self.changeLogUnit(forLogUnitTypeId: logUnitTypeId, forLogNumberOfLogUnits: logNumberOfUnits)
+        self.logCreatedByReminderUUID = logCreatedByReminderUUID ?? logCreatedByReminderUUID
         self.offlineModeComponents = offlineModeComponents ?? self.offlineModeComponents
     }
     
@@ -228,41 +223,46 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         // Don't pull logId or logIsDeleted from logToOverride. A valid fromBody needs to provide this itself
         let logId: Int? = fromBody[Constant.Key.logId.rawValue] as? Int
         let logUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.logUUID.rawValue] as? String)
-        let logLastModified: Date? = (fromBody[Constant.Key.logLastModified.rawValue] as? String)?.formatISO8601IntoDate()
+        let logCreated: Date? = (fromBody[Constant.Key.logCreated.rawValue] as? String)?.formatISO8601IntoDate()
+        
         let logIsDeleted: Bool? = fromBody[Constant.Key.logIsDeleted.rawValue] as? Bool
         
-        // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
-        guard let logId = logId, let logUUID = logUUID, let logLastModified = logLastModified, let logIsDeleted = logIsDeleted else {
+        guard let logId = logId, let logUUID = logUUID, let logCreated = logCreated, let logIsDeleted = logIsDeleted else {
             return nil
         }
         
         guard logIsDeleted == false else {
-            // The log has been deleted. Doesn't matter if our offline mode made any changes
             return nil
         }
         
+        let logLastModified: Date? = (fromBody[Constant.Key.logLastModified.rawValue] as? String)?.formatISO8601IntoDate()
+        
         // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer server update takes precedence over our offline update
-        if let logToOverride = logToOverride, let initialAttemptedSyncDate = logToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= logLastModified {
+        if let logToOverride = logToOverride, let initialAttemptedSyncDate = logToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= logLastModified ?? logCreated {
             self.init(
-                forLogId: logToOverride.logId,
-                forLogUUID: logToOverride.logUUID,
-                forUserId: logToOverride.userId,
-                forLogActionTypeId: logToOverride.logActionTypeId,
-                forLogCustomActionName: logToOverride.logCustomActionName,
-                forLogStartDate: logToOverride.logStartDate,
-                forLogEndDate: logToOverride.logEndDate,
-                forLogNote: logToOverride.logNote,
-                forLogUnitTypeId: logToOverride.logUnitTypeId,
-                forLogNumberOfUnits: logToOverride.logNumberOfLogUnits,
-                forCreatedByReminderUUID: logToOverride.logCreatedByReminderUUID,
-                offlineModeComponents: logToOverride.offlineModeComponents
-            )
+                    logId: logToOverride.logId,
+                    logUUID: logToOverride.logUUID,
+                    logCreated: logToOverride.logCreated,
+                    logCreatedBy: logToOverride.logCreatedBy,
+                    logLastModified: logToOverride.logLastModified,
+                    logLastModifiedBy: logToOverride.logLastModifiedBy,
+                    logActionTypeId: logToOverride.logActionTypeId,
+                    logCustomActionName: logToOverride.logCustomActionName,
+                    logStartDate: logToOverride.logStartDate,
+                    logEndDate: logToOverride.logEndDate,
+                    logNote: logToOverride.logNote,
+                    logUnitTypeId: logToOverride.logUnitTypeId,
+                    logNumberOfUnits: logToOverride.logNumberOfLogUnits,
+                    logCreatedByReminderUUID: logToOverride.logCreatedByReminderUUID,
+                    offlineModeComponents: logToOverride.offlineModeComponents
+                )
             return
         }
         
         // if the log is the same, then we pull values from logToOverride
         // if the log is updated, then we pull values from fromBody
-        let userId: String? = fromBody[Constant.Key.userId.rawValue] as? String ?? logToOverride?.userId
+        let logCreatedBy = fromBody[Constant.Key.logCreatedBy.rawValue] as? String ?? logToOverride?.logCreatedBy
+        let logLastModifiedBy: String? = fromBody[Constant.Key.logLastModifiedBy.rawValue] as? String ?? logToOverride?.logLastModifiedBy
         
         let logActionTypeId: Int? = fromBody[Constant.Key.logActionTypeId.rawValue] as? Int ?? logToOverride?.logActionTypeId
         
@@ -290,17 +290,20 @@ final class Log: NSObject, NSCoding, NSCopying, Comparable {
         let logCreatedByReminderUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.logCreatedByReminderUUID.rawValue] as? String) ?? logToOverride?.logCreatedByReminderUUID
         
         self.init(
-            forLogId: logId,
-            forLogUUID: logUUID,
-            forUserId: userId,
-            forLogActionTypeId: logActionTypeId,
-            forLogCustomActionName: logCustomActionName,
-            forLogStartDate: logStartDate,
-            forLogEndDate: logEndDate,
-            forLogNote: logNote,
-            forLogUnitTypeId: logUnitTypeId,
-            forLogNumberOfUnits: logNumberOfLogUnits,
-            forCreatedByReminderUUID: logCreatedByReminderUUID,
+            logId: logId,
+            logUUID: logUUID,
+            logCreated: logCreated,
+            logCreatedBy: logCreatedBy,
+            logLastModified: logLastModified,
+            logLastModifiedBy: logLastModifiedBy,
+            logActionTypeId: logActionTypeId,
+            logCustomActionName: logCustomActionName,
+            logStartDate: logStartDate,
+            logEndDate: logEndDate,
+            logNote: logNote,
+            logUnitTypeId: logUnitTypeId,
+            logNumberOfUnits: logNumberOfLogUnits,
+            logCreatedByReminderUUID: logCreatedByReminderUUID,
             // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
             offlineModeComponents: nil
         )

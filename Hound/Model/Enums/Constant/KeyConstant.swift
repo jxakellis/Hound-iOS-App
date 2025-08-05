@@ -128,7 +128,10 @@ public enum KeyConstant: String {
     case dogId
     case dogUUID
     case dogName
+    case dogCreated
+    case dogCreatedBy
     case dogLastModified
+    case dogLastModifiedBy
     case dogIsDeleted
 
     // MARK: Log
@@ -144,7 +147,10 @@ public enum KeyConstant: String {
     case logUnitTypeId
     case logNumberOfLogUnits
     case logCreatedByReminderUUID
+    case logCreated
+    case logCreatedBy
     case logLastModified
+    case logLastModifiedBy
     case logIsDeleted
 
     // MARK: Reminder
@@ -161,7 +167,10 @@ public enum KeyConstant: String {
     case reminderIsEnabled
     case reminderRecipientUserIds
     case reminderTimeZone
+    case reminderCreated
+    case reminderCreatedBy
     case reminderLastModified
+    case reminderLastModifiedBy
     case reminderIsDeleted
     
     // MARK: GlobalTypes

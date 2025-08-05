@@ -8,6 +8,8 @@
 
 import UIKit
 
+// TODO reminderCreated, reminderCreatedBy, reminderLastModified, reminderLastModifiedBy
+
 enum ReminderType: String, CaseIterable {
     
     init?(rawValue: String) {

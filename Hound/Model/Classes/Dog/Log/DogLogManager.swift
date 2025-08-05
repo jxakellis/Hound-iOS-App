@@ -8,6 +8,8 @@
 
 import UIKit
 
+// TODO support different sort methods: start, end, created, and modified date. this should be four presorted copies of dogLogs. when add/update/remove log called, then the presorted copies should be updated. dont store them tho. only dog logs is stored.
+
 final class DogLogManager: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
@@ -23,9 +25,9 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCoding
     
-    required init?(coder aDecoder: NSCoder) {
+    required convenience init?(coder aDecoder: NSCoder) {
         let decodedDogLogs: [Log]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.dogLogs.rawValue)
-        dogLogs = decodedDogLogs ?? dogLogs
+        self.init(forLogs: decodedDogLogs ?? [], forParentDog: nil)
     }
     
     func encode(with aCoder: NSCoder) {

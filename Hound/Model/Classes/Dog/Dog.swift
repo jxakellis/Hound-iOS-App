@@ -8,6 +8,8 @@
 
 import UIKit
 
+// TODO dogCreated, dogCreatedBy, dogLastModified, dogLastModifiedBy
+
 final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     
     // MARK: - NSCopying

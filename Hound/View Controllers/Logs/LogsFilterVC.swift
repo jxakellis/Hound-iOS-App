@@ -8,6 +8,11 @@
 
 import UIKit
 
+// TOOD rename clear button to reset
+// TODO add an exit without save warning btn
+// TODO to filter is broken for time filter, it only checks end date but it should be adaptive
+// TODO make time filter be able to go off of start date, end date, modified date, or created date
+
 protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(forLogsFilter: LogsFilter)
 }

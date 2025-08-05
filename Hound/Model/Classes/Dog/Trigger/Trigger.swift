@@ -8,6 +8,9 @@
 
 import UIKit
 
+// TODO triggerCreated, triggerCreatedBy, triggerLastModified, triggerLastModifiedBy
+// TODO track trigger activations and display last activation in trigger tvc
+
 enum TriggerType: String, CaseIterable {
     
     init?(rawValue: String) {

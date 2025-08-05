@@ -8,19 +8,9 @@
     - if log is liked by any person, then this whole element has a rounded background added to it (similar to how we display log note/log unit). in this whole background highlight, there is the heart on the RHS (either selected or not), then on the LHS is the initials (in little bubbles/circle) of the people who liked it
     - add ability to filter logs by favorites
     
-- REFERRAL PROGRAM
-    - “Give a Month, Get a Month”: users share a code; when a friend signs up and completes 30 days, both receive a free month. See how Monarch Money does it  
-    - Build referral page that users can get a code to share with other users
-    - They can also track the progress of their rewards
-    - Only get reward if user actually buys subscription
-    
 - GOOGLE SIGN-IN
     - Add “Sign in with Google” alongside Apple ID.
-
----
-
-## 🎯 Future
-
+    
 - NEW LOG FIELDS
     - Poop stool quality
     - logCreated
@@ -31,6 +21,16 @@
     - start date asc/desc
     - end date asc/desc
     - modified date asc/desc
+
+---
+
+## 🎯 Future
+
+- REFERRAL PROGRAM
+    - “Give a Month, Get a Month”: users share a code; when a friend signs up and completes 30 days, both receive a free month. See how Monarch Money does it  
+    - Build referral page that users can get a code to share with other users
+    - They can also track the progress of their rewards
+    - Only get reward if user actually buys subscription
     
 - LOG ANALYTICS PAGE (like DogLog)
     - e.g. for the past 14 days for feed, you've had this many logs for each days
@@ -57,9 +57,6 @@
 - EMAIL SERVICE
     - whenever a user submits feedback about the app, send me an email
     - later we can do actual email that go to users about stuff but thats a whole thing
-
-- CACHE LOCAL HOUR/MINUTE/DAY FOR REMINDER COMPONENT
-    - we do a lot of calculations for it and when doing things like comparison, we call it lots of time. not very performant
 
 - MULTIPLE FAMILIES SIMULTANOUESLY
     - you should be able to invite users (e.g. dog walker or sitter) to your family temporarily and possible limit permissions or visibility
