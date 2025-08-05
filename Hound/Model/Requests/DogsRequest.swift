@@ -47,7 +47,7 @@ enum DogsRequest {
         return RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: url,
+            url: url,
             body: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
@@ -108,7 +108,7 @@ enum DogsRequest {
         return RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: url,
+            url: url,
             body: [:]) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
@@ -151,7 +151,7 @@ enum DogsRequest {
         return RequestUtils.genericPostRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { responseBody, responseStatus, error in
                 // As long as we got a response from the server, it no longers needs synced. Success or failure
                 if responseStatus != .noResponse {
@@ -197,7 +197,7 @@ enum DogsRequest {
         return RequestUtils.genericPutRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { _, responseStatus, error in
                 // As long as we got a response from the server, it no longers needs synced. Success or failure
                 if responseStatus != .noResponse {
@@ -239,7 +239,7 @@ enum DogsRequest {
         return RequestUtils.genericDeleteRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request

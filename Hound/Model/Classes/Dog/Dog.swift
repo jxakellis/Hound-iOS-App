@@ -180,7 +180,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         let dogCreated: Date? = (fromBody[Constant.Key.dogCreated.rawValue] as? String)?.formatISO8601IntoDate()
         let dogIsDeleted: Bool? = fromBody[Constant.Key.dogIsDeleted.rawValue] as? Bool
         
-        guard let dogId = dogId, let dogUUID = dogUUID, let dogCreated = dogCreated,  let dogIsDeleted = dogIsDeleted else {
+        guard let dogId = dogId, let dogUUID = dogUUID, let dogCreated = dogCreated, let dogIsDeleted = dogIsDeleted else {
             return nil
         }
         

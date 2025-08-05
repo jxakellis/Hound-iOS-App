@@ -150,8 +150,8 @@ enum DogIconManager {
             // attempt to remove any image at specified url
             try FileManager.default.removeItem(at: url)
             // remove lifecycle storage of dog icon
-            icons.removeAll { localDogIcon in
-                localDogIcon.dogUUID == dogUUID
+            icons.removeAll { icon in
+                icon.dogUUID == dogUUID
             }
         }
         catch {

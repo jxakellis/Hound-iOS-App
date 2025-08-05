@@ -84,8 +84,8 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     
     /// Helper function allows us to use the same logic for addReminder and addReminders and allows us to only sort at the end. Without this function, addReminders would invoke addReminder repeadly and sortReminders() with each call.
     private func addReminderWithoutSorting(reminder: Reminder) {
-        dogReminders.removeAll { reminder in
-            return reminder.reminderUUID == reminder.reminderUUID
+        dogReminders.removeAll { r in
+            return r.reminderUUID == reminder.reminderUUID
         }
         
         dogReminders.append(reminder)
@@ -112,8 +112,8 @@ final class DogReminderManager: NSObject, NSCoding, NSCopying {
     @discardableResult func removeReminder(reminderUUID: UUID) -> Bool {
         var didRemoveObject = false
         
-        dogReminders.removeAll { reminder in
-            guard reminder.reminderUUID == reminderUUID else {
+        dogReminders.removeAll { r in
+            guard r.reminderUUID == reminderUUID else {
                 return false
             }
             

@@ -90,7 +90,7 @@ enum SurveyFeedbackRequest {
         return RequestUtils.genericPostRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { _, responseStatus, error in
                 completionHandler(responseStatus, error)
         }

@@ -26,7 +26,7 @@ enum TransactionsRequest {
         RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURLWithoutParams,
+            url: baseURLWithoutParams,
             body: [:]) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
@@ -80,7 +80,7 @@ enum TransactionsRequest {
         return RequestUtils.genericPostRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURLWithoutParams,
+            url: baseURLWithoutParams,
             body: body) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:

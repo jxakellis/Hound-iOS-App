@@ -205,8 +205,8 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     @discardableResult func removeLogs(logUUIDs: [UUID]) -> Bool {
         var didRemoveObject = false
         
-        dogLogs.removeAll { log in
-            guard logUUIDs.contains(log.logUUID) else {
+        dogLogs.removeAll { l in
+            guard logUUIDs.contains(l.logUUID) else {
                 return false
             }
             

@@ -24,7 +24,7 @@ enum GlobalTypesRequest {
         RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: [:]) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     completionHandler(responseStatus, error)

@@ -25,7 +25,7 @@ enum FamilyRequest {
         return RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: [:]) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     completionHandler(responseStatus, error)
@@ -56,7 +56,7 @@ enum FamilyRequest {
         RequestUtils.genericPostRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: [:]) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:
@@ -86,7 +86,7 @@ enum FamilyRequest {
         return RequestUtils.genericPutRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:
@@ -118,7 +118,7 @@ enum FamilyRequest {
         RequestUtils.genericDeleteRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:

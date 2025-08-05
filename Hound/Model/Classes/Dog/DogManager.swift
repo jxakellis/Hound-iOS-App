@@ -99,8 +99,8 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     func addDogWithoutSorting(dog: Dog) {
         
         // removes any existing dogs that have the same dogUUID as they would cause problems.
-        dogs.removeAll { dog in
-            return dog.dogUUID == dog.dogUUID
+        dogs.removeAll { d in
+            return d.dogUUID == dog.dogUUID
         }
         
         dogs.append(dog)
@@ -127,8 +127,8 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     @discardableResult func removeDog(dogUUID: UUID) -> Bool {
         var didRemoveObject = false
         
-        dogs.removeAll { dog in
-            guard dog.dogUUID == dogUUID else {
+        dogs.removeAll { d in
+            guard d.dogUUID == dogUUID else {
                 return false
             }
             

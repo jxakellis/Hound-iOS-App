@@ -336,7 +336,6 @@ class LogsSortVC: HoundScrollViewController,
         containerView.addSubview(applyButton)
         containerView.addSubview(resetButton)
         
-        
         let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
         didTapScreenGesture.delegate = self
         didTapScreenGesture.cancelsTouchesInView = false

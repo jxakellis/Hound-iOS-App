@@ -127,16 +127,16 @@ final class ReminderTimingManager {
     
     /// Removes all reminderTimers with the same reminderUUID from reminderAlarmTimers, invalidating their timers in the process
     private static func removeTimer(reminderUUID: UUID, type: ReminderTimerTypes) {
-        reminderTimers.removeAll { reminderTimer in
-            guard reminderTimer.type == type else {
+        reminderTimers.removeAll { rt in
+            guard rt.type == type else {
                 return false
             }
             
-            guard reminderTimer.reminder.reminderUUID == reminderUUID else {
+            guard rt.reminder.reminderUUID == reminderUUID else {
                 return false
             }
             
-            reminderTimer.timer.invalidate()
+            rt.timer.invalidate()
             return true
         }
     }

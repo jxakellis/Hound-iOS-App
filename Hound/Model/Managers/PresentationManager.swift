@@ -55,10 +55,10 @@ enum PresentationManager {
     
     /// The presenter used for an alert. Sometimes we need to present an alert but the alert to be shown is called from a non UIAlertController class as that is not in the view heirarchy and physically cannot present a view, so this is used instead.
     static func addGlobalPresenterToStack(_ viewController: UIViewController) {
-        globalPresenterStack.removeAll { viewController in
+        globalPresenterStack.removeAll { vc in
             // Remove stale presenters that are no longer in the window or
             // duplicate references to the same instance.
-            let isDuplicate = viewController === viewController
+            let isDuplicate = vc === viewController
             let isStale = viewController.viewIfLoaded?.window == nil
             return isDuplicate || isStale
         }
@@ -73,9 +73,9 @@ enum PresentationManager {
     }
     
     static func removeGlobalPresenterFromStack(_ viewController: UIViewController) {
-        globalPresenterStack.removeAll { viewController in
+        globalPresenterStack.removeAll { vc in
             // Remove all matching instances of our global presenter
-            return viewController === viewController
+            return vc === viewController
         }
     }
     
@@ -106,9 +106,9 @@ enum PresentationManager {
         
         guard fetchingInformationAlertController.presentingViewController != nil else {
             // fetchingInformationAlertController isn't being dismissed and it has no presentingViewController, so it is not presented at all.
-            viewControllerPresentationQueue.removeAll { viewController in
+            viewControllerPresentationQueue.removeAll { vc in
                 // fetchingInformationAlertController hasn't been presented but it could be in the queue to be presented. Remove it so it can't be presented
-                return viewController === fetchingInformationAlertController
+                return vc === fetchingInformationAlertController
             }
             completionHandler?()
             return
@@ -328,8 +328,8 @@ enum PresentationManager {
     
     private static func enqueue(_ viewController: UIViewController) {
         // Make sure that the alertController that is being queued isn't already presented or in the queue
-        guard currentPresentedViewController !== viewController && viewControllerPresentationQueue.contains(where: { viewController in
-            return viewController === viewController
+        guard currentPresentedViewController !== viewController && viewControllerPresentationQueue.contains(where: { vc in
+            return vc === viewController
         }) == false else {
             // Don't call presentNextViewController() as queue didn't change
             return
@@ -434,8 +434,8 @@ enum PresentationManager {
         // If currentPresentedViewController has no presentingViewController (indicating it was never presented), then it is no longer the currentPresentedViewController
         
         // If there are any copies of the dismissed VC in the queue, remove them
-        viewControllerPresentationQueue.removeAll { viewController in
-            return self.currentPresentedViewController === viewController
+        viewControllerPresentationQueue.removeAll { vc in
+            return self.currentPresentedViewController === vc
         }
         
         self.currentPresentedViewController = nil

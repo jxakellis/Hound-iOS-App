@@ -58,7 +58,7 @@ final class HoundIntroductionVC: HoundViewController,
     
     // MARK: - HoundIntroductionDogNameViewDelegate
     
-    func willContinue(dogName dogName: String?) {
+    func willContinue(dogName: String?) {
         // Store the entered dog name
         self.dogNameInput = dogName
         
@@ -73,7 +73,7 @@ final class HoundIntroductionVC: HoundViewController,
     
     // MARK: - HoundIntroductionDogIconViewDelegate
     
-    func willFinish(dogIcon dogIcon: UIImage?) {
+    func willFinish(dogIcon: UIImage?) {
         self.dogIconInput = dogIcon
         
         // If the family already has at least one dog, simply update its icon
@@ -155,7 +155,7 @@ final class HoundIntroductionVC: HoundViewController,
     
     // MARK: - Functions
     
-    private func goToPage(pageDirection pageDirection: PageDirection, animated animated: Bool) {
+    private func goToPage(pageDirection: PageDirection, animated: Bool) {
         let delta = (pageDirection == .next ? 1 : -1)
         let targetIndex = min(max(currentPageIndex + delta, 0), pages.count - 1)
         currentPageIndex = targetIndex

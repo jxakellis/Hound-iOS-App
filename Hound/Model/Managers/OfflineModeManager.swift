@@ -197,8 +197,8 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
     /// Invoke this function if a dog, reminder, or log was attempted to be deleted, however it failed due to no response from the Hound server
     func addDeletedObjectToQueue(object: OfflineModeDeletedObject) {
         // Ensure that the queue doesn't already have the deleted object waiting in it.
-        guard offlineModeDeletedObjects.contains(where: { object in
-            return object == object
+        guard offlineModeDeletedObjects.contains(where: { o in
+            return o == object
         }) == false else { return }
         
         offlineModeDeletedObjects.append(object)
@@ -375,8 +375,8 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 }
                 
                 // Got a response for this request. Whether it was successful or a failure, clear this object from being sync'd
-                self.offlineModeDeletedObjects.removeAll { object in
-                    return object == deletedDog
+                self.offlineModeDeletedObjects.removeAll { o in
+                    return o == deletedDog
                 }
                 
                 // If the dog got added back into the dogManager, remove it again and then push the change to everything else
@@ -400,8 +400,8 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 }
                 
                 // Got a response for this request. Whether it was successful or a failure, clear this object from being sync'd
-                self.offlineModeDeletedObjects.removeAll { object in
-                    return object == deletedReminder
+                self.offlineModeDeletedObjects.removeAll { o in
+                    return o == deletedReminder
                 }
                 
                 // If the dog got added back into the dogManager, remove it again and then push the change to everything else
@@ -425,8 +425,8 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 }
                 
                 // Got a response for this request. Whether it was successful or a failure, clear this object from being sync'd
-                self.offlineModeDeletedObjects.removeAll { object in
-                    return object == deletedLog
+                self.offlineModeDeletedObjects.removeAll { o in
+                    return o == deletedLog
                 }
                 
                 // If the dog got added back into the dogManager, remove it again and then push the change to everything else
@@ -450,8 +450,8 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 }
                 
                 // Got a response for this request. Whether it was successful or a failure, clear this object from being sync'd
-                self.offlineModeDeletedObjects.removeAll { object in
-                    return object == deletedTrigger
+                self.offlineModeDeletedObjects.removeAll { o in
+                    return o == deletedTrigger
                 }
                 
                 // If the dog got added back into the dogManager, remove it again and then push the change to everything else

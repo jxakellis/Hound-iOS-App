@@ -24,7 +24,7 @@ enum UserRequest {
         RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: [:]) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     completionHandler(responseStatus, error)
@@ -56,7 +56,7 @@ enum UserRequest {
         RequestUtils.genericPostRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: UserConfiguration.createBody(addingOntoBody: UserInformation.createBody(addingOntoBody: nil))) { responseBody, responseStatus, error in
 
             switch responseStatus {
@@ -89,7 +89,7 @@ enum UserRequest {
         RequestUtils.genericPutRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     completionHandler(responseStatus, error)
@@ -117,7 +117,7 @@ enum UserRequest {
         RequestUtils.genericDeleteRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:

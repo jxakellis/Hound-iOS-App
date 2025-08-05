@@ -44,7 +44,7 @@ extension RemindersRequest {
         return RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
@@ -102,7 +102,7 @@ extension RemindersRequest {
         return RequestUtils.genericPostRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { responseBody, responseStatus, error in
                 // As long as we got a response from the server, it no longers needs synced. Success or failure
                 if responseStatus != .noResponse {
@@ -173,7 +173,7 @@ extension RemindersRequest {
         return RequestUtils.genericPutRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { _, responseStatus, error in
                 // As long as we got a response from the server, it no longers needs synced. Success or failure
                 if responseStatus != .noResponse {
@@ -228,7 +228,7 @@ extension RemindersRequest {
         return RequestUtils.genericDeleteRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request

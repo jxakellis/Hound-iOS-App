@@ -51,7 +51,7 @@ extension TriggersRequest {
         return RequestUtils.genericGetRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body
         ) { responseBody, responseStatus, error in
             guard responseStatus != .failureResponse else {
@@ -130,7 +130,7 @@ extension TriggersRequest {
         return RequestUtils.genericPostRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body
         ) { responseBody, responseStatus, error in
             // As long as we got a response from the server, it no longers needs synced. Success or failure
@@ -210,7 +210,7 @@ extension TriggersRequest {
         return RequestUtils.genericPutRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body
         ) { _, responseStatus, error in
             // As long as we got a response from the server, it no longers needs synced. Success or failure
@@ -269,7 +269,7 @@ extension TriggersRequest {
         return RequestUtils.genericDeleteRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: body
         ) { _, responseStatus, error in
             guard responseStatus != .failureResponse else {

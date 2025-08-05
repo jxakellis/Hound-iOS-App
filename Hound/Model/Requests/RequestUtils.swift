@@ -81,7 +81,7 @@ enum RequestUtils {
         
         // Create the task that will send the request
         let task = session.dataTask(with: request) { data, response, error in
-            genericRequestResponse(request: request, errorAlert: errorAlert, completionHandler: completionHandler, data: data, uRLResponse: response, error: error)
+            genericRequestResponse(request: request, errorAlert: errorAlert, completionHandler: completionHandler, data: data, URLResponse: response, error: error)
         }
         
         // Pass off the task to be executed when its time for it. Handles lots of requests coming in at once
@@ -96,11 +96,11 @@ enum RequestUtils {
         errorAlert: ResponseAutomaticErrorAlertTypes,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void,
         data: Data?,
-        uRLResponse: URLResponse?,
+        URLResponse: URLResponse?,
         error: Error?
     ) {
         // extract status code from URLResponse
-        let responseStatusCode: Int? = (uRLResponse as? HTTPURLResponse)?.statusCode
+        let responseStatusCode: Int? = (URLResponse as? HTTPURLResponse)?.statusCode
         
         // parse response from json
         let responseBody: JSONResponseBody? = {
@@ -283,13 +283,13 @@ extension RequestUtils {
     static func genericGetRequest(
         errorAlert: ResponseAutomaticErrorAlertTypes,
         sourceFunction: RequestSourceFunctionTypes,
-        uRL: URL,
+        url: URL,
         body: JSONRequestBody,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
-        var request = URLRequest(url: uRL)
+        var request = URLRequest(url: url)
         
         // specify http method
         request.httpMethod = "PATCH"
@@ -311,13 +311,13 @@ extension RequestUtils {
     static func genericPostRequest(
         errorAlert: ResponseAutomaticErrorAlertTypes,
         sourceFunction: RequestSourceFunctionTypes,
-        uRL: URL,
+        url: URL,
         body: JSONRequestBody,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
-        var request = URLRequest(url: uRL)
+        var request = URLRequest(url: url)
         
         // specify http method
         request.httpMethod = "POST"
@@ -340,13 +340,13 @@ extension RequestUtils {
     static func genericPutRequest(
         errorAlert: ResponseAutomaticErrorAlertTypes,
         sourceFunction: RequestSourceFunctionTypes,
-        uRL: URL,
+        url: URL,
         body: JSONRequestBody,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
-        var request = URLRequest(url: uRL)
+        var request = URLRequest(url: url)
         
         // specify http method
         request.httpMethod = "PUT"
@@ -369,13 +369,13 @@ extension RequestUtils {
     static func genericDeleteRequest(
         errorAlert: ResponseAutomaticErrorAlertTypes,
         sourceFunction: RequestSourceFunctionTypes,
-        uRL: URL,
+        url: URL,
         body: JSONRequestBody,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
-        var request = URLRequest(url: uRL)
+        var request = URLRequest(url: url)
         
         // specify http method
         request.httpMethod = "DELETE"

@@ -36,8 +36,8 @@ final class ReminderAlarmManager {
         // If the app is in the background, add the willCreateAndShowReminderAlarm to the queue. Once the app is brought to the foreground, executes synchronizeReminderAlarmQueueIfNeeded to attempt to reshow all of these alarms. This ensures that when the alarms are presented, the app is open. Otherwise, we could refresh the information for an alarm and present it, only for it to sit in the background for an hour while the app is closed, making the alarm outdated.
         guard UIApplication.shared.applicationState != .background else {
             // make sure we don't have multiple of the same alarm in the alarm queue
-            alarmQueue.removeAll { alarmQueueItem in
-                alarmQueueItem.dogUUID == dogUUID && alarmQueueItem.reminder.reminderUUID == reminder.reminderUUID
+            alarmQueue.removeAll { item in
+                item.dogUUID == dogUUID && item.reminder.reminderUUID == reminder.reminderUUID
             }
             alarmQueue.append(AlarmQueueItem(dogName: dogName, dogUUID: dogUUID, reminder: reminder))
             return

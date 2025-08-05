@@ -25,7 +25,7 @@ enum AlertRequest {
         return RequestUtils.genericPostRequest(
             errorAlert: errorAlert,
             sourceFunction: sourceFunction,
-            uRL: baseURL,
+            url: baseURL,
             body: [:]) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:
