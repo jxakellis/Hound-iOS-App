@@ -37,7 +37,7 @@ class HoundScrollViewController: HoundViewController {
         // Set the top content inset so the scroll view's content initially starts just below the safe area (e.g., under the notch or status bar).
         scrollView.contentInset.top = view.safeAreaInsets.top
         scrollView.contentInset.bottom = view.safeAreaInsets.bottom
-        // Reset the content offset so the top of the content is aligned exactly with the safe area top when the view first appears.
+        // Reset the content offset so the top of the contelont is aligned exactly with the safe area top when the view first appears.
         // This avoids the scroll view appearing already scrolled down due to system adjustments when the inset is changed.
         scrollView.contentOffset.y = -view.safeAreaInsets.top
     }

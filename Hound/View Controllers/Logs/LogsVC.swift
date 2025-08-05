@@ -283,6 +283,7 @@ final class LogsVC: HoundViewController,
         addLogButton.isHidden = dogManager.dogs.isEmpty
         exportLogsButton.isHidden = !familyHasAtLeastOneLog
         filterLogsButton.isHidden = !familyHasAtLeastOneLog
+        sortLogsButton.isHidden = !familyHasAtLeastOneLog
         
         if (sender.localized is LogsTableVC) == false {
             logsTableViewController.setDogManager(
@@ -385,7 +386,7 @@ final class LogsVC: HoundViewController,
         // filterLogsButton
         NSLayoutConstraint.activate([
             filterLogsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
-            filterLogsButton.trailingAnchor.constraint(equalTo: exportLogsButton.leadingAnchor, constant: -Constant.Constraint.Spacing.contentTightIntraHori),
+            filterLogsButton.trailingAnchor.constraint(equalTo: sortLogsButton.leadingAnchor, constant: -Constant.Constraint.Spacing.contentTightIntraHori),
             filterLogsButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
             filterLogsButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight),
             filterLogsButton.createSquareAspectRatio()

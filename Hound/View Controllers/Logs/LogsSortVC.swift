@@ -361,7 +361,7 @@ class LogsSortVC: HoundScrollViewController,
         }
         
         sortDirectionStack.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.bottom).offset(Constant.Constraint.Spacing.contentSectionVert)
+            make.top.equalTo(sortFieldStack.snp.bottom).offset(Constant.Constraint.Spacing.contentSectionVert)
             make.horizontalEdges.equalTo(containerView).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
         sortDirectionLabel.snp.makeConstraints { make in

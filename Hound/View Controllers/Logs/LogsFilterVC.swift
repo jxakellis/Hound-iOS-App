@@ -349,6 +349,7 @@ class LogsFilterVC: HoundScrollViewController,
     func setup(delegate: LogsFilterDelegate, filter: LogsFilter) {
         self.delegate = delegate
         self.filter = (filter.copy() as? LogsFilter) ?? filter
+        updateDynamicUIElements()
     }
     
     // MARK: - Functions
@@ -422,6 +423,8 @@ class LogsFilterVC: HoundScrollViewController,
             let noDate = Date()
             let fromDate = filter.timeRangeFromDate ?? filter.timeRangeToDate ?? noDate
             let toDate = filter.timeRangeToDate ?? filter.timeRangeFromDate ?? noDate
+            
+            timeRangeFieldLabel.text = filter.timeRangeField.readableValue
             
             fromDatePicker.setDate(fromDate, animated: false)
             toDatePicker.setDate(toDate, animated: false)
