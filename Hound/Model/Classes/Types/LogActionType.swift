@@ -42,13 +42,13 @@ final class LogActionType: NSObject, Comparable, NSCoding {
         }
         
         self.init(
-            forLogActionTypeId: decodedLogActionTypeId,
-            forInternalValue: decodedInternalValue,
-            forReadableValue: decodedReadableValue,
-            forEmoji: decodedEmoji,
-            forSortOrder: decodedSortOrder,
-            forIsDefault: decodedIsDefault,
-            forAllowsCustom: decodedAllowsCustom
+            logActionTypeId: decodedLogActionTypeId,
+            internalValue: decodedInternalValue,
+            readableValue: decodedReadableValue,
+            emoji: decodedEmoji,
+            sortOrder: decodedSortOrder,
+            isDefault: decodedIsDefault,
+            allowsCustom: decodedAllowsCustom
         )
     }
     
@@ -119,21 +119,21 @@ final class LogActionType: NSObject, Comparable, NSCoding {
     // MARK: - Initialization
     
     init(
-        forLogActionTypeId: Int,
-        forInternalValue: String,
-        forReadableValue: String,
-        forEmoji: String,
-        forSortOrder: Int,
-        forIsDefault: Bool,
-        forAllowsCustom: Bool
+        logActionTypeId: Int,
+        internalValue: String,
+        readableValue: String,
+        emoji: String,
+        sortOrder: Int,
+        isDefault: Bool,
+        allowsCustom: Bool
     ) {
-        self.logActionTypeId = forLogActionTypeId
-        self.internalValue = forInternalValue
-        self.readableValue = forReadableValue
-        self.emoji = forEmoji
-        self.sortOrder = forSortOrder
-        self.isDefault = forIsDefault
-        self.allowsCustom = forAllowsCustom
+        self.logActionTypeId = logActionTypeId
+        self.internalValue = internalValue
+        self.readableValue = readableValue
+        self.emoji = emoji
+        self.sortOrder = sortOrder
+        self.isDefault = isDefault
+        self.allowsCustom = allowsCustom
         super.init()
     }
     
@@ -151,21 +151,21 @@ final class LogActionType: NSObject, Comparable, NSCoding {
         }
         
         self.init(
-            forLogActionTypeId: idVal,
-            forInternalValue: internalVal,
-            forReadableValue: readableVal,
-            forEmoji: emojiVal,
-            forSortOrder: sortOrderVal,
-            forIsDefault: isDefaultVal,
-            forAllowsCustom: allowsCustomVal
+            logActionTypeId: idVal,
+            internalValue: internalVal,
+            readableValue: readableVal,
+            emoji: emojiVal,
+            sortOrder: sortOrderVal,
+            isDefault: isDefaultVal,
+            allowsCustom: allowsCustomVal
         )
     }
     
     // MARK: - Readable Conversion
     
-    static func find(forLogActionTypeId: Int) -> LogActionType {
-        guard let found = GlobalTypes.shared.logActionTypes.first(where: { $0.logActionTypeId == forLogActionTypeId }) else {
-            HoundLogger.general.error("LogActionType.find: No LogActionType found for id \(forLogActionTypeId). Returning default LogActionType.")
+    static func find(logActionTypeId: Int) -> LogActionType {
+        guard let found = GlobalTypes.shared.logActionTypes.first(where: { $0.logActionTypeId == logActionTypeId }) else {
+            HoundLogger.general.error("LogActionType.find: No LogActionType found for id \(logActionTypeId). Returning default LogActionType.")
             return GlobalTypes.shared.logActionTypes[0]
         }
         return found

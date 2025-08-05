@@ -73,9 +73,9 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
     @objc private func showDisabledBanner(_ sender: Any) {
         guard UserConfiguration.isNotificationEnabled == false else { return }
         PresentationManager.enqueueBanner(
-            forTitle: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
-            forSubtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
-            forStyle: .warning
+            title: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
+            subtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
+            style: .warning
         )
     }
     
@@ -89,7 +89,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
         // cant choose silent mode time when silent mode is disabled
         synchronizeDatePickers(animated: true)
         
-        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+        UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.isSilentModeEnabled = beforeUpdateIsSilentModeEnabled
@@ -112,7 +112,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
             Constant.Key.userConfigurationSilentModeStartMinute.rawValue: .int(UserConfiguration.silentModeStartMinute)
         ]
 
-        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+        UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 UserConfiguration.silentModeStartHour = beforeUpdateSilentModeStartHour
                 UserConfiguration.silentModeStartMinute = beforeUpdateSilentModeStartMinute
@@ -135,7 +135,7 @@ final class SettingsNotifsSilentModeTVC: HoundTableViewCell {
             Constant.Key.userConfigurationSilentModeEndMinute.rawValue: .int(UserConfiguration.silentModeEndMinute)
         ]
 
-        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+        UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 UserConfiguration.silentModeEndHour = beforeUpdateSilentModeEndHour
                 UserConfiguration.silentModeEndMinute = beforeUpdateSilentModeEndMinute

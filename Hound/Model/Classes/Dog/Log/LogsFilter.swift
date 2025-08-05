@@ -13,7 +13,7 @@ class LogsFilter: NSObject, NSCopying {
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {
-        let copy = LogsFilter(forDogManager: dogManager)
+        let copy = LogsFilter(dogManager: dogManager)
         copy.searchText = self.searchText
         copy.filteredDogsUUIDs = self.filteredDogsUUIDs
         copy.filteredLogActionActionTypeIds = self.filteredLogActionActionTypeIds
@@ -65,9 +65,9 @@ class LogsFilter: NSObject, NSCopying {
     
     // MARK: - Main
     
-    init(forDogManager: DogManager) {
+    init(dogManager: DogManager) {
         super.init()
-        apply(forDogManager: forDogManager)
+        apply(dogManager: dogManager)
     }
     
     // MARK: - Computed Properties
@@ -91,66 +91,66 @@ class LogsFilter: NSObject, NSCopying {
     // MARK: - Functions
     
     func clearAll() {
-        apply(forFilterDogs: [])
-        apply(forFilterLogActions: [])
-        apply(forFilterFamilyMembers: [])
-        apply(forSearchText: "")
-        apply(forTimeRangeField: LogsSortField.logStartDate)
-        apply(forTimeRangeFromDate: nil)
-        apply(forTimeRangeToDate: nil)
+        apply(filterDogs: [])
+        apply(filterLogActions: [])
+        apply(filterFamilyMembers: [])
+        apply(searchText: "")
+        apply(timeRangeField: LogsSortField.logStartDate)
+        apply(timeRangeFromDate: nil)
+        apply(timeRangeToDate: nil)
     }
     
-    func apply(forDogManager: DogManager) {
-        dogManager = forDogManager
+    func apply(dogManager: DogManager) {
+        self.dogManager = dogManager
     }
     
     // filteredDogsUUIDs
-    func apply(forFilterDogs: [Dog]) {
-        filteredDogsUUIDs = Set(forFilterDogs.map({ $0.dogUUID }))
+    func apply(filterDogs: [Dog]) {
+        filteredDogsUUIDs = Set(filterDogs.map({ $0.dogUUID }))
     }
-    func add(forFilterDogUUID: UUID) {
-        filteredDogsUUIDs.insert(forFilterDogUUID)
+    func add(filterDogUUID: UUID) {
+        filteredDogsUUIDs.insert(filterDogUUID)
     }
-    func remove(forFilterDogUUID: UUID) {
-        filteredDogsUUIDs.remove(forFilterDogUUID)
+    func remove(filterDogUUID: UUID) {
+        filteredDogsUUIDs.remove(filterDogUUID)
     }
     
     // filteredLogActionActionTypeIds
-    func apply(forFilterLogActions: [LogActionType]) {
-        filteredLogActionActionTypeIds = Set(forFilterLogActions.map({ $0.logActionTypeId }))
+    func apply(filterLogActions: [LogActionType]) {
+        filteredLogActionActionTypeIds = Set(filterLogActions.map({ $0.logActionTypeId }))
     }
-    func add(forLogActionTypeId: Int) {
-        filteredLogActionActionTypeIds.insert(forLogActionTypeId)
+    func add(logActionTypeId: Int) {
+        filteredLogActionActionTypeIds.insert(logActionTypeId)
     }
-    func remove(forLogActionTypeId: Int) {
-        filteredLogActionActionTypeIds.remove(forLogActionTypeId)
+    func remove(logActionTypeId: Int) {
+        filteredLogActionActionTypeIds.remove(logActionTypeId)
     }
     
     // filteredFamilyMemberUserIds
-    func apply(forFilterFamilyMembers: [FamilyMember]) {
-        filteredFamilyMemberUserIds = Set(forFilterFamilyMembers.map({ $0.userId }))
+    func apply(filterFamilyMembers: [FamilyMember]) {
+        filteredFamilyMemberUserIds = Set(filterFamilyMembers.map({ $0.userId }))
     }
-    func add(forUserId: String) {
-        filteredFamilyMemberUserIds.insert(forUserId)
+    func add(userId: String) {
+        filteredFamilyMemberUserIds.insert(userId)
     }
-    func remove(forUserId: String) {
-        filteredFamilyMemberUserIds.remove(forUserId)
+    func remove(userId: String) {
+        filteredFamilyMemberUserIds.remove(userId)
     }
     
-    // forSearchText
-    func apply(forSearchText: String) {
-        searchText = forSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
+    // searchText
+    func apply(searchText: String) {
+        self.searchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     // timeRangeField, timeRangeFromDate, timeRangeToDate
-    func apply(forTimeRangeField: LogsSortField) {
-        timeRangeField = forTimeRangeField
+    func apply(timeRangeField: LogsSortField) {
+        self.timeRangeField = timeRangeField
     }
-    func apply(forTimeRangeFromDate: Date?) {
-        timeRangeFromDate = forTimeRangeFromDate
+    func apply(timeRangeFromDate: Date?) {
+        self.timeRangeFromDate = timeRangeFromDate
     }
-    func apply(forTimeRangeToDate: Date?) {
-        timeRangeToDate = forTimeRangeToDate
+    func apply(timeRangeToDate: Date?) {
+        self.timeRangeToDate = timeRangeToDate
     }
     
 }

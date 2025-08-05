@@ -113,29 +113,29 @@ final class DogsReminderTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    func setup(forDogUUID: UUID, forReminder: Reminder) {
-        self.dogUUID = forDogUUID
-        self.reminder = forReminder
+    func setup(dogUUID: UUID, reminder: Reminder) {
+        self.dogUUID = dogUUID
+        self.reminder = reminder
         
-        reminderActionIconLabel.text = forReminder.reminderActionType.emoji
-        reminderActionIconLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
-        reminderActionIconLabel.isHidden = forReminder.reminderIsTriggerResult
+        reminderActionIconLabel.text = reminder.reminderActionType.emoji
+        reminderActionIconLabel.alpha = reminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
+        reminderActionIconLabel.isHidden = reminder.reminderIsTriggerResult
         
-        triggerResultIndicatorImageView.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
-        triggerResultIndicatorImageView.isHidden = !forReminder.reminderIsTriggerResult
+        triggerResultIndicatorImageView.alpha = reminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
+        triggerResultIndicatorImageView.isHidden = !reminder.reminderIsTriggerResult
         
-        reminderActionTextLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName)
-        reminderActionTextLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
+        reminderActionTextLabel.text = reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName)
+        reminderActionTextLabel.alpha = reminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
-        intervalLabel.text = forReminder.readableRecurrance()
-        intervalLabel.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
+        intervalLabel.text = reminder.readableRecurrance()
+        intervalLabel.alpha = reminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
-        chevronImageView.alpha = (forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha) * 0.75
-        notificationBellImageView.alpha = forReminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
+        chevronImageView.alpha = (reminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha) * 0.75
+        notificationBellImageView.alpha = reminder.reminderIsEnabled ? reminderEnabledElementAlpha : reminderDisabledElementAlpha
         
-        let reminderEnabled = forReminder.reminderIsEnabled
-        let userIsRecipient = forReminder.reminderRecipientUserIds.contains { $0 == UserInformation.userId ?? Constant.Visual.Text.unknownUserId }
-        let hasRecipients = !forReminder.reminderRecipientUserIds.isEmpty
+        let reminderEnabled = reminder.reminderIsEnabled
+        let userIsRecipient = reminder.reminderRecipientUserIds.contains { $0 == UserInformation.userId ?? Constant.Visual.Text.unknownUserId }
+        let hasRecipients = !reminder.reminderRecipientUserIds.isEmpty
         
         let shouldShowBell =
         reminderEnabled && (
@@ -145,7 +145,7 @@ final class DogsReminderTVC: HoundTableViewCell {
         )
         
         notificationBellImageView.isHidden = !shouldShowBell
-        timeZoneIndicatorImageView.isHidden = !forReminder.reminderIsEnabled || UserConfiguration.timeZone == forReminder.reminderTimeZone
+        timeZoneIndicatorImageView.isHidden = !reminder.reminderIsEnabled || UserConfiguration.timeZone == reminder.reminderTimeZone
         
         reloadNextAlarmLabel()
     }

@@ -10,15 +10,15 @@ import StoreKit
 import UIKit
 
 protocol SettingsPagesTableVCDelegate: AnyObject {
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager)
 }
 
 final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDelegate, FamilyUpgradeIntroductionVCDelegate {
     
     // MARK: - SettingsAccountVCDelegate
     
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
-        delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: forDogManager)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager) {
+        delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), dogManager: dogManager)
     }
     
     // MARK: - FamilyUpgradeIntroductionVCDelegate
@@ -54,15 +54,15 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
         
         if LocalConfiguration.localHasCompletedFamilyUpgradeIntroductionViewController == false && FamilyInformation.familyActiveSubscription.productId == Constant.Class.Subscription.defaultSubscription.productId {
             let vc = FamilyUpgradeIntroductionVC()
-            vc.setup(forDelegate: self)
+            vc.setup(delegate: self)
             PresentationManager.enqueueViewController(vc)
         }
     }
     
     // MARK: - Setup
     
-    func setup(forDelegate: SettingsPagesTableVCDelegate) {
-        self.delegate = forDelegate
+    func setup(delegate: SettingsPagesTableVCDelegate) {
+        self.delegate = delegate
     }
     
     // MARK: - Table View Data Source
@@ -107,7 +107,7 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
             return HoundTableViewCell()
         }
         
-        settingsPagesTableViewCell.setup(forPage: settingsPage)
+        settingsPagesTableViewCell.setup(page: settingsPage)
         
         switch settingsPage {
         case .account:
@@ -133,7 +133,7 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
         switch page {
         case .account:
             let vc = SettingsAccountVC()
-            vc.setup(forDelegate: self)
+            vc.setup(delegate: self)
             PresentationManager.enqueueViewController(vc)
         case .family:
             let vc = SettingsFamilyVC()

@@ -13,8 +13,8 @@ enum RemindersRequest {
     static var baseURL: URL { DogsRequest.baseURL.appendingPathComponent("/reminders") }
     
     /// Returns an array of reminder bodies under the key "reminders". E.g. { reminders : [{reminder1}, {reminder2}] }
-    private static func createBody(forDogUUID: UUID, forReminders: [Reminder]) -> JSONRequestBody {
-        let reminderBodies = forReminders.map { $0.createBody(forDogUUID: forDogUUID) }
+    private static func createBody(dogUUID: UUID, reminders: [Reminder]) -> JSONRequestBody {
+        let reminderBodies = reminders.map { $0.createBody(dogUUID: dogUUID) }
         
         let body: JSONRequestBody = [Constant.Key.dogReminders.rawValue: .array(
             reminderBodies.map { .object($0.compactMapValues { $0 }) }
@@ -33,19 +33,19 @@ extension RemindersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forReminder: Reminder,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        reminder: Reminder,
         completionHandler: @escaping (Reminder?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body: JSONRequestBody = forReminder.createBody(forDogUUID: forDogUUID)
+        let body: JSONRequestBody = reminder.createBody(dogUUID: dogUUID)
         
         return RequestUtils.genericGetRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(nil, responseStatus, error)
@@ -67,16 +67,16 @@ extension RemindersRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
-                    OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
+                    OfflineModeManager.shared.didGetNoResponse(type: .dogManagerGet)
                 }
                 else if let reminderBody = remindersBody?.first {
                     // If we got a reminderBody, use it. This can only happen if responseStatus != .noResponse.
-                    completionHandler(Reminder(fromBody: reminderBody, reminderToOverride: forReminder.copy() as? Reminder), responseStatus, error)
+                    completionHandler(Reminder(fromBody: reminderBody, reminderToOverride: reminder.copy() as? Reminder), responseStatus, error)
                     return
                 }
                 
                 // Either no response or no new, updated information from the Hound server
-                completionHandler(forReminder, responseStatus, error)
+                completionHandler(reminder, responseStatus, error)
         }
     }
     
@@ -85,29 +85,29 @@ extension RemindersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func create(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forReminders: [Reminder],
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        reminders: [Reminder],
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         // There should be reminders to actually create
-        guard forReminders.count >= 1 else {
+        guard reminders.count >= 1 else {
             completionHandler(.successResponse, nil)
             return nil
         }
         
-        let body = createBody(forDogUUID: forDogUUID, forReminders: forReminders)
+        let body = createBody(dogUUID: dogUUID, reminders: reminders)
         
         return RequestUtils.genericPostRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { responseBody, responseStatus, error in
                 // As long as we got a response from the server, it no longers needs synced. Success or failure
                 if responseStatus != .noResponse {
-                    forReminders.forEach { forReminder in
-                        forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                    reminders.forEach { reminder in
+                        reminder.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: nil)
                     }
                 }
                 
@@ -132,22 +132,22 @@ extension RemindersRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the reminders to be updated later
-                    forReminders.forEach { forReminder in
-                        forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    reminders.forEach { reminder in
+                        reminder.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: Date())
                     }
                 }
                 else if let remindersBody = remindersBody {
                     remindersBody.forEach { reminderBody in
                         // For each reminderBody, get the reminderUUID and reminderId. We use the reminderUUID to locate the reminder so we can assign it its reminderId
-                        guard let reminderId = reminderBody[Constant.Key.reminderId.rawValue] as? Int, let reminderUUID = UUID.fromString(forUUIDString: reminderBody[Constant.Key.reminderUUID.rawValue] as? String) else {
+                        guard let reminderId = reminderBody[Constant.Key.reminderId.rawValue] as? Int, let reminderUUID = UUID.fromString(UUIDString: reminderBody[Constant.Key.reminderUUID.rawValue] as? String) else {
                             return
                         }
                         
-                        let forReminder = forReminders.first { forReminder in
-                            return forReminder.reminderUUID == reminderUUID
+                        let reminder = reminders.first { reminder in
+                            return reminder.reminderUUID == reminderUUID
                         }
                         
-                        forReminder?.reminderId = reminderId
+                        reminder?.reminderId = reminderId
                     }
                 }
                 
@@ -156,29 +156,29 @@ extension RemindersRequest {
     }
     
     @discardableResult static func update(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forReminders: [Reminder],
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        reminders: [Reminder],
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         // There should be reminders to actually update
-        guard forReminders.count >= 1 else {
+        guard reminders.count >= 1 else {
             completionHandler(.successResponse, nil)
             return nil
         }
         
-        let body = createBody(forDogUUID: forDogUUID, forReminders: forReminders)
+        let body = createBody(dogUUID: dogUUID, reminders: reminders)
         
         return RequestUtils.genericPutRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { _, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { _, responseStatus, error in
                 // As long as we got a response from the server, it no longers needs synced. Success or failure
                 if responseStatus != .noResponse {
-                    forReminders.forEach { forReminder in
-                        forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                    reminders.forEach { reminder in
+                        reminder.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: nil)
                     }
                 }
                 
@@ -190,8 +190,8 @@ extension RemindersRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the reminders to be updated later
-                    forReminders.forEach { forReminder in
-                        forReminder.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    reminders.forEach { reminder in
+                        reminder.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: Date())
                     }
                 }
                 
@@ -200,14 +200,14 @@ extension RemindersRequest {
     }
     
     @discardableResult static func delete(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forReminderUUIDs: [UUID],
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        reminderUUIDs: [UUID],
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         // There should be reminders to actually delete
-        guard forReminderUUIDs.count >= 1 else {
+        guard reminderUUIDs.count >= 1 else {
             completionHandler(.successResponse, nil)
             return nil
         }
@@ -215,10 +215,10 @@ extension RemindersRequest {
         let body: JSONRequestBody = {
             var reminderBodies: [JSONRequestBody] = []
             
-            for forReminderUUID in forReminderUUIDs {
+            for reminderUUID in reminderUUIDs {
                 var reminderBody: JSONRequestBody = [:]
-                reminderBody[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
-                reminderBody[Constant.Key.reminderUUID.rawValue] = .string(forReminderUUID.uuidString)
+                reminderBody[Constant.Key.dogUUID.rawValue] = .string(dogUUID.uuidString)
+                reminderBody[Constant.Key.reminderUUID.rawValue] = .string(reminderUUID.uuidString)
                 reminderBodies.append(reminderBody)
             }
         
@@ -226,10 +226,10 @@ extension RemindersRequest {
         }()
         
         return RequestUtils.genericDeleteRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { _, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(responseStatus, error)
@@ -240,8 +240,8 @@ extension RemindersRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the reminder to be deleted later
-                    forReminderUUIDs.forEach { forReminderUUID in
-                        OfflineModeManager.shared.addDeletedObjectToQueue(forObject: OfflineModeDeletedReminder(dogUUID: forDogUUID, reminderUUID: forReminderUUID, deletedDate: Date()))
+                    reminderUUIDs.forEach { reminderUUID in
+                        OfflineModeManager.shared.addDeletedObjectToQueue(object: OfflineModeDeletedReminder(dogUUID: dogUUID, reminderUUID: reminderUUID, deletedDate: Date()))
                     }
                 }
                 

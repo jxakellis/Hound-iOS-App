@@ -16,9 +16,9 @@ enum DogsRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDog: Dog,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dog: Dog,
         completionHandler: @escaping (Dog?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
@@ -42,13 +42,13 @@ enum DogsRequest {
             return nil
         }
         
-        let body: JSONRequestBody = [Constant.Key.dogUUID.rawValue: .string(forDog.dogUUID.uuidString)]
+        let body: JSONRequestBody = [Constant.Key.dogUUID.rawValue: .string(dog.dogUUID.uuidString)]
         
         return RequestUtils.genericGetRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: url,
-            forBody: body) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: url,
+            body: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(nil, responseStatus, error)
@@ -59,16 +59,16 @@ enum DogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
-                    OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
+                    OfflineModeManager.shared.didGetNoResponse(type: .dogManagerGet)
                 }
                 else if let newDogBody = responseBody?[Constant.Key.result.rawValue] as? [String: Any] {
                     // If we got a dogBody, use it. This can only happen if responseStatus != .noResponse.
-                    completionHandler(Dog(fromBody: newDogBody, dogToOverride: forDog.copy() as? Dog), responseStatus, error)
+                    completionHandler(Dog(fromBody: newDogBody, dogToOverride: dog.copy() as? Dog), responseStatus, error)
                     return
                 }
                 
                 // Either no response or no new, updated information from the Hound server
-                completionHandler(forDog, responseStatus, error)
+                completionHandler(dog, responseStatus, error)
         }
     }
     
@@ -77,9 +77,9 @@ enum DogsRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogManager: DogManager,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogManager: DogManager,
         completionHandler: @escaping (DogManager?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
@@ -106,10 +106,10 @@ enum DogsRequest {
         let previousDogManagerSynchronization = Date()
         
         return RequestUtils.genericGetRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: url,
-            forBody: [:]) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: url,
+            body: [:]) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(nil, responseStatus, error)
@@ -120,18 +120,18 @@ enum DogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
-                    OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
+                    OfflineModeManager.shared.didGetNoResponse(type: .dogManagerGet)
                 }
                 else if let dogBodies = responseBody?[Constant.Key.result.rawValue] as? [[String: Any]] {
                     // If we got dogBodies, use them. This can only happen if responseStatus != .noResponse.
                     LocalConfiguration.previousDogManagerSynchronization = previousDogManagerSynchronization
                     
-                    completionHandler(DogManager(fromDogBodies: dogBodies, dogManagerToOverride: forDogManager.copy() as? DogManager), responseStatus, error)
+                    completionHandler(DogManager(fromDogBodies: dogBodies, dogManagerToOverride: dogManager.copy() as? DogManager), responseStatus, error)
                     return
                 }
                 
                 // Either no response or no new, updated information from the Hound server
-                completionHandler(forDogManager, responseStatus, error)
+                completionHandler(dogManager, responseStatus, error)
         }
         
     }
@@ -141,21 +141,21 @@ enum DogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func create(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDog: Dog,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dog: Dog,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body = forDog.createBody()
+        let body = dog.createBody()
         
         return RequestUtils.genericPostRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { responseBody, responseStatus, error in
                 // As long as we got a response from the server, it no longers needs synced. Success or failure
                 if responseStatus != .noResponse {
-                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                    dog.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: nil)
                 }
                 
                 guard responseStatus != .failureResponse else {
@@ -165,17 +165,17 @@ enum DogsRequest {
                 }
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
-                if let dogIcon = forDog.dogIcon {
-                    DogIconManager.addIcon(forDogUUID: forDog.dogUUID, forDogIcon: dogIcon)
+                if let dogIcon = dog.dogIcon {
+                    DogIconManager.addIcon(dogUUID: dog.dogUUID, dogIcon: dogIcon)
                 }
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the dog to be updated later
-                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    dog.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: Date())
                 }
                 else if let dogId = responseBody?[Constant.Key.result.rawValue] as? Int {
                     // If we got a dogId, use it. This can only happen if responseStatus != .noResponse.
-                    forDog.dogId = dogId
+                    dog.dogId = dogId
                 }
                 
                 completionHandler(responseStatus, error)
@@ -187,21 +187,21 @@ enum DogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func update(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDog: Dog,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dog: Dog,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body = forDog.createBody()
+        let body = dog.createBody()
         
         return RequestUtils.genericPutRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { _, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { _, responseStatus, error in
                 // As long as we got a response from the server, it no longers needs synced. Success or failure
                 if responseStatus != .noResponse {
-                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                    dog.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: nil)
                 }
                 
                 guard responseStatus != .failureResponse else {
@@ -211,13 +211,13 @@ enum DogsRequest {
                 }
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
-                if let dogIcon = forDog.dogIcon {
-                    DogIconManager.addIcon(forDogUUID: forDog.dogUUID, forDogIcon: dogIcon)
+                if let dogIcon = dog.dogIcon {
+                    DogIconManager.addIcon(dogUUID: dog.dogUUID, dogIcon: dogIcon)
                 }
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the dog to be updated later
-                    forDog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    dog.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: Date())
                 }
                 
                 completionHandler(responseStatus, error)
@@ -229,18 +229,18 @@ enum DogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body: JSONRequestBody = [Constant.Key.dogUUID.rawValue: .string(forDogUUID.uuidString)]
+        let body: JSONRequestBody = [Constant.Key.dogUUID.rawValue: .string(dogUUID.uuidString)]
         
         return RequestUtils.genericDeleteRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { _, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(responseStatus, error)
@@ -248,11 +248,11 @@ enum DogsRequest {
                 }
                 
                 // Either completed successfully or no response from the server, we can proceed as usual
-                DogIconManager.removeIcon(forDogUUID: forDogUUID)
+                DogIconManager.removeIcon(dogUUID: dogUUID)
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the dog to be deleted later
-                    OfflineModeManager.shared.addDeletedObjectToQueue(forObject: OfflineModeDeletedDog(dogUUID: forDogUUID, deletedDate: Date()))
+                    OfflineModeManager.shared.addDeletedObjectToQueue(object: OfflineModeDeletedDog(dogUUID: dogUUID, deletedDate: Date()))
                 }
                 
                 completionHandler(responseStatus, error)

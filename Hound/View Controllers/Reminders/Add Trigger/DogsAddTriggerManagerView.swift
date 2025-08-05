@@ -344,9 +344,9 @@ final class DogsAddTriggerManagerView: HoundView,
             return nil
         }
         
-        let reminderActionType = ReminderActionType.find(forReminderActionTypeId: selectedReminderResult.reminderActionTypeId)
+        let reminderActionType = ReminderActionType.find(reminderActionTypeId: selectedReminderResult.reminderActionTypeId)
         let customName = reminderActionType.allowsCustom ? (reminderCustomActionNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "") : ""
-        trigger.triggerReminderResult = TriggerReminderResult(forReminderActionTypeId: selectedReminderResult.reminderActionTypeId, forReminderCustomActionName: customName)
+        trigger.triggerReminderResult = TriggerReminderResult(reminderActionTypeId: selectedReminderResult.reminderActionTypeId, reminderCustomActionName: customName)
         
         if selectedTriggerType == .timeDelay {
             trigger.triggerType = .timeDelay
@@ -381,7 +381,7 @@ final class DogsAddTriggerManagerView: HoundView,
         reminderCustomActionNameTextField.text = selectedReminderResult?.reminderCustomActionName
         updateTriggerTypeDescriptionLabel()
         
-        let customActionNameIsHidden = !(selectedReminderResult.map { ReminderActionType.find(forReminderActionTypeId: $0.reminderActionTypeId).allowsCustom } ?? false)
+        let customActionNameIsHidden = !(selectedReminderResult.map { ReminderActionType.find(reminderActionTypeId: $0.reminderActionTypeId).allowsCustom } ?? false)
         if reminderCustomActionNameTextField.isHidden != customActionNameIsHidden {
             reminderCustomActionNameTextField.isHidden = customActionNameIsHidden
             remakeCustomActionNameConstraints()
@@ -409,16 +409,16 @@ final class DogsAddTriggerManagerView: HoundView,
     
     // MARK: - Setup
     
-    func setup(forDog: Dog?, forTriggerToUpdate: Trigger?) {
-        dog = forDog
-        triggerToUpdate = forTriggerToUpdate
-        initialTrigger = forTriggerToUpdate?.copy() as? Trigger
+    func setup(dog: Dog?, triggerToUpdate: Trigger?) {
+        self.dog = dog
+        self.triggerToUpdate = triggerToUpdate
+        initialTrigger = triggerToUpdate?.copy() as? Trigger
         
         availableLogReactions = []
         let logs = dog?.dogLogs.dogLogs ?? []
         for type in GlobalTypes.shared.logActionTypes {
             availableLogReactions.append(
-                TriggerLogReaction(forLogActionTypeId: type.logActionTypeId)
+                TriggerLogReaction(logActionTypeId: type.logActionTypeId)
             )
             var seen = Set<String>()
             for log in logs where log.logActionTypeId == type.logActionTypeId {
@@ -426,7 +426,7 @@ final class DogsAddTriggerManagerView: HoundView,
                 guard type.allowsCustom, !name.isEmpty else { continue }
                 if seen.insert(name).inserted {
                     availableLogReactions.append(
-                        TriggerLogReaction(forLogActionTypeId: type.logActionTypeId, forLogCustomActionName: name)
+                        TriggerLogReaction(logActionTypeId: type.logActionTypeId, logCustomActionName: name)
                     )
                 }
                 if seen.count >= PreviousLogCustomActionName.maxStored { break }
@@ -434,15 +434,15 @@ final class DogsAddTriggerManagerView: HoundView,
             
         }
         
-        manuallyCreatedSwitch.isOn = forTriggerToUpdate?.triggerManualCondition ?? Constant.Class.Trigger.defaultTriggerManualCondition
-        createdByAlarmSwitch.isOn = forTriggerToUpdate?.triggerAlarmCreatedCondition ?? Constant.Class.Trigger.defaultTriggerAlarmCreatedCondition
+        manuallyCreatedSwitch.isOn = triggerToUpdate?.triggerManualCondition ?? Constant.Class.Trigger.defaultTriggerManualCondition
+        createdByAlarmSwitch.isOn = triggerToUpdate?.triggerAlarmCreatedCondition ?? Constant.Class.Trigger.defaultTriggerAlarmCreatedCondition
         
         // Build available reminder results
         availableReminderResults = []
         let reminders = dog?.dogReminders.dogReminders ?? []
         for type in GlobalTypes.shared.reminderActionTypes {
             availableReminderResults.append(
-                TriggerReminderResult(forReminderActionTypeId: type.reminderActionTypeId)
+                TriggerReminderResult(reminderActionTypeId: type.reminderActionTypeId)
             )
             var seen = Set<String>()
             for reminder in reminders where reminder.reminderActionTypeId == type.reminderActionTypeId {
@@ -450,14 +450,14 @@ final class DogsAddTriggerManagerView: HoundView,
                 guard type.allowsCustom, !name.isEmpty else { continue }
                 if seen.insert(name).inserted {
                     availableReminderResults.append(
-                        TriggerReminderResult(forReminderActionTypeId: type.reminderActionTypeId, forReminderCustomActionName: name)
+                        TriggerReminderResult(reminderActionTypeId: type.reminderActionTypeId, reminderCustomActionName: name)
                     )
                 }
                 if seen.count >= PreviousReminderCustomActionName.maxStored { break }
             }
         }
         
-        if let trigger = forTriggerToUpdate {
+        if let trigger = triggerToUpdate {
             selectedLogReactions = trigger.triggerLogReactions
             selectedReminderResult = trigger.triggerReminderResult
             selectedTriggerType = trigger.triggerType
@@ -466,18 +466,18 @@ final class DogsAddTriggerManagerView: HoundView,
             selectedTriggerType = Constant.Class.Trigger.defaultTriggerType
         }
         
-        if forTriggerToUpdate?.triggerType == .timeDelay {
-            timeDelayView.setup(forDelegate: self, forComponents: forTriggerToUpdate?.timeDelayComponents)
+        if triggerToUpdate?.triggerType == .timeDelay {
+            timeDelayView.setup(delegate: self, components: triggerToUpdate?.timeDelayComponents)
         }
         else {
-            timeDelayView.setup(forDelegate: self, forComponents: nil)
+            timeDelayView.setup(delegate: self, components: nil)
         }
         
-        if forTriggerToUpdate?.triggerType == .fixedTime {
-            fixedTimeView.setup(forDelegate: self, forComponents: forTriggerToUpdate?.fixedTimeComponents)
+        if triggerToUpdate?.triggerType == .fixedTime {
+            fixedTimeView.setup(delegate: self, components: triggerToUpdate?.fixedTimeComponents)
         }
         else {
-            fixedTimeView.setup(forDelegate: self, forComponents: nil)
+            fixedTimeView.setup(delegate: self, components: nil)
         }
         
         updateDynamicUIElements()
@@ -548,7 +548,7 @@ final class DogsAddTriggerManagerView: HoundView,
         }
     }
     
-    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
+    func numberOfRows(section: Int, identifier: any HoundDropDownType) -> Int {
         guard let type = identifier as? DogsAddTriggerDropDownTypes else { return 0 }
         switch type {
         case .logReactions:
@@ -658,7 +658,7 @@ final class DogsAddTriggerManagerView: HoundView,
             reminderResultLabel.errorMessage = nil
             selectedReminderResult = availableReminderResults[indexPath.row]
             
-            if let selectedReminderResult = selectedReminderResult, ReminderActionType.find(forReminderActionTypeId: selectedReminderResult.reminderActionTypeId).allowsCustom {
+            if let selectedReminderResult = selectedReminderResult, ReminderActionType.find(reminderActionTypeId: selectedReminderResult.reminderActionTypeId).allowsCustom {
                 // If custom action is allowed, begin editing textField
                 reminderCustomActionNameTextField.text = selectedReminderResult.reminderCustomActionName
             }

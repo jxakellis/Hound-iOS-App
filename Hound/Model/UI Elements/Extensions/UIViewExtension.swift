@@ -17,7 +17,7 @@ extension UIView {
             action: #selector(self.dismissKeyboard)
         )
         
-        tap.delegate = delegate
+        tap.self.delegate = delegate
         tap.cancelsTouchesInView = false
         
         self.addGestureRecognizer(tap)

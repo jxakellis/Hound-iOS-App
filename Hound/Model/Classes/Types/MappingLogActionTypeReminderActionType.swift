@@ -34,9 +34,9 @@ final class MappingLogActionTypeReminderActionType: NSObject, Comparable, NSCodi
             return nil
         }
         self.init(
-            forMappingId: mappingId,
-            forLogActionTypeId: logActionTypeId,
-            forReminderActionTypeId: reminderActionTypeId
+            mappingId: mappingId,
+            logActionTypeId: logActionTypeId,
+            reminderActionTypeId: reminderActionTypeId
         )
     }
     
@@ -57,13 +57,13 @@ final class MappingLogActionTypeReminderActionType: NSObject, Comparable, NSCodi
     // MARK: - Initialization
     
     init(
-        forMappingId: Int,
-        forLogActionTypeId: Int,
-        forReminderActionTypeId: Int
+        mappingId: Int,
+        logActionTypeId: Int,
+        reminderActionTypeId: Int
     ) {
-        self.mappingId = forMappingId
-        self.logActionTypeId = forLogActionTypeId
-        self.reminderActionTypeId = forReminderActionTypeId
+        self.mappingId = mappingId
+        self.logActionTypeId = logActionTypeId
+        self.reminderActionTypeId = reminderActionTypeId
         super.init()
     }
     
@@ -77,9 +77,9 @@ final class MappingLogActionTypeReminderActionType: NSObject, Comparable, NSCodi
         }
         
         self.init(
-            forMappingId: mappingIdVal,
-            forLogActionTypeId: logActionTypeIdVal,
-            forReminderActionTypeId: reminderActionTypeIdVal
+            mappingId: mappingIdVal,
+            logActionTypeId: logActionTypeIdVal,
+            reminderActionTypeId: reminderActionTypeIdVal
         )
     }
 }

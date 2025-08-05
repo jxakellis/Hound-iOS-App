@@ -9,10 +9,10 @@
 import UIKit
 
 protocol LogsTableVCDelegate: AnyObject {
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
-    func didSelectLog(forDogUUID: UUID, forLog: Log)
-    func shouldUpdateNoLogsRecorded(forIsHidden: Bool)
-    func shouldUpdateAlphaForButtons(forAlpha: Double)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager)
+    func didSelectLog(dogUUID: UUID, log: Log)
+    func shouldUpdateNoLogsRecorded(isHidden: Bool)
+    func shouldUpdateAlphaForButtons(alpha: Double)
     func shouldUpdateFilterLogsButton()
 }
 
@@ -29,16 +29,16 @@ final class LogsTableVC: HoundTableViewController {
         // When contentOffset.y reaches alphaConstant, UI element's alpha becomes 0
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
-        delegate?.shouldUpdateAlphaForButtons(forAlpha: alpha)
+        delegate?.shouldUpdateAlphaForButtons(alpha: alpha)
     }
     
     // MARK: - Properties
     
-    /// Array of tuples [[(forDogUUID, log)]].
+    /// Array of tuples [[(dogUUID, log)]].
     /// Logs are grouped by date; first element is future, last is oldest.
     private(set) var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = [] {
         didSet {
-            delegate?.shouldUpdateNoLogsRecorded(forIsHidden: !logsForDogUUIDsGroupedByDate.isEmpty)
+            delegate?.shouldUpdateNoLogsRecorded(isHidden: !logsForDogUUIDsGroupedByDate.isEmpty)
         }
     }
     
@@ -60,7 +60,7 @@ final class LogsTableVC: HoundTableViewController {
         }
     }
     
-    private var storedLogsFilter: LogsFilter = LogsFilter(forDogManager: DogManager())
+    private var storedLogsFilter: LogsFilter = LogsFilter(dogManager: DogManager())
     var logsFilter: LogsFilter {
         get {
             storedLogsFilter
@@ -98,12 +98,12 @@ final class LogsTableVC: HoundTableViewController {
     private(set) var dogManager: DogManager = DogManager()
     
     /// Update dogManager and refresh UI accordingly
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        dogManager = forDogManager
-        logsFilter.apply(forDogManager: forDogManager)
+    func setDogManager(sender: Sender, dogManager: DogManager) {
+        self.dogManager = dogManager
+        logsFilter.apply(dogManager: dogManager)
         
         if (sender.localized is LogsTableVC) == true {
-            delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
+            delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), dogManager: dogManager)
         }
         
         reloadTable()
@@ -139,8 +139,8 @@ final class LogsTableVC: HoundTableViewController {
     
     // MARK: - Setup
     
-    func setup(forDelegate: LogsTableVCDelegate) {
-        self.delegate = forDelegate
+    func setup(delegate: LogsTableVCDelegate) {
+        self.delegate = delegate
     }
     
     // MARK: - Functions
@@ -149,8 +149,8 @@ final class LogsTableVC: HoundTableViewController {
     @objc private func refreshTableData() {
         PresentationManager.beginFetchingInformationIndicator()
         DogsRequest.get(
-            forErrorAlert: .automaticallyAlertOnlyForFailure,
-            forDogManager: dogManager
+            errorAlert: .automaticallyAlertOnlyForFailure,
+            dogManager: dogManager
         ) { newDogManager, responseStatus, _ in
             PresentationManager.endFetchingInformationIndicator {
                 // End refresh animation first to avoid visual glitch
@@ -162,25 +162,25 @@ final class LogsTableVC: HoundTableViewController {
                 
                 if responseStatus == .successResponse {
                     PresentationManager.enqueueBanner(
-                        forTitle: Constant.Visual.BannerText.successRefreshLogsTitle,
-                        forSubtitle: Constant.Visual.BannerText.successRefreshLogsSubtitle,
-                        forStyle: .success
+                        title: Constant.Visual.BannerText.successRefreshLogsTitle,
+                        subtitle: Constant.Visual.BannerText.successRefreshLogsSubtitle,
+                        style: .success
                     )
                 }
                 else {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
                         // Only show if offline banner already shown
                         PresentationManager.enqueueBanner(
-                            forTitle: Constant.Visual.BannerText.infoRefreshOnHoldTitle,
-                            forSubtitle: Constant.Visual.BannerText.infoRefreshOnHoldSubtitle,
-                            forStyle: .info
+                            title: Constant.Visual.BannerText.infoRefreshOnHoldTitle,
+                            subtitle: Constant.Visual.BannerText.infoRefreshOnHoldSubtitle,
+                            style: .info
                         )
                     }
                 }
                 
                 self.setDogManager(
                     sender: Sender(origin: self, localized: self),
-                    forDogManager: newDogManager
+                    dogManager: newDogManager
                 )
             }
         }
@@ -189,7 +189,7 @@ final class LogsTableVC: HoundTableViewController {
     /// Compute logsForDogUUIDsGroupedByDate and reload table view
     private func reloadTable() {
         // Avoid recomputation if no logs
-        logsForDogUUIDsGroupedByDate = dogManager.logsForDogUUIDsGroupedByDate(forFilter: logsFilter, forSort: logsSort)
+        logsForDogUUIDsGroupedByDate = dogManager.logsForDogUUIDsGroupedByDate(filter: logsFilter, sort: logsSort)
         tableView.isUserInteractionEnabled = !logsForDogUUIDsGroupedByDate.isEmpty
         guard allowReloadTable else { return }
         tableView.reloadData()
@@ -253,7 +253,7 @@ final class LogsTableVC: HoundTableViewController {
         
         let (dogUUID, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
-        guard let dog = dogManager.findDog(forDogUUID: dogUUID) else {
+        guard let dog = dogManager.findDog(dogUUID: dogUUID) else {
             return HoundTableViewCell()
         }
         
@@ -264,7 +264,7 @@ final class LogsTableVC: HoundTableViewController {
             return HoundTableViewCell()
         }
         
-        cell.setup(forParentDogName: dog.dogName, forLog: log)
+        cell.setup(parentDogName: dog.dogName, log: log)
         
         // Reset rounding before applying new corners
         cell.containerView.roundCorners(setCorners: .none)
@@ -294,12 +294,12 @@ final class LogsTableVC: HoundTableViewController {
     ) {
         guard editingStyle == .delete else { return }
         
-        let (forDogUUID, forLog) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
+        let (dogUUID, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
         LogsRequest.delete(
-            forErrorAlert: .automaticallyAlertOnlyForFailure,
-            forDogUUID: forDogUUID,
-            forLogUUID: forLog.logUUID
+            errorAlert: .automaticallyAlertOnlyForFailure,
+            dogUUID: dogUUID,
+            logUUID: log.logUUID
         ) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 return
@@ -307,13 +307,13 @@ final class LogsTableVC: HoundTableViewController {
             
             let previousLogs = self.logsForDogUUIDsGroupedByDate
 
-            self.dogManager.findDog(forDogUUID: forDogUUID)?
-                .dogLogs.removeLog(forLogUUID: forLog.logUUID)
+            self.dogManager.findDog(dogUUID: dogUUID)?
+                .dogLogs.removeLog(logUUID: log.logUUID)
 
             self.allowReloadTable = false
             self.setDogManager(
                 sender: Sender(origin: self, localized: self),
-                forDogManager: self.dogManager
+                dogManager: self.dogManager
             )
             self.allowReloadTable = true
 
@@ -345,14 +345,14 @@ final class LogsTableVC: HoundTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let (forDogUUID, forLog) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
+        let (dogUUID, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
         
         PresentationManager.beginFetchingInformationIndicator()
         LogsRequest.get(
-            forErrorAlert: .automaticallyAlertOnlyForFailure,
-            forDogUUID: forDogUUID,
-            forLog: forLog
-        ) { log, responseStatus, _ in
+            errorAlert: .automaticallyAlertOnlyForFailure,
+            dogUUID: dogUUID,
+            log: log
+        ) { responseLog, responseStatus, _ in
             PresentationManager.endFetchingInformationIndicator {
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 
@@ -360,18 +360,17 @@ final class LogsTableVC: HoundTableViewController {
                     return
                 }
                 
-                guard let log = log else {
+                guard let responseLog = responseLog else {
                     // Log was deleted on server; update local manager
-                    self.dogManager.findDog(forDogUUID: forDogUUID)?
-                        .dogLogs.removeLog(forLogUUID: forLog.logUUID)
+                    self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.removeLog(logUUID: log.logUUID)
                     self.setDogManager(
                         sender: Sender(origin: self, localized: self),
-                        forDogManager: self.dogManager
+                        dogManager: self.dogManager
                     )
                     return
                 }
                 
-                self.delegate?.didSelectLog(forDogUUID: forDogUUID, forLog: log)
+                self.delegate?.didSelectLog(dogUUID: dogUUID, log: responseLog)
             }
         }
     }

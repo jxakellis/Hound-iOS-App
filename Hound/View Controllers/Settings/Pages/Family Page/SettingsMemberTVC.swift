@@ -51,7 +51,7 @@ final class SettingsFamilyMemberTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    func setup(forDisplayFullName displayFullName: String) {
+    func setup(displayFullName: String) {
         displayFullNameLabel.text = displayFullName
         
         // if the user is not the family head, that means the cell should not be selectable nor should we show the chevron that indicates selectability

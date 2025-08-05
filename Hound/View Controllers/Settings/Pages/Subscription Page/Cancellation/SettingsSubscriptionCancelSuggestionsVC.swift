@@ -82,15 +82,15 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
             // Only allow if user is a family head
             guard UserInformation.isUserFamilyHead else {
                 PresentationManager.enqueueBanner(
-                    forTitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionTitle,
-                    forSubtitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionSubtitle,
-                    forStyle: .danger
+                    title: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionTitle,
+                    subtitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionSubtitle,
+                    style: .danger
                 )
                 return
             }
             
             SurveyFeedbackRequest.create(
-                forErrorAlert: .automaticallyAlertForNone,
+                errorAlert: .automaticallyAlertForNone,
                 userCancellationReason: self.cancellationReason,
                 userCancellationFeedback: self.suggestionTextView.text ?? ""
             ) { _, _ in return }
@@ -129,9 +129,9 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
     
     // MARK: - Setup
     
-    func setup(forDelegate: SettingsSubscriptionCancelSuggestionsVCDelegate, forCancellationReason: SubscriptionCancellationReason?) {
-        self.delegate = forDelegate
-        self.cancellationReason = forCancellationReason
+    func setup(delegate: SettingsSubscriptionCancelSuggestionsVCDelegate, cancellationReason: SubscriptionCancellationReason?) {
+        self.delegate = delegate
+        self.cancellationReason = cancellationReason
     }
     
     // MARK: - Setup Elements

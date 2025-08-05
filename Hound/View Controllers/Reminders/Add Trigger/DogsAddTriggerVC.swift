@@ -9,9 +9,9 @@
 import UIKit
 
 protocol DogsAddTriggerVCDelegate: AnyObject {
-    func didAddTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger)
-    func didUpdateTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger)
-    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, triggerUUID: UUID)
+    func didAddTrigger(sender: Sender, dogUUID: UUID?, trigger: Trigger)
+    func didUpdateTrigger(sender: Sender, dogUUID: UUID?, trigger: Trigger)
+    func didRemoveTrigger(sender: Sender, dogUUID: UUID?, triggerUUID: UUID)
 }
 
 final class DogsAddTriggerVC: HoundScrollViewController {
@@ -94,26 +94,26 @@ final class DogsAddTriggerVC: HoundScrollViewController {
     // MARK: - Setup
     
     /// Changes made by this view controller will not be persisted to the server, and will only be used locally. Dog is optional
-    func setupWithoutServerPersistence(forDelegate: DogsAddTriggerVCDelegate, forDog: Dog?, forTriggerToUpdate: Trigger?) {
+    func setupWithoutServerPersistence(delegate: DogsAddTriggerVCDelegate, dog: Dog?, triggerToUpdate: Trigger?) {
         shouldPersistChangesToServer = false
-        commonSetup(forDelegate: forDelegate, forDog: forDog, forTriggerToUpdate: forTriggerToUpdate)
+        commonSetup(delegate: delegate, dog: dog, triggerToUpdate: triggerToUpdate)
     }
     
     /// Changes made by this view controller will be persisted to the server. Dog is required
-    func setupWithServerPersistence(forDelegate: DogsAddTriggerVCDelegate, forDog: Dog, forTriggerToUpdate: Trigger?) {
+    func setupWithServerPersistence(delegate: DogsAddTriggerVCDelegate, dog: Dog, triggerToUpdate: Trigger?) {
         shouldPersistChangesToServer = true
-        commonSetup(forDelegate: forDelegate, forDog: forDog, forTriggerToUpdate: forTriggerToUpdate)
+        commonSetup(delegate: delegate, dog: dog, triggerToUpdate: triggerToUpdate)
     }
     
-    private func commonSetup(forDelegate: DogsAddTriggerVCDelegate, forDog: Dog?, forTriggerToUpdate: Trigger?) {
-        delegate = forDelegate
-        dog = forDog
-        triggerToUpdate = forTriggerToUpdate
+    private func commonSetup(delegate: DogsAddTriggerVCDelegate, dog: Dog?, triggerToUpdate: Trigger?) {
+        self.delegate = delegate
+        self.dog = dog
+        self.triggerToUpdate = triggerToUpdate
         
-        editPageHeaderView.setTitle(forTriggerToUpdate == nil ? "Create Automation" : "Edit Automation")
-        editPageHeaderView.isLeadingButtonEnabled = forTriggerToUpdate != nil
-        editPageHeaderView.isTrailingButtonEnabled = forTriggerToUpdate != nil
-        managerView.setup(forDog: forDog, forTriggerToUpdate: forTriggerToUpdate)
+        editPageHeaderView.setTitle(triggerToUpdate == nil ? "Create Automation" : "Edit Automation")
+        editPageHeaderView.isLeadingButtonEnabled = triggerToUpdate != nil
+        editPageHeaderView.isTrailingButtonEnabled = triggerToUpdate != nil
+        managerView.setup(dog: dog, triggerToUpdate: triggerToUpdate)
     }
     
     // MARK: - Functions
@@ -127,10 +127,10 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         
         guard shouldPersistChangesToServer, let dog = dog else {
             if triggerToUpdate == nil {
-                delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, forTrigger: trigger)
+                delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), dogUUID: nil, trigger: trigger)
             }
             else {
-                delegate?.didUpdateTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, forTrigger: trigger)
+                delegate?.didUpdateTrigger(sender: Sender(origin: self, localized: self), dogUUID: nil, trigger: trigger)
             }
             HapticsManager.notification(.success)
             self.dismiss(animated: true)
@@ -150,10 +150,10 @@ final class DogsAddTriggerVC: HoundScrollViewController {
             guard status != .failureResponse else { return }
             
             if self.triggerToUpdate != nil {
-                self.delegate?.didUpdateTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dog.dogUUID, forTrigger: trigger)
+                self.delegate?.didUpdateTrigger(sender: Sender(origin: self, localized: self), dogUUID: dog.dogUUID, trigger: trigger)
             }
             else {
-                self.delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dog.dogUUID, forTrigger: trigger)
+                self.delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), dogUUID: dog.dogUUID, trigger: trigger)
             }
             
             HapticsManager.notification(.success)
@@ -161,10 +161,10 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         }
         
         if triggerToUpdate != nil {
-            TriggersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: [trigger], completionHandler: completion)
+            TriggersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, dogTriggers: [trigger], completionHandler: completion)
         }
         else {
-            TriggersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: [trigger], completionHandler: completion)
+            TriggersRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, dogTriggers: [trigger], completionHandler: completion)
         }
     }
     
@@ -176,7 +176,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         }
         
         guard shouldPersistChangesToServer, let dog = dog else {
-            delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, forTrigger: duplicateTrigger)
+            delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), dogUUID: nil, trigger: duplicateTrigger)
             HapticsManager.notification(.success)
             self.dismiss(animated: true)
             return
@@ -186,13 +186,13 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         view.isUserInteractionEnabled = false
         saveButton.isLoading = true
         
-        TriggersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: [duplicateTrigger]) { [weak self] status, _ in
+        TriggersRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, dogTriggers: [duplicateTrigger]) { [weak self] status, _ in
             guard let self = self else { return }
             self.view.isUserInteractionEnabled = true
             self.saveButton.isLoading = false
             
             guard status != .failureResponse else { return }
-            self.delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dog.dogUUID, forTrigger: duplicateTrigger)
+            self.delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), dogUUID: dog.dogUUID, trigger: duplicateTrigger)
             HapticsManager.notification(.success)
             self.dismiss(animated: true)
         }
@@ -206,7 +206,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         }
         
         guard shouldPersistChangesToServer, let dog = dog else {
-            delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: nil, triggerUUID: triggerToUpdate.triggerUUID)
+            delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), dogUUID: nil, triggerUUID: triggerToUpdate.triggerUUID)
             HapticsManager.notification(.warning)
             self.dismiss(animated: true)
             return
@@ -215,10 +215,10 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         let alert = UIAlertController(title: "Are you sure you want to delete this trigger?", message: nil, preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             self.view.isUserInteractionEnabled = false
-            TriggersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, triggerUUIDs: [triggerToUpdate.triggerUUID]) { status, _ in
+            TriggersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, triggerUUIDs: [triggerToUpdate.triggerUUID]) { status, _ in
                 self.view.isUserInteractionEnabled = true
                 guard status != .failureResponse else { return }
-                self.delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), forDogUUID: dog.dogUUID, triggerUUID: triggerToUpdate.triggerUUID)
+                self.delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), dogUUID: dog.dogUUID, triggerUUID: triggerToUpdate.triggerUUID)
                 HapticsManager.notification(.warning)
                 self.dismiss(animated: true)
             }

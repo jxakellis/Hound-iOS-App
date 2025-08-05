@@ -28,7 +28,7 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
             return nil
         }
         let decodedCustomName = aDecoder.decodeOptionalString(forKey: Constant.Key.logCustomActionName.rawValue)
-        self.init(forLogActionTypeId: decodedLogActionTypeId, forLogCustomActionName: decodedCustomName)
+        self.init(logActionTypeId: decodedLogActionTypeId, logCustomActionName: decodedCustomName)
     }
 
     func encode(with aCoder: NSCoder) {
@@ -43,9 +43,9 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
     
     // MARK: - Main
 
-    init(forLogActionTypeId: Int? = nil, forLogCustomActionName: String? = nil) {
-        self.logActionTypeId = forLogActionTypeId ?? logActionTypeId
-        self.logCustomActionName = forLogCustomActionName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? logCustomActionName
+    init(logActionTypeId: Int? = nil, logCustomActionName: String? = nil) {
+        self.logActionTypeId = logActionTypeId ?? self.logActionTypeId
+        self.logCustomActionName = logCustomActionName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? self.logCustomActionName
         super.init()
     }
     
@@ -53,13 +53,13 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
         let logActionTypeId = fromBody[Constant.Key.logActionTypeId.rawValue] as? Int ?? toOverride?.logActionTypeId
         let logCustomActionName = fromBody[Constant.Key.logCustomActionName.rawValue] as? String ?? toOverride?.logCustomActionName
         
-        self.init(forLogActionTypeId: logActionTypeId, forLogCustomActionName: logCustomActionName)
+        self.init(logActionTypeId: logActionTypeId, logCustomActionName: logCustomActionName)
     }
     
     // MARK: - Functions
     
     func readableName(includeMatchingEmoji: Bool) -> String {
-        return LogActionType.find(forLogActionTypeId: logActionTypeId).convertToReadableName(customActionName: logCustomActionName, includeMatchingEmoji: includeMatchingEmoji)
+        return LogActionType.find(logActionTypeId: logActionTypeId).convertToReadableName(customActionName: logCustomActionName, includeMatchingEmoji: includeMatchingEmoji)
     }
     
     func createBody() -> JSONRequestBody {

@@ -18,23 +18,23 @@ enum TransactionsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
     @discardableResult static func get(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
 
         RequestUtils.genericGetRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURLWithoutParams,
-            forBody: [:]) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURLWithoutParams,
+            body: [:]) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[Constant.Key.result.rawValue] as? [JSONResponseBody] {
 
                     FamilyInformation.clearAllFamilySubscriptions()
                     for subscription in result {
-                        FamilyInformation.addFamilySubscription(forSubscription: Subscription(fromBody: subscription))
+                        FamilyInformation.addFamilySubscription(subscription: Subscription(fromBody: subscription))
                     }
 
                     completionHandler(.successResponse, error)
@@ -56,8 +56,8 @@ enum TransactionsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
     */
     @discardableResult static func create(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         // Get the receipt if it's available. If the receipt isn't available, we sent through an invalid base64EncodedString, then the server will return us an error
@@ -78,15 +78,15 @@ enum TransactionsRequest {
         let body: JSONRequestBody = [Constant.Key.appStoreReceiptURL.rawValue: .string(base64EncodedReceiptString)]
 
         return RequestUtils.genericPostRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURLWithoutParams,
-            forBody: body) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURLWithoutParams,
+            body: body) { responseBody, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 if let result = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
                     let familyActiveSubscription = Subscription(fromBody: result)
-                    FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
+                    FamilyInformation.addFamilySubscription(subscription: familyActiveSubscription)
 
                     completionHandler(.successResponse, error)
                 }

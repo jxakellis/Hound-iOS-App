@@ -53,12 +53,12 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     /// Provide an array of dictionary literal of dog properties to instantiate dogs. Provide a dogManager to have the dogs add themselves into, update themselves in, or delete themselves from.
     convenience init?(fromDogBodies: [JSONResponseBody], dogManagerToOverride: DogManager?) {
         self.init()
-        self.addDogs(forDogs: dogManagerToOverride?.dogs ?? [])
+        self.addDogs(dogs: dogManagerToOverride?.dogs ?? [])
         
         for fromBody in fromDogBodies {
             // Don't pull these properties from overrideDog. A valid fromBody needs to provide this itself
             let dogId: Int? = fromBody[Constant.Key.dogId.rawValue] as? Int
-            let dogUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.dogUUID.rawValue] as? String)
+            let dogUUID: UUID? = UUID.fromString(UUIDString: fromBody[Constant.Key.dogUUID.rawValue] as? String)
             let dogIsDeleted: Bool? = fromBody[Constant.Key.dogIsDeleted.rawValue] as? Bool
             
             guard dogId != nil, let dogUUID = dogUUID, let dogIsDeleted = dogIsDeleted else {
@@ -67,13 +67,13 @@ final class DogManager: NSObject, NSCoding, NSCopying {
             }
             
             guard dogIsDeleted == false else {
-                DogIconManager.removeIcon(forDogUUID: dogUUID)
-                removeDog(forDogUUID: dogUUID)
+                DogIconManager.removeIcon(dogUUID: dogUUID)
+                removeDog(dogUUID: dogUUID)
                 continue
             }
             
-            if let dog = Dog(fromBody: fromBody, dogToOverride: findDog(forDogUUID: dogUUID)) {
-                addDog(forDog: dog)
+            if let dog = Dog(fromBody: fromBody, dogToOverride: findDog(dogUUID: dogUUID)) {
+                addDog(dog: dog)
             }
         }
     }
@@ -91,44 +91,44 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     // MARK: - Functions
     
     /// Returns reference of a dog with the given dogUUID
-    func findDog(forDogUUID: UUID) -> Dog? {
-        dogs.first(where: { $0.dogUUID == forDogUUID })
+    func findDog(dogUUID: UUID) -> Dog? {
+        dogs.first(where: { $0.dogUUID == dogUUID })
     }
     
     /// Helper function allows us to use the same logic for addDog and addDogs and allows us to only sort at the end. Without this function, addDogs would invoke addDog repeadly and sortDogs() with each call.
-    func addDogWithoutSorting(forDog: Dog) {
+    func addDogWithoutSorting(dog: Dog) {
         
         // removes any existing dogs that have the same dogUUID as they would cause problems.
         dogs.removeAll { dog in
-            return dog.dogUUID == forDog.dogUUID
+            return dog.dogUUID == dog.dogUUID
         }
         
-        dogs.append(forDog)
+        dogs.append(dog)
     }
     
     /// Checks to see if a dog is already present. If its dogUUID is, then is removes the old dog and replaces it with the new.
-    func addDog(forDog dog: Dog) {
+    func addDog(dog: Dog) {
         
-        addDogWithoutSorting(forDog: dog)
+        addDogWithoutSorting(dog: dog)
         
         dogs.sort(by: { $0 <= $1 })
     }
     
-    /// Adds array of dogs with addDog(forDog: Dog) repition  (but only sorts once at the end to be more efficent)
-    func addDogs(forDogs: [Dog]) {
-        for dog in forDogs {
-            addDogWithoutSorting(forDog: dog)
+    /// Adds array of dogs with addDog(dog: Dog) repition  (but only sorts once at the end to be more efficent)
+    func addDogs(dogs: [Dog]) {
+        for dog in dogs {
+            addDogWithoutSorting(dog: dog)
         }
         
-        dogs.sort(by: { $0 <= $1 })
+        self.dogs.sort(by: { $0 <= $1 })
     }
     
     /// Returns true if it removed at least one dog with the same dogUUID
-    @discardableResult func removeDog(forDogUUID: UUID) -> Bool {
+    @discardableResult func removeDog(dogUUID: UUID) -> Bool {
         var didRemoveObject = false
         
         dogs.removeAll { dog in
-            guard dog.dogUUID == forDogUUID else {
+            guard dog.dogUUID == dogUUID else {
                 return false
             }
             
@@ -140,33 +140,33 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     }
     
     /// Returns an array of tuples [[(dogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest.
-    func logsForDogUUIDsGroupedByDate(forFilter: LogsFilter, forSort: LogsSort) -> [[(UUID, Log)]] {
+    func logsForDogUUIDsGroupedByDate(filter: LogsFilter, sort: LogsSort) -> [[(UUID, Log)]] {
         var dogUUIDLogPairs: [(UUID, Log)] = []
         
         for dog in dogs {
-            if forFilter.filteredDogsUUIDs.count >= 1 && forFilter.filteredDogsUUIDs.contains(dog.dogUUID) == false {
+            if filter.filteredDogsUUIDs.count >= 1 && filter.filteredDogsUUIDs.contains(dog.dogUUID) == false {
                 // We are filtering by dogs and this is not one of them, therefore, this dog is no available
                 continue
             }
             
             var numberOfLogsAdded = 0
-            for log in dog.dogLogs.sortedDogLogs(sortField: forSort.sortField, sortDirection: forSort.sortDirection) {
+            for log in dog.dogLogs.sortedDogLogs(sortField: sort.sortField, sortDirection: sort.sortDirection) {
                 // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
                 guard numberOfLogsAdded <= LogsTableVC.logsDisplayedLimit else {
                     break
                 }
                 
-                if forFilter.filteredLogActionActionTypeIds.count >= 1 && forFilter.filteredLogActionActionTypeIds.contains(log.logActionTypeId) == false {
+                if filter.filteredLogActionActionTypeIds.count >= 1 && filter.filteredLogActionActionTypeIds.contains(log.logActionTypeId) == false {
                     // We are filtering by log actions and this is not one of them, therefore, this log action is not available
                     continue
                 }
-                if forFilter.filteredFamilyMemberUserIds.count >= 1 && forFilter.filteredFamilyMemberUserIds.contains(log.logCreatedBy) == false {
+                if filter.filteredFamilyMemberUserIds.count >= 1 && filter.filteredFamilyMemberUserIds.contains(log.logCreatedBy) == false {
                     // We are filtering by family members and this is not one of them, therefore, this family member is no available
                     continue
                 }
-                if forFilter.isFromDateEnabled, let timeRangeFromDate = forFilter.timeRangeFromDate {
+                if filter.isFromDateEnabled, let timeRangeFromDate = filter.timeRangeFromDate {
                     let date: Date
-                    switch forFilter.timeRangeField {
+                    switch filter.timeRangeField {
                     case .createdDate:
                         date = log.logCreated
                     case .modifiedDate:
@@ -181,9 +181,9 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                         continue
                     }
                 }
-                if forFilter.isToDateEnabled, let timeRangeToDate = forFilter.timeRangeToDate {
+                if filter.isToDateEnabled, let timeRangeToDate = filter.timeRangeToDate {
                     let date: Date
-                    switch forFilter.timeRangeField {
+                    switch filter.timeRangeField {
                     case .createdDate:
                         date = log.logCreated
                     case .modifiedDate:
@@ -198,8 +198,8 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                         continue
                     }
                 }
-                if forFilter.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false &&
-                    log.matchesSearchText(forFilter.searchText) == false {
+                if filter.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false &&
+                    log.matchesSearchText(filter.searchText) == false {
                     // Search text provided but log doesn't match it
                     continue
                 }
@@ -210,8 +210,8 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         }
         
         dogUUIDLogPairs.sort { lhs, rhs in
-            let comparisonResult = lhs.1.compare(to: rhs.1, sortField: forSort.sortField)
-            return forSort.sortDirection == .ascending ? (comparisonResult == .orderedAscending) : (comparisonResult == .orderedDescending)
+            let comparisonResult = lhs.1.compare(to: rhs.1, sortField: sort.sortField)
+            return sort.sortDirection == .ascending ? (comparisonResult == .orderedAscending) : (comparisonResult == .orderedDescending)
         }
         
         // Splice the chronologically sorted array so that it doesn't exceed maximumNumberOfLogs elements. This will be the maximumNumberOfLogs most recent logs as the array is sorted chronologically
@@ -246,17 +246,17 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     }
     
     /// Iterates through all dogs for a given array of dogUUIDs. Finds all reminders for each of those dogs where the reminder is enabled, its reminderActionType matches, and its reminderCustomActionName matches.
-    func matchingReminders(forDogUUIDs: [UUID], forLogActionType: LogActionType, forLogCustomActionName: String?) -> [(UUID, Reminder)] {
+    func matchingReminders(dogUUIDs: [UUID], logActionType: LogActionType, logCustomActionName: String?) -> [(UUID, Reminder)] {
         var allMatchingReminders: [(UUID, Reminder)] = []
         
         // Find the dogs that are currently selected
         let dogs = dogs.filter { dog in
-            forDogUUIDs.contains(dog.dogUUID)
+            dogUUIDs.contains(dog.dogUUID)
         }
         
         // Search through all of the dogs currently selected. For each dog, find the matching reminders
         for dog in dogs {
-            let matchingReminders = dog.matchingReminders(forLogActionType: forLogActionType, forLogCustomActionName: forLogCustomActionName)
+            let matchingReminders = dog.matchingReminders(logActionType: logActionType, logCustomActionName: logCustomActionName)
             
             // We found any reminders that match, map them with their dogUUID to return them
             allMatchingReminders += matchingReminders.map({ reminder in

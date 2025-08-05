@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SettingsAccountVCDelegate: AnyObject {
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager)
 }
 
 final class SettingsAccountVC: HoundScrollViewController {
@@ -69,7 +69,7 @@ final class SettingsAccountVC: HoundScrollViewController {
     @objc private func didTapCopyUserEmail(_ sender: Any) {
         guard let userEmail = UserInformation.userEmail else { return }
         
-        UIPasteboard.general.setPasteboard(forString: userEmail)
+        UIPasteboard.general.setPasteboard(string: userEmail)
     }
     
     private let userIdHeaderLabel: HoundLabel = {
@@ -162,7 +162,7 @@ final class SettingsAccountVC: HoundScrollViewController {
     @objc private func didTapCopyUserId(_ sender: Any) {
         guard let userId = UserInformation.userId else { return }
         
-        UIPasteboard.general.setPasteboard(forString: userId)
+        UIPasteboard.general.setPasteboard(string: userId)
     }
     
     @objc private func didTapRedownloadData(_ sender: Any) {
@@ -174,7 +174,7 @@ final class SettingsAccountVC: HoundScrollViewController {
         LocalConfiguration.previousDogManagerSynchronization = nil
         redownloadDataButton.isLoading = true
         
-        DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogManager: DogManager()) { dogManager, responseStatus, _ in
+        DogsRequest.get(errorAlert: .automaticallyAlertOnlyForFailure, dogManager: DogManager()) { dogManager, responseStatus, _ in
             PresentationManager.endFetchingInformationIndicator {
                 self.redownloadDataButton.isLoading = false
                 guard responseStatus != .failureResponse, let dogManager = dogManager else {
@@ -184,17 +184,17 @@ final class SettingsAccountVC: HoundScrollViewController {
                 }
                 
                 if responseStatus == .successResponse {
-                    PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.successRedownloadDataTitle, forSubtitle: Constant.Visual.BannerText.successRedownloadDataSubtitle, forStyle: .success)
+                    PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.successRedownloadDataTitle, subtitle: Constant.Visual.BannerText.successRedownloadDataSubtitle, style: .success)
                 }
                 else {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
                         // If OfflineModeManager has displayed its banner that indicates its turning on, then we are safe to display this banner. Otherwise, we would run the risk of both of these banners displaying if its the first time enterin offline mode.
-                        PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.infoRedownloadOnHoldTitle, forSubtitle: Constant.Visual.BannerText.infoRedownloadOnHoldSubtitle, forStyle: .info)
+                        PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.infoRedownloadOnHoldTitle, subtitle: Constant.Visual.BannerText.infoRedownloadOnHoldSubtitle, style: .info)
                     }
                 }
                 
                 // successful query to fully redownload the dogManager, no need to mess with previousDogManagerSynchronization as that is automatically handled
-                self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
             }
         }
     }
@@ -223,7 +223,7 @@ final class SettingsAccountVC: HoundScrollViewController {
             PresentationManager.beginFetchingInformationIndicator()
             self.deleteAccountButton.isLoading = true
             
-            UserRequest.delete(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
+            UserRequest.delete(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                 PresentationManager.endFetchingInformationIndicator {
                     self.deleteAccountButton.isLoading = false
                     guard responseStatus == .successResponse else {
@@ -274,8 +274,8 @@ final class SettingsAccountVC: HoundScrollViewController {
     
     // MARK: - Setup
     
-    func setup(forDelegate: SettingsAccountVCDelegate) {
-        self.delegate = forDelegate
+    func setup(delegate: SettingsAccountVCDelegate) {
+        self.delegate = delegate
     }
     
     // MARK: - Setup Elements

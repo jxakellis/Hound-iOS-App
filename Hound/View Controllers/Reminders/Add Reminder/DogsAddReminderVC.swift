@@ -12,9 +12,9 @@ protocol DogsAddReminderVCDelegate: AnyObject {
     /// If a dogUUID is provided, then the reminder is added, updated, or deleted on the Hound server,
     /// and both a dogUUID and reminder is returned. If a dogUUID is not returned, the reminder has only
     /// been added, updated, or deleted locally.
-    func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder)
-    func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder)
-    func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID)
+    func didAddReminder(sender: Sender, dogUUID: UUID?, reminder: Reminder)
+    func didUpdateReminder(sender: Sender, dogUUID: UUID?, reminder: Reminder)
+    func didRemoveReminder(sender: Sender, dogUUID: UUID?, reminderUUID: UUID)
 }
 
 final class DogsAddReminderVC: HoundScrollViewController {
@@ -107,19 +107,19 @@ final class DogsAddReminderVC: HoundScrollViewController {
     // MARK: - Setup
     
     func setup(
-        forDelegate: DogsAddReminderVCDelegate,
-        forReminderToUpdateDogUUID: UUID?,
-        forReminderToUpdate: Reminder?
+        delegate: DogsAddReminderVCDelegate,
+        reminderToUpdateDogUUID: UUID?,
+        reminderToUpdate: Reminder?
     ) {
-        self.delegate = forDelegate
-        self.reminderToUpdateDogUUID = forReminderToUpdateDogUUID
-        self.reminderToUpdate = forReminderToUpdate
+        self.delegate = delegate
+        self.reminderToUpdateDogUUID = reminderToUpdateDogUUID
+        self.reminderToUpdate = reminderToUpdate
         
-        editPageHeaderView.setTitle(forReminderToUpdate == nil ? "Create Reminder" : "Edit Reminder")
-        editPageHeaderView.isLeadingButtonEnabled = forReminderToUpdate != nil
-        editPageHeaderView.isTrailingButtonEnabled = forReminderToUpdate != nil
+        editPageHeaderView.setTitle(reminderToUpdate == nil ? "Create Reminder" : "Edit Reminder")
+        editPageHeaderView.isLeadingButtonEnabled = reminderToUpdate != nil
+        editPageHeaderView.isTrailingButtonEnabled = reminderToUpdate != nil
         
-        dogsAddReminderManagerView.setup(forReminderToUpdate: forReminderToUpdate)
+        dogsAddReminderManagerView.setup(reminderToUpdate: reminderToUpdate)
     }
     
     // MARK: - Functions
@@ -129,8 +129,8 @@ final class DogsAddReminderVC: HoundScrollViewController {
         
         // Persist custom action name locally
         LocalConfiguration.addReminderCustomAction(
-            forReminderActionType: reminder.reminderActionType,
-            forReminderCustomActionName: reminder.reminderCustomActionName
+            reminderActionType: reminder.reminderActionType,
+            reminderCustomActionName: reminder.reminderCustomActionName
         )
         
         // If there's no dogUUID, notify delegate locally and dismiss
@@ -138,15 +138,15 @@ final class DogsAddReminderVC: HoundScrollViewController {
             if reminderToUpdate == nil {
                 delegate?.didAddReminder(
                     sender: Sender(origin: self, localized: self),
-                    forDogUUID: nil,
-                    forReminder: reminder
+                    dogUUID: nil,
+                    reminder: reminder
                 )
             }
             else {
                 delegate?.didUpdateReminder(
                     sender: Sender(origin: self, localized: self),
-                    forDogUUID: nil,
-                    forReminder: reminder
+                    dogUUID: nil,
+                    reminder: reminder
                 )
             }
             HapticsManager.notification(.success)
@@ -167,15 +167,15 @@ final class DogsAddReminderVC: HoundScrollViewController {
             if self.reminderToUpdate != nil {
                 self.delegate?.didUpdateReminder(
                     sender: Sender(origin: self, localized: self),
-                    forDogUUID: reminderToUpdateDogUUID,
-                    forReminder: reminder
+                    dogUUID: reminderToUpdateDogUUID,
+                    reminder: reminder
                 )
             }
             else {
                 self.delegate?.didAddReminder(
                     sender: Sender(origin: self, localized: self),
-                    forDogUUID: reminderToUpdateDogUUID,
-                    forReminder: reminder
+                    dogUUID: reminderToUpdateDogUUID,
+                    reminder: reminder
                 )
             }
             HapticsManager.notification(.success)
@@ -184,17 +184,17 @@ final class DogsAddReminderVC: HoundScrollViewController {
         
         if reminderToUpdate != nil {
             RemindersRequest.update(
-                forErrorAlert: .automaticallyAlertOnlyForFailure,
-                forDogUUID: reminderToUpdateDogUUID,
-                forReminders: [reminder],
+                errorAlert: .automaticallyAlertOnlyForFailure,
+                dogUUID: reminderToUpdateDogUUID,
+                reminders: [reminder],
                 completionHandler: completionHandler
             )
         }
         else {
             RemindersRequest.create(
-                forErrorAlert: .automaticallyAlertOnlyForFailure,
-                forDogUUID: reminderToUpdateDogUUID,
-                forReminders: [reminder],
+                errorAlert: .automaticallyAlertOnlyForFailure,
+                dogUUID: reminderToUpdateDogUUID,
+                reminders: [reminder],
                 completionHandler: completionHandler
             )
         }
@@ -207,8 +207,8 @@ final class DogsAddReminderVC: HoundScrollViewController {
         guard let reminderToUpdateDogUUID = reminderToUpdateDogUUID else {
             delegate?.didAddReminder(
                 sender: Sender(origin: self, localized: self),
-                forDogUUID: nil,
-                forReminder: duplicateReminder
+                dogUUID: nil,
+                reminder: duplicateReminder
             )
             HapticsManager.notification(.success)
             self.dismiss(animated: true)
@@ -220,9 +220,9 @@ final class DogsAddReminderVC: HoundScrollViewController {
         saveReminderButton.isLoading = true
         
         RemindersRequest.create(
-            forErrorAlert: .automaticallyAlertOnlyForFailure,
-            forDogUUID: reminderToUpdateDogUUID,
-            forReminders: [duplicateReminder]
+            errorAlert: .automaticallyAlertOnlyForFailure,
+            dogUUID: reminderToUpdateDogUUID,
+            reminders: [duplicateReminder]
         ) { [weak self] responseStatus, _ in
             guard let self = self else { return }
             view.isUserInteractionEnabled = true
@@ -231,8 +231,8 @@ final class DogsAddReminderVC: HoundScrollViewController {
             
             self.delegate?.didAddReminder(
                 sender: Sender(origin: self, localized: self),
-                forDogUUID: reminderToUpdateDogUUID,
-                forReminder: duplicateReminder
+                dogUUID: reminderToUpdateDogUUID,
+                reminder: duplicateReminder
             )
             HapticsManager.notification(.success)
             self.dismiss(animated: true)
@@ -244,8 +244,8 @@ final class DogsAddReminderVC: HoundScrollViewController {
         guard let reminderToUpdateDogUUID = reminderToUpdateDogUUID else {
             delegate?.didRemoveReminder(
                 sender: Sender(origin: self, localized: self),
-                forDogUUID: nil,
-                forReminderUUID: reminderToUpdate.reminderUUID
+                dogUUID: nil,
+                reminderUUID: reminderToUpdate.reminderUUID
             )
             HapticsManager.notification(.warning)
             self.dismiss(animated: true)
@@ -268,17 +268,17 @@ final class DogsAddReminderVC: HoundScrollViewController {
             view.isUserInteractionEnabled = false
             
             RemindersRequest.delete(
-                forErrorAlert: .automaticallyAlertOnlyForFailure,
-                forDogUUID: reminderToUpdateDogUUID,
-                forReminderUUIDs: [reminderToUpdate.reminderUUID]
+                errorAlert: .automaticallyAlertOnlyForFailure,
+                dogUUID: reminderToUpdateDogUUID,
+                reminderUUIDs: [reminderToUpdate.reminderUUID]
             ) { responseStatus, _ in
                 self.view.isUserInteractionEnabled = true
                 guard responseStatus != .failureResponse else { return }
                 
                 self.delegate?.didRemoveReminder(
                     sender: Sender(origin: self, localized: self),
-                    forDogUUID: reminderToUpdateDogUUID,
-                    forReminderUUID: reminderToUpdate.reminderUUID
+                    dogUUID: reminderToUpdateDogUUID,
+                    reminderUUID: reminderToUpdate.reminderUUID
                 )
                 HapticsManager.notification(.warning)
                 self.dismiss(animated: true)

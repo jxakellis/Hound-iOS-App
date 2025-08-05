@@ -17,22 +17,22 @@ enum UserRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func get(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         RequestUtils.genericGetRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: [:]) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: [:]) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     completionHandler(responseStatus, error)
                     return
                 }
                 
                 if responseStatus == .noResponse {
-                    OfflineModeManager.shared.didGetNoResponse(forType: .userRequestGet)
+                    OfflineModeManager.shared.didGetNoResponse(type: .userRequestGet)
                 }
                 else if let result = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
                     UserInformation.setup(fromBody: result)
@@ -49,15 +49,15 @@ enum UserRequest {
      If query isn't successful, returns (false, .failureResponse, requestId, responseId) or (false, .noResponse, requestId, responseId)
      */
     @discardableResult static func create(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         RequestUtils.genericPostRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: UserConfiguration.createBody(addingOntoBody: UserInformation.createBody(addingOntoBody: nil))) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: UserConfiguration.createBody(addingOntoBody: UserInformation.createBody(addingOntoBody: nil))) { responseBody, responseStatus, error in
 
             switch responseStatus {
             case .successResponse:
@@ -81,23 +81,23 @@ enum UserRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func update(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forBody: JSONRequestBody,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        body: JSONRequestBody,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         RequestUtils.genericPutRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: forBody) { _, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     completionHandler(responseStatus, error)
                     return
                 }
                 
                 if responseStatus == .noResponse {
-                    OfflineModeManager.shared.didGetNoResponse(forType: .userRequestUpdate)
+                    OfflineModeManager.shared.didGetNoResponse(type: .userRequestUpdate)
                 }
                 
                 completionHandler(responseStatus, error)
@@ -109,16 +109,16 @@ enum UserRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forBody: JSONRequestBody = [:],
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        body: JSONRequestBody = [:],
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         RequestUtils.genericDeleteRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: forBody) { _, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 PersistenceManager.clearStorageToReloginToAccount()

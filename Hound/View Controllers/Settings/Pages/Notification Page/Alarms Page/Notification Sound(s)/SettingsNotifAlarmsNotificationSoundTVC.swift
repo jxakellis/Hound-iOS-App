@@ -29,7 +29,7 @@ final class SettingsNotifsAlarmsNotificationSoundTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    func setup(forNotificationSound notificationSound: String) {
+    func setup(notificationSound: String) {
         notificationSoundLabel.text = notificationSound
     }
     

@@ -95,23 +95,23 @@ final class Subscription: NSObject, NSCoding {
     // MARK: - Main
 
     init(
-        forTransactionId: Int?,
-        forProductId: String,
-        forPurchaseDate: Date?,
-        forExpiresDate: Date?,
-        forNumberOfFamilyMembers: Int,
-        forIsActive: Bool,
-        forAutoRenewStatus: Bool,
-        forAutoRenewProductId: String
+        transactionId: Int?,
+        productId: String,
+        purchaseDate: Date?,
+        expiresDate: Date?,
+        numberOfFamilyMembers: Int,
+        isActive: Bool,
+        autoRenewStatus: Bool,
+        autoRenewProductId: String
     ) {
-        self.transactionId = forTransactionId
-        self.productId = forProductId
-        self.purchaseDate = forPurchaseDate
-        self.expiresDate = forExpiresDate
-        self.numberOfFamilyMembers = forNumberOfFamilyMembers
-        self.isActive = forIsActive
-        self.autoRenewStatus = forAutoRenewStatus
-        self.autoRenewProductId = forAutoRenewProductId
+        self.transactionId = transactionId
+        self.productId = productId
+        self.purchaseDate = purchaseDate
+        self.expiresDate = expiresDate
+        self.numberOfFamilyMembers = numberOfFamilyMembers
+        self.isActive = isActive
+        self.autoRenewStatus = autoRenewStatus
+        self.autoRenewProductId = autoRenewProductId
         super.init()
     }
     
@@ -126,14 +126,14 @@ final class Subscription: NSObject, NSCoding {
         internalAutoRenewProductId: String?
     ) {
         self.init(
-            forTransactionId: internalTransactionId,
-            forProductId: internalProductId ?? Constant.Class.Subscription.defaultProductId,
-            forPurchaseDate: internalPurchaseDate,
-            forExpiresDate: internalExpiresDate,
-            forNumberOfFamilyMembers: internalNumberOfFamilyMembers ?? Constant.Class.Subscription.defaultSubscriptionNumberOfFamilyMembers,
-            forIsActive: internalIsActive ?? false,
-            forAutoRenewStatus: internalAutoRenewStatus ?? true,
-            forAutoRenewProductId: internalAutoRenewProductId ?? internalProductId ?? Constant.Class.Subscription.defaultProductId
+            transactionId: internalTransactionId,
+            productId: internalProductId ?? Constant.Class.Subscription.defaultProductId,
+            purchaseDate: internalPurchaseDate,
+            expiresDate: internalExpiresDate,
+            numberOfFamilyMembers: internalNumberOfFamilyMembers ?? Constant.Class.Subscription.defaultSubscriptionNumberOfFamilyMembers,
+            isActive: internalIsActive ?? false,
+            autoRenewStatus: internalAutoRenewStatus ?? true,
+            autoRenewProductId: internalAutoRenewProductId ?? internalProductId ?? Constant.Class.Subscription.defaultProductId
         )
     }
 

@@ -155,21 +155,21 @@ final class DogsAddReminderWeeklyView: HoundView {
     // MARK: - Setup
     
     func setup(
-        forDelegate: DogsAddReminderWeeklyViewDelegate,
-        forComponents: WeeklyComponents?,
-        forTimeZone: TimeZone
+        delegate: DogsAddReminderWeeklyViewDelegate,
+        components: WeeklyComponents?,
+        timeZone: TimeZone
     ) {
-        delegate = forDelegate
-        currentTimeZone = forTimeZone
-        timeOfDayDatePicker.timeZone = forTimeZone
+        self.delegate = delegate
+        currentTimeZone = timeZone
+        timeOfDayDatePicker.timeZone = timeZone
         
-        if let components = forComponents {
+        if let components = components {
             let calendar = Calendar.fromZone(currentTimeZone)
             var dateComponents = calendar.dateComponents([.year, .month, .day], from: Date())
             dateComponents.hour = components.zonedHour
             dateComponents.minute = components.zonedMinute
             dateComponents.second = 0
-            dateComponents.timeZone = forTimeZone
+            dateComponents.timeZone = timeZone
             timeOfDayDatePicker.date = calendar.date(from: dateComponents) ?? timeOfDayDatePicker.date
             
             weekdayButtons.forEach { button in

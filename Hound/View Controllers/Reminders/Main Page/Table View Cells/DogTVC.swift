@@ -84,17 +84,17 @@ final class DogTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    func setup(forDog: Dog) {
-        self.dog = forDog
+    func setup(dog: Dog) {
+        self.dog = dog
         
-        houndPaw.shouldRoundCorners = forDog.dogIcon != nil
+        houndPaw.shouldRoundCorners = dog.dogIcon != nil
         
-        dogNameLabel.text = forDog.dogName
-        if forDog.dogTriggers.dogTriggers.isEmpty {
+        dogNameLabel.text = dog.dogName
+        if dog.dogTriggers.dogTriggers.isEmpty {
             dogTriggersLabel.text = "No automations ✨"
         }
         else {
-            dogTriggersLabel.text = "\(forDog.dogTriggers.dogTriggers.count) automation\(forDog.dogTriggers.dogTriggers.count > 1 ? "s" : "") ✨"
+            dogTriggersLabel.text = "\(dog.dogTriggers.dogTriggers.count) automation\(dog.dogTriggers.dogTriggers.count > 1 ? "s" : "") ✨"
         }
     }
     

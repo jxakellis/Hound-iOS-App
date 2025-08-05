@@ -161,7 +161,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         
         let body: JSONRequestBody = [Constant.Key.userConfigurationInterfaceStyle.rawValue: .int(selectedOption.userInterfaceStyle.rawValue)]
         
-        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+        UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.interfaceStyle = beforeUpdateInterfaceStyle
@@ -181,7 +181,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         
         let body: JSONRequestBody = [Constant.Key.userConfigurationMeasurementSystem.rawValue: .int(UserConfiguration.measurementSystem.rawValue)]
         
-        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+        UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.measurementSystem = beforeUpdateMeasurementSystem
@@ -198,7 +198,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         
         let body: JSONRequestBody = [Constant.Key.userConfigurationIsHapticsEnabled.rawValue: .bool(UserConfiguration.isHapticsEnabled)]
         
-        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+        UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 UserConfiguration.isHapticsEnabled = beforeUpdate
                 self.hapticsEnabledSwitch.setOn(beforeUpdate, animated: true)
@@ -226,7 +226,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
             Constant.Key.userConfigurationDeviceTimeZone.rawValue: .string(UserConfiguration.deviceTimeZone.identifier)
         ]
         
-        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+        UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 UserConfiguration.usesDeviceTimeZone = beforeUpdateUses
                 UserConfiguration.userTimeZone = beforeUpdateTz
@@ -294,7 +294,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
         }
     }
     
-    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
+    func numberOfRows(section: Int, identifier: any HoundDropDownType) -> Int {
         guard let type = identifier as? SettingsAppearanceDropDownTypes else { return 0 }
         switch type {
         case .timeZone:
@@ -333,7 +333,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
                 Constant.Key.userConfigurationUserTimeZone.rawValue: .string(newTz.identifier)
             ]
             
-            UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+            UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     UserConfiguration.userTimeZone = beforeUpdateTz
                     self.synchronizeTimeZoneUI(animated: true)

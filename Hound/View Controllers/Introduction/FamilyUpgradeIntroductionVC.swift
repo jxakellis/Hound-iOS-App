@@ -101,8 +101,8 @@ final class FamilyUpgradeIntroductionVC: HoundViewController {
 
     // MARK: - Setup
 
-    func setup(forDelegate: FamilyUpgradeIntroductionVCDelegate) {
-        self.delegate = forDelegate
+    func setup(delegate: FamilyUpgradeIntroductionVCDelegate) {
+        self.delegate = delegate
     }
 
     // MARK: - Functions

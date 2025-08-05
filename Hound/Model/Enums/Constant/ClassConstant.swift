@@ -21,14 +21,14 @@ public enum ClassConstant {
 public enum SubscriptionConstant {
     static var defaultSubscription: Subscription {
         Subscription(
-            forTransactionId: nil,
-            forProductId: defaultProductId,
-            forPurchaseDate: nil,
-            forExpiresDate: nil,
-            forNumberOfFamilyMembers: defaultSubscriptionNumberOfFamilyMembers,
-            forIsActive: true,
-            forAutoRenewStatus: true,
-            forAutoRenewProductId: defaultProductId)
+            transactionId: nil,
+            productId: defaultProductId,
+            purchaseDate: nil,
+            expiresDate: nil,
+            numberOfFamilyMembers: defaultSubscriptionNumberOfFamilyMembers,
+            isActive: true,
+            autoRenewStatus: true,
+            autoRenewProductId: defaultProductId)
     }
     static let defaultSubscriptionNumberOfFamilyMembers = 1
     static let defaultSubscriptionSpelledOutNumberOfFamilyMembers = "one"
@@ -121,10 +121,10 @@ public enum TriggerConstant {
     static let defaultTriggerFixedTimeHour = 16
     static let defaultTriggerFixedTimeMinute = 5
     static var defaultTriggers: [Trigger] {
-        // forLogActionTypeId 1 == feed
-        let logReaction = TriggerLogReaction(forLogActionTypeId: 1, forLogCustomActionName: nil)
-        // forReminderActionTypeId 3 == potty
-        let reminderResult = TriggerReminderResult(forReminderActionTypeId: 3, forReminderCustomActionName: nil)
+        // logActionTypeId 1 == feed
+        let logReaction = TriggerLogReaction(logActionTypeId: 1, logCustomActionName: nil)
+        // reminderActionTypeId 3 == potty
+        let reminderResult = TriggerReminderResult(reminderActionTypeId: 3, reminderCustomActionName: nil)
         let trigger = Trigger(
             triggerLogReactions: [logReaction],
             triggerReminderResult: reminderResult,

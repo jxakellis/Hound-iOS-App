@@ -9,7 +9,7 @@
 import UIKit
 
 protocol DogsAddDogVCDelegate: AnyObject {
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager)
 }
 
 final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, DogsAddReminderVCDelegate, DogsAddTriggerVCDelegate, DogsAddDogRemindersViewDelegate, DogsAddDogTriggersViewDelegate {
@@ -18,7 +18,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         
-        if let dogIcon = DogIconManager.processDogIcon(forInfo: info) {
+        if let dogIcon = DogIconManager.processDogIcon(info: info) {
             self.dogIconButton.setTitle(nil, for: .normal)
             self.dogIconButton.setImage(dogIcon, for: .normal)
         }
@@ -60,34 +60,34 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     // MARK: - DogsAddDogRemindersViewDelegate
     
-    func shouldOpenAddReminderVC(forReminder: Reminder?) {
+    func shouldOpenAddReminderVC(reminder: Reminder?) {
         let vc = DogsAddReminderVC()
         /// DogsAddDogVC takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
-        vc.setup(forDelegate: self, forReminderToUpdateDogUUID: nil, forReminderToUpdate: forReminder)
+        vc.setup(delegate: self, reminderToUpdateDogUUID: nil, reminderToUpdate: reminder)
         PresentationManager.enqueueViewController(vc)
     }
     
     // MARK: - DogsAddDogTriggersViewDelegate
     
-    func shouldOpenAddTriggerVC(forTrigger: Trigger?) {
+    func shouldOpenAddTriggerVC(trigger: Trigger?) {
         let vc = DogsAddTriggerVC()
         /// DogsAddDogVC takes care of all server communication when, and if, the user decides to save their changes to the dog. Therefore, we don't provide a reminderToUpdateDogUUID to dogsAddReminderViewController, as otherwise it would contact and update the server.
-        vc.setupWithoutServerPersistence(forDelegate: self, forDog: dogToUpdate, forTriggerToUpdate: forTrigger)
+        vc.setupWithoutServerPersistence(delegate: self, dog: dogToUpdate, triggerToUpdate: trigger)
         PresentationManager.enqueueViewController(vc)
     }
     
     // MARK: - DogsAddReminderVCDelegate
     
-    func didAddReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
-        self.remindersView.didAddReminder(forReminder: forReminder)
+    func didAddReminder(sender: Sender, dogUUID: UUID?, reminder: Reminder) {
+        self.remindersView.didAddReminder(reminder: reminder)
     }
     
-    func didUpdateReminder(sender: Sender, forDogUUID: UUID?, forReminder: Reminder) {
-        self.remindersView.didUpdateReminder(forReminder: forReminder)
+    func didUpdateReminder(sender: Sender, dogUUID: UUID?, reminder: Reminder) {
+        self.remindersView.didUpdateReminder(reminder: reminder)
     }
     
-    func didRemoveReminder(sender: Sender, forDogUUID: UUID?, forReminderUUID: UUID) {
-        self.remindersView.didRemoveReminder(forReminderUUID: forReminderUUID)
+    func didRemoveReminder(sender: Sender, dogUUID: UUID?, reminderUUID: UUID) {
+        self.remindersView.didRemoveReminder(reminderUUID: reminderUUID)
     }
     
     func didUpdateReminderCount() {
@@ -96,15 +96,15 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     // MARK: - DogsAddTriggerVCDelegate
     
-    func didAddTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
-        self.triggersView.didAddTrigger(forTrigger: forTrigger)
+    func didAddTrigger(sender: Sender, dogUUID: UUID?, trigger: Trigger) {
+        self.triggersView.didAddTrigger(trigger: trigger)
     }
     
-    func didUpdateTrigger(sender: Sender, forDogUUID: UUID?, forTrigger: Trigger) {
-        self.triggersView.didUpdateTrigger(forTrigger: forTrigger)
+    func didUpdateTrigger(sender: Sender, dogUUID: UUID?, trigger: Trigger) {
+        self.triggersView.didUpdateTrigger(trigger: trigger)
     }
     
-    func didRemoveTrigger(sender: Sender, forDogUUID: UUID?, triggerUUID: UUID) {
+    func didRemoveTrigger(sender: Sender, dogUUID: UUID?, triggerUUID: UUID) {
         self.triggersView.didRemoveTrigger(triggerUUID: triggerUUID)
     }
     
@@ -239,15 +239,15 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let removeDogConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogNameTextField.text ?? dogToUpdate.dogName)?", message: nil, preferredStyle: .alert)
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            DogsRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogToUpdate.dogUUID) { responseStatus, _ in
+            DogsRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogToUpdate.dogUUID) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }
                 
-                self.dogManager?.removeDog(forDogUUID: dogToUpdate.dogUUID)
+                self.dogManager?.removeDog(dogUUID: dogToUpdate.dogUUID)
                 
                 if let dogManager = self.dogManager {
-                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
                 }
                 
                 HapticsManager.notification(.warning)
@@ -272,7 +272,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     // When the add button is tapped, runs a series of checks. Makes sure the name and description of the dog is valid, and if so then passes information up chain of view controllers to DogsVC.
     @objc private func didTouchUpInsideSaveDog(_ sender: Any) {
         let dog = dogToUpdate ?? Dog()
-        guard dog.changeDogName(forDogName: dogNameTextField.text) else {
+        guard dog.changeDogName(dogName: dogNameTextField.text) else {
             HapticsManager.notification(.error)
             dogNameTextField.errorMessage = Constant.Error.DogError.dogNameMissing
             return
@@ -343,13 +343,13 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         
         guard dogToUpdate != nil else {
             // not updating, therefore the dog is being created new and the reminders are too
-            DogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDog: dog) { responseStatusDogCreate, _ in
+            DogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dog: dog) { responseStatusDogCreate, _ in
                 guard responseStatusDogCreate != .failureResponse else {
                     self.saveDogButton.isLoading = false
                     return
                 }
                 
-                self.dogManager?.addDog(forDog: dog)
+                self.dogManager?.addDog(dog: dog)
                 
                 var numTasks = 0
                 if createdReminders.count >= 1 {
@@ -362,7 +362,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                 guard numTasks > 0 else {
                     self.saveDogButton.isLoading = false
                     if let dogManager = self.dogManager {
-                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
                     }
                     HapticsManager.notification(.success)
                     self.dismiss(animated: true)
@@ -374,7 +374,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                 } completedAllTasksCompletionHandler: {
                     self.saveDogButton.isLoading = false
                     if let dogManager = self.dogManager {
-                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
                     }
                     HapticsManager.notification(.success)
                     self.dismiss(animated: true)
@@ -383,20 +383,20 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                 }
 
                 if createdReminders.count >= 1 {
-                    RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: createdReminders) { responseStatusReminderCreate, _ in
+                    RemindersRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, reminders: createdReminders) { responseStatusReminderCreate, _ in
                         guard responseStatusReminderCreate != .failureResponse else {
                             return
                         }
-                        dog.dogReminders.addReminders(forReminders: createdReminders)
+                        dog.dogReminders.addReminders(reminders: createdReminders)
                         completionTracker.completedTask()
                     }
                 }
                 if createdTriggers.count >= 1 {
-                    TriggersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: createdTriggers) { responseStatusTriggerCreate, _ in
+                    TriggersRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, dogTriggers: createdTriggers) { responseStatusTriggerCreate, _ in
                         guard responseStatusTriggerCreate != .failureResponse else {
                             return
                         }
-                        dog.dogTriggers.addTriggers(forDogTriggers: createdTriggers)
+                        dog.dogTriggers.addTriggers(dogTriggers: createdTriggers)
                         completionTracker.completedTask()
                     }
                 }
@@ -432,7 +432,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let completionTracker = CompletionTracker(numberOfTasks: numberOfTasks) {
             // everytime a task completes, update the dog manager so everything else updates
             if let dogManager = self.dogManager {
-                self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+                self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
             }
         } completedAllTasksCompletionHandler: {
             // when everything completes, close the page
@@ -445,63 +445,63 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         }
         
         // first query to update the dog itself (independent of any reminders)
-        DogsRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDog: dog) { responseStatusDogUpdate, _ in
+        DogsRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, dog: dog) { responseStatusDogUpdate, _ in
             guard responseStatusDogUpdate != .failureResponse else {
                 completionTracker.failedTask()
                 return
             }
             
             // Updated dog
-            self.dogManager?.addDog(forDog: dog)
+            self.dogManager?.addDog(dog: dog)
             completionTracker.completedTask()
             
             if createdReminders.count >= 1 {
-                RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: createdReminders) { responseStatusReminderCreate, _ in
+                RemindersRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, reminders: createdReminders) { responseStatusReminderCreate, _ in
                     guard responseStatusReminderCreate != .failureResponse else {
                         completionTracker.failedTask()
                         return
                     }
-                    dog.dogReminders.addReminders(forReminders: createdReminders)
+                    dog.dogReminders.addReminders(reminders: createdReminders)
                     completionTracker.completedTask()
                 }
             }
             if createdTriggers.count >= 1 {
-                TriggersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: createdTriggers) { responseStatusTriggerCreate, _ in
+                TriggersRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, dogTriggers: createdTriggers) { responseStatusTriggerCreate, _ in
                     guard responseStatusTriggerCreate != .failureResponse else {
                         completionTracker.failedTask()
                         return
                     }
-                    dog.dogTriggers.addTriggers(forDogTriggers: createdTriggers)
+                    dog.dogTriggers.addTriggers(dogTriggers: createdTriggers)
                     completionTracker.completedTask()
                 }
             }
             
             if updatedReminders.count >= 1 {
-                RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: updatedReminders) { responseStatusReminderUpdate, _ in
+                RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, reminders: updatedReminders) { responseStatusReminderUpdate, _ in
                     guard responseStatusReminderUpdate != .failureResponse else {
                         completionTracker.failedTask()
                         return
                     }
-                    dog.dogReminders.addReminders(forReminders: updatedReminders)
+                    dog.dogReminders.addReminders(reminders: updatedReminders)
                     completionTracker.completedTask()
                 }
             }
             if updatedTriggers.count >= 1 {
-                TriggersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: updatedTriggers) { responseStatusTriggerUpdate, _ in
+                TriggersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, dogTriggers: updatedTriggers) { responseStatusTriggerUpdate, _ in
                     guard responseStatusTriggerUpdate != .failureResponse else {
                         completionTracker.failedTask()
                         return
                     }
-                    dog.dogTriggers.addTriggers(forDogTriggers: updatedTriggers)
+                    dog.dogTriggers.addTriggers(dogTriggers: updatedTriggers)
                     completionTracker.completedTask()
                 }
             }
             
             if deletedReminders.count >= 1 {
                 RemindersRequest.delete(
-                    forErrorAlert: .automaticallyAlertOnlyForFailure,
-                    forDogUUID: dog.dogUUID,
-                    forReminderUUIDs: deletedReminders.map({ reminder in
+                    errorAlert: .automaticallyAlertOnlyForFailure,
+                    dogUUID: dog.dogUUID,
+                    reminderUUIDs: deletedReminders.map({ reminder in
                         return reminder.reminderUUID
                     })
                 ) { responseStatusReminderDelete, _ in
@@ -510,15 +510,15 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                         return
                     }
                     for deletedReminder in deletedReminders {
-                        dog.dogReminders.removeReminder(forReminderUUID: deletedReminder.reminderUUID)
+                        dog.dogReminders.removeReminder(reminderUUID: deletedReminder.reminderUUID)
                     }
                     completionTracker.completedTask()
                 }
             }
             if deletedTriggers.count >= 1 {
                 TriggersRequest.delete(
-                    forErrorAlert: .automaticallyAlertOnlyForFailure,
-                    forDogUUID: dog.dogUUID,
+                    errorAlert: .automaticallyAlertOnlyForFailure,
+                    dogUUID: dog.dogUUID,
                     triggerUUIDs: deletedTriggers.map({ trigger in
                         return trigger.triggerUUID
                     })
@@ -625,10 +625,10 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddDogVCDelegate, forDogManager: DogManager?, forDogToUpdate: Dog?) {
-        delegate = forDelegate
-        dogManager = forDogManager
-        dogToUpdate = forDogToUpdate
+    func setup(delegate: DogsAddDogVCDelegate, dogManager: DogManager?, dogToUpdate: Dog?) {
+        self.delegate = delegate
+        self.dogManager = dogManager
+        self.dogToUpdate = dogToUpdate
         
         editPageHeaderView.setTitle(dogToUpdate == nil ? "Create Dog" : "Edit Dog")
         editPageHeaderView.isTrailingButtonEnabled = dogToUpdate != nil
@@ -642,8 +642,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         }
         initialDogIcon = dogToUpdate?.dogIcon
         
-        remindersView.setup(forDelegate: self, forDogReminders: dogToUpdate?.dogReminders)
-        triggersView.setup(forDelegate: self, forDogTriggers: dogToUpdate?.dogTriggers)
+        remindersView.setup(delegate: self, dogReminders: dogToUpdate?.dogReminders)
+        triggersView.setup(delegate: self, dogTriggers: dogToUpdate?.dogTriggers)
         
         updateSegmentedControlTitles()
     }

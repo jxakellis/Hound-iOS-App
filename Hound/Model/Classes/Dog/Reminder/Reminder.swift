@@ -74,9 +74,9 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedReminderId: Int? = aDecoder.decodeOptionalInteger(forKey: Constant.Key.reminderId.rawValue)
-        let decodedReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.reminderUUID.rawValue))
+        let decodedReminderUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.reminderUUID.rawValue))
         let decodedReminderCreated: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.reminderCreated.rawValue)?.formatISO8601IntoDate())
-        let decodedReminderCreatedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.reminderCreatedBy.rawValue) ?? Constant.Class.Log.defaultUserId
+        let decodedReminderCreatedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.reminderCreatedBy.rawValue)
         let decodedReminderLastModified: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.reminderLastModified.rawValue)?.formatISO8601IntoDate())
         let decodedReminderLastModifiedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.reminderLastModifiedBy.rawValue)
         let decodedReminderActionTypeId: Int? = aDecoder.decodeOptionalInteger(forKey: Constant.Key.reminderActionTypeId.rawValue)
@@ -272,7 +272,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     var reminderActionTypeId: Int = Constant.Class.Reminder.defaultReminderActionTypeId
     
     var reminderActionType: ReminderActionType {
-        return ReminderActionType.find(forReminderActionTypeId: reminderActionTypeId)
+        return ReminderActionType.find(reminderActionTypeId: reminderActionTypeId)
     }
     
     private var storedReminderCustomActionName: String = ""
@@ -385,7 +385,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     convenience init?(fromBody: JSONResponseBody, reminderToOverride: Reminder?) {
         // Don't pull reminderId or reminderIsDeleted from reminderToOverride. A valid fromBody needs to provide this itself
         let reminderId: Int? = fromBody[Constant.Key.reminderId.rawValue] as? Int
-        let reminderUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.reminderUUID.rawValue] as? String)
+        let reminderUUID: UUID? = UUID.fromString(UUIDString: fromBody[Constant.Key.reminderUUID.rawValue] as? String)
         let reminderCreated: Date? = (fromBody[Constant.Key.reminderCreated.rawValue] as? String)?.formatISO8601IntoDate()
         let reminderIsDeleted: Bool? = fromBody[Constant.Key.reminderIsDeleted.rawValue] as? Bool
 
@@ -684,9 +684,9 @@ extension Reminder {
     // MARK: - Request
     
     /// Returns an array literal of the reminders's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody(forDogUUID: UUID) -> JSONRequestBody {
+    func createBody(dogUUID: UUID) -> JSONRequestBody {
         var body: JSONRequestBody = [:]
-        body[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+        body[Constant.Key.dogUUID.rawValue] = .string(dogUUID.uuidString)
         body[Constant.Key.reminderId.rawValue] = .int(reminderId)
         body[Constant.Key.reminderUUID.rawValue] = .string(reminderUUID.uuidString)
         body[Constant.Key.reminderCreated.rawValue] = .string(reminderCreated.ISO8601FormatWithFractionalSeconds())

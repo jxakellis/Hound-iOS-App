@@ -140,14 +140,14 @@ final class ServerLoginIntroductionVC: HoundViewController,
     private func signInUser() {
         PresentationManager.beginFetchingInformationIndicator()
         
-        UserRequest.create(forErrorAlert: .automaticallyAlertForNone) { responseStatus, houndErrorCreate in
+        UserRequest.create(errorAlert: .automaticallyAlertForNone) { responseStatus, houndErrorCreate in
             guard responseStatus != .failureResponse else {
                 // If creation failed, try “get” in case the account already exists:
-                UserRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, houndErrorGet in
+                UserRequest.get(errorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, houndErrorGet in
                     PresentationManager.endFetchingInformationIndicator {
                         guard responseStatus != .failureResponse else {
                             // Show error from GET if it failed:
-                            (houndErrorGet ?? Constant.Error.GeneralResponseError.getFailureResponse(forRequestId: -1, forResponseId: -1)).alert()
+                            (houndErrorGet ?? Constant.Error.GeneralResponseError.getFailureResponse(requestId: -1, responseId: -1)).alert()
                             return
                         }
                         // If GET succeeded, but userId is still missing, that’s unexpected:

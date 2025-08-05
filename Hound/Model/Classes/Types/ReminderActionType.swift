@@ -42,13 +42,13 @@ final class ReminderActionType: NSObject, Comparable, NSCoding {
         }
 
         self.init(
-            forReminderActionTypeId: decodedReminderActionTypeId,
-            forInternalValue: decodedInternalValue,
-            forReadableValue: decodedReadableValue,
-            forEmoji: decodedEmoji,
-            forSortOrder: decodedSortOrder,
-            forIsDefault: decodedIsDefault,
-            forAllowsCustom: decodedAllowsCustom
+            reminderActionTypeId: decodedReminderActionTypeId,
+            internalValue: decodedInternalValue,
+            readableValue: decodedReadableValue,
+            emoji: decodedEmoji,
+            sortOrder: decodedSortOrder,
+            isDefault: decodedIsDefault,
+            allowsCustom: decodedAllowsCustom
         )
     }
     
@@ -97,21 +97,21 @@ final class ReminderActionType: NSObject, Comparable, NSCoding {
     // MARK: - Initialization
     
     init(
-        forReminderActionTypeId: Int,
-        forInternalValue: String,
-        forReadableValue: String,
-        forEmoji: String,
-        forSortOrder: Int,
-        forIsDefault: Bool,
-        forAllowsCustom: Bool
+        reminderActionTypeId: Int,
+        internalValue: String,
+        readableValue: String,
+        emoji: String,
+        sortOrder: Int,
+        isDefault: Bool,
+        allowsCustom: Bool
     ) {
-        self.reminderActionTypeId = forReminderActionTypeId
-        self.internalValue = forInternalValue
-        self.readableValue = forReadableValue
-        self.emoji = forEmoji
-        self.sortOrder = forSortOrder
-        self.isDefault = forIsDefault
-        self.allowsCustom = forAllowsCustom
+        self.reminderActionTypeId = reminderActionTypeId
+        self.internalValue = internalValue
+        self.readableValue = readableValue
+        self.emoji = emoji
+        self.sortOrder = sortOrder
+        self.isDefault = isDefault
+        self.allowsCustom = allowsCustom
         super.init()
     }
     
@@ -129,21 +129,21 @@ final class ReminderActionType: NSObject, Comparable, NSCoding {
         }
         
         self.init(
-            forReminderActionTypeId: idVal,
-            forInternalValue: internalVal,
-            forReadableValue: readableVal,
-            forEmoji: emojiVal,
-            forSortOrder: sortOrderVal,
-            forIsDefault: isDefaultVal,
-            forAllowsCustom: allowsCustomVal
+            reminderActionTypeId: idVal,
+            internalValue: internalVal,
+            readableValue: readableVal,
+            emoji: emojiVal,
+            sortOrder: sortOrderVal,
+            isDefault: isDefaultVal,
+            allowsCustom: allowsCustomVal
         )
     }
     
     // MARK: - Readable Conversion
     
-    static func find(forReminderActionTypeId: Int) -> ReminderActionType {
-        guard let found = GlobalTypes.shared.reminderActionTypes.first(where: { $0.reminderActionTypeId == forReminderActionTypeId }) else {
-            HoundLogger.general.error("ReminderActionType.find: No ReminderActionType found for id \(forReminderActionTypeId). Returning default ReminderActionType.")
+    static func find(reminderActionTypeId: Int) -> ReminderActionType {
+        guard let found = GlobalTypes.shared.reminderActionTypes.first(where: { $0.reminderActionTypeId == reminderActionTypeId }) else {
+            HoundLogger.general.error("ReminderActionType.find: No ReminderActionType found for id \(reminderActionTypeId). Returning default ReminderActionType.")
             return GlobalTypes.shared.reminderActionTypes[0]
         }
         return found

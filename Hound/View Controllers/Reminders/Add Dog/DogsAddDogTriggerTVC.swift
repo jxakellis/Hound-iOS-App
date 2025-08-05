@@ -65,20 +65,20 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    func setup(forTrigger: Trigger) {
+    func setup(trigger: Trigger) {
         logReactionsLabel.attributedText = {
-            let logs = forTrigger.triggerLogReactions.map { $0.readableName(includeMatchingEmoji: true) }
+            let logs = trigger.triggerLogReactions.map { $0.readableName(includeMatchingEmoji: true) }
             let logNames = logs.joined(separator: ", ", endingSeparator: " or ")
             
             // Build the appropriate phrase depending on trigger conditions.
             let text: String
-            if forTrigger.triggerManualCondition && forTrigger.triggerAlarmCreatedCondition {
+            if trigger.triggerManualCondition && trigger.triggerAlarmCreatedCondition {
                 text = "Whenever a \(logNames) log is added"
             }
-            else if forTrigger.triggerManualCondition {
+            else if trigger.triggerManualCondition {
                 text = "Whenever someone adds a \(logNames) log"
             }
-            else if forTrigger.triggerAlarmCreatedCondition {
+            else if trigger.triggerAlarmCreatedCondition {
                 text = "Whenever an alarm adds a \(logNames) log"
             }
             else {
@@ -102,13 +102,13 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
                 attributes: [.font: Constant.Visual.Font.secondaryRegularLabel])
             message.append(
                 NSAttributedString(
-                    string: forTrigger.triggerReminderResult.readableName,
+                    string: trigger.triggerReminderResult.readableName,
                     attributes: [.font: Constant.Visual.Font.emphasizedSecondaryRegularLabel]
                 )
             )
             message.append(
                 NSAttributedString(
-                    string: " for \(forTrigger.readableTime())",
+                    string: " for \(trigger.readableTime())",
                     attributes: [.font: Constant.Visual.Font.secondaryRegularLabel]
                 )
             )

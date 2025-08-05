@@ -110,16 +110,16 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
     // MARK: - Setup
     
     func setup(
-        forDelegate: DogsAddTriggerFixedTimeViewDelegate,
-        forComponents: TriggerFixedTimeComponents?
+        delegate: DogsAddTriggerFixedTimeViewDelegate,
+        components: TriggerFixedTimeComponents?
     ) {
-        delegate = forDelegate
+        self.delegate = delegate
         
-        let index = forComponents?.triggerFixedTimeTypeAmount ?? selectedDayOffset
+        let index = components?.triggerFixedTimeTypeAmount ?? selectedDayOffset
         selectedDayOffset = index
         dayOffsetLabel.text = textForOffset(index)
         
-        if let components = forComponents {
+        if let components = components {
             var comps = DateComponents()
             comps.year = 2000
             comps.month = 1
@@ -131,7 +131,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
             timeOfDayPicker.date = Calendar.user.date(from: comps) ?? timeOfDayPicker.date
         }
         
-        delegate?.didUpdateDescriptionLabel()
+        delegate.didUpdateDescriptionLabel()
     }
     
     // MARK: - Functions
@@ -192,7 +192,7 @@ final class DogsAddTriggerFixedTimeView: HoundView, HoundDropDownDataSource, Hou
         }
     }
     
-    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
+    func numberOfRows(section: Int, identifier: any HoundDropDownType) -> Int {
         guard let type = identifier as? DogsAddTriggerFixedTimeDropDownTypes else { return 0 }
         switch type {
         case .dayOffset:

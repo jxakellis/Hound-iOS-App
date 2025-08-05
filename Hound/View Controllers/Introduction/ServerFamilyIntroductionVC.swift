@@ -173,18 +173,18 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
     
     // MARK: - Setup
     
-    func setup(forDelegate: ServerFamilyIntroductionVCDelegate) {
-        self.delegate = forDelegate
+    func setup(delegate: ServerFamilyIntroductionVCDelegate) {
+        self.delegate = delegate
     }
     
     // MARK: - Functions
     
     @objc private func willCreateFamily(_ sender: Any) {
         PresentationManager.beginFetchingInformationIndicator()
-        FamilyRequest.create(forErrorAlert: .automaticallyAlertForNone) { responseStatus, houndError in
+        FamilyRequest.create(errorAlert: .automaticallyAlertForNone) { responseStatus, houndError in
             PresentationManager.endFetchingInformationIndicator {
                 // The user is already in a family so can't create a new one
-                if houndError?.name == Constant.Error.FamilyResponseError.joinInFamilyAlready(forRequestId: -1, forResponseId: -1).name {
+                if houndError?.name == Constant.Error.FamilyResponseError.joinInFamilyAlready(requestId: -1, responseId: -1).name {
                     self.dismiss(animated: true, completion: nil)
                     return
                 }
@@ -235,17 +235,17 @@ final class ServerFamilyIntroductionVC: HoundViewController, UITextFieldDelegate
             else {
                 PresentationManager.beginFetchingInformationIndicator()
                 FamilyRequest.update(
-                    forErrorAlert: .automaticallyAlertForNone,
-                    forBody: [Constant.Key.familyCode.rawValue: .string(familyCode)]
+                    errorAlert: .automaticallyAlertForNone,
+                    body: [Constant.Key.familyCode.rawValue: .string(familyCode)]
                 ) { responseStatus, houndError in
                     PresentationManager.endFetchingInformationIndicator {
                         // Already in a family
-                        if houndError?.name == Constant.Error.FamilyResponseError.joinInFamilyAlready(forRequestId: -1, forResponseId: -1).name {
+                        if houndError?.name == Constant.Error.FamilyResponseError.joinInFamilyAlready(requestId: -1, responseId: -1).name {
                             self.dismiss(animated: true, completion: nil)
                             return
                         }
                         // Family limit too low
-                        if houndError?.name == Constant.Error.FamilyResponseError.limitFamilyMemberTooLow(forRequestId: -1, forResponseId: -1).name {
+                        if houndError?.name == Constant.Error.FamilyResponseError.limitFamilyMemberTooLow(requestId: -1, responseId: -1).name {
                             let vc = LimitTooLowViewController()
                             PresentationManager.enqueueViewController(vc)
                             return

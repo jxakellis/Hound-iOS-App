@@ -17,19 +17,19 @@ enum LogsRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse)
      */
     @discardableResult static func get(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forLog: Log,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        log: Log,
         completionHandler: @escaping (Log?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body: JSONRequestBody = forLog.createBody(forDogUUID: forDogUUID)
+        let body: JSONRequestBody = log.createBody(dogUUID: dogUUID)
         
         return RequestUtils.genericGetRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(nil, responseStatus, error)
@@ -40,16 +40,16 @@ enum LogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
-                    OfflineModeManager.shared.didGetNoResponse(forType: .dogManagerGet)
+                    OfflineModeManager.shared.didGetNoResponse(type: .dogManagerGet)
                 }
                 else if let logBody = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
                     // If we got a logBody, use it. This can only happen if responseStatus != .noResponse.
-                    completionHandler(Log(fromBody: logBody, logToOverride: forLog.copy() as? Log), responseStatus, error)
+                    completionHandler(Log(fromBody: logBody, logToOverride: log.copy() as? Log), responseStatus, error)
                     return
                 }
                 
                 // Either no response or no new, updated information from the Hound server
-                completionHandler(forLog, responseStatus, error)
+                completionHandler(log, responseStatus, error)
         }
     }
     
@@ -58,22 +58,22 @@ enum LogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func create(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forLog: Log,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        log: Log,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body = forLog.createBody(forDogUUID: forDogUUID)
+        let body = log.createBody(dogUUID: dogUUID)
         
         return RequestUtils.genericPostRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { responseBody, responseStatus, error in
                 // As long as we got a response from the server, it no longers needs synced. Success or failure
                 if responseStatus != .noResponse {
-                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                    log.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: nil)
                 }
                 
                 guard responseStatus != .failureResponse else {
@@ -86,11 +86,11 @@ enum LogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the log to be updated later
-                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    log.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: Date())
                 }
                 else if let logId = responseBody?[Constant.Key.result.rawValue] as? Int {
                     // If we got a logId, use it. This can only happen if responseStatus != .noResponse.
-                    forLog.logId = logId
+                    log.logId = logId
                 }
                 
                 completionHandler(responseStatus, error)
@@ -102,23 +102,23 @@ enum LogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func update(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forLog: Log,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        log: Log,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
-        let body = forLog.createBody(forDogUUID: forDogUUID)
+        let body = log.createBody(dogUUID: dogUUID)
         
         // make put request, assume body valid as constructed with function
         return RequestUtils.genericPutRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { _, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { _, responseStatus, error in
                 // As long as we got a response from the server, it no longers needs synced. Success or failure
                 if responseStatus != .noResponse {
-                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                    log.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: nil)
                 }
                 
                 guard responseStatus != .failureResponse else {
@@ -129,7 +129,7 @@ enum LogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the log to be updated later
-                    forLog.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                    log.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: Date())
                 }
                 
                 completionHandler(responseStatus, error)
@@ -141,21 +141,21 @@ enum LogsRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func delete(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forLogUUID: UUID,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        logUUID: UUID,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         var body: JSONRequestBody = [:]
-        body[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
-        body[Constant.Key.logUUID.rawValue] = .string(forLogUUID.uuidString)
+        body[Constant.Key.dogUUID.rawValue] = .string(dogUUID.uuidString)
+        body[Constant.Key.logUUID.rawValue] = .string(logUUID.uuidString)
         
         return RequestUtils.genericDeleteRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { _, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { _, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     // If there was a failureResponse, there was something purposefully wrong with the request
                     completionHandler(responseStatus, error)
@@ -166,7 +166,7 @@ enum LogsRequest {
                 
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the log to be deleted later
-                    OfflineModeManager.shared.addDeletedObjectToQueue(forObject: OfflineModeDeletedLog(dogUUID: forDogUUID, logUUID: forLogUUID, deletedDate: Date()))
+                    OfflineModeManager.shared.addDeletedObjectToQueue(object: OfflineModeDeletedLog(dogUUID: dogUUID, logUUID: logUUID, deletedDate: Date()))
                 }
                 
                 completionHandler(responseStatus, error)

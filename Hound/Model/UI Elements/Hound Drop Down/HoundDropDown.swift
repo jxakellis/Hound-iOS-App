@@ -25,7 +25,7 @@ enum HoundDropDownAutoscroll {
 protocol HoundDropDownDataSource {
     func setupCellForDropDown(cell: HoundDropDownTVC, indexPath: IndexPath, identifier: any HoundDropDownType)
     /// Returns number of rows in a given section of the dropDownMenu
-    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int
+    func numberOfRows(section: Int, identifier: any HoundDropDownType) -> Int
     /// Returns number section in the dropDownMenu
     func numberOfSections(identifier: any HoundDropDownType) -> Int
     
@@ -53,7 +53,7 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
             return 0
         }
         
-        return (dropDownDataSource?.numberOfRows(forSection: section, identifier: identifier) ?? 0)
+        return (dropDownDataSource?.numberOfRows(section: section, identifier: identifier) ?? 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -81,7 +81,7 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
     // Converts `indexPath` into the index path expected by the data source when the dropdown is displayed in `.up` direction.
 //    private func translatedIndexPath(_ indexPath: IndexPath) -> IndexPath {
 //        guard direction == .up, let identifier = identifier else { return indexPath }
-//        let totalRows = dropDownDataSource?.numberOfRows(forSection: indexPath.section, identifier: identifier) ?? 0
+//        let totalRows = dropDownDataSource?.numberOfRows(section: indexPath.section, identifier: identifier) ?? 0
 //        let newRow = max(totalRows - 1 - indexPath.row, 0)
 //        print("Translating indexPath \(indexPath) to new row \(newRow) in section \(indexPath.section)")
 //        return IndexPath(row: newRow, section: indexPath.section)
@@ -181,7 +181,7 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
             let numberOfSections = dropDownDataSource?.numberOfSections(identifier: identifier) ?? 0
             
             for i in 0..<numberOfSections {
-                let numberOfRows = dropDownDataSource?.numberOfRows(forSection: i, identifier: identifier) ?? 0
+                let numberOfRows = dropDownDataSource?.numberOfRows(section: i, identifier: identifier) ?? 0
                 heightNeeded += CGFloat(numberOfRows) * dropDownTableView.estimatedRowHeight
             }
             

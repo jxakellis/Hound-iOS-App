@@ -97,4 +97,3 @@ final class LogsSort: NSObject, NSCopying {
         return sortedLogs
     }
 }
-

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SettingsSubscriptionCancelReasonTVCDelegate: AnyObject {
-    func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelReasonTVC, forIsCustomSelected: Bool)
+    func didSetCustomIsSelected(cell: SettingsSubscriptionCancelReasonTVC, isCustomSelected: Bool)
 }
 
 final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
@@ -58,11 +58,11 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    func setup(forDelegate: SettingsSubscriptionCancelReasonTVCDelegate, forCancellationReason: SubscriptionCancellationReason, forIsCustomSelected: Bool) {
-        self.delegate = forDelegate
-        self.cancellationReason = forCancellationReason
+    func setup(delegate: SettingsSubscriptionCancelReasonTVCDelegate, cancellationReason: SubscriptionCancellationReason, isCustomSelected: Bool) {
+        self.delegate = delegate
+        self.cancellationReason = cancellationReason
         
-        setCustomSelected(forIsCustomSelected, animated: false)
+        setCustomSelected(isCustomSelected, animated: false)
     }
     
     // MARK: - Functions
@@ -71,7 +71,7 @@ final class SettingsSubscriptionCancelReasonTVC: HoundTableViewCell {
     func setCustomSelected(_ selected: Bool, animated: Bool) {
         isCustomSelected = selected
         
-        delegate?.didSetCustomIsSelected(forCell: self, forIsCustomSelected: isCustomSelected)
+        delegate?.didSetCustomIsSelected(cell: self, isCustomSelected: isCustomSelected)
         
         UIView.animate(withDuration: animated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
             self.checkmarkButton.isHidden = !self.isCustomSelected

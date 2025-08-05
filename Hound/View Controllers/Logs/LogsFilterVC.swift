@@ -11,7 +11,7 @@ import UIKit
 // TODO add a leave without save warning
 
 protocol LogsFilterDelegate: AnyObject {
-    func didUpdateLogsFilter(forLogsFilter: LogsFilter)
+    func didUpdateLogsFilter(logsFilter: LogsFilter)
 }
 
 enum LogsFilterDropDownTypes: String, HoundDropDownType {
@@ -263,47 +263,47 @@ class LogsFilterVC: HoundScrollViewController,
     )
     
     @objc private func didChangeFromDate(_ sender: UIDatePicker) {
-        filter?.apply(forTimeRangeFromDate: sender.date)
+        filter?.apply(timeRangeFromDate: sender.date)
         if sender.date > toDatePicker.date {
             toDatePicker.setDate(sender.date, animated: true)
-            filter?.apply(forTimeRangeToDate: toDateSwitch.isOn ? sender.date : nil)
+            filter?.apply(timeRangeToDate: toDateSwitch.isOn ? sender.date : nil)
         }
         fromDateSwitch.setOn(true, animated: true)
     }
     
     @objc private func didChangeToDate(_ sender: UIDatePicker) {
-        filter?.apply(forTimeRangeToDate: sender.date)
+        filter?.apply(timeRangeToDate: sender.date)
         if sender.date < fromDatePicker.date {
             fromDatePicker.setDate(sender.date, animated: true)
-            filter?.apply(forTimeRangeFromDate: fromDateSwitch.isOn ? sender.date : nil)
+            filter?.apply(timeRangeFromDate: fromDateSwitch.isOn ? sender.date : nil)
         }
         toDateSwitch.setOn(true, animated: true)
     }
     
     @objc private func didToggleFromDate(_ sender: HoundSwitch) {
-        filter?.apply(forTimeRangeFromDate: sender.isOn ? fromDatePicker.date : nil)
+        filter?.apply(timeRangeFromDate: sender.isOn ? fromDatePicker.date : nil)
         fromDatePicker.isEnabled = sender.isOn
     }
     
     @objc private func didToggleToDate(_ sender: HoundSwitch) {
-        filter?.apply(forTimeRangeToDate: sender.isOn ? toDatePicker.date : nil)
+        filter?.apply(timeRangeToDate: sender.isOn ? toDatePicker.date : nil)
         toDatePicker.isEnabled = sender.isOn
     }
     
     @objc private func didChangeSearchText(_ sender: UITextField) {
-        filter?.apply(forSearchText: sender.text ?? "")
+        filter?.apply(searchText: sender.text ?? "")
     }
     
     @objc private func didTapClearFilter(_ sender: Any) {
         filter?.clearAll()
         if let filter = filter {
-            delegate?.didUpdateLogsFilter(forLogsFilter: filter)
+            delegate?.didUpdateLogsFilter(logsFilter: filter)
         }
     }
     
     @objc private func didTapApplyFilter(_ sender: Any) {
         guard let filter = filter else { return }
-        delegate?.didUpdateLogsFilter(forLogsFilter: filter)
+        delegate?.didUpdateLogsFilter(logsFilter: filter)
     }
     
     // MARK: - Properties
@@ -346,9 +346,9 @@ class LogsFilterVC: HoundScrollViewController,
     
     // MARK: - Setup
     
-    func setup(forDelegate: LogsFilterDelegate, forFilter: LogsFilter) {
-        delegate = forDelegate
-        filter = (forFilter.copy() as? LogsFilter) ?? forFilter
+    func setup(delegate: LogsFilterDelegate, filter: LogsFilter) {
+        self.delegate = delegate
+        self.filter = (filter.copy() as? LogsFilter) ?? filter
     }
     
     // MARK: - Functions
@@ -362,7 +362,7 @@ class LogsFilterVC: HoundScrollViewController,
             filterDogsLabel.text = {
                 if filter.filteredDogsUUIDs.count == 1, let dogUUID = filter.filteredDogsUUIDs.first {
                     // The user only has one dog selected to filter by
-                    return filter.dogManager.findDog(forDogUUID: dogUUID)?.dogName ?? Constant.Visual.Text.unknownName
+                    return filter.dogManager.findDog(dogUUID: dogUUID)?.dogName ?? Constant.Visual.Text.unknownName
                 }
                 else if filter.filteredDogsUUIDs.count > 1 && filter.filteredDogsUUIDs.count < filter.availableDogs.count {
                     // The user has multiple, but not all, dogs selected to filter by
@@ -382,7 +382,7 @@ class LogsFilterVC: HoundScrollViewController,
             filterLogActionsSectionLabel.text = {
                 if filter.filteredLogActionActionTypeIds.count == 1, let logActionTypeId = filter.filteredLogActionActionTypeIds.first {
                     // The user only has one log action selected to filter by
-                    return LogActionType.find(forLogActionTypeId: logActionTypeId).convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
+                    return LogActionType.find(logActionTypeId: logActionTypeId).convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
                 }
                 else if filter.filteredLogActionActionTypeIds.count > 1 && filter.filteredLogActionActionTypeIds.count < filter.availableLogActions.count {
                     // The user has multiple, but not all, log actions selected to filter by
@@ -402,7 +402,7 @@ class LogsFilterVC: HoundScrollViewController,
             filterFamilyMembersLabel.text = {
                 if filter.filteredFamilyMemberUserIds.count == 1, let userId = filter.filteredFamilyMemberUserIds.first {
                     // The user only has one family member selected to filter by
-                    return FamilyInformation.findFamilyMember(forUserId: userId)?.displayFullName ?? Constant.Visual.Text.unknownName
+                    return FamilyInformation.findFamilyMember(userId: userId)?.displayFullName ?? Constant.Visual.Text.unknownName
                 }
                 else if filter.filteredFamilyMemberUserIds.count > 1 && filter.filteredFamilyMemberUserIds.count < filter.availableFamilyMembers.count {
                     // The user has multiple, but not all, family members selected to filter by
@@ -493,7 +493,7 @@ class LogsFilterVC: HoundScrollViewController,
         }
     }
     
-    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
+    func numberOfRows(section: Int, identifier: any HoundDropDownType) -> Int {
         guard let filter = filter else {
             return 0
         }
@@ -534,16 +534,16 @@ class LogsFilterVC: HoundScrollViewController,
             }
             
             cell.setCustomSelected(true)
-            filter.apply(forTimeRangeField: type)
+            filter.apply(timeRangeField: type)
             dropDown.hideDropDown(animated: true)
         case .filterDogs:
             let dogSelected = filter.availableDogs[indexPath.row]
             let beforeSelectNumberOfDogsSelected = filter.availableDogs.count
             if cell.isCustomSelected == true {
-                filter.remove(forFilterDogUUID: dogSelected.dogUUID)
+                filter.remove(filterDogUUID: dogSelected.dogUUID)
             }
             else {
-                filter.add(forFilterDogUUID: dogSelected.dogUUID)
+                filter.add(filterDogUUID: dogSelected.dogUUID)
             }
             cell.setCustomSelected(!cell.isCustomSelected)
             if beforeSelectNumberOfDogsSelected == 0 || filter.filteredDogsUUIDs.count == filter.availableDogs.count {
@@ -553,10 +553,10 @@ class LogsFilterVC: HoundScrollViewController,
             let selectedLogAction = filter.availableLogActions[indexPath.row]
             let beforeSelectNumberOfLogActionsSelected = filter.availableLogActions.count
             if cell.isCustomSelected == true {
-                filter.remove(forLogActionTypeId: selectedLogAction.logActionTypeId)
+                filter.remove(logActionTypeId: selectedLogAction.logActionTypeId)
             }
             else {
-                filter.add(forLogActionTypeId: selectedLogAction.logActionTypeId)
+                filter.add(logActionTypeId: selectedLogAction.logActionTypeId)
             }
             cell.setCustomSelected(!cell.isCustomSelected)
             if beforeSelectNumberOfLogActionsSelected == 0 || filter.filteredLogActionActionTypeIds.count == filter.availableLogActions.count {
@@ -566,10 +566,10 @@ class LogsFilterVC: HoundScrollViewController,
             let familyMemberSelected = filter.availableFamilyMembers[indexPath.row]
             let beforeSelectNumberOfFamilyMembersSelected = filter.availableFamilyMembers.count
             if cell.isCustomSelected == true {
-                filter.remove(forUserId: familyMemberSelected.userId)
+                filter.remove(userId: familyMemberSelected.userId)
             }
             else {
-                filter.add(forUserId: familyMemberSelected.userId)
+                filter.add(userId: familyMemberSelected.userId)
             }
             cell.setCustomSelected(!cell.isCustomSelected)
             if beforeSelectNumberOfFamilyMembersSelected == 0 || filter.filteredFamilyMemberUserIds.count == filter.availableFamilyMembers.count {

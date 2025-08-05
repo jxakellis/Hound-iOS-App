@@ -22,7 +22,7 @@ enum AudioManager {
 
     // MARK: - General Audio
 
-    static func playAudio(forAudioPath audioPath: String) {
+    static func playAudio(audioPath: String) {
         DispatchQueue.global().async {
             guard let path = Bundle.main.path(forResource: audioPath, ofType: "mp3") else {
                 return

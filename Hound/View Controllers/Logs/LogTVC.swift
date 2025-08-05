@@ -108,7 +108,7 @@ final class LogTVC: HoundTableViewCell {
     // MARK: - Setup
     
     /// Configure the cell’s labels and adjust dynamic constraints based on the provided Log
-    func setup(forParentDogName dogName: String, forLog log: Log) {
+    func setup(parentDogName dogName: String, log: Log) {
         logActionIconLabel.text = log.logActionType.emoji
         
         // Pad label so it lines up with other labels
@@ -145,7 +145,7 @@ final class LogTVC: HoundTableViewCell {
             guard let unitType = log.logUnitType, let numUnits = log.logNumberOfLogUnits else {
                 return nil
             }
-            return unitType.pluralReadableValueWithNumUnits(forLogNumberOfLogUnits: numUnits)
+            return unitType.pluralReadableValueWithNumUnits(logNumberOfLogUnits: numUnits)
         }()
         logUnitLabel.text = logUnitString.map { "  \($0)  " }
         logUnitLabel.isHidden = logUnitLabel.text == nil

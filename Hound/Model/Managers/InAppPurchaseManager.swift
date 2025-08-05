@@ -59,10 +59,10 @@ final class InAppPurchaseManager {
 
     /// Query apple servers to purchase a certain product. If successful, then queries Hound servers to have transaction verified and applied. If there is an error, ErrorManager is automatically invoked and nil is returned.
     static func purchaseProduct(
-        forProduct product: SKProduct,
+        product: SKProduct,
         completionHandler: @escaping (String?) -> Void
     ) {
-        InternalInAppPurchaseManager.shared.purchase(forProduct: product) { productIdentifier in
+        InternalInAppPurchaseManager.shared.purchase(product: product) { productIdentifier in
             completionHandler(productIdentifier)
         }
     }
@@ -213,7 +213,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
 
     // Prompt a product payment transaction
     func purchase(
-        forProduct product: SKProduct,
+        product: SKProduct,
         completionHandler: @escaping (String?) -> Void
     ) {
         // Make sure the user has the Hound permissions to perform such a request
@@ -287,7 +287,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
 
-            TransactionsRequest.create(forErrorAlert: .automaticallyAlertForNone) { responseStatus, _ in
+            TransactionsRequest.create(errorAlert: .automaticallyAlertForNone) { responseStatus, _ in
                 self.backgroundPurchaseInProgress = false
                 guard responseStatus == .successResponse else {
                     return
@@ -322,7 +322,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                 return
             }
 
-            TransactionsRequest.create(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
+            TransactionsRequest.create(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                 guard responseStatus == .successResponse else {
                     productRestoreCompletionHandler(false)
                     self.productRestoreCompletionHandler = nil
@@ -361,7 +361,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     }
                     keychain.set(true, forKey: Constant.Key.userPurchasedProduct.rawValue)
 
-                    TransactionsRequest.create(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
+                    TransactionsRequest.create(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                         guard responseStatus == .successResponse else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil
@@ -384,7 +384,7 @@ private final class InternalInAppPurchaseManager: NSObject, SKProductsRequestDel
                     // A transaction that restores content previously purchased by the user.
                     // Read the original property to obtain information about the original purchase.
 
-                    TransactionsRequest.create(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
+                    TransactionsRequest.create(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                         guard responseStatus == .successResponse else {
                             productPurchaseCompletionHandler(nil)
                             self.productPurchaseCompletionHandler = nil

@@ -68,7 +68,7 @@ final class FamilyInformation: UserDefaultPersistable {
             if let familyActiveSubscription = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? Subscription {
                 // The familyActiveSubscription should always have isActive true. However, decodeBool might decode it as false if no key exists for that value.
                 familyActiveSubscription.isActive = true
-                FamilyInformation.addFamilySubscription(forSubscription: familyActiveSubscription)
+                FamilyInformation.addFamilySubscription(subscription: familyActiveSubscription)
             }
             else {
                 HoundLogger.general.error("FamilyInformation.load: Failed to decode familyActiveSubscription with unarchiver")
@@ -135,7 +135,7 @@ final class FamilyInformation: UserDefaultPersistable {
         }
         if let familyActiveSubscriptionBody = fromBody[Constant.Key.familyActiveSubscription.rawValue] as? JSONResponseBody {
             let familyActiveSubscription = Subscription(fromBody: familyActiveSubscriptionBody)
-            addFamilySubscription(forSubscription: familyActiveSubscription)
+            addFamilySubscription(subscription: familyActiveSubscription)
         }
         
         let newUserIds = Set(familyMembers.map { $0.userId })
@@ -156,7 +156,7 @@ final class FamilyInformation: UserDefaultPersistable {
     
     // MARK: - Functions
     
-    static func findFamilyMember(forUserId userId: String?) -> FamilyMember? {
+    static func findFamilyMember(userId: String?) -> FamilyMember? {
         guard let userId = userId else {
             return nil
         }
@@ -170,7 +170,7 @@ final class FamilyInformation: UserDefaultPersistable {
         return matchingFamilyMember
     }
 
-    static func addFamilySubscription(forSubscription subscription: Subscription) {
+    static func addFamilySubscription(subscription: Subscription) {
         // Remove any transactions that match the transactionId
         familySubscriptions.removeAll { existingSubscription in
             existingSubscription.transactionId == subscription.transactionId

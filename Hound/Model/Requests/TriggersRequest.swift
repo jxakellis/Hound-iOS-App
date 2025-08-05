@@ -14,10 +14,10 @@ enum TriggersRequest {
     
     /// Returns an array of reminder trigger bodies under the key "dogTriggers".
     private static func createBody(
-        forDogUUID: UUID,
-        forDogTriggers: [Trigger]
+        dogUUID: UUID,
+        dogTriggers: [Trigger]
     ) -> JSONRequestBody {
-        let triggerBodies = forDogTriggers.map { $0.createBody(forDogUUID: forDogUUID) }
+        let triggerBodies = dogTriggers.map { $0.createBody(dogUUID: dogUUID) }
         
         let body: JSONRequestBody = [Constant.Key.dogTriggers.rawValue: .array(
             triggerBodies.map { .object($0.compactMapValues { $0 }) }
@@ -36,23 +36,23 @@ extension TriggersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse).
      */
     @discardableResult static func get(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forTrigger: Trigger,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        trigger: Trigger,
         completionHandler: @escaping (
             Trigger?,
             ResponseStatus,
             HoundError?
         ) -> Void
     ) -> Progress? {
-        let body: JSONRequestBody = forTrigger.createBody(forDogUUID: forDogUUID)
+        let body: JSONRequestBody = trigger.createBody(dogUUID: dogUUID)
         
         return RequestUtils.genericGetRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body
         ) { responseBody, responseStatus, error in
             guard responseStatus != .failureResponse else {
                 // If there was a failureResponse, there was something purposefully wrong with the request
@@ -76,12 +76,12 @@ extension TriggersRequest {
             if responseStatus == .noResponse {
                 // If we got no response from a get request, then communicate to OfflineModeManager so it will sync the dogManager from the server when it begins to sync
                 OfflineModeManager.shared.didGetNoResponse(
-                    forType: .dogManagerGet
+                    type: .dogManagerGet
                 )
             }
             else if let triggerBody = triggersBody?.first {
                 // If we got a triggerBody, use it. This can only happen if responseStatus != .noResponse.
-                let override = forTrigger.copy() as? Trigger
+                let override = trigger.copy() as? Trigger
                 completionHandler(
                     Trigger(
                         fromBody: triggerBody,
@@ -95,7 +95,7 @@ extension TriggersRequest {
             
             // Either no response or no new, updated information from the Hound server
             completionHandler(
-                forTrigger,
+                trigger,
                 responseStatus,
                 error
             )
@@ -107,38 +107,38 @@ extension TriggersRequest {
      If query isn't successful, returns (nil, .failureResponse) or (nil, .noResponse).
      */
     @discardableResult static func create(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forDogTriggers: [Trigger],
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        dogTriggers: [Trigger],
         completionHandler: @escaping (
             ResponseStatus,
             HoundError?
         ) -> Void
     ) -> Progress? {
         // There should be triggers to actually create
-        guard forDogTriggers.count >= 1 else {
+        guard dogTriggers.count >= 1 else {
             completionHandler(.successResponse, nil)
             return nil
         }
         
         let body = createBody(
-            forDogUUID: forDogUUID,
-            forDogTriggers: forDogTriggers
+            dogUUID: dogUUID,
+            dogTriggers: dogTriggers
         )
         
         return RequestUtils.genericPostRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body
         ) { responseBody, responseStatus, error in
             // As long as we got a response from the server, it no longers needs synced. Success or failure
             if responseStatus != .noResponse {
-                forDogTriggers.forEach { trigger in
+                dogTriggers.forEach { trigger in
                     trigger.offlineModeComponents
                         .updateInitialAttemptedSyncDate(
-                            forInitialAttemptedSyncDate: nil
+                            initialAttemptedSyncDate: nil
                         )
                 }
             }
@@ -164,10 +164,10 @@ extension TriggersRequest {
             
             if responseStatus == .noResponse {
                 // If we got no response, then mark the triggers to be updated later
-                forDogTriggers.forEach { trigger in
+                dogTriggers.forEach { trigger in
                     trigger.offlineModeComponents
                         .updateInitialAttemptedSyncDate(
-                            forInitialAttemptedSyncDate: Date()
+                            initialAttemptedSyncDate: Date()
                         )
                 }
             }
@@ -176,12 +176,12 @@ extension TriggersRequest {
                 bodies.forEach { body in
                     guard let id = body[Constant.Key.triggerId.rawValue] as? Int,
                           let uuidString = body[Constant.Key.triggerUUID.rawValue] as? String,
-                          let uuid = UUID.fromString(forUUIDString: uuidString)
+                          let uuid = UUID.fromString(UUIDString: uuidString)
                     else {
                         return
                     }
                     
-                    forDogTriggers.first(where: { $0.triggerUUID == uuid })?.triggerId = id
+                    dogTriggers.first(where: { $0.triggerUUID == uuid })?.triggerId = id
                 }
             }
             
@@ -190,33 +190,33 @@ extension TriggersRequest {
     }
     
     @discardableResult static func update(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
-        forDogTriggers: [Trigger],
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        dogTriggers: [Trigger],
         completionHandler: @escaping (
             ResponseStatus,
             HoundError?
         ) -> Void
     ) -> Progress? {
         // There should be reminders to actually update
-        guard forDogTriggers.count >= 1 else {
+        guard dogTriggers.count >= 1 else {
             completionHandler(.successResponse, nil)
             return nil
         }
         
-        let body = createBody(forDogUUID: forDogUUID, forDogTriggers: forDogTriggers)
+        let body = createBody(dogUUID: dogUUID, dogTriggers: dogTriggers)
         
         return RequestUtils.genericPutRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body
         ) { _, responseStatus, error in
             // As long as we got a response from the server, it no longers needs synced. Success or failure
             if responseStatus != .noResponse {
-                forDogTriggers.forEach { trigger in
-                    trigger.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: nil)
+                dogTriggers.forEach { trigger in
+                    trigger.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: nil)
                 }
             }
             
@@ -228,8 +228,8 @@ extension TriggersRequest {
             
             if responseStatus == .noResponse {
                 // If we got no response, then mark the reminders to be updated later
-                forDogTriggers.forEach { trigger in
-                    trigger.offlineModeComponents.updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date())
+                dogTriggers.forEach { trigger in
+                    trigger.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: Date())
                 }
             }
             
@@ -238,9 +238,9 @@ extension TriggersRequest {
     }
     
     @discardableResult static func delete(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forDogUUID: UUID,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
         triggerUUIDs: [UUID],
         completionHandler: @escaping (
             ResponseStatus,
@@ -255,10 +255,10 @@ extension TriggersRequest {
         
         let body: JSONRequestBody = {
             var triggerBodies: [JSONRequestBody] = []
-            for forUUID in triggerUUIDs {
+            for UUID in triggerUUIDs {
                 var entry: JSONRequestBody = [:]
-                entry[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
-                entry[Constant.Key.triggerUUID.rawValue] = .string(forUUID.uuidString)
+                entry[Constant.Key.dogUUID.rawValue] = .string(dogUUID.uuidString)
+                entry[Constant.Key.triggerUUID.rawValue] = .string(UUID.uuidString)
                 triggerBodies.append(entry)
             }
             return [Constant.Key.dogTriggers.rawValue: .array(
@@ -267,10 +267,10 @@ extension TriggersRequest {
         }()
         
         return RequestUtils.genericDeleteRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body
         ) { _, responseStatus, error in
             guard responseStatus != .failureResponse else {
                 // If there was a failureResponse, there was something purposefully wrong with the request
@@ -283,9 +283,9 @@ extension TriggersRequest {
             if responseStatus == .noResponse {
                 triggerUUIDs.forEach { uuid in
                     OfflineModeManager.shared
-                        .addDeletedObjectToQueue(forObject:
+                        .addDeletedObjectToQueue(object:
                                                     OfflineModeDeletedTrigger(
-                                                        dogUUID: forDogUUID,
+                                                        dogUUID: dogUUID,
                                                         triggerUUID: uuid,
                                                         deletedDate: Date()))
                 }

@@ -18,8 +18,8 @@ enum SurveyFeedbackRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
     @discardableResult static func create(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
         userCancellationReason: SubscriptionCancellationReason?,
         userCancellationFeedback: String,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
@@ -29,7 +29,7 @@ enum SurveyFeedbackRequest {
         body[Constant.Key.surveyFeedbackUserCancellationReason.rawValue] = .string(userCancellationReason?.internalValue)
         body[Constant.Key.surveyFeedbackUserCancellationFeedback.rawValue] = .string(userCancellationFeedback)
         
-        return create(forErrorAlert: forErrorAlert, forSourceFunction: forSourceFunction, forBody: body, completionHandler: completionHandler)
+        return create(errorAlert: errorAlert, sourceFunction: sourceFunction, body: body, completionHandler: completionHandler)
     }
     
     /**
@@ -38,8 +38,8 @@ enum SurveyFeedbackRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
     @discardableResult static func create(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
         numberOfStars: Int,
         appExperienceFeedback: String,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
@@ -50,7 +50,7 @@ enum SurveyFeedbackRequest {
             Constant.Key.surveyFeedbackAppExperienceFeedback.rawValue: .string(appExperienceFeedback)
         ]
         
-        return create(forErrorAlert: forErrorAlert, forSourceFunction: forSourceFunction, forBody: body) { responseStatus, houndError in
+        return create(errorAlert: errorAlert, sourceFunction: sourceFunction, body: body) { responseStatus, houndError in
             guard responseStatus != .failureResponse else {
                 completionHandler(responseStatus, houndError)
                 return
@@ -71,27 +71,27 @@ enum SurveyFeedbackRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
     @discardableResult private static func create(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
-        forBody: JSONRequestBody,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        body: JSONRequestBody,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
        
-        var forBodyWithDeviceMetrics = forBody
-        forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricModel.rawValue] = .string(UIDevice.current.model)
-        forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricSystemVersion.rawValue] = .string(UIDevice.current.systemVersion)
-        forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricAppVersion.rawValue] = .string(AppVersion.current.rawValue)
-        forBodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricLocale.rawValue] = .string(Locale.current.identifier)
+        var bodyWithDeviceMetrics = body
+        bodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricModel.rawValue] = .string(UIDevice.current.model)
+        bodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricSystemVersion.rawValue] = .string(UIDevice.current.systemVersion)
+        bodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricAppVersion.rawValue] = .string(AppVersion.current.rawValue)
+        bodyWithDeviceMetrics[Constant.Key.surveyFeedbackDeviceMetricLocale.rawValue] = .string(Locale.current.identifier)
         
         // All of the previous body should be encapsulated inside a surveyFeedback body
         var body: JSONRequestBody = [:]
-        body[Constant.Key.surveyFeedback.rawValue] = .object(forBodyWithDeviceMetrics)
+        body[Constant.Key.surveyFeedback.rawValue] = .object(bodyWithDeviceMetrics)
         
         return RequestUtils.genericPostRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: body) { _, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: body) { _, responseStatus, error in
                 completionHandler(responseStatus, error)
         }
     }

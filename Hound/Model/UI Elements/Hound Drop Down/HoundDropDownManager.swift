@@ -121,7 +121,7 @@ final class HoundDropDownManager<T: HoundDropDownType> {
             action: #selector(HoundDropDownManager.didTapLabel(sender:))
         )
         gesture.name = identifier.rawValue
-        gesture.delegate = delegate
+        gesture.self.delegate = delegate
         gesture.cancelsTouchesInView = false
         return gesture
     }

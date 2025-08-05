@@ -19,7 +19,6 @@ enum TimeAgoQuickSelect: String, CaseIterable {
     case fourHoursAgo = "4 hrs ago"
     case eightHoursAgo = "8 hrs ago"
     
-    /// Given a forReferenceDate, finds all of the TimeAgoQuickSelect where startingPoint + valueInSeconds is < occurringOnOrBefore
     static func optionsOccurringBeforeDate(startingPoint: Date, occurringOnOrBefore: Date) -> [TimeAgoQuickSelect] {
         return TimeAgoQuickSelect.allCases.filter { timeQuickSelectOption in
             guard let valueInSeconds = timeQuickSelectOption.valueInSeconds() else {
@@ -68,7 +67,6 @@ enum AfterTimeQuickSelect: String, CaseIterable {
     case inFourHours = "After 4 hrs"
     case inEightHours = "After 8 hrs"
     
-    /// Given a forReferenceDate, finds all of the TimeAgoQuickSelect where startingPoint + valueInSeconds is > occurringOnOrBefore
     static func optionsOccurringAfterDate(startingPoint: Date, occurringOnOrAfter: Date) -> [AfterTimeQuickSelect] {
         return AfterTimeQuickSelect.allCases.filter { timeQuickSelectOption in
             guard let valueInSeconds = timeQuickSelectOption.valueInSeconds() else {

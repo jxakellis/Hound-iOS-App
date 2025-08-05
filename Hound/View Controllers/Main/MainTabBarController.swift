@@ -21,41 +21,41 @@ final class MainTabBarController: HoundTabBarController,
     
     // MARK: LogsVCDelegate && DogsVCDelegate
     
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
-        setDogManager(sender: sender, forDogManager: forDogManager)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager) {
+        setDogManager(sender: sender, dogManager: dogManager)
     }
     
     // MARK: - ReminderAlarmManagerDelegate
     
-    func didAddLog(sender: Sender, forDogUUID: UUID, forLog log: Log, forInvokeDogTriggers: Bool) {
-        let triggerReminders = dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: forInvokeDogTriggers)
-        setDogManager(sender: sender, forDogManager: dogManager)
+    func didAddLog(sender: Sender, dogUUID: UUID, log: Log, invokeDogTriggers: Bool) {
+        let triggerReminders = dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: invokeDogTriggers)
+        setDogManager(sender: sender, dogManager: dogManager)
         
         guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {
             return
         }
         
         // silently try to create trigger reminders
-        RemindersRequest.create(forErrorAlert: .automaticallyAlertForNone, forDogUUID: forDogUUID, forReminders: triggerReminders) { responseStatus, _ in
+        RemindersRequest.create(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, reminders: triggerReminders) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 return
             }
-            self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminders(forReminders: triggerReminders)
-            self.setDogManager(sender: sender, forDogManager: self.dogManager)
+            self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: triggerReminders)
+            self.setDogManager(sender: sender, dogManager: self.dogManager)
         }
     }
     
-    func didRemoveReminder(sender: Sender, forDogUUID: UUID, forReminderUUID: UUID) {
-        let dogReminders = dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders
-        dogReminders?.removeReminder(forReminderUUID: forReminderUUID)
-        setDogManager(sender: sender, forDogManager: dogManager)
+    func didRemoveReminder(sender: Sender, dogUUID: UUID, reminderUUID: UUID) {
+        let dogReminders = dogManager.findDog(dogUUID: dogUUID)?.dogReminders
+        dogReminders?.removeReminder(reminderUUID: reminderUUID)
+        setDogManager(sender: sender, dogManager: dogManager)
     }
     
     // MARK: - ReminderAlarmManagerDelegate && ReminderTimingManagerDelegate
     
-    func didAddReminder(sender: Sender, forDogUUID: UUID, forReminder reminder: Reminder) {
-        dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: reminder)
-        setDogManager(sender: sender, forDogManager: dogManager)
+    func didAddReminder(sender: Sender, dogUUID: UUID, reminder: Reminder) {
+        dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminder(reminder: reminder)
+        setDogManager(sender: sender, dogManager: dogManager)
     }
     
     // MARK: - Dog Manager
@@ -63,26 +63,26 @@ final class MainTabBarController: HoundTabBarController,
     private var dogManager: DogManager = DogManager.globalDogManager ?? DogManager()
     
     /// Sets dog manager; when the value changes, propagate timers and child VCs
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        dogManager = forDogManager
+    func setDogManager(sender: Sender, dogManager: DogManager) {
+        self.dogManager = dogManager
         DogManager.globalDogManager = dogManager
         
         // If not coming from ServerSyncVC, initialize timers
         if (sender.localized is ServerSyncVC) == false {
-            ReminderTimingManager.initializeReminderTimers(forDogManager: dogManager)
+            ReminderTimingManager.initializeReminderTimers(dogManager: dogManager)
         }
         // Propagate to DogsVC if sender isn't DogsVC
         if (sender.localized is DogsVC) == false {
             dogsViewController.setDogManager(
                 sender: Sender(origin: sender, localized: self),
-                forDogManager: dogManager
+                dogManager: dogManager
             )
         }
         // Propagate to LogsVC if sender isn't LogsVC
         if (sender.localized is LogsVC) == false {
             logsViewController.setDogManager(
                 sender: Sender(origin: sender, localized: self),
-                forDogManager: dogManager
+                dogManager: dogManager
             )
         }
     }
@@ -130,14 +130,14 @@ final class MainTabBarController: HoundTabBarController,
                 return
             }
             DogsRequest.get(
-                forErrorAlert: .automaticallyAlertForNone,
-                forDogManager: mainTBC.dogManager
+                errorAlert: .automaticallyAlertForNone,
+                dogManager: mainTBC.dogManager
             ) { newDM, _, _ in
                 MainTabBarController.shouldSilentlyRefreshDogManager = false
                 guard let newDM = newDM else { return }
                 mainTBC.setDogManager(
                     sender: Sender(origin: self, localized: self),
-                    forDogManager: newDM
+                    dogManager: newDM
                 )
             }
         }
@@ -150,7 +150,7 @@ final class MainTabBarController: HoundTabBarController,
             guard MainTabBarController.mainTabBarController?.viewIfLoaded?.window != nil else {
                 return
             }
-            FamilyRequest.get(forErrorAlert: .automaticallyAlertForNone) { _, _ in
+            FamilyRequest.get(errorAlert: .automaticallyAlertForNone) { _, _ in
                 MainTabBarController.shouldSilentlyRefreshFamily = false
             }
         }
@@ -182,13 +182,13 @@ final class MainTabBarController: HoundTabBarController,
         
         HoundLogger.lifecycle.notice("Version: \(AppVersion.current)")
         
-        logsViewController.setup(forDelegate: self)
-        logsViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+        logsViewController.setup(delegate: self)
+        logsViewController.setDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
         
-        dogsViewController.setup(forDelegate: self)
-        dogsViewController.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: dogManager)
+        dogsViewController.setup(delegate: self)
+        dogsViewController.setDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
         
-        settingsPagesTableViewController.setup(forDelegate: self)
+        settingsPagesTableViewController.setup(delegate: self)
         
         MainTabBarController.mainTabBarController = self
         ReminderTimingManager.delegate = self
@@ -201,20 +201,20 @@ final class MainTabBarController: HoundTabBarController,
         
         if MainTabBarController.shouldSilentlyRefreshDogManager {
             DogsRequest.get(
-                forErrorAlert: .automaticallyAlertForNone,
-                forDogManager: self.dogManager
+                errorAlert: .automaticallyAlertForNone,
+                dogManager: self.dogManager
             ) { newDM, _, _ in
                 MainTabBarController.shouldSilentlyRefreshDogManager = false
                 guard let newDM = newDM else { return }
                 self.setDogManager(
                     sender: Sender(origin: self, localized: self),
-                    forDogManager: newDM
+                    dogManager: newDM
                 )
             }
         }
         
         if MainTabBarController.shouldSilentlyRefreshFamily {
-            FamilyRequest.get(forErrorAlert: .automaticallyAlertForNone) { _, _ in
+            FamilyRequest.get(errorAlert: .automaticallyAlertForNone) { _, _ in
                 MainTabBarController.shouldSilentlyRefreshFamily = false
             }
         }
@@ -233,14 +233,14 @@ final class MainTabBarController: HoundTabBarController,
         
         // Synchronize notifications and timers on each appearance
         NotificationPermissionsManager.synchronizeNotificationAuthorization()
-        ReminderTimingManager.initializeReminderTimers(forDogManager: dogManager)
+        ReminderTimingManager.initializeReminderTimers(dogManager: dogManager)
         
         guard didSetupCustomSubviews == false else { return }
         didSetupCustomSubviews = true
         
         // Slight delay so tab item frames are valid before drawing underline
         DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.addTabBarUpperLine(forIndex: self.selectedIndex)
+            self.addTabBarUpperLine(index: self.selectedIndex)
         }
     }
     
@@ -249,7 +249,7 @@ final class MainTabBarController: HoundTabBarController,
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         // selectedIndex is still the “old” index at this moment; compute new index manually
         guard let newIndex = tabBar.items?.firstIndex(of: item) else { return }
-        addTabBarUpperLine(forIndex: newIndex)
+        addTabBarUpperLine(index: newIndex)
         
         switch newIndex {
         case MainTabBarControllerIndexes.logs.rawValue:
@@ -260,7 +260,7 @@ final class MainTabBarController: HoundTabBarController,
             if LocalConfiguration.localHasCompletedRemindersIntroductionViewController == false {
                 if dogManager.hasCreatedReminder == false {
                     let introVC = RemindersIntroductionVC()
-                    introVC.setup(forDelegate: self, forDogManager: dogManager)
+                    introVC.setup(delegate: self, dogManager: dogManager)
                     PresentationManager.enqueueViewController(introVC)
                 }
                 else {
@@ -277,7 +277,7 @@ final class MainTabBarController: HoundTabBarController,
         }
     }
     
-    private func addTabBarUpperLine(forIndex index: Int) {
+    private func addTabBarUpperLine(index: Int) {
         // Underline the selected tab item by accessing its underlying view
         guard let tabView = tabBar.items?[index].value(forKey: "view") as? UIView else { return }
         tabBarUpperLineView?.removeFromSuperview()

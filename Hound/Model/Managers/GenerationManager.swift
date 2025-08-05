@@ -59,15 +59,15 @@ enum GenerationManager {
             let logNumberOfUnits = Double.random(in: 0.0...1000.0)
             
             let log = Log(
-                forLogId: nil,
-                forLogActionTypeId: logActionType.logActionTypeId,
-                forLogCustomActionName: logCustomActionName,
-                forLogStartDate: logStartDate,
-                forLogEndDate: logEndDate,
-                forLogNote: logNote,
-                forLogUnitTypeId: logUnitType?.logUnitTypeId,
-                forLogNumberOfUnits: logNumberOfUnits,
-                forCreatedByReminderUUID: nil
+                logId: nil,
+                logActionTypeId: logActionType.logActionTypeId,
+                logCustomActionName: logCustomActionName,
+                logStartDate: logStartDate,
+                logEndDate: logEndDate,
+                logNote: logNote,
+                logUnitTypeId: logUnitType?.logUnitTypeId,
+                logNumberOfUnits: logNumberOfUnits,
+                logCreatedByReminderUUID: nil
             )
             
             let dog = toDogManager.dogs.randomElement()
@@ -81,14 +81,14 @@ enum GenerationManager {
                     return
                 }
                 
-                LogsRequest.create(forErrorAlert: .automaticallyAlertForNone, forDogUUID: dog.dogUUID, forLog: log) { responseStatus, _ in
+                LogsRequest.create(errorAlert: .automaticallyAlertForNone, dogUUID: dog.dogUUID, log: log) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         completionTracker.failedTask()
                         return
                     }
                     
                     completionTracker.completedTask()
-                    dog.dogLogs.addLog(forLog: log, invokeDogTriggers: false)
+                    dog.dogLogs.addLog(log: log, invokeDogTriggers: false)
                 }
             }
         }
@@ -126,10 +126,10 @@ enum GenerationManager {
         func foodUnitSymbol() -> String { "cup" }
         
         // --- 1. Dogs ---
-        guard
-            let bella = try? Dog(forDogName: "Bella"),
-            let charlie = try? Dog(forDogName: "Charlie")
-        else { return nil }
+        let bella = Dog()
+        bella.changeDogName(dogName: "Bella")
+        let charlie = Dog()
+        charlie.changeDogName(dogName: "Charlie")
         
         // --- 2. Reminders ---
         if let pottyId = reminderTypeId("potty") {
@@ -141,7 +141,7 @@ enum GenerationManager {
                 reminderTimeZone: UserConfiguration.timeZone,
                 countdownComponents: countdown
             )
-            bella.dogReminders.addReminder(forReminder: reminder)
+            bella.dogReminders.addReminder(reminder: reminder)
         }
         if let feedId = reminderTypeId("feed") {
             let weekly = WeeklyComponents()
@@ -154,7 +154,7 @@ enum GenerationManager {
                 reminderTimeZone: UserConfiguration.timeZone,
                 weeklyComponents: weekly
             )
-            bella.dogReminders.addReminder(forReminder: reminder)
+            bella.dogReminders.addReminder(reminder: reminder)
         }
         if let medicineId = reminderTypeId("medicine") {
             let monthly = MonthlyComponents(zonedDay: 1, zonedHour: 9, zonedMinute: 0, skippedDate: nil)
@@ -164,7 +164,7 @@ enum GenerationManager {
                 reminderTimeZone: UserConfiguration.timeZone,
                 monthlyComponents: monthly
             )
-            bella.dogReminders.addReminder(forReminder: reminder)
+            bella.dogReminders.addReminder(reminder: reminder)
         }
         
         // Charlie: Feed (8:00am), Water (12:00pm), Walk (6:00pm) - all days
@@ -179,7 +179,7 @@ enum GenerationManager {
                 reminderTimeZone: UserConfiguration.timeZone,
                 weeklyComponents: weekly
             )
-            charlie.dogReminders.addReminder(forReminder: reminder)
+            charlie.dogReminders.addReminder(reminder: reminder)
         }
         if let waterId = reminderTypeId("water") {
             let weekly = WeeklyComponents()
@@ -192,7 +192,7 @@ enum GenerationManager {
                 reminderTimeZone: UserConfiguration.timeZone,
                 weeklyComponents: weekly
             )
-            charlie.dogReminders.addReminder(forReminder: reminder)
+            charlie.dogReminders.addReminder(reminder: reminder)
         }
         if let walkId = reminderTypeId("walk") {
             let weekly = WeeklyComponents()
@@ -205,12 +205,12 @@ enum GenerationManager {
                 reminderTimeZone: UserConfiguration.timeZone,
                 weeklyComponents: weekly
             )
-            charlie.dogReminders.addReminder(forReminder: reminder)
+            charlie.dogReminders.addReminder(reminder: reminder)
         }
         
         // --- 3. Triggers / Automations ---
-        bella.dogTriggers.addTriggers(forDogTriggers: Constant.Class.Trigger.defaultTriggers)
-        charlie.dogTriggers.addTriggers(forDogTriggers: Constant.Class.Trigger.defaultTriggers)
+        bella.dogTriggers.addTriggers(dogTriggers: Constant.Class.Trigger.defaultTriggers)
+        charlie.dogTriggers.addTriggers(dogTriggers: Constant.Class.Trigger.defaultTriggers)
         
         // --- 4. Logs (balanced between aesthetic, realistic, and feature showcase) ---
         func addLog(
@@ -226,15 +226,15 @@ enum GenerationManager {
             guard let logType = logType(action) else { return }
             let unitId = unitSymbol.flatMap { logUnit($0)?.logUnitTypeId }
             let log = Log(
-                forLogActionTypeId: logType.logActionTypeId,
-                forLogCustomActionName: customName,
-                forLogStartDate: start,
-                forLogEndDate: end,
-                forLogNote: note,
-                forLogUnitTypeId: unitId,
-                forLogNumberOfUnits: units
+                logActionTypeId: logType.logActionTypeId,
+                logCustomActionName: customName,
+                logStartDate: start,
+                logEndDate: end,
+                logNote: note,
+                logUnitTypeId: unitId,
+                logNumberOfUnits: units
             )
-            dog.dogLogs.addLog(forLog: log, invokeDogTriggers: false)
+            dog.dogLogs.addLog(log: log, invokeDogTriggers: false)
         }
         
         // Bella (Yesterday and Today)
@@ -352,7 +352,7 @@ enum GenerationManager {
         
         // --- 5. Compose manager ---
         let manager = DogManager()
-        manager.addDogs(forDogs: [bella, charlie])
+        manager.addDogs(dogs: [bella, charlie])
         return manager
     }
 

@@ -25,9 +25,9 @@ final class HoundAlarmAlertController: UIAlertController {
     // MARK: - Main
 
     /// UIAlertController can't be subclassed. Therefore, we can't override the init functions.
-    func setup(forDogUUID: UUID, forReminder: Reminder) {
-        self.dogUUID = forDogUUID
-        self.reminders = [forReminder]
+    func setup(dogUUID: UUID, reminder: Reminder) {
+        self.dogUUID = dogUUID
+        self.reminders = [reminder]
     }
 
     // MARK: - Functions

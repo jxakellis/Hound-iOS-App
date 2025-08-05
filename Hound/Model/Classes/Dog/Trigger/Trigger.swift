@@ -67,9 +67,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
     required convenience init?(coder aDecoder: NSCoder) {
         let triggerId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerId.rawValue)
-        let triggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerUUID.rawValue))
+        let triggerUUID = UUID.fromString(UUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerUUID.rawValue))
         let triggerCreated: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.triggerCreated.rawValue)?.formatISO8601IntoDate())
-        let triggerCreatedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.triggerCreatedBy.rawValue) ?? Constant.Class.Log.defaultUserId
+        let triggerCreatedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.triggerCreatedBy.rawValue)
         let triggerLastModified: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.triggerLastModified.rawValue)?.formatISO8601IntoDate())
         let triggerLastModifiedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.triggerLastModifiedBy.rawValue)
         let triggerLogReactions: [TriggerLogReaction]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerLogReactions.rawValue)
@@ -215,8 +215,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     private(set) var triggerLogReactions: [TriggerLogReaction] = [] {
         didSet {
             triggerLogReactions.sort { lhs, rhs in
-                let lhsType = LogActionType.find(forLogActionTypeId: lhs.logActionTypeId)
-                let rhsType = LogActionType.find(forLogActionTypeId: rhs.logActionTypeId)
+                let lhsType = LogActionType.find(logActionTypeId: lhs.logActionTypeId)
+                let rhsType = LogActionType.find(logActionTypeId: rhs.logActionTypeId)
                 let lhsOrder = lhsType.sortOrder
                 let rhsOrder = rhsType.sortOrder
                 
@@ -291,7 +291,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     convenience init?(fromBody: JSONResponseBody, triggerToOverride: Trigger?) {
         // Don't pull triggerId or triggerIsDeleted from triggerToOverride. A valid fromBody needs to provide this itself
         let triggerId = fromBody[Constant.Key.triggerId.rawValue] as? Int
-        let triggerUUID = UUID.fromString(forUUIDString: fromBody[Constant.Key.triggerUUID.rawValue] as? String)
+        let triggerUUID = UUID.fromString(UUIDString: fromBody[Constant.Key.triggerUUID.rawValue] as? String)
         let triggerCreated = (fromBody[Constant.Key.triggerCreated.rawValue] as? String)?.formatISO8601IntoDate()
         let triggerIsDeleted = fromBody[Constant.Key.triggerIsDeleted.rawValue] as? Bool
 
@@ -335,7 +335,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         let triggerLogReactions = reactionsBody?.compactMap { body -> TriggerLogReaction? in
             guard let id = body[Constant.Key.logActionTypeId.rawValue] as? Int else { return nil }
             let name = body[Constant.Key.logCustomActionName.rawValue] as? String
-            return TriggerLogReaction(forLogActionTypeId: id, forLogCustomActionName: name)
+            return TriggerLogReaction(logActionTypeId: id, logCustomActionName: name)
         } ?? triggerToOverride?.triggerLogReactions
         
         let triggerReminderResult: TriggerReminderResult? = {
@@ -388,7 +388,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         }
     }
     
-    func shouldActivateTrigger(forLog log: Log) -> Bool {
+    func shouldActivateTrigger(log: Log) -> Bool {
         if triggerManualCondition == false && log.logCreatedByReminderUUID == nil {
             return false
         }
@@ -443,9 +443,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         )
     }
     
-    func createBody(forDogUUID: UUID) -> JSONRequestBody {
+    func createBody(dogUUID: UUID) -> JSONRequestBody {
         var body: JSONRequestBody = [:]
-        body[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+        body[Constant.Key.dogUUID.rawValue] = .string(dogUUID.uuidString)
         body[Constant.Key.triggerId.rawValue] = .int(triggerId)
         body[Constant.Key.triggerUUID.rawValue] = .string(triggerUUID.uuidString)
         body[Constant.Key.triggerCreated.rawValue] = .string(triggerCreated.ISO8601FormatWithFractionalSeconds())

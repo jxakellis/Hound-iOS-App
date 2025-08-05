@@ -530,9 +530,9 @@ final class DogsAddReminderManagerView: HoundView,
     
     // MARK: - Setup
     
-    func setup(forReminderToUpdate: Reminder?) {
-        reminderToUpdate = forReminderToUpdate
-        initialReminder = forReminderToUpdate?.copy() as? Reminder
+    func setup(reminderToUpdate: Reminder?) {
+        self.reminderToUpdate = reminderToUpdate
+        initialReminder = reminderToUpdate?.copy() as? Reminder
         
         // reminderActionLabel
         selectedReminderAction = reminderToUpdate?.reminderActionType
@@ -557,48 +557,48 @@ final class DogsAddReminderManagerView: HoundView,
             let date = Date().distance(to: reminderToUpdate?.oneTimeComponents.oneTimeDate ?? Date()) > 0 ?
             reminderToUpdate?.oneTimeComponents.oneTimeDate : nil
             onceView.setup(
-                forDelegate: self,
-                forComponents: date != nil ? OneTimeComponents(oneTimeDate: date) : nil,
-                forTimeZone: timeZone
+                delegate: self,
+                components: date != nil ? OneTimeComponents(oneTimeDate: date) : nil,
+                timeZone: timeZone
             )
         }
         else {
-            onceView.setup(forDelegate: self, forComponents: nil, forTimeZone: timeZone)
+            onceView.setup(delegate: self, components: nil, timeZone: timeZone)
         }
         
         // countdownView
         if reminderToUpdate?.reminderType == .countdown {
             countdownView.setup(
-                forDelegate: self,
-                forComponents: reminderToUpdate?.countdownComponents
+                delegate: self,
+                components: reminderToUpdate?.countdownComponents
             )
         }
         else {
-            countdownView.setup(forDelegate: self, forComponents: nil)
+            countdownView.setup(delegate: self, components: nil)
         }
         
         // weeklyView
         if reminderToUpdate?.reminderType == .weekly {
             weeklyView.setup(
-                forDelegate: self,
-                forComponents: reminderToUpdate?.weeklyComponents,
-                forTimeZone: timeZone
+                delegate: self,
+                components: reminderToUpdate?.weeklyComponents,
+                timeZone: timeZone
             )
         }
         else {
-            weeklyView.setup(forDelegate: self, forComponents: nil, forTimeZone: timeZone)
+            weeklyView.setup(delegate: self, components: nil, timeZone: timeZone)
         }
         
         // monthlyView
         if reminderToUpdate?.reminderType == .monthly {
             monthlyView.setup(
-                forDelegate: self,
-                forComponents: reminderToUpdate?.monthlyComponents,
-                forTimeZone: timeZone
+                delegate: self,
+                components: reminderToUpdate?.monthlyComponents,
+                timeZone: timeZone
             )
         }
         else {
-            monthlyView.setup(forDelegate: self, forComponents: nil, forTimeZone: timeZone)
+            monthlyView.setup(delegate: self, components: nil, timeZone: timeZone)
         }
     }
     
@@ -618,7 +618,7 @@ final class DogsAddReminderManagerView: HoundView,
             reminderRecipientsLabel.text = "Me"
         }
         else if selectedRecipientUserIds.count == 1, let userId = selectedRecipientUserIds.first {
-            reminderRecipientsLabel.text = FamilyInformation.findFamilyMember(forUserId: userId)?.displayFullName ?? Constant.Visual.Text.unknownName
+            reminderRecipientsLabel.text = FamilyInformation.findFamilyMember(userId: userId)?.displayFullName ?? Constant.Visual.Text.unknownName
         }
         else if  selectedRecipientUserIds.count == FamilyInformation.familyMembers.count {
             reminderRecipientsLabel.text = "Everyone"
@@ -786,7 +786,7 @@ final class DogsAddReminderManagerView: HoundView,
         }
     }
     
-    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
+    func numberOfRows(section: Int, identifier: any HoundDropDownType) -> Int {
         guard let identifier = identifier as? DogsAddReminderDropDownTypes else {
             return 0
         }

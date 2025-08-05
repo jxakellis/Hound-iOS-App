@@ -9,7 +9,7 @@
 import UIKit
 
 protocol RemindersIntroductionVCDelegate: AnyObject {
-    func didUpdateDogManager(sender: Sender, forDogManager dogManager: DogManager)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager)
 }
 
 final class RemindersIntroductionVC: HoundViewController {
@@ -80,9 +80,9 @@ final class RemindersIntroductionVC: HoundViewController {
 
     // MARK: - Setup
 
-    func setup(forDelegate: RemindersIntroductionVCDelegate, forDogManager: DogManager) {
-        self.delegate = forDelegate
-        self.dogManager = forDogManager
+    func setup(delegate: RemindersIntroductionVCDelegate, dogManager: DogManager) {
+        self.delegate = delegate
+        self.dogManager = dogManager
     }
 
     // MARK: - Functions
@@ -113,9 +113,9 @@ final class RemindersIntroductionVC: HoundViewController {
                 // do nothing when an individual task completes
             } completedAllTasksCompletionHandler: {
                 PresentationManager.endFetchingInformationIndicator {
-                    dog.dogReminders.addReminders(forReminders: reminders)
-                    dog.dogTriggers.addTriggers(forDogTriggers: triggers)
-                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    dog.dogReminders.addReminders(reminders: reminders)
+                    dog.dogTriggers.addTriggers(dogTriggers: triggers)
+                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     self.dismiss(animated: true, completion: nil)
                 }
             } failedTaskCompletionHandler: {
@@ -126,7 +126,7 @@ final class RemindersIntroductionVC: HoundViewController {
             }
 
             if !reminders.isEmpty {
-                RemindersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminders: reminders) { responseStatus, _ in
+                RemindersRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, reminders: reminders) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         completionTracker.failedTask()
                         return
@@ -135,7 +135,7 @@ final class RemindersIntroductionVC: HoundViewController {
                 }
             }
             if !triggers.isEmpty {
-                TriggersRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forDogTriggers: triggers) { responseStatus, _ in
+                TriggersRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, dogTriggers: triggers) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         completionTracker.failedTask()
                         return

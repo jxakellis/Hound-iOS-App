@@ -34,9 +34,9 @@ final class MappingLogActionTypeLogUnitType: NSObject, Comparable, NSCoding {
             return nil
         }
         self.init(
-            forMappingId: mappingId,
-            forLogActionTypeId: logActionTypeId,
-            forLogUnitTypeId: logUnitTypeId
+            mappingId: mappingId,
+            logActionTypeId: logActionTypeId,
+            logUnitTypeId: logUnitTypeId
         )
     }
     
@@ -57,13 +57,13 @@ final class MappingLogActionTypeLogUnitType: NSObject, Comparable, NSCoding {
     // MARK: - Initialization
     
     init(
-        forMappingId: Int,
-        forLogActionTypeId: Int,
-        forLogUnitTypeId: Int
+        mappingId: Int,
+        logActionTypeId: Int,
+        logUnitTypeId: Int
     ) {
-        self.mappingId = forMappingId
-        self.logActionTypeId = forLogActionTypeId
-        self.logUnitTypeId = forLogUnitTypeId
+        self.mappingId = mappingId
+        self.logActionTypeId = logActionTypeId
+        self.logUnitTypeId = logUnitTypeId
         super.init()
     }
     
@@ -77,9 +77,9 @@ final class MappingLogActionTypeLogUnitType: NSObject, Comparable, NSCoding {
         }
         
         self.init(
-            forMappingId: mappingIdVal,
-            forLogActionTypeId: logActionTypeIdVal,
-            forLogUnitTypeId: logUnitTypeIdVal
+            mappingId: mappingIdVal,
+            logActionTypeId: logActionTypeIdVal,
+            logUnitTypeId: logUnitTypeIdVal
         )
     }
 }

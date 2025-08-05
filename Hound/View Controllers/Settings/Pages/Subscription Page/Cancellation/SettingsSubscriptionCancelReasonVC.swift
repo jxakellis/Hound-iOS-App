@@ -12,11 +12,11 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
     
     // MARK: - SettingsSubscriptionCancelReasonTVCDelegate
     
-    func didSetCustomIsSelected(forCell: SettingsSubscriptionCancelReasonTVC, forIsCustomSelected: Bool) {
-        lastSelectedCell = forCell
+    func didSetCustomIsSelected(cell: SettingsSubscriptionCancelReasonTVC, isCustomSelected: Bool) {
+        lastSelectedCell = cell
         
         // The user can only continue if they have selected a cancellation reason
-        continueButton.isEnabled = forIsCustomSelected
+        continueButton.isEnabled = isCustomSelected
     }
     
     // MARK: - SettingsSubscriptionCancelSuggestionsVCDelegate
@@ -82,7 +82,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
             
             let vc = SettingsSubscriptionCancelSuggestionsVC()
             self.settingsSubscriptionCancelSuggestionsViewController = vc
-            vc.setup(forDelegate: self, forCancellationReason: lastSelectedCell?.cancellationReason)
+            vc.setup(delegate: self, cancellationReason: lastSelectedCell?.cancellationReason)
             PresentationManager.enqueueViewController(vc)
         }
         button.addAction(continueAction, for: .touchUpInside)
@@ -164,7 +164,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
             lastSelectedCell?.setCustomSelected(false, animated: false)
         }
         
-        cell.setup(forDelegate: self, forCancellationReason: cellCancellationReason, forIsCustomSelected: cellIsCustomSelected)
+        cell.setup(delegate: self, cancellationReason: cellCancellationReason, isCustomSelected: cellIsCustomSelected)
         
         return cell
     }

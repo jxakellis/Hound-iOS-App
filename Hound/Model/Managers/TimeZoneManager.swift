@@ -44,6 +44,6 @@ final class TimeZoneMonitor {
         let body: JSONRequestBody = [
             Constant.Key.userConfigurationDeviceTimeZone.rawValue: .string(UserConfiguration.deviceTimeZone.identifier)
         ]
-        UserRequest.update(forErrorAlert: .automaticallyAlertForNone, forBody: body) { _, _ in }
+        UserRequest.update(errorAlert: .automaticallyAlertForNone, body: body) { _, _ in }
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol HoundIntroductionDogNameViewDelegate: AnyObject {
-    func willContinue(forDogName: String?)
+    func willContinue(dogName: String?)
 }
 
 final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGestureRecognizerDelegate {
@@ -24,7 +24,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
         self.dismissKeyboard()
         dogNameTextField.isEnabled = false
         continueButton.isEnabled = false
-        delegate?.willContinue(forDogName: inputDogName)
+        delegate?.willContinue(dogName: inputDogName)
         return false
     }
 
@@ -85,19 +85,19 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
 
     // MARK: - Setup
 
-    func setup(forDelegate: HoundIntroductionDogNameViewDelegate, forDogManager: DogManager) {
-        delegate = forDelegate
-        dogManager = forDogManager
+    func setup(delegate: HoundIntroductionDogNameViewDelegate, dogManager: DogManager) {
+        self.delegate = delegate
+        self.dogManager = dogManager
 
         dogNameTextField.delegate = self
-        dogNameTextField.isEnabled = forDogManager.dogs.isEmpty
+        dogNameTextField.isEnabled = dogManager.dogs.isEmpty
         continueButton.isEnabled = true
 
         introductionView.backgroundImageView.image = UIImage(named: "autumnParkFamilyWithDog")
 
-        if let dog = forDogManager.dogs.first {
+        if let dog = dogManager.dogs.first {
             introductionView.pageHeaderLabel.text = "We See You Have a Pack!"
-            introductionView.pageDescriptionLabel.text = "You can manage \(dog.dogName)\(forDogManager.dogs.count > 1 ? " (and other dogs)" : "") on the next page"
+            introductionView.pageDescriptionLabel.text = "You can manage \(dog.dogName)\(dogManager.dogs.count > 1 ? " (and other dogs)" : "") on the next page"
             dogNameTextField.placeholder = dog.dogName
         }
         else {
@@ -114,7 +114,7 @@ final class HoundIntroductionDogNameView: HoundView, UITextFieldDelegate, UIGest
         self.dismissKeyboard()
         dogNameTextField.isEnabled = false
         continueButton.isEnabled = false
-        delegate?.willContinue(forDogName: inputDogName)
+        delegate?.willContinue(dogName: inputDogName)
     }
 
     // MARK: - Setup Elements

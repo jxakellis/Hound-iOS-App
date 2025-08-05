@@ -14,8 +14,8 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     
     // MARK: - SettingsSubscriptionTierTableViewCellSettingsSubscriptionTierTVC
     
-    func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTVC) {
-        lastSelectedCell = forCell
+    func didSetCustomIsSelectedToTrue(cell: SettingsSubscriptionTierTVC) {
+        lastSelectedCell = cell
         
         if let attributedText = continueButton.titleLabel?.attributedText {
             let mutableAttributedText = NSMutableAttributedString(attributedString: attributedText)
@@ -201,7 +201,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     @objc private func didTapRestoreTransactions(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
-            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionTitle, forSubtitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionTitle, subtitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionSubtitle, style: .danger)
             return
         }
         
@@ -215,7 +215,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                     return
                 }
                 
-                PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.successRestoreTransactionsTitle, forSubtitle: Constant.Visual.BannerText.successRestoreTransactionsSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.successRestoreTransactionsTitle, subtitle: Constant.Visual.BannerText.successRestoreTransactionsSubtitle, style: .success)
                 
                 // When we reload the tableView, cells are reusable.
                 self.lastSelectedCell = nil
@@ -229,7 +229,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
     @objc private func didTapContinue(_ sender: Any) {
         // The user doesn't have permission to perform this action
         guard UserInformation.isUserFamilyHead else {
-            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionTitle, forSubtitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionTitle, subtitle: Constant.Visual.BannerText.notFamilyHeadInvalidPermissionSubtitle, style: .danger)
             return
         }
         
@@ -244,7 +244,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         
         // Attempt to purchase the selected product
         PresentationManager.beginFetchingInformationIndicator()
-        InAppPurchaseManager.purchaseProduct(forProduct: product) { productIdentifier in
+        InAppPurchaseManager.purchaseProduct(product: product) { productIdentifier in
             PresentationManager.endFetchingInformationIndicator {
                 self.continueButton.isEnabled = true
                 
@@ -253,7 +253,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
                     return
                 }
                 
-                PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.successPurchasedSubscriptionTitle, forSubtitle: Constant.Visual.BannerText.successPurchasedSubscriptionSubtitle, forStyle: .success)
+                PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.successPurchasedSubscriptionTitle, subtitle: Constant.Visual.BannerText.successPurchasedSubscriptionSubtitle, style: .success)
                 
                 UIView.transition(with: self.tableView, duration: Constant.Visual.Animation.moveMultipleElements, options: .transitionCrossDissolve, animations: {
                     self.tableView.reloadData()
@@ -312,7 +312,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         guard let settingsSubscriptionViewController = SettingsSubscriptionVC.settingsSubscriptionViewController, settingsSubscriptionViewController.viewIfLoaded?.window != nil else { return }
         // If a transaction was syncronized to the Hound server from the background, i.e. the system recognized there was a transaction sitting in the queue so silently contacted Hound to process it, we don't want to cause any visual indicators that would confuse the user. Instead we just update the information on the server then reload the labels. No fancy animations or error messages if anything fails.
         
-        TransactionsRequest.get(forErrorAlert: .automaticallyAlertForNone) { responseStatus, _ in
+        TransactionsRequest.get(errorAlert: .automaticallyAlertForNone) { responseStatus, _ in
             guard responseStatus == .successResponse else {
                 return
             }
@@ -328,7 +328,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         
         PresentationManager.beginFetchingInformationIndicator()
         
-        TransactionsRequest.get(forErrorAlert: .automaticallyAlertForAll) { responseStatus, houndError in
+        TransactionsRequest.get(errorAlert: .automaticallyAlertForAll) { responseStatus, houndError in
             PresentationManager.endFetchingInformationIndicator {
                 guard responseStatus == .successResponse else {
                     houndError?.alert()
@@ -412,7 +412,7 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
             lastSelectedCell?.setCustomSelected(false, animated: false)
         }
         
-        cell.setup(forDelegate: self, forProduct: cellProduct, forIsCustomSelected: cellIsCustomSelected)
+        cell.setup(delegate: self, product: cellProduct, isCustomSelected: cellIsCustomSelected)
         
         return cell
     }

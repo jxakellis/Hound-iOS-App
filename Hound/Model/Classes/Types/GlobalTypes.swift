@@ -23,11 +23,11 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
             return nil
         }
         self.init(
-            forLogActionTypes: logActionTypes,
-            forReminderActionTypes: reminderActionTypes,
-            forMappingLogActionTypeReminderActionType: mappingLogActionTypeReminderActionType,
-            forLogUnitTypes: logUnitTypes,
-            forMappingLogActionTypeLogUnitType: mappingLogActionTypeLogUnitType
+            logActionTypes: logActionTypes,
+            reminderActionTypes: reminderActionTypes,
+            mappingLogActionTypeReminderActionType: mappingLogActionTypeReminderActionType,
+            logUnitTypes: logUnitTypes,
+            mappingLogActionTypeLogUnitType: mappingLogActionTypeLogUnitType
         )
     }
     
@@ -102,17 +102,17 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
     // MARK: - Initialization
     
     init(
-        forLogActionTypes: [LogActionType],
-        forReminderActionTypes: [ReminderActionType],
-        forMappingLogActionTypeReminderActionType: [MappingLogActionTypeReminderActionType],
-        forLogUnitTypes: [LogUnitType],
-        forMappingLogActionTypeLogUnitType: [MappingLogActionTypeLogUnitType]
+        logActionTypes: [LogActionType],
+        reminderActionTypes: [ReminderActionType],
+        mappingLogActionTypeReminderActionType: [MappingLogActionTypeReminderActionType],
+        logUnitTypes: [LogUnitType],
+        mappingLogActionTypeLogUnitType: [MappingLogActionTypeLogUnitType]
     ) {
-        self.logActionTypes = forLogActionTypes.sorted()
-        self.reminderActionTypes = forReminderActionTypes.sorted()
-        self.mappingLogActionTypeReminderActionType = forMappingLogActionTypeReminderActionType.sorted()
-        self.logUnitTypes = forLogUnitTypes.sorted()
-        self.mappingLogActionTypeLogUnitType = forMappingLogActionTypeLogUnitType.sorted()
+        self.logActionTypes = logActionTypes.sorted()
+        self.reminderActionTypes = reminderActionTypes.sorted()
+        self.mappingLogActionTypeReminderActionType = mappingLogActionTypeReminderActionType.sorted()
+        self.logUnitTypes = logUnitTypes.sorted()
+        self.mappingLogActionTypeLogUnitType = mappingLogActionTypeLogUnitType.sorted()
         if logActionTypes.isEmpty {
             HoundLogger.general.error("GlobalTypes.init: logActionTypes is empty for GlobalTypes")
         }
@@ -150,11 +150,11 @@ final class GlobalTypes: NSObject, NSCoding, UserDefaultPersistable {
         let mlatlutMapped = mappingLogActionTypeLogUnitTypeArr.compactMap { MappingLogActionTypeLogUnitType(fromBody: $0) }
         
         self.init(
-            forLogActionTypes: latMapped,
-            forReminderActionTypes: ratMapped,
-            forMappingLogActionTypeReminderActionType: mlatratMapped,
-            forLogUnitTypes: lutMapped,
-            forMappingLogActionTypeLogUnitType: mlatlutMapped
+            logActionTypes: latMapped,
+            reminderActionTypes: ratMapped,
+            mappingLogActionTypeReminderActionType: mlatratMapped,
+            logUnitTypes: lutMapped,
+            mappingLogActionTypeLogUnitType: mlatlutMapped
         )
     }
 }

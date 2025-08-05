@@ -29,7 +29,7 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
             return nil
         }
         
-        self.init(forDogTriggers: dogTriggers)
+        self.init(dogTriggers: dogTriggers)
     }
     
     func encode(with aCoder: NSCoder) {
@@ -49,23 +49,23 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
         super.init()
     }
     
-    init(forDogTriggers: [Trigger] = []) {
+    init(dogTriggers: [Trigger] = []) {
         super.init()
-        addTriggers(forDogTriggers: forDogTriggers)
+        addTriggers(dogTriggers: dogTriggers)
     }
     
     convenience init(
         fromTriggerBodies: [JSONResponseBody],
         dogTriggerManagerToOverride: DogTriggerManager?
     ) {
-        self.init(forDogTriggers:
+        self.init(dogTriggers:
                     dogTriggerManagerToOverride?.dogTriggers ?? []
         )
         
         for fromBody in fromTriggerBodies {
             let triggerId = fromBody[KeyConstant.triggerId.rawValue] as? Int
             let triggerUUID = UUID.fromString(
-                forUUIDString: fromBody[KeyConstant.triggerUUID.rawValue] as? String
+                UUIDString: fromBody[KeyConstant.triggerUUID.rawValue] as? String
             )
             let triggerIsDeleted = fromBody[KeyConstant.triggerIsDeleted.rawValue] as? Bool
             
@@ -85,7 +85,7 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
                 fromBody: fromBody,
                 triggerToOverride: findTrigger(triggerUUID: triggerUUID)
             ) {
-                addTrigger(forTrigger: trigger)
+                addTrigger(trigger: trigger)
             }
         }
     }
@@ -103,28 +103,28 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
     
     /// Helper function: remove existing then append without sorting
     private func addTriggerWithoutSorting(
-        forTrigger: Trigger
+        trigger: Trigger
     ) {
         dogTriggers.removeAll {
-            $0.triggerUUID == forTrigger.triggerUUID
+            $0.triggerUUID == trigger.triggerUUID
         }
-        dogTriggers.append(forTrigger)
+        dogTriggers.append(trigger)
     }
     
     /// If a trigger with the same UUID exists, replaces it, then sorts
-    func addTrigger(forTrigger: Trigger) {
-        addTriggerWithoutSorting(forTrigger: forTrigger)
+    func addTrigger(trigger: Trigger) {
+        addTriggerWithoutSorting(trigger: trigger)
         dogTriggers.sort(by: { $0 <= $1 })
     }
     
-    /// Invokes addTrigger(forTrigger:) for each, sorting once
+    /// Invokes addTrigger(trigger:) for each, sorting once
     func addTriggers(
-        forDogTriggers: [Trigger]
+        dogTriggers: [Trigger]
     ) {
-        for trigger in forDogTriggers {
-            addTriggerWithoutSorting(forTrigger: trigger)
+        for trigger in dogTriggers {
+            addTriggerWithoutSorting(trigger: trigger)
         }
-        dogTriggers.sort(by: { $0 <= $1 })
+        self.dogTriggers.sort(by: { $0 <= $1 })
     }
     
     /// Returns true if at least one trigger was removed by UUID
@@ -145,7 +145,7 @@ final class DogTriggerManager: NSObject, NSCoding, NSCopying {
         return didRemoveObject
     }
     
-    func matchingActivatedTriggers(forLog log: Log) -> [Trigger] {
-        return dogTriggers.filter { trigger in trigger.shouldActivateTrigger(forLog: log) }
+    func matchingActivatedTriggers(log: Log) -> [Trigger] {
+        return dogTriggers.filter { trigger in trigger.shouldActivateTrigger(log: log) }
     }
 }

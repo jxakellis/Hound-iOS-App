@@ -12,7 +12,7 @@ import UIKit
 // TODO add a leave without save warning
 
 protocol LogsSortDelegate: AnyObject {
-    func didUpdateLogsSort(forLogsSort: LogsSort)
+    func didUpdateLogsSort(logsSort: LogsSort)
 }
 
 enum LogsSortDropDownTypes: String, HoundDropDownType {
@@ -140,13 +140,13 @@ class LogsSortVC: HoundScrollViewController,
     
     @objc private func didTapApply(_ sender: Any) {
         guard let sort = sort else { return }
-        delegate?.didUpdateLogsSort(forLogsSort: sort)
+        delegate?.didUpdateLogsSort(logsSort: sort)
     }
     
     @objc private func didTapReset(_ sender: Any) {
         sort?.reset()
         if let sort = sort {
-            delegate?.didUpdateLogsSort(forLogsSort: sort)
+            delegate?.didUpdateLogsSort(logsSort: sort)
         }
     }
     
@@ -190,9 +190,9 @@ class LogsSortVC: HoundScrollViewController,
     
     // MARK: - Setup
     
-    func setup(forDelegate: LogsSortDelegate, forSort: LogsSort) {
-        delegate = forDelegate
-        sort = (forSort.copy() as? LogsSort) ?? forSort
+    func setup(delegate: LogsSortDelegate, sort: LogsSort) {
+        self.delegate = delegate
+        self.sort = (sort.copy() as? LogsSort) ?? self.sort
     }
     
     // MARK: - Functions
@@ -245,7 +245,7 @@ class LogsSortVC: HoundScrollViewController,
         }
     }
     
-    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
+    func numberOfRows(section: Int, identifier: any HoundDropDownType) -> Int {
         guard let sort = sort else {
             return 0
         }

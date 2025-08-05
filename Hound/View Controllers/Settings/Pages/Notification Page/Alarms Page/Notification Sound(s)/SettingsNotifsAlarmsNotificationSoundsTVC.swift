@@ -54,9 +54,9 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
     @objc private func showDisabledBanner(_ sender: Any) {
         guard UserConfiguration.isNotificationEnabled == false else { return }
         PresentationManager.enqueueBanner(
-            forTitle: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
-            forSubtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
-            forStyle: .warning
+            title: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
+            subtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
+            style: .warning
         )
     }
     
@@ -117,7 +117,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         
         let notificationSound = NotificationSound.allCases[indexPath.row]
         
-        cell.setup(forNotificationSound: notificationSound == NotificationSound.radar ? "Radar (Default)" : notificationSound.rawValue)
+        cell.setup(notificationSound: notificationSound == NotificationSound.radar ? "Radar (Default)" : notificationSound.rawValue)
         cell.setCustomSelected(notificationSound == UserConfiguration.notificationSound, animated: false)
         
         return cell
@@ -139,7 +139,7 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
                 AudioManager.stopAudio()
             }
             else {
-                AudioManager.playAudio(forAudioPath: "\(UserConfiguration.notificationSound.rawValue.lowercased())")
+                AudioManager.playAudio(audioPath: "\(UserConfiguration.notificationSound.rawValue.lowercased())")
             }
             
             return
@@ -160,12 +160,12 @@ final class SettingsNotifsAlarmsNotificationSoundsTVC: HoundTableViewCell, UITab
         
         // assign user configuration to new value and play its audio
         UserConfiguration.notificationSound = selectedNotificationSound
-        AudioManager.playAudio(forAudioPath: "\(UserConfiguration.notificationSound.rawValue.lowercased())")
+        AudioManager.playAudio(audioPath: "\(UserConfiguration.notificationSound.rawValue.lowercased())")
         
         // contact server to attempt to persist change
         let body: JSONRequestBody = [Constant.Key.userConfigurationNotificationSound.rawValue: .string(UserConfiguration.notificationSound.rawValue)]
         
-        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+        UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.notificationSound = beforeUpdateNotificationSound

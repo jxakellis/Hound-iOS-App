@@ -14,8 +14,8 @@ final class OfflineModeComponents: NSObject, NSCoding, NSCopying {
     
     func copy(with zone: NSZone? = nil) -> Any {
         return OfflineModeComponents(
-            forInitialAttemptedSyncDate: self.initialAttemptedSyncDate,
-            forInitialCreationDate: self.initialCreationDate
+            initialAttemptedSyncDate: self.initialAttemptedSyncDate,
+            initialCreationDate: self.initialCreationDate
         )
     }
     
@@ -26,8 +26,8 @@ final class OfflineModeComponents: NSObject, NSCoding, NSCopying {
         let decodedInitialCreationDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponentsInitialCreationDate.rawValue)
         
         self.init(
-            forInitialAttemptedSyncDate: decodedInitialAttemptedSyncDate,
-            forInitialCreationDate: decodedInitialCreationDate
+            initialAttemptedSyncDate: decodedInitialAttemptedSyncDate,
+            initialCreationDate: decodedInitialCreationDate
         )
     }
     
@@ -48,20 +48,20 @@ final class OfflineModeComponents: NSObject, NSCoding, NSCopying {
     /// This is the date which the object was attempted to be synced with the Hound server but failed due to no connection. If this is set to a
     private(set) var initialAttemptedSyncDate: Date?
     /// Function used externally to manage initialAttemptedSyncDate
-    func updateInitialAttemptedSyncDate(forInitialAttemptedSyncDate: Date?) {
-        guard let forInitialAttemptedSyncDate = forInitialAttemptedSyncDate else {
+    func updateInitialAttemptedSyncDate(initialAttemptedSyncDate: Date?) {
+        guard let initialAttemptedSyncDate = initialAttemptedSyncDate else {
             // Override initialAttemptedSyncDate to set it to nil
-            initialAttemptedSyncDate = forInitialAttemptedSyncDate
+            self.initialAttemptedSyncDate = initialAttemptedSyncDate
             return
         }
         
-        guard initialAttemptedSyncDate != nil else {
-            // forInitialAttemptedSyncDate isn't nil but initialAttemptedSyncDate is, override initialAttemptedSyncDate with the value
-            initialAttemptedSyncDate = forInitialAttemptedSyncDate
+        guard self.initialAttemptedSyncDate != nil else {
+            // initialAttemptedSyncDate isn't nil but initialAttemptedSyncDate is, override initialAttemptedSyncDate with the value
+            self.initialAttemptedSyncDate = initialAttemptedSyncDate
             return
         }
         
-        // Both forInitialAttemptedSyncDate and initialAttemptedSyncDate aren't nil, therefore do nothing as the initialAttemptedSyncDate shouldn't be overriden with another value.
+        // Both initialAttemptedSyncDate and initialAttemptedSyncDate aren't nil, therefore do nothing as the initialAttemptedSyncDate shouldn't be overriden with another value.
     }
     
     /// This is the date which the object was created by the user
@@ -70,10 +70,10 @@ final class OfflineModeComponents: NSObject, NSCoding, NSCopying {
     // MARK: - Main
     
     init(
-        forInitialAttemptedSyncDate: Date? = nil,
-        forInitialCreationDate: Date? = nil
+        initialAttemptedSyncDate: Date? = nil,
+        initialCreationDate: Date? = nil
     ) {
-        self.initialAttemptedSyncDate = forInitialAttemptedSyncDate ?? initialAttemptedSyncDate
-        self.initialCreationDate = forInitialCreationDate ?? initialCreationDate
+        self.initialAttemptedSyncDate = initialAttemptedSyncDate ?? self.initialAttemptedSyncDate
+        self.initialCreationDate = initialCreationDate ?? self.initialCreationDate
     }
 }

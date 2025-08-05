@@ -153,7 +153,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     // MARK: Get Functions
     
     private func getGlobalTypes() {
-        getGlobalTypesProgress = GlobalTypesRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
+        getGlobalTypesProgress = GlobalTypesRequest.get(errorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 self.failureResponseForRequest()
                 return
@@ -198,7 +198,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     }
     
     private func getUser() {
-        getUserProgress = UserRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
+        getUserProgress = UserRequest.get(errorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 self.failureResponseForRequest()
                 return
@@ -229,7 +229,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
             else {
                 // User needs to join a family because they have no familyId
                 let vc = ServerFamilyIntroductionVC()
-                vc.setup(forDelegate: self)
+                vc.setup(delegate: self)
                 PresentationManager.enqueueViewController(vc)
             }
         }
@@ -249,7 +249,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     }
     
     private func getFamilyInformation() {
-        getFamilyProgress = FamilyRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
+        getFamilyProgress = FamilyRequest.get(errorAlert: .automaticallyAlertOnlyForFailure) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 self.failureResponseForRequest()
                 return
@@ -274,7 +274,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
     private func getDogs() {
         let dogManager = DogManager.globalDogManager ?? DogManager()
         // we want to use our own custom error message
-        getDogsProgress = DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogManager: dogManager) { newDogManager, responseStatus, _ in
+        getDogsProgress = DogsRequest.get(errorAlert: .automaticallyAlertOnlyForFailure, dogManager: dogManager) { newDogManager, responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 self.failureResponseForRequest()
                 return

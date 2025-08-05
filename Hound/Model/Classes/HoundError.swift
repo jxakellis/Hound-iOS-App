@@ -20,21 +20,21 @@ class HoundError: Error {
     private(set) var onTap: (() -> Void)
 
     // MARK: - Main
-    init(forName: String, forDescription: String, forOnTap: (() -> Void)?) {
-        self.name = forName
-        self.description = forDescription
+    init(name: String, description: String, onTap: (() -> Void)?) {
+        self.name = name
+        self.description = description
         let userId = UserInformation.userId
 
         /// If onTap isn't specified, this is the default action to take.
         let defaultOnTap: (() -> Void) = {
-            var message = "Name: \(forName)\nDescription: \(forDescription)"
+            var message = "Name: \(name)\nDescription: \(description)"
             if let userId = userId {
                 message.append("\nSupport ID: \(userId)")
             }
 
             let errorInformationAlertController = UIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
             let copyAlertAction = UIAlertAction(title: "Copy to Clipboard", style: .default) { _ in
-                UIPasteboard.general.setPasteboard(forString: message)
+                UIPasteboard.general.setPasteboard(string: message)
             }
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
             errorInformationAlertController.addAction(copyAlertAction)
@@ -42,7 +42,7 @@ class HoundError: Error {
             PresentationManager.enqueueAlert(errorInformationAlertController)
         }
 
-        self.onTap = forOnTap ?? defaultOnTap
+        self.onTap = onTap ?? defaultOnTap
     }
 
     // MARK: - Functions
@@ -51,19 +51,19 @@ class HoundError: Error {
     func alert() {
         HoundLogger.general.error("HoundError.alert(): Alerting user for error: \(self.description)")
 
-        guard name != Constant.Error.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
+        guard name != Constant.Error.GeneralResponseError.appVersionOutdated(requestId: -1, responseId: -1).name else {
             let vc = AppVersionOutdatedVC()
             PresentationManager.enqueueViewController(vc)
             return
         }
         
-        guard name != Constant.Error.FamilyResponseError.limitFamilyMemberExceeded(forRequestId: -1, forResponseId: -1).name else {
+        guard name != Constant.Error.FamilyResponseError.limitFamilyMemberExceeded(requestId: -1, responseId: -1).name else {
             let vc = LimitExceededViewController()
             PresentationManager.enqueueViewController(vc)
             return
         }
 
-        PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.errorAlertTitle, forSubtitle: description, forStyle: .danger) {
+        PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.errorAlertTitle, subtitle: description, style: .danger) {
             self.onTap()
         }
     }
@@ -81,21 +81,21 @@ final class HoundServerError: HoundError {
 
     // MARK: - Main
     
-    init(forName: String, forDescription: String, forOnTap: (() -> Void)?, forRequestId: Int, forResponseId: Int) {
-        self.requestId = forRequestId
-        self.responseId = forResponseId
+    init(name: String, description: String, onTap: (() -> Void)?, requestId: Int, responseId: Int) {
+        self.requestId = requestId
+        self.responseId = responseId
         let userId = UserInformation.userId
 
         /// If onTap isn't specified, this is the default action to take.
         let defaultOnTap: (() -> Void) = {
-            var message = "Name: \(forName)\nDescription: \(forDescription)\nRequest ID: \(forRequestId)\nResponse ID: \(forResponseId)"
+            var message = "Name: \(name)\nDescription: \(description)\nRequest ID: \(requestId)\nResponse ID: \(responseId)"
             if let userId = userId {
                 message.append("\nSupport ID: \(userId)")
             }
 
             let errorInformationAlertController = UIAlertController(title: "Error Information", message: message, preferredStyle: .alert)
             let copyAlertAction = UIAlertAction(title: "Copy to Clipboard", style: .default) { _ in
-                UIPasteboard.general.setPasteboard(forString: message)
+                UIPasteboard.general.setPasteboard(string: message)
             }
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
             errorInformationAlertController.addAction(copyAlertAction)
@@ -103,6 +103,6 @@ final class HoundServerError: HoundError {
             PresentationManager.enqueueAlert(errorInformationAlertController)
         }
 
-        super.init(forName: forName, forDescription: forDescription, forOnTap: forOnTap ?? defaultOnTap)
+        super.init(name: name, description: description, onTap: onTap ?? defaultOnTap)
     }
 }

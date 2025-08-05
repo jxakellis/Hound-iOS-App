@@ -9,7 +9,7 @@
 import UIKit
 
 protocol LogsVCDelegate: AnyObject {
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager)
 }
 
 // UI VERIFIED 6/25/25
@@ -17,8 +17,6 @@ final class LogsVC: HoundViewController,
                     LogsTableVCDelegate,
                     LogsAddLogDelegate,
                     LogsFilterDelegate, LogsSortDelegate {
-    
-    
     
     // MARK: - UIGestureRecognizerDelegate
     
@@ -31,28 +29,28 @@ final class LogsVC: HoundViewController,
     // MARK: - LogsAddLogDelegate & LogsTableVCDelegate
     
     /// Called when the dogManager is updated from add-log or table view
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager) {
-        setDogManager(sender: sender, forDogManager: forDogManager)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager) {
+        setDogManager(sender: sender, dogManager: dogManager)
     }
     
     // MARK: - LogsTableVCDelegate
     
     /// Called when a log is selected in the table view
-    func didSelectLog(forDogUUID: UUID, forLog: Log) {
+    func didSelectLog(dogUUID: UUID, log: Log) {
         let vc = LogsAddLogVC()
         logsAddLogViewController = vc
         vc.setup(
-            forDelegate: self,
-            forDogManager: self.dogManager,
-            forDogUUIDToUpdate: forDogUUID,
-            forLogToUpdate: forLog
+            delegate: self,
+            dogManager: self.dogManager,
+            dogUUIDToUpdate: dogUUID,
+            logToUpdate: log
         )
         PresentationManager.enqueueViewController(vc)
     }
     
     /// Show or hide the “No logs recorded” label, and update its text based on dog count
-    func shouldUpdateNoLogsRecorded(forIsHidden: Bool) {
-        noLogsRecordedLabel.isHidden = forIsHidden
+    func shouldUpdateNoLogsRecorded(isHidden: Bool) {
+        noLogsRecordedLabel.isHidden = isHidden
         guard !dogManager.dogs.isEmpty else {
             noLogsRecordedLabel.text = "No logs created yet!\n\nTry creating a dog and adding some logs to it..."
             return
@@ -70,12 +68,12 @@ final class LogsVC: HoundViewController,
     }
     
     /// Adjust button alphas and hide/show based on scroll offset and log availability
-    func shouldUpdateAlphaForButtons(forAlpha: Double) {
-        addLogButton.alpha = forAlpha
-        exportLogsButton.alpha = forAlpha
-        sortLogsButton.alpha = forAlpha
-        filterLogsButton.alpha = forAlpha
-        clearFilterButton.alpha = forAlpha
+    func shouldUpdateAlphaForButtons(alpha: Double) {
+        addLogButton.alpha = alpha
+        exportLogsButton.alpha = alpha
+        sortLogsButton.alpha = alpha
+        filterLogsButton.alpha = alpha
+        clearFilterButton.alpha = alpha
         
         addLogButton.isHidden = (addLogButton.alpha == 0.0) || dogManager.dogs.isEmpty
         exportLogsButton.isHidden = (exportLogsButton.alpha == 0.0) || !familyHasAtLeastOneLog
@@ -95,24 +93,24 @@ final class LogsVC: HoundViewController,
     // MARK: - LogsFilterDelegate
     
     /// Pass updated filter to the logs table view controller
-    func didUpdateLogsFilter(forLogsFilter: LogsFilter) {
-        logsTableViewController.logsFilter = forLogsFilter
+    func didUpdateLogsFilter(logsFilter: LogsFilter) {
+        logsTableViewController.logsFilter = logsFilter
         UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) { [weak self] in
             guard let self = self else {
                 return
             }
-            filterLogsButton.badgeValue = forLogsFilter.numActiveFilters
+            filterLogsButton.badgeValue = logsFilter.numActiveFilters
             shouldUpdateClearFilterButton()
         }
     }
     
     // MARK: - LogsSortDelegate
     
-    func didUpdateLogsSort(forLogsSort: LogsSort) {
-        logsTableViewController.logsSort = forLogsSort
+    func didUpdateLogsSort(logsSort: LogsSort) {
+        logsTableViewController.logsSort = logsSort
         UIView.animate(withDuration: Constant.Visual.Animation.showOrHideSingleElement) { [weak self] in
             guard let self = self else { return }
-            if forLogsSort.sortDirection == .descending {
+            if logsSort.sortDirection == .descending {
                 self.sortLogsButton.imageView?.transform = .identity
             }
             else {
@@ -151,7 +149,7 @@ final class LogsVC: HoundViewController,
             guard let self = self else { return }
             
             let vc = LogsAddLogVC()
-            vc.setup(forDelegate: self, forDogManager: dogManager, forDogUUIDToUpdate: nil, forLogToUpdate: nil)
+            vc.setup(delegate: self, dogManager: dogManager, dogUUIDToUpdate: nil, logToUpdate: nil)
             PresentationManager.enqueueViewController(vc)
         }
         button.addAction(action, for: .touchUpInside)
@@ -176,7 +174,7 @@ final class LogsVC: HoundViewController,
             
             let filter = logsTableViewController.logsFilter
             filter.clearAll()
-            didUpdateLogsFilter(forLogsFilter: filter)
+            didUpdateLogsFilter(logsFilter: filter)
         }
         button.addAction(action, for: .touchUpInside)
         
@@ -197,7 +195,7 @@ final class LogsVC: HoundViewController,
             guard let self = self else { return }
             
             let vc = LogsFilterVC()
-            vc.setup(forDelegate: self, forFilter: logsTableViewController.logsFilter)
+            vc.setup(delegate: self, filter: logsTableViewController.logsFilter)
             PresentationManager.enqueueViewController(vc)
         }
         button.addAction(action, for: .touchUpInside)
@@ -219,7 +217,7 @@ final class LogsVC: HoundViewController,
             guard let self = self else { return }
             
             let vc = LogsSortVC()
-            vc.setup(forDelegate: self, forSort: logsTableViewController.logsSort)
+            vc.setup(delegate: self, sort: logsTableViewController.logsSort)
             PresentationManager.enqueueViewController(vc)
         }
         button.addAction(action, for: .touchUpInside)
@@ -249,7 +247,7 @@ final class LogsVC: HoundViewController,
                 dogUUIDLogTuples += $0
             }
             
-            ExportActivityViewManager.exportLogs(forDogUUIDLogTuples: dogUUIDLogTuples)
+            ExportActivityViewManager.exportLogs(dogUUIDLogTuples: dogUUIDLogTuples)
         }
         button.addAction(action, for: .touchUpInside)
         
@@ -279,8 +277,8 @@ final class LogsVC: HoundViewController,
     private(set) var dogManager: DogManager = DogManager()
     
     /// Set the dogManager and update UI elements and child controllers
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        dogManager = forDogManager
+    func setDogManager(sender: Sender, dogManager: DogManager) {
+        self.dogManager = dogManager
         
         addLogButton.isHidden = dogManager.dogs.isEmpty
         exportLogsButton.isHidden = !familyHasAtLeastOneLog
@@ -289,7 +287,7 @@ final class LogsVC: HoundViewController,
         if (sender.localized is LogsTableVC) == false {
             logsTableViewController.setDogManager(
                 sender: Sender(origin: sender, localized: self),
-                forDogManager: dogManager
+                dogManager: dogManager
             )
         }
         if (sender.localized is MainTabBarController) == true {
@@ -303,7 +301,7 @@ final class LogsVC: HoundViewController,
         if (sender.localized is MainTabBarController) == false {
             delegate?.didUpdateDogManager(
                 sender: Sender(origin: sender, localized: self),
-                forDogManager: dogManager
+                dogManager: dogManager
             )
         }
     }
@@ -314,13 +312,13 @@ final class LogsVC: HoundViewController,
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         
-        logsTableViewController.setup(forDelegate: self)
+        logsTableViewController.setup(delegate: self)
     }
     
     // MARK: - Setup
     
-    func setup(forDelegate: LogsVCDelegate) {
-        self.delegate = forDelegate
+    func setup(delegate: LogsVCDelegate) {
+        self.delegate = delegate
     }
     
     // MARK: - Setup Elements

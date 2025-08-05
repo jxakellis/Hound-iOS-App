@@ -11,7 +11,7 @@ import UIKit
 
 protocol DogsAddDogReminderTVCDelegate: AnyObject {
     /// The reminder switch to toggle the enable status was flipped. The reminder was updated and the server was NOT queried.
-    func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool)
+    func didUpdateReminderIsEnabled(sender: Sender, reminderUUID: UUID, reminderIsEnabled: Bool)
 }
 
 final class DogsAddDogReminderTVC: HoundTableViewCell {
@@ -134,7 +134,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
         updateIndicators()
         
-        delegate?.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), forReminderUUID: reminder.reminderUUID, forReminderIsEnabled: reminderIsEnabledSwitch.isOn)
+        delegate?.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), reminderUUID: reminder.reminderUUID, reminderIsEnabled: reminderIsEnabledSwitch.isOn)
     }
     
     // MARK: - Properties
@@ -147,18 +147,18 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddDogReminderTVCDelegate, forReminder: Reminder) {
-        delegate = forDelegate
-        reminderIsEnabledSwitch.isOn = forReminder.reminderIsEnabled
-        reminder = forReminder
+    func setup(delegate: DogsAddDogReminderTVCDelegate, reminder: Reminder) {
+        self.delegate = delegate
+        reminderIsEnabledSwitch.isOn = reminder.reminderIsEnabled
+        self.reminder = reminder
         
-        reminderActionLabel.text = forReminder.reminderActionType.convertToReadableName(customActionName: forReminder.reminderCustomActionName, includeMatchingEmoji: true)
+        reminderActionLabel.text = reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName, includeMatchingEmoji: true)
         
-        intervalLabel.text = forReminder.readableRecurrance()
+        intervalLabel.text = reminder.readableRecurrance()
         
-        triggerResultIndicatorImageView.isHidden = !forReminder.reminderIsTriggerResult
-        chevronImageView.isHidden = forReminder.reminderIsTriggerResult
-        reminderIsEnabledSwitch.isHidden = forReminder.reminderIsTriggerResult
+        triggerResultIndicatorImageView.isHidden = !reminder.reminderIsTriggerResult
+        chevronImageView.isHidden = reminder.reminderIsTriggerResult
+        reminderIsEnabledSwitch.isHidden = reminder.reminderIsTriggerResult
         
         updateIndicators()
     }

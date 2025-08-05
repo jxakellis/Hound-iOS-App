@@ -80,7 +80,7 @@ final class SettingsNotifsAlarmsVC: HoundViewController, UITableViewDelegate, UI
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = PageSheetHeaderFooterView()
-        headerView.setup(forTitle: "Alarms")
+        headerView.setup(title: "Alarms")
         return headerView
     }
     

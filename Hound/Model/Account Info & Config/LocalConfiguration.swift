@@ -129,30 +129,30 @@ final class LocalConfiguration: UserDefaultPersistable {
     static var localPreviousLogCustomActionNames: [PreviousLogCustomActionName] = []
     
     /// Add the custom log action name to the stored array of localPreviousLogCustomActionNames. If it is already present, then nothing changes, otherwise override the oldest one
-    static func addLogCustomAction(forLogActionType: LogActionType, forLogCustomActionName: String) {
+    static func addLogCustomAction(logActionType: LogActionType, logCustomActionName: String) {
         // make sure its a valid custom type
-        guard forLogActionType.allowsCustom else { return }
+        guard logActionType.allowsCustom else { return }
         
         // make sure the name actually contains something
-        guard forLogCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else { return }
+        guard logCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else { return }
         
         // Remove any identical records to this, as we want these to all be unique
         localPreviousLogCustomActionNames.removeAll { previousLogCustomActionName in
-            return previousLogCustomActionName.logActionTypeId == forLogActionType.logActionTypeId && previousLogCustomActionName.logCustomActionName == forLogCustomActionName
+            return previousLogCustomActionName.logActionTypeId == logActionType.logActionTypeId && previousLogCustomActionName.logCustomActionName == logCustomActionName
         }
         
         // Re-add at beginning of array
         localPreviousLogCustomActionNames.insert(
             PreviousLogCustomActionName(
-                logActionTypeId: forLogActionType.logActionTypeId,
-                logCustomActionName: forLogCustomActionName
+                logActionTypeId: logActionType.logActionTypeId,
+                logCustomActionName: logCustomActionName
             ),
             at: 0
         )
         
         // check to see if we are over capacity for this specific action type
         var countForType = 0
-        for (index, element) in localPreviousLogCustomActionNames.enumerated().reversed() where element.logActionTypeId == forLogActionType.logActionTypeId {
+        for (index, element) in localPreviousLogCustomActionNames.enumerated().reversed() where element.logActionTypeId == logActionType.logActionTypeId {
             countForType += 1
             if countForType > PreviousLogCustomActionName.maxStored {
                 localPreviousLogCustomActionNames.remove(at: index)
@@ -167,30 +167,30 @@ final class LocalConfiguration: UserDefaultPersistable {
     static var localPreviousReminderCustomActionNames: [PreviousReminderCustomActionName] = []
     
     /// Add the custom reminder action name to the stored array of localPreviousReminderCustomActionNames. If it is already present, then nothing changes, otherwise override the oldest one
-    static func addReminderCustomAction(forReminderActionType: ReminderActionType, forReminderCustomActionName: String) {
+    static func addReminderCustomAction(reminderActionType: ReminderActionType, reminderCustomActionName: String) {
         // make sure its a valid custom type
-        guard forReminderActionType.allowsCustom else { return }
+        guard reminderActionType.allowsCustom else { return }
         
         // make sure the name actually contains something
-        guard forReminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else { return }
+        guard reminderCustomActionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false else { return }
         
         // Remove any identical records to this, as we want these to all be unique
         localPreviousReminderCustomActionNames.removeAll { previousReminderCustomActionName in
-            return previousReminderCustomActionName.reminderActionTypeId == forReminderActionType.reminderActionTypeId && previousReminderCustomActionName.reminderCustomActionName == forReminderCustomActionName
+            return previousReminderCustomActionName.reminderActionTypeId == reminderActionType.reminderActionTypeId && previousReminderCustomActionName.reminderCustomActionName == reminderCustomActionName
         }
         
         // Re-add at beginning of array
         localPreviousReminderCustomActionNames.insert(
             PreviousReminderCustomActionName(
-                reminderActionTypeId: forReminderActionType.reminderActionTypeId,
-                reminderCustomActionName: forReminderCustomActionName
+                reminderActionTypeId: reminderActionType.reminderActionTypeId,
+                reminderCustomActionName: reminderCustomActionName
             ),
             at: 0
         )
         
         // check to see if we are over capacity for this specific action type
         var countForType = 0
-        for (index, element) in localPreviousReminderCustomActionNames.enumerated().reversed() where element.reminderActionTypeId == forReminderActionType.reminderActionTypeId {
+        for (index, element) in localPreviousReminderCustomActionNames.enumerated().reversed() where element.reminderActionTypeId == reminderActionType.reminderActionTypeId {
             countForType += 1
             if countForType > PreviousReminderCustomActionName.maxStored {
                 localPreviousReminderCustomActionNames.remove(at: index)

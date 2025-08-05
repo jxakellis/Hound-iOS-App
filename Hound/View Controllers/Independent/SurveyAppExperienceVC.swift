@@ -153,14 +153,14 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         let numStars = (indexOfUserStarRating + 1)
         
         // for numberOfStars, adjust the index 0-4 of the star rating to its actual 1-5 value.
-        SurveyFeedbackRequest.create(forErrorAlert: .automaticallyAlertForNone, numberOfStars: numStars, appExperienceFeedback: suggestionTextView.text ?? "") { _, _ in
+        SurveyFeedbackRequest.create(errorAlert: .automaticallyAlertForNone, numberOfStars: numStars, appExperienceFeedback: suggestionTextView.text ?? "") { _, _ in
             return
         }
         
         HapticsManager.notification(.success)
         self.dismiss(animated: true) {
             // After we successfully submit this survey and dismiss the view, thank the user
-            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.surveyFeedbackAppExperienceTitle, forSubtitle: Constant.Visual.BannerText.surveyFeedbackAppExperienceSubtitle, forStyle: .success)
+            PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.surveyFeedbackAppExperienceTitle, subtitle: Constant.Visual.BannerText.surveyFeedbackAppExperienceSubtitle, style: .success)
             
             guard numStars >= 4 else {
                 return

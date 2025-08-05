@@ -73,7 +73,7 @@ class LimitExceededViewController: BluePawVC {
         }
         
         descriptionLabel.text = {
-            return Constant.Error.FamilyResponseError.limitFamilyMemberExceeded(forRequestId: -1, forResponseId: -1).description
+            return Constant.Error.FamilyResponseError.limitFamilyMemberExceeded(requestId: -1, responseId: -1).description
         }()
     }
     

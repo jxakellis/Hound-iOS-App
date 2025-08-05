@@ -44,15 +44,15 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
         }
         
         self.init(
-            forLogUnitTypeId: logUnitTypeId,
-            forUnitSymbol: unitSymbol,
-            forReadableValue: readableValue,
-            forIsImperial: isImperial,
-            forIsMetric: isMetric,
-            forIsUnitMass: isUnitMass,
-            forIsUnitVolume: isUnitVolume,
-            forIsUnitLength: isUnitLength,
-            forSortOrder: sortOrder
+            logUnitTypeId: logUnitTypeId,
+            unitSymbol: unitSymbol,
+            readableValue: readableValue,
+            isImperial: isImperial,
+            isMetric: isMetric,
+            isUnitMass: isUnitMass,
+            isUnitVolume: isUnitVolume,
+            isUnitLength: isUnitLength,
+            sortOrder: sortOrder
         )
     }
     
@@ -85,25 +85,25 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
     // MARK: - Initialization
     
     init(
-        forLogUnitTypeId: Int,
-        forUnitSymbol: String,
-        forReadableValue: String,
-        forIsImperial: Bool,
-        forIsMetric: Bool,
-        forIsUnitMass: Bool,
-        forIsUnitVolume: Bool,
-        forIsUnitLength: Bool,
-        forSortOrder: Int
+        logUnitTypeId: Int,
+        unitSymbol: String,
+        readableValue: String,
+        isImperial: Bool,
+        isMetric: Bool,
+        isUnitMass: Bool,
+        isUnitVolume: Bool,
+        isUnitLength: Bool,
+        sortOrder: Int
     ) {
-        self.logUnitTypeId = forLogUnitTypeId
-        self.unitSymbol = forUnitSymbol
-        self.readableValue = forReadableValue
-        self.isImperial = forIsImperial
-        self.isMetric = forIsMetric
-        self.isUnitMass = forIsUnitMass
-        self.isUnitVolume = forIsUnitVolume
-        self.isUnitLength = forIsUnitLength
-        self.sortOrder = forSortOrder
+        self.logUnitTypeId = logUnitTypeId
+        self.unitSymbol = unitSymbol
+        self.readableValue = readableValue
+        self.isImperial = isImperial
+        self.isMetric = isMetric
+        self.isUnitMass = isUnitMass
+        self.isUnitVolume = isUnitVolume
+        self.isUnitLength = isUnitLength
+        self.sortOrder = sortOrder
         super.init()
     }
     
@@ -123,30 +123,30 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
         }
         
         self.init(
-            forLogUnitTypeId: idVal,
-            forUnitSymbol: symbolVal,
-            forReadableValue: readableVal,
-            forIsImperial: isImperialVal,
-            forIsMetric: isMetricVal,
-            forIsUnitMass: isMassVal,
-            forIsUnitVolume: isVolumeVal,
-            forIsUnitLength: isLengthVal,
-            forSortOrder: sortOrderVal
+            logUnitTypeId: idVal,
+            unitSymbol: symbolVal,
+            readableValue: readableVal,
+            isImperial: isImperialVal,
+            isMetric: isMetricVal,
+            isUnitMass: isMassVal,
+            isUnitVolume: isVolumeVal,
+            isUnitLength: isLengthVal,
+            sortOrder: sortOrderVal
         )
     }
     
     // MARK: - Functions
     
-    static func find(forLogUnitTypeId: Int) -> LogUnitType {
-        guard let found = GlobalTypes.shared.logUnitTypes.first(where: { $0.logUnitTypeId == forLogUnitTypeId }) else {
-            HoundLogger.general.error("LogUnitType.find: No LogUnitType found for id \(forLogUnitTypeId). Returning default LogUnitType.")
+    static func find(logUnitTypeId: Int) -> LogUnitType {
+        guard let found = GlobalTypes.shared.logUnitTypes.first(where: { $0.logUnitTypeId == logUnitTypeId }) else {
+            HoundLogger.general.error("LogUnitType.find: No LogUnitType found for id \(logUnitTypeId). Returning default LogUnitType.")
             return GlobalTypes.shared.logUnitTypes[0]
         }
         return found
     }
     
     /// Produces a logNumberOfLogUnits that is more readable to the user. We accomplish this by rounding the double to two decimal places. Additionally, the decimal separator is varied based on locale (e.g. period in U.S.)
-    static func readableRoundedNumUnits(forLogNumberOfLogUnits logNumberOfLogUnits: Double?) -> String? {
+    static func readableRoundedNumUnits(logNumberOfLogUnits: Double?) -> String? {
         guard let logNumberOfLogUnits = logNumberOfLogUnits, logNumberOfLogUnits >= 0.01 else {
             // If logNumberOfLogUnits isn't greater than 0.01, we have nothing to display, return nil
             return nil
@@ -161,7 +161,7 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
         return formatter.string(from: logNumberOfLogUnits as NSNumber)
     }
     
-    static func convertStringToDouble(forLogNumberOfLogUnits logNumberOfLogUnits: String?) -> Double? {
+    static func convertStringToDouble(logNumberOfLogUnits: String?) -> Double? {
         guard let logNumberOfLogUnits = logNumberOfLogUnits else {
             return nil
         }
@@ -178,19 +178,19 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
     }
     
     /// Produces a logUnitType that is more readable to the user. We accomplish this by changing the plurality of a log unit if needed : "cup" -> "cups" (changed needed if numberOfUnits != 1); "g" -> "g" (no change needed ever).
-    func pluralReadableValueNoNumUnits(forLogNumberOfLogUnits: Double?) -> String? {
-        let logNumberOfLogUnits = forLogNumberOfLogUnits ?? 0.0
+    func pluralReadableValueNoNumUnits(logNumberOfLogUnits: Double?) -> String? {
+        let logNumberOfLogUnits = logNumberOfLogUnits ?? 0.0
         
         return (abs(logNumberOfLogUnits - 1.0) < 0.0001) ? self.readableValue : self.readableValue.appending("s")
     }
     
     /// Produces a logUnitType and logNumberOfLogUnits that is more readable to the user. Converts the unit and value of units into the correct system.For example: .cup, 1.5 -> "1.5 cups"; .g, 1.0 -> "1g" Also if the logUnit is in the wrong measurement system, e.g. its grams and the user wants imperial,
-    func pluralReadableValueWithNumUnits(forLogNumberOfLogUnits: Double, toTargetSystem: MeasurementSystem = UserConfiguration.measurementSystem) -> String? {
-        let (convertedLogUnit, convertedLogNumberOfLogUnits) = LogUnitTypeConverter.convert(forLogUnitType: self, forNumberOfLogUnits: forLogNumberOfLogUnits, toTargetSystem: toTargetSystem)
+    func pluralReadableValueWithNumUnits(logNumberOfLogUnits: Double, toTargetSystem: MeasurementSystem = UserConfiguration.measurementSystem) -> String? {
+        let (convertedLogUnit, convertedLogNumberOfLogUnits) = LogUnitTypeConverter.convert(logUnitType: self, numberOfLogUnits: logNumberOfLogUnits, toTargetSystem: toTargetSystem)
         
         // Take our raw values and convert them to something more readable
-        let pluralReadableValueNoNumUnits = convertedLogUnit.pluralReadableValueNoNumUnits(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)
-        let readableNumUnits = LogUnitType.readableRoundedNumUnits(forLogNumberOfLogUnits: convertedLogNumberOfLogUnits)
+        let pluralReadableValueNoNumUnits = convertedLogUnit.pluralReadableValueNoNumUnits(logNumberOfLogUnits: convertedLogNumberOfLogUnits)
+        let readableNumUnits = LogUnitType.readableRoundedNumUnits(logNumberOfLogUnits: convertedLogNumberOfLogUnits)
         
         guard let pluralReadableValueNoNumUnits = pluralReadableValueNoNumUnits, let readableNumUnits = readableNumUnits else {
             // If we reach this point it likely measure that readableIndividualLogNumberOfLogUnits was < 0.01, which would wouldn't be displayed, so nil was returned

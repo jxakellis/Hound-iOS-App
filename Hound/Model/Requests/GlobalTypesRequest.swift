@@ -17,15 +17,15 @@ enum GlobalTypesRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
      */
     @discardableResult static func get(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         RequestUtils.genericGetRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: [:]) { responseBody, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: [:]) { responseBody, responseStatus, error in
                 guard responseStatus != .failureResponse else {
                     completionHandler(responseStatus, error)
                     return

@@ -98,22 +98,22 @@ final class DogsAddReminderMonthlyView: HoundView {
     // MARK: - Setup
     
     func setup(
-        forDelegate: DogsAddReminderMonthlyViewDelegate,
-        forComponents: MonthlyComponents?,
-        forTimeZone: TimeZone
+        delegate: DogsAddReminderMonthlyViewDelegate,
+        components: MonthlyComponents?,
+        timeZone: TimeZone
     ) {
-        delegate = forDelegate
-        currentTimeZone = forTimeZone
-        timeOfDayDatePicker.timeZone = forTimeZone
+        self.delegate = delegate
+        currentTimeZone = timeZone
+        timeOfDayDatePicker.timeZone = timeZone
         
-        if let components = forComponents {
+        if let components = components {
             let calendar = Calendar.fromZone(currentTimeZone)
             var comps = calendar.dateComponents([.year, .month], from: Date())
             comps.day = components.zonedDay
             comps.hour = components.zonedHour
             comps.minute = components.zonedMinute
             comps.second = 0
-            comps.timeZone = forTimeZone
+            comps.timeZone = timeZone
             timeOfDayDatePicker.date = calendar.date(from: comps) ?? timeOfDayDatePicker.date
         }
         updateDescriptionLabel()

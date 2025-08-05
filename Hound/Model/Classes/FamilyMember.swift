@@ -85,10 +85,10 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
     
     // MARK: - Main
 
-    init(forUserId: String, forFirstName: String?, forLastName: String?) {
-        self.userId = forUserId
-        self.firstName = forFirstName
-        self.lastName = forLastName
+    init(userId: String, firstName: String?, lastName: String?) {
+        self.userId = userId
+        self.firstName = firstName
+        self.lastName = lastName
         super.init()
     }
     
@@ -98,9 +98,9 @@ final class FamilyMember: NSObject, NSCoding, Comparable {
         internalLastName: String?
     ) {
         self.init(
-            forUserId: internalUserId ?? Constant.Visual.Text.unknownHash,
-            forFirstName: internalFirstName,
-            forLastName: internalLastName
+            userId: internalUserId ?? Constant.Visual.Text.unknownHash,
+            firstName: internalFirstName,
+            lastName: internalLastName
         )
     }
 

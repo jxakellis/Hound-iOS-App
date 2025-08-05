@@ -52,28 +52,28 @@ final class HoundIntroductionVC: HoundViewController,
     
     private var dogManager: DogManager = DogManager.globalDogManager ?? DogManager()
     
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        dogManager = forDogManager
+    func setDogManager(sender: Sender, dogManager: DogManager) {
+        self.dogManager = dogManager
     }
     
     // MARK: - HoundIntroductionDogNameViewDelegate
     
-    func willContinue(forDogName dogName: String?) {
+    func willContinue(dogName dogName: String?) {
         // Store the entered dog name
         self.dogNameInput = dogName
         
         // Configure the dogIconPage for the next step
         let defaultName = dogManager.dogs.first?.dogName ?? Constant.Class.Dog.defaultDogName
         let nameToUse = dogName ?? defaultName
-        dogIconPage.setup(forDelegate: self, forDogName: nameToUse)
+        dogIconPage.setup(delegate: self, dogName: nameToUse)
         
         // Advance the scroll view to the next page
-        goToPage(forPageDirection: .next, forAnimated: true)
+        goToPage(pageDirection: .next, animated: true)
     }
     
     // MARK: - HoundIntroductionDogIconViewDelegate
     
-    func willFinish(forDogIcon dogIcon: UIImage?) {
+    func willFinish(dogIcon dogIcon: UIImage?) {
         self.dogIconInput = dogIcon
         
         // If the family already has at least one dog, simply update its icon
@@ -82,36 +82,36 @@ final class HoundIntroductionVC: HoundViewController,
             
             // Persist the new dog icon locally
             if let icon = existingDog.dogIcon {
-                DogIconManager.addIcon(forDogUUID: existingDog.dogUUID, forDogIcon: icon)
+                DogIconManager.addIcon(dogUUID: existingDog.dogUUID, dogIcon: icon)
             }
             
             // Manually present MainTabBarController
             let mainTabBarController = MainTabBarController()
             mainTabBarController.setDogManager(sender: Sender(origin: self, localized: self),
-                                               forDogManager: dogManager)
+                                               dogManager: dogManager)
             PresentationManager.enqueueViewController(mainTabBarController)
             
         }
         else {
             // No dogs exist yet: create a new Dog object and send request
-            let newDog = (try? Dog(forDogName: dogNameInput ?? Constant.Class.Dog.defaultDogName))
-            ?? Dog()
+            let newDog = Dog()
+            newDog.changeDogName(dogName: dogNameInput ?? Constant.Class.Dog.defaultDogName)
             newDog.dogIcon = dogIconInput
             
             PresentationManager.beginFetchingInformationIndicator()
-            DogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDog: newDog) { responseStatus, _ in
+            DogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dog: newDog) { responseStatus, _ in
                 PresentationManager.endFetchingInformationIndicator {
                     guard responseStatus != .failureResponse else {
                         return
                     }
                     
                     // Add the newly created dog to our local manager
-                    self.dogManager.addDog(forDog: newDog)
+                    self.dogManager.addDog(dog: newDog)
                     
                     // Manually present MainTabBarController
                     let mainTabBarController = MainTabBarController()
                     mainTabBarController.setDogManager(sender: Sender(origin: self, localized: self),
-                                                       forDogManager: self.dogManager)
+                                                       dogManager: self.dogManager)
                     PresentationManager.enqueueViewController(mainTabBarController)
                 }
             }
@@ -144,7 +144,7 @@ final class HoundIntroductionVC: HoundViewController,
         
         didSetupCustomSubviews = true
         
-        dogNamePage.setup(forDelegate: self, forDogManager: dogManager)
+        dogNamePage.setup(delegate: self, dogManager: dogManager)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -155,7 +155,7 @@ final class HoundIntroductionVC: HoundViewController,
     
     // MARK: - Functions
     
-    private func goToPage(forPageDirection pageDirection: PageDirection, forAnimated animated: Bool) {
+    private func goToPage(pageDirection pageDirection: PageDirection, animated animated: Bool) {
         let delta = (pageDirection == .next ? 1 : -1)
         let targetIndex = min(max(currentPageIndex + delta, 0), pages.count - 1)
         currentPageIndex = targetIndex

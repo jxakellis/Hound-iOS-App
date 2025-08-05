@@ -77,8 +77,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationC
 
         let body: JSONRequestBody = [Constant.Key.userNotificationToken.rawValue: .string(token)]
         UserRequest.update(
-            forErrorAlert: .automaticallyAlertForNone,
-            forBody: body
+            errorAlert: .automaticallyAlertForNone,
+            body: body
         ) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 return

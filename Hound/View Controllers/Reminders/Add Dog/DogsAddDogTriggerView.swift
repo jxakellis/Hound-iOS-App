@@ -9,7 +9,7 @@
 import UIKit
 
 protocol DogsAddDogTriggersViewDelegate: AnyObject {
-    func shouldOpenAddTriggerVC(forTrigger: Trigger?)
+    func shouldOpenAddTriggerVC(trigger: Trigger?)
     func didUpdateTriggerCount()
 }
 
@@ -51,19 +51,19 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
     
     @objc func didTouchUpInsideAddTrigger() {
         guard dogTriggers.dogTriggers.count < Constant.Class.Dog.maximumNumberOfTriggers else {
-            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.noAddMoreTriggersTitle, forSubtitle: Constant.Visual.BannerText.noAddMoreTriggersSubtitle, forStyle: .warning)
+            PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.noAddMoreTriggersTitle, subtitle: Constant.Visual.BannerText.noAddMoreTriggersSubtitle, style: .warning)
             return
         }
         
-        delegate?.shouldOpenAddTriggerVC(forTrigger: nil)
+        delegate?.shouldOpenAddTriggerVC(trigger: nil)
     }
     
     // MARK: - Properties
     
     private weak var delegate: DogsAddDogTriggersViewDelegate?
     /// dogTriggers is either a copy of dogToUpdate's triggers or a DogTriggerManager initialized to a default array of triggers. This is purposeful so that either, if you dont have a dogToUpdate, you can still create triggers, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
-    private(set) var dogTriggers: DogTriggerManager = DogTriggerManager(forDogTriggers: Constant.Class.Trigger.defaultTriggers)
-    private(set) var initialTriggers: DogTriggerManager = DogTriggerManager(forDogTriggers: Constant.Class.Trigger.defaultTriggers)
+    private(set) var dogTriggers: DogTriggerManager = DogTriggerManager(dogTriggers: Constant.Class.Trigger.defaultTriggers)
+    private(set) var initialTriggers: DogTriggerManager = DogTriggerManager(dogTriggers: Constant.Class.Trigger.defaultTriggers)
     
     var didUpdateInitialValues: Bool {
         // if current triggers has more triggers than initial triggers, the loop below won't catch it, as the loop below just looks to see if each initial trigger is still present in current triggers.
@@ -90,26 +90,26 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddDogTriggersViewDelegate, forDogTriggers: DogTriggerManager?) {
-        delegate = forDelegate
+    func setup(delegate: DogsAddDogTriggersViewDelegate, dogTriggers: DogTriggerManager?) {
+        self.delegate = delegate
         
-        dogTriggers = (forDogTriggers?.copy() as? DogTriggerManager) ?? dogTriggers
-        initialTriggers = (forDogTriggers?.copy() as? DogTriggerManager) ?? initialTriggers
+        self.dogTriggers = (dogTriggers?.copy() as? DogTriggerManager) ?? self.dogTriggers
+        initialTriggers = (dogTriggers?.copy() as? DogTriggerManager) ?? initialTriggers
         
         tableView.reloadData()
     }
     
     // MARK: - Functions
     
-    func didAddTrigger(forTrigger: Trigger) {
-        dogTriggers.addTrigger(forTrigger: forTrigger)
+    func didAddTrigger(trigger: Trigger) {
+        dogTriggers.addTrigger(trigger: trigger)
         delegate?.didUpdateTriggerCount()
         // not in view so no animation
         self.tableView.reloadData()
     }
     
-    func didUpdateTrigger(forTrigger: Trigger) {
-        dogTriggers.addTrigger(forTrigger: forTrigger)
+    func didUpdateTrigger(trigger: Trigger) {
+        dogTriggers.addTrigger(trigger: trigger)
         delegate?.didUpdateTriggerCount()
         // not in view so no animation
         self.tableView.reloadData()
@@ -153,7 +153,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: DogsAddDogTriggerTVC.reuseIdentifier, for: indexPath)
         
         if let castedCell = cell as? DogsAddDogTriggerTVC {
-            castedCell.setup(forTrigger: dogTriggers.dogTriggers[indexPath.section])
+            castedCell.setup(trigger: dogTriggers.dogTriggers[indexPath.section])
             castedCell.containerView.roundCorners(setCorners: .all)
         }
         
@@ -163,7 +163,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let trigger = dogTriggers.dogTriggers[indexPath.section]
         
-        delegate?.shouldOpenAddTriggerVC(forTrigger: trigger)
+        delegate?.shouldOpenAddTriggerVC(trigger: trigger)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

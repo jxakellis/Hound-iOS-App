@@ -70,7 +70,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     @objc private func didTouchUpInsideShareFamily(_ sender: Any) {
         guard let familyCode = familyCode else { return }
         
-        ExportActivityViewManager.shareFamilyCode(forFamilyCode: familyCode)
+        ExportActivityViewManager.shareFamilyCode(familyCode: familyCode)
     }
     
     private let membersHeaderLabel: HoundLabel = {
@@ -189,7 +189,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
             leaveFamilyAlertController.title = "Are you sure you want to leave your family?"
             let leaveAlertAction = UIAlertAction(title: "Leave Family", style: .destructive) { _ in
                 PresentationManager.beginFetchingInformationIndicator()
-                FamilyRequest.delete(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
+                FamilyRequest.delete(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                     PresentationManager.endFetchingInformationIndicator {
                         guard responseStatus == .successResponse else {
                             return
@@ -212,7 +212,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
             
             let deleteAlertAction = UIAlertAction(title: "Delete Family", style: .destructive) { _ in
                 PresentationManager.beginFetchingInformationIndicator()
-                FamilyRequest.delete(forErrorAlert: .automaticallyAlertForAll) { responseStatus, _ in
+                FamilyRequest.delete(errorAlert: .automaticallyAlertForAll) { responseStatus, _ in
                     PresentationManager.endFetchingInformationIndicator {
                         guard responseStatus == .successResponse else {
                             return
@@ -251,12 +251,12 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         : tableView.dequeueReusableCell(withIdentifier: SettingsFamilyMemberTVC.reuseIdentifier, for: indexPath)
         
         if let cell = cell as? SettingsFamilyHeadTVC {
-            cell.setup(forDisplayFullName: familyMember.displayFullName ?? Constant.Visual.Text.unknownName)
+            cell.setup(displayFullName: familyMember.displayFullName ?? Constant.Visual.Text.unknownName)
             cell.containerView.roundCorners(setCorners: .all)
         }
         
         if let cell = cell as? SettingsFamilyMemberTVC {
-            cell.setup(forDisplayFullName: familyMember.displayFullName ?? Constant.Visual.Text.unknownName)
+            cell.setup(displayFullName: familyMember.displayFullName ?? Constant.Visual.Text.unknownName)
             cell.containerView.roundCorners(setCorners: .none)
         }
         
@@ -276,14 +276,14 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
             // the user wants to kick the family member so query the server
             let body: JSONRequestBody = [Constant.Key.familyKickUserId.rawValue: .string(familyMember.userId)]
             PresentationManager.beginFetchingInformationIndicator()
-            FamilyRequest.delete(forErrorAlert: .automaticallyAlertForAll, forBody: body) { responseStatusFamilyDelete, _ in
+            FamilyRequest.delete(errorAlert: .automaticallyAlertForAll, body: body) { responseStatusFamilyDelete, _ in
                 PresentationManager.endFetchingInformationIndicator {
                     guard responseStatusFamilyDelete == .successResponse else {
                         return
                     }
                     
                     // Refresh this page
-                    FamilyRequest.get(forErrorAlert: .automaticallyAlertForAll) { responseStatusFamilyGet, _ in
+                    FamilyRequest.get(errorAlert: .automaticallyAlertForAll) { responseStatusFamilyGet, _ in
                         guard responseStatusFamilyGet == .successResponse else {
                             return
                         }

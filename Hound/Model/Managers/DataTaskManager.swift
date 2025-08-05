@@ -69,16 +69,16 @@ enum DataTaskManager {
     private static var isDelayInProgress: Bool = false
     
     /// If a dataTask hasn't been queued yet
-    static func enqueueTask(forDataTask: URLSessionDataTask) {
+    static func enqueueTask(dataTask: URLSessionDataTask) {
         // Guard against enqueuing the same dataTask twice
         guard taskQueue.contains(where: { dataTask in
-            return dataTask.taskIdentifier == forDataTask.taskIdentifier
+            return dataTask.taskIdentifier == dataTask.taskIdentifier
         }) == false else { return }
         
         // When dataTasks are created, they start in the suspended state. Don't try to initiate from other states
-        guard forDataTask.state == .suspended else { return }
+        guard dataTask.state == .suspended else { return }
         
-        taskQueue.append(forDataTask)
+        taskQueue.append(dataTask)
         
         startTask()
     }

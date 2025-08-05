@@ -69,7 +69,7 @@ final class OfflineModeDeletedDog: OfflineModeDeletedObject {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
+        let decodedDogUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
         let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
         self.init(
             dogUUID: decodedDogUUID ?? Constant.Visual.Text.unknownUUID,
@@ -111,8 +111,8 @@ final class OfflineModeDeletedReminder: OfflineModeDeletedObject {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
-        let decodedReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.reminderUUID.rawValue))
+        let decodedDogUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
+        let decodedReminderUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.reminderUUID.rawValue))
         let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
         self.init(
             dogUUID: decodedDogUUID ?? Constant.Visual.Text.unknownUUID,
@@ -158,8 +158,8 @@ final class OfflineModeDeletedLog: OfflineModeDeletedObject {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
-        let decodedLogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.logUUID.rawValue))
+        let decodedDogUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
+        let decodedLogUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.logUUID.rawValue))
         let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
         self.init(
             dogUUID: decodedDogUUID ?? Constant.Visual.Text.unknownUUID,
@@ -205,8 +205,8 @@ final class OfflineModeDeletedTrigger: OfflineModeDeletedObject {
     // MARK: - NSCoding
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let decodedDogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
-        let decodedTriggerUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerUUID.rawValue))
+        let decodedDogUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.dogUUID.rawValue))
+        let decodedTriggerUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerUUID.rawValue))
         let decodedDeletedDate: Date? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeDeletedObjectDeletedDate.rawValue)
         self.init(
             dogUUID: decodedDogUUID ?? Constant.Visual.Text.unknownUUID,

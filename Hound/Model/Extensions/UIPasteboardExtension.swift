@@ -9,10 +9,10 @@
 import UIKit
 
 extension UIPasteboard {
-    /// Assigns UIPasteboard.general.string to forString then shows a banner to confirm to the user that the specified information was copied.
-    func setPasteboard(forString string: String) {
+    /// Assigns UIPasteboard.general.string to string then shows a banner to confirm to the user that the specified information was copied.
+    func setPasteboard(string: String) {
         UIPasteboard.general.string = string
 
-        PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.copiedToClipboardTitle, forSubtitle: Constant.Visual.BannerText.copiedToClipboardSubtitle, forStyle: .success)
+        PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.copiedToClipboardTitle, subtitle: Constant.Visual.BannerText.copiedToClipboardSubtitle, style: .success)
     }
 }

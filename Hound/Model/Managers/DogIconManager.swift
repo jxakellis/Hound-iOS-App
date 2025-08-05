@@ -13,9 +13,9 @@ enum DogIconManager {
     final class LocalDogIcon {
         // MARK: - Main
 
-        init(forDogUUID: UUID, forDogIcon: UIImage) {
-            self.dogUUID = forDogUUID
-            self.dogIcon = forDogIcon
+        init(dogUUID: UUID, dogIcon: UIImage) {
+            self.dogUUID = dogUUID
+            self.dogIcon = dogIcon
         }
 
         // MARK: - Properties
@@ -42,7 +42,7 @@ enum DogIconManager {
                 PresentationManager.enqueueViewController(imagePickerController)
             }
             else {
-                PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.noCameraTitle, forSubtitle: nil, forStyle: .danger)
+                PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.noCameraTitle, subtitle: nil, style: .danger)
             }
         }))
 
@@ -58,7 +58,7 @@ enum DogIconManager {
     }()
 
     /// Processes the information returned by the UIImagePickerController, attempts to create an image from it. In the process it scales the image to the point size of the ScaledUiButton of the dogIcon multiplied by the scale factor of the local screen. For Retina displays, the scale factor may be 3.0 or 2.0 and one point can represented by nine or four pixels, respectively. For standard-resolution displays, the scale factor is 1.0 and one point equals one pixel.
-    static func processDogIcon(forInfo info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
+    static func processDogIcon(info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
         let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage
 
         guard let image = image else {
@@ -85,7 +85,7 @@ enum DogIconManager {
     private static var icons: [LocalDogIcon] = []
 
     /// Attempts to create a file path url for the given dogUUID
-    private static func getIconURL(forDogUUID dogUUID: UUID) -> URL? {
+    private static func getIconURL(dogUUID: UUID) -> URL? {
         // make sure we have a urls to read/write to
         let documentsURLs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 
@@ -98,7 +98,7 @@ enum DogIconManager {
     }
 
     /// Attempts to retrieve the dogIcon for the provided dogUUID. If no dogIcon is found, then nil is returned
-    static func getIcon(forDogUUID dogUUID: UUID) -> UIImage? {
+    static func getIcon(dogUUID: UUID) -> UIImage? {
         // Before reading icon from files, see if we have it stored in a reference (meaning we've retrieved it before in this lifecycle). Saves us from needlessly reading from files again
         if let icon = icons.first(where: { localDogIcon in
             localDogIcon.dogUUID.uuidString == dogUUID.uuidString
@@ -107,7 +107,7 @@ enum DogIconManager {
         }
 
         // need a url to perform any read/writes to
-        guard let url = getIconURL(forDogUUID: dogUUID) else {
+        guard let url = getIconURL(dogUUID: dogUUID) else {
             return nil
         }
 
@@ -116,25 +116,25 @@ enum DogIconManager {
 
         if let icon = icon {
             // add dog icon to life cycle storage
-            icons.append(LocalDogIcon(forDogUUID: dogUUID, forDogIcon: icon))
+            icons.append(LocalDogIcon(dogUUID: dogUUID, dogIcon: icon))
         }
 
         return icon
     }
 
     /// Removes all LocalDogIcons stored in LocalConfiguration.dogIcons that match the provided dogUUID, then adds a LocalDogIcon to LocalConfiguration.dogIcons with the provided dogUUID and dogIcon.
-    static func addIcon(forDogUUID dogUUID: UUID, forDogIcon dogIcon: UIImage) {
+    static func addIcon(dogUUID: UUID, dogIcon: UIImage) {
 
-        removeIcon(forDogUUID: dogUUID)
+        removeIcon(dogUUID: dogUUID)
 
         // need a url to perform any read/writes to
-        guard let url = getIconURL(forDogUUID: dogUUID) else { return }
+        guard let url = getIconURL(dogUUID: dogUUID) else { return }
 
         // convert dogIcon to data, then attempt to write to url, saving the image
         do {
             try dogIcon.pngData()?.write(to: url)
             // add dog icon to life cycle storage
-            icons.append(LocalDogIcon(forDogUUID: dogUUID, forDogIcon: dogIcon))
+            icons.append(LocalDogIcon(dogUUID: dogUUID, dogIcon: dogIcon))
         }
         catch {
             // failed to add dog icon
@@ -142,9 +142,9 @@ enum DogIconManager {
     }
 
     /// Removes all LocalDogIcons stored in LocalConfiguration.dogIcons that match the provided dogUUID
-    static func removeIcon(forDogUUID dogUUID: UUID) {
+    static func removeIcon(dogUUID: UUID) {
         // need a url to perform any read/writes to
-        guard let url = getIconURL(forDogUUID: dogUUID) else { return }
+        guard let url = getIconURL(dogUUID: dogUUID) else { return }
 
         do {
             // attempt to remove any image at specified url

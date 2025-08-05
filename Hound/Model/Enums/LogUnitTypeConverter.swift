@@ -11,7 +11,7 @@ import Foundation
 enum LogUnitTypeConverter {
     
     /// For a given logUnitType and its numberOfLogUnits, converts to the targetSystem. If the targetSystem is .both, then nothing is done as all units are acceptable. Otherwise, converts between imperial and metric. For example: 1 oz -> 28.3495 grams
-    static func convert(forLogUnitType logUnitType: LogUnitType, forNumberOfLogUnits numberOfLogUnits: Double, toTargetSystem: MeasurementSystem) -> (LogUnitType, Double) {
+    static func convert(logUnitType: LogUnitType, numberOfLogUnits: Double, toTargetSystem: MeasurementSystem) -> (LogUnitType, Double) {
         
         // If the target system accepts both measurement systems, no conversion is needed
         guard toTargetSystem != .both else {
@@ -25,13 +25,13 @@ enum LogUnitTypeConverter {
         }
         
         if logUnitType.isUnitMass, let unit = UnitMass.from(symbol: logUnitType.unitSymbol) {
-            return convertUnitMass(forMeasurement: Measurement(value: numberOfLogUnits, unit: unit), toTargetSystem: toTargetSystem)
+            return convertUnitMass(measurement: Measurement(value: numberOfLogUnits, unit: unit), toTargetSystem: toTargetSystem)
         }
         else if logUnitType.isUnitVolume, let unit = UnitVolume.from(symbol: logUnitType.unitSymbol) {
-            return convertUnitVolume(forMeasurement: Measurement(value: numberOfLogUnits, unit: unit), toTargetSystem: toTargetSystem)
+            return convertUnitVolume(measurement: Measurement(value: numberOfLogUnits, unit: unit), toTargetSystem: toTargetSystem)
         }
         else if logUnitType.isUnitLength, let unit = UnitLength.from(symbol: logUnitType.unitSymbol) {
-            return convertUnitLength(forMeasurement: Measurement(value: numberOfLogUnits, unit: unit), toTargetSystem: toTargetSystem)
+            return convertUnitLength(measurement: Measurement(value: numberOfLogUnits, unit: unit), toTargetSystem: toTargetSystem)
         }
         
         // Some units can't be converted, e.g. treats
@@ -39,7 +39,7 @@ enum LogUnitTypeConverter {
     }
     
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: .5 kg is too small, so 500 grams is chosen. 1.0 kg is great enough (> threshhold), so 1.0 kg is chosen.
-    private static func convertUnitMass(forMeasurement measurement: Measurement<UnitMass>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
+    private static func convertUnitMass(measurement: Measurement<UnitMass>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
         let conversions = GlobalTypes.shared.logUnitTypes.filter { logUnitType in
             return logUnitType.isUnitMass && UnitMass.from(symbol: logUnitType.unitSymbol) != nil
         }
@@ -75,7 +75,7 @@ enum LogUnitTypeConverter {
     }
     
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: .5 kg is too small, so 500 grams is chosen. 1.0 kg is great enough (> threshhold), so 1.0 kg is chosen.
-    private static func convertUnitVolume(forMeasurement measurement: Measurement<UnitVolume>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
+    private static func convertUnitVolume(measurement: Measurement<UnitVolume>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
         let conversions = GlobalTypes.shared.logUnitTypes.filter { lut in
             return lut.isUnitVolume && UnitVolume.from(symbol: lut.unitSymbol) != nil
         }
@@ -111,7 +111,7 @@ enum LogUnitTypeConverter {
     }
     
     /// For a given Measurement<UnitVolume>, converts it into the units for the targetSystem. Then selects the highest conversion unit where its value is greater than 1.0. For example: .5 kg is too small, so 500 grams is chosen. 1.0 kg is great enough (> threshhold), so 1.0 kg is chosen.
-    private static func convertUnitLength(forMeasurement measurement: Measurement<UnitLength>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
+    private static func convertUnitLength(measurement: Measurement<UnitLength>, toTargetSystem targetSystem: MeasurementSystem) -> (LogUnitType, Double) {
         let conversions = GlobalTypes.shared.logUnitTypes.filter { lut in
             return lut.isUnitLength && UnitLength.from(symbol: lut.unitSymbol) != nil
         }

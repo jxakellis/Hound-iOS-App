@@ -28,7 +28,7 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
             return nil
         }
         let decodedCustomName = aDecoder.decodeOptionalString(forKey: Constant.Key.reminderCustomActionName.rawValue)
-        self.init(forReminderActionTypeId: decodedReminderActionTypeId, forReminderCustomActionName: decodedCustomName)
+        self.init(reminderActionTypeId: decodedReminderActionTypeId, reminderCustomActionName: decodedCustomName)
     }
 
     func encode(with aCoder: NSCoder) {
@@ -42,14 +42,14 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
     private(set) var reminderCustomActionName: String = ""
     
     var readableName: String {
-        return ReminderActionType.find(forReminderActionTypeId: reminderActionTypeId).convertToReadableName(customActionName: reminderCustomActionName, includeMatchingEmoji: true)
+        return ReminderActionType.find(reminderActionTypeId: reminderActionTypeId).convertToReadableName(customActionName: reminderCustomActionName, includeMatchingEmoji: true)
     }
     
     // MARK: - Main
 
-    init(forReminderActionTypeId: Int? = nil, forReminderCustomActionName: String? = nil) {
-        self.reminderActionTypeId = forReminderActionTypeId ?? reminderActionTypeId
-        self.reminderCustomActionName = forReminderCustomActionName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? reminderCustomActionName
+    init(reminderActionTypeId: Int? = nil, reminderCustomActionName: String? = nil) {
+        self.reminderActionTypeId = reminderActionTypeId ?? self.reminderActionTypeId
+        self.reminderCustomActionName = reminderCustomActionName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? self.reminderCustomActionName
         super.init()
     }
     
@@ -57,7 +57,7 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
         let reminderActionTypeId = fromBody[Constant.Key.reminderActionTypeId.rawValue] as? Int ?? toOverride?.reminderActionTypeId
         let reminderCustomActionName = fromBody[Constant.Key.reminderCustomActionName.rawValue] as? String ?? toOverride?.reminderCustomActionName
         
-        self.init(forReminderActionTypeId: reminderActionTypeId, forReminderCustomActionName: reminderCustomActionName)
+        self.init(reminderActionTypeId: reminderActionTypeId, reminderCustomActionName: reminderCustomActionName)
     }
     
     // MARK: - Functions

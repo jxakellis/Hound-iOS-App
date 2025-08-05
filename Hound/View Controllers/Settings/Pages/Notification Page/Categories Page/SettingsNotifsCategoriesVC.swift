@@ -98,7 +98,7 @@ final class SettingsNotifsCategoriesVC: HoundViewController, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = PageSheetHeaderFooterView()
-        headerView.setup(forTitle: "Categories")
+        headerView.setup(title: "Categories")
         return headerView
     }
     

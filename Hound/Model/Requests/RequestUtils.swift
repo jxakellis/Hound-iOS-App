@@ -47,18 +47,18 @@ enum RequestUtils {
     
     /// Takes an already constructed URLRequest and executes it, returning it in a compeltion handler. This is the basis to all URL requests
     private static func genericRequest(
-        forRequest originalRequest: URLRequest,
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes,
+        request originalRequest: URLRequest,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         // If there is no internet connection, return noResponse and invoke OfflineModeManager to start attempting to re-sync data once a connection is restored
         // If sourceFunction is normal and OfflineModeManager is actively syncing, return noResponse as we want OfflineModeManager to finish syncing before trying to perform any more requests
-        guard (NetworkManager.shared.isConnected) && (forSourceFunction != .normal || OfflineModeManager.shared.isSyncInProgress == false) else {
+        guard (NetworkManager.shared.isConnected) && (sourceFunction != .normal || OfflineModeManager.shared.isSyncInProgress == false) else {
             // Any completionHandlers or UI element changes must be done on the main thread
             DispatchQueue.main.async {
                 let houndError = Constant.Error.GeneralRequestError.noInternetConnection()
-                if forErrorAlert == .automaticallyAlertForAll {
+                if errorAlert == .automaticallyAlertForAll {
                     houndError.alert()
                 }
                 
@@ -81,76 +81,77 @@ enum RequestUtils {
         
         // Create the task that will send the request
         let task = session.dataTask(with: request) { data, response, error in
-            genericRequestResponse(forRequest: request, forErrorAlert: forErrorAlert, completionHandler: completionHandler, forData: data, forURLResponse: response, forError: error)
+            genericRequestResponse(request: request, errorAlert: errorAlert, completionHandler: completionHandler, data: data, uRLResponse: response, error: error)
         }
         
         // Pass off the task to be executed when its time for it. Handles lots of requests coming in at once
-        DataTaskManager.enqueueTask(forDataTask: task)
+        DataTaskManager.enqueueTask(dataTask: task)
         
         return task.progress
     }
     
     /// Parses the response from session.dataTask(with: request). Depending on if the response was a success, failure, or no response, invokes a futher helper function
     private static func genericRequestResponse(
-        forRequest: URLRequest,
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        request: URLRequest,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void,
-        forData: Data?,
-        forURLResponse: URLResponse?,
-        forError: Error?
+        data: Data?,
+        uRLResponse: URLResponse?,
+        error: Error?
     ) {
         // extract status code from URLResponse
-        let responseStatusCode: Int? = (forURLResponse as? HTTPURLResponse)?.statusCode
+        let responseStatusCode: Int? = (uRLResponse as? HTTPURLResponse)?.statusCode
         
         // parse response from json
         let responseBody: JSONResponseBody? = {
             // if no data or if no status code, then request failed
-            guard let forData = forData else {
+            guard let data = data else {
                 return nil
             }
             
             // try to serialize data as "result" form with array of info first, if that fails, revert to regular "message" and "error" format
             return try?
-            JSONSerialization.jsonObject(with: forData, options: .fragmentsAllowed) as? [String: [JSONResponseBody]]
-            ?? JSONSerialization.jsonObject(with: forData, options: .fragmentsAllowed) as? JSONResponseBody
+            JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: [JSONResponseBody]]
+            ?? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? JSONResponseBody
         }()
         
         //        HoundLogger.apiResponse.debug("\tResponse Body: \(responseBody)")
         
-        guard forError == nil, let responseBody = responseBody, let responseStatusCode = responseStatusCode else {
+        guard error == nil, let responseBody = responseBody, let responseStatusCode = responseStatusCode else {
             genericRequestNoResponse(
-                forRequest: forRequest,
-                forErrorAlert: forErrorAlert,
+                request: request,
+                errorAlert: errorAlert,
                 completionHandler: completionHandler,
-                forResponseBody: responseBody,
-                forError: forError
+                responseBody: responseBody,
+                error: error
             )
             return
         }
         
         guard 200...299 ~= responseStatusCode else {
             genericRequestFailureResponse(
-                forRequest: forRequest,
-                forErrorAlert: forErrorAlert,
+                request: request,
+                errorAlert: errorAlert,
                 completionHandler: completionHandler,
-                forResponseBody: responseBody
+                responseBody: responseBody
             )
             return
         }
         
         genericRequestSuccessResponse(
-            forRequest: forRequest,
+            request: request,
             completionHandler: completionHandler,
-            forResponseBody: responseBody
+            responseBody: responseBody
         )
     }
     
     /// Handles a case of a no response from a data task query
     private static func genericRequestNoResponse(
-        forRequest request: URLRequest,
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        request: URLRequest,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void,
-        forResponseBody: JSONResponseBody?, forError error: Error?
+        responseBody: JSONResponseBody?,
+        error: Error?
     ) {
         // assume an error is no response as that implies request/response failure, meaning the end result of no response is the same
         HoundLogger.apiResponse.warning(
@@ -173,11 +174,11 @@ enum RequestUtils {
         
         // Any completionHandlers or UI element changes must be done on the main thread
         DispatchQueue.main.async {
-            if forErrorAlert == .automaticallyAlertForAll {
+            if errorAlert == .automaticallyAlertForAll {
                 responseError.alert()
             }
             
-            completionHandler(forResponseBody, .noResponse, responseError)
+            completionHandler(responseBody, .noResponse, responseError)
             
             // We can't perform the request because there is no internet connection. Have offline sync manager start monitoring for when connectivity is restored. This has to be after completionHandler, otherwise there will be nothing to sync so OfflineModeManager won't monitor anything
             OfflineModeManager.shared.startMonitoring()
@@ -186,10 +187,10 @@ enum RequestUtils {
     
     /// Handles a case of a failure response from a data task query
     private static func genericRequestFailureResponse(
-        forRequest request: URLRequest,
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
+        request: URLRequest,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void,
-        forResponseBody responseBody: JSONResponseBody
+        responseBody: JSONResponseBody
     ) {
         // Our request went through but was invalid
         HoundLogger.apiResponse.warning(
@@ -201,56 +202,56 @@ enum RequestUtils {
         
         let responseError: HoundError = {
             // attempt to construct an error from responseErrorCode
-            if let responseErrorCode = responseErrorCode, let error = Constant.Error.serverError(forErrorCode: responseErrorCode, forRequestId: requestId, forResponseId: responseId) {
+            if let responseErrorCode = responseErrorCode, let error = Constant.Error.serverError(errorCode: responseErrorCode, requestId: requestId, responseId: responseId) {
                 return error
             }
             
             // could not construct an error, use a default error message based upon the http method
             switch request.httpMethod {
             case "PATCH":
-                return Constant.Error.GeneralResponseError.getFailureResponse(forRequestId: requestId, forResponseId: responseId)
+                return Constant.Error.GeneralResponseError.getFailureResponse(requestId: requestId, responseId: responseId)
             case "POST":
-                return Constant.Error.GeneralResponseError.postFailureResponse(forRequestId: requestId, forResponseId: responseId)
+                return Constant.Error.GeneralResponseError.postFailureResponse(requestId: requestId, responseId: responseId)
             case "PUT":
-                return Constant.Error.GeneralResponseError.putFailureResponse(forRequestId: requestId, forResponseId: responseId)
+                return Constant.Error.GeneralResponseError.putFailureResponse(requestId: requestId, responseId: responseId)
             case "DELETE":
-                return Constant.Error.GeneralResponseError.deleteFailureResponse(forRequestId: requestId, forResponseId: responseId)
+                return Constant.Error.GeneralResponseError.deleteFailureResponse(requestId: requestId, responseId: responseId)
             default:
-                return Constant.Error.GeneralResponseError.getFailureResponse(forRequestId: requestId, forResponseId: responseId)
+                return Constant.Error.GeneralResponseError.getFailureResponse(requestId: requestId, responseId: responseId)
             }
         }()
         
         // Any completionHandlers or UI element changes must be done on the main thread
         DispatchQueue.main.async {
             
-            guard responseError.name != Constant.Error.GeneralResponseError.appVersionOutdated(forRequestId: -1, forResponseId: -1).name else {
+            guard responseError.name != Constant.Error.GeneralResponseError.appVersionOutdated(requestId: -1, responseId: -1).name else {
                 // If the user's app is outdated, it no longer works for hound. Therefore, prevent them from doing anything until they update.
-                // Ignore forErrorAlert
+                // Ignore errorAlert
                 responseError.alert()
                 return
             }
             
-            if forErrorAlert == .automaticallyAlertForAll || forErrorAlert == .automaticallyAlertOnlyForFailure {
+            if errorAlert == .automaticallyAlertForAll || errorAlert == .automaticallyAlertOnlyForFailure {
                 responseError.alert()
             }
             
             // if the error happened to be about the user's account or family disappearing or them losing access, then revert them to the login page
-            if responseError.name == Constant.Error.PermissionResponseError.noUser(forRequestId: -1, forResponseId: -1).name {
+            if responseError.name == Constant.Error.PermissionResponseError.noUser(requestId: -1, responseId: -1).name {
                 PersistenceManager.clearStorageToReloginToAccount()
                 PresentationManager.lastFromGlobalPresenterStack?.dismissToViewController(ofClass: ServerSyncVC.self, completionHandler: nil)
             }
-            else if responseError.name == Constant.Error.PermissionResponseError.noFamily(forRequestId: -1, forResponseId: -1).name {
+            else if responseError.name == Constant.Error.PermissionResponseError.noFamily(requestId: -1, responseId: -1).name {
                 PersistenceManager.clearStorageToRejoinFamily()
                 PresentationManager.lastFromGlobalPresenterStack?.dismissToViewController(ofClass: ServerSyncVC.self, completionHandler: nil)
             }
             // if the error happens to be because a dog, log, or reminder was deleted, then invoke a low level refresh to update the user's data.
-            else if responseError.name == Constant.Error.FamilyResponseError.deletedDog(forRequestId: -1, forResponseId: -1).name ||
-                        responseError.name == Constant.Error.FamilyResponseError.deletedLog(forRequestId: -1, forResponseId: -1).name ||
-                        responseError.name == Constant.Error.FamilyResponseError.deletedReminder(forRequestId: -1, forResponseId: -1).name ||
-                        responseError.name == Constant.Error.FamilyResponseError.deletedTrigger(forRequestId: -1, forResponseId: -1).name {
+            else if responseError.name == Constant.Error.FamilyResponseError.deletedDog(requestId: -1, responseId: -1).name ||
+                        responseError.name == Constant.Error.FamilyResponseError.deletedLog(requestId: -1, responseId: -1).name ||
+                        responseError.name == Constant.Error.FamilyResponseError.deletedReminder(requestId: -1, responseId: -1).name ||
+                        responseError.name == Constant.Error.FamilyResponseError.deletedTrigger(requestId: -1, responseId: -1).name {
                 MainTabBarController.shouldSilentlyRefreshDogManager = true
             }
-            else if responseError.name == Constant.Error.GeneralResponseError.rateLimitExceeded(forRequestId: -1, forResponseId: -1).name {
+            else if responseError.name == Constant.Error.GeneralResponseError.rateLimitExceeded(requestId: -1, responseId: -1).name {
                 DataTaskManager.lastDateRateLimitReceived = Date()
             }
             
@@ -260,9 +261,9 @@ enum RequestUtils {
     
     /// Handles a case of a success response from a data task query
     private static func genericRequestSuccessResponse(
-        forRequest request: URLRequest,
+        request: URLRequest,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void,
-        forResponseBody responseBody: JSONResponseBody
+        responseBody: JSONResponseBody
     ) {
         // Our request was valid and successful
         HoundLogger.apiResponse.notice("Success \(request.httpMethod ?? Constant.Visual.Text.unknownText) Response for \(request.url?.description ?? Constant.Visual.Text.unknownText)")
@@ -280,27 +281,27 @@ extension RequestUtils {
     
     /// Perform a generic get request at the specified url with NO body; assumes URL params are already provided. completionHandler is on the .main thread.
     static func genericGetRequest(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes,
-        forURL: URL,
-        forBody: JSONRequestBody,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes,
+        uRL: URL,
+        body: JSONRequestBody,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
-        var request = URLRequest(url: forURL)
+        var request = URLRequest(url: uRL)
         
         // specify http method
         request.httpMethod = "PATCH"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        let serializableBody = forBody.toAnyDictionary()
+        let serializableBody = body.toAnyDictionary()
         request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
         
         return genericRequest(
-            forRequest: request,
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction
+            request: request,
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction
         ) { responseBody, responseStatus, error in
             completionHandler(responseBody, responseStatus, error)
         }
@@ -308,27 +309,27 @@ extension RequestUtils {
     
     /// Perform a generic get request at the specified url with provided body; assumes URL params are already provided. completionHandler is on the .main thread.
     static func genericPostRequest(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes,
-        forURL: URL,
-        forBody: JSONRequestBody,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes,
+        uRL: URL,
+        body: JSONRequestBody,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
-        var request = URLRequest(url: forURL)
+        var request = URLRequest(url: uRL)
         
         // specify http method
         request.httpMethod = "POST"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        let serializableBody = forBody.toAnyDictionary()
+        let serializableBody = body.toAnyDictionary()
         request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
         
         return genericRequest(
-            forRequest: request,
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction
+            request: request,
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction
         ) { responseBody, responseStatus, error in
             completionHandler(responseBody, responseStatus, error)
         }
@@ -337,27 +338,27 @@ extension RequestUtils {
     
     /// Perform a generic get request at the specified url with provided body; assumes URL params are already provided. completionHandler is on the .main thread.
     static func genericPutRequest(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes,
-        forURL: URL,
-        forBody: JSONRequestBody,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes,
+        uRL: URL,
+        body: JSONRequestBody,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
-        var request = URLRequest(url: forURL)
+        var request = URLRequest(url: uRL)
         
         // specify http method
         request.httpMethod = "PUT"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        let serializableBody = forBody.toAnyDictionary()
+        let serializableBody = body.toAnyDictionary()
         request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
         
         return genericRequest(
-            forRequest: request,
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction
+            request: request,
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction
         ) { responseBody, responseStatus, error in
             completionHandler(responseBody, responseStatus, error)
         }
@@ -366,27 +367,27 @@ extension RequestUtils {
     
     /// Perform a generic get request at the specified url with NO body; assumes URL params are already provided. completionHandler is on the .main thread.
     static func genericDeleteRequest(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes,
-        forURL: URL,
-        forBody: JSONRequestBody,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes,
+        uRL: URL,
+        body: JSONRequestBody,
         completionHandler: @escaping (JSONResponseBody?, ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         
         // create request to send
-        var request = URLRequest(url: forURL)
+        var request = URLRequest(url: uRL)
         
         // specify http method
         request.httpMethod = "DELETE"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        let serializableBody = forBody.toAnyDictionary()
+        let serializableBody = body.toAnyDictionary()
         request.httpBody = try? JSONSerialization.data(withJSONObject: serializableBody)
         
         return genericRequest(
-            forRequest: request,
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction
+            request: request,
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction
         ) { responseBody, responseStatus, error  in
             completionHandler(responseBody, responseStatus, error)
         }

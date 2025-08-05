@@ -106,7 +106,7 @@ final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = PageSheetHeaderFooterView()
-        headerView.setup(forTitle: "Notifications")
+        headerView.setup(title: "Notifications")
         return headerView
     }
     
@@ -117,7 +117,7 @@ final class SettingsNotifsVC: HoundViewController, UITableViewDelegate, UITableV
         let identifier = settingsNotifsTVCReuseIdentifiers[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         if let cell = cell as? SettingsNotifsUseNotificationsTVC {
-            cell.setup(forDelegate: self)
+            cell.setup(delegate: self)
         }
         return cell
     }

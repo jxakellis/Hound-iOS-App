@@ -9,7 +9,7 @@
 import UIKit
 
 protocol DogsAddDogRemindersViewDelegate: AnyObject {
-    func shouldOpenAddReminderVC(forReminder: Reminder?)
+    func shouldOpenAddReminderVC(reminder: Reminder?)
     func didUpdateReminderCount()
 }
 
@@ -17,8 +17,8 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
     
     // MARK: - DogsAddDogReminderTVCDelegate
     
-    func didUpdateReminderIsEnabled(sender: Sender, forReminderUUID: UUID, forReminderIsEnabled: Bool) {
-        dogReminders.findReminder(forReminderUUID: forReminderUUID)?.reminderIsEnabled = forReminderIsEnabled
+    func didUpdateReminderIsEnabled(sender: Sender, reminderUUID: UUID, reminderIsEnabled: Bool) {
+        dogReminders.findReminder(reminderUUID: reminderUUID)?.reminderIsEnabled = reminderIsEnabled
     }
     
     // MARK: - Elements
@@ -59,19 +59,19 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         let numNonTriggerReminders = dogReminders.dogReminders.count(where: { $0.reminderIsTriggerResult == false })
         
         guard numNonTriggerReminders < Constant.Class.Dog.maximumNumberOfReminders else {
-            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.noAddMoreRemindersTitle, forSubtitle: Constant.Visual.BannerText.noAddMoreRemindersSubtitle, forStyle: .warning)
+            PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.noAddMoreRemindersTitle, subtitle: Constant.Visual.BannerText.noAddMoreRemindersSubtitle, style: .warning)
             return
         }
         
-        delegate?.shouldOpenAddReminderVC(forReminder: nil)
+        delegate?.shouldOpenAddReminderVC(reminder: nil)
     }
     
     // MARK: - Properties
     
     private weak var delegate: DogsAddDogRemindersViewDelegate?
     /// dogReminders is either a copy of dogToUpdate's reminders or a DogReminderManager initialized to a default array of reminders. This is purposeful so that either, if you dont have a dogToUpdate, you can still create reminders, and if you do have a dogToUpdate, you don't directly update the dogToUpdate until save is pressed
-    private(set) var dogReminders: DogReminderManager = DogReminderManager(forReminders: Constant.Class.Reminder.defaultReminders)
-    private(set) var initialReminders: DogReminderManager = DogReminderManager(forReminders: Constant.Class.Reminder.defaultReminders)
+    private(set) var dogReminders: DogReminderManager = DogReminderManager(reminders: Constant.Class.Reminder.defaultReminders)
+    private(set) var initialReminders: DogReminderManager = DogReminderManager(reminders: Constant.Class.Reminder.defaultReminders)
     
     var didUpdateInitialValues: Bool {
         // if current reminders has more reminders than initial reminders, the loop below won't catch it, as the loop below just looks to see if each initial reminder is still present in current reminders.
@@ -98,33 +98,33 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddDogRemindersViewDelegate, forDogReminders: DogReminderManager?) {
-        delegate = forDelegate
+    func setup(delegate: DogsAddDogRemindersViewDelegate, dogReminders: DogReminderManager?) {
+        self.delegate = delegate
         
-        dogReminders = (forDogReminders?.copy() as? DogReminderManager) ?? dogReminders
-        initialReminders = (forDogReminders?.copy() as? DogReminderManager) ?? initialReminders
+        self.dogReminders = (dogReminders?.copy() as? DogReminderManager) ?? self.dogReminders
+        initialReminders = (dogReminders?.copy() as? DogReminderManager) ?? initialReminders
         
         tableView.reloadData()
     }
     
     // MARK: - Functions
     
-    func didAddReminder(forReminder: Reminder) {
-        dogReminders.addReminder(forReminder: forReminder)
+    func didAddReminder(reminder: Reminder) {
+        dogReminders.addReminder(reminder: reminder)
         delegate?.didUpdateReminderCount()
         // not in view so no animation
         self.tableView.reloadData()
     }
     
-    func didUpdateReminder(forReminder: Reminder) {
-        dogReminders.addReminder(forReminder: forReminder)
+    func didUpdateReminder(reminder: Reminder) {
+        dogReminders.addReminder(reminder: reminder)
         delegate?.didUpdateReminderCount()
         // not in view so no animation
         self.tableView.reloadData()
     }
     
-    func didRemoveReminder(forReminderUUID: UUID) {
-        dogReminders.removeReminder(forReminderUUID: forReminderUUID)
+    func didRemoveReminder(reminderUUID: UUID) {
+        dogReminders.removeReminder(reminderUUID: reminderUUID)
         delegate?.didUpdateReminderCount()
         // not in view so no animation
         self.tableView.reloadData()
@@ -161,7 +161,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         let cell = tableView.dequeueReusableCell(withIdentifier: DogsAddDogReminderTVC.reuseIdentifier, for: indexPath)
         
         if let castedCell = cell as? DogsAddDogReminderTVC {
-            castedCell.setup(forDelegate: self, forReminder: dogReminders.dogReminders[indexPath.section])
+            castedCell.setup(delegate: self, reminder: dogReminders.dogReminders[indexPath.section])
             castedCell.containerView.roundCorners(setCorners: .all)
         }
         
@@ -172,11 +172,11 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         let reminder = dogReminders.dogReminders[indexPath.section]
         
         guard reminder.reminderIsTriggerResult == false else {
-            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.noEditTriggerResultRemindersTitle, forSubtitle: Constant.Visual.BannerText.noEditTriggerResultRemindersSubtitle, forStyle: .warning)
+            PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.noEditTriggerResultRemindersTitle, subtitle: Constant.Visual.BannerText.noEditTriggerResultRemindersSubtitle, style: .warning)
             return
         }
         
-        delegate?.shouldOpenAddReminderVC(forReminder: reminder)
+        delegate?.shouldOpenAddReminderVC(reminder: reminder)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -187,7 +187,7 @@ final class DogsAddDogRemindersView: HoundView, UITableViewDataSource, UITableVi
         let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
         
         let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            self.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
+            self.dogReminders.removeReminder(reminderUUID: reminder.reminderUUID)
             self.delegate?.didUpdateReminderCount()
             
             self.tableView.deleteSections([indexPath.section], with: .fade)

@@ -10,7 +10,7 @@ import StoreKit
 import UIKit
 
 protocol SettingsSubscriptionTierTVCDelegate: AnyObject {
-    func didSetCustomIsSelectedToTrue(forCell: SettingsSubscriptionTierTVC)
+    func didSetCustomIsSelectedToTrue(cell: SettingsSubscriptionTierTVC)
 }
 
 final class SettingsSubscriptionTierTVC: HoundTableViewCell {
@@ -95,11 +95,11 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
 
     // MARK: - Setup
 
-    func setup(forDelegate: SettingsSubscriptionTierTVCDelegate, forProduct: SKProduct, forIsCustomSelected: Bool) {
-        self.delegate = forDelegate
-        self.product = forProduct
+    func setup(delegate: SettingsSubscriptionTierTVCDelegate, product: SKProduct, isCustomSelected: Bool) {
+        self.delegate = delegate
+        self.product = product
 
-        setCustomSelected(forIsCustomSelected, animated: false)
+        setCustomSelected(isCustomSelected, animated: false)
     }
     
     // MARK: - Functions
@@ -109,7 +109,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         isCustomSelected = selected
 
         if isCustomSelected == true {
-            delegate?.didSetCustomIsSelectedToTrue(forCell: self)
+            delegate?.didSetCustomIsSelectedToTrue(cell: self)
         }
         
         // this must come first as savePercentLabel.text changes
@@ -159,7 +159,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
         ]
 
         // "" -> "6 months - $59.99"
-        let precalculatedDynamicSubscriptionLengthAndPriceText = "\(convertPeriodUnit(forUnit: unit, forNumberOfUnits: numberOfUnits)) - \(totalPriceWithCurrencySymbol)"
+        let precalculatedDynamicSubscriptionLengthAndPriceText = "\(convertPeriodUnit(unit: unit, numberOfUnits: numberOfUnits)) - \(totalPriceWithCurrencySymbol)"
 
         // "1 month - $19.99 " -> "1 months - $19.99" (NO-OP)
         // "6 months - $59.99 " -> "6 months - $59.99 $119.99"
@@ -247,7 +247,7 @@ final class SettingsSubscriptionTierTVC: HoundTableViewCell {
     }
 
     /// Converts period unit and numberOfUnits into string, e.g. "3 days", "1 week", "6 months"
-    private func convertPeriodUnit(forUnit unit: SKProduct.PeriodUnit, forNumberOfUnits numberOfUnits: Int) -> String {
+    private func convertPeriodUnit(unit: SKProduct.PeriodUnit, numberOfUnits: Int) -> String {
 
         // Display x year as 12x months
         guard unit != .year else {

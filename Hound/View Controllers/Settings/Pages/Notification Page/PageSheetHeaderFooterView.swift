@@ -16,8 +16,8 @@ class PageSheetHeaderFooterView: HoundHeaderFooterView {
     
     // MARK: - Setup
     
-    func setup(forTitle: String) {
-        pageSheetHeaderView.pageHeaderLabel.text = forTitle
+    func setup(title: String) {
+        pageSheetHeaderView.pageHeaderLabel.text = title
     }
     
     // MARK: - Setup Elements

@@ -18,15 +18,15 @@ enum AlertRequest {
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
    */
     @discardableResult static func create(
-        forErrorAlert: ResponseAutomaticErrorAlertTypes,
-        forSourceFunction: RequestSourceFunctionTypes = .normal,
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
         completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
     ) -> Progress? {
         return RequestUtils.genericPostRequest(
-            forErrorAlert: forErrorAlert,
-            forSourceFunction: forSourceFunction,
-            forURL: baseURL,
-            forBody: [:]) { _, responseStatus, error in
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            uRL: baseURL,
+            body: [:]) { _, responseStatus, error in
             switch responseStatus {
             case .successResponse:
                 completionHandler(responseStatus, error)

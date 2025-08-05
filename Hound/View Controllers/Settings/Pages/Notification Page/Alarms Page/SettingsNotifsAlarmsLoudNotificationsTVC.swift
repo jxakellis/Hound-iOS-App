@@ -63,7 +63,7 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
         
         let body: JSONRequestBody = [Constant.Key.userConfigurationIsLoudNotificationEnabled.rawValue: .bool(UserConfiguration.isLoudNotificationEnabled)]
         
-        UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+        UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
             guard responseStatus != .failureResponse else {
                 // Revert local values to previous state due to an error
                 UserConfiguration.isLoudNotificationEnabled = beforeUpdateIsLoudNotificationEnabled
@@ -76,9 +76,9 @@ final class SettingsNotifsAlarmsLoudNotificationsTVC: HoundTableViewCell {
     @objc private func showDisabledBanner(_ sender: Any) {
         guard UserConfiguration.isNotificationEnabled == false else { return }
         PresentationManager.enqueueBanner(
-            forTitle: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
-            forSubtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
-            forStyle: .warning
+            title: Constant.Visual.BannerText.noEditNotificationSettingsTitle,
+            subtitle: Constant.Visual.BannerText.noEditNotificationSettingsSubtitle,
+            style: .warning
         )
     }
     

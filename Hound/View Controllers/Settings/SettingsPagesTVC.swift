@@ -125,11 +125,11 @@ final class SettingsPagesTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    func setup(forPage: SettingsPages) {
-        self.page = forPage
+    func setup(page: SettingsPages) {
+        self.page = page
         
-        pageImageView.image = forPage.image
-        headerLabel.text = forPage.rawValue
+        pageImageView.image = page.image
+        headerLabel.text = page.rawValue
     }
     
     // MARK: - Setup Elements

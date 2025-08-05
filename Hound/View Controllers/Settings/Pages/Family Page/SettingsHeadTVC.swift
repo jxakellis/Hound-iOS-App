@@ -41,7 +41,7 @@ final class SettingsFamilyHeadTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    func setup(forDisplayFullName displayFullName: String) {
+    func setup(displayFullName: String) {
         displayFullNameLabel.text = displayFullName
     }
     

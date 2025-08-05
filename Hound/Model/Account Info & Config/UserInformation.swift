@@ -152,7 +152,7 @@ final class UserInformation: UserDefaultPersistable {
     }
     
     static var isUserFamilyHead: Bool {
-        return FamilyInformation.findFamilyMember(forUserId: UserInformation.userId)?.isUserFamilyHead ?? false
+        return FamilyInformation.findFamilyMember(userId: UserInformation.userId)?.isUserFamilyHead ?? false
     }
     
     // MARK: - Function

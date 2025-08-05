@@ -64,17 +64,17 @@ final class DogsAddReminderOneTimeView: HoundView {
     // MARK: - Setup
     
     func setup(
-        forDelegate: DogsAddReminderOneTimeViewDelegate,
-        forComponents: OneTimeComponents?,
-        forTimeZone: TimeZone
+        delegate: DogsAddReminderOneTimeViewDelegate,
+        components: OneTimeComponents?,
+        timeZone: TimeZone
     ) {
-        delegate = forDelegate
-        currentTimeZone = forTimeZone
-        oneTimeDatePicker.timeZone = forTimeZone
-        if let date = forComponents?.oneTimeDate {
+        self.delegate = delegate
+        currentTimeZone = timeZone
+        oneTimeDatePicker.timeZone = timeZone
+        if let date = components?.oneTimeDate {
             oneTimeDatePicker.date = date
         }
-        delegate?.didUpdateDescriptionLabel()
+        delegate.didUpdateDescriptionLabel()
     }
     
     // MARK: - Time Zone

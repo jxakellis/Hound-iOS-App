@@ -54,16 +54,16 @@ enum PresentationManager {
     // MARK: Public Global Presenter Management
     
     /// The presenter used for an alert. Sometimes we need to present an alert but the alert to be shown is called from a non UIAlertController class as that is not in the view heirarchy and physically cannot present a view, so this is used instead.
-    static func addGlobalPresenterToStack(_ forViewController: UIViewController) {
+    static func addGlobalPresenterToStack(_ viewController: UIViewController) {
         globalPresenterStack.removeAll { viewController in
             // Remove stale presenters that are no longer in the window or
             // duplicate references to the same instance.
-            let isDuplicate = viewController === forViewController
+            let isDuplicate = viewController === viewController
             let isStale = viewController.viewIfLoaded?.window == nil
             return isDuplicate || isStale
         }
         
-        globalPresenterStack.append(forViewController)
+        globalPresenterStack.append(viewController)
         
         if let currentPresentedViewController = currentPresentedViewController, globalPresenterStack.contains(currentPresentedViewController) {
             // This fixes a logical anomoily. If a view controller is presented using PresentationManager, it will become the currentPresentedViewController. This is how we normally treated presented views. However, if this currentPresentedViewController is in the globalPresenterStack, it means it is able to present views itself and is eligible. Therefore, we should unlock the presentation stack by removing it as a currentPresentedViewController and continuing to the next item in the stack.
@@ -72,10 +72,10 @@ enum PresentationManager {
         }
     }
     
-    static func removeGlobalPresenterFromStack(_ forViewController: UIViewController) {
+    static func removeGlobalPresenterFromStack(_ viewController: UIViewController) {
         globalPresenterStack.removeAll { viewController in
             // Remove all matching instances of our global presenter
-            return viewController === forViewController
+            return viewController === viewController
         }
     }
     
@@ -119,11 +119,11 @@ enum PresentationManager {
         }
     }
     
-    static func enqueueViewController(_ forViewController: UIViewController) {
-        enqueue(forViewController)
+    static func enqueueViewController(_ viewController: UIViewController) {
+        enqueue(viewController)
     }
     
-    static func enqueueBanner(forTitle title: String, forSubtitle subtitle: String?, forStyle: BannerStyle, onTap: (() -> Void)? = nil) {
+    static func enqueueBanner(title: String, subtitle: String?, style: BannerStyle, onTap: (() -> Void)? = nil) {
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedSubtitle = subtitle?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
@@ -142,7 +142,7 @@ enum PresentationManager {
         // Info
         // Danger
         let style: BannerStyle = {
-            switch forStyle {
+            switch style {
             case .success:
                 return .success
             case .info:
@@ -301,79 +301,79 @@ enum PresentationManager {
         )
     }
     
-    static func enqueueAlert(_ forAlertController: UIAlertController) {
+    static func enqueueAlert(_ alertController: UIAlertController) {
         // We are unable to change .preferredStyle and if its not .alert (and we queue the alert) then we could crash
-        guard forAlertController.preferredStyle == .alert else { return }
+        guard alertController.preferredStyle == .alert else { return }
         
-        enqueue(forAlertController)
+        enqueue(alertController)
     }
     
-    static func enqueueActionSheet(_ forAlertController: UIAlertController, sourceView: UIView) {
+    static func enqueueActionSheet(_ alertController: UIAlertController, sourceView: UIView) {
         // We are unable to change .preferredStyle and if its not .actionSheet (and we queue the alert) then we could crash
-        guard forAlertController.preferredStyle == .actionSheet else { return }
+        guard alertController.preferredStyle == .actionSheet else { return }
         
         // This is needed for iPad, otherwise it will crash
         if UIDevice.current.userInterfaceIdiom == .pad {
-            forAlertController.popoverPresentationController?.sourceView = sourceView
-            forAlertController.popoverPresentationController?.sourceRect = sourceView.bounds
-            forAlertController.popoverPresentationController?.permittedArrowDirections = [.up, .down]
+            alertController.popoverPresentationController?.sourceView = sourceView
+            alertController.popoverPresentationController?.sourceRect = sourceView.bounds
+            alertController.popoverPresentationController?.permittedArrowDirections = [.up, .down]
         }
         
-        enqueue(forAlertController)
+        enqueue(alertController)
     }
     
     // MARK: - Private Internal Queue
     
     private static var viewControllerPresentationQueue: [UIViewController] = []
     
-    private static func enqueue(_ forViewController: UIViewController) {
+    private static func enqueue(_ viewController: UIViewController) {
         // Make sure that the alertController that is being queued isn't already presented or in the queue
-        guard currentPresentedViewController !== forViewController && viewControllerPresentationQueue.contains(where: { viewController in
-            return viewController === forViewController
+        guard currentPresentedViewController !== viewController && viewControllerPresentationQueue.contains(where: { viewController in
+            return viewController === viewController
         }) == false else {
             // Don't call presentNextViewController() as queue didn't change
             return
         }
         
-        guard let forAlarmAlertController = forViewController as? HoundAlarmAlertController else {
-            // Not dealing with an forAlarmAlertController, can append alertController to queue
-            viewControllerPresentationQueue.append(forViewController)
+        guard let alarmAlertController = viewController as? HoundAlarmAlertController else {
+            // Not dealing with an alarmAlertController, can append alertController to queue
+            viewControllerPresentationQueue.append(viewController)
             presentNextViewController()
             return
         }
         
         // User attempted to pass an HoundAlarmAlertController that hasn't been setup and is therefore invalid
-        guard forAlarmAlertController.dogUUID != nil && forAlarmAlertController.reminders != nil else {
+        guard alarmAlertController.dogUUID != nil && alarmAlertController.reminders != nil else {
             // Don't call presentNextViewController() as queue didn't change
             return
         }
         
         // If we are dealing with an HoundAlarmAlertController, then attempt to absorb it into the currentPresentedViewController.
-        if let presentedAlarmAlertController = (currentPresentedViewController as? HoundAlarmAlertController), presentedAlarmAlertController.absorb(forAlarmAlertController) {
-            // currentPresentedViewController is an HoundAlarmAlertController and we were able to absorb forAlarmAlertController into it. Therefore, discard forAlarmAlertController.
+        if let presentedAlarmAlertController = (currentPresentedViewController as? HoundAlarmAlertController), presentedAlarmAlertController.absorb(alarmAlertController) {
+            // currentPresentedViewController is an HoundAlarmAlertController and we were able to absorb alarmAlertController into it. Therefore, discard alarmAlertController.
             // Don't call presentNextViewController() as queue didn't change
             return
         }
         
-        // forAlarmAlertController couldn't be absorbed into currentPresentedViewController, therefore try absorbing it into other items in queue.
+        // alarmAlertController couldn't be absorbed into currentPresentedViewController, therefore try absorbing it into other items in queue.
         for viewControllerInQueue in viewControllerPresentationQueue {
             guard let alarmAlertControllerInQueue = viewControllerInQueue as? HoundAlarmAlertController else {
-                // viewControllerInQueue isn't an HoundAlarmAlertController and cannot absorb anything. or it is but wasn't able to be combined with forAlarmAlertController
+                // viewControllerInQueue isn't an HoundAlarmAlertController and cannot absorb anything. or it is but wasn't able to be combined with alarmAlertController
                 continue
             }
             
-            guard alarmAlertControllerInQueue.absorb(forAlarmAlertController) else {
-                // alarmAlertControllerInQueue wasn't able to absorb forAlarmAlertController
+            guard alarmAlertControllerInQueue.absorb(alarmAlertController) else {
+                // alarmAlertControllerInQueue wasn't able to absorb alarmAlertController
                 continue
             }
             
-            // alarmAlertControllerInQueue was able to successfully absorb forAlarmAlertController. Discard forAlarmAlertController
+            // alarmAlertControllerInQueue was able to successfully absorb alarmAlertController. Discard alarmAlertController
             // Don't call presentNextViewController() as queue didn't change
             return
         }
         
-        // Couldn't absorb forAlarmAlertController with any pre-existing ViewController, therefore append it to queue
-        viewControllerPresentationQueue.append(forAlarmAlertController)
+        // Couldn't absorb alarmAlertController with any pre-existing ViewController, therefore append it to queue
+        viewControllerPresentationQueue.append(alarmAlertController)
         presentNextViewController()
     }
     

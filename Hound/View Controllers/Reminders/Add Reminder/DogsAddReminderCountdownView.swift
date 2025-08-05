@@ -48,13 +48,13 @@ final class DogsAddReminderCountdownView: HoundView {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsAddReminderCountdownViewDelegate,
-               forComponents: CountdownComponents?) {
-        delegate = forDelegate
+    func setup(delegate: DogsAddReminderCountdownViewDelegate,
+               components: CountdownComponents?) {
+        self.delegate = delegate
         
-        countdownDatePicker.countDownDuration = forComponents?.executionInterval ??
+        countdownDatePicker.countDownDuration = components?.executionInterval ??
         countdownDatePicker.countDownDuration
-        delegate?.didUpdateDescriptionLabel()
+        delegate.didUpdateDescriptionLabel()
     }
     
     // MARK: - Setup Elements

@@ -9,11 +9,11 @@
 import UIKit
 
 protocol DogsTableVCDelegate: AnyObject {
-    func shouldOpenDogMenu(forDogUUID: UUID?)
-    func shouldOpenReminderMenu(forDogUUID: UUID, forReminder: Reminder?)
-    func shouldOpenTriggerMenu(forDog: Dog, forTrigger: Trigger?)
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
-    func shouldUpdateAlphaForButtons(forAlpha: Double)
+    func shouldOpenDogMenu(dogUUID: UUID?)
+    func shouldOpenReminderMenu(dogUUID: UUID, reminder: Reminder?)
+    func shouldOpenTriggerMenu(dog: Dog, trigger: Trigger?)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager)
+    func shouldUpdateAlphaForButtons(alpha: Double)
 }
 
 final class DogsTableVC: HoundTableViewController {
@@ -28,7 +28,7 @@ final class DogsTableVC: HoundTableViewController {
         // When scrollView.contentOffset.y reaches the value of alphaConstant, the UI element's alpha is set to 0 and is hidden.
         let alphaConstant: Double = 100.0
         let alpha: Double = max(1.0 - (adjustedContentOffsetY / alphaConstant), 0.0)
-        delegate?.shouldUpdateAlphaForButtons(forAlpha: alpha)
+        delegate?.shouldUpdateAlphaForButtons(alpha: alpha)
     }
     
     // MARK: - Properties
@@ -41,15 +41,15 @@ final class DogsTableVC: HoundTableViewController {
     
     private(set) var dogManager: DogManager = DogManager()
     
-    func setDogManager(sender: Sender, forDogManager: DogManager) {
-        dogManager = forDogManager
+    func setDogManager(sender: Sender, dogManager: DogManager) {
+        self.dogManager = dogManager
         
         // possible senders
         // DogsAddDogReminderTVC
         // DogTVC
         // DogsVC
         if !(sender.localized is DogsVC) {
-            delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), forDogManager: dogManager)
+            delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), dogManager: dogManager)
         }
         if !(sender.localized is DogsReminderTVC) && !(sender.origin is DogsTableVC) {
             // source could be anything and could not be in view so no animation
@@ -110,8 +110,8 @@ final class DogsTableVC: HoundTableViewController {
     
     // MARK: - Setup
     
-    func setup(forDelegate: DogsTableVCDelegate) {
-        self.delegate = forDelegate
+    func setup(delegate: DogsTableVCDelegate) {
+        self.delegate = delegate
     }
     
     // MARK: - Functions
@@ -131,7 +131,7 @@ final class DogsTableVC: HoundTableViewController {
     /// Makes a query to the server to retrieve new information then refreshed the tableView
     @objc private func refreshTableData() {
         PresentationManager.beginFetchingInformationIndicator()
-        DogsRequest.get(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogManager: dogManager) { newDogManager, responseStatus, _ in
+        DogsRequest.get(errorAlert: .automaticallyAlertOnlyForFailure, dogManager: dogManager) { newDogManager, responseStatus, _ in
             PresentationManager.endFetchingInformationIndicator {
                 // end refresh first otherwise there will be a weird visual issue
                 self.tableView.refreshControl?.endRefreshing()
@@ -141,16 +141,16 @@ final class DogsTableVC: HoundTableViewController {
                 }
                 
                 if responseStatus == .successResponse {
-                    PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.successRefreshRemindersTitle, forSubtitle: Constant.Visual.BannerText.successRefreshRemindersSubtitle, forStyle: .success)
+                    PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.successRefreshRemindersTitle, subtitle: Constant.Visual.BannerText.successRefreshRemindersSubtitle, style: .success)
                 }
                 else {
                     if OfflineModeManager.shared.hasDisplayedOfflineModeBanner == true {
                         // If OfflineModeManager has displayed its banner that indicates its turning on, then we are safe to display this banner. Otherwise, we would run the risk of both of these banners displaying if its the first time enterin offline mode.
-                        PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.infoRefreshOnHoldTitle, forSubtitle: Constant.Visual.BannerText.infoRefreshOnHoldSubtitle, forStyle: .info)
+                        PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.infoRefreshOnHoldTitle, subtitle: Constant.Visual.BannerText.infoRefreshOnHoldSubtitle, style: .info)
                     }
                 }
                 
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: newDogManager)
+                self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: newDogManager)
                 // manually reload table as the self sender doesn't do that
                 // whole page is changing so no animation
                 self.tableView.reloadData()
@@ -158,7 +158,7 @@ final class DogsTableVC: HoundTableViewController {
         }
     }
     
-    private func willShowDogActionSheet(forCell cell: DogTVC, forIndexPath indexPath: IndexPath) {
+    private func willShowDogActionSheet(cell: DogTVC, indexPath: IndexPath) {
         guard let dog = cell.dog, let dogName = cell.dog?.dogName, let dogUUID = cell.dog?.dogUUID, let section = self.dogManager.dogs.firstIndex(where: { dog in
             dog.dogUUID == dogUUID
         }) else { return }
@@ -168,17 +168,17 @@ final class DogsTableVC: HoundTableViewController {
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         let addReminderAlertAction = UIAlertAction(title: "Add Reminder", style: .default) { _ in
-            self.delegate?.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: nil)
+            self.delegate?.shouldOpenReminderMenu(dogUUID: dogUUID, reminder: nil)
         }
         let addTriggerAlertAction = UIAlertAction(title: "Add Automation", style: .default) { _ in
-            self.delegate?.shouldOpenTriggerMenu(forDog: dog, forTrigger: nil)
+            self.delegate?.shouldOpenTriggerMenu(dog: dog, trigger: nil)
         }
         
         let editAlertAction = UIAlertAction(
             title: "Edit Dog",
             style: .default,
             handler: { (_: UIAlertAction!)  in
-                self.delegate?.shouldOpenDogMenu(forDogUUID: dogUUID)
+                self.delegate?.shouldOpenDogMenu(dogUUID: dogUUID)
             })
         
         let removeAlertAction = UIAlertAction(title: "Delete Dog", style: .destructive) { _ in
@@ -187,12 +187,12 @@ final class DogsTableVC: HoundTableViewController {
             let removeDogConfirmation = UIAlertController(title: "Are you sure you want to delete \(dogName)?", message: nil, preferredStyle: .alert)
             
             let confirmRemoveDogAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                DogsRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID) { responseStatus, _ in
+                DogsRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         return
                     }
-                    self.dogManager.removeDog(forDogUUID: dogUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    self.dogManager.removeDog(dogUUID: dogUUID)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     self.tableView.deleteSections([section], with: .automatic)
                     
                 }
@@ -219,8 +219,8 @@ final class DogsTableVC: HoundTableViewController {
     }
     
     /// Called when a reminder is tapped by the user, display an action sheet of possible modifcations to the alarm/reminder.
-    private func willShowReminderActionSheet(forCell cell: DogsReminderTVC, forIndexPath indexPath: IndexPath) {
-        guard let dogUUID = cell.dogUUID, let dog = dogManager.findDog(forDogUUID: dogUUID) else { return }
+    private func willShowReminderActionSheet(cell: DogsReminderTVC, indexPath: IndexPath) {
+        guard let dogUUID = cell.dogUUID, let dog = dogManager.findDog(dogUUID: dogUUID) else { return }
         
         guard let reminder = cell.reminder else { return }
         
@@ -233,7 +233,7 @@ final class DogsTableVC: HoundTableViewController {
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         let editAlertAction = UIAlertAction(title: "Edit Reminder", style: .default) { _ in
-            self.delegate?.shouldOpenReminderMenu(forDogUUID: dogUUID, forReminder: reminder)
+            self.delegate?.shouldOpenReminderMenu(dogUUID: dogUUID, reminder: reminder)
         }
         
         // REMOVE BUTTON
@@ -243,7 +243,7 @@ final class DogsTableVC: HoundTableViewController {
             let removeReminderConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
             
             let removeReminderConfirmationRemove = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID, forReminderUUIDs: [reminder.reminderUUID]) { responseStatus, _ in
+                RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, reminderUUIDs: [reminder.reminderUUID]) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         return
                     }
@@ -256,8 +256,8 @@ final class DogsTableVC: HoundTableViewController {
                             aboveReminderCell?.containerView.roundCorners(setCorners: .bottom)
                         }
                     }
-                    dog.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    dog.dogReminders.removeReminder(reminderUUID: reminder.reminderUUID)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 }
                 
@@ -276,8 +276,8 @@ final class DogsTableVC: HoundTableViewController {
             title: "Skip Once",
             style: .default,
             handler: { _ in
-                self.userSkippedReminderOnce(forDogUUID: dog.dogUUID, forReminder: reminder)
-                PresentationManager.enqueueBanner(forTitle: "Skipped \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName)) Once", forSubtitle: nil, forStyle: .success)
+                self.userSkippedReminderOnce(dogUUID: dog.dogUUID, reminder: reminder)
+                PresentationManager.enqueueBanner(title: "Skipped \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName)) Once", subtitle: nil, style: .success)
             })
         
         // DETERMINES IF ITS A LOG BUTTON OR UNDO LOG BUTTON
@@ -306,7 +306,7 @@ final class DogsTableVC: HoundTableViewController {
         
         // ADD LOG BUTTONS (MULTIPLE IF POTTY OR OTHER SPECIAL CASE)
         if shouldUndoLogOrUnskip == true {
-            let logToUndo = findLogFromSkippedReminder(forDog: dog, forReminder: reminder)
+            let logToUndo = findLogFromSkippedReminder(dog: dog, reminder: reminder)
             
             let logAlertAction = UIAlertAction(
                 title:
@@ -316,13 +316,13 @@ final class DogsTableVC: HoundTableViewController {
                 + "for \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName))",
                 style: .default,
                 handler: { (_: UIAlertAction!)  in
-                    self.userSelectedUnskipReminder(forDog: dog, forReminder: reminder)
+                    self.userSelectedUnskipReminder(dog: dog, reminder: reminder)
                     
                     let bannerTitle = (logToUndo != nil
                                        ? "Undid "
                                        : "Unskipped ")
                     + (reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName))
-                    PresentationManager.enqueueBanner(forTitle: bannerTitle, forSubtitle: nil, forStyle: .success)
+                    PresentationManager.enqueueBanner(title: bannerTitle, subtitle: nil, style: .success)
                     
                 })
             alertActionsForLog.append(logAlertAction)
@@ -337,8 +337,8 @@ final class DogsTableVC: HoundTableViewController {
                     title: "Log \(fullReadableName)",
                     style: .default,
                     handler: { _ in
-                        self.userPreemptivelyLoggedReminder(forDogUUID: dog.dogUUID, forReminder: reminder, forLogActionType: logActionType)
-                        PresentationManager.enqueueBanner(forTitle: "Logged \(fullReadableName)", forSubtitle: nil, forStyle: .success)
+                        self.userPreemptivelyLoggedReminder(dogUUID: dog.dogUUID, reminder: reminder, logActionType: logActionType)
+                        PresentationManager.enqueueBanner(title: "Logged \(fullReadableName)", subtitle: nil, style: .success)
                     })
                 alertActionsForLog.append(logAlertAction)
             }
@@ -365,21 +365,21 @@ final class DogsTableVC: HoundTableViewController {
     }
     
     /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log.
-    private func userPreemptivelyLoggedReminder(forDogUUID: UUID, forReminder: Reminder, forLogActionType: LogActionType) {
-        let log = Log(forLogActionTypeId: forLogActionType.logActionTypeId, forLogCustomActionName: forReminder.reminderCustomActionName, forLogStartDate: Date(), forCreatedByReminderUUID: nil)
+    private func userPreemptivelyLoggedReminder(dogUUID: UUID, reminder: Reminder, logActionType: LogActionType) {
+        let log = Log(logActionTypeId: logActionType.logActionTypeId, logCustomActionName: reminder.reminderCustomActionName, logStartDate: Date(), logCreatedByReminderUUID: nil)
         
         // special case. Once a oneTime reminder executes/ is skipped, it must be delete. Therefore there are special server queries.
-        if forReminder.reminderType == .oneTime {
+        if reminder.reminderType == .oneTime {
             // make request to add log, then (if successful) make request to delete reminder
             
             // delete the reminder on the server
-            RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminderUUIDs: [forReminder.reminderUUID]) { responseStatus, _ in
+            RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, reminderUUIDs: [reminder.reminderUUID]) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }
                 
-                if let dogSection = self.dogManager.dogs.firstIndex(where: { $0.dogUUID == forDogUUID }),
-                   let reminderIndex = self.dogManager.dogs[dogSection].dogReminders.dogReminders.firstIndex(where: { $0.reminderUUID == forReminder.reminderUUID }) {
+                if let dogSection = self.dogManager.dogs.firstIndex(where: { $0.dogUUID == dogUUID }),
+                   let reminderIndex = self.dogManager.dogs[dogSection].dogReminders.dogReminders.firstIndex(where: { $0.reminderUUID == reminder.reminderUUID }) {
                     let indexPath = IndexPath(row: reminderIndex + 1, section: dogSection)
                     
                     let numReminders = self.dogManager.dogs[indexPath.section].dogReminders.dogReminders.count
@@ -390,8 +390,8 @@ final class DogsTableVC: HoundTableViewController {
                             aboveReminderCell?.containerView.roundCorners(setCorners: .bottom)
                         }
                     }
-                    self.dogManager.dogs[dogSection].dogReminders.removeReminder(forReminderUUID: forReminder.reminderUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    self.dogManager.dogs[dogSection].dogReminders.removeReminder(reminderUUID: reminder.reminderUUID)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
                     //                    UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
@@ -400,66 +400,66 @@ final class DogsTableVC: HoundTableViewController {
                     //                    }
                 }
                 else {
-                    self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.removeReminder(forReminderUUID: forReminder.reminderUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.removeReminder(reminderUUID: reminder.reminderUUID)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     self.tableView.reloadData()
                 }
                 
-                LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, log: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
                     
-                    let triggerReminders = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: true)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    let triggerReminders = self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: true)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     
                     guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {
                         return
                     }
                     
                     // silently try to create trigger reminders
-                    RemindersRequest.create(forErrorAlert: .automaticallyAlertForNone, forDogUUID: forDogUUID, forReminders: triggerReminders) { responseStatus, _ in
+                    RemindersRequest.create(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, reminders: triggerReminders) { responseStatus, _ in
                         guard responseStatus != .failureResponse else {
                             return
                         }
-                        self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminders(forReminders: triggerReminders)
-                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                        self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: triggerReminders)
+                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     }
                 }
             }
         }
         // Nest all the other cases inside this else statement as otherwise .oneTime alarms would make request with the above code then again down here.
         else {
-            forReminder.enableIsSkipping(skippedDate: Date())
+            reminder.enableIsSkipping(skippedDate: Date())
             
             // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-            RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+            RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, reminders: [reminder]) { responseStatusReminderUpdate, _ in
                 guard responseStatusReminderUpdate != .failureResponse else {
                     return
                 }
                 
-                self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: forReminder)
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminder(reminder: reminder)
+                self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                 
-                LogsRequest.create(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forLog: log) { responseStatusLogCreate, _ in
+                LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, log: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
                     
-                    let triggerReminders = self.dogManager.findDog(forDogUUID: forDogUUID)?.dogLogs.addLog(forLog: log, invokeDogTriggers: true)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    let triggerReminders = self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: true)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     
                     guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {
                         return
                     }
                     
                     // silently try to create trigger reminders
-                    RemindersRequest.create(forErrorAlert: .automaticallyAlertForNone, forDogUUID: forDogUUID, forReminders: triggerReminders) { responseStatus, _ in
+                    RemindersRequest.create(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, reminders: triggerReminders) { responseStatus, _ in
                         guard responseStatus != .failureResponse else {
                             return
                         }
-                        self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminders(forReminders: triggerReminders)
-                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                        self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: triggerReminders)
+                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     }
                 }
             }
@@ -467,31 +467,31 @@ final class DogsTableVC: HoundTableViewController {
     }
     
     /// The user went to log/skip a reminder on the reminders page. Must updating skipping data and add a log.
-    private func userSkippedReminderOnce(forDogUUID: UUID, forReminder: Reminder) {
-        guard forReminder.reminderType != .oneTime else { return }
+    private func userSkippedReminderOnce(dogUUID: UUID, reminder: Reminder) {
+        guard reminder.reminderType != .oneTime else { return }
         
-        forReminder.enableIsSkipping(skippedDate: Date())
+        reminder.enableIsSkipping(skippedDate: Date())
         
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-        RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+        RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, reminders: [reminder]) { responseStatusReminderUpdate, _ in
             guard responseStatusReminderUpdate != .failureResponse else {
                 return
             }
             
-            self.dogManager.findDog(forDogUUID: forDogUUID)?.dogReminders.addReminder(forReminder: forReminder)
-            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+            self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminder(reminder: reminder)
+            self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
         }
     }
     
     /// If a reminder was skipped, it could have either been a preemptive log (meaning there was a log created) or it was skipped without a log. Thus, locate the log if it exists.
-    private func findLogFromSkippedReminder(forDog: Dog, forReminder: Reminder) -> Log? {
+    private func findLogFromSkippedReminder(dog: Dog, reminder: Reminder) -> Log? {
         // this is the time that the reminder's next alarm was skipped. at this same moment, a log was added. If this log is still there, with it's date unmodified by the user, then we remove it.
         let dateOfLogToRemove: Date? = {
-            if forReminder.reminderType == .weekly {
-                return forReminder.weeklyComponents.skippedDate
+            if reminder.reminderType == .weekly {
+                return reminder.weeklyComponents.skippedDate
             }
-            else if forReminder.reminderType == .monthly {
-                return forReminder.monthlyComponents.skippedDate
+            else if reminder.reminderType == .monthly {
+                return reminder.monthlyComponents.skippedDate
             }
             
             return nil
@@ -502,7 +502,7 @@ final class DogsTableVC: HoundTableViewController {
         }
         
         // find log that is incredibly close the time where the reminder was skipped, once found, then we delete it.
-        let logToRemove = forDog.dogLogs.dogLogs.first(where: { log in
+        let logToRemove = dog.dogLogs.dogLogs.first(where: { log in
             return abs(dateOfLogToRemove.distance(to: log.logStartDate)) < 0.001
         })
         
@@ -510,34 +510,34 @@ final class DogsTableVC: HoundTableViewController {
     }
     
     /// The user went to unlog/unskip a reminder on the reminders page. Must update skipping information. Note: only weekly/monthly reminders can be skipped therefore only they can be unskipped.
-    private func userSelectedUnskipReminder(forDog: Dog, forReminder: Reminder) {
+    private func userSelectedUnskipReminder(dog: Dog, reminder: Reminder) {
         // we can only unskip a weekly/monthly reminder that is currently isSkipping == true
-        guard (forReminder.reminderType == .weekly && forReminder.weeklyComponents.isSkipping == true) || (forReminder.reminderType == .monthly && forReminder.monthlyComponents.isSkipping == true) else { return }
+        guard (reminder.reminderType == .weekly && reminder.weeklyComponents.isSkipping == true) || (reminder.reminderType == .monthly && reminder.monthlyComponents.isSkipping == true) else { return }
         
-        forReminder.disableIsSkipping()
+        reminder.disableIsSkipping()
         
         // make request to the server, if successful then we persist the data. If there is an error, then we discard to data to keep client and server in sync (as server wasn't able to update)
-        RemindersRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDog.dogUUID, forReminders: [forReminder]) { responseStatusReminderUpdate, _ in
+        RemindersRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, reminders: [reminder]) { responseStatusReminderUpdate, _ in
             guard responseStatusReminderUpdate != .failureResponse else {
                 return
             }
             
-            self.dogManager.findDog(forDogUUID: forDog.dogUUID)?.dogReminders.addReminder(forReminder: forReminder)
-            self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+            self.dogManager.findDog(dogUUID: dog.dogUUID)?.dogReminders.addReminder(reminder: reminder)
+            self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
             
             // find log that is incredibly close the time where the reminder was skipped, once found, then we delete it.
-            guard let logToRemove = self.findLogFromSkippedReminder(forDog: forDog, forReminder: forReminder) else {
+            guard let logToRemove = self.findLogFromSkippedReminder(dog: dog, reminder: reminder) else {
                 return
             }
             
             // log to remove from unlog event. Attempt to delete the log server side
-            LogsRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: forDog.dogUUID, forLogUUID: logToRemove.logUUID) { responseStatusLogDelete, _ in
+            LogsRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, logUUID: logToRemove.logUUID) { responseStatusLogDelete, _ in
                 guard responseStatusLogDelete != .failureResponse else {
                     return
                 }
                 
-                self.dogManager.findDog(forDogUUID: forDog.dogUUID)?.dogLogs.removeLog(forLogUUID: logToRemove.logUUID)
-                self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                self.dogManager.findDog(dogUUID: dog.dogUUID)?.dogLogs.removeLog(logUUID: logToRemove.logUUID)
+                self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
             }
             
         }
@@ -580,7 +580,7 @@ final class DogsTableVC: HoundTableViewController {
         : tableView.dequeueReusableCell(withIdentifier: DogsReminderTVC.reuseIdentifier, for: indexPath)
         
         if let castedCell = cell as? DogTVC {
-            castedCell.setup(forDog: dogManager.dogs[indexPath.section])
+            castedCell.setup(dog: dogManager.dogs[indexPath.section])
             castedCell.containerView.roundCorners(setCorners: .all)
             
             if dogManager.dogs[indexPath.section].dogReminders.dogReminders.isEmpty {
@@ -592,7 +592,7 @@ final class DogsTableVC: HoundTableViewController {
             }
         }
         else if let castedCell = cell as? DogsReminderTVC {
-            castedCell.setup(forDogUUID: dogManager.dogs[indexPath.section].dogUUID, forReminder: dogManager.dogs[indexPath.section].dogReminders.dogReminders[indexPath.row - 1])
+            castedCell.setup(dogUUID: dogManager.dogs[indexPath.section].dogUUID, reminder: dogManager.dogs[indexPath.section].dogReminders.dogReminders[indexPath.row - 1])
             
             // This cell is a bottom cell
             if indexPath.row == dogManager.dogs[indexPath.section].dogReminders.dogReminders.count {
@@ -613,10 +613,10 @@ final class DogsTableVC: HoundTableViewController {
         guard dogManager.dogs.isEmpty == false else { return }
         
         if indexPath.row == 0, let dogsDogDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogTVC {
-            willShowDogActionSheet(forCell: dogsDogDisplayTableViewCell, forIndexPath: indexPath)
+            willShowDogActionSheet(cell: dogsDogDisplayTableViewCell, indexPath: indexPath)
         }
         else if indexPath.row > 0, let dogsReminderDisplayTableViewCell = tableView.cellForRow(at: indexPath) as? DogsReminderTVC {
-            willShowReminderActionSheet(forCell: dogsReminderDisplayTableViewCell, forIndexPath: indexPath)
+            willShowReminderActionSheet(cell: dogsReminderDisplayTableViewCell, indexPath: indexPath)
         }
         
     }
@@ -633,13 +633,13 @@ final class DogsTableVC: HoundTableViewController {
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(dog.dogName)?", message: nil, preferredStyle: .alert)
             
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                DogsRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dog.dogUUID) { responseStatus, _ in
+                DogsRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         return
                     }
                     
-                    self.dogManager.removeDog(forDogUUID: dog.dogUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    self.dogManager.removeDog(dogUUID: dog.dogUUID)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     self.tableView.deleteSections([indexPath.section], with: .automatic)
                     UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
                         self.view.setNeedsLayout()
@@ -654,11 +654,11 @@ final class DogsTableVC: HoundTableViewController {
             removeConfirmation?.addAction(cancelAlertAction)
         }
         // delete reminder
-        if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderTVC, let dogUUID = reminderCell.dogUUID, let dog: Dog = dogManager.findDog(forDogUUID: dogUUID), let reminder = reminderCell.reminder {
+        if indexPath.row > 0, let reminderCell = tableView.cellForRow(at: indexPath) as? DogsReminderTVC, let dogUUID = reminderCell.dogUUID, let dog: Dog = dogManager.findDog(dogUUID: dogUUID), let reminder = reminderCell.reminder {
             removeConfirmation = UIAlertController(title: "Are you sure you want to delete \(reminder.reminderActionType.convertToReadableName(customActionName: reminder.reminderCustomActionName))?", message: nil, preferredStyle: .alert)
             
             let removeAlertAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                RemindersRequest.delete(forErrorAlert: .automaticallyAlertOnlyForFailure, forDogUUID: dogUUID, forReminderUUIDs: [reminder.reminderUUID]) { responseStatus, _ in
+                RemindersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, reminderUUIDs: [reminder.reminderUUID]) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         return
                     }
@@ -671,8 +671,8 @@ final class DogsTableVC: HoundTableViewController {
                             aboveReminderCell?.containerView.roundCorners(setCorners: .bottom)
                         }
                     }
-                    dog.dogReminders.removeReminder(forReminderUUID: reminder.reminderUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    dog.dogReminders.removeReminder(reminderUUID: reminder.reminderUUID)
+                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 }
                 

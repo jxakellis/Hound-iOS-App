@@ -40,9 +40,9 @@ final class Log: NSObject, NSCoding, NSCopying {
     
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedLogId: Int? = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logId.rawValue)
-        let decodedLogUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.logUUID.rawValue))
+        let decodedLogUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.logUUID.rawValue))
         let decodedLogCreated: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.logCreated.rawValue)?.formatISO8601IntoDate())
-        let decodedLogCreatedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.logCreatedBy.rawValue) ?? Constant.Class.Log.defaultUserId
+        let decodedLogCreatedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.logCreatedBy.rawValue)
         let decodedLogLastModified: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.logLastModified.rawValue)?.formatISO8601IntoDate())
         let decodedLogLastModifiedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.logLastModifiedBy.rawValue)
         let decodedLogActionTypeId: Int = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logActionTypeId.rawValue) ?? Constant.Class.Log.defaultLogActionTypeId
@@ -52,7 +52,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         let decodedLogNote: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.logNote.rawValue)
         let decodedLogUnitTypeId: Int? = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logUnitTypeId.rawValue)
         let decodedLogNumberOfLogUnits: Double? = aDecoder.decodeOptionalDouble(forKey: Constant.Key.logNumberOfLogUnits.rawValue)
-        let decodedLogCreatedByReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalObject(forKey: Constant.Key.logCreatedByReminderUUID.rawValue))
+        let decodedLogCreatedByReminderUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalObject(forKey: Constant.Key.logCreatedByReminderUUID.rawValue))
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
         
         self.init(
@@ -142,7 +142,7 @@ final class Log: NSObject, NSCoding, NSCopying {
     var logActionTypeId: Int = Constant.Class.Log.defaultLogActionTypeId {
         didSet {
             // Check to see if logUnitTypeId are compatible with the new logActionTypeId
-            let logUnitTypeIds = LogActionType.find(forLogActionTypeId: logActionTypeId).associatedLogUnitTypes.map { $0.logUnitTypeId }
+            let logUnitTypeIds = LogActionType.find(logActionTypeId: logActionTypeId).associatedLogUnitTypes.map { $0.logUnitTypeId }
             
             guard let logUnitTypeId = logUnitTypeId else {
                 self.logNumberOfLogUnits = nil
@@ -158,7 +158,7 @@ final class Log: NSObject, NSCoding, NSCopying {
     }
     
     var logActionType: LogActionType {
-        return LogActionType.find(forLogActionTypeId: logActionTypeId)
+        return LogActionType.find(logActionTypeId: logActionTypeId)
     }
     
     private var storedLogCustomActionName: String = ""
@@ -190,7 +190,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         guard let logUnitTypeId = logUnitTypeId else {
             return nil
         }
-        return LogUnitType.find(forLogUnitTypeId: logUnitTypeId)
+        return LogUnitType.find(logUnitTypeId: logUnitTypeId)
     }
     
     private(set) var logNumberOfLogUnits: Double?
@@ -231,7 +231,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         self.logStartDate = logStartDate ?? self.logStartDate
         self.logEndDate = logEndDate ?? self.logEndDate
         self.logNote = logNote ?? self.logNote
-        self.changeLogUnit(forLogUnitTypeId: logUnitTypeId, forLogNumberOfLogUnits: logNumberOfUnits)
+        self.changeLogUnit(logUnitTypeId: logUnitTypeId, logNumberOfLogUnits: logNumberOfUnits)
         self.logCreatedByReminderUUID = logCreatedByReminderUUID ?? logCreatedByReminderUUID
         self.offlineModeComponents = offlineModeComponents ?? self.offlineModeComponents
     }
@@ -240,7 +240,7 @@ final class Log: NSObject, NSCoding, NSCopying {
     convenience init?(fromBody: JSONResponseBody, logToOverride: Log?) {
         // Don't pull logId or logIsDeleted from logToOverride. A valid fromBody needs to provide this itself
         let logId: Int? = fromBody[Constant.Key.logId.rawValue] as? Int
-        let logUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.logUUID.rawValue] as? String)
+        let logUUID: UUID? = UUID.fromString(UUIDString: fromBody[Constant.Key.logUUID.rawValue] as? String)
         let logCreated: Date? = (fromBody[Constant.Key.logCreated.rawValue] as? String)?.formatISO8601IntoDate()
         let logIsDeleted: Bool? = fromBody[Constant.Key.logIsDeleted.rawValue] as? Bool
         
@@ -304,7 +304,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         let logUnitTypeId: Int? = fromBody[Constant.Key.logUnitTypeId.rawValue] as? Int ?? logToOverride?.logUnitTypeId
         
         let logNumberOfLogUnits: Double? = fromBody[Constant.Key.logNumberOfLogUnits.rawValue] as? Double ?? logToOverride?.logNumberOfLogUnits
-        let logCreatedByReminderUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.logCreatedByReminderUUID.rawValue] as? String) ?? logToOverride?.logCreatedByReminderUUID
+        let logCreatedByReminderUUID: UUID? = UUID.fromString(UUIDString: fromBody[Constant.Key.logCreatedByReminderUUID.rawValue] as? String) ?? logToOverride?.logCreatedByReminderUUID
         
         self.init(
             logId: logId,
@@ -329,36 +329,36 @@ final class Log: NSObject, NSCoding, NSCopying {
     // MARK: - Functions
     
     /// logStartDate takes precendence over logEndDate. Therefore, if the times overlap incorrectly, i.e. logStartDate is after logEndDate, then logStartDate is set its value, then logEndDate is adjusted so that it is later than logStartDate.
-    func changeLogDate(forLogStartDate: Date, forLogEndDate: Date?) {
-        logStartDate = forLogStartDate
+    func changeLogDate(logStartDate: Date, logEndDate: Date?) {
+        self.logStartDate = logStartDate
         
-        if let forLogEndDate = forLogEndDate {
-            // If forLogStartDate is after forLogEndDate, that is incorrect. Therefore, disregard it
-            logEndDate = forLogStartDate >= forLogEndDate ? nil : forLogEndDate
+        if let logEndDate = logEndDate {
+            // If logStartDate is after logEndDate, that is incorrect. Therefore, disregard it
+            self.logEndDate = logStartDate >= logEndDate ? nil : logEndDate
         }
         else {
-            logEndDate = nil
+            self.logEndDate = nil
         }
     }
     
-    /// If forNumberOfUnits or forLogUnitTypeId is nil, both are set to nil. The forLogUnitTypeId provided must be in the array of LogUnitTypes that are valid for this log's logActionTypeId.
-    func changeLogUnit(forLogUnitTypeId: Int?, forLogNumberOfLogUnits: Double?) {
-        guard let forLogUnitTypeId = forLogUnitTypeId, let forLogNumberOfLogUnits = forLogNumberOfLogUnits else {
-            logNumberOfLogUnits = nil
-            logUnitTypeId = nil
+    /// If numberOfUnits or logUnitTypeId is nil, both are set to nil. The logUnitTypeId provided must be in the array of LogUnitTypes that are valid for this log's logActionTypeId.
+    func changeLogUnit(logUnitTypeId: Int?, logNumberOfLogUnits: Double?) {
+        guard let logUnitTypeId = logUnitTypeId, let logNumberOfLogUnits = logNumberOfLogUnits else {
+            self.logNumberOfLogUnits = nil
+            self.logUnitTypeId = nil
             return
         }
         
         let logUnitTypeIds = logActionType.associatedLogUnitTypes.map { $0.logUnitTypeId }
         
-        guard logUnitTypeIds.contains(forLogUnitTypeId) else {
-            logNumberOfLogUnits = nil
-            logUnitTypeId = nil
+        guard logUnitTypeIds.contains(logUnitTypeId) else {
+            self.logNumberOfLogUnits = nil
+            self.logUnitTypeId = nil
             return
         }
         
-        logNumberOfLogUnits = round(forLogNumberOfLogUnits * 100.0) / 100.0
-        logUnitTypeId = forLogUnitTypeId
+        self.logNumberOfLogUnits = round(logNumberOfLogUnits * 100.0) / 100.0
+        self.logUnitTypeId = logUnitTypeId
     }
     
     /// Returns true if any major property of the log matches the provided search text
@@ -373,16 +373,16 @@ final class Log: NSObject, NSCoding, NSCopying {
         if logNote.lowercased().contains(trimmed) { return true }
         
         if let logUnitType = logUnitType, let num = logNumberOfLogUnits {
-            if logUnitType.pluralReadableValueWithNumUnits(forLogNumberOfLogUnits: num)?.lowercased().contains(trimmed) ?? false { return true }
+            if logUnitType.pluralReadableValueWithNumUnits(logNumberOfLogUnits: num)?.lowercased().contains(trimmed) ?? false { return true }
         }
         
         return false
     }
     
     /// Returns an array literal of the logs's properties. This is suitable to be used as the JSON body for a HTTP request
-    func createBody(forDogUUID: UUID) -> JSONRequestBody {
+    func createBody(dogUUID: UUID) -> JSONRequestBody {
         var body: JSONRequestBody = [:]
-        body[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
+        body[Constant.Key.dogUUID.rawValue] = .string(dogUUID.uuidString)
         body[Constant.Key.logId.rawValue] = .int(logId)
         body[Constant.Key.logUUID.rawValue] = .string(logUUID.uuidString)
         body[Constant.Key.logCreated.rawValue] = .string(logCreated.ISO8601FormatWithFractionalSeconds())

@@ -10,8 +10,8 @@ import UIKit
 
 enum ExportActivityViewManager {
 
-    /// Verifys that the family has space for a new family member and is unlocked. If conditions are passed, meaning the family can have a new user join, constructs an activityViewController with the information to share (i.e. the familyCode and short description of Hound) then presents it on forViewController
-    static func shareFamilyCode(forFamilyCode familyCode: String) {
+    /// Verifys that the family has space for a new family member and is unlocked. If conditions are passed, meaning the family can have a new user join, constructs an activityViewController with the information to share (i.e. the familyCode and short description of Hound) then presents it on viewController
+    static func shareFamilyCode(familyCode: String) {
         guard let globalPresenter = PresentationManager.lastFromGlobalPresenterStack else {
             Constant.Error.ExportError.shareFamilyCode().alert()
             return
@@ -33,17 +33,17 @@ enum ExportActivityViewManager {
         /*
          // Make sure that the family is unlocked so new
         guard FamilyInformation.familyIsLocked == false else {
-            PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.invalidLockedFamilyShareTitle, forSubtitle: Constant.Visual.BannerText.invalidLockedFamilyShareSubtitle, forStyle: .danger)
+            PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.invalidLockedFamilyShareTitle, subtitle: Constant.Visual.BannerText.invalidLockedFamilyShareSubtitle, style: .danger)
             return
         }
          */
 
         let shareHoundText = "Connect our family with Hound! It streamlines our pet care routine with shared logs and timely reminders to look after our dog.\n\nJoin my Hound family today by using the following code: \(familyCode)\n\nhttps://apps.apple.com/app/hound-dog-schedule-organizer/id1564604025"
 
-        exportToActivityViewController(forObjectToShare: [shareHoundText], forGlobalPresenter: globalPresenter)
+        exportToActivityViewController(objectToShare: [shareHoundText], globalPresenter: globalPresenter)
     }
 
-    static func exportLogs(forDogUUIDLogTuples: [(UUID, Log)]) {
+    static func exportLogs(dogUUIDLogTuples: [(UUID, Log)]) {
         PresentationManager.beginFetchingInformationIndicator()
 
         guard let globalPresenter = PresentationManager.lastFromGlobalPresenterStack else {
@@ -73,21 +73,21 @@ enum ExportActivityViewManager {
         var userIdToFamilyMemberFullName: [String: String] = [:]
 
         // Individual rows for CSV file
-        for forDogUUIDLogTuple in forDogUUIDLogTuples {
-            let dogUUID = forDogUUIDLogTuple.0
-            let log = forDogUUIDLogTuple.1
+        for dogUUIDLogTuple in dogUUIDLogTuples {
+            let dogUUID = dogUUIDLogTuple.0
+            let log = dogUUIDLogTuple.1
 
-            var familyMemberFullName = userIdToFamilyMemberFullName[log.userId]
+            var familyMemberFullName = userIdToFamilyMemberFullName[log.logCreatedBy]
             if familyMemberFullName == nil {
                 // if we don't have familyMemberFullName stored in the dictionary for quick reference, store it
-                familyMemberFullName = FamilyInformation.findFamilyMember(forUserId: log.userId)?.displayFullName ?? Constant.Visual.Text.unknownName
-                userIdToFamilyMemberFullName[log.userId] = familyMemberFullName
+                familyMemberFullName = FamilyInformation.findFamilyMember(userId: log.logCreatedBy)?.displayFullName ?? Constant.Visual.Text.unknownName
+                userIdToFamilyMemberFullName[log.logCreatedBy] = familyMemberFullName
             }
 
             var dogName = dogUUIDToDogNames[dogUUID]
             if dogName == nil {
                 // if we don't have dogName stored in the dictionary for quick reference, store it
-                dogName = DogManager.globalDogManager?.findDog(forDogUUID: dogUUID)?.dogName ?? Constant.Visual.Text.unknownName
+                dogName = DogManager.globalDogManager?.findDog(dogUUID: dogUUID)?.dogName ?? Constant.Visual.Text.unknownName
                 dogUUIDToDogNames[dogUUID] = dogName
             }
 
@@ -115,7 +115,7 @@ enum ExportActivityViewManager {
                     return ""
                 }
                 
-                return logUnitType.pluralReadableValueWithNumUnits(forLogNumberOfLogUnits: logNumberOfLogUnits) ?? ""
+                return logUnitType.pluralReadableValueWithNumUnits(logNumberOfLogUnits: logNumberOfLogUnits) ?? ""
             }()
             
             let logNote = log.logNote
@@ -141,12 +141,12 @@ enum ExportActivityViewManager {
         }
 
         PresentationManager.endFetchingInformationIndicator {
-            exportToActivityViewController(forObjectToShare: [houndExportedLogsURL], forGlobalPresenter: globalPresenter)
+            exportToActivityViewController(objectToShare: [houndExportedLogsURL], globalPresenter: globalPresenter)
         }
     }
 
     /// Creates an activityViewController used to share the objects passed. We purposefully pass through globalPresenter here, so if earlier in the flow one of the invoking functions can't resolve a globalPresenter, we are able to present a custom error message then and there
-    private static func exportToActivityViewController(forObjectToShare objectToShare: [Any], forGlobalPresenter globalPresenter: UIViewController) {
+    private static func exportToActivityViewController(objectToShare: [Any], globalPresenter: UIViewController) {
         let activityViewController = UIActivityViewController(activityItems: objectToShare, applicationActivities: nil)
         // Configure so that iPads won't crash
         activityViewController.popoverPresentationController?.sourceView = globalPresenter.view

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol HoundIntroductionDogIconViewDelegate: AnyObject {
-    func willFinish(forDogIcon: UIImage?)
+    func willFinish(dogIcon: UIImage?)
 }
 
 final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -17,7 +17,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
     // MARK: - UIImagePickerControllerDelegate
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        if let dogIcon = DogIconManager.processDogIcon(forInfo: info) {
+        if let dogIcon = DogIconManager.processDogIcon(info: info) {
             dogIconButton.setTitle(nil, for: .normal)
             dogIconButton.setImage(dogIcon, for: .normal)
         }
@@ -60,8 +60,8 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
 
     // MARK: - Setup
 
-    func setup(forDelegate: HoundIntroductionDogIconViewDelegate, forDogName dogName: String) {
-        delegate = forDelegate
+    func setup(delegate: HoundIntroductionDogIconViewDelegate, dogName: String) {
+        self.delegate = delegate
 
         introductionView.backgroundImageView.image = UIImage(named: "blueShorelineManThrowingStickForDog")
         introductionView.pageHeaderLabel.text = "Select an Icon For \(dogName)"
@@ -82,7 +82,7 @@ final class HoundIntroductionDogIconView: HoundView, UIImagePickerControllerDele
     @objc private func didTouchUpInsideFinish(_ sender: Any) {
         dogIconButton.isEnabled = false
         finishButton.isEnabled = false
-        delegate?.willFinish(forDogIcon: dogIcon)
+        delegate?.willFinish(dogIcon: dogIcon)
     }
 
     // MARK: - Setup Elements

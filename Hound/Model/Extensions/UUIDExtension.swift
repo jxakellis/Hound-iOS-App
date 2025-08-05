@@ -9,11 +9,11 @@
 import Foundation
 
 extension UUID {
-    static func fromString(forUUIDString: String?) -> UUID? {
-        guard let forUUIDString = forUUIDString else {
+    static func fromString(UUIDString: String?) -> UUID? {
+        guard let UUIDString = UUIDString else {
             return nil
         }
         
-        return UUID(uuidString: forUUIDString)
+        return UUID(uuidString: UUIDString)
     }
 }

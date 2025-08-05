@@ -58,7 +58,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
                     
                     let body: JSONRequestBody = [Constant.Key.userConfigurationIsNotificationEnabled.rawValue: .bool(UserConfiguration.isNotificationEnabled)]
                     
-                    UserRequest.update(forErrorAlert: .automaticallyAlertOnlyForFailure, forBody: body) { responseStatus, _ in
+                    UserRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, body: body) { responseStatus, _ in
                         guard responseStatus != .failureResponse else {
                             // Revert local values to previous state due to an error
                             UserConfiguration.isNotificationEnabled = beforeUpdateIsNotificationEnabled
@@ -80,7 +80,7 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
                     // Attempt to re-direct the user to their iPhone's settings for Hound, so they can enable notifications
                     guard let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) else {
                         // If we can't redirect the user, then just user a generic pop-up
-                        PresentationManager.enqueueBanner(forTitle: Constant.Visual.BannerText.notificationsDisabledTitle, forSubtitle: Constant.Visual.BannerText.notificationsDisabledSubtitle, forStyle: .danger)
+                        PresentationManager.enqueueBanner(title: Constant.Visual.BannerText.notificationsDisabledTitle, subtitle: Constant.Visual.BannerText.notificationsDisabledSubtitle, style: .danger)
                         return
                     }
                     
@@ -129,8 +129,8 @@ final class SettingsNotifsUseNotificationsTVC: HoundTableViewCell {
     
     // MARK: - Setup
     
-    func setup(forDelegate: SettingsNotifsUseNotificationsTVCDelegate) {
-        self.delegate = forDelegate
+    func setup(delegate: SettingsNotifsUseNotificationsTVCDelegate) {
+        self.delegate = delegate
     }
     
     // MARK: - Functions

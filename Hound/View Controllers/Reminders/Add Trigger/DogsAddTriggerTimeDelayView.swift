@@ -43,15 +43,15 @@ final class DogsAddTriggerTimeDelayView: HoundView {
     // MARK: - Setup
     
     func setup(
-        forDelegate: DogsAddTriggerTimeDelayViewDelegate,
-        forComponents: TriggerTimeDelayComponents?
+        delegate: DogsAddTriggerTimeDelayViewDelegate,
+        components: TriggerTimeDelayComponents?
     ) {
-        delegate = forDelegate
-        if let delay = forComponents?.triggerTimeDelay {
+        self.delegate = delegate
+        if let delay = components?.triggerTimeDelay {
             countdownDatePicker.countDownDuration = delay
         }
         
-        delegate?.didUpdateDescriptionLabel()
+        delegate.didUpdateDescriptionLabel()
     }
     
     // MARK: - Functions

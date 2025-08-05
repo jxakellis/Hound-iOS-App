@@ -9,7 +9,7 @@ import SnapKit
 import UIKit
 
 protocol LogsAddLogDelegate: AnyObject {
-    func didUpdateDogManager(sender: Sender, forDogManager: DogManager)
+    func didUpdateDogManager(sender: Sender, dogManager: DogManager)
 }
 
 enum LogsAddLogDropDownTypes: String, HoundDropDownType {
@@ -619,20 +619,20 @@ final class LogsAddLogVC: HoundScrollViewController,
             
             // The user decided to delete so we must query server
             LogsRequest.delete(
-                forErrorAlert: .automaticallyAlertOnlyForFailure,
-                forDogUUID: dogUUIDToUpdate,
-                forLogUUID: logToUpdate.logUUID
+                errorAlert: .automaticallyAlertOnlyForFailure,
+                dogUUID: dogUUIDToUpdate,
+                logUUID: logToUpdate.logUUID
             ) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     return
                 }
                 
-                self.dogManager.findDog(forDogUUID: dogUUIDToUpdate)?
-                    .dogLogs.removeLog(forLogUUID: logToUpdate.logUUID)
+                self.dogManager.findDog(dogUUID: dogUUIDToUpdate)?
+                    .dogLogs.removeLog(logUUID: logToUpdate.logUUID)
                 
                 self.delegate?.didUpdateDogManager(
                     sender: Sender(origin: self, localized: self),
-                    forDogManager: self.dogManager
+                    dogManager: self.dogManager
                 )
                 
                 HapticsManager.notification(.warning)
@@ -871,19 +871,19 @@ final class LogsAddLogVC: HoundScrollViewController,
     
     // MARK: - Setup
     
-    func setup(forDelegate: LogsAddLogDelegate,
-               forDogManager: DogManager,
-               forDogUUIDToUpdate: UUID?,
-               forLogToUpdate: Log?) {
-        delegate = forDelegate
-        dogManager = forDogManager
-        dogUUIDToUpdate = forDogUUIDToUpdate
-        logToUpdate = forLogToUpdate
+    func setup(delegate: LogsAddLogDelegate,
+               dogManager: DogManager,
+               dogUUIDToUpdate: UUID?,
+               logToUpdate: Log?) {
+        self.delegate = delegate
+        self.dogManager = dogManager
+        self.dogUUIDToUpdate = dogUUIDToUpdate
+        self.logToUpdate = logToUpdate
         
         if let dogUUIDToUpdate = dogUUIDToUpdate, logToUpdate != nil {
             editPageHeaderView.setTitle("Edit Log")
             editPageHeaderView.isTrailingButtonEnabled = true
-            if let dog = dogManager.findDog(forDogUUID: dogUUIDToUpdate) {
+            if let dog = dogManager.findDog(dogUUID: dogUUIDToUpdate) {
                 selectedDogUUIDs = [dog.dogUUID]
                 initialSelectedDogUUIDs = selectedDogUUIDs
             }
@@ -917,7 +917,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         ? "Which dog did you take care of?"
         : "Which dog(s) did you take care of?"
         
-        familyMemberLabel.text = FamilyInformation.findFamilyMember(forUserId: logToUpdate?.userId)?.displayFullName
+        familyMemberLabel.text = FamilyInformation.findFamilyMember(userId: logToUpdate?.logCreatedBy)?.displayFullName
         familyMemberStack.isHidden = logToUpdate == nil
         
         selectedLogAction = logToUpdate?.logActionType
@@ -942,15 +942,15 @@ final class LogsAddLogVC: HoundScrollViewController,
                   let numberOfUnits = logToUpdate?.logNumberOfLogUnits else {
                 return nil
             }
-            return LogUnitTypeConverter.convert(forLogUnitType: unitType, forNumberOfLogUnits: numberOfUnits,
+            return LogUnitTypeConverter.convert(logUnitType: unitType, numberOfLogUnits: numberOfUnits,
                                                 toTargetSystem: UserConfiguration.measurementSystem)
         }()
         
         selectedLogUnitType = convertedLogUnits?.0
         initialLogUnitType = convertedLogUnits?.0
         
-        logNumberOfLogUnitsTextField.text = LogUnitType.readableRoundedNumUnits(forLogNumberOfLogUnits: convertedLogUnits?.1)
-        initialLogNumberOfLogUnits = LogUnitType.readableRoundedNumUnits(forLogNumberOfLogUnits: convertedLogUnits?.1)
+        logNumberOfLogUnitsTextField.text = LogUnitType.readableRoundedNumUnits(logNumberOfLogUnits: convertedLogUnits?.1)
+        initialLogNumberOfLogUnits = LogUnitType.readableRoundedNumUnits(logNumberOfLogUnits: convertedLogUnits?.1)
         
         selectedLogStartDate = logToUpdate?.logStartDate
         initialLogStartDate = logToUpdate?.logStartDate
@@ -1014,8 +1014,8 @@ final class LogsAddLogVC: HoundScrollViewController,
         }
         
         logUnitLabel.text = selectedLogUnitType?.pluralReadableValueNoNumUnits(
-            forLogNumberOfLogUnits: LogUnitType.convertStringToDouble(
-                forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text
+            logNumberOfLogUnits: LogUnitType.convertStringToDouble(
+                logNumberOfLogUnits: logNumberOfLogUnitsTextField.text
             )
         )
         logUnitLabel.isEnabled = selectedLogAction != nil
@@ -1162,8 +1162,8 @@ final class LogsAddLogVC: HoundScrollViewController,
             if indexPath.row < unitTypes.count {
                 let unit = unitTypes[indexPath.row]
                 cell.label.text = unit.pluralReadableValueNoNumUnits(
-                    forLogNumberOfLogUnits: LogUnitType.convertStringToDouble(
-                        forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text
+                    logNumberOfLogUnits: LogUnitType.convertStringToDouble(
+                        logNumberOfLogUnits: logNumberOfLogUnitsTextField.text
                     ) ?? 0.0
                 )
                 if let selectedUnit = selectedLogUnitType, selectedUnit == unit {
@@ -1185,7 +1185,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         }
     }
     
-    func numberOfRows(forSection: Int, identifier: any HoundDropDownType) -> Int {
+    func numberOfRows(section: Int, identifier: any HoundDropDownType) -> Int {
         guard let identifier = identifier as? LogsAddLogDropDownTypes else {
             HoundLogger.general.error("LogsAddLogVC.numberOfRows: Unable to identifier \(identifier.rawValue)")
             return 0
@@ -1348,9 +1348,9 @@ final class LogsAddLogVC: HoundScrollViewController,
         
         // Only retrieve matchingReminders if switch is on.
         let matchingReminders: [(UUID, Reminder)] = dogManager.matchingReminders(
-            forDogUUIDs: selectedDogUUIDs,
-            forLogActionType: selectedLogAction,
-            forLogCustomActionName: logCustomActionNameTextField.text
+            dogUUIDs: selectedDogUUIDs,
+            logActionType: selectedLogAction,
+            logCustomActionName: logCustomActionNameTextField.text
         )
         
         var triggerRemindersByDogUUID: [UUID: [Reminder]] = [:]
@@ -1360,26 +1360,26 @@ final class LogsAddLogVC: HoundScrollViewController,
             // Each time a task completes, update the dog manager so everything else updates
             self.delegate?.didUpdateDogManager(
                 sender: Sender(origin: self, localized: self),
-                forDogManager: self.dogManager
+                dogManager: self.dogManager
             )
         } completedAllTasksCompletionHandler: {
             // create all the triggers silently in the background
             for (dogUUID, reminders) in triggerRemindersByDogUUID {
-                guard let dog = self.dogManager.findDog(forDogUUID: dogUUID) else {
+                guard let dog = self.dogManager.findDog(dogUUID: dogUUID) else {
                     return
                 }
                 
                 // silently try to create trigger reminders
                 RemindersRequest.create(
-                    forErrorAlert: .automaticallyAlertForNone,
-                    forDogUUID: dogUUID,
-                    forReminders: reminders
+                    errorAlert: .automaticallyAlertForNone,
+                    dogUUID: dogUUID,
+                    reminders: reminders
                 ) { responseStatus, _ in
                     guard responseStatus != .failureResponse else {
                         return
                     }
-                    dog.dogReminders.addReminders(forReminders: reminders)
-                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), forDogManager: self.dogManager)
+                    dog.dogReminders.addReminders(reminders: reminders)
+                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
                 }
             }
             
@@ -1399,9 +1399,9 @@ final class LogsAddLogVC: HoundScrollViewController,
             matchingReminder.enableIsSkipping(skippedDate: selectedLogStartDate)
             
             RemindersRequest.update(
-                forErrorAlert: .automaticallyAlertOnlyForFailure,
-                forDogUUID: dogUUID,
-                forReminders: [matchingReminder]
+                errorAlert: .automaticallyAlertOnlyForFailure,
+                dogUUID: dogUUID,
+                reminders: [matchingReminder]
             ) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     completionTracker.failedTask()
@@ -1414,22 +1414,22 @@ final class LogsAddLogVC: HoundScrollViewController,
         for selectedDogUUID in selectedDogUUIDs {
             // Each dog needs its own newLog object with its own unique UUID
             let logToAdd = Log(
-                forLogActionTypeId: selectedLogAction.logActionTypeId,
-                forLogCustomActionName: logCustomActionNameTextField.text,
-                forLogStartDate: selectedLogStartDate,
-                forLogEndDate: selectedLogEndDate,
-                forLogNote: logNoteTextView.text,
-                forLogUnitTypeId: selectedLogUnitType?.logUnitTypeId,
-                forLogNumberOfUnits: LogUnitType.convertStringToDouble(
-                    forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text
+                logActionTypeId: selectedLogAction.logActionTypeId,
+                logCustomActionName: logCustomActionNameTextField.text,
+                logStartDate: selectedLogStartDate,
+                logEndDate: selectedLogEndDate,
+                logNote: logNoteTextView.text,
+                logUnitTypeId: selectedLogUnitType?.logUnitTypeId,
+                logNumberOfUnits: LogUnitType.convertStringToDouble(
+                    logNumberOfLogUnits: logNumberOfLogUnitsTextField.text
                 ),
-                forCreatedByReminderUUID: nil
+                logCreatedByReminderUUID: nil
             )
             
             LogsRequest.create(
-                forErrorAlert: .automaticallyAlertOnlyForFailure,
-                forDogUUID: selectedDogUUID,
-                forLog: logToAdd
+                errorAlert: .automaticallyAlertOnlyForFailure,
+                dogUUID: selectedDogUUID,
+                log: logToAdd
             ) { responseStatus, _ in
                 guard responseStatus != .failureResponse else {
                     completionTracker.failedTask()
@@ -1438,12 +1438,12 @@ final class LogsAddLogVC: HoundScrollViewController,
                 
                 // Request was successful, so add the new custom action name locally
                 LocalConfiguration.addLogCustomAction(
-                    forLogActionType: logToAdd.logActionType,
-                    forLogCustomActionName: logToAdd.logCustomActionName
+                    logActionType: logToAdd.logActionType,
+                    logCustomActionName: logToAdd.logCustomActionName
                 )
                 
-                let reminders = self.dogManager.findDog(forDogUUID: selectedDogUUID)?
-                    .dogLogs.addLog(forLog: logToAdd, invokeDogTriggers: true)
+                let reminders = self.dogManager.findDog(dogUUID: selectedDogUUID)?
+                    .dogLogs.addLog(log: logToAdd, invokeDogTriggers: true)
                 if let reminders = reminders, !reminders.isEmpty {
                     if triggerRemindersByDogUUID[selectedDogUUID] != nil {
                         triggerRemindersByDogUUID[selectedDogUUID]! += reminders // swiftlint:disable:this force_unwrapping
@@ -1465,17 +1465,17 @@ final class LogsAddLogVC: HoundScrollViewController,
         selectedLogStartDate: Date
     ) {
         logToUpdate.changeLogDate(
-            forLogStartDate: selectedLogStartDate,
-            forLogEndDate: selectedLogEndDate
+            logStartDate: selectedLogStartDate,
+            logEndDate: selectedLogEndDate
         )
         logToUpdate.logActionTypeId = selectedLogAction.logActionTypeId
         logToUpdate.logCustomActionName = selectedLogAction.allowsCustom
         ? (logCustomActionNameTextField.text ?? "")
         : ""
         logToUpdate.changeLogUnit(
-            forLogUnitTypeId: selectedLogUnitType?.logUnitTypeId,
-            forLogNumberOfLogUnits: LogUnitType.convertStringToDouble(
-                forLogNumberOfLogUnits: logNumberOfLogUnitsTextField.text
+            logUnitTypeId: selectedLogUnitType?.logUnitTypeId,
+            logNumberOfLogUnits: LogUnitType.convertStringToDouble(
+                logNumberOfLogUnits: logNumberOfLogUnitsTextField.text
             )
         )
         logToUpdate.logNote = logNoteTextView.text ?? ""
@@ -1483,9 +1483,9 @@ final class LogsAddLogVC: HoundScrollViewController,
         saveLogButton.isLoading = true
         
         LogsRequest.update(
-            forErrorAlert: .automaticallyAlertOnlyForFailure,
-            forDogUUID: dogUUIDToUpdate,
-            forLog: logToUpdate
+            errorAlert: .automaticallyAlertOnlyForFailure,
+            dogUUID: dogUUIDToUpdate,
+            log: logToUpdate
         ) { responseStatus, _ in
             self.saveLogButton.isLoading = false
             guard responseStatus != .failureResponse else {
@@ -1494,15 +1494,15 @@ final class LogsAddLogVC: HoundScrollViewController,
             
             // Request was successful, so store the custom action name locally
             LocalConfiguration.addLogCustomAction(
-                forLogActionType: logToUpdate.logActionType,
-                forLogCustomActionName: logToUpdate.logCustomActionName
+                logActionType: logToUpdate.logActionType,
+                logCustomActionName: logToUpdate.logCustomActionName
             )
             
-            self.dogManager.findDog(forDogUUID: dogUUIDToUpdate)?
-                .dogLogs.addLog(forLog: logToUpdate, invokeDogTriggers: false)
+            self.dogManager.findDog(dogUUID: dogUUIDToUpdate)?
+                .dogLogs.addLog(log: logToUpdate, invokeDogTriggers: false)
             self.delegate?.didUpdateDogManager(
                 sender: Sender(origin: self, localized: self),
-                forDogManager: self.dogManager
+                dogManager: self.dogManager
             )
             
             HapticsManager.notification(.success)
