@@ -40,6 +40,11 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     
     private(set) var dogLogs: [Log] = []
     
+    private var sortedDogLogsCreated: [Log]?
+    private var sortedDogLogsModified: [Log]?
+    private var sortedDogLogsStart: [Log]?
+    private var sortedDogLogsEnd: [Log]?
+    
     weak var parentDog: Dog?
     
     // MARK: - Main
@@ -83,19 +88,49 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         dogLogs.first(where: { $0.logUUID == forLogUUID })
     }
     
-    /// Helper function allows us to use the same logic for addLog and addLogs and allows us to only sort at the end. Without this function, addLogs would invoke addLog repeadly and sortLogs() with each call.
-    private func addLogWithoutSorting(forLog: Log) {
-        removeLog(forLogUUID: forLog.logUUID)
-        
-        dogLogs.append(forLog)
+    func sortedDogLogs(sortField: LogsSortField, sortDirection: LogsSortDirection) -> [Log] {
+        switch sortField {
+        case .createdDate:
+            if let existing = sortedDogLogsCreated {
+                sortedDogLogsCreated = LogsSort.sort(existing, sortField: .createdDate, sortDirection: sortDirection)
+            } else {
+                sortedDogLogsCreated = LogsSort.sort(dogLogs, sortField: .createdDate, sortDirection: sortDirection)
+            }
+            return sortedDogLogsCreated ?? []
+        case .modifiedDate:
+            if let existing = sortedDogLogsModified {
+                sortedDogLogsModified = LogsSort.sort(existing, sortField: .modifiedDate, sortDirection: sortDirection)
+            } else {
+                sortedDogLogsModified = LogsSort.sort(dogLogs, sortField: .modifiedDate, sortDirection: sortDirection)
+            }
+            return sortedDogLogsModified ?? []
+        case .logStartDate:
+            if let existing = sortedDogLogsStart {
+                sortedDogLogsStart = LogsSort.sort(existing, sortField: .logStartDate, sortDirection: sortDirection)
+            } else {
+                sortedDogLogsStart = LogsSort.sort(dogLogs, sortField: .logStartDate, sortDirection: sortDirection)
+            }
+            return sortedDogLogsStart ?? []
+        case .logEndDate:
+            if let existing = sortedDogLogsEnd {
+                sortedDogLogsEnd = LogsSort.sort(existing, sortField: .logEndDate, sortDirection: sortDirection)
+            } else {
+                sortedDogLogsEnd = LogsSort.sort(dogLogs, sortField: .logEndDate, sortDirection: sortDirection)
+            }
+            return sortedDogLogsEnd ?? []
+        }
     }
     
     /// Adds a log to the dogLogs array and sorts. If invokeDogTriggers is true, it will the dog to see if any triggers are activated (and if so, generate reminders from them and return those reminders)
     @discardableResult
     func addLog(forLog: Log, invokeDogTriggers: Bool) -> [Reminder] {
-        addLogWithoutSorting(forLog: forLog)
+        removeLog(forLogUUID: forLog.logUUID)
         
-        dogLogs.sort(by: { $0 <= $1 })
+        dogLogs.append(forLog)
+        sortedDogLogsCreated?.append(forLog)
+        sortedDogLogsModified?.append(forLog)
+        sortedDogLogsStart?.append(forLog)
+        sortedDogLogsEnd?.append(forLog)
         
         var generatedReminders: [Reminder] = []
         if invokeDogTriggers {
@@ -118,11 +153,13 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     /// Adds a log to the dogLogs array and sorts. If invokeDogTriggers is true, it will the dog to see if any triggers are activated (and if so, generate reminders from them and return those reminders)
     @discardableResult
     func addLogs(forLogs: [Log], invokeDogTriggers: Bool) -> [Reminder] {
-        for forLog in forLogs {
-            addLogWithoutSorting(forLog: forLog)
-        }
+        removeLogs(forLogUUIDs: forLogs.map { $0.logUUID })
         
-        dogLogs.sort(by: { $0 <= $1 })
+        dogLogs.append(contentsOf: forLogs)
+        sortedDogLogsCreated?.append(contentsOf: forLogs)
+        sortedDogLogsModified?.append(contentsOf: forLogs)
+        sortedDogLogsStart?.append(contentsOf: forLogs)
+        sortedDogLogsEnd?.append(contentsOf: forLogs)
         
         var generatedReminders: [Reminder] = []
         if invokeDogTriggers {
@@ -141,7 +178,6 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         return generatedReminders
     }
     
-    /// Returns true if it removed at least one log with the same logUUID
     @discardableResult func removeLog(forLogUUID: UUID) -> Bool {
         var didRemoveObject = false
         
@@ -154,17 +190,31 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
             return true
         }
         
+        sortedDogLogsCreated?.removeAll(where: { $0.logUUID == forLogUUID })
+        sortedDogLogsModified?.removeAll(where: { $0.logUUID == forLogUUID })
+        sortedDogLogsStart?.removeAll(where: { $0.logUUID == forLogUUID })
+        sortedDogLogsEnd?.removeAll(where: { $0.logUUID == forLogUUID })
+        
         return didRemoveObject
     }
     
-    /// Returns true if it removed at least a log at the specified index
-    @discardableResult func removeLog(forIndex: Int) -> Bool {
-        // Make sure the index is valid
-        guard forIndex >= 0 && forIndex < dogLogs.count  else {
-            return false
+    @discardableResult func removeLogs(forLogUUIDs: [UUID]) -> Bool {
+        var didRemoveObject = false
+        
+        dogLogs.removeAll { log in
+            guard forLogUUIDs.contains(log.logUUID) else {
+                return false
+            }
+            
+            didRemoveObject = true
+            return true
         }
         
-        dogLogs.remove(at: forIndex)
-        return true
+        sortedDogLogsCreated?.removeAll(where: { forLogUUIDs.contains($0.logUUID) })
+        sortedDogLogsModified?.removeAll(where: { forLogUUIDs.contains($0.logUUID) })
+        sortedDogLogsStart?.removeAll(where: { forLogUUIDs.contains($0.logUUID) })
+        sortedDogLogsEnd?.removeAll(where: { forLogUUIDs.contains($0.logUUID) })
+        
+        return didRemoveObject
     }
 }

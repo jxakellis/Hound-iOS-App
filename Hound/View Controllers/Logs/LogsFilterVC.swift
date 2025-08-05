@@ -8,16 +8,14 @@
 
 import UIKit
 
-// TOOD rename clear button to reset
-// TODO add an exit without save warning btn
-// TODO to filter is broken for time filter, it only checks end date but it should be adaptive
-// TODO make time filter be able to go off of start date, end date, modified date, or created date
+// TODO add a leave without save warning
 
 protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(forLogsFilter: LogsFilter)
 }
 
 enum LogsFilterDropDownTypes: String, HoundDropDownType {
+    case filterTimeRange = "DropDownFilterTimeRange"
     case filterDogs = "DropDownFilterDogs"
     case filterLogActions = "DropDownFilterLogActions"
     case filterFamilyMembers = "DropDownFilterFamilyMembers"
@@ -49,58 +47,83 @@ class LogsFilterVC: HoundScrollViewController,
         return view
     }()
     
-    private let timeRangeLabel: HoundLabel = {
+    private let timeRangeSectionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 340, compressionResistancePriority: 340)
         label.text = "Time Range"
         label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
-    private let timeRangeFromLabel: HoundLabel = {
+    private let timeRangeFieldHeaderLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
+        label.text = "Field"
+        label.font = Constant.Visual.Font.primaryRegularLabel
+        return label
+    }()
+    
+    private lazy var timeRangeFieldLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
+        label.font = Constant.Visual.Font.primaryRegularLabel
+        label.applyStyle(.thinGrayBorder)
+        label.shouldInsetText = true
+        
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(
+            dropDownManager.showHideDropDownGesture(
+                identifier: LogsFilterDropDownTypes.filterTimeRange,
+                delegate: self
+            )
+        )
+        dropDownManager.register(identifier: .filterTimeRange, label: label, autoscroll: .firstOpen)
+        
+        return label
+    }()
+    
+    private let timeRangeFromHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
         label.text = "From"
         label.font = Constant.Visual.Font.primaryRegularLabel
         return label
     }()
     
-    private lazy var startDatePicker: HoundDatePicker = {
+    private lazy var fromDatePicker: HoundDatePicker = {
         let picker = HoundDatePicker(huggingPriority: 330, compressionResistancePriority: 330)
         picker.datePickerMode = .dateAndTime
         picker.minuteInterval = Constant.Development.minuteInterval
         picker.preferredDatePickerStyle = .compact
-        picker.addTarget(self, action: #selector(didChangeStartDate(_:)), for: .valueChanged)
+        picker.addTarget(self, action: #selector(didChangeFromDate(_:)), for: .valueChanged)
         return picker
     }()
     
-    private lazy var startDateSwitch: HoundSwitch = {
+    private lazy var fromDateSwitch: HoundSwitch = {
         let uiSwitch = HoundSwitch(huggingPriority: 325, compressionResistancePriority: 325)
-        uiSwitch.addTarget(self, action: #selector(didToggleStartDate), for: .valueChanged)
+        uiSwitch.addTarget(self, action: #selector(didToggleFromDate), for: .valueChanged)
         return uiSwitch
     }()
     
-    private let timeRangeToLabel: HoundLabel = {
+    private let timeRangeToHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
         label.text = "to"
         label.font = Constant.Visual.Font.primaryRegularLabel
         return label
     }()
     
-    private lazy var endDatePicker: HoundDatePicker = {
+    private lazy var toDatePicker: HoundDatePicker = {
         let picker = HoundDatePicker(huggingPriority: 310, compressionResistancePriority: 310)
         picker.datePickerMode = .dateAndTime
         picker.minuteInterval = Constant.Development.minuteInterval
         picker.preferredDatePickerStyle = .compact
-        picker.addTarget(self, action: #selector(didChangeEndDate(_:)), for: .valueChanged)
+        picker.addTarget(self, action: #selector(didChangeToDate(_:)), for: .valueChanged)
         return picker
     }()
     
-    private lazy var endDateSwitch: HoundSwitch = {
+    private lazy var toDateSwitch: HoundSwitch = {
         let uiSwitch = HoundSwitch(huggingPriority: 305, compressionResistancePriority: 305)
-        uiSwitch.addTarget(self, action: #selector(didToggleEndDate), for: .valueChanged)
+        uiSwitch.addTarget(self, action: #selector(didToggleToDate), for: .valueChanged)
         return uiSwitch
     }()
     
-    private let searchLabel: HoundLabel = {
+    private let searchSectionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "Search Text"
         label.font = Constant.Visual.Font.secondaryHeaderLabel
@@ -119,7 +142,7 @@ class LogsFilterVC: HoundScrollViewController,
         return textField
     }()
     
-    private let dogsLabel: HoundLabel = {
+    private let dogsSectionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 290, compressionResistancePriority: 290)
         label.text = "Dogs"
         label.font = Constant.Visual.Font.secondaryHeaderLabel
@@ -145,14 +168,14 @@ class LogsFilterVC: HoundScrollViewController,
         return label
     }()
     
-    private let logActionsLabel: HoundLabel = {
+    private let logActionsSectionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 270, compressionResistancePriority: 270)
         label.text = "Actions"
         label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
     
-    private lazy var filterLogActionsLabel: HoundLabel = {
+    private lazy var filterLogActionsSectionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 260, compressionResistancePriority: 260)
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
@@ -171,7 +194,7 @@ class LogsFilterVC: HoundScrollViewController,
         return label
     }()
     
-    private let familyMembersLabel: HoundLabel = {
+    private let familyMembersSectionLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Family Members"
         label.font = Constant.Visual.Font.secondaryHeaderLabel
@@ -200,7 +223,7 @@ class LogsFilterVC: HoundScrollViewController,
     private lazy var clearButton: HoundButton = {
         let button = HoundButton(huggingPriority: 220, compressionResistancePriority: 220)
         
-        button.setTitle("Clear", for: .normal)
+        button.setTitle("Reset", for: .normal)
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = Constant.Visual.Font.wideButton
         
@@ -239,32 +262,32 @@ class LogsFilterVC: HoundScrollViewController,
         delegate: self
     )
     
-    @objc private func didChangeStartDate(_ sender: UIDatePicker) {
-        filter?.apply(forStartDate: sender.date)
-        if sender.date > endDatePicker.date {
-            endDatePicker.setDate(sender.date, animated: true)
-            filter?.apply(forEndDate: endDateSwitch.isOn ? sender.date : nil)
+    @objc private func didChangeFromDate(_ sender: UIDatePicker) {
+        filter?.apply(forTimeRangeFromDate: sender.date)
+        if sender.date > toDatePicker.date {
+            toDatePicker.setDate(sender.date, animated: true)
+            filter?.apply(forTimeRangeToDate: toDateSwitch.isOn ? sender.date : nil)
         }
-        startDateSwitch.setOn(true, animated: true)
+        fromDateSwitch.setOn(true, animated: true)
     }
     
-    @objc private func didChangeEndDate(_ sender: UIDatePicker) {
-        filter?.apply(forEndDate: sender.date)
-        if sender.date < startDatePicker.date {
-            startDatePicker.setDate(sender.date, animated: true)
-            filter?.apply(forStartDate: startDateSwitch.isOn ? sender.date : nil)
+    @objc private func didChangeToDate(_ sender: UIDatePicker) {
+        filter?.apply(forTimeRangeToDate: sender.date)
+        if sender.date < fromDatePicker.date {
+            fromDatePicker.setDate(sender.date, animated: true)
+            filter?.apply(forTimeRangeFromDate: fromDateSwitch.isOn ? sender.date : nil)
         }
-        endDateSwitch.setOn(true, animated: true)
+        toDateSwitch.setOn(true, animated: true)
     }
     
-    @objc private func didToggleStartDate(_ sender: HoundSwitch) {
-        filter?.apply(forStartDate: sender.isOn ? startDatePicker.date : nil)
-        startDatePicker.isEnabled = sender.isOn
+    @objc private func didToggleFromDate(_ sender: HoundSwitch) {
+        filter?.apply(forTimeRangeFromDate: sender.isOn ? fromDatePicker.date : nil)
+        fromDatePicker.isEnabled = sender.isOn
     }
     
-    @objc private func didToggleEndDate(_ sender: HoundSwitch) {
-        filter?.apply(forEndDate: sender.isOn ? endDatePicker.date : nil)
-        endDatePicker.isEnabled = sender.isOn
+    @objc private func didToggleToDate(_ sender: HoundSwitch) {
+        filter?.apply(forTimeRangeToDate: sender.isOn ? toDatePicker.date : nil)
+        toDatePicker.isEnabled = sender.isOn
     }
     
     @objc private func didChangeSearchText(_ sender: UITextField) {
@@ -293,7 +316,7 @@ class LogsFilterVC: HoundScrollViewController,
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.modalPresentationStyle = .fullScreen
+        self.modalPresentationStyle = .pageSheet
     }
     
     required init?(coder: NSCoder) {
@@ -356,7 +379,7 @@ class LogsFilterVC: HoundScrollViewController,
         }
         
         if let filter = filter, filter.filteredLogActionActionTypeIds.count >= 1 {
-            filterLogActionsLabel.text = {
+            filterLogActionsSectionLabel.text = {
                 if filter.filteredLogActionActionTypeIds.count == 1, let logActionTypeId = filter.filteredLogActionActionTypeIds.first {
                     // The user only has one log action selected to filter by
                     return LogActionType.find(forLogActionTypeId: logActionTypeId).convertToReadableName(customActionName: nil, includeMatchingEmoji: true)
@@ -372,7 +395,7 @@ class LogsFilterVC: HoundScrollViewController,
         }
         else {
             // The user has no log actions selected to filter by, so we interpret this as including all log actions in the filter
-            filterLogActionsLabel.text = nil
+            filterLogActionsSectionLabel.text = nil
         }
         
         if let filter = filter, filter.filteredFamilyMemberUserIds.count >= 1 {
@@ -397,16 +420,16 @@ class LogsFilterVC: HoundScrollViewController,
         
         if let filter = filter {
             let noDate = Date()
-            let startDate = filter.startDate ?? filter.endDate ?? noDate
-            let endDate = filter.endDate ?? filter.startDate ?? noDate
+            let fromDate = filter.timeRangeFromDate ?? filter.timeRangeToDate ?? noDate
+            let toDate = filter.timeRangeToDate ?? filter.timeRangeFromDate ?? noDate
             
-            startDatePicker.setDate(startDate, animated: false)
-            endDatePicker.setDate(endDate, animated: false)
+            fromDatePicker.setDate(fromDate, animated: false)
+            toDatePicker.setDate(toDate, animated: false)
             
-            startDateSwitch.setOn(filter.isStartDateEnabled, animated: false)
-            startDatePicker.isEnabled = filter.isStartDateEnabled
-            endDateSwitch.setOn(filter.isEndDateEnabled, animated: false)
-            endDatePicker.isEnabled = filter.isEndDateEnabled
+            fromDateSwitch.setOn(filter.isFromDateEnabled, animated: false)
+            fromDatePicker.isEnabled = filter.isFromDateEnabled
+            toDateSwitch.setOn(filter.isToDateEnabled, animated: false)
+            toDatePicker.isEnabled = filter.isToDateEnabled
         }
         
         self.view.setNeedsLayout()
@@ -431,6 +454,7 @@ class LogsFilterVC: HoundScrollViewController,
         
         let rows: CGFloat = {
             switch type {
+            case .filterTimeRange: return CGFloat(filter?.availableTimeRangeFields.count ?? 0)
             case .filterDogs: return CGFloat(filter?.availableDogs.count ?? 0)
             case .filterLogActions: return CGFloat(filter?.availableLogActions.count ?? 0)
             case .filterFamilyMembers: return CGFloat(filter?.availableFamilyMembers.count ?? 0)
@@ -450,6 +474,10 @@ class LogsFilterVC: HoundScrollViewController,
         guard let filter = filter else { return }
         guard let type = identifier as? LogsFilterDropDownTypes else { return }
         switch type {
+        case .filterTimeRange:
+            let timeRangeField = filter.availableTimeRangeFields[indexPath.row]
+            cell.setCustomSelected(filter.timeRangeField == timeRangeField, animated: false)
+            cell.label.text = timeRangeField.readableValue
         case .filterDogs:
             let dog = filter.availableDogs[indexPath.row]
             cell.setCustomSelected(filter.filteredDogsUUIDs.contains(dog.dogUUID), animated: false)
@@ -471,6 +499,8 @@ class LogsFilterVC: HoundScrollViewController,
         }
         guard let type = identifier as? LogsFilterDropDownTypes else { return 0 }
         switch type {
+        case .filterTimeRange:
+            return filter.availableTimeRangeFields.count
         case .filterDogs:
             return filter.availableDogs.count
         case .filterLogActions:
@@ -483,7 +513,7 @@ class LogsFilterVC: HoundScrollViewController,
     func numberOfSections(identifier: any HoundDropDownType) -> Int {
         guard let type = identifier as? LogsFilterDropDownTypes else { return 0 }
         switch type {
-        case .filterDogs, .filterLogActions, .filterFamilyMembers:
+        case .filterTimeRange, .filterDogs, .filterLogActions, .filterFamilyMembers:
             return 1
         }
     }
@@ -495,6 +525,17 @@ class LogsFilterVC: HoundScrollViewController,
         guard let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
         
         switch type {
+        case .filterTimeRange:
+            let type = filter.availableTimeRangeFields[indexPath.row]
+            
+            // prevent deselectiong of time range field. we shuld always have one selected
+            guard type != filter.timeRangeField else {
+                return
+            }
+            
+            cell.setCustomSelected(true)
+            filter.apply(forTimeRangeField: type)
+            dropDown.hideDropDown(animated: true)
         case .filterDogs:
             let dogSelected = filter.availableDogs[indexPath.row]
             let beforeSelectNumberOfDogsSelected = filter.availableDogs.count
@@ -542,6 +583,11 @@ class LogsFilterVC: HoundScrollViewController,
             guard let filter = filter else { return nil }
             guard let type = identifier as? LogsFilterDropDownTypes else { return nil }
             switch type {
+            case .filterTimeRange:
+                if let idx = filter.availableTimeRangeFields
+                    .firstIndex(where: { $0 == filter.timeRangeField }) {
+                    return IndexPath(row: idx, section: 0)
+                }
             case .filterDogs:
                 if let idx = filter.filteredDogsUUIDs
                     .compactMap({ uuid in filter.availableDogs.firstIndex(where: { $0.dogUUID == uuid }) })
@@ -576,25 +622,30 @@ class LogsFilterVC: HoundScrollViewController,
         super.addSubViews()
         containerView.addSubview(pageHeader)
         
-        containerView.addSubview(timeRangeLabel)
-        containerView.addSubview(startDatePicker)
-        containerView.addSubview(startDateSwitch)
-        containerView.addSubview(timeRangeFromLabel)
-        containerView.addSubview(timeRangeToLabel)
-        containerView.addSubview(endDatePicker)
-        containerView.addSubview(endDateSwitch)
+        containerView.addSubview(timeRangeSectionLabel)
         
-        containerView.addSubview(searchLabel)
+        containerView.addSubview(timeRangeFieldHeaderLabel)
+        containerView.addSubview(timeRangeFieldLabel)
+        
+        containerView.addSubview(timeRangeFromHeaderLabel)
+        containerView.addSubview(fromDatePicker)
+        containerView.addSubview(fromDateSwitch)
+        
+        containerView.addSubview(timeRangeToHeaderLabel)
+        containerView.addSubview(toDatePicker)
+        containerView.addSubview(toDateSwitch)
+        
+        containerView.addSubview(searchSectionLabel)
         containerView.addSubview(searchTextField)
         
         containerView.addSubview(filterDogsLabel)
-        containerView.addSubview(dogsLabel)
+        containerView.addSubview(dogsSectionLabel)
         
-        containerView.addSubview(filterLogActionsLabel)
-        containerView.addSubview(logActionsLabel)
+        containerView.addSubview(filterLogActionsSectionLabel)
+        containerView.addSubview(logActionsSectionLabel)
         
         containerView.addSubview(filterFamilyMembersLabel)
-        containerView.addSubview(familyMembersLabel)
+        containerView.addSubview(familyMembersSectionLabel)
         
         containerView.addSubview(clearButton)
         containerView.addSubview(applyButton)
@@ -615,129 +666,145 @@ class LogsFilterVC: HoundScrollViewController,
             pageHeader.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
-        // timeRangeLabel
+        // timeRangeSectionLabel
         NSLayoutConstraint.activate([
-            timeRangeLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
-            timeRangeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
-            timeRangeLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+            timeRangeSectionLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            timeRangeSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            timeRangeSectionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            timeRangeSectionLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            timeRangeSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
-        // timeRangeFromLabel
+        // timeRangeFieldHeaderLabel
         NSLayoutConstraint.activate([
-            timeRangeFromLabel.topAnchor.constraint(equalTo: timeRangeLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            timeRangeFromLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeFromLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
+            timeRangeFieldHeaderLabel.topAnchor.constraint(equalTo: timeRangeSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            timeRangeFieldHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            timeRangeFieldHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
-        // startDatePicker
+        // timeRangeFieldLabel
         NSLayoutConstraint.activate([
-            startDatePicker.topAnchor.constraint(equalTo: timeRangeFromLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            startDatePicker.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            startDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: startDateSwitch.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
-            startDatePicker.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
-            startDatePicker.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight),
-            startDatePicker.createAspectRatio(2.75 * 2)
+            timeRangeFieldLabel.topAnchor.constraint(equalTo: timeRangeFieldHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            timeRangeFieldLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            timeRangeFieldLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            timeRangeFieldLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
+            timeRangeFieldLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
         ])
         
-        // startDateSwitch
+        // timeRangeFromHeaderLabel
         NSLayoutConstraint.activate([
-            startDateSwitch.centerYAnchor.constraint(equalTo: startDatePicker.centerYAnchor),
-            startDateSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
+            timeRangeFromHeaderLabel.topAnchor.constraint(equalTo: timeRangeFieldLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            timeRangeFromHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            timeRangeFromHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
-        // timeRangeToLabel
+        // fromDatePicker
         NSLayoutConstraint.activate([
-            timeRangeToLabel.topAnchor.constraint(equalTo: startDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            timeRangeToLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeToLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
+            fromDatePicker.topAnchor.constraint(equalTo: timeRangeFromHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            fromDatePicker.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            fromDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: fromDateSwitch.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
+            fromDatePicker.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
+            fromDatePicker.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight),
+            fromDatePicker.createAspectRatio(2.75 * 2)
         ])
         
-        // endDatePicker
+        // fromDateSwitch
         NSLayoutConstraint.activate([
-            endDatePicker.topAnchor.constraint(equalTo: timeRangeToLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            endDatePicker.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            endDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: endDateSwitch.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
-            endDatePicker.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
-            endDatePicker.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight),
-            endDatePicker.createAspectRatio(2.75 * 2)
+            fromDateSwitch.centerYAnchor.constraint(equalTo: fromDatePicker.centerYAnchor),
+            fromDateSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
         
-        // endDateSwitch
+        // timeRangeToHeaderLabel
         NSLayoutConstraint.activate([
-            endDateSwitch.centerYAnchor.constraint(equalTo: endDatePicker.centerYAnchor),
-            endDateSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
+            timeRangeToHeaderLabel.topAnchor.constraint(equalTo: fromDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            timeRangeToHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            timeRangeToHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])
         
-        // searchLabel
+        // toDatePicker
         NSLayoutConstraint.activate([
-            searchLabel.topAnchor.constraint(equalTo: endDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
-            searchLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            searchLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            searchLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),
-            searchLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight)
+            toDatePicker.topAnchor.constraint(equalTo: timeRangeToHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            toDatePicker.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            toDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: toDateSwitch.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
+            toDatePicker.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
+            toDatePicker.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight),
+            toDatePicker.createAspectRatio(2.75 * 2)
+        ])
+        
+        // toDateSwitch
+        NSLayoutConstraint.activate([
+            toDateSwitch.centerYAnchor.constraint(equalTo: toDatePicker.centerYAnchor),
+            toDateSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
+        ])
+        
+        // searchSectionLabel
+        NSLayoutConstraint.activate([
+            searchSectionLabel.topAnchor.constraint(equalTo: toDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            searchSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            searchSectionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            searchSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),
+            searchSectionLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight)
         ])
         
         // searchTextField
         NSLayoutConstraint.activate([
-            searchTextField.topAnchor.constraint(equalTo: searchLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            searchTextField.topAnchor.constraint(equalTo: searchSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
             searchTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             searchTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             searchTextField.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
             searchTextField.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
         ])
         
-        // dogsLabel
+        // dogsSectionLabel
         NSLayoutConstraint.activate([
-            dogsLabel.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
-            dogsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            dogsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            dogsLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
-            dogsLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+            dogsSectionLabel.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            dogsSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            dogsSectionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            dogsSectionLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            dogsSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
         // filterDogsLabel
         NSLayoutConstraint.activate([
-            filterDogsLabel.topAnchor.constraint(equalTo: dogsLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            filterDogsLabel.topAnchor.constraint(equalTo: dogsSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
             filterDogsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             filterDogsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             filterDogsLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight),
             filterDogsLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: view)
         ])
         
-        // logActionsLabel
+        // logActionsSectionLabel
         NSLayoutConstraint.activate([
-            logActionsLabel.topAnchor.constraint(equalTo: filterDogsLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
-            logActionsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            logActionsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            logActionsLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
-            logActionsLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+            logActionsSectionLabel.topAnchor.constraint(equalTo: filterDogsLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            logActionsSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            logActionsSectionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            logActionsSectionLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            logActionsSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
-        // filterLogActionsLabel
+        // filterLogActionsSectionLabel
         NSLayoutConstraint.activate([
-            filterLogActionsLabel.topAnchor.constraint(equalTo: logActionsLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            filterLogActionsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            filterLogActionsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            filterLogActionsLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight),
-            filterLogActionsLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: view)
+            filterLogActionsSectionLabel.topAnchor.constraint(equalTo: logActionsSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            filterLogActionsSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            filterLogActionsSectionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            filterLogActionsSectionLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight),
+            filterLogActionsSectionLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: view)
             
         ])
         
-        // familyMembersLabel
+        // familyMembersSectionLabel
         NSLayoutConstraint.activate([
-            familyMembersLabel.topAnchor.constraint(equalTo: filterLogActionsLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
-            familyMembersLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            familyMembersLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            familyMembersLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
-            familyMembersLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
+            familyMembersSectionLabel.topAnchor.constraint(equalTo: filterLogActionsSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            familyMembersSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            familyMembersSectionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            familyMembersSectionLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
+            familyMembersSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
             
         ])
         
         // filterFamilyMembersLabel
         NSLayoutConstraint.activate([
-            filterFamilyMembersLabel.topAnchor.constraint(equalTo: familyMembersLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            filterFamilyMembersLabel.topAnchor.constraint(equalTo: familyMembersSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
             filterFamilyMembersLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             filterFamilyMembersLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             filterFamilyMembersLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight),

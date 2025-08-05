@@ -8,8 +8,6 @@
 
 import UIKit
 
-// TODO reminderCreated, reminderCreatedBy, reminderLastModified, reminderLastModifiedBy
-
 enum ReminderType: String, CaseIterable {
     
     init?(rawValue: String) {
@@ -46,9 +44,13 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
     func copy(with zone: NSZone? = nil) -> Any {
         let copy = Reminder()
-        
+        // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
         copy.reminderId = self.reminderId
         copy.reminderUUID = self.reminderUUID
+        copy.reminderCreated = self.reminderCreated
+        copy.reminderCreatedBy = self.reminderCreatedBy
+        copy.reminderLastModified = self.reminderLastModified
+        copy.reminderLastModifiedBy = self.reminderLastModifiedBy
         copy.reminderActionTypeId = self.reminderActionTypeId
         copy.reminderCustomActionName = self.reminderCustomActionName
         copy.reminderType = self.reminderType
@@ -73,6 +75,10 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     required convenience init?(coder aDecoder: NSCoder) {
         let decodedReminderId: Int? = aDecoder.decodeOptionalInteger(forKey: Constant.Key.reminderId.rawValue)
         let decodedReminderUUID: UUID? = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.reminderUUID.rawValue))
+        let decodedReminderCreated: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.reminderCreated.rawValue)?.formatISO8601IntoDate())
+        let decodedReminderCreatedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.reminderCreatedBy.rawValue) ?? Constant.Class.Log.defaultUserId
+        let decodedReminderLastModified: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.reminderLastModified.rawValue)?.formatISO8601IntoDate())
+        let decodedReminderLastModifiedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.reminderLastModifiedBy.rawValue)
         let decodedReminderActionTypeId: Int? = aDecoder.decodeOptionalInteger(forKey: Constant.Key.reminderActionTypeId.rawValue)
         let decodedReminderCustomActionName: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.reminderCustomActionName.rawValue)
         let decodedReminderType: ReminderType? = ReminderType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.reminderType.rawValue) ?? Constant.Class.Reminder.defaultReminderType.rawValue)
@@ -92,6 +98,10 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             reminderId: decodedReminderId,
             reminderUUID: decodedReminderUUID,
+            reminderCreated: decodedReminderCreated,
+            reminderCreatedBy: decodedReminderCreatedBy,
+            reminderLastModified: decodedReminderLastModified,
+            reminderLastModifiedBy: decodedReminderLastModifiedBy,
             reminderActionTypeId: decodedReminderActionTypeId,
             reminderCustomActionName: decodedReminderCustomActionName,
             reminderType: decodedReminderType,
@@ -116,6 +126,16 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             aCoder.encode(reminderId, forKey: Constant.Key.reminderId.rawValue)
         }
         aCoder.encode(reminderUUID.uuidString, forKey: Constant.Key.reminderUUID.rawValue)
+        aCoder.encode(reminderCreated.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.reminderCreated.rawValue)
+        if let reminderCreatedBy = reminderCreatedBy {
+            aCoder.encode(reminderCreatedBy, forKey: Constant.Key.reminderCreatedBy.rawValue)
+        }
+        if let reminderLastModified = reminderLastModified {
+            aCoder.encode(reminderLastModified.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.reminderLastModified.rawValue)
+        }
+        if let reminderLastModifiedBy = reminderLastModifiedBy {
+            aCoder.encode(reminderLastModifiedBy, forKey: Constant.Key.reminderLastModifiedBy.rawValue)
+        }
         aCoder.encode(reminderActionTypeId, forKey: Constant.Key.reminderActionTypeId.rawValue)
         aCoder.encode(reminderCustomActionName, forKey: Constant.Key.reminderCustomActionName.rawValue)
         aCoder.encode(reminderType.rawValue, forKey: Constant.Key.reminderType.rawValue)
@@ -239,9 +259,14 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
     /// The reminderId given to this log from the Hound database
     var reminderId: Int?
-    
+
     /// The UUID of this reminder that is generated locally upon creation. Useful in identifying the reminder before/in the process of creating it
     var reminderUUID: UUID = UUID()
+
+    private(set) var reminderCreated: Date = Date()
+    private(set) var reminderCreatedBy: String? = Constant.Class.Log.defaultUserId
+    private(set) var reminderLastModified: Date?
+    private(set) var reminderLastModifiedBy: String?
     
     /// This is a user selected label for the reminder. It dictates the name that is displayed in the UI for this reminder.
     var reminderActionTypeId: Int = Constant.Class.Reminder.defaultReminderActionTypeId
@@ -312,6 +337,10 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     init(
         reminderId: Int? = nil,
         reminderUUID: UUID? = nil,
+        reminderCreated: Date? = nil,
+        reminderCreatedBy: String? = nil,
+        reminderLastModified: Date? = nil,
+        reminderLastModifiedBy: String? = nil,
         reminderActionTypeId: Int? = nil,
         reminderCustomActionName: String? = nil,
         reminderType: ReminderType? = nil,
@@ -328,9 +357,13 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         offlineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
-        
+
         self.reminderId = reminderId ?? self.reminderId
         self.reminderUUID = reminderUUID ?? self.reminderUUID
+        self.reminderCreated = reminderCreated ?? self.reminderCreated
+        self.reminderCreatedBy = reminderCreatedBy ?? self.reminderCreatedBy
+        self.reminderLastModified = reminderLastModified ?? self.reminderLastModified
+        self.reminderLastModifiedBy = reminderLastModifiedBy ?? self.reminderLastModifiedBy
         self.reminderActionTypeId = reminderActionTypeId ?? self.reminderActionTypeId
         self.reminderCustomActionName = reminderCustomActionName ?? self.reminderCustomActionName
         self.reminderType = reminderType ?? self.reminderType
@@ -339,7 +372,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.reminderIsEnabled = reminderIsEnabled ?? self.reminderIsEnabled
         self.reminderRecipientUserIds = reminderRecipientUserIds ?? self.reminderRecipientUserIds
         self.reminderTimeZone = reminderTimeZone ?? self.reminderTimeZone
-        
+
         self.countdownComponents = countdownComponents ?? self.countdownComponents
         self.weeklyComponents = weeklyComponents ?? self.weeklyComponents
         self.monthlyComponents = monthlyComponents ?? self.monthlyComponents
@@ -353,10 +386,10 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         // Don't pull reminderId or reminderIsDeleted from reminderToOverride. A valid fromBody needs to provide this itself
         let reminderId: Int? = fromBody[Constant.Key.reminderId.rawValue] as? Int
         let reminderUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.reminderUUID.rawValue] as? String)
-        let reminderLastModified: Date? = (fromBody[Constant.Key.reminderLastModified.rawValue] as? String)?.formatISO8601IntoDate()
+        let reminderCreated: Date? = (fromBody[Constant.Key.reminderCreated.rawValue] as? String)?.formatISO8601IntoDate()
         let reminderIsDeleted: Bool? = fromBody[Constant.Key.reminderIsDeleted.rawValue] as? Bool
-        
-        guard let reminderId = reminderId, let reminderUUID = reminderUUID, let reminderLastModified = reminderLastModified, let reminderIsDeleted = reminderIsDeleted else {
+
+        guard let reminderId = reminderId, let reminderUUID = reminderUUID, let reminderCreated = reminderCreated, let reminderIsDeleted = reminderIsDeleted else {
             return nil
         }
         
@@ -364,11 +397,17 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
             return nil
         }
         
+        let reminderLastModified: Date? = (fromBody[Constant.Key.reminderLastModified.rawValue] as? String)?.formatISO8601IntoDate()
+        
         // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer update takes precedence over our update
-        if let reminderToOverride = reminderToOverride, let initialAttemptedSyncDate = reminderToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= reminderLastModified {
+        if let reminderToOverride = reminderToOverride, let initialAttemptedSyncDate = reminderToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= reminderLastModified ?? reminderCreated {
             self.init(
                 reminderId: reminderToOverride.reminderId,
                 reminderUUID: reminderToOverride.reminderUUID,
+                reminderCreated: reminderToOverride.reminderCreated,
+                reminderCreatedBy: reminderToOverride.reminderCreatedBy,
+                reminderLastModified: reminderToOverride.reminderLastModified,
+                reminderLastModifiedBy: reminderToOverride.reminderLastModifiedBy,
                 reminderActionTypeId: reminderToOverride.reminderActionTypeId,
                 reminderCustomActionName: reminderToOverride.reminderCustomActionName,
                 reminderType: reminderToOverride.reminderType,
@@ -390,6 +429,9 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         // if the reminder is the same, then we pull values from reminderToOverride
         // if the reminder is updated, then we pull values from fromBody
         // reminder
+        let reminderCreatedBy: String? = fromBody[Constant.Key.reminderCreatedBy.rawValue] as? String ?? reminderToOverride?.reminderCreatedBy
+        let reminderLastModifiedBy: String? = fromBody[Constant.Key.reminderLastModifiedBy.rawValue] as? String ?? reminderToOverride?.reminderLastModifiedBy
+        
         let reminderActionTypeId: Int? = fromBody[Constant.Key.reminderActionTypeId.rawValue] as? Int ?? reminderToOverride?.reminderActionTypeId
         let reminderCustomActionName: String? = fromBody[Constant.Key.reminderCustomActionName.rawValue] as? String
         let reminderType: ReminderType? = {
@@ -430,6 +472,10 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             reminderId: reminderId,
             reminderUUID: reminderUUID,
+            reminderCreated: reminderCreated,
+            reminderCreatedBy: reminderCreatedBy,
+            reminderLastModified: reminderLastModified,
+            reminderLastModifiedBy: reminderLastModifiedBy,
             reminderActionTypeId: reminderActionTypeId,
             reminderCustomActionName: reminderCustomActionName,
             reminderType: reminderType,
@@ -571,6 +617,18 @@ extension Reminder {
         else if reminderUUID != other.reminderUUID {
             return false
         }
+        else if reminderCreated != other.reminderCreated {
+            return false
+        }
+        else if reminderCreatedBy != other.reminderCreatedBy {
+            return false
+        }
+        else if reminderLastModified != other.reminderLastModified {
+            return false
+        }
+        else if reminderLastModifiedBy != other.reminderLastModifiedBy {
+            return false
+        }
         else if reminderActionTypeId != other.reminderActionTypeId {
             return false
         }
@@ -631,6 +689,10 @@ extension Reminder {
         body[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
         body[Constant.Key.reminderId.rawValue] = .int(reminderId)
         body[Constant.Key.reminderUUID.rawValue] = .string(reminderUUID.uuidString)
+        body[Constant.Key.reminderCreated.rawValue] = .string(reminderCreated.ISO8601FormatWithFractionalSeconds())
+        body[Constant.Key.reminderCreatedBy.rawValue] = .string(reminderCreatedBy)
+        body[Constant.Key.reminderLastModified.rawValue] = .string(reminderLastModified?.ISO8601FormatWithFractionalSeconds())
+        body[Constant.Key.reminderLastModifiedBy.rawValue] = .string(reminderLastModifiedBy)
         body[Constant.Key.reminderActionTypeId.rawValue] = .int(reminderActionTypeId)
         body[Constant.Key.reminderCustomActionName.rawValue] = .string(reminderCustomActionName)
         body[Constant.Key.reminderType.rawValue] = .string(reminderType.rawValue)

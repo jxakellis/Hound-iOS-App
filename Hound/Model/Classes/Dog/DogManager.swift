@@ -140,7 +140,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
     }
     
     /// Returns an array of tuples [[(dogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest.
-    func logsForDogUUIDsGroupedByDate(forFilter: LogsFilter) -> [[(UUID, Log)]] {
+    func logsForDogUUIDsGroupedByDate(forFilter: LogsFilter, forSort: LogsSort) -> [[(UUID, Log)]] {
         var dogUUIDLogPairs: [(UUID, Log)] = []
         
         for dog in dogs {
@@ -150,7 +150,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
             }
             
             var numberOfLogsAdded = 0
-            for log in dog.dogLogs.dogLogs {
+            for log in dog.dogLogs.sortedDogLogs(sortField: forSort.sortField, sortDirection: forSort.sortDirection) {
                 // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
                 guard numberOfLogsAdded <= LogsTableVC.logsDisplayedLimit else {
                     break
@@ -160,17 +160,43 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                     // We are filtering by log actions and this is not one of them, therefore, this log action is not available
                     continue
                 }
-                if forFilter.filteredFamilyMemberUserIds.count >= 1 && forFilter.filteredFamilyMemberUserIds.contains(log.userId) == false {
+                if forFilter.filteredFamilyMemberUserIds.count >= 1 && forFilter.filteredFamilyMemberUserIds.contains(log.logCreatedBy) == false {
                     // We are filtering by family members and this is not one of them, therefore, this family member is no available
                     continue
                 }
-                if forFilter.isStartDateEnabled,
-                   let startDate = forFilter.startDate,
-                   log.logStartDate < startDate {
-                    continue
+                if forFilter.isFromDateEnabled, let timeRangeFromDate = forFilter.timeRangeFromDate {
+                    let date: Date
+                    switch forFilter.timeRangeField {
+                    case .createdDate:
+                        date = log.logCreated
+                    case .modifiedDate:
+                        date = log.logLastModified ?? log.logCreated
+                    case .logStartDate:
+                        date = log.logStartDate
+                    case .logEndDate:
+                        date = log.logEndDate ?? log.logStartDate
+                    }
+                    
+                    guard date >= timeRangeFromDate else {
+                        continue
+                    }
                 }
-                if forFilter.isEndDateEnabled, let endDate = forFilter.endDate, let logEndDate = log.logEndDate, logEndDate > endDate {
-                    continue
+                if forFilter.isToDateEnabled, let timeRangeToDate = forFilter.timeRangeToDate {
+                    let date: Date
+                    switch forFilter.timeRangeField {
+                    case .createdDate:
+                        date = log.logCreated
+                    case .modifiedDate:
+                        date = log.logLastModified ?? log.logCreated
+                    case .logStartDate:
+                        date = log.logStartDate
+                    case .logEndDate:
+                        date = log.logEndDate ?? log.logStartDate
+                    }
+                    
+                    guard date <= timeRangeToDate else {
+                        continue
+                    }
                 }
                 if forFilter.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false &&
                     log.matchesSearchText(forFilter.searchText) == false {
@@ -183,7 +209,10 @@ final class DogManager: NSObject, NSCoding, NSCopying {
             }
         }
         
-        dogUUIDLogPairs.sort(by: { $0.1 <= $1.1 })
+        dogUUIDLogPairs.sort { lhs, rhs in
+            let comparisonResult = lhs.1.compare(to: rhs.1, sortField: forSort.sortField)
+            return forSort.sortDirection == .ascending ? (comparisonResult == .orderedAscending) : (comparisonResult == .orderedDescending)
+        }
         
         // Splice the chronologically sorted array so that it doesn't exceed maximumNumberOfLogs elements. This will be the maximumNumberOfLogs most recent logs as the array is sorted chronologically
         dogUUIDLogPairs = dogUUIDLogPairs.count > LogsTableVC.logsDisplayedLimit
@@ -193,24 +222,14 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         // dogUUIDLogPairs grouped separated into different array element depending on their day, month, and year
         var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = []
         
-        // we will be going from oldest logs to newest logs (by logStartDate)
         for (dogUUID, log) in dogUUIDLogPairs {
-            let logDay = Calendar.user.component(.day, from: log.logStartDate)
-            let logMonth = Calendar.user.component(.month, from: log.logStartDate)
-            let logYear = Calendar.user.component(.year, from: log.logStartDate)
-            
             let containsDateCombination = {
-                // dogUUIDLogPairs is sorted chronologically, which means everything is added in chronological order to logsForDogUUIDsGroupedByDate.
+                // dogUUIDLogPairs is sorted chronologically
                 guard let lastDateGroup = logsForDogUUIDsGroupedByDate.last, let (_, logFromLastDateGroup) = lastDateGroup.last else {
                     return false
                 }
                 
-                let lastDay = Calendar.user.component(.day, from: logFromLastDateGroup.logStartDate)
-                let lastMonth = Calendar.user.component(.month, from: logFromLastDateGroup.logStartDate)
-                let lastYear = Calendar.user.component(.year, from: logFromLastDateGroup.logStartDate)
-                
-                // check to see if that day, month, year comboination is already present
-                return lastDay == logDay && lastMonth == logMonth && lastYear == logYear
+                return Calendar.user.isDate(log.logStartDate, inSameDayAs: logFromLastDateGroup.logStartDate)
             }()
             
             if containsDateCombination {

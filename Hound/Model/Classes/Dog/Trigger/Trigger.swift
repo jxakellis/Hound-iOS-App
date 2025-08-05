@@ -8,7 +8,6 @@
 
 import UIKit
 
-// TODO triggerCreated, triggerCreatedBy, triggerLastModified, triggerLastModifiedBy
 // TODO track trigger activations and display last activation in trigger tvc
 
 enum TriggerType: String, CaseIterable {
@@ -42,6 +41,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         // IMPORTANT: The setter method for properties may modify values. We want to clone exactly what is stored, so access stored properties directly.
         copy.triggerId = self.triggerId
         copy.triggerUUID = self.triggerUUID
+        copy.triggerCreated = self.triggerCreated
+        copy.triggerCreatedBy = self.triggerCreatedBy
+        copy.triggerLastModified = self.triggerLastModified
+        copy.triggerLastModifiedBy = self.triggerLastModifiedBy
         for logActionReaction in triggerLogReactions {
             if let logActionReactionCopy = logActionReaction.copy() as? TriggerLogReaction {
                 copy.triggerLogReactions.append(logActionReactionCopy)
@@ -65,6 +68,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     required convenience init?(coder aDecoder: NSCoder) {
         let triggerId = aDecoder.decodeOptionalInteger(forKey: Constant.Key.triggerId.rawValue)
         let triggerUUID = UUID.fromString(forUUIDString: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerUUID.rawValue))
+        let triggerCreated: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.triggerCreated.rawValue)?.formatISO8601IntoDate())
+        let triggerCreatedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.triggerCreatedBy.rawValue) ?? Constant.Class.Log.defaultUserId
+        let triggerLastModified: Date? = (aDecoder.decodeOptionalString(forKey: Constant.Key.triggerLastModified.rawValue)?.formatISO8601IntoDate())
+        let triggerLastModifiedBy: String? = aDecoder.decodeOptionalString(forKey: Constant.Key.triggerLastModifiedBy.rawValue)
         let triggerLogReactions: [TriggerLogReaction]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerLogReactions.rawValue)
         let triggerReminderResult: TriggerReminderResult? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerReminderResult.rawValue)
         let triggerType = TriggerType(rawValue: aDecoder.decodeOptionalString(forKey: Constant.Key.triggerType.rawValue) ?? Constant.Class.Trigger.defaultTriggerType.rawValue)
@@ -79,6 +86,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             triggerId: triggerId,
             triggerUUID: triggerUUID,
+            triggerCreated: triggerCreated,
+            triggerCreatedBy: triggerCreatedBy,
+            triggerLastModified: triggerLastModified,
+            triggerLastModifiedBy: triggerLastModifiedBy,
             triggerLogReactions: triggerLogReactions,
             triggerReminderResult: triggerReminderResult,
             triggerType: triggerType,
@@ -95,6 +106,16 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         
         aCoder.encode(triggerId, forKey: Constant.Key.triggerId.rawValue)
         aCoder.encode(triggerUUID.uuidString, forKey: Constant.Key.triggerUUID.rawValue)
+        aCoder.encode(triggerCreated.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.triggerCreated.rawValue)
+        if let triggerCreatedBy = triggerCreatedBy {
+            aCoder.encode(triggerCreatedBy, forKey: Constant.Key.triggerCreatedBy.rawValue)
+        }
+        if let triggerLastModified = triggerLastModified {
+            aCoder.encode(triggerLastModified.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.triggerLastModified.rawValue)
+        }
+        if let triggerLastModifiedBy = triggerLastModifiedBy {
+            aCoder.encode(triggerLastModifiedBy, forKey: Constant.Key.triggerLastModifiedBy.rawValue)
+        }
         aCoder.encode(triggerLogReactions, forKey: Constant.Key.triggerLogReactions.rawValue)
         aCoder.encode(triggerReminderResult, forKey: Constant.Key.triggerReminderResult.rawValue)
         aCoder.encode(triggerType.rawValue, forKey: Constant.Key.triggerType.rawValue)
@@ -185,7 +206,12 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
     /// The UUID of this dynamic log that is generated locally upon creation. Useful in identifying the dynamic log before/in the process of creating it
     var triggerUUID: UUID = UUID()
-    
+
+    private(set) var triggerCreated: Date = Date()
+    private(set) var triggerCreatedBy: String? = Constant.Class.Log.defaultUserId
+    private(set) var triggerLastModified: Date?
+    private(set) var triggerLastModifiedBy: String?
+
     private(set) var triggerLogReactions: [TriggerLogReaction] = [] {
         didSet {
             triggerLogReactions.sort { lhs, rhs in
@@ -231,6 +257,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     init(
         triggerId: Int? = nil,
         triggerUUID: UUID? = nil,
+        triggerCreated: Date? = nil,
+        triggerCreatedBy: String? = nil,
+        triggerLastModified: Date? = nil,
+        triggerLastModifiedBy: String? = nil,
         triggerLogReactions: [TriggerLogReaction]? = nil,
         triggerReminderResult: TriggerReminderResult? = nil,
         triggerType: TriggerType? = nil,
@@ -243,6 +273,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         super.init()
         self.triggerId = triggerId ?? self.triggerId
         self.triggerUUID = triggerUUID ?? self.triggerUUID
+        self.triggerCreated = triggerCreated ?? self.triggerCreated
+        self.triggerCreatedBy = triggerCreatedBy ?? self.triggerCreatedBy
+        self.triggerLastModified = triggerLastModified ?? self.triggerLastModified
+        self.triggerLastModifiedBy = triggerLastModifiedBy ?? self.triggerLastModifiedBy
         self.triggerLogReactions = triggerLogReactions ?? self.triggerLogReactions
         self.triggerReminderResult = triggerReminderResult ?? self.triggerReminderResult
         self.triggerType = triggerType ?? self.triggerType
@@ -258,24 +292,28 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         // Don't pull triggerId or triggerIsDeleted from triggerToOverride. A valid fromBody needs to provide this itself
         let triggerId = fromBody[Constant.Key.triggerId.rawValue] as? Int
         let triggerUUID = UUID.fromString(forUUIDString: fromBody[Constant.Key.triggerUUID.rawValue] as? String)
+        let triggerCreated = (fromBody[Constant.Key.triggerCreated.rawValue] as? String)?.formatISO8601IntoDate()
+        let triggerIsDeleted = fromBody[Constant.Key.triggerIsDeleted.rawValue] as? Bool
+
+        guard let triggerId = triggerId, let triggerUUID = triggerUUID, let triggerCreated = triggerCreated, let triggerIsDeleted = triggerIsDeleted else {
+            return nil
+        }
+
+        guard triggerIsDeleted == false else {
+            return nil
+        }
+        
         let triggerLastModified = (fromBody[Constant.Key.triggerLastModified.rawValue] as? String)?.formatISO8601IntoDate()
-        let reminderIsDeleted = fromBody[Constant.Key.triggerIsDeleted.rawValue] as? Bool
-        
-        // The body needs an id, uuid, and isDeleted to be intrepreted as same, updated, or deleted. Otherwise, it is invalid
-        guard let triggerId = triggerId, let triggerUUID = triggerUUID, let triggerLastModified = triggerLastModified, let reminderIsDeleted = reminderIsDeleted else {
-            return nil
-        }
-        
-        guard reminderIsDeleted == false else {
-            // The reminder trigger has been deleted. Doesn't matter if our offline mode made any changes
-            return nil
-        }
         
         // If we have pulled an update from the server which is more outdated than our local change, then ignore the data from the server. Otherwise, the newer server update takes precedence over our offline update
-        if let triggerToOverride = triggerToOverride, let initialAttemptedSyncDate = triggerToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= triggerLastModified {
+        if let triggerToOverride = triggerToOverride, let initialAttemptedSyncDate = triggerToOverride.offlineModeComponents.initialAttemptedSyncDate, initialAttemptedSyncDate >= triggerLastModified ?? triggerCreated {
             self.init(
                 triggerId: triggerToOverride.triggerId,
                 triggerUUID: triggerToOverride.triggerUUID,
+                triggerCreated: triggerToOverride.triggerCreated,
+                triggerCreatedBy: triggerToOverride.triggerCreatedBy,
+                triggerLastModified: triggerToOverride.triggerLastModified,
+                triggerLastModifiedBy: triggerToOverride.triggerLastModifiedBy,
                 triggerLogReactions: triggerToOverride.triggerLogReactions,
                 triggerReminderResult: triggerToOverride.triggerReminderResult,
                 triggerType: triggerToOverride.triggerType,
@@ -290,6 +328,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         
         // if the reminder trigger is the same, then we pull values from triggerToOverride
         // if the reminder trigger is updated, then we pull values from fromBody
+        let triggerCreatedBy = fromBody[Constant.Key.triggerCreatedBy.rawValue] as? String ?? triggerToOverride?.triggerCreatedBy
+        let triggerLastModifiedBy = fromBody[Constant.Key.triggerLastModifiedBy.rawValue] as? String ?? triggerToOverride?.triggerLastModifiedBy
         
         let reactionsBody = fromBody[Constant.Key.triggerLogReactions.rawValue] as? [JSONResponseBody]
         let triggerLogReactions = reactionsBody?.compactMap { body -> TriggerLogReaction? in
@@ -322,6 +362,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         self.init(
             triggerId: triggerId,
             triggerUUID: triggerUUID,
+            triggerCreated: triggerCreated,
+            triggerCreatedBy: triggerCreatedBy,
+            triggerLastModified: triggerLastModified,
+            triggerLastModifiedBy: triggerLastModifiedBy,
             triggerLogReactions: triggerLogReactions,
             triggerReminderResult: triggerReminderResult,
             triggerType: triggerType,
@@ -404,6 +448,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         body[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
         body[Constant.Key.triggerId.rawValue] = .int(triggerId)
         body[Constant.Key.triggerUUID.rawValue] = .string(triggerUUID.uuidString)
+        body[Constant.Key.triggerCreated.rawValue] = .string(triggerCreated.ISO8601FormatWithFractionalSeconds())
+        body[Constant.Key.triggerCreatedBy.rawValue] = .string(triggerCreatedBy)
+        body[Constant.Key.triggerLastModified.rawValue] = .string(triggerLastModified?.ISO8601FormatWithFractionalSeconds())
+        body[Constant.Key.triggerLastModifiedBy.rawValue] = .string(triggerLastModifiedBy)
         body[Constant.Key.triggerLogReactions.rawValue] = .array(triggerLogReactions.map { .object($0.createBody()) })
         body[Constant.Key.triggerReminderResult.rawValue] = .object(triggerReminderResult.createBody())
         body[Constant.Key.triggerType.rawValue] = .string(triggerType.rawValue)
@@ -424,6 +472,10 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     func isSame(as other: Trigger) -> Bool {
         if triggerId != other.triggerId { return false }
         if triggerUUID != other.triggerUUID { return false }
+        if triggerCreated != other.triggerCreated { return false }
+        if triggerCreatedBy != other.triggerCreatedBy { return false }
+        if triggerLastModified != other.triggerLastModified { return false }
+        if triggerLastModifiedBy != other.triggerLastModifiedBy { return false }
         if triggerLogReactions.count != other.triggerLogReactions.count { return false }
         for (a, b) in zip(triggerLogReactions, other.triggerLogReactions) where !a.isSame(as: b) {
             return false

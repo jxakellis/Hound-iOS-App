@@ -42,6 +42,24 @@ final class LogsTableVC: HoundTableViewController {
         }
     }
     
+    private var storedLogsSort: LogsSort = LogsSort()
+    var logsSort: LogsSort {
+        get {
+            storedLogsSort
+        }
+        set {
+            self.storedLogsSort = newValue
+            
+            // Only reload data if view is visible; otherwise mark for later update
+            guard self.viewIfLoaded?.window != nil else {
+                tableViewDataSourceHasBeenUpdated = true
+                return
+            }
+            
+            reloadTable()
+        }
+    }
+    
     private var storedLogsFilter: LogsFilter = LogsFilter(forDogManager: DogManager())
     var logsFilter: LogsFilter {
         get {
@@ -171,7 +189,7 @@ final class LogsTableVC: HoundTableViewController {
     /// Compute logsForDogUUIDsGroupedByDate and reload table view
     private func reloadTable() {
         // Avoid recomputation if no logs
-        logsForDogUUIDsGroupedByDate = dogManager.logsForDogUUIDsGroupedByDate(forFilter: logsFilter)
+        logsForDogUUIDsGroupedByDate = dogManager.logsForDogUUIDsGroupedByDate(forFilter: logsFilter, forSort: logsSort)
         tableView.isUserInteractionEnabled = !logsForDogUUIDsGroupedByDate.isEmpty
         guard allowReloadTable else { return }
         tableView.reloadData()

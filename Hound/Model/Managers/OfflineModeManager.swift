@@ -133,11 +133,11 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 return true
             }
             
-            for log in dog.dogLogs.dogLogs where log.offlineModeComponents.needsSyncedWithHoundServer == true {
+            for trigger in dog.dogTriggers.dogTriggers where trigger.offlineModeComponents.needsSyncedWithHoundServer == true {
                 return true
             }
             
-            for trigger in dog.dogTriggers.dogTriggers where trigger.offlineModeComponents.needsSyncedWithHoundServer == true {
+            for log in dog.dogLogs.dogLogs where log.offlineModeComponents.needsSyncedWithHoundServer == true {
                 return true
             }
         }

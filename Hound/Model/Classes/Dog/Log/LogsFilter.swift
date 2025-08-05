@@ -18,8 +18,9 @@ class LogsFilter: NSObject, NSCopying {
         copy.filteredDogsUUIDs = self.filteredDogsUUIDs
         copy.filteredLogActionActionTypeIds = self.filteredLogActionActionTypeIds
         copy.filteredFamilyMemberUserIds = self.filteredFamilyMemberUserIds
-        copy.startDate = self.startDate
-        copy.endDate = self.endDate
+        copy.timeRangeField = self.timeRangeField
+        copy.timeRangeFromDate = self.timeRangeFromDate
+        copy.timeRangeToDate = self.timeRangeToDate
         return copy
     }
     
@@ -36,16 +37,15 @@ class LogsFilter: NSObject, NSCopying {
     
     private(set) var filteredFamilyMemberUserIds: Set<String> = []
     
-    /// Caches the selected start date. Only applied when isStartDateEnabled is true
-    private(set) var startDate: Date?
-    /// Caches the selected end date. Only applied when isEndDateEnabled is true
-    private(set) var endDate: Date?
+    private(set) var timeRangeField: LogsSortField = LogsSortField.logStartDate
+    private(set) var timeRangeFromDate: Date?
+    private(set) var timeRangeToDate: Date?
     
-    var isStartDateEnabled: Bool {
-        return startDate != nil
+    var isFromDateEnabled: Bool {
+        return timeRangeFromDate != nil
     }
-    var isEndDateEnabled: Bool {
-        return endDate != nil
+    var isToDateEnabled: Bool {
+        return timeRangeToDate != nil
     }
     
     var hasActiveFilter: Bool {
@@ -57,8 +57,8 @@ class LogsFilter: NSObject, NSCopying {
         + filteredDogsUUIDs.count
         + filteredLogActionActionTypeIds.count
         + filteredFamilyMemberUserIds.count
-        + (isStartDateEnabled ? 1 : 0)
-        + (isEndDateEnabled ? 1 : 0)
+        + (isFromDateEnabled ? 1 : 0)
+        + (isToDateEnabled ? 1 : 0)
         
         return num == 0 ? nil : num
     }
@@ -71,6 +71,10 @@ class LogsFilter: NSObject, NSCopying {
     }
     
     // MARK: - Computed Properties
+    
+    var availableTimeRangeFields: [LogsSortField] {
+        return LogsSortField.allCases
+    }
     
     var availableDogs: [Dog] {
         return dogManager.dogs
@@ -91,8 +95,9 @@ class LogsFilter: NSObject, NSCopying {
         apply(forFilterLogActions: [])
         apply(forFilterFamilyMembers: [])
         apply(forSearchText: "")
-        apply(forStartDate: nil)
-        apply(forEndDate: nil)
+        apply(forTimeRangeField: LogsSortField.logStartDate)
+        apply(forTimeRangeFromDate: nil)
+        apply(forTimeRangeToDate: nil)
     }
     
     func apply(forDogManager: DogManager) {
@@ -137,14 +142,15 @@ class LogsFilter: NSObject, NSCopying {
         searchText = forSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
-    // startDate
-    func apply(forStartDate: Date?) {
-        startDate = forStartDate
+    // timeRangeField, timeRangeFromDate, timeRangeToDate
+    func apply(forTimeRangeField: LogsSortField) {
+        timeRangeField = forTimeRangeField
     }
-    
-    // endDate
-    func apply(forEndDate: Date?) {
-        endDate = forEndDate
+    func apply(forTimeRangeFromDate: Date?) {
+        timeRangeFromDate = forTimeRangeFromDate
+    }
+    func apply(forTimeRangeToDate: Date?) {
+        timeRangeToDate = forTimeRangeToDate
     }
     
 }

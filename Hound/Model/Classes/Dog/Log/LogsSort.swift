@@ -9,11 +9,11 @@
 import Foundation
 
 enum LogsSortField: CaseIterable {
-    case createdDate
-    case modifiedDate
     case logStartDate
     case logEndDate
-
+    case createdDate
+    case modifiedDate
+    
     var readableValue: String {
         switch self {
         case .createdDate:
@@ -29,8 +29,8 @@ enum LogsSortField: CaseIterable {
 }
 
 enum LogsSortDirection: CaseIterable {
-    case ascending
     case descending
+    case ascending
 
     var readableValue: String {
         switch self {
@@ -53,8 +53,21 @@ final class LogsSort: NSObject, NSCopying {
         return copy
     }
     
+    // MARK: - Properties
+    
     var sortField: LogsSortField = .logStartDate
-    var sortDirection: LogsSortDirection = .ascending
+    
+    var sortDirection: LogsSortDirection = .descending
+    
+    // MARK: - Computed Properties
+    
+    var availableFields: [LogsSortField] {
+        return LogsSortField.allCases
+    }
+    
+    var availableDirections: [LogsSortDirection] {
+        return LogsSortDirection.allCases
+    }
     
     // MARK: - Main
     
@@ -65,27 +78,19 @@ final class LogsSort: NSObject, NSCopying {
     
     // MARK: - Function
     
-    func sort(logs: [Log]) -> [Log] {
-        let filteredLogs: [Log]
-        if sortField == .logEndDate {
-            filteredLogs = logs.filter { $0.logEndDate != nil }
-        } else {
-            filteredLogs = logs
-        }
-        
-        let sortedLogs: [Log] = filteredLogs.sorted { (lhs: Log, rhs: Log) in
-            let comparisonResult: ComparisonResult
-            switch sortField {
-            case .createdDate:
-                comparisonResult = lhs.createdDate.compare(rhs.createdDate)
-            case .modifiedDate:
-                comparisonResult = lhs.modifiedDate.compare(rhs.modifiedDate)
-            case .logStartDate:
-                comparisonResult = lhs.logStartDate.compare(rhs.logStartDate)
-            case .logEndDate:
-                // Safe to force unwrap because of filter above
-                comparisonResult = lhs.logEndDate!.compare(rhs.logEndDate!)
-            }
+    func reset() {
+        self.sortField = .logStartDate
+        self.sortDirection = .descending
+    }
+    
+    func sort(_ logs: [Log]) -> [Log] {
+        return LogsSort.sort(logs, sortField: self.sortField, sortDirection: self.sortDirection)
+    }
+    
+    /// Sorts an array of logs based on the current sort field and direction.
+    static func sort(_ logs: [Log], sortField: LogsSortField, sortDirection: LogsSortDirection) -> [Log] {
+        let sortedLogs: [Log] = logs.sorted { (lhs: Log, rhs: Log) in
+            let comparisonResult = lhs.compare(to: rhs, sortField: sortField)
             return sortDirection == .ascending ? (comparisonResult == .orderedAscending) : (comparisonResult == .orderedDescending)
         }
         

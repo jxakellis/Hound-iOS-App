@@ -202,6 +202,7 @@
 		A2DC23A8264D822F00EB287A /* DogsAddReminderMonthlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DC23A7264D822F00EB287A /* DogsAddReminderMonthlyView.swift */; };
 		A2DF1ABD28865E4A00FE9E3A /* AlertRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DF1ABC28865E4A00FE9E3A /* AlertRequest.swift */; };
 		A2E5259F2E4185C900C3D45C /* LogsSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E5259E2E4185C200C3D45C /* LogsSort.swift */; };
+		A2E525A12E41923500C3D45C /* LogsSortVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E525A02E41923200C3D45C /* LogsSortVC.swift */; };
 		A2E66C9B25534A880068CCA6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E66C9A25534A880068CCA6 /* AppDelegate.swift */; };
 		A2E66C9D25534A880068CCA6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E66C9C25534A880068CCA6 /* SceneDelegate.swift */; };
 		A2E66CA125534A880068CCA6 /* DogsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E66CA025534A880068CCA6 /* DogsVC.swift */; };
@@ -460,6 +461,7 @@
 		A2DC23A7264D822F00EB287A /* DogsAddReminderMonthlyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsAddReminderMonthlyView.swift; sourceTree = "<group>"; };
 		A2DF1ABC28865E4A00FE9E3A /* AlertRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertRequest.swift; sourceTree = "<group>"; };
 		A2E5259E2E4185C200C3D45C /* LogsSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsSort.swift; sourceTree = "<group>"; };
+		A2E525A02E41923200C3D45C /* LogsSortVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsSortVC.swift; sourceTree = "<group>"; };
 		A2E66C9725534A880068CCA6 /* Hound.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hound.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2E66C9A25534A880068CCA6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A2E66C9C25534A880068CCA6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -1010,6 +1012,7 @@
 				A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */,
 				A2173DAD2B095CE90000C08A /* LogTVC.swift */,
 				A2A284822B0C4D1000ACC5C0 /* LogsFilterVC.swift */,
+				A2E525A02E41923200C3D45C /* LogsSortVC.swift */,
 			);
 			path = Logs;
 			sourceTree = "<group>";
@@ -1513,6 +1516,7 @@
 				A2588BA32930876300B0ACB2 /* SettingsNotifsCategoriesFamilyTVC.swift in Sources */,
 				A250FEB92B734F93005409FD /* PreviousLogCustomActionName.swift in Sources */,
 				A2D7A2592B67214E00EB7D10 /* SettingsSubscriptionCancelReasonVC.swift in Sources */,
+				A2E525A12E41923500C3D45C /* LogsSortVC.swift in Sources */,
 				A26AF36E25807887005D5DAB /* DateExtension.swift in Sources */,
 				A249619327E3A75E006CFDCC /* DogsAddDogReminderTVC.swift in Sources */,
 				A233519927FC946C00CDF1BF /* FamilyMember.swift in Sources */,

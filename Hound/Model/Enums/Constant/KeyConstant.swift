@@ -216,7 +216,10 @@ public enum KeyConstant: String {
     case triggerFixedTimeMinute
     case triggerManualCondition
     case triggerAlarmCreatedCondition
+    case triggerCreated
+    case triggerCreatedBy
     case triggerLastModified
+    case triggerLastModifiedBy
     case triggerIsDeleted
     
     // MARK: Snooze Components

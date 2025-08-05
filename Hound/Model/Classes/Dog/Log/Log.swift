@@ -108,6 +108,24 @@ final class Log: NSObject, NSCoding, NSCopying {
         aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
     }
     
+    // MARK: - Compare
+    
+    func compare(to other: Log, sortField: LogsSortField) -> ComparisonResult {
+            let result: ComparisonResult
+            switch sortField {
+            case .createdDate:
+                result = self.logCreated.compare(other.logCreated)
+            case .modifiedDate:
+                result = (self.logLastModified ?? self.logCreated).compare(other.logLastModified ?? other.logCreated)
+            case .logStartDate:
+                result = self.logStartDate.compare(other.logStartDate)
+            case .logEndDate:
+                result = (self.logEndDate ?? self.logStartDate).compare(other.logEndDate ?? other.logStartDate)
+            }
+        
+            return result
+        }
+    
     // MARK: - Properties
     
     /// The logId given to this log from the Hound database
@@ -224,7 +242,6 @@ final class Log: NSObject, NSCoding, NSCopying {
         let logId: Int? = fromBody[Constant.Key.logId.rawValue] as? Int
         let logUUID: UUID? = UUID.fromString(forUUIDString: fromBody[Constant.Key.logUUID.rawValue] as? String)
         let logCreated: Date? = (fromBody[Constant.Key.logCreated.rawValue] as? String)?.formatISO8601IntoDate()
-        
         let logIsDeleted: Bool? = fromBody[Constant.Key.logIsDeleted.rawValue] as? Bool
         
         guard let logId = logId, let logUUID = logUUID, let logCreated = logCreated, let logIsDeleted = logIsDeleted else {
@@ -368,6 +385,10 @@ final class Log: NSObject, NSCoding, NSCopying {
         body[Constant.Key.dogUUID.rawValue] = .string(forDogUUID.uuidString)
         body[Constant.Key.logId.rawValue] = .int(logId)
         body[Constant.Key.logUUID.rawValue] = .string(logUUID.uuidString)
+        body[Constant.Key.logCreated.rawValue] = .string(logCreated.ISO8601FormatWithFractionalSeconds())
+        body[Constant.Key.logCreatedBy.rawValue] = .string(logCreatedBy)
+        body[Constant.Key.logLastModified.rawValue] = .string(logLastModified?.ISO8601FormatWithFractionalSeconds())
+        body[Constant.Key.logLastModifiedBy.rawValue] = .string(logLastModifiedBy)
         body[Constant.Key.logActionTypeId.rawValue] = .int(logActionTypeId)
         body[Constant.Key.logCustomActionName.rawValue] = .string(logCustomActionName)
         body[Constant.Key.logStartDate.rawValue] = .string(logStartDate.ISO8601FormatWithFractionalSeconds())

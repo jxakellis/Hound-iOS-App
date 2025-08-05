@@ -13,6 +13,8 @@ enum AppVersion: String, CaseIterable, Comparable {
     case v4_0_0 = "4.0.0"
     
     case v4_0_1 = "4.0.1"
+    
+    case v4_1_0 = "4.1.0"
 
     // MARK: - Init
     /// Creates an AppVersion from a raw value. If the raw value does not match a known
@@ -48,7 +50,7 @@ enum AppVersion: String, CaseIterable, Comparable {
     
     /// Oldest compatible version of the app. Any version older than this should
     /// have its data considered incompatible.
-    static var oldestCompatible: AppVersion { .v4_0_1 }
+    static var oldestCompatible: AppVersion { .v4_1_0 }
 
     static func isCompatible(previous: AppVersion?) -> Bool {
         guard let prev = previous else {
@@ -121,6 +123,15 @@ enum AppVersion: String, CaseIterable, Comparable {
                 title: "New App Icon",
                 description: "Spot Hound faster with our crisp new look."
             )
+            return builder.buildAttributedString()
+        case .v4_1_0:
+            var builder = ReleaseNotesBuilder()
+            
+            // TODO WRITE NOTES
+            // new log sorting
+            // log favoriting
+            // sign in w google
+            
             return builder.buildAttributedString()
         }
     }
