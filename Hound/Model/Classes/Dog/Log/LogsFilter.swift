@@ -95,7 +95,7 @@ class LogsFilter: NSObject, NSCopying {
         apply(filterLogActions: [])
         apply(filterFamilyMembers: [])
         apply(searchText: "")
-        apply(timeRangeField: LogsSortField.logStartDate)
+        apply(timeRangeField: LogsSortField.defaultSortField)
         apply(timeRangeFromDate: nil)
         apply(timeRangeToDate: nil)
     }

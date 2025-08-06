@@ -41,7 +41,7 @@ class LogsFilterVC: HoundScrollViewController,
     
     // MARK: - Elements
     
-    private let pageHeader: HoundPageSheetHeaderView = {
+    private let pageHeaderView: HoundPageSheetHeaderView = {
         let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
         view.pageHeaderLabel.text = "Filter"
         return view
@@ -623,7 +623,7 @@ class LogsFilterVC: HoundScrollViewController,
     
     override func addSubViews() {
         super.addSubViews()
-        containerView.addSubview(pageHeader)
+        containerView.addSubview(pageHeaderView)
         
         containerView.addSubview(timeRangeSectionLabel)
         
@@ -662,16 +662,16 @@ class LogsFilterVC: HoundScrollViewController,
     override func setupConstraints() {
         super.setupConstraints()
         
-        // pageHeader
+        // pageHeaderView
         NSLayoutConstraint.activate([
-            pageHeader.topAnchor.constraint(equalTo: containerView.topAnchor),
-            pageHeader.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            pageHeader.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+            pageHeaderView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            pageHeaderView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            pageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
         // timeRangeSectionLabel
         NSLayoutConstraint.activate([
-            timeRangeSectionLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            timeRangeSectionLabel.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             timeRangeSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             timeRangeSectionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             timeRangeSectionLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),

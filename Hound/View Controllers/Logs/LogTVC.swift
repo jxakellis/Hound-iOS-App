@@ -10,7 +10,7 @@ import UIKit
 
 // TODO LOG SORTING this needs different time display modes.
 // if its log start/end date, this its fine and stay regular
-// if its last modified or created date, we should add an extra bubble at the bottom with the values so the sort makes sense
+// if its last modified or created date, we should add an extra bubble at the bottom with the values so the sort makes sense. this would be a similar format to unit / note. this would probably say something to the effect of "Modified: 2:30PM" or "Created: 2:30PM".
 
 // TODO LOG FAVORITING we need to make logUnit / logNote displays more modular at the bottom. they should ideally go side by side, but if one is too long, then it should be able to go to its own line. Further, if unit/note takes more than 1 line, they should be able to expand up to 3 lines vertically. i think the way to do this is a collection view.
 
@@ -129,6 +129,7 @@ final class LogTVC: HoundTableViewCell {
         
         if let logEndDate = log.logEndDate {
             let endString: String
+            // dont use inSameDayAs, b/c take alarm at 11:59PM to 12:01AM, then we would show 11:59PM - Aug 5 (assuming 11:59PM on Aug 4)
             if log.logStartDate.distance(to: logEndDate) < 60 * 60 * 24 {
                 // Same day: no need for date information
                 endString = logEndDate.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)

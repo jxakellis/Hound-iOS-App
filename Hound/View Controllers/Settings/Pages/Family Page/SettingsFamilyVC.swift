@@ -12,7 +12,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     
     // MARK: - Elements
     
-    private let pageHeader: HoundPageSheetHeaderView = {
+    private let pageHeaderView: HoundPageSheetHeaderView = {
         let view = HoundPageSheetHeaderView(huggingPriority: 380, compressionResistancePriority: 380)
         view.pageHeaderLabel.text = "Family"
         return view
@@ -321,7 +321,7 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
         containerView.addSubview(familyCodeDescriptionLabel)
         containerView.addSubview(leaveFamilyButton)
         containerView.addSubview(leaveFamilyDescriptionLabel)
-        containerView.addSubview(pageHeader)
+        containerView.addSubview(pageHeaderView)
         containerView.addSubview(shareFamilyButton)
         containerView.addSubview(membersHeaderLabel)
         
@@ -332,16 +332,16 @@ final class SettingsFamilyVC: HoundScrollViewController, UITableViewDelegate, UI
     override func setupConstraints() {
         super.setupConstraints()
         
-        // pageHeader
+        // pageHeaderView
         NSLayoutConstraint.activate([
-            pageHeader.topAnchor.constraint(equalTo: containerView.topAnchor),
-            pageHeader.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            pageHeader.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+            pageHeaderView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            pageHeaderView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            pageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
         // familyCodeHeaderLabel
         NSLayoutConstraint.activate([
-            familyCodeHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            familyCodeHeaderLabel.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             familyCodeHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             familyCodeHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             familyCodeHeaderLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),

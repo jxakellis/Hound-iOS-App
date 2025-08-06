@@ -304,7 +304,7 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         
         // starsStackView
         NSLayoutConstraint.activate([
-            starsStackView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            starsStackView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             starsStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset * 2.0),
             starsStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])

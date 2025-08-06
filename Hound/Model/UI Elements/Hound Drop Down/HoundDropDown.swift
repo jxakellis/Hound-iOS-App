@@ -83,7 +83,6 @@ final class HoundDropDown<T: HoundDropDownType>: HoundView, UITableViewDelegate,
 //        guard direction == .up, let identifier = identifier else { return indexPath }
 //        let totalRows = dropDownDataSource?.numberOfRows(section: indexPath.section, identifier: identifier) ?? 0
 //        let newRow = max(totalRows - 1 - indexPath.row, 0)
-//        print("Translating indexPath \(indexPath) to new row \(newRow) in section \(indexPath.section)")
 //        return IndexPath(row: newRow, section: indexPath.section)
 //    }
     

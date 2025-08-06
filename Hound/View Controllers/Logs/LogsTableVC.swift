@@ -221,7 +221,13 @@ final class LogsTableVC: HoundTableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = HoundTableHeaderFooterView()
         
-        let date = logsForDogUUIDsGroupedByDate[section].first?.1.logStartDate ?? Date()
+        // all of these logs are of the same day (for whatever day were grouping by)
+        let logForSection = logsForDogUUIDsGroupedByDate[section].first?.1
+        guard let log = logForSection else {
+            return headerView
+        }
+        // depending upon what field were sorting by, this dictates the header
+        let date = self.logsSort.sortField.date(log)
         let currentYear = Calendar.user.component(.year, from: Date())
         let dateYear = Calendar.user.component(.year, from: date)
         

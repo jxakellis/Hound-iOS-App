@@ -32,7 +32,7 @@ class LogsSortVC: HoundScrollViewController,
     
     // MARK: - Elements
     
-    private let pageHeader: HoundPageSheetHeaderView = {
+    private let pageHeaderView: HoundPageSheetHeaderView = {
         let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
         view.pageHeaderLabel.text = "Sort"
         return view
@@ -327,7 +327,7 @@ class LogsSortVC: HoundScrollViewController,
     
     override func addSubViews() {
         super.addSubViews()
-        containerView.addSubview(pageHeader)
+        containerView.addSubview(pageHeaderView)
         
         containerView.addSubview(sortFieldStack)
         
@@ -345,14 +345,14 @@ class LogsSortVC: HoundScrollViewController,
     override func setupConstraints() {
         super.setupConstraints()
         
-        pageHeader.snp.makeConstraints { make in
+        pageHeaderView.snp.makeConstraints { make in
             make.top.equalTo(containerView.snp.top)
             make.leading.equalTo(containerView.snp.leading)
             make.trailing.equalTo(containerView.snp.trailing)
         }
         
         sortFieldStack.snp.makeConstraints { make in
-            make.top.equalTo(pageHeader.snp.bottom).offset(Constant.Constraint.Spacing.contentSectionVert)
+            make.top.equalTo(pageHeaderView.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
             make.horizontalEdges.equalTo(containerView).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
         sortFieldLabel.snp.makeConstraints { make in

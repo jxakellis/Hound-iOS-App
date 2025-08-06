@@ -6,21 +6,21 @@
 //  Copyright © 2025 Jonathan Xakellis. All rights reserved.
 //
 
+import SnapKit
 import UIKit
 
 final class HoundPageSheetHeaderView: HoundView {
     
     // MARK: - Elements
     
-    private var pageHeaderLeadingConstraint: GeneralLayoutConstraint!
-    private var pageHeaderCenterXConstraint: GeneralLayoutConstraint!
-    let pageHeaderLabel: HoundLabel = {
+    lazy var pageHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 500, compressionResistancePriority: 500)
         label.text = "Default Page Header"
         label.font = Constant.Visual.Font.primaryHeaderLabel
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = false
+        label.textAlignment = useLeftTextAlignment ? .left : .center
         return label
     }()
     
@@ -36,16 +36,15 @@ final class HoundPageSheetHeaderView: HoundView {
         return button
     }()
     
-    private var pageHeaderBottomConstraint: GeneralLayoutConstraint!
-    private var pageDescriptionTopConstraint: GeneralLayoutConstraint!
-    private var pageDescriptionBottomConstraint: GeneralLayoutConstraint!
-    let pageDescriptionLabel: HoundLabel = {
+    lazy var pageDescriptionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 480, compressionResistancePriority: 480)
         label.text = "Default Page Description"
         label.font = Constant.Visual.Font.tertiaryHeaderLabel
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = false
+        label.textAlignment = useLeftTextAlignment ? .left : .center
+        label.isHidden = !isDescriptionEnabled
         return label
     }()
     
@@ -53,45 +52,20 @@ final class HoundPageSheetHeaderView: HoundView {
     
     var useLeftTextAlignment: Bool = true {
         didSet {
-            handleUseLeftTextAlignment()
+            pageHeaderLabel.textAlignment = useLeftTextAlignment ? .left : .center
+            pageDescriptionLabel.textAlignment = useLeftTextAlignment ? .left : .center
+            remakeHeaderAndDescriptionConstraints()
         }
     }
     
     var isDescriptionEnabled: Bool = false {
         didSet {
-            handleIsDescriptionEnabled()
+            pageDescriptionLabel.isHidden = !isDescriptionEnabled
+            remakeHeaderAndDescriptionConstraints()
         }
     }
     
     // MARK: - Functions
-    
-    private func handleUseLeftTextAlignment() {
-        pageHeaderLabel.textAlignment = useLeftTextAlignment ? .left : .center
-        pageDescriptionLabel.textAlignment = .center
-        if useLeftTextAlignment {
-            pageHeaderCenterXConstraint.isActive = false
-            pageHeaderLeadingConstraint.isActive = true
-        }
-        else {
-            pageHeaderLeadingConstraint.isActive = false
-            pageHeaderCenterXConstraint.isActive = true
-        }
-    }
-    
-    private func handleIsDescriptionEnabled() {
-        if isDescriptionEnabled {
-            pageDescriptionLabel.isHidden = false
-            pageHeaderBottomConstraint.isActive = false
-            pageDescriptionTopConstraint.isActive = true
-            pageDescriptionBottomConstraint.isActive = true
-        }
-        else {
-            pageDescriptionTopConstraint.isActive = false
-            pageDescriptionBottomConstraint.isActive = false
-            pageDescriptionLabel.isHidden = true
-            pageHeaderBottomConstraint.isActive = true
-        }
-    }
     
     // MARK: - Setup Elements
     
@@ -102,41 +76,47 @@ final class HoundPageSheetHeaderView: HoundView {
         self.addSubview(pageDescriptionLabel)
     }
     
+    private func remakeHeaderAndDescriptionConstraints() {
+        // in the process of remaking header constraints when description is still active (not remade yet), may run into issues, so remove description first
+        pageDescriptionLabel.snp.removeConstraints()
+        
+        pageHeaderLabel.snp.remakeConstraints { make in
+            make.top.equalTo(self.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)
+            if useLeftTextAlignment {
+                make.leading.equalTo(self.snp.leading).offset(Constant.Constraint.Spacing.absoluteHoriInset)
+            }
+            else {
+                make.centerX.equalTo(self.snp.centerX)
+            }
+            
+            if pageDescriptionLabel.isHidden {
+                make.bottom.equalTo(self.snp.bottom)
+            }
+        }
+        
+        pageDescriptionLabel.snp.remakeConstraints { make in
+            if !pageDescriptionLabel.isHidden {
+                make.top.equalTo(pageHeaderLabel.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+                make.bottom.equalTo(self.snp.bottom)
+                make.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(Constant.Constraint.Spacing.absoluteHoriInset)
+            }
+        }
+    }
     override func setupConstraints() {
         super.setupConstraints()
         
-        // pageHeaderLabel
-        pageHeaderLeadingConstraint = GeneralLayoutConstraint(pageHeaderLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset))
-        pageHeaderCenterXConstraint = GeneralLayoutConstraint(pageHeaderLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor))
+        backButton.snp.makeConstraints { make in
+            make.top.equalTo(self.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)
+            // the header should be at least as tall as the back btn
+            make.bottom.lessThanOrEqualTo(self.snp.bottom)
+            make.leading.equalTo(pageHeaderLabel.snp.trailing).offset(Constant.Constraint.Spacing.contentTightIntraHori)
+            make.trailing.equalTo(self.snp.trailing).inset(Constant.Constraint.Spacing.absoluteCircleHoriInset)
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Button.miniCircleHeightMultiplier)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.miniCircleMaxHeight)
+            make.width.equalTo(backButton.snp.height)
+        }
         
-        handleUseLeftTextAlignment()
-        
-        NSLayoutConstraint.activate([
-            pageHeaderLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset)
-        ])
-        
-        // backButton
-        NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: self.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
-            backButton.leadingAnchor.constraint(equalTo: pageHeaderLabel.trailingAnchor, constant: Constant.Constraint.Spacing.contentTightIntraHori),
-            backButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
-            backButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: self),
-            backButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight),
-            backButton.createSquareAspectRatio()
-        ])
-        
-        // pageDescriptionLabel
-        pageHeaderBottomConstraint = GeneralLayoutConstraint(pageHeaderLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor))
-        pageDescriptionTopConstraint = GeneralLayoutConstraint(pageDescriptionLabel.topAnchor.constraint(equalTo: pageHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert))
-        pageDescriptionBottomConstraint = GeneralLayoutConstraint(pageDescriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor))
-        
-        handleIsDescriptionEnabled()
-        
-        NSLayoutConstraint.activate([
-            pageDescriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            pageDescriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            pageDescriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
+        remakeHeaderAndDescriptionConstraints()
         
     }
 

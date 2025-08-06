@@ -214,7 +214,7 @@ final class SettingsSubscriptionCancelReasonVC: HoundScrollViewController, UITab
         
         // tableView
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            tableView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])

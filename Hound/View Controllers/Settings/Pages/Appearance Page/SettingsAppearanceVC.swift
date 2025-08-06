@@ -56,7 +56,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
     
     // MARK: - Elements
     
-    private let pageHeader: HoundPageSheetHeaderView = {
+    private let pageHeaderView: HoundPageSheetHeaderView = {
         let view = HoundPageSheetHeaderView(huggingPriority: 360, compressionResistancePriority: 360)
         view.pageHeaderLabel.text = "Appearance"
         return view
@@ -365,7 +365,7 @@ final class SettingsAppearanceVC: HoundScrollViewController,
     
     override func addSubViews() {
         super.addSubViews()
-        containerView.addSubview(pageHeader)
+        containerView.addSubview(pageHeaderView)
         containerView.addSubview(interfaceStyleSegmentedControl)
         containerView.addSubview(interfaceStyleHeaderLabel)
         containerView.addSubview(measurementHeaderLabel)
@@ -393,16 +393,16 @@ final class SettingsAppearanceVC: HoundScrollViewController,
     override func setupConstraints() {
         super.setupConstraints()
         
-        // pageHeader
+        // pageHeaderView
         NSLayoutConstraint.activate([
-            pageHeader.topAnchor.constraint(equalTo: containerView.topAnchor),
-            pageHeader.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            pageHeader.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+            pageHeaderView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            pageHeaderView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            pageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
         // interfaceStyleHeaderLabel
         NSLayoutConstraint.activate([
-            interfaceStyleHeaderLabel.topAnchor.constraint(equalTo: pageHeader.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
+            interfaceStyleHeaderLabel.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             interfaceStyleHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             interfaceStyleHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
         ])

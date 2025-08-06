@@ -160,7 +160,7 @@ final class SettingsSubscriptionCancelSuggestionsVC: HoundScrollViewController, 
         
         // suggestionTextView
         NSLayoutConstraint.activate([
-            suggestionTextView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            suggestionTextView.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
             suggestionTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             suggestionTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             suggestionTextView.createHeightMultiplier(Constant.Constraint.Input.textViewHeightMultiplier, relativeToWidthOf: containerView),
