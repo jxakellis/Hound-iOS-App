@@ -93,7 +93,7 @@ final class ServerSyncVC: HoundViewController, ServerFamilyIntroductionVCDelegat
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         // if no userIdentifier, then they need to sign in so don't show welcome back
-        welcomeBackLabel.isHidden = UserInformation.userIdentifier == nil || (UserInformation.userFirstName == nil && UserInformation.userFirstName == nil)
+        welcomeBackLabel.isHidden = UserInformation.userIdentifier == nil || (UserInformation.userFirstName == nil && UserInformation.userLastName == nil)
         welcomeBackLabel.text = "Welcome Back, \(UserInformation.userFirstName ?? UserInformation.userLastName ?? Constant.Visual.Text.unknownName)"
     }
     

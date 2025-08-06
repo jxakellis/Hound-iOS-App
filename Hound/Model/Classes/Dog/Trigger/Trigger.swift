@@ -8,7 +8,7 @@
 
 import UIKit
 
-// TODO track trigger activations and display last activation in trigger tvc
+// TODO AUTOMATIONS track trigger activations and display last activation in trigger tvc
 
 enum TriggerType: String, CaseIterable {
     
@@ -107,9 +107,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(triggerId, forKey: Constant.Key.triggerId.rawValue)
         aCoder.encode(triggerUUID.uuidString, forKey: Constant.Key.triggerUUID.rawValue)
         aCoder.encode(triggerCreated.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.triggerCreated.rawValue)
-        if let triggerCreatedBy = triggerCreatedBy {
-            aCoder.encode(triggerCreatedBy, forKey: Constant.Key.triggerCreatedBy.rawValue)
-        }
+        aCoder.encode(triggerCreatedBy, forKey: Constant.Key.triggerCreatedBy.rawValue)
         if let triggerLastModified = triggerLastModified {
             aCoder.encode(triggerLastModified.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.triggerLastModified.rawValue)
         }
@@ -208,7 +206,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     var triggerUUID: UUID = UUID()
 
     private(set) var triggerCreated: Date = Date()
-    private(set) var triggerCreatedBy: String? = Constant.Class.Log.defaultUserId
+    private(set) var triggerCreatedBy: String = Constant.Class.Log.defaultUserId
     private(set) var triggerLastModified: Date?
     private(set) var triggerLastModifiedBy: String?
 

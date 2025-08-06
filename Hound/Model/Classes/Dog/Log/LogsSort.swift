@@ -14,6 +14,8 @@ enum LogsSortField: CaseIterable {
     case createdDate
     case modifiedDate
     
+    static let defaultSortField = LogsSortField.logStartDate
+    
     var readableValue: String {
         switch self {
         case .createdDate:
@@ -26,11 +28,30 @@ enum LogsSortField: CaseIterable {
             return "End Date"
         }
     }
+    
+    func date(_ log: Log) -> Date {
+        switch self {
+        case .createdDate:
+            return log.logCreated
+        case .modifiedDate:
+            return log.logLastModified ?? log.logCreated
+        case .logStartDate:
+            return log.logStartDate
+        case .logEndDate:
+            return log.logEndDate ?? log.logStartDate
+        }
+    }
+    
+    func compare(lhs: Log, rhs: Log) -> ComparisonResult {
+        return self.date(lhs).compare(self.date(rhs))
+    }
 }
 
 enum LogsSortDirection: CaseIterable {
     case descending
     case ascending
+    
+    static let defaultSortDirection = LogsSortDirection.descending
 
     var readableValue: String {
         switch self {
@@ -55,9 +76,9 @@ final class LogsSort: NSObject, NSCopying {
     
     // MARK: - Properties
     
-    var sortField: LogsSortField = .logStartDate
+    var sortField: LogsSortField = LogsSortField.defaultSortField
     
-    var sortDirection: LogsSortDirection = .descending
+    var sortDirection: LogsSortDirection = LogsSortDirection.defaultSortDirection
     
     // MARK: - Computed Properties
     
@@ -67,6 +88,10 @@ final class LogsSort: NSObject, NSCopying {
     
     var availableDirections: [LogsSortDirection] {
         return LogsSortDirection.allCases
+    }
+    
+    var hasActiveSort: Bool {
+        return self.sortField != LogsSortField.defaultSortField || self.sortDirection != LogsSortDirection.defaultSortDirection
     }
     
     // MARK: - Main
@@ -79,8 +104,8 @@ final class LogsSort: NSObject, NSCopying {
     // MARK: - Function
     
     func reset() {
-        self.sortField = .logStartDate
-        self.sortDirection = .descending
+        self.sortField = LogsSortField.defaultSortField
+        self.sortDirection = LogsSortDirection.defaultSortDirection
     }
     
     func sort(_ logs: [Log]) -> [Log] {
@@ -90,7 +115,7 @@ final class LogsSort: NSObject, NSCopying {
     /// Sorts an array of logs based on the current sort field and direction.
     static func sort(_ logs: [Log], sortField: LogsSortField, sortDirection: LogsSortDirection) -> [Log] {
         let sortedLogs: [Log] = logs.sorted { (lhs: Log, rhs: Log) in
-            let comparisonResult = lhs.compare(to: rhs, sortField: sortField)
+            let comparisonResult = sortField.compare(lhs: rhs, rhs: rhs)
             return sortDirection == .ascending ? (comparisonResult == .orderedAscending) : (comparisonResult == .orderedDescending)
         }
         

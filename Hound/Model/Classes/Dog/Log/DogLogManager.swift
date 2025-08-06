@@ -8,8 +8,7 @@
 
 import UIKit
 
-// TODO support different sort methods: start, end, created, and modified date. this should be four presorted copies of dogLogs. when add/update/remove log called, then the presorted copies should be updated. dont store them tho. only dog logs is stored.
-
+// TODO EFFICIENCY Run this thru gpt. is there a more optimal way to do this?
 final class DogLogManager: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying

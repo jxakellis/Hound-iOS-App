@@ -139,6 +139,8 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         return didRemoveObject
     }
     
+    // TODO EFFICIENCY Run this thru gpt. is there a more optimal way to do this?
+    
     /// Returns an array of tuples [[(dogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest.
     func logsForDogUUIDsGroupedByDate(filter: LogsFilter, sort: LogsSort) -> [[(UUID, Log)]] {
         var dogUUIDLogPairs: [(UUID, Log)] = []
@@ -165,36 +167,12 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                     continue
                 }
                 if filter.isFromDateEnabled, let timeRangeFromDate = filter.timeRangeFromDate {
-                    let date: Date
-                    switch filter.timeRangeField {
-                    case .createdDate:
-                        date = log.logCreated
-                    case .modifiedDate:
-                        date = log.logLastModified ?? log.logCreated
-                    case .logStartDate:
-                        date = log.logStartDate
-                    case .logEndDate:
-                        date = log.logEndDate ?? log.logStartDate
-                    }
-                    
-                    guard date >= timeRangeFromDate else {
+                    guard filter.timeRangeField.date(log) >= timeRangeFromDate else {
                         continue
                     }
                 }
                 if filter.isToDateEnabled, let timeRangeToDate = filter.timeRangeToDate {
-                    let date: Date
-                    switch filter.timeRangeField {
-                    case .createdDate:
-                        date = log.logCreated
-                    case .modifiedDate:
-                        date = log.logLastModified ?? log.logCreated
-                    case .logStartDate:
-                        date = log.logStartDate
-                    case .logEndDate:
-                        date = log.logEndDate ?? log.logStartDate
-                    }
-                    
-                    guard date <= timeRangeToDate else {
+                    guard filter.timeRangeField.date(log) <= timeRangeToDate else {
                         continue
                     }
                 }
@@ -210,7 +188,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         }
         
         dogUUIDLogPairs.sort { lhs, rhs in
-            let comparisonResult = lhs.1.compare(to: rhs.1, sortField: sort.sortField)
+            let comparisonResult = sort.sortField.compare(lhs: lhs.1, rhs: rhs.1)
             return sort.sortDirection == .ascending ? (comparisonResult == .orderedAscending) : (comparisonResult == .orderedDescending)
         }
         
@@ -229,7 +207,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                     return false
                 }
                 
-                return Calendar.user.isDate(log.logStartDate, inSameDayAs: logFromLastDateGroup.logStartDate)
+                return Calendar.user.isDate(sort.sortField.date(log), inSameDayAs: sort.sortField.date(logFromLastDateGroup))
             }()
             
             if containsDateCombination {

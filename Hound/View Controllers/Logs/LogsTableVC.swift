@@ -13,7 +13,7 @@ protocol LogsTableVCDelegate: AnyObject {
     func didSelectLog(dogUUID: UUID, log: Log)
     func shouldUpdateNoLogsRecorded(isHidden: Bool)
     func shouldUpdateAlphaForButtons(alpha: Double)
-    func shouldUpdateFilterLogsButton()
+    func updateFilterLogsButton()
 }
 
 // UI VERIFIED 6/25/25
@@ -108,7 +108,7 @@ final class LogsTableVC: HoundTableViewController {
         
         reloadTable()
         
-        delegate?.shouldUpdateFilterLogsButton()
+        delegate?.updateFilterLogsButton()
     }
     
     // MARK: - Main

@@ -8,6 +8,8 @@
 
 import UIKit
 
+// TODO reminder/dog/trigger, dont let createdBy be null. fudge fill it with just the family head.
+
 enum ReminderType: String, CaseIterable {
     
     init?(rawValue: String) {
@@ -127,9 +129,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         }
         aCoder.encode(reminderUUID.uuidString, forKey: Constant.Key.reminderUUID.rawValue)
         aCoder.encode(reminderCreated.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.reminderCreated.rawValue)
-        if let reminderCreatedBy = reminderCreatedBy {
-            aCoder.encode(reminderCreatedBy, forKey: Constant.Key.reminderCreatedBy.rawValue)
-        }
+        aCoder.encode(reminderCreatedBy, forKey: Constant.Key.reminderCreatedBy.rawValue)
         if let reminderLastModified = reminderLastModified {
             aCoder.encode(reminderLastModified.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.reminderLastModified.rawValue)
         }
@@ -264,7 +264,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     var reminderUUID: UUID = UUID()
 
     private(set) var reminderCreated: Date = Date()
-    private(set) var reminderCreatedBy: String? = Constant.Class.Log.defaultUserId
+    private(set) var reminderCreatedBy: String = Constant.Class.Log.defaultUserId
     private(set) var reminderLastModified: Date?
     private(set) var reminderLastModifiedBy: String?
     

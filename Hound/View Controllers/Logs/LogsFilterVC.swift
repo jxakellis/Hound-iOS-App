@@ -8,7 +8,7 @@
 
 import UIKit
 
-// TODO add a leave without save warning
+// TODO QOL add a leave without save warning
 
 protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(logsFilter: LogsFilter)
@@ -220,7 +220,7 @@ class LogsFilterVC: HoundScrollViewController,
         return label
     }()
     
-    private lazy var clearButton: HoundButton = {
+    private lazy var resetButton: HoundButton = {
         let button = HoundButton(huggingPriority: 220, compressionResistancePriority: 220)
         
         button.setTitle("Reset", for: .normal)
@@ -233,7 +233,7 @@ class LogsFilterVC: HoundScrollViewController,
         
         button.shouldDismissParentViewController = true
         
-        button.addTarget(self, action: #selector(didTapClearFilter), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapResetFilter), for: .touchUpInside)
         
         return button
     }()
@@ -294,8 +294,8 @@ class LogsFilterVC: HoundScrollViewController,
         filter?.apply(searchText: sender.text ?? "")
     }
     
-    @objc private func didTapClearFilter(_ sender: Any) {
-        filter?.clearAll()
+    @objc private func didTapResetFilter(_ sender: Any) {
+        filter?.reset()
         if let filter = filter {
             delegate?.didUpdateLogsFilter(logsFilter: filter)
         }
@@ -650,7 +650,7 @@ class LogsFilterVC: HoundScrollViewController,
         containerView.addSubview(filterFamilyMembersLabel)
         containerView.addSubview(familyMembersSectionLabel)
         
-        containerView.addSubview(clearButton)
+        containerView.addSubview(resetButton)
         containerView.addSubview(applyButton)
         
         let didTapScreenGesture = UITapGestureRecognizer(target: self, action: #selector(didTapScreen(sender:)))
@@ -823,14 +823,14 @@ class LogsFilterVC: HoundScrollViewController,
             applyButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
         
-        // clearButton
+        // resetButton
         NSLayoutConstraint.activate([
-            clearButton.topAnchor.constraint(equalTo: applyButton.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
-            clearButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset * 2.0),
-            clearButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            clearButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            clearButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
-            clearButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
+            resetButton.topAnchor.constraint(equalTo: applyButton.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            resetButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset * 2.0),
+            resetButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            resetButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
+            resetButton.createHeightMultiplier(Constant.Constraint.Button.wideHeightMultiplier, relativeToWidthOf: view),
+            resetButton.createMaxHeight(Constant.Constraint.Button.wideMaxHeight)
         ])
     }
     

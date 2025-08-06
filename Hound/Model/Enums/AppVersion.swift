@@ -127,7 +127,7 @@ enum AppVersion: String, CaseIterable, Comparable {
         case .v4_1_0:
             var builder = ReleaseNotesBuilder()
             
-            // TODO WRITE NOTES
+            // TODO RELEASE NOTES
             // new log sorting
             // log favoriting
             // sign in w google

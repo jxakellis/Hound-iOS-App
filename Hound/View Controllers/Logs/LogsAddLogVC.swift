@@ -113,6 +113,8 @@ final class LogsAddLogVC: HoundScrollViewController,
             return false
         }
         
+        // TODO BUG if text is 0.xx its okay but .xxxxx allows >2 digits after the period/comma
+        
         // MARK: Verify number of digits after period or comma
         // "123.456"
         if let componentBeforeDecimalSeparator = updatedText.split(separator: decimalSeparator)[safe: 0] {
@@ -194,6 +196,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.text = "Logged by"
         return label
     }()
+    // TODO LOG SORTING Add subtext to this "Logged at XXX. Last modified by XXX at XXX"
     private lazy var familyMemberLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 285, compressionResistancePriority: 285)
         label.applyStyle(.thinGrayBorder)

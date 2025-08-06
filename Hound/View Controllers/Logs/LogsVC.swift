@@ -73,21 +73,21 @@ final class LogsVC: HoundViewController,
         exportLogsButton.alpha = alpha
         sortLogsButton.alpha = alpha
         filterLogsButton.alpha = alpha
-        clearFilterButton.alpha = alpha
+        resetFilterAndSortButton.alpha = alpha
         
         addLogButton.isHidden = (addLogButton.alpha == 0.0) || dogManager.dogs.isEmpty
         exportLogsButton.isHidden = (exportLogsButton.alpha == 0.0) || !familyHasAtLeastOneLog
         sortLogsButton.isHidden = (sortLogsButton.alpha == 0.0) || !familyHasAtLeastOneLog
-        shouldUpdateFilterLogsButton()
-        shouldUpdateClearFilterButton()
+        updateFilterLogsButton()
+        updateResetFilterAndSortButton()
     }
     
-    func shouldUpdateFilterLogsButton() {
+    func updateFilterLogsButton() {
         filterLogsButton.isHidden = (filterLogsButton.alpha == 0.0) || !familyHasAtLeastOneLog
     }
     
-    func shouldUpdateClearFilterButton() {
-        clearFilterButton.isHidden = (clearFilterButton.alpha == 0.0) || !familyHasAtLeastOneLog || !logsTableViewController.logsFilter.hasActiveFilter
+    func updateResetFilterAndSortButton() {
+        resetFilterAndSortButton.isHidden = (resetFilterAndSortButton.alpha == 0.0) || !familyHasAtLeastOneLog || (!logsTableViewController.logsFilter.hasActiveFilter && !logsTableViewController.logsSort.hasActiveSort)
     }
     
     // MARK: - LogsFilterDelegate
@@ -99,8 +99,9 @@ final class LogsVC: HoundViewController,
             guard let self = self else {
                 return
             }
+            filterLogsButton.badgeVisible = logsFilter.hasActiveFilter
             filterLogsButton.badgeValue = logsFilter.numActiveFilters
-            shouldUpdateClearFilterButton()
+            updateResetFilterAndSortButton()
         }
     }
     
@@ -116,6 +117,9 @@ final class LogsVC: HoundViewController,
             else {
                 self.sortLogsButton.imageView?.transform = CGAffineTransform(rotationAngle: .pi)
             }
+            
+            sortLogsButton.badgeVisible = logsSort.hasActiveSort
+            updateResetFilterAndSortButton()
         }
     }
     
@@ -157,7 +161,7 @@ final class LogsVC: HoundViewController,
         return button
     }()
     
-    private lazy var clearFilterButton: HoundButton = {
+    private lazy var resetFilterAndSortButton: HoundButton = {
         let button = HoundButton(huggingPriority: 230, compressionResistancePriority: 230)
         
         button.tintColor = UIColor.systemRed
@@ -173,8 +177,12 @@ final class LogsVC: HoundViewController,
             guard let self = self else { return }
             
             let filter = logsTableViewController.logsFilter
-            filter.clearAll()
+            filter.reset()
             didUpdateLogsFilter(logsFilter: filter)
+            
+            let sort = logsTableViewController.logsSort
+            sort.reset()
+            didUpdateLogsSort(logsSort: sort)
         }
         button.addAction(action, for: .touchUpInside)
         
@@ -340,7 +348,7 @@ final class LogsVC: HoundViewController,
         
         view.addSubview(exportLogsButton)
         
-        view.addSubview(clearFilterButton)
+        view.addSubview(resetFilterAndSortButton)
         view.addSubview(filterLogsButton)
         view.addSubview(sortLogsButton)
     }
@@ -392,13 +400,13 @@ final class LogsVC: HoundViewController,
             filterLogsButton.createSquareAspectRatio()
         ])
         
-        // clearFilterButton
+        // resetFilterAndSortButton
         NSLayoutConstraint.activate([
-            clearFilterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
-            clearFilterButton.trailingAnchor.constraint(equalTo: filterLogsButton.leadingAnchor, constant: -Constant.Constraint.Spacing.contentTightIntraHori),
-            clearFilterButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-            clearFilterButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight),
-            clearFilterButton.createSquareAspectRatio()
+            resetFilterAndSortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
+            resetFilterAndSortButton.trailingAnchor.constraint(equalTo: filterLogsButton.leadingAnchor, constant: -Constant.Constraint.Spacing.contentTightIntraHori),
+            resetFilterAndSortButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
+            resetFilterAndSortButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight),
+            resetFilterAndSortButton.createSquareAspectRatio()
         ])
         
         // noLogsRecordedLabel

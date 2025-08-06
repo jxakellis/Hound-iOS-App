@@ -8,6 +8,14 @@
 
 import UIKit
 
+// TODO LOG SORTING this needs different time display modes.
+// if its log start/end date, this its fine and stay regular
+// if its last modified or created date, we should add an extra bubble at the bottom with the values so the sort makes sense
+
+// TODO LOG FAVORITING we need to make logUnit / logNote displays more modular at the bottom. they should ideally go side by side, but if one is too long, then it should be able to go to its own line. Further, if unit/note takes more than 1 line, they should be able to expand up to 3 lines vertically. i think the way to do this is a collection view.
+
+// TODO LOG FAVORITING  add log favorite display. This should go to the RHS of the unit/note/alternative time displays and below the log start/end date/duration displays. Generally. its width should be adaptive. if there is no unit / note (or they are short), then it should just expand horizontally. howeverit should also be able to expand vertically. e.g. if it expands enough to push the unit/note into displaying into 2 lines, then it should also itself be able to display in two lines. it should prioritize growing horizontally, but if it grows too much horizontally, then it should grow vertically. If it does expand enough to push the unit/note into two lines, then it should also expand vertically to match the height of the unit/note. This is a bit tricky. What happens if by doing this (expanding itself to two lines to match the two lines of log unit/note, that log unit / note contract back to a single line? then thats tricky. need a way to manage this.
+
 // UI VERIFIED 6/25/25
 final class LogTVC: HoundTableViewCell {
     

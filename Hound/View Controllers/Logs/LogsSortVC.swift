@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-// TODO add a leave without save warning
+// TODO QOL add a leave without save warning
 
 protocol LogsSortDelegate: AnyObject {
     func didUpdateLogsSort(logsSort: LogsSort)

@@ -37,7 +37,7 @@ class LogsFilter: NSObject, NSCopying {
     
     private(set) var filteredFamilyMemberUserIds: Set<String> = []
     
-    private(set) var timeRangeField: LogsSortField = LogsSortField.logStartDate
+    private(set) var timeRangeField: LogsSortField = LogsSortField.defaultSortField
     private(set) var timeRangeFromDate: Date?
     private(set) var timeRangeToDate: Date?
     
@@ -90,7 +90,7 @@ class LogsFilter: NSObject, NSCopying {
     
     // MARK: - Functions
     
-    func clearAll() {
+    func reset() {
         apply(filterDogs: [])
         apply(filterLogActions: [])
         apply(filterFamilyMembers: [])

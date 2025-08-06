@@ -59,7 +59,7 @@ enum PresentationManager {
             // Remove stale presenters that are no longer in the window or
             // duplicate references to the same instance.
             let isDuplicate = vc === viewController
-            let isStale = viewController.viewIfLoaded?.window == nil
+            let isStale = vc.viewIfLoaded?.window == nil
             return isDuplicate || isStale
         }
         

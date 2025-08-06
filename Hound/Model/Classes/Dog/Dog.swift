@@ -69,9 +69,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
         }
         aCoder.encode(dogUUID.uuidString, forKey: Constant.Key.dogUUID.rawValue)
         aCoder.encode(dogCreated.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.dogCreated.rawValue)
-        if let dogCreatedBy = dogCreatedBy {
-            aCoder.encode(dogCreatedBy, forKey: Constant.Key.dogCreatedBy.rawValue)
-        }
+        aCoder.encode(dogCreatedBy, forKey: Constant.Key.dogCreatedBy.rawValue)
         if let dogLastModified = dogLastModified {
             aCoder.encode(dogLastModified.ISO8601FormatWithFractionalSeconds(), forKey: Constant.Key.dogLastModified.rawValue)
         }
@@ -121,7 +119,7 @@ final class Dog: NSObject, NSCoding, NSCopying, Comparable {
     var dogUUID: UUID = UUID()
 
     private(set) var dogCreated: Date = Date()
-    private(set) var dogCreatedBy: String? = Constant.Class.Log.defaultUserId
+    private(set) var dogCreatedBy: String = Constant.Class.Log.defaultUserId
     private(set) var dogLastModified: Date?
     private(set) var dogLastModifiedBy: String?
 

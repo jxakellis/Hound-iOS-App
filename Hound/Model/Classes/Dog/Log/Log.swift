@@ -8,8 +8,6 @@
 
 import UIKit
 
-// TODO logCreated, logCreatedBy (rename userId), logLastModified, logLastModifiedBy
-
 final class Log: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
@@ -107,24 +105,6 @@ final class Log: NSObject, NSCoding, NSCopying {
         }
         aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
     }
-    
-    // MARK: - Compare
-    
-    func compare(to other: Log, sortField: LogsSortField) -> ComparisonResult {
-            let result: ComparisonResult
-            switch sortField {
-            case .createdDate:
-                result = self.logCreated.compare(other.logCreated)
-            case .modifiedDate:
-                result = (self.logLastModified ?? self.logCreated).compare(other.logLastModified ?? other.logCreated)
-            case .logStartDate:
-                result = self.logStartDate.compare(other.logStartDate)
-            case .logEndDate:
-                result = (self.logEndDate ?? self.logStartDate).compare(other.logEndDate ?? other.logStartDate)
-            }
-        
-            return result
-        }
     
     // MARK: - Properties
     
