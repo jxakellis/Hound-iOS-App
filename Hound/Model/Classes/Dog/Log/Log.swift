@@ -30,6 +30,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         copy.logNumberOfLogUnits = self.logNumberOfLogUnits
         copy.logCreatedByReminderUUID = self.logCreatedByReminderUUID
         copy.offlineModeComponents = self.offlineModeComponents.copy() as? OfflineModeComponents ?? OfflineModeComponents()
+        copy.likedByUserIds = self.likedByUserIds
         
         return copy
     }
@@ -51,6 +52,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         let decodedLogUnitTypeId: Int? = aDecoder.decodeOptionalInteger(forKey: Constant.Key.logUnitTypeId.rawValue)
         let decodedLogNumberOfLogUnits: Double? = aDecoder.decodeOptionalDouble(forKey: Constant.Key.logNumberOfLogUnits.rawValue)
         let decodedLogCreatedByReminderUUID: UUID? = UUID.fromString(UUIDString: aDecoder.decodeOptionalObject(forKey: Constant.Key.logCreatedByReminderUUID.rawValue))
+        let decodedLikedByUserIds: [String]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.logLikedByUserIds.rawValue)
         let decodedOfflineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
         
         self.init(
@@ -68,6 +70,7 @@ final class Log: NSObject, NSCoding, NSCopying {
             logUnitTypeId: decodedLogUnitTypeId,
             logNumberOfUnits: decodedLogNumberOfLogUnits,
             logCreatedByReminderUUID: decodedLogCreatedByReminderUUID,
+            likedByUserIds: Set(decodedLikedByUserIds ?? []),
             offlineModeComponents: decodedOfflineModeComponents
         )
     }
@@ -103,6 +106,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         if let logCreatedByReminderUUID = logCreatedByReminderUUID {
             aCoder.encode(logCreatedByReminderUUID.uuidString, forKey: Constant.Key.logCreatedByReminderUUID.rawValue)
         }
+        aCoder.encode(Array(likedByUserIds), forKey: Constant.Key.logLikedByUserIds.rawValue)
         aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
     }
     
@@ -153,6 +157,18 @@ final class Log: NSObject, NSCoding, NSCopying {
     
     private(set) var logStartDate: Date = Constant.Class.Log.defaultLogStartDate
     private(set) var logEndDate: Date?
+    /// logStartDate takes precendence over logEndDate. Therefore, if the times overlap incorrectly, i.e. logStartDate is after logEndDate, then logStartDate is set its value, then logEndDate is adjusted so that it is later than logStartDate.
+    func setLogDate(logStartDate: Date, logEndDate: Date?) {
+        self.logStartDate = logStartDate
+        
+        if let logEndDate = logEndDate {
+            // If logStartDate is after logEndDate, that is incorrect. Therefore, disregard it
+            self.logEndDate = logStartDate >= logEndDate ? nil : logEndDate
+        }
+        else {
+            self.logEndDate = nil
+        }
+    }
     
     private var storedLogNote: String = ""
     var logNote: String {
@@ -172,11 +188,43 @@ final class Log: NSObject, NSCoding, NSCopying {
         }
         return LogUnitType.find(logUnitTypeId: logUnitTypeId)
     }
-    
     private(set) var logNumberOfLogUnits: Double?
+    /// If numberOfUnits or logUnitTypeId is nil, both are set to nil. The logUnitTypeId provided must be in the array of LogUnitTypes that are valid for this log's logActionTypeId.
+    func setLogUnit(logUnitTypeId: Int?, logNumberOfLogUnits: Double?) {
+        guard let logUnitTypeId = logUnitTypeId, let logNumberOfLogUnits = logNumberOfLogUnits else {
+            self.logNumberOfLogUnits = nil
+            self.logUnitTypeId = nil
+            return
+        }
+        
+        let logUnitTypeIds = logActionType.associatedLogUnitTypes.map { $0.logUnitTypeId }
+        
+        guard logUnitTypeIds.contains(logUnitTypeId) else {
+            self.logNumberOfLogUnits = nil
+            self.logUnitTypeId = nil
+            return
+        }
+        
+        self.logNumberOfLogUnits = round(logNumberOfLogUnits * 100.0) / 100.0
+        self.logUnitTypeId = logUnitTypeId
+    }
     
     private(set) var logCreatedByReminderUUID: UUID?
-    
+
+    private(set) var likedByUserIds: Set<String> = []
+    func setLogLike(_ liked: Bool) {
+        if liked {
+            likedByUserIds.insert(Constant.Class.Log.defaultUserId)
+        }
+        else {
+            likedByUserIds.remove(Constant.Class.Log.defaultUserId)
+        }
+    }
+    func setLogLikes(_ userIds: Set<String>) {
+        likedByUserIds = userIds
+    }
+
+
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
     private(set) var offlineModeComponents: OfflineModeComponents = OfflineModeComponents()
     
@@ -197,6 +245,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         logUnitTypeId: Int? = nil,
         logNumberOfUnits: Double? = nil,
         logCreatedByReminderUUID: UUID? = nil,
+        likedByUserIds: Set<String>? = nil,
         offlineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
@@ -211,8 +260,9 @@ final class Log: NSObject, NSCoding, NSCopying {
         self.logStartDate = logStartDate ?? self.logStartDate
         self.logEndDate = logEndDate ?? self.logEndDate
         self.logNote = logNote ?? self.logNote
-        self.changeLogUnit(logUnitTypeId: logUnitTypeId, logNumberOfLogUnits: logNumberOfUnits)
+        self.setLogUnit(logUnitTypeId: logUnitTypeId, logNumberOfLogUnits: logNumberOfUnits)
         self.logCreatedByReminderUUID = logCreatedByReminderUUID ?? logCreatedByReminderUUID
+        self.likedByUserIds = likedByUserIds ?? self.likedByUserIds
         self.offlineModeComponents = offlineModeComponents ?? self.offlineModeComponents
     }
     
@@ -251,6 +301,7 @@ final class Log: NSObject, NSCoding, NSCopying {
                     logUnitTypeId: logToOverride.logUnitTypeId,
                     logNumberOfUnits: logToOverride.logNumberOfLogUnits,
                     logCreatedByReminderUUID: logToOverride.logCreatedByReminderUUID,
+                    likedByUserIds: logToOverride.likedByUserIds,
                     offlineModeComponents: logToOverride.offlineModeComponents
                 )
             return
@@ -285,6 +336,13 @@ final class Log: NSObject, NSCoding, NSCopying {
         
         let logNumberOfLogUnits: Double? = fromBody[Constant.Key.logNumberOfLogUnits.rawValue] as? Double ?? logToOverride?.logNumberOfLogUnits
         let logCreatedByReminderUUID: UUID? = UUID.fromString(UUIDString: fromBody[Constant.Key.logCreatedByReminderUUID.rawValue] as? String) ?? logToOverride?.logCreatedByReminderUUID
+
+        let likedByUserIds: Set<String>? = {
+            if let arr = fromBody[Constant.Key.logLikedByUserIds.rawValue] as? [String] {
+                return Set(arr)
+            }
+            return logToOverride?.likedByUserIds
+        }()
         
         self.init(
             logId: logId,
@@ -301,45 +359,13 @@ final class Log: NSObject, NSCoding, NSCopying {
             logUnitTypeId: logUnitTypeId,
             logNumberOfUnits: logNumberOfLogUnits,
             logCreatedByReminderUUID: logCreatedByReminderUUID,
+            likedByUserIds: likedByUserIds,
             // Verified that the update from the server happened more recently than our local changes, so no need to offline sync anymore
             offlineModeComponents: nil
         )
     }
     
     // MARK: - Functions
-    
-    /// logStartDate takes precendence over logEndDate. Therefore, if the times overlap incorrectly, i.e. logStartDate is after logEndDate, then logStartDate is set its value, then logEndDate is adjusted so that it is later than logStartDate.
-    func changeLogDate(logStartDate: Date, logEndDate: Date?) {
-        self.logStartDate = logStartDate
-        
-        if let logEndDate = logEndDate {
-            // If logStartDate is after logEndDate, that is incorrect. Therefore, disregard it
-            self.logEndDate = logStartDate >= logEndDate ? nil : logEndDate
-        }
-        else {
-            self.logEndDate = nil
-        }
-    }
-    
-    /// If numberOfUnits or logUnitTypeId is nil, both are set to nil. The logUnitTypeId provided must be in the array of LogUnitTypes that are valid for this log's logActionTypeId.
-    func changeLogUnit(logUnitTypeId: Int?, logNumberOfLogUnits: Double?) {
-        guard let logUnitTypeId = logUnitTypeId, let logNumberOfLogUnits = logNumberOfLogUnits else {
-            self.logNumberOfLogUnits = nil
-            self.logUnitTypeId = nil
-            return
-        }
-        
-        let logUnitTypeIds = logActionType.associatedLogUnitTypes.map { $0.logUnitTypeId }
-        
-        guard logUnitTypeIds.contains(logUnitTypeId) else {
-            self.logNumberOfLogUnits = nil
-            self.logUnitTypeId = nil
-            return
-        }
-        
-        self.logNumberOfLogUnits = round(logNumberOfLogUnits * 100.0) / 100.0
-        self.logUnitTypeId = logUnitTypeId
-    }
     
     /// Returns true if any major property of the log matches the provided search text
     func matchesSearchText(_ searchText: String) -> Bool {
@@ -377,6 +403,8 @@ final class Log: NSObject, NSCoding, NSCopying {
         body[Constant.Key.logUnitTypeId.rawValue] = .int(logUnitTypeId)
         body[Constant.Key.logNumberOfLogUnits.rawValue] = .double(logNumberOfLogUnits)
         body[Constant.Key.logCreatedByReminderUUID.rawValue] = .string(logCreatedByReminderUUID?.uuidString)
+        // don't send logLikedByUserIds because that is handled w/ a separate api call
+        // body[Constant.Key.logLikedByUserIds.rawValue] = .array(likedByUserIds.map { .string($0) })
         return body
     }
 }

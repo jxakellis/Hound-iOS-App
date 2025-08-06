@@ -1522,7 +1522,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         selectedLogAction: LogActionType,
         selectedLogStartDate: Date
     ) {
-        logToUpdate.changeLogDate(
+        logToUpdate.setLogDate(
             logStartDate: selectedLogStartDate,
             logEndDate: selectedLogEndDate
         )
@@ -1530,7 +1530,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         logToUpdate.logCustomActionName = selectedLogAction.allowsCustom
         ? (logCustomActionNameTextField.text ?? "")
         : ""
-        logToUpdate.changeLogUnit(
+        logToUpdate.setLogUnit(
             logUnitTypeId: selectedLogUnitType?.logUnitTypeId,
             logNumberOfLogUnits: LogUnitType.convertStringToDouble(
                 logNumberOfLogUnits: logNumberOfLogUnitsTextField.text

@@ -151,6 +151,7 @@ public enum KeyConstant: String {
     case logCreatedBy
     case logLastModified
     case logLastModifiedBy
+    case logLikedByUserIds
     case logIsDeleted
 
     // MARK: Reminder

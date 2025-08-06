@@ -181,6 +181,11 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                     // Search text provided but log doesn't match it
                     continue
                 }
+                if filter.onlyShowLikes {
+                    guard let userId = UserInformation.userId, log.likedByUserIds.contains(userId) else {
+                        continue
+                    }
+                }
                 
                 dogUUIDLogPairs.append((dog.dogUUID, log))
                 numberOfLogsAdded += 1

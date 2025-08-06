@@ -54,6 +54,7 @@ class LogsFilterVC: HoundScrollViewController,
         return label
     }()
     
+    // TODO UI remove field header label it adds nothing
     private let timeRangeFieldHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
         label.text = "Field"
@@ -61,6 +62,7 @@ class LogsFilterVC: HoundScrollViewController,
         return label
     }()
     
+    // TODO UI this should start blank and have a placeholder. if user tries to save filter w/ from/to on but no field, show an error message
     private lazy var timeRangeFieldLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
         label.font = Constant.Visual.Font.primaryRegularLabel
@@ -120,6 +122,19 @@ class LogsFilterVC: HoundScrollViewController,
     private lazy var toDateSwitch: HoundSwitch = {
         let uiSwitch = HoundSwitch(huggingPriority: 305, compressionResistancePriority: 305)
         uiSwitch.addTarget(self, action: #selector(didToggleToDate), for: .valueChanged)
+        return uiSwitch
+    }()
+    
+    private let likesOnlySectionLabel: HoundLabel = {
+        let label = HoundLabel(huggingPriority: 235, compressionResistancePriority: 235)
+        label.font = Constant.Visual.Font.secondaryHeaderLabel
+        label.text = "Only Show Likes"
+        return label
+    }()
+    
+    private lazy var likesOnlySwitch: HoundSwitch = {
+        let uiSwitch = HoundSwitch(huggingPriority: 230, compressionResistancePriority: 230)
+        uiSwitch.addTarget(self, action: #selector(didToggleLikesOnly), for: .valueChanged)
         return uiSwitch
     }()
     
@@ -290,6 +305,10 @@ class LogsFilterVC: HoundScrollViewController,
         toDatePicker.isEnabled = sender.isOn
     }
     
+    @objc private func didToggleLikesOnly(_ sender: HoundSwitch) {
+        filter?.apply(onlyShowLikes: sender.isOn)
+    }
+    
     @objc private func didChangeSearchText(_ sender: UITextField) {
         filter?.apply(searchText: sender.text ?? "")
     }
@@ -357,6 +376,10 @@ class LogsFilterVC: HoundScrollViewController,
     private func updateDynamicUIElements() {
         if let filter = filter {
             searchTextField.text = filter.searchText
+        }
+        
+        if let filter = filter {
+            likesOnlySwitch.setOn(filter.onlyShowLikes, animated: false)
         }
         
         if let filter = filter, filter.filteredDogsUUIDs.count >= 1 {
@@ -583,35 +606,35 @@ class LogsFilterVC: HoundScrollViewController,
     }
     
     func firstSelectedIndexPath(identifier: any HoundDropDownType) -> IndexPath? {
-            guard let filter = filter else { return nil }
-            guard let type = identifier as? LogsFilterDropDownTypes else { return nil }
-            switch type {
-            case .filterTimeRange:
-                if let idx = filter.availableTimeRangeFields
-                    .firstIndex(where: { $0 == filter.timeRangeField }) {
-                    return IndexPath(row: idx, section: 0)
-                }
-            case .filterDogs:
-                if let idx = filter.filteredDogsUUIDs
-                    .compactMap({ uuid in filter.availableDogs.firstIndex(where: { $0.dogUUID == uuid }) })
-                    .min() {
-                    return IndexPath(row: idx, section: 0)
-                }
-            case .filterLogActions:
-                if let idx = filter.filteredLogActionActionTypeIds
-                    .compactMap({ id in filter.availableLogActions.firstIndex(where: { $0.logActionTypeId == id }) })
-                    .min() {
-                    return IndexPath(row: idx, section: 0)
-                }
-            case .filterFamilyMembers:
-                if let idx = filter.filteredFamilyMemberUserIds
-                    .compactMap({ userId in filter.availableFamilyMembers.firstIndex(where: { $0.userId == userId }) })
-                    .min() {
-                    return IndexPath(row: idx, section: 0)
-                }
+        guard let filter = filter else { return nil }
+        guard let type = identifier as? LogsFilterDropDownTypes else { return nil }
+        switch type {
+        case .filterTimeRange:
+            if let idx = filter.availableTimeRangeFields
+                .firstIndex(where: { $0 == filter.timeRangeField }) {
+                return IndexPath(row: idx, section: 0)
             }
-            return nil
+        case .filterDogs:
+            if let idx = filter.filteredDogsUUIDs
+                .compactMap({ uuid in filter.availableDogs.firstIndex(where: { $0.dogUUID == uuid }) })
+                .min() {
+                return IndexPath(row: idx, section: 0)
+            }
+        case .filterLogActions:
+            if let idx = filter.filteredLogActionActionTypeIds
+                .compactMap({ id in filter.availableLogActions.firstIndex(where: { $0.logActionTypeId == id }) })
+                .min() {
+                return IndexPath(row: idx, section: 0)
+            }
+        case .filterFamilyMembers:
+            if let idx = filter.filteredFamilyMemberUserIds
+                .compactMap({ userId in filter.availableFamilyMembers.firstIndex(where: { $0.userId == userId }) })
+                .min() {
+                return IndexPath(row: idx, section: 0)
+            }
         }
+        return nil
+    }
     
     // MARK: - Setup Elements
     
@@ -637,6 +660,9 @@ class LogsFilterVC: HoundScrollViewController,
         containerView.addSubview(timeRangeToHeaderLabel)
         containerView.addSubview(toDatePicker)
         containerView.addSubview(toDateSwitch)
+        
+        containerView.addSubview(likesOnlySectionLabel)
+        containerView.addSubview(likesOnlySwitch)
         
         containerView.addSubview(searchSectionLabel)
         containerView.addSubview(searchTextField)
@@ -740,9 +766,24 @@ class LogsFilterVC: HoundScrollViewController,
             toDateSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
         
+        // likesOnlySectionLabel
+        NSLayoutConstraint.activate([
+            likesOnlySectionLabel.topAnchor.constraint(equalTo: toDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            likesOnlySectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            likesOnlySectionLabel.trailingAnchor.constraint(lessThanOrEqualTo: likesOnlySwitch.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
+            likesOnlySectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),
+            likesOnlySectionLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight)
+        ])
+        
+        // likesOnlySwitch
+        NSLayoutConstraint.activate([
+            likesOnlySwitch.centerYAnchor.constraint(equalTo: likesOnlySectionLabel.centerYAnchor),
+            likesOnlySwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
+        ])
+        
         // searchSectionLabel
         NSLayoutConstraint.activate([
-            searchSectionLabel.topAnchor.constraint(equalTo: toDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            searchSectionLabel.topAnchor.constraint(equalTo: likesOnlySectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
             searchSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             searchSectionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             searchSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),

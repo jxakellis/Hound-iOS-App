@@ -11,6 +11,7 @@ import Foundation
 enum LogsRequest {
     
     static var baseURL: URL { DogsRequest.baseURL.appendingPathComponent("/logs") }
+    static var baseURLForLike: URL { baseURL.appendingPathComponent("/like") }
     
     /**
      If query is successful, automatically combines client-side and server-side logs and returns (log, .successResponse)
@@ -97,6 +98,45 @@ enum LogsRequest {
         }
     }
     
+    @discardableResult static func createLike(
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        log: Log,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
+        let body = log.createBody(dogUUID: dogUUID)
+        
+        return RequestUtils.genericPostRequest(
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            url: baseURLForLike,
+            body: body) { responseBody, responseStatus, error in
+                if responseStatus != .noResponse {
+                    // TODO LL we need to make log likes work properly w/ offline mode
+                    log.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: nil)
+                }
+                
+                guard responseStatus != .failureResponse else {
+                    completionHandler(responseStatus, error)
+                    return
+                }
+                
+                if responseStatus == .noResponse {
+                    // If we got no response, then mark the log to be updated later
+                    // TODO LL we need to make log likes work properly w/ offline mode
+                    log.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: Date())
+                }
+                else if let logBody = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
+                    // return log contains the correct likes for the log
+                    let returnLog = Log(fromBody: logBody, logToOverride: log.copy() as? Log)
+                    log.setLogLikes(returnLog?.likedByUserIds ?? log.likedByUserIds)
+                }
+                
+                completionHandler(responseStatus, error)
+        }
+    }
+    
     /**
      If query is successful, automatically DEFAULT-DOES-NOTHING and returns (true, .successResponse)
      If query isn't successful, returns (false, .failureResponse) or (false, .noResponse)
@@ -167,6 +207,45 @@ enum LogsRequest {
                 if responseStatus == .noResponse {
                     // If we got no response, then mark the log to be deleted later
                     OfflineModeManager.shared.addDeletedObjectToQueue(object: OfflineModeDeletedLog(dogUUID: dogUUID, logUUID: logUUID, deletedDate: Date()))
+                }
+                
+                completionHandler(responseStatus, error)
+        }
+    }
+    
+    @discardableResult static func deleteLike(
+        errorAlert: ResponseAutomaticErrorAlertTypes,
+        sourceFunction: RequestSourceFunctionTypes = .normal,
+        dogUUID: UUID,
+        log: Log,
+        completionHandler: @escaping (ResponseStatus, HoundError?) -> Void
+    ) -> Progress? {
+        let body = log.createBody(dogUUID: dogUUID)
+        
+        return RequestUtils.genericDeleteRequest(
+            errorAlert: errorAlert,
+            sourceFunction: sourceFunction,
+            url: baseURLForLike,
+            body: body) { responseBody, responseStatus, error in
+                if responseStatus != .noResponse {
+                    // TODO LL we need to make log likes work properly w/ offline mode
+                    log.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: nil)
+                }
+                
+                guard responseStatus != .failureResponse else {
+                    completionHandler(responseStatus, error)
+                    return
+                }
+                
+                if responseStatus == .noResponse {
+                    // If we got no response, then mark the log to be updated later
+                    // TODO LL we need to make log likes work properly w/ offline mode
+                    log.offlineModeComponents.updateInitialAttemptedSyncDate(initialAttemptedSyncDate: Date())
+                }
+                else if let logBody = responseBody?[Constant.Key.result.rawValue] as? JSONResponseBody {
+                    // return log contains the correct likes for the log
+                    let returnLog = Log(fromBody: logBody, logToOverride: log.copy() as? Log)
+                    log.setLogLikes(returnLog?.likedByUserIds ?? log.likedByUserIds)
                 }
                 
                 completionHandler(responseStatus, error)

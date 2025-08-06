@@ -21,6 +21,7 @@ class LogsFilter: NSObject, NSCopying {
         copy.timeRangeField = self.timeRangeField
         copy.timeRangeFromDate = self.timeRangeFromDate
         copy.timeRangeToDate = self.timeRangeToDate
+        copy.onlyShowLikes = self.onlyShowLikes
         return copy
     }
     
@@ -36,10 +37,11 @@ class LogsFilter: NSObject, NSCopying {
     private(set) var filteredLogActionActionTypeIds: Set<Int> = []
     
     private(set) var filteredFamilyMemberUserIds: Set<String> = []
-    
+
     private(set) var timeRangeField: LogsSortField = LogsSortField.defaultSortField
     private(set) var timeRangeFromDate: Date?
     private(set) var timeRangeToDate: Date?
+    private(set) var onlyShowLikes: Bool = false
     
     var isFromDateEnabled: Bool {
         return timeRangeFromDate != nil
@@ -57,6 +59,7 @@ class LogsFilter: NSObject, NSCopying {
         + filteredDogsUUIDs.count
         + filteredLogActionActionTypeIds.count
         + filteredFamilyMemberUserIds.count
+        + (onlyShowLikes ? 1 : 0)
         + (isFromDateEnabled ? 1 : 0)
         + (isToDateEnabled ? 1 : 0)
         
@@ -94,6 +97,7 @@ class LogsFilter: NSObject, NSCopying {
         apply(filterDogs: [])
         apply(filterLogActions: [])
         apply(filterFamilyMembers: [])
+        apply(onlyShowLikes: false)
         apply(searchText: "")
         apply(timeRangeField: LogsSortField.defaultSortField)
         apply(timeRangeFromDate: nil)
@@ -135,6 +139,10 @@ class LogsFilter: NSObject, NSCopying {
     }
     func remove(userId: String) {
         filteredFamilyMemberUserIds.remove(userId)
+    }
+
+    func apply(onlyShowLikes: Bool) {
+        self.onlyShowLikes = onlyShowLikes
     }
     
     // searchText

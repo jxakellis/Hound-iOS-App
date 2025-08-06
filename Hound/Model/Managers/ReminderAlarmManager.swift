@@ -225,7 +225,7 @@ final class ReminderAlarmManager {
         let log = Log(logCreatedByReminderUUID: reminder.reminderUUID)
         log.logActionTypeId = logActionType.logActionTypeId
         log.logCustomActionName = reminder.reminderCustomActionName
-        log.changeLogDate(logStartDate: Date(), logEndDate: nil)
+        log.setLogDate(logStartDate: Date(), logEndDate: nil)
 
         // special case. Once a oneTime reminder executes, it must be delete. Therefore there are special server queries.
         if reminder.reminderType == .oneTime {

@@ -38,6 +38,7 @@ class LogsSortVC: HoundScrollViewController,
         return view
     }()
     
+    // TODO UI think of better names that "Field" and "Order" for this
     private let sortFieldHeaderLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Field"
