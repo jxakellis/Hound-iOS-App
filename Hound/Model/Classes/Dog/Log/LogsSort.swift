@@ -115,7 +115,7 @@ final class LogsSort: NSObject, NSCopying {
     /// Sorts an array of logs based on the current sort field and direction.
     static func sort(_ logs: [Log], sortField: LogsSortField, sortDirection: LogsSortDirection) -> [Log] {
         let sortedLogs: [Log] = logs.sorted { (lhs: Log, rhs: Log) in
-            let comparisonResult = sortField.compare(lhs: rhs, rhs: rhs)
+            let comparisonResult = sortField.compare(lhs: lhs, rhs: rhs)
             return sortDirection == .ascending ? (comparisonResult == .orderedAscending) : (comparisonResult == .orderedDescending)
         }
         

@@ -130,6 +130,7 @@ enum AppVersion: String, CaseIterable, Comparable {
             // TODO RELEASE NOTES
             // new log sorting
             // log favoriting
+            // log tracks creation / modified time and by who
             // sign in w google
             
             return builder.buildAttributedString()

@@ -300,12 +300,12 @@ final class LogsVC: HoundViewController,
             )
         }
         if (sender.localized is MainTabBarController) == true {
-//            if logsAddLogViewController?.viewIfLoaded?.window == nil {
-//                // If add‐log VC isn’t currently visible, dismiss it when dog data changes
-//                logsAddLogViewController?.dismiss(animated: true)
-//            }
+            //            if logsAddLogViewController?.viewIfLoaded?.window == nil {
+            //                // If add‐log VC isn’t currently visible, dismiss it when dog data changes
+            //                logsAddLogViewController?.dismiss(animated: true)
+            //            }
             // Dismiss filter VC if data changes, so filters remain valid
-//            logsFilterViewController?.dismiss(animated: true)
+            //            logsFilterViewController?.dismiss(animated: true)
         }
         if (sender.localized is MainTabBarController) == false {
             delegate?.didUpdateDogManager(
@@ -322,6 +322,18 @@ final class LogsVC: HoundViewController,
         self.eligibleForGlobalPresenter = true
         
         logsTableViewController.setup(delegate: self)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // don't use .maxY because this adds height + safe area inset, but logsTableVC already accounts for safe area inset, so that offsets it too much
+        let exportButtonBottom = exportLogsButton.convert(exportLogsButton.bounds, to: view).height
+        
+        logsTableViewController.tableView.contentInset.top = exportLogsButton.isHidden
+        ? Constant.Constraint.Spacing.absoluteVertInset
+        : (exportButtonBottom + Constant.Constraint.Spacing.absoluteVertInset)
+        logsTableViewController.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
     }
     
     // MARK: - Setup

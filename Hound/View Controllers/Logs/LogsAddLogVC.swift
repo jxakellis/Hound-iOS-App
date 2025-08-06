@@ -113,22 +113,46 @@ final class LogsAddLogVC: HoundScrollViewController,
             return false
         }
         
-        // TODO BUG if text is 0.xx its okay but .xxxxx allows >2 digits after the period/comma
-        
         // MARK: Verify number of digits after period or comma
-        // "123.456"
-        if let componentBeforeDecimalSeparator = updatedText.split(separator: decimalSeparator)[safe: 0] {
-            // "123"
-            // We only want to allow five numbers before the decimal place
-            if componentBeforeDecimalSeparator.count > 5 {
+        let maxComponentsBeforeDecimalSeparator = 5
+        let maxComponentsAfterDecimalSeparator = 2
+        let splitText = updatedText.split(separator: decimalSeparator)
+        
+        if occurancesOfDecimalSeparator == 0, let component = splitText.first {
+            // e.g. text is "xxx" with no separator
+            if component.count > maxComponentsBeforeDecimalSeparator {
                 return false
             }
         }
-        if let componentAfterDecimalSeparator = updatedText.split(separator: decimalSeparator)[safe: 1] {
-            // "456"
-            // We only want to allow two decimals after the decimal place
-            if componentAfterDecimalSeparator.count > 2 {
-                return false
+        else if splitText.count == 1, let component = splitText.first {
+            // e.g. text is either "xx." or ".xx" with the separator at the exact from or end
+            if updatedText.last == decimalSeparator {
+                // e.g. text is "xx."
+                if component.count > maxComponentsBeforeDecimalSeparator {
+                    return false
+                }
+            }
+            else if updatedText.first == decimalSeparator {
+                // e.g. text is ".xx"
+                if component.count > maxComponentsAfterDecimalSeparator {
+                    return false
+                }
+            }
+        }
+        else if splitText.count == 2 {
+            // e.g. text is "123.456" with separator in the middle
+            if let componentBeforeDecimalSeparator = splitText[safe: 0] {
+                // "123"
+                // We only want to allow five numbers before the decimal place
+                if componentBeforeDecimalSeparator.count > maxComponentsBeforeDecimalSeparator {
+                    return false
+                }
+            }
+            if let componentAfterDecimalSeparator = splitText[safe: 1] {
+                // "456"
+                if componentAfterDecimalSeparator.count > maxComponentsAfterDecimalSeparator {
+                    return false
+                }
             }
         }
         
@@ -196,7 +220,6 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.text = "Logged by"
         return label
     }()
-    // TODO LOG SORTING Add subtext to this "Logged at XXX. Last modified by XXX at XXX"
     private lazy var familyMemberLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 285, compressionResistancePriority: 285)
         label.applyStyle(.thinGrayBorder)
@@ -205,10 +228,20 @@ final class LogsAddLogVC: HoundScrollViewController,
         label.shouldInsetText = true
         return label
     }()
+    private lazy var familyMemberDescriptionLabel: HoundLabel = {
+        let label = HoundLabel()
+        label.font = Constant.Visual.Font.secondaryColorDescLabel
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = false
+        return label
+    }()
     private lazy var familyMemberStack: HoundStackView = {
         let stack = HoundStackView()
         stack.addArrangedSubview(familyMemberHeaderLabel)
         stack.addArrangedSubview(familyMemberLabel)
+        stack.addArrangedSubview(familyMemberDescriptionLabel)
         stack.axis = .vertical
         stack.spacing = Constant.Constraint.Spacing.contentTightIntraVert
         return stack
@@ -760,18 +793,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             }
             updateLogStartEndDateErrors()
             
-            if Calendar.user.isDateInToday(start) {
-                // If the start date is today, show only time
-                // 7:53 AM
-                logStartDateLabel.text = start.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
-            }
-            else {
-                // If start date is not today, show month/day and possibly year
-                let yearOfStart = Calendar.user.component(.year, from: start)
-                let currentYear = Calendar.user.component(.year, from: Date())
-                logStartDateLabel.text = start.houndFormatted(.template(yearOfStart == currentYear ? "MMMMdhma" : "MMMMdyyyyhma"), displayTimeZone: UserConfiguration.timeZone)
-            }
-            
+            logStartDateLabel.text = formatDateRelativeToNow(start, addExtraAtForToday: false)
             logStartDatePicker.date = start
         }
     }
@@ -807,18 +829,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             }
             updateLogStartEndDateErrors()
             
-            if Calendar.user.isDateInToday(end) {
-                // If the end date is today, show only time
-                // 7:53 AM
-                logEndDateLabel.text = end.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
-            }
-            else {
-                // If end date is not today, show month/day and possibly year
-                let yearOfEnd = Calendar.user.component(.year, from: end)
-                let currentYear = Calendar.user.component(.year, from: Date())
-                logEndDateLabel.text = end.houndFormatted(.template((yearOfEnd == currentYear) ? "MMMMdhma" : "MMMMdyyyyhma"), displayTimeZone: UserConfiguration.timeZone)
-            }
-            
+            logEndDateLabel.text = formatDateRelativeToNow(end, addExtraAtForToday: false)
             logEndDatePicker.date = end
         }
     }
@@ -921,6 +932,27 @@ final class LogsAddLogVC: HoundScrollViewController,
         : "Which dog(s) did you take care of?"
         
         familyMemberLabel.text = FamilyInformation.findFamilyMember(userId: logToUpdate?.logCreatedBy)?.displayFullName
+        familyMemberDescriptionLabel.text = {
+            guard let logToUpdate = logToUpdate else {
+                return ""
+            }
+            
+            var text = "Logged \(formatDateRelativeToNow(logToUpdate.logCreated, addExtraAtForToday: true))"
+            
+            let modifiedDate = logToUpdate.logLastModified
+            let modifiedBy = FamilyInformation.findFamilyMember(userId: logToUpdate.logLastModifiedBy)?.displayFullName
+            
+            if modifiedDate != nil || modifiedBy != nil {
+                text += ". Last Modified"
+                if let modifiedDate = modifiedDate {
+                    text += " \(formatDateRelativeToNow(modifiedDate, addExtraAtForToday: true))"
+                }
+                if let modifiedBy = modifiedBy {
+                    text += " by \(modifiedBy)"
+                }
+            }
+            return text
+        }()
         familyMemberStack.isHidden = logToUpdate == nil
         
         selectedLogAction = logToUpdate?.logActionType
@@ -1067,6 +1099,29 @@ final class LogsAddLogVC: HoundScrollViewController,
         if logEndDateLabel.errorMessage == Constant.Error.LogError.logEndTooEarly || logEndDatePicker.errorMessage == Constant.Error.LogError.logEndTooEarly {
             logEndDateLabel.errorMessage = nil
             logEndDatePicker.errorMessage = nil
+        }
+    }
+    
+    private func formatDateRelativeToNow(_ date: Date, addExtraAtForToday: Bool) -> String {
+        let extraAt = addExtraAtForToday ? "at " : ""
+        if Calendar.user.isDateInToday(date) {
+            // If the start date is today, show only time
+            // 7:53 AM
+            return extraAt + date.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
+        }
+        else if Calendar.user.isDateInYesterday(date) {
+            // If the start date is yesterday, show "Yesterday at 7:53 AM"
+            return "Yesterday at " + date.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
+        }
+        else if Calendar.user.isDateInTomorrow(date) {
+            // If the start date is tomorrow, show "Tomorrow at 7:53 AM"
+            return "Tomorrow at " + date.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
+        }
+        else {
+            // If start date is not today, show month/day and possibly year
+            let yearOfStart = Calendar.user.component(.year, from: date)
+            let currentYear = Calendar.user.component(.year, from: Date())
+            return date.houndFormatted(.template(yearOfStart == currentYear ? "MMMMdhma" : "MMMMdyyyyhma"), displayTimeZone: UserConfiguration.timeZone)
         }
     }
     

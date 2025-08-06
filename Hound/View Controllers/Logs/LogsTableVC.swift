@@ -117,8 +117,7 @@ final class LogsTableVC: HoundTableViewController {
         super.viewDidLoad()
         // self.enableDummyHeaderView = true
         self.tableView.register(LogTVC.self, forCellReuseIdentifier: LogTVC.reuseIdentifier)
-        self.tableView.contentInset.top = Constant.Constraint.Spacing.absoluteVertInset
-        self.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
+        // tableView.contentInset is set in LogsVC
         
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(refreshTableData), for: .valueChanged)

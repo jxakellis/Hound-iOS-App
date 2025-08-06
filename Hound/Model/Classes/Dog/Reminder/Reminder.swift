@@ -8,8 +8,6 @@
 
 import UIKit
 
-// TODO reminder/dog/trigger, dont let createdBy be null. fudge fill it with just the family head.
-
 enum ReminderType: String, CaseIterable {
     
     init?(rawValue: String) {
