@@ -139,4 +139,22 @@ class HoundViewController: UIViewController, HoundUIProtocol, HoundUIKitProtocol
     }
     
     func didUpdateUserTimeZone() { }
+    
+    func presentUnsavedChangesAlert() {
+        let unsavedInformationConfirmation = UIAlertController(
+            title: "Are you sure you want to exit?",
+            message: nil,
+            preferredStyle: .alert
+        )
+        let exitAlertAction = UIAlertAction(
+            title: "Yes, I don't want to save changes",
+            style: .default
+        ) { _ in
+            self.dismiss(animated: true)
+        }
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        unsavedInformationConfirmation.addAction(exitAlertAction)
+        unsavedInformationConfirmation.addAction(cancelAlertAction)
+        PresentationManager.enqueueAlert(unsavedInformationConfirmation)
+    }
 }

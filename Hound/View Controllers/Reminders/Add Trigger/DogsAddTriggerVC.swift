@@ -233,12 +233,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
             self.dismiss(animated: true)
             return
         }
-        let alert = UIAlertController(title: "Are you sure you want to exit?", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { _ in
-            self.dismiss(animated: true)
-        })
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        PresentationManager.enqueueAlert(alert)
+        presentUnsavedChangesAlert()
     }
     
     @objc private func didTapScreen(sender: UITapGestureRecognizer) {

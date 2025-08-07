@@ -172,12 +172,14 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 return false
             }
 
-            if filter.isFromDateEnabled, let fromDate = filter.timeRangeFromDate,
-               filter.timeRangeField.date(log) <= fromDate { return false }
+            if let timeRangeField = filter.timeRangeField {
+                if filter.isFromDateEnabled, let fromDate = filter.timeRangeFromDate,
+                   timeRangeField.dateForDateType(log) <= fromDate { return false }
 
-            if filter.isToDateEnabled, let toDate = filter.timeRangeToDate,
-               filter.timeRangeField.date(log) >= toDate { return false }
-
+                if filter.isToDateEnabled, let toDate = filter.timeRangeToDate,
+                   timeRangeField.dateForDateType(log) >= toDate { return false }
+            }
+        
             if filter.searchText.isEmpty == false && log.matchesSearchText(filter.searchText) == false {
                 return false
             }
@@ -241,7 +243,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
             // If the last group is for the same day, append; otherwise, start a new group
             if let lastDateGroup = allLogsGroupedByDate.last,
                let (_, lastLog) = lastDateGroup.last,
-               Calendar.user.isDate(sort.dateType.date(log), inSameDayAs: sort.dateType.date(lastLog)) {
+               Calendar.user.isDate(sort.dateType.dateForDateType(log), inSameDayAs: sort.dateType.dateForDateType(lastLog)) {
                 allLogsGroupedByDate[allLogsGroupedByDate.count - 1].append((dogUUID, log))
             }
             else {

@@ -25,20 +25,36 @@ class LogsFilter: NSObject, NSCopying {
         return copy
     }
     
-    // MARK: - Properties
+    // MARK: - Equatable
     
-    private(set) var dogManager: DogManager = DogManager()
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? LogsFilter else {
+            return false
+        }
+        
+        // DONT check availableDogManager
+        return self.filteredDogsUUIDs == object.filteredDogsUUIDs &&
+            self.searchText == object.searchText &&
+            self.filteredDogsUUIDs == object.filteredDogsUUIDs &&
+            self.filteredLogActionActionTypeIds == object.filteredLogActionActionTypeIds &&
+            self.filteredFamilyMemberUserIds == object.filteredFamilyMemberUserIds &&
+            self.timeRangeField == object.timeRangeField &&
+            self.timeRangeFromDate == object.timeRangeFromDate &&
+            self.timeRangeToDate == object.timeRangeToDate &&
+            self.onlyShowLikes == object.onlyShowLikes
+    }
     
     /// Text used to broadly search through logs. If empty, no search text is applied
     private(set) var searchText: String = ""
     
+    private(set) var availableDogManager: DogManager = DogManager()
     private(set) var filteredDogsUUIDs: Set<UUID> = []
     
     private(set) var filteredLogActionActionTypeIds: Set<Int> = []
     
     private(set) var filteredFamilyMemberUserIds: Set<String> = []
 
-    private(set) var timeRangeField: LogsDateType = LogsDateType.defaultDateType
+    private(set) var timeRangeField: LogsDateType?
     private(set) var timeRangeFromDate: Date?
     private(set) var timeRangeToDate: Date?
     private(set) var onlyShowLikes: Bool = false
@@ -68,9 +84,9 @@ class LogsFilter: NSObject, NSCopying {
     
     // MARK: - Main
     
-    init(dogManager: DogManager) {
+    init(availableDogManager: DogManager) {
         super.init()
-        apply(dogManager: dogManager)
+        apply(availableDogManager: availableDogManager)
     }
     
     // MARK: - Computed Properties
@@ -80,7 +96,7 @@ class LogsFilter: NSObject, NSCopying {
     }
     
     var availableDogs: [Dog] {
-        return dogManager.dogs
+        return availableDogManager.dogs
     }
     
     var availableLogActions: [LogActionType] {
@@ -104,8 +120,8 @@ class LogsFilter: NSObject, NSCopying {
         apply(timeRangeToDate: nil)
     }
     
-    func apply(dogManager: DogManager) {
-        self.dogManager = dogManager
+    func apply(availableDogManager: DogManager) {
+        self.availableDogManager = availableDogManager
     }
     
     // filteredDogsUUIDs
@@ -151,7 +167,7 @@ class LogsFilter: NSObject, NSCopying {
     }
     
     // timeRangeField, timeRangeFromDate, timeRangeToDate
-    func apply(timeRangeField: LogsDateType) {
+    func apply(timeRangeField: LogsDateType?) {
         self.timeRangeField = timeRangeField
     }
     func apply(timeRangeFromDate: Date?) {

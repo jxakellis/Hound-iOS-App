@@ -128,10 +128,11 @@ enum AppVersion: String, CaseIterable, Comparable {
             var builder = ReleaseNotesBuilder()
             
             // TODO RELEASE NOTES
-            // new log sorting
             // log favoriting
-            // log tracks creation / modified time and by who
             // sign in w google
+            // new log sorting
+            // log tracks creation / modified time and by who
+            // automations track when last activated
             
             return builder.buildAttributedString()
         }

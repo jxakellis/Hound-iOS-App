@@ -113,11 +113,12 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         return stack
     }()
     
+    // TODO if you press and hold on the like button, and there are >= 1 likes, show a list of likes (partial page sheet vc thing)
+    // TODO make a partial page sheet vc. instead of being a full page, it only comes up partially on the screen (e.g. maybe a 1/3 of the way). you can drag on the top to dismiss it or drag up to make it appear the full way. if it is fully appeared then it should look and function similar to hound scroll vc. the header should be the same too
     private lazy var likeButton: HoundButton = {
         let button = HoundButton(type: .system)
-        // TODO UI the animation for click/unclock looks weird. the image changes but its not really sync'd up with the color change that happens when the button is selected. i cant just set heart.fill as the .selected image though because then it only shows the image when the button is physically tapped, not when its actually on / off (aka liked or not liked)
-        // TODO UI make this a better color. pink is too aggressive but i need a good, natural color for it.
-        button.tintColor = .systemGray2
+//        button.setImage(UIImage(systemName: "heart"), for: .normal)
+//        button.setImage(UIImage(systemName: "heart.fill"), for: .selected)
         
         let action = UIAction { [weak self] _  in
             guard let self = self else { return }
@@ -156,7 +157,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         layout.minimumLineSpacing = Constant.Constraint.Spacing.contentIntraVert
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.scrollDirection = .vertical
-
+        
         let collectionView = HoundIntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.register(LogInfoBubbleCVC.self, forCellWithReuseIdentifier: LogInfoBubbleCVC.reuseIdentifier)
@@ -187,7 +188,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         
         // depending on the different sort methods, the logs displayed will be grouped and displayed by different dates, thus affecting the headers (e.g. you have a group "Today" of logs but that could be Today for start date, or created date, etc...
         // thus if times are relative, e.g. 8:50AM, they need to be relative to this header
-        let cellGroupedByDate = sort.dateType.date(log)
+        let cellGroupedByDate = sort.dateType.dateForDateType(log)
         
         func convertDateToRelative(_ convert: Date) -> String {
             if Calendar.user.isDate(convert, inSameDayAs: cellGroupedByDate) {
@@ -265,13 +266,20 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
     // MARK: - Functions
     
     private func updateLikeButtonBadge(animated: Bool) {
-        UIView.animate(withDuration: animated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
-            if let userId = UserInformation.userId, self.log?.likedByUserIds.contains(userId) == true {
-                self.likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            }
-            else {
-                self.likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
-            }
+        let duration = animated ? Constant.Visual.Animation.selectSingleElement : 0.0
+        
+        let isLiked: Bool
+        if let userId = UserInformation.userId {
+            isLiked = self.log?.likedByUserIds.contains(userId) == true
+        }
+        else {
+            isLiked = false
+        }
+        
+        UIView.transition(with: likeButton, duration: duration, options: .transitionCrossDissolve) {
+            self.likeButton.setImage(isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart"), for: .normal)
+            self.likeButton.setImage(isLiked ? UIImage(systemName: "heart") : UIImage(systemName: "heart.fill"), for: .selected)
+            self.likeButton.tintColor = isLiked ? .systemRed : .systemGray2
             self.likeButton.badgeValue = self.log?.likedByUserIds.count
             self.likeButton.badgeVisible = self.log?.likedByUserIds.isEmpty == false
         }
@@ -289,7 +297,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
     
     private func remakeLikeButtonConstraints() {
         let shouldBeInStack = infoItems.isEmpty && logDurationLabel.text == nil
-
+        
         likeButton.snp.remakeConstraints { make in
             if shouldBeInStack {
                 // TODO TEST this might become funky for big screen sizes and overlap with stuff
@@ -317,11 +325,11 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         infoBubbleCollectionView.snp.makeConstraints { make in
             make.leading.equalTo(containerView).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
-
+        
         guard !infoItems.isEmpty else {
             return
         }
-
+        
         infoBubbleCollectionView.snp.makeConstraints { make in
             make.top.equalTo(topStack.snp.bottom).offset(Constant.Constraint.Spacing.contentIntraVert)
             make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.contentIntraVert)

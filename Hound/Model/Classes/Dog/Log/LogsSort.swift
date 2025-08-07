@@ -29,7 +29,7 @@ enum LogsDateType: CaseIterable {
         }
     }
     
-    func date(_ log: Log) -> Date {
+    func dateForDateType(_ log: Log) -> Date {
         switch self {
         case .createdDate:
             return log.logCreated
@@ -43,7 +43,7 @@ enum LogsDateType: CaseIterable {
     }
     
     func compare(lhs: Log, rhs: Log) -> ComparisonResult {
-        return self.date(lhs).compare(self.date(rhs))
+        return self.dateForDateType(lhs).compare(self.dateForDateType(rhs))
     }
 }
 
@@ -72,6 +72,16 @@ final class LogsSort: NSObject, NSCopying {
         copy.dateType = self.dateType
         copy.sortDirection = self.sortDirection
         return copy
+    }
+    
+    // MARK: - Equatable
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? LogsSort else {
+            return false
+        }
+        
+        return self.dateType == object.dateType && self.sortDirection == object.sortDirection
     }
     
     // MARK: - Properties

@@ -297,18 +297,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
             return
         }
         
-        let alert = UIAlertController(
-            title: "Are you sure you want to exit?",
-            message: nil,
-            preferredStyle: .alert
-        )
-        let exitAction = UIAlertAction(title: "Yes, I don't want to save changes", style: .default) { [weak self] _ in
-            self?.dismiss(animated: true)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alert.addAction(exitAction)
-        alert.addAction(cancelAction)
-        PresentationManager.enqueueAlert(alert)
+        presentUnsavedChangesAlert()
     }
     
     // MARK: - Setup Elements

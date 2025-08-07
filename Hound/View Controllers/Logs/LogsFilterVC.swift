@@ -8,8 +8,6 @@
 
 import UIKit
 
-// TODO QOL add a leave without save warning. if the filter has changed, warn the user that they will lose their changes if they leave without saving. this should appear when the user try to close the view (swiping down from the top or hitting the x) but not when apply or reset are called. we should implement logic similar to reminders/automatiosn view. where, when setup, we make a copy of the filter. then all the changes the user makes are appleid to a copy of that filter. then, when they go to exit, if that copy is different (make logsfilter conform to equatable or somerthing) then pop the warning
-
 protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(logsFilter: LogsFilter)
 }
@@ -24,7 +22,8 @@ enum LogsFilterDropDownTypes: String, HoundDropDownType {
 class LogsFilterVC: HoundScrollViewController,
                     HoundDropDownDataSource,
                     HoundDropDownManagerDelegate,
-                    UITextFieldDelegate {
+                    UITextFieldDelegate,
+                    UIAdaptivePresentationControllerDelegate {
     
     // MARK: - UITextFieldDelegate
     
@@ -39,11 +38,25 @@ class LogsFilterVC: HoundScrollViewController,
         return true
     }
     
+    // MARK: - UIAdaptivePresentationControllerDelegate
+    
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return !didUpdateInitialFilter
+    }
+    
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        if didUpdateInitialFilter {
+            presentUnsavedChangesAlert()
+        }
+    }
+    
     // MARK: - Elements
     
-    private let pageHeaderView: HoundPageSheetHeaderView = {
+    private lazy var pageHeaderView: HoundPageSheetHeaderView = {
         let view = HoundPageSheetHeaderView(huggingPriority: 350, compressionResistancePriority: 350)
         view.pageHeaderLabel.text = "Filter"
+        view.backButton.shouldDismissParentViewController = false
+        view.backButton.addTarget(self, action: #selector(didTapBack), for: .touchUpInside)
         return view
     }()
     
@@ -54,21 +67,20 @@ class LogsFilterVC: HoundScrollViewController,
         return label
     }()
     
-    private let timeRangeFieldHeaderLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
-        label.text = "Date to Filter"
-        label.font = Constant.Visual.Font.primaryRegularLabel
-        return label
-    }()
+    //    private let timeRangeFieldHeaderLabel: HoundLabel = {
+    //        let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
+    //        label.text = "Date to Filter"
+    //        label.font = Constant.Visual.Font.primaryRegularLabel
+    //        return label
+    //    }()
     
-    // TODO UI timeRangeFieldLabel should start blank and have a placeholder. if user tries to save filter w/ from/to on but no field, show an error message
     private lazy var timeRangeFieldLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.shouldInsetText = true
+        label.placeholder = "Select a date to use..."
         
-        // TODO Add placeholder "select date type or select date to filter by...
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(
             dropDownManager.showHideDropDownGesture(
@@ -277,6 +289,14 @@ class LogsFilterVC: HoundScrollViewController,
         delegate: self
     )
     
+    @objc private func didTapBack(_ sender: Any) {
+        guard didUpdateInitialFilter else {
+            self.dismiss(animated: true)
+            return
+        }
+        presentUnsavedChangesAlert()
+    }
+    
     @objc private func didChangeFromDate(_ sender: UIDatePicker) {
         filter?.apply(timeRangeFromDate: sender.date)
         if sender.date > toDatePicker.date {
@@ -295,6 +315,7 @@ class LogsFilterVC: HoundScrollViewController,
         toDateSwitch.setOn(true, animated: true)
     }
     
+    // TODO add additional logic. when a date type is selected, then flip both of these switches on. if date type is deselected, then flip them off
     @objc private func didToggleFromDate(_ sender: HoundSwitch) {
         filter?.apply(timeRangeFromDate: sender.isOn ? fromDatePicker.date : nil)
         fromDatePicker.isEnabled = sender.isOn
@@ -322,6 +343,7 @@ class LogsFilterVC: HoundScrollViewController,
     
     @objc private func didTapApplyFilter(_ sender: Any) {
         guard let filter = filter else { return }
+        // TODO add error message to time range label if none is selected but time range enabled
         delegate?.didUpdateLogsFilter(logsFilter: filter)
     }
     
@@ -330,6 +352,12 @@ class LogsFilterVC: HoundScrollViewController,
     private weak var delegate: LogsFilterDelegate?
     
     private var filter: LogsFilter?
+    private var initialFilter: LogsFilter?
+    
+    private var didUpdateInitialFilter: Bool {
+        guard let filter = filter, let initialFilter = initialFilter else { return false }
+        return filter != initialFilter
+    }
     
     // MARK: - Main
     
@@ -347,6 +375,8 @@ class LogsFilterVC: HoundScrollViewController,
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
         self.enableSwipeBackToDismiss = true
+        
+        self.presentationController?.delegate = self
         
         updateDynamicUIElements()
     }
@@ -368,6 +398,7 @@ class LogsFilterVC: HoundScrollViewController,
     func setup(delegate: LogsFilterDelegate, filter: LogsFilter) {
         self.delegate = delegate
         self.filter = (filter.copy() as? LogsFilter) ?? filter
+        self.initialFilter = (filter.copy() as? LogsFilter) ?? self.initialFilter
         updateDynamicUIElements()
     }
     
@@ -386,7 +417,7 @@ class LogsFilterVC: HoundScrollViewController,
             filterDogsLabel.text = {
                 if filter.filteredDogsUUIDs.count == 1, let dogUUID = filter.filteredDogsUUIDs.first {
                     // The user only has one dog selected to filter by
-                    return filter.dogManager.findDog(dogUUID: dogUUID)?.dogName ?? Constant.Visual.Text.unknownName
+                    return filter.availableDogManager.findDog(dogUUID: dogUUID)?.dogName ?? Constant.Visual.Text.unknownName
                 }
                 else if filter.filteredDogsUUIDs.count > 1 && filter.filteredDogsUUIDs.count < filter.availableDogs.count {
                     // The user has multiple, but not all, dogs selected to filter by
@@ -443,14 +474,33 @@ class LogsFilterVC: HoundScrollViewController,
         }
         
         if let filter = filter {
-            let noDate = Date()
-            let fromDate = filter.timeRangeFromDate ?? filter.timeRangeToDate ?? noDate
-            let toDate = filter.timeRangeToDate ?? filter.timeRangeFromDate ?? noDate
+            let calendar = Calendar.user
+            let now = Date()
             
-            timeRangeFieldLabel.text = filter.timeRangeField.readableValue
+            var fromDate: Date?
+            var toDate: Date?
             
-            fromDatePicker.setDate(fromDate, animated: false)
-            toDatePicker.setDate(toDate, animated: false)
+            if filter.timeRangeFromDate == nil && filter.timeRangeToDate == nil {
+                fromDate = calendar.date(byAdding: .day, value: -1, to: now)
+                toDate = calendar.date(byAdding: .day, value: 1, to: now)
+            }
+            else if let from = filter.timeRangeFromDate, filter.timeRangeToDate == nil {
+                fromDate = from
+                toDate = calendar.date(byAdding: .day, value: 1, to: from)
+            }
+            else if let to = filter.timeRangeToDate, filter.timeRangeFromDate == nil {
+                toDate = to
+                fromDate = calendar.date(byAdding: .day, value: -1, to: to)
+            }
+            else {
+                fromDate = filter.timeRangeFromDate
+                toDate = filter.timeRangeToDate
+            }
+            
+            timeRangeFieldLabel.text = filter.timeRangeField?.readableValue
+            
+            fromDatePicker.setDate(fromDate ?? now, animated: false)
+            toDatePicker.setDate(toDate ?? now, animated: false)
             
             fromDateSwitch.setOn(filter.isFromDateEnabled, animated: false)
             fromDatePicker.isEnabled = filter.isFromDateEnabled
@@ -552,14 +602,22 @@ class LogsFilterVC: HoundScrollViewController,
         
         switch type {
         case .filterTimeRange:
-            let type = filter.availableTimeRangeFields[indexPath.row]
-            
-            // prevent deselectiong of time range field. we shuld always have one selected
-            guard type != filter.timeRangeField else {
+            guard !cell.isCustomSelected else {
+                cell.setCustomSelected(false)
+                filter.apply(timeRangeField: nil)
+                updateDynamicUIElements()
                 return
             }
             
+            if let previouslySelected = filter.timeRangeField, let previouslySelectedIndex = filter.availableTimeRangeFields.firstIndex(of: previouslySelected) {
+                let previouslySelectedIndexPath = IndexPath(row: previouslySelectedIndex, section: 0)
+                let previousSelectedCell = dropDown.dropDownTableView?.cellForRow(at: previouslySelectedIndexPath) as? HoundDropDownTVC
+                previousSelectedCell?.setCustomSelected(false)
+            }
+            
             cell.setCustomSelected(true)
+            
+            let type = filter.availableTimeRangeFields[indexPath.row]
             filter.apply(timeRangeField: type)
             dropDown.hideDropDown(animated: true)
         case .filterDogs:
@@ -650,7 +708,7 @@ class LogsFilterVC: HoundScrollViewController,
         
         containerView.addSubview(timeRangeSectionLabel)
         
-        containerView.addSubview(timeRangeFieldHeaderLabel)
+        //        containerView.addSubview(timeRangeFieldHeaderLabel)
         containerView.addSubview(timeRangeFieldLabel)
         
         containerView.addSubview(timeRangeFromHeaderLabel)
@@ -704,16 +762,16 @@ class LogsFilterVC: HoundScrollViewController,
             timeRangeSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
         ])
         
-        // timeRangeFieldHeaderLabel
-        NSLayoutConstraint.activate([
-            timeRangeFieldHeaderLabel.topAnchor.constraint(equalTo: timeRangeSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            timeRangeFieldHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeFieldHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
-        ])
+        //        // timeRangeFieldHeaderLabel
+        //        NSLayoutConstraint.activate([
+        //            timeRangeFieldHeaderLabel.topAnchor.constraint(equalTo: timeRangeSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+        //            timeRangeFieldHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+        //            timeRangeFieldHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
+        //        ])
         
         // timeRangeFieldLabel
         NSLayoutConstraint.activate([
-            timeRangeFieldLabel.topAnchor.constraint(equalTo: timeRangeFieldHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
+            timeRangeFieldLabel.topAnchor.constraint(equalTo: timeRangeSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
             timeRangeFieldLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             timeRangeFieldLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             timeRangeFieldLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: view),

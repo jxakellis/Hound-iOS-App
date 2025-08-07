@@ -65,7 +65,7 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
         }
     }
     
-    private var storedLogsFilter: LogsFilter = LogsFilter(dogManager: DogManager())
+    private var storedLogsFilter: LogsFilter = LogsFilter(availableDogManager: DogManager())
     var logsFilter: LogsFilter {
         get {
             storedLogsFilter
@@ -105,7 +105,7 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
     /// Update dogManager and refresh UI accordingly
     func setDogManager(sender: Sender, dogManager: DogManager) {
         self.dogManager = dogManager
-        logsFilter.apply(dogManager: dogManager)
+        logsFilter.apply(availableDogManager: dogManager)
         
         if (sender.localized is LogsTableVC) == true {
             delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), dogManager: dogManager)
@@ -244,7 +244,7 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
             return headerView
         }
         // depending upon what field were sorting by, this dictates the header
-        let date = self.logsSort.dateType.date(log)
+        let date = self.logsSort.dateType.dateForDateType(log)
         let currentYear = Calendar.user.component(.year, from: Date())
         let dateYear = Calendar.user.component(.year, from: date)
         
