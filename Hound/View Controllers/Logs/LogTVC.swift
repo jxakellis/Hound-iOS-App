@@ -118,8 +118,8 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
     
     private lazy var likeButton: HoundButton = {
         let button = HoundButton(type: .system)
-        // TODO UI the animation for click/unclock looks weird
-        // TODO UI make this a better color
+        // TODO UI the animation for click/unclock looks weird. the image changes but its not really sync'd up with the color change that happens when the button is selected. i cant just set heart.fill as the .selected image though because then it only shows the image when the button is physically tapped, not when its actually on / off (aka liked or not liked)
+        // TODO UI make this a better color. pink is too aggressive but i need a good, natural color for it.
         button.tintColor = .systemGray2
         
         let action = UIAction { [weak self] _  in

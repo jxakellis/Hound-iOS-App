@@ -9,7 +9,7 @@
 import SnapKit
 import UIKit
 
-// TODO QOL add a leave without save warning
+// TODO QOL add a leave without save warning. if the logsort has changed, warn the user that they will lose their changes if they leave without saving. this should appear when the user try to close the view (swiping down from the top or hitting the x) but not when apply or reset are called. we should implement logic similar to reminders/automatiosn view. where, when setup, we make a copy of the sort. then all the changes the user makes are appleid to a copy of that sort. then, when they go to exit, if that copy is different (make logssort conform to equatable or somerthing) then pop the warning
 
 protocol LogsSortDelegate: AnyObject {
     func didUpdateLogsSort(logsSort: LogsSort)

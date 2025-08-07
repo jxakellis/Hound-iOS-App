@@ -8,7 +8,7 @@
 
 import UIKit
 
-// TODO QOL add a leave without save warning
+// TODO QOL add a leave without save warning. if the filter has changed, warn the user that they will lose their changes if they leave without saving. this should appear when the user try to close the view (swiping down from the top or hitting the x) but not when apply or reset are called. we should implement logic similar to reminders/automatiosn view. where, when setup, we make a copy of the filter. then all the changes the user makes are appleid to a copy of that filter. then, when they go to exit, if that copy is different (make logsfilter conform to equatable or somerthing) then pop the warning
 
 protocol LogsFilterDelegate: AnyObject {
     func didUpdateLogsFilter(logsFilter: LogsFilter)
