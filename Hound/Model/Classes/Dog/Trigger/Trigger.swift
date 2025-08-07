@@ -8,7 +8,7 @@
 
 import UIKit
 
-// TODO AUTOMATIONS track trigger activations and display last activation in trigger tvc
+// TODO AUTOMATIONS triggers should track their last activations. it should be an array of dates that exist on the object. this is similar to how logs have an array of liked by user ids, etc. it will need to encode/decode this locally when persisted/copied/decoded, and also be able to send it to the server when it updates. this activation value should only be updated when the trigger is activated, creating a reminder. this is trickty however as we dont want api calls in doglogmanager. instead probably return the triggers that got activated from createTriggerResultReminder and we can somehow update the trigger from there with its new activation dates. be thoughtful. further, then we want a little info bubble at the button of trigger tvc inside triggermanagerview. it should basically say last activated at 8:50PM or 3:50PM yesterday etc. this should only search a week back though, if not activated in the last week then show no info bubble. if >1 activations in the last week, then we have a second info bubble that says actived x times in te past week
 
 enum TriggerType: String, CaseIterable {
     

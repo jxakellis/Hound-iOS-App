@@ -61,7 +61,7 @@ class LogsFilterVC: HoundScrollViewController,
         return label
     }()
     
-    // TODO UI this should start blank and have a placeholder. if user tries to save filter w/ from/to on but no field, show an error message
+    // TODO UI timeRangeFieldLabel should start blank and have a placeholder. if user tries to save filter w/ from/to on but no field, show an error message
     private lazy var timeRangeFieldLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
         label.font = Constant.Visual.Font.primaryRegularLabel

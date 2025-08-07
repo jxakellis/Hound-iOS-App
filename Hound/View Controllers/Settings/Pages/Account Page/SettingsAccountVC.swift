@@ -14,7 +14,6 @@ protocol SettingsAccountVCDelegate: AnyObject {
 
 final class SettingsAccountVC: HoundScrollViewController {
     
-    // TODO add haptics to copy buttons
     // MARK: - Elements
     
     private let pageHeaderView: HoundPageSheetHeaderView = {
@@ -69,6 +68,7 @@ final class SettingsAccountVC: HoundScrollViewController {
     
     @objc private func didTapCopyUserEmail(_ sender: Any) {
         guard let userEmail = UserInformation.userEmail else { return }
+        HapticsManager.selectionChanged()
         
         UIPasteboard.general.setPasteboard(string: userEmail)
     }
@@ -162,6 +162,7 @@ final class SettingsAccountVC: HoundScrollViewController {
     
     @objc private func didTapCopyUserId(_ sender: Any) {
         guard let userId = UserInformation.userId else { return }
+        HapticsManager.selectionChanged()
         
         UIPasteboard.general.setPasteboard(string: userId)
     }

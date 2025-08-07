@@ -13,9 +13,6 @@ protocol LogTVCDelegate: AnyObject {
     func didUpdateLogLikes(dogUUID: UUID, log: Log)
 }
 
-// TODO BUG there some weird stuff w the collection view going on
-// if you sort by an odd way then spam refresh, every refresh the info bubbles update with different info
-
 final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     // MARK: - UICollectionViewDataSource

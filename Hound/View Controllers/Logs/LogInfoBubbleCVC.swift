@@ -18,8 +18,11 @@ final class LogInfoBubbleCVC: UICollectionViewCell {
         label.backgroundColor = UIColor.secondarySystemBackground
         label.font = Constant.Visual.Font.secondaryRegularLabel
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = false
+        
         label.shouldRoundCorners = true
         label.staticCornerRadius = nil
+        
         label.shouldInsetText = true
         label.customTextInsets.left = Constant.Constraint.Spacing.contentTightIntraHori
         label.customTextInsets.right = Constant.Constraint.Spacing.contentTightIntraHori
