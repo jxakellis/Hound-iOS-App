@@ -24,6 +24,11 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
         // TODO update dog manager n stuff
     }
     
+    func shouldShowLogLikes(log: Log) {
+        let vc = LogLikesVC()
+        PresentationManager.enqueueViewController(vc)
+    }
+    
     // MARK: - UIScrollViewDelegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -90,6 +95,8 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
     private var allowReloadTable: Bool = true
     
     private weak var delegate: LogsTableVCDelegate?
+    
+    private weak var logLikesVC: LogLikesVC?
     
     // MARK: Page Loader
     

@@ -137,16 +137,16 @@ class LogsFilterVC: HoundScrollViewController,
         return uiSwitch
     }()
     
-    private let likesOnlySectionLabel: HoundLabel = {
+    private let onlyShowMyLikesSectionLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 235, compressionResistancePriority: 235)
         label.font = Constant.Visual.Font.secondaryHeaderLabel
-        label.text = "Only Show Likes"
+        label.text = "Only Show My Likes"
         return label
     }()
     
-    private lazy var likesOnlySwitch: HoundSwitch = {
+    private lazy var onlyShowMyLikesSwitch: HoundSwitch = {
         let uiSwitch = HoundSwitch(huggingPriority: 230, compressionResistancePriority: 230)
-        uiSwitch.addTarget(self, action: #selector(didToggleLikesOnly), for: .valueChanged)
+        uiSwitch.addTarget(self, action: #selector(didToggleOnlyShowMyLikes), for: .valueChanged)
         return uiSwitch
     }()
     
@@ -326,8 +326,8 @@ class LogsFilterVC: HoundScrollViewController,
         toDatePicker.isEnabled = sender.isOn
     }
     
-    @objc private func didToggleLikesOnly(_ sender: HoundSwitch) {
-        filter?.apply(onlyShowLikes: sender.isOn)
+    @objc private func didToggleOnlyShowMyLikes(_ sender: HoundSwitch) {
+        filter?.apply(onlyShowMyLikes: sender.isOn)
     }
     
     @objc private func didChangeSearchText(_ sender: UITextField) {
@@ -374,7 +374,6 @@ class LogsFilterVC: HoundScrollViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        self.enableSwipeBackToDismiss = true
         
         self.presentationController?.delegate = self
         
@@ -410,7 +409,7 @@ class LogsFilterVC: HoundScrollViewController,
         }
         
         if let filter = filter {
-            likesOnlySwitch.setOn(filter.onlyShowLikes, animated: false)
+            onlyShowMyLikesSwitch.setOn(filter.onlyShowMyLikes, animated: false)
         }
         
         if let filter = filter, filter.filteredDogsUUIDs.count >= 1 {
@@ -719,8 +718,8 @@ class LogsFilterVC: HoundScrollViewController,
         containerView.addSubview(toDatePicker)
         containerView.addSubview(toDateSwitch)
         
-        containerView.addSubview(likesOnlySectionLabel)
-        containerView.addSubview(likesOnlySwitch)
+        containerView.addSubview(onlyShowMyLikesSectionLabel)
+        containerView.addSubview(onlyShowMyLikesSwitch)
         
         containerView.addSubview(searchSectionLabel)
         containerView.addSubview(searchTextField)
@@ -824,24 +823,24 @@ class LogsFilterVC: HoundScrollViewController,
             toDateSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
         
-        // likesOnlySectionLabel
+        // onlyShowMyLikesSectionLabel
         NSLayoutConstraint.activate([
-            likesOnlySectionLabel.topAnchor.constraint(equalTo: toDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
-            likesOnlySectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            likesOnlySectionLabel.trailingAnchor.constraint(lessThanOrEqualTo: likesOnlySwitch.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
-            likesOnlySectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),
-            likesOnlySectionLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight)
+            onlyShowMyLikesSectionLabel.topAnchor.constraint(equalTo: toDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            onlyShowMyLikesSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
+            onlyShowMyLikesSectionLabel.trailingAnchor.constraint(lessThanOrEqualTo: onlyShowMyLikesSwitch.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
+            onlyShowMyLikesSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),
+            onlyShowMyLikesSectionLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight)
         ])
         
-        // likesOnlySwitch
+        // onlyShowMyLikesSwitch
         NSLayoutConstraint.activate([
-            likesOnlySwitch.centerYAnchor.constraint(equalTo: likesOnlySectionLabel.centerYAnchor),
-            likesOnlySwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
+            onlyShowMyLikesSwitch.centerYAnchor.constraint(equalTo: onlyShowMyLikesSectionLabel.centerYAnchor),
+            onlyShowMyLikesSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
         ])
         
         // searchSectionLabel
         NSLayoutConstraint.activate([
-            searchSectionLabel.topAnchor.constraint(equalTo: likesOnlySectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            searchSectionLabel.topAnchor.constraint(equalTo: onlyShowMyLikesSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
             searchSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             searchSectionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
             searchSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),

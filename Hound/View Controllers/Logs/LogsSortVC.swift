@@ -201,7 +201,6 @@ class LogsSortVC: HoundScrollViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         self.eligibleForGlobalPresenter = true
-        self.enableSwipeBackToDismiss = true
         
         self.presentationController?.delegate = self
         

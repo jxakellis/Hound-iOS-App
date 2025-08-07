@@ -9,6 +9,52 @@
 import SnapKit
 import UIKit
 
+enum HoundScrollViewDetent: CaseIterable {
+    case third
+    case medium
+    case large
+    
+    fileprivate var identifier: UISheetPresentationController.Detent.Identifier {
+        switch self {
+        case .third:
+            return .third
+        case .medium:
+            return .medium
+        case .large:
+            return .large
+        }
+    }
+    
+    fileprivate var detent: UISheetPresentationController.Detent {
+        if #available(iOS 16.0, *) {
+            switch self {
+            case .third:
+                return .custom(identifier: .third) { context in
+                    context.maximumDetentValue * 0.33
+                }
+            case .medium:
+                return .medium()
+            case .large:
+                return .large()
+            }
+        }
+        else {
+            switch self {
+            case .third:
+                return .medium()
+            case .medium:
+                return .medium()
+            case .large:
+                return .large()
+            }
+        }
+    }
+}
+
+extension UISheetPresentationController.Detent.Identifier {
+    static let third = UISheetPresentationController.Detent.Identifier("third")
+}
+
 class HoundScrollViewController: HoundViewController {
     
     // MARK: - Elements
@@ -23,6 +69,11 @@ class HoundScrollViewController: HoundViewController {
     }()
     
     let containerView: HoundView = HoundView()
+    
+    // MARK: - Properties
+    
+    private var detents: [HoundScrollViewDetent] = []
+    private var initialDetent: HoundScrollViewDetent?
     
     // MARK: - Main
     
@@ -42,6 +93,17 @@ class HoundScrollViewController: HoundViewController {
         scrollView.contentOffset.y = -view.safeAreaInsets.top
     }
     
+    // MARK: - Setup
+    
+    func configureDents(
+        detents: [HoundScrollViewDetent] = HoundScrollViewDetent.allCases,
+        initialDetent: HoundScrollViewDetent
+    ) {
+        self.detents = detents
+        self.initialDetent = initialDetent
+        configureDetents()
+    }
+    
     // MARK: - Functions
     
     func scrollDescendantViewToVisibleIfNeeded(_ targetView: UIView, verticalPadding: CGFloat = Constant.Constraint.Spacing.absoluteVertInset) {
@@ -54,6 +116,15 @@ class HoundScrollViewController: HoundViewController {
         if !visibleRect.contains(paddedRect) {
             scrollView.scrollRectToVisible(paddedRect, animated: true)
         }
+    }
+    
+    private func configureDetents() {
+        guard let sheet = self.sheetPresentationController else { return }
+        guard let initialDetent = initialDetent, !detents.isEmpty else { return }
+        sheet.detents = detents.map { $0.detent }
+        sheet.selectedDetentIdentifier = initialDetent.identifier
+        sheet.prefersGrabberVisible = true
+        sheet.prefersScrollingExpandsWhenScrolledToEdge = true
     }
     
     // MARK: - Setup

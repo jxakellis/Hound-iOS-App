@@ -11,6 +11,7 @@ import UIKit
 
 protocol LogTVCDelegate: AnyObject {
     func didUpdateLogLikes(dogUUID: UUID, log: Log)
+    func shouldShowLogLikes(log: Log)
 }
 
 final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -113,14 +114,12 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         return stack
     }()
     
-    // TODO if you press and hold on the like button, and there are >= 1 likes, show a list of likes (partial page sheet vc thing)
-    // TODO make a partial page sheet vc. instead of being a full page, it only comes up partially on the screen (e.g. maybe a 1/3 of the way). you can drag on the top to dismiss it or drag up to make it appear the full way. if it is fully appeared then it should look and function similar to hound scroll vc. the header should be the same too
     private lazy var likeButton: HoundButton = {
         let button = HoundButton(type: .system)
 //        button.setImage(UIImage(systemName: "heart"), for: .normal)
 //        button.setImage(UIImage(systemName: "heart.fill"), for: .selected)
         
-        let action = UIAction { [weak self] _  in
+        let likeAction = UIAction { [weak self] _  in
             guard let self = self else { return }
             guard let dogUUID = self.dogUUID, let log = self.log else { return }
             guard let userId = UserInformation.userId else { return }
@@ -147,7 +146,19 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
             }
         }
         
-        button.addAction(action, for: .touchUpInside)
+        let showLikesAction = UIAction { [weak self] _  in
+            guard let self = self else { return }
+            guard let log = log else { return }
+            
+            HapticsManager.selectionChanged()
+            
+            delegate?.shouldShowLogLikes(log: log)
+        }
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLikeButtonLongPress(_:)))
+        
+        button.addAction(likeAction, for: .touchUpInside)
+        button.addGestureRecognizer(longPressGesture)
         return button
     }()
     
@@ -167,6 +178,13 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         
         return collectionView
     }()
+    
+    @objc private func handleLikeButtonLongPress(_ gesture: UILongPressGestureRecognizer) {
+        guard gesture.state == .began else { return } // Only trigger once per long-press
+        guard let log = log else { return }
+        HapticsManager.selectionChanged()
+        delegate?.shouldShowLogLikes(log: log)
+    }
     
     // MARK: - Properties
     

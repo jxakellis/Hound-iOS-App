@@ -184,7 +184,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 return false
             }
 
-            if filter.onlyShowLikes {
+            if filter.onlyShowMyLikes {
                 guard let userId = UserInformation.userId, log.likedByUserIds.contains(userId) else { return false }
             }
 

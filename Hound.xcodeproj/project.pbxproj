@@ -181,6 +181,7 @@
 		A2BAFC032E444E3F004C3983 /* LogInfoBubbleCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC022E444E38004C3983 /* LogInfoBubbleCVC.swift */; };
 		A2BAFC052E4460AA004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC042E44609F004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift */; };
 		A2BAFC072E446764004C3983 /* HoundIntrinsicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC062E44675E004C3983 /* HoundIntrinsicCollectionView.swift */; };
+		A2BAFC092E454E03004C3983 /* LogLikesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC082E454DFE004C3983 /* LogLikesVC.swift */; };
 		A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */; };
 		A2C1FEB928D55CC9005C21D3 /* CompletionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */; };
 		A2C2951C2E08CA45008F1054 /* NSCoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */; };
@@ -443,6 +444,7 @@
 		A2BAFC022E444E38004C3983 /* LogInfoBubbleCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInfoBubbleCVC.swift; sourceTree = "<group>"; };
 		A2BAFC042E44609F004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundLeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		A2BAFC062E44675E004C3983 /* HoundIntrinsicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundIntrinsicCollectionView.swift; sourceTree = "<group>"; };
+		A2BAFC082E454DFE004C3983 /* LogLikesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLikesVC.swift; sourceTree = "<group>"; };
 		A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionTracker.swift; sourceTree = "<group>"; };
 		A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoderExtension.swift; sourceTree = "<group>"; };
@@ -1021,6 +1023,7 @@
 				A2173DAD2B095CE90000C08A /* LogTVC.swift */,
 				A2BAFC022E444E38004C3983 /* LogInfoBubbleCVC.swift */,
 				A2A284822B0C4D1000ACC5C0 /* LogsFilterVC.swift */,
+				A2BAFC082E454DFE004C3983 /* LogLikesVC.swift */,
 				A2E525A02E41923200C3D45C /* LogsSortVC.swift */,
 			);
 			path = Logs;
@@ -1654,6 +1657,7 @@
 				A278ED8C2610FF3D000575FC /* DogsAddReminderCountdownView.swift in Sources */,
 				A2C2952A2E0D05B0008F1054 /* HoundHeaderFooterView.swift in Sources */,
 				A21AAF252DECDC8D0077C89D /* GlobalTypesRequest.swift in Sources */,
+				A2BAFC092E454E03004C3983 /* LogLikesVC.swift in Sources */,
 				A2101E652A6AF1B900A65396 /* HoundIntroductionDogIconView.swift in Sources */,
 				A2B678E527D13AD100424FB0 /* ServerSyncVC.swift in Sources */,
 				A2B00F9E27FA3C2E00C6126E /* FamilyRequest.swift in Sources */,

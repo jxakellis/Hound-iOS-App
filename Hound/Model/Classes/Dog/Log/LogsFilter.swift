@@ -21,7 +21,7 @@ class LogsFilter: NSObject, NSCopying {
         copy.timeRangeField = self.timeRangeField
         copy.timeRangeFromDate = self.timeRangeFromDate
         copy.timeRangeToDate = self.timeRangeToDate
-        copy.onlyShowLikes = self.onlyShowLikes
+        copy.onlyShowMyLikes = self.onlyShowMyLikes
         return copy
     }
     
@@ -41,7 +41,7 @@ class LogsFilter: NSObject, NSCopying {
             self.timeRangeField == object.timeRangeField &&
             self.timeRangeFromDate == object.timeRangeFromDate &&
             self.timeRangeToDate == object.timeRangeToDate &&
-            self.onlyShowLikes == object.onlyShowLikes
+            self.onlyShowMyLikes == object.onlyShowMyLikes
     }
     
     /// Text used to broadly search through logs. If empty, no search text is applied
@@ -57,7 +57,7 @@ class LogsFilter: NSObject, NSCopying {
     private(set) var timeRangeField: LogsDateType?
     private(set) var timeRangeFromDate: Date?
     private(set) var timeRangeToDate: Date?
-    private(set) var onlyShowLikes: Bool = false
+    private(set) var onlyShowMyLikes: Bool = false
     
     var isFromDateEnabled: Bool {
         return timeRangeFromDate != nil
@@ -75,7 +75,7 @@ class LogsFilter: NSObject, NSCopying {
         + filteredDogsUUIDs.count
         + filteredLogActionActionTypeIds.count
         + filteredFamilyMemberUserIds.count
-        + (onlyShowLikes ? 1 : 0)
+        + (onlyShowMyLikes ? 1 : 0)
         + (isFromDateEnabled ? 1 : 0)
         + (isToDateEnabled ? 1 : 0)
         
@@ -113,7 +113,7 @@ class LogsFilter: NSObject, NSCopying {
         apply(filterDogs: [])
         apply(filterLogActions: [])
         apply(filterFamilyMembers: [])
-        apply(onlyShowLikes: false)
+        apply(onlyShowMyLikes: false)
         apply(searchText: "")
         apply(timeRangeField: LogsDateType.defaultDateType)
         apply(timeRangeFromDate: nil)
@@ -157,8 +157,8 @@ class LogsFilter: NSObject, NSCopying {
         filteredFamilyMemberUserIds.remove(userId)
     }
 
-    func apply(onlyShowLikes: Bool) {
-        self.onlyShowLikes = onlyShowLikes
+    func apply(onlyShowMyLikes: Bool) {
+        self.onlyShowMyLikes = onlyShowMyLikes
     }
     
     // searchText
