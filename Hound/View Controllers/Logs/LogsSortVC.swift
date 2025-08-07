@@ -16,7 +16,7 @@ protocol LogsSortDelegate: AnyObject {
 }
 
 enum LogsSortDropDownTypes: String, HoundDropDownType {
-    case sortField = "SortField"
+    case dateType = "DateType"
     case sortDirection = "SortDirection"
 }
 
@@ -38,14 +38,13 @@ class LogsSortVC: HoundScrollViewController,
         return view
     }()
     
-    // TODO UI think of better names that "Field" and "Order" for this
-    private let sortFieldHeaderLabel: HoundLabel = {
+    private let dateTypeHeaderLabel: HoundLabel = {
         let label = HoundLabel()
-        label.text = "Field"
+        label.text = "Sort By"
         label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
-    private lazy var sortFieldLabel: HoundLabel = {
+    private lazy var dateTypeLabel: HoundLabel = {
         let label = HoundLabel()
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
@@ -54,23 +53,24 @@ class LogsSortVC: HoundScrollViewController,
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(
             dropDownManager.showHideDropDownGesture(
-                identifier: LogsSortDropDownTypes.sortField,
+                identifier: LogsSortDropDownTypes.dateType,
                 delegate: self
             )
         )
-        dropDownManager.register(identifier: .sortField, label: label, autoscroll: .firstOpen)
+        dropDownManager.register(identifier: .dateType, label: label, autoscroll: .firstOpen)
         
         return label
     }()
-    private lazy var sortFieldStack: HoundStackView = {
-        let stack = HoundStackView.inputFieldStack(sortFieldHeaderLabel)
-        stack.addArrangedSubview(sortFieldLabel)
+    private lazy var dateTypeStack: HoundStackView = {
+        let stack = HoundStackView.inputFieldStack(dateTypeHeaderLabel)
+        stack.addArrangedSubview(dateTypeLabel)
         return stack
     }()
     
     private let sortDirectionHeaderLabel: HoundLabel = {
         let label = HoundLabel()
         label.text = "Order"
+        // could also be Order/Direction
         label.font = Constant.Visual.Font.secondaryHeaderLabel
         return label
     }()
@@ -200,7 +200,7 @@ class LogsSortVC: HoundScrollViewController,
     
     private func updateDynamicUIElements() {
         if let sort = sort {
-            sortFieldLabel.text = sort.sortField.readableValue
+            dateTypeLabel.text = sort.dateType.readableValue
             sortDirectionLabel.text = sort.sortDirection.readableValue
         }
     }
@@ -217,7 +217,7 @@ class LogsSortVC: HoundScrollViewController,
         
         let rows: CGFloat = {
             switch type {
-            case .sortField: return CGFloat(sort.availableFields.count)
+            case .dateType: return CGFloat(sort.availableFields.count)
             case .sortDirection: return CGFloat(sort.availableDirections.count)
             }
         }()
@@ -235,9 +235,9 @@ class LogsSortVC: HoundScrollViewController,
         guard let sort = sort else { return }
         guard let type = identifier as? LogsSortDropDownTypes else { return }
         switch type {
-        case .sortField:
+        case .dateType:
             let field = sort.availableFields[indexPath.row]
-            cell.setCustomSelected(sort.sortField == field, animated: false)
+            cell.setCustomSelected(sort.dateType == field, animated: false)
             cell.label.text = field.readableValue
         case .sortDirection:
             let direction = sort.availableDirections[indexPath.row]
@@ -252,7 +252,7 @@ class LogsSortVC: HoundScrollViewController,
         }
         guard let type = identifier as? LogsSortDropDownTypes else { return 0 }
         switch type {
-        case .sortField:
+        case .dateType:
             return sort.availableFields.count
         case .sortDirection:
             return sort.availableDirections.count
@@ -262,7 +262,7 @@ class LogsSortVC: HoundScrollViewController,
     func numberOfSections(identifier: any HoundDropDownType) -> Int {
         guard let type = identifier as? LogsSortDropDownTypes else { return 0 }
         switch type {
-        case .sortField, .sortDirection:
+        case .dateType, .sortDirection:
             return 1
         }
     }
@@ -274,16 +274,16 @@ class LogsSortVC: HoundScrollViewController,
         guard let cell = dropDown.dropDownTableView?.cellForRow(at: indexPath) as? HoundDropDownTVC else { return }
         
         switch type {
-        case .sortField:
+        case .dateType:
             let type = sort.availableFields[indexPath.row]
             
             // prevent deselection. we shuld always have one selected
-            guard type != sort.sortField else {
+            guard type != sort.dateType else {
                 return
             }
             
             cell.setCustomSelected(true)
-            sort.sortField = type
+            sort.dateType = type
             dropDown.hideDropDown(animated: true)
         case .sortDirection:
             let type = sort.availableDirections[indexPath.row]
@@ -304,9 +304,9 @@ class LogsSortVC: HoundScrollViewController,
         guard let sort = sort else { return nil }
         guard let type = identifier as? LogsSortDropDownTypes else { return nil }
         switch type {
-        case .sortField:
+        case .dateType:
             if let idx = sort.availableFields
-                .firstIndex(where: { $0 == sort.sortField }) {
+                .firstIndex(where: { $0 == sort.dateType }) {
                 return IndexPath(row: idx, section: 0)
             }
         case .sortDirection:
@@ -330,7 +330,7 @@ class LogsSortVC: HoundScrollViewController,
         super.addSubViews()
         containerView.addSubview(pageHeaderView)
         
-        containerView.addSubview(sortFieldStack)
+        containerView.addSubview(dateTypeStack)
         
         containerView.addSubview(sortDirectionStack)
         
@@ -352,17 +352,17 @@ class LogsSortVC: HoundScrollViewController,
             make.trailing.equalTo(containerView.snp.trailing)
         }
         
-        sortFieldStack.snp.makeConstraints { make in
+        dateTypeStack.snp.makeConstraints { make in
             make.top.equalTo(pageHeaderView.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
             make.horizontalEdges.equalTo(containerView).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
-        sortFieldLabel.snp.makeConstraints { make in
+        dateTypeLabel.snp.makeConstraints { make in
             make.height.equalTo(containerView.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
             make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
         }
         
         sortDirectionStack.snp.makeConstraints { make in
-            make.top.equalTo(sortFieldStack.snp.bottom).offset(Constant.Constraint.Spacing.contentSectionVert)
+            make.top.equalTo(dateTypeStack.snp.bottom).offset(Constant.Constraint.Spacing.contentSectionVert)
             make.horizontalEdges.equalTo(containerView).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
         sortDirectionLabel.snp.makeConstraints { make in

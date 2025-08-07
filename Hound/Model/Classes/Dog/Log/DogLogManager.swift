@@ -95,27 +95,27 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         sortedDogLogsEnd = nil
     }
 
-    func sortedDogLogs(sortField: LogsSortField, sortDirection: LogsSortDirection) -> [Log] {
+    func sortedDogLogs(dateType: LogsDateType, sortDirection: LogsSortDirection) -> [Log] {
         let ascendingLogs: [Log]
-        switch sortField {
+        switch dateType {
         case .createdDate:
             if sortedDogLogsCreated == nil {
-                sortedDogLogsCreated = LogsSort.sort(dogLogs, sortField: .createdDate, sortDirection: .ascending)
+                sortedDogLogsCreated = LogsSort.sort(dogLogs, dateType: .createdDate, sortDirection: .ascending)
             }
             ascendingLogs = sortedDogLogsCreated ?? []
         case .modifiedDate:
             if sortedDogLogsModified == nil {
-                sortedDogLogsModified = LogsSort.sort(dogLogs, sortField: .modifiedDate, sortDirection: .ascending)
+                sortedDogLogsModified = LogsSort.sort(dogLogs, dateType: .modifiedDate, sortDirection: .ascending)
             }
             ascendingLogs = sortedDogLogsModified ?? []
         case .logStartDate:
             if sortedDogLogsStart == nil {
-                sortedDogLogsStart = LogsSort.sort(dogLogs, sortField: .logStartDate, sortDirection: .ascending)
+                sortedDogLogsStart = LogsSort.sort(dogLogs, dateType: .logStartDate, sortDirection: .ascending)
             }
             ascendingLogs = sortedDogLogsStart ?? []
         case .logEndDate:
             if sortedDogLogsEnd == nil {
-                sortedDogLogsEnd = LogsSort.sort(dogLogs, sortField: .logEndDate, sortDirection: .ascending)
+                sortedDogLogsEnd = LogsSort.sort(dogLogs, dateType: .logEndDate, sortDirection: .ascending)
             }
             ascendingLogs = sortedDogLogsEnd ?? []
         }

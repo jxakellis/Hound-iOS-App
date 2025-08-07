@@ -38,7 +38,7 @@ class LogsFilter: NSObject, NSCopying {
     
     private(set) var filteredFamilyMemberUserIds: Set<String> = []
 
-    private(set) var timeRangeField: LogsSortField = LogsSortField.defaultSortField
+    private(set) var timeRangeField: LogsDateType = LogsDateType.defaultDateType
     private(set) var timeRangeFromDate: Date?
     private(set) var timeRangeToDate: Date?
     private(set) var onlyShowLikes: Bool = false
@@ -75,8 +75,8 @@ class LogsFilter: NSObject, NSCopying {
     
     // MARK: - Computed Properties
     
-    var availableTimeRangeFields: [LogsSortField] {
-        return LogsSortField.allCases
+    var availableTimeRangeFields: [LogsDateType] {
+        return LogsDateType.allCases
     }
     
     var availableDogs: [Dog] {
@@ -99,7 +99,7 @@ class LogsFilter: NSObject, NSCopying {
         apply(filterFamilyMembers: [])
         apply(onlyShowLikes: false)
         apply(searchText: "")
-        apply(timeRangeField: LogsSortField.defaultSortField)
+        apply(timeRangeField: LogsDateType.defaultDateType)
         apply(timeRangeFromDate: nil)
         apply(timeRangeToDate: nil)
     }
@@ -151,7 +151,7 @@ class LogsFilter: NSObject, NSCopying {
     }
     
     // timeRangeField, timeRangeFromDate, timeRangeToDate
-    func apply(timeRangeField: LogsSortField) {
+    func apply(timeRangeField: LogsDateType) {
         self.timeRangeField = timeRangeField
     }
     func apply(timeRangeFromDate: Date?) {

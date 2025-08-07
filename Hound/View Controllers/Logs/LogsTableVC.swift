@@ -244,7 +244,7 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
             return headerView
         }
         // depending upon what field were sorting by, this dictates the header
-        let date = self.logsSort.sortField.date(log)
+        let date = self.logsSort.dateType.date(log)
         let currentYear = Calendar.user.component(.year, from: Date())
         let dateYear = Calendar.user.component(.year, from: date)
         

@@ -54,10 +54,9 @@ class LogsFilterVC: HoundScrollViewController,
         return label
     }()
     
-    // TODO UI remove field header label it adds nothing
     private let timeRangeFieldHeaderLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
-        label.text = "Field"
+        label.text = "Date to Filter"
         label.font = Constant.Visual.Font.primaryRegularLabel
         return label
     }()
@@ -69,6 +68,7 @@ class LogsFilterVC: HoundScrollViewController,
         label.applyStyle(.thinGrayBorder)
         label.shouldInsetText = true
         
+        // TODO Add placeholder "select date type or select date to filter by...
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(
             dropDownManager.showHideDropDownGesture(

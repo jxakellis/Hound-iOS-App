@@ -13,6 +13,9 @@ protocol LogTVCDelegate: AnyObject {
     func didUpdateLogLikes(dogUUID: UUID, log: Log)
 }
 
+// TODO BUG there some weird stuff w the collection view going on
+// if you sort by an odd way then spam refresh, every refresh the info bubbles update with different info
+
 final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     // MARK: - UICollectionViewDataSource
@@ -115,6 +118,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
     
     private lazy var likeButton: HoundButton = {
         let button = HoundButton(type: .system)
+        // TODO UI the animation for click/unclock looks weird
         // TODO UI make this a better color
         button.tintColor = .systemGray2
         
@@ -122,6 +126,8 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
             guard let self = self else { return }
             guard let dogUUID = self.dogUUID, let log = self.log else { return }
             guard let userId = UserInformation.userId else { return }
+            
+            HapticsManager.selectionChanged()
             
             let currentlyLiked = log.likedByUserIds.contains(userId)
             log.setLogLike(!currentlyLiked)
@@ -184,7 +190,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         
         // depending on the different sort methods, the logs displayed will be grouped and displayed by different dates, thus affecting the headers (e.g. you have a group "Today" of logs but that could be Today for start date, or created date, etc...
         // thus if times are relative, e.g. 8:50AM, they need to be relative to this header
-        let cellGroupedByDate = sort.sortField.date(log)
+        let cellGroupedByDate = sort.dateType.date(log)
         
         func convertDateToRelative(_ convert: Date) -> String {
             if Calendar.user.isDate(convert, inSameDayAs: cellGroupedByDate) {
@@ -214,6 +220,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
             logStartToEndDateLabel.text = logStartToEndDateLabel.text?.appending(" - \(convertDateToRelative(logEndDate))")
         }
         
+        let previousLogDurationText = logDurationLabel.text
         logDurationLabel.text = {
             guard let logEndDate = log.logEndDate else {
                 return nil
@@ -223,12 +230,13 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         
         updateLikeButtonBadge(animated: false)
         
+        let previousInfoItems = infoItems
         infoItems = []
-        if sort.sortField == .createdDate || filter.timeRangeField == .createdDate {
+        if sort.dateType == .createdDate || filter.timeRangeField == .createdDate {
             let dateString = convertDateToRelative(log.logCreated)
             infoItems.append("Created: \(dateString)")
         }
-        if sort.sortField == .modifiedDate || filter.timeRangeField == .modifiedDate {
+        if sort.dateType == .modifiedDate || filter.timeRangeField == .modifiedDate {
             let dateString = convertDateToRelative(log.logLastModified ?? log.logCreated)
             infoItems.append("Modified: \(dateString)")
         }
@@ -240,9 +248,21 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
             infoItems.append(trimmedNote)
         }
         
-        remakeInfoBubbleConstraints()
+        let infoItemsChanged = previousInfoItems != infoItems
+        if infoItemsChanged {
+            infoBubbleCollectionView.reloadData()
+            remakeInfoBubbleConstraints()
+        }
         
-        remakeLikeButtonConstraints()
+        let logDurationChange = previousLogDurationText != logDurationLabel.text
+        if logDurationChange || infoItemsChanged {
+            remakeLikeButtonConstraints()
+        }
+        
+        if logDurationChange || infoItemsChanged {
+            // cell's height changed so table view needs to relay it out to give it the proper vertical space it needs
+            updateTableViewHeight()
+        }
     }
     
     // MARK: - Functions

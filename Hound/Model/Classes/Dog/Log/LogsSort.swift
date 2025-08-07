@@ -8,20 +8,20 @@
 
 import Foundation
 
-enum LogsSortField: CaseIterable {
+enum LogsDateType: CaseIterable {
     case logStartDate
     case logEndDate
     case createdDate
     case modifiedDate
     
-    static let defaultSortField = LogsSortField.logStartDate
+    static let defaultDateType = LogsDateType.logStartDate
     
     var readableValue: String {
         switch self {
         case .createdDate:
-            return "Created Date"
+            return "Created"
         case .modifiedDate:
-            return "Modified Date"
+            return "Modified"
         case .logStartDate:
             return "Start Date"
         case .logEndDate:
@@ -69,21 +69,21 @@ final class LogsSort: NSObject, NSCopying {
     
     func copy(with zone: NSZone? = nil) -> Any {
         let copy = LogsSort()
-        copy.sortField = self.sortField
+        copy.dateType = self.dateType
         copy.sortDirection = self.sortDirection
         return copy
     }
     
     // MARK: - Properties
     
-    var sortField: LogsSortField = LogsSortField.defaultSortField
+    var dateType: LogsDateType = LogsDateType.defaultDateType
     
     var sortDirection: LogsSortDirection = LogsSortDirection.defaultSortDirection
     
     // MARK: - Computed Properties
     
-    var availableFields: [LogsSortField] {
-        return LogsSortField.allCases
+    var availableFields: [LogsDateType] {
+        return LogsDateType.allCases
     }
     
     var availableDirections: [LogsSortDirection] {
@@ -91,31 +91,31 @@ final class LogsSort: NSObject, NSCopying {
     }
     
     var hasActiveSort: Bool {
-        return self.sortField != LogsSortField.defaultSortField || self.sortDirection != LogsSortDirection.defaultSortDirection
+        return self.dateType != LogsDateType.defaultDateType || self.sortDirection != LogsSortDirection.defaultSortDirection
     }
     
     // MARK: - Main
     
-    init(sortField: LogsSortField? = nil, sortDirection: LogsSortDirection? = nil) {
-        self.sortField = sortField ?? self.sortField
+    init(dateType: LogsDateType? = nil, sortDirection: LogsSortDirection? = nil) {
+        self.dateType = dateType ?? self.dateType
         self.sortDirection = sortDirection ?? self.sortDirection
     }
     
     // MARK: - Function
     
     func reset() {
-        self.sortField = LogsSortField.defaultSortField
+        self.dateType = LogsDateType.defaultDateType
         self.sortDirection = LogsSortDirection.defaultSortDirection
     }
     
     func sort(_ logs: [Log]) -> [Log] {
-        return LogsSort.sort(logs, sortField: self.sortField, sortDirection: self.sortDirection)
+        return LogsSort.sort(logs, dateType: self.dateType, sortDirection: self.sortDirection)
     }
     
     /// Sorts an array of logs based on the current sort field and direction.
-    static func sort(_ logs: [Log], sortField: LogsSortField, sortDirection: LogsSortDirection) -> [Log] {
+    static func sort(_ logs: [Log], dateType: LogsDateType, sortDirection: LogsSortDirection) -> [Log] {
         let sortedLogs: [Log] = logs.sorted { (lhs: Log, rhs: Log) in
-            let comparisonResult = sortField.compare(lhs: lhs, rhs: rhs)
+            let comparisonResult = dateType.compare(lhs: lhs, rhs: rhs)
             return sortDirection == .ascending ? (comparisonResult == .orderedAscending) : (comparisonResult == .orderedDescending)
         }
         

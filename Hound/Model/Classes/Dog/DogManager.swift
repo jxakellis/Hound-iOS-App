@@ -156,7 +156,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                 continue
             }
 
-            let sortedLogs = dog.dogLogs.sortedDogLogs(sortField: sort.sortField, sortDirection: sort.sortDirection)
+            let sortedLogs = dog.dogLogs.sortedDogLogs(dateType: sort.dateType, sortDirection: sort.sortDirection)
             sequences.append((uuid: dog.dogUUID, logs: sortedLogs, index: 0))
         }
 
@@ -212,7 +212,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
                     let currentBestLog = sequences[currentBest].logs[sequences[currentBest].index]
                     let candidateLog = sequences[i].logs[sequences[i].index]
                     // Compare logs using the requested sort field and direction
-                    let comparison = sort.sortField.compare(lhs: candidateLog, rhs: currentBestLog)
+                    let comparison = sort.dateType.compare(lhs: candidateLog, rhs: currentBestLog)
                     let replace = sort.sortDirection == .ascending
                         ? (comparison == .orderedAscending)
                         : (comparison == .orderedDescending)
@@ -241,7 +241,7 @@ final class DogManager: NSObject, NSCoding, NSCopying {
             // If the last group is for the same day, append; otherwise, start a new group
             if let lastDateGroup = allLogsGroupedByDate.last,
                let (_, lastLog) = lastDateGroup.last,
-               Calendar.user.isDate(sort.sortField.date(log), inSameDayAs: sort.sortField.date(lastLog)) {
+               Calendar.user.isDate(sort.dateType.date(log), inSameDayAs: sort.dateType.date(lastLog)) {
                 allLogsGroupedByDate[allLogsGroupedByDate.count - 1].append((dogUUID, log))
             }
             else {

@@ -48,6 +48,20 @@ class HoundTableViewCell: UITableViewCell, HoundUIProtocol, HoundUIKitProtocol {
         return
     }
     
+    // MARK: - Properties
+    
+    /// The closest parent `UITableView` in the view hierarchy, if any.
+    var closestTableView: UITableView? {
+        var view: UIView? = self.superview
+        while let current = view {
+            if let tableView = current as? UITableView {
+                return tableView
+            }
+            view = current.superview
+        }
+        return nil
+    }
+    
     // MARK: - Main
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -80,5 +94,18 @@ class HoundTableViewCell: UITableViewCell, HoundUIProtocol, HoundUIKitProtocol {
         
         setupGeneratedViews()
     }
-
+    
+    /// Recalculates the cell's height within its containing table view.
+    func updateTableViewHeight() {
+        setNeedsLayout()
+        layoutIfNeeded()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard let tableView = self.closestTableView, self.window != nil else { return }
+            
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        }
+    }
+    
 }

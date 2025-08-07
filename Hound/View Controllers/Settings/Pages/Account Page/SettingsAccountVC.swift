@@ -14,6 +14,7 @@ protocol SettingsAccountVCDelegate: AnyObject {
 
 final class SettingsAccountVC: HoundScrollViewController {
     
+    // TODO add haptics to copy buttons
     // MARK: - Elements
     
     private let pageHeaderView: HoundPageSheetHeaderView = {

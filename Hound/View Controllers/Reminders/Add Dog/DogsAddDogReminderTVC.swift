@@ -176,15 +176,23 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
             (hasRecipients && !UserConfiguration.isNotificationEnabled) ||
             (hasRecipients && !UserConfiguration.isReminderNotificationEnabled)
         )
+        
+        var hasMadeChange = false
         if noNotificationIndicator.isHidden != !shouldShowBell {
+            hasMadeChange = true
             noNotificationIndicator.isHidden = !shouldShowBell
             remakeNoNotificationIndicatorConstraints()
         }
         
         let shouldShowDiffTZ = reminder.reminderIsEnabled && reminder.reminderTimeZone != UserConfiguration.timeZone
         if differentTimeZoneIndicator.isHidden != !shouldShowDiffTZ {
+            hasMadeChange = true
             differentTimeZoneIndicator.isHidden = !shouldShowDiffTZ
             remakeDifferentTimeZoneIndicatorConstraints()
+        }
+        
+        if hasMadeChange {
+            updateTableViewHeight()
         }
     }
     
