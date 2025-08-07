@@ -8,7 +8,8 @@
 
 import UIKit
 
-// TODO EFFICIENCY Run this thru gpt. is there a more optimal way to do this?
+/// Manages a collection of logs for a dog and provides efficient sorted access.
+/// Sorted arrays are cached and only rebuilt when the underlying data changes.
 final class DogLogManager: NSObject, NSCoding, NSCopying {
     
     // MARK: - NSCopying
@@ -79,49 +80,47 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
             }
         }
     }
-    
+
     // MARK: - Functions
-    
+
     /// finds and returns the reference of a log matching the given logUUID
     func findLog(logUUID: UUID) -> Log? {
         dogLogs.first(where: { $0.logUUID == logUUID })
     }
-    
+
+    private func invalidateSortedCaches() {
+        sortedDogLogsCreated = nil
+        sortedDogLogsModified = nil
+        sortedDogLogsStart = nil
+        sortedDogLogsEnd = nil
+    }
+
     func sortedDogLogs(sortField: LogsSortField, sortDirection: LogsSortDirection) -> [Log] {
+        let ascendingLogs: [Log]
         switch sortField {
         case .createdDate:
-            if let existing = sortedDogLogsCreated {
-                sortedDogLogsCreated = LogsSort.sort(existing, sortField: .createdDate, sortDirection: sortDirection)
+            if sortedDogLogsCreated == nil {
+                sortedDogLogsCreated = LogsSort.sort(dogLogs, sortField: .createdDate, sortDirection: .ascending)
             }
-            else {
-                sortedDogLogsCreated = LogsSort.sort(dogLogs, sortField: .createdDate, sortDirection: sortDirection)
-            }
-            return sortedDogLogsCreated ?? []
+            ascendingLogs = sortedDogLogsCreated ?? []
         case .modifiedDate:
-            if let existing = sortedDogLogsModified {
-                sortedDogLogsModified = LogsSort.sort(existing, sortField: .modifiedDate, sortDirection: sortDirection)
+            if sortedDogLogsModified == nil {
+                sortedDogLogsModified = LogsSort.sort(dogLogs, sortField: .modifiedDate, sortDirection: .ascending)
             }
-            else {
-                sortedDogLogsModified = LogsSort.sort(dogLogs, sortField: .modifiedDate, sortDirection: sortDirection)
-            }
-            return sortedDogLogsModified ?? []
+            ascendingLogs = sortedDogLogsModified ?? []
         case .logStartDate:
-            if let existing = sortedDogLogsStart {
-                sortedDogLogsStart = LogsSort.sort(existing, sortField: .logStartDate, sortDirection: sortDirection)
+            if sortedDogLogsStart == nil {
+                sortedDogLogsStart = LogsSort.sort(dogLogs, sortField: .logStartDate, sortDirection: .ascending)
             }
-            else {
-                sortedDogLogsStart = LogsSort.sort(dogLogs, sortField: .logStartDate, sortDirection: sortDirection)
-            }
-            return sortedDogLogsStart ?? []
+            ascendingLogs = sortedDogLogsStart ?? []
         case .logEndDate:
-            if let existing = sortedDogLogsEnd {
-                sortedDogLogsEnd = LogsSort.sort(existing, sortField: .logEndDate, sortDirection: sortDirection)
+            if sortedDogLogsEnd == nil {
+                sortedDogLogsEnd = LogsSort.sort(dogLogs, sortField: .logEndDate, sortDirection: .ascending)
             }
-            else {
-                sortedDogLogsEnd = LogsSort.sort(dogLogs, sortField: .logEndDate, sortDirection: sortDirection)
-            }
-            return sortedDogLogsEnd ?? []
+            ascendingLogs = sortedDogLogsEnd ?? []
         }
+
+        return sortDirection == .ascending ? ascendingLogs : Array(ascendingLogs.reversed())
     }
     
     /// Adds a log to the dogLogs array and sorts. If invokeDogTriggers is true, it will the dog to see if any triggers are activated (and if so, generate reminders from them and return those reminders)
@@ -130,10 +129,7 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         removeLog(logUUID: log.logUUID)
         
         dogLogs.append(log)
-        sortedDogLogsCreated?.append(log)
-        sortedDogLogsModified?.append(log)
-        sortedDogLogsStart?.append(log)
-        sortedDogLogsEnd?.append(log)
+        invalidateSortedCaches()
         
         var generatedReminders: [Reminder] = []
         if invokeDogTriggers {
@@ -159,10 +155,7 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
         removeLogs(logUUIDs: logs.map { $0.logUUID })
         
         dogLogs.append(contentsOf: logs)
-        sortedDogLogsCreated?.append(contentsOf: logs)
-        sortedDogLogsModified?.append(contentsOf: logs)
-        sortedDogLogsStart?.append(contentsOf: logs)
-        sortedDogLogsEnd?.append(contentsOf: logs)
+        invalidateSortedCaches()
         
         var generatedReminders: [Reminder] = []
         if invokeDogTriggers {
@@ -188,36 +181,34 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
             guard log.logUUID == logUUID else {
                 return false
             }
-            
+
             didRemoveObject = true
             return true
         }
-        
-        sortedDogLogsCreated?.removeAll(where: { $0.logUUID == logUUID })
-        sortedDogLogsModified?.removeAll(where: { $0.logUUID == logUUID })
-        sortedDogLogsStart?.removeAll(where: { $0.logUUID == logUUID })
-        sortedDogLogsEnd?.removeAll(where: { $0.logUUID == logUUID })
-        
+
+        if didRemoveObject {
+            invalidateSortedCaches()
+        }
+
         return didRemoveObject
     }
-    
+
     @discardableResult func removeLogs(logUUIDs: [UUID]) -> Bool {
         var didRemoveObject = false
-        
+
         dogLogs.removeAll { l in
             guard logUUIDs.contains(l.logUUID) else {
                 return false
             }
-            
+
             didRemoveObject = true
             return true
         }
-        
-        sortedDogLogsCreated?.removeAll(where: { logUUIDs.contains($0.logUUID) })
-        sortedDogLogsModified?.removeAll(where: { logUUIDs.contains($0.logUUID) })
-        sortedDogLogsStart?.removeAll(where: { logUUIDs.contains($0.logUUID) })
-        sortedDogLogsEnd?.removeAll(where: { logUUIDs.contains($0.logUUID) })
-        
+
+        if didRemoveObject {
+            invalidateSortedCaches()
+        }
+
         return didRemoveObject
     }
 }

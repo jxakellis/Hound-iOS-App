@@ -251,7 +251,7 @@ final class LogsVC: HoundViewController,
             var dogUUIDLogTuples: [(UUID, Log)] = []
             
             // Flatten the 2D array into a single array
-            logsTableViewController.logsForDogUUIDsGroupedByDate.forEach {
+            logsTableViewController.allLogsGroupedByDate.forEach {
                 dogUUIDLogTuples += $0
             }
             

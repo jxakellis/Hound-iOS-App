@@ -139,93 +139,117 @@ final class DogManager: NSObject, NSCoding, NSCopying {
         return didRemoveObject
     }
     
-    // TODO EFFICIENCY Run this thru gpt. is there a more optimal way to do this?
-    
-    /// Returns an array of tuples [[(dogUUID, log)]]. This array has all of the logs for all of the dogs grouped what unique day/month/year they occured on, first element is furthest in the future and last element is the oldest.
-    func logsForDogUUIDsGroupedByDate(filter: LogsFilter, sort: LogsSort) -> [[(UUID, Log)]] {
-        var dogUUIDLogPairs: [(UUID, Log)] = []
-        
+    /// Returns an array of tuples [[(dogUUID, log)]]. This array has all of the logs for all of the dogs grouped by the unique day/month/year they occurred on.
+    ///
+    /// The previous implementation collected every matching log and performed an additional sort before grouping. For large
+    /// datasets this required sorting many more elements than were ultimately displayed. The logic below performs a k-way
+    /// merge across each dog's already‑sorted logs and only materializes up to `limit` entries. This
+    /// drastically reduces the amount of work when the total log count is high while keeping the result deterministic and
+    /// free of cache invalidation concerns.
+    func allLogsGroupedByDate(filter: LogsFilter, sort: LogsSort, limit: Int) -> [[(UUID, Log)]] {
+        // Prepare sequences of sorted logs for all dogs that pass the dog filter
+        typealias DogLogSequence = (uuid: UUID, logs: [Log], index: Int)
+        var sequences: [DogLogSequence] = []
+
         for dog in dogs {
-            if filter.filteredDogsUUIDs.count >= 1 && filter.filteredDogsUUIDs.contains(dog.dogUUID) == false {
-                // We are filtering by dogs and this is not one of them, therefore, this dog is no available
+            if filter.filteredDogsUUIDs.isEmpty == false && filter.filteredDogsUUIDs.contains(dog.dogUUID) == false {
                 continue
             }
-            
-            var numberOfLogsAdded = 0
-            for log in dog.dogLogs.sortedDogLogs(sortField: sort.sortField, sortDirection: sort.sortDirection) {
-                // in total, we can only have maximumNumberOfLogs. This means that 1/2 of that limit could be from one dog, 1/4 from second dog, and 1/4 from a third dog OR all of that limit could be from one dog. Therefore, we must add maximumNumberOfLogs of logs for each dog, then eliminate excess at a later stage
-                guard numberOfLogsAdded <= LogsTableVC.logsDisplayedLimit else {
-                    break
-                }
-                
-                if filter.filteredLogActionActionTypeIds.count >= 1 && filter.filteredLogActionActionTypeIds.contains(log.logActionTypeId) == false {
-                    // We are filtering by log actions and this is not one of them, therefore, this log action is not available
-                    continue
-                }
-                if filter.filteredFamilyMemberUserIds.count >= 1 && filter.filteredFamilyMemberUserIds.contains(log.logCreatedBy) == false {
-                    // We are filtering by family members and this is not one of them, therefore, this family member is no available
-                    continue
-                }
-                if filter.isFromDateEnabled, let timeRangeFromDate = filter.timeRangeFromDate {
-                    guard filter.timeRangeField.date(log) >= timeRangeFromDate else {
-                        continue
-                    }
-                }
-                if filter.isToDateEnabled, let timeRangeToDate = filter.timeRangeToDate {
-                    guard filter.timeRangeField.date(log) <= timeRangeToDate else {
-                        continue
-                    }
-                }
-                if filter.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false &&
-                    log.matchesSearchText(filter.searchText) == false {
-                    // Search text provided but log doesn't match it
-                    continue
-                }
-                if filter.onlyShowLikes {
-                    guard let userId = UserInformation.userId, log.likedByUserIds.contains(userId) else {
-                        continue
-                    }
-                }
-                
-                dogUUIDLogPairs.append((dog.dogUUID, log))
-                numberOfLogsAdded += 1
+
+            let sortedLogs = dog.dogLogs.sortedDogLogs(sortField: sort.sortField, sortDirection: sort.sortDirection)
+            sequences.append((uuid: dog.dogUUID, logs: sortedLogs, index: 0))
+        }
+
+        // Helper to evaluate whether a log passes all of the provided filters
+        func logPassesFilter(_ log: Log) -> Bool {
+            if filter.filteredLogActionActionTypeIds.isEmpty == false &&
+                filter.filteredLogActionActionTypeIds.contains(log.logActionTypeId) == false {
+                return false
             }
+
+            if filter.filteredFamilyMemberUserIds.isEmpty == false &&
+                filter.filteredFamilyMemberUserIds.contains(log.logCreatedBy) == false {
+                return false
+            }
+
+            if filter.isFromDateEnabled, let fromDate = filter.timeRangeFromDate,
+               filter.timeRangeField.date(log) <= fromDate { return false }
+
+            if filter.isToDateEnabled, let toDate = filter.timeRangeToDate,
+               filter.timeRangeField.date(log) >= toDate { return false }
+
+            if filter.searchText.isEmpty == false && log.matchesSearchText(filter.searchText) == false {
+                return false
+            }
+
+            if filter.onlyShowLikes {
+                guard let userId = UserInformation.userId, log.likedByUserIds.contains(userId) else { return false }
+            }
+
+            return true
         }
-        
-        dogUUIDLogPairs.sort { lhs, rhs in
-            let comparisonResult = sort.sortField.compare(lhs: lhs.1, rhs: rhs.1)
-            return sort.sortDirection == .ascending ? (comparisonResult == .orderedAscending) : (comparisonResult == .orderedDescending)
-        }
-        
-        // Splice the chronologically sorted array so that it doesn't exceed maximumNumberOfLogs elements. This will be the maximumNumberOfLogs most recent logs as the array is sorted chronologically
-        dogUUIDLogPairs = dogUUIDLogPairs.count > LogsTableVC.logsDisplayedLimit
-        ? Array(dogUUIDLogPairs[..<LogsTableVC.logsDisplayedLimit])
-        : dogUUIDLogPairs
-        
-        // dogUUIDLogPairs grouped separated into different array element depending on their day, month, and year
-        var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = []
-        
-        for (dogUUID, log) in dogUUIDLogPairs {
-            let containsDateCombination = {
-                // dogUUIDLogPairs is sorted chronologically
-                guard let lastDateGroup = logsForDogUUIDsGroupedByDate.last, let (_, logFromLastDateGroup) = lastDateGroup.last else {
-                    return false
+
+        // Merge sequences by repeatedly selecting the next log across all dogs
+        var dogUUIDLogPairs: [(UUID, Log)] = []
+        dogUUIDLogPairs.reserveCapacity(limit)
+
+        // This loop performs a k-way merge across all dogs' sorted logs, only materializing up to the display limit.
+        while dogUUIDLogPairs.count < limit {
+            var bestSequenceIndex: Int?
+
+            // Find the next "best" log among all dogs, according to the sort order
+            for i in sequences.indices {
+                // Advance each sequence to the next log that satisfies the filters
+                while sequences[i].index < sequences[i].logs.count &&
+                        logPassesFilter(sequences[i].logs[sequences[i].index]) == false {
+                    sequences[i].index += 1
                 }
-                
-                return Calendar.user.isDate(sort.sortField.date(log), inSameDayAs: sort.sortField.date(logFromLastDateGroup))
-            }()
-            
-            if containsDateCombination {
-                // there is already a tuple with the same day, month, and year, so we want to add this dogUUID/log combo to the array attached to that tuple
-                logsForDogUUIDsGroupedByDate[logsForDogUUIDsGroupedByDate.count - 1].append((dogUUID, log))
+
+                // If this sequence is exhausted, skip it
+                guard sequences[i].index < sequences[i].logs.count else { continue }
+
+                if let currentBest = bestSequenceIndex {
+                    let currentBestLog = sequences[currentBest].logs[sequences[currentBest].index]
+                    let candidateLog = sequences[i].logs[sequences[i].index]
+                    // Compare logs using the requested sort field and direction
+                    let comparison = sort.sortField.compare(lhs: candidateLog, rhs: currentBestLog)
+                    let replace = sort.sortDirection == .ascending
+                        ? (comparison == .orderedAscending)
+                        : (comparison == .orderedDescending)
+                    // First valid candidate found
+                    if replace { bestSequenceIndex = i }
+                }
+                else {
+                    bestSequenceIndex = i
+                }
+            }
+
+            // If no more logs are available, break
+            guard let sequenceIndex = bestSequenceIndex else { break }
+
+            // Add the selected log to the result and advance its sequence
+            let sequence = sequences[sequenceIndex]
+            let log = sequence.logs[sequence.index]
+            dogUUIDLogPairs.append((sequence.uuid, log))
+            sequences[sequenceIndex].index += 1
+        }
+
+        // Group the chronologically ordered logs by day/month/year
+        var allLogsGroupedByDate: [[(UUID, Log)]] = []
+
+        for (dogUUID, log) in dogUUIDLogPairs {
+            // If the last group is for the same day, append; otherwise, start a new group
+            if let lastDateGroup = allLogsGroupedByDate.last,
+               let (_, lastLog) = lastDateGroup.last,
+               Calendar.user.isDate(sort.sortField.date(log), inSameDayAs: sort.sortField.date(lastLog)) {
+                allLogsGroupedByDate[allLogsGroupedByDate.count - 1].append((dogUUID, log))
             }
             else {
-                // in the master array, there is not a matching tuple with the specified day, month, and year, so we should add an element that contains the day, month, and year plus this log since its logStartDate is on this day, month, and year
-                logsForDogUUIDsGroupedByDate.append(([(dogUUID, log)]))
+                allLogsGroupedByDate.append([(dogUUID, log)])
             }
         }
-        
-        return logsForDogUUIDsGroupedByDate
+
+        return allLogsGroupedByDate
     }
     
     /// Iterates through all dogs for a given array of dogUUIDs. Finds all reminders for each of those dogs where the reminder is enabled, its reminderActionType matches, and its reminderCustomActionName matches.

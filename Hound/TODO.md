@@ -22,6 +22,16 @@
     - end date asc/desc
     - modified date asc/desc
 
+- SERVER SHOULD SEND LATEST VERSION
+    - only do it when the app first opens (maybe tie into get globaltypes call)
+    - store the latest app version
+    - if we open dog manager and detect latest version is diff, have banner saying new version available
+    
+- PREPARE FUTURE VERSIONS FOR SCHEAM CHANGES IN API RESPONS
+    - instead of being { message: ""} or { result: "" }, make it more flexible
+    - right now we cause the api response to be tightly coupled and not allow passage of extra data
+    - e.g. { message: "", result: { log/dog/etc: {}, otherProperty, .... } }
+
 ---
 
 ## 🎯 Future
@@ -50,6 +60,12 @@
 
 - DYNAMIC ERROR MESSAGES
     - if an error cannot be matched to one defined in Constant.Error / ErrorConstant, then create a custom one. This should pull all available info from the error returned by the server.
+
+- API CALLS RETURN UPDATED/CREATED OBJECT
+    - instead of returning success or the id of the created item, the api call should return the full object
+    - will help in detection of data saving faults along with tricky scenarios where server may save part of object 
+    - e.g. take this kinda stupid hypothetical. updateLog is called with a log. it has new logLikeUserIds that haven't been synced (it was in offline mode), so offline mode manager knows the log needs to update with some new info, sending the log to the server. however, in the process, it detects that one of the new/removed userIds is invalid for some reason. thus everything succeeds but maybe only some of the userIds are added/saved.
+    - or maybe the server may mutate certain data, we want the user to have the accurate representation
 
 - CALENDAR VIEW
     - Visualize logs on a calendar grid in addition to the daily scroll.

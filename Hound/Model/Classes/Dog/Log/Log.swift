@@ -224,7 +224,6 @@ final class Log: NSObject, NSCoding, NSCopying {
         likedByUserIds = userIds
     }
 
-
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
     private(set) var offlineModeComponents: OfflineModeComponents = OfflineModeComponents()
     
@@ -403,8 +402,7 @@ final class Log: NSObject, NSCoding, NSCopying {
         body[Constant.Key.logUnitTypeId.rawValue] = .int(logUnitTypeId)
         body[Constant.Key.logNumberOfLogUnits.rawValue] = .double(logNumberOfLogUnits)
         body[Constant.Key.logCreatedByReminderUUID.rawValue] = .string(logCreatedByReminderUUID?.uuidString)
-        // don't send logLikedByUserIds because that is handled w/ a separate api call
-        // body[Constant.Key.logLikedByUserIds.rawValue] = .array(likedByUserIds.map { .string($0) })
+        body[Constant.Key.logLikedByUserIds.rawValue] = .array(likedByUserIds.map { .string($0) })
         return body
     }
 }

@@ -36,9 +36,9 @@ final class LogsTableVC: HoundTableViewController {
     
     /// Array of tuples [[(dogUUID, log)]].
     /// Logs are grouped by date; first element is future, last is oldest.
-    private(set) var logsForDogUUIDsGroupedByDate: [[(UUID, Log)]] = [] {
+    private(set) var allLogsGroupedByDate: [[(UUID, Log)]] = [] {
         didSet {
-            delegate?.shouldUpdateNoLogsRecorded(isHidden: !logsForDogUUIDsGroupedByDate.isEmpty)
+            delegate?.shouldUpdateNoLogsRecorded(isHidden: !allLogsGroupedByDate.isEmpty)
         }
     }
     
@@ -89,9 +89,9 @@ final class LogsTableVC: HoundTableViewController {
     // MARK: Page Loader
     
     /// How many logs to load each time user scrolls to bottom
-    private static var logsDisplayedLimitIncrementation = 100
+    private var logsDisplayedLimitIncrementation = 500
     /// Number of logs currently displayed; initial value is twice the incrementation
-    static var logsDisplayedLimit: Int = logsDisplayedLimitIncrementation * 2
+    lazy var logsDisplayedLimit: Int = logsDisplayedLimitIncrementation * 2
     
     // MARK: - Dog Manager
     
@@ -185,11 +185,11 @@ final class LogsTableVC: HoundTableViewController {
         }
     }
     
-    /// Compute logsForDogUUIDsGroupedByDate and reload table view
+    /// Compute allLogsGroupedByDate and reload table view
     private func reloadTable() {
         // Avoid recomputation if no logs
-        logsForDogUUIDsGroupedByDate = dogManager.logsForDogUUIDsGroupedByDate(filter: logsFilter, sort: logsSort)
-        tableView.isUserInteractionEnabled = !logsForDogUUIDsGroupedByDate.isEmpty
+        allLogsGroupedByDate = dogManager.allLogsGroupedByDate(filter: logsFilter, sort: logsSort, limit: logsDisplayedLimit)
+        tableView.isUserInteractionEnabled = !allLogsGroupedByDate.isEmpty
         guard allowReloadTable else { return }
         tableView.reloadData()
     }
@@ -206,23 +206,23 @@ final class LogsTableVC: HoundTableViewController {
     // MARK: - Table View Data Source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return logsForDogUUIDsGroupedByDate.count
+        return allLogsGroupedByDate.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // No logs => no rows
-        guard !logsForDogUUIDsGroupedByDate.isEmpty else {
+        guard !allLogsGroupedByDate.isEmpty else {
             return 0
         }
         
-        return logsForDogUUIDsGroupedByDate[section].count
+        return allLogsGroupedByDate[section].count
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = HoundTableHeaderFooterView()
         
         // all of these logs are of the same day (for whatever day were grouping by)
-        let logForSection = logsForDogUUIDsGroupedByDate[section].first?.1
+        let logForSection = allLogsGroupedByDate[section].first?.1
         guard let log = logForSection else {
             return headerView
         }
@@ -252,11 +252,11 @@ final class LogsTableVC: HoundTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard !logsForDogUUIDsGroupedByDate.isEmpty else {
+        guard !allLogsGroupedByDate.isEmpty else {
             return HoundTableViewCell()
         }
         
-        let (dogUUID, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
+        let (dogUUID, log) = allLogsGroupedByDate[indexPath.section][indexPath.row]
         
         guard let dog = dogManager.findDog(dogUUID: dogUUID) else {
             return HoundTableViewCell()
@@ -279,7 +279,7 @@ final class LogsTableVC: HoundTableViewController {
             cell.containerView.roundCorners(addCorners: .top)
         }
         // Bottom cell: round bottom corners
-        if indexPath.row == logsForDogUUIDsGroupedByDate[indexPath.section].count - 1 {
+        if indexPath.row == allLogsGroupedByDate[indexPath.section].count - 1 {
             cell.containerView.roundCorners(addCorners: .bottom)
         }
         
@@ -299,7 +299,7 @@ final class LogsTableVC: HoundTableViewController {
     ) {
         guard editingStyle == .delete else { return }
         
-        let (dogUUID, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
+        let (dogUUID, log) = allLogsGroupedByDate[indexPath.section][indexPath.row]
         
         LogsRequest.delete(
             errorAlert: .automaticallyAlertOnlyForFailure,
@@ -310,7 +310,7 @@ final class LogsTableVC: HoundTableViewController {
                 return
             }
             
-            let previousLogs = self.logsForDogUUIDsGroupedByDate
+            let previousLogs = self.allLogsGroupedByDate
 
             self.dogManager.findDog(dogUUID: dogUUID)?
                 .dogLogs.removeLog(logUUID: log.logUUID)
@@ -322,7 +322,7 @@ final class LogsTableVC: HoundTableViewController {
             )
             self.allowReloadTable = true
 
-            let newLogs = self.logsForDogUUIDsGroupedByDate
+            let newLogs = self.allLogsGroupedByDate
             self.tableView.isUserInteractionEnabled = !newLogs.isEmpty
             
             if previousLogs[indexPath.section].count > 1 && indexPath.row == previousLogs[indexPath.section].count - 1 {
@@ -350,7 +350,7 @@ final class LogsTableVC: HoundTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let (dogUUID, log) = logsForDogUUIDsGroupedByDate[indexPath.section][indexPath.row]
+        let (dogUUID, log) = allLogsGroupedByDate[indexPath.section][indexPath.row]
         
         PresentationManager.beginFetchingInformationIndicator()
         LogsRequest.get(
@@ -380,16 +380,19 @@ final class LogsTableVC: HoundTableViewController {
         }
     }
     
+    private var isLoadingMoreLogs = false
+    
     override func tableView(
         _ tableView: UITableView,
         willDisplay cell: UITableViewCell,
         forRowAt indexPath: IndexPath
     ) {
+        guard !isLoadingMoreLogs else { return }
         // Check if user has scrolled near bottom to load more logs
         var possibleLogsDisplayed = 0
         var currentLogsDisplayed = 0
         
-        for (index, array) in logsForDogUUIDsGroupedByDate.enumerated() {
+        for (index, array) in allLogsGroupedByDate.enumerated() {
             possibleLogsDisplayed += array.count
             if index <= indexPath.section {
                 currentLogsDisplayed += array.count
@@ -397,12 +400,16 @@ final class LogsTableVC: HoundTableViewController {
         }
         
         // If at limit and near bottom, increase limit and reload
-        guard (possibleLogsDisplayed == LogsTableVC.logsDisplayedLimit),
-              currentLogsDisplayed >= (possibleLogsDisplayed - LogsTableVC.logsDisplayedLimitIncrementation)
+        guard possibleLogsDisplayed >= logsDisplayedLimit && currentLogsDisplayed >= (possibleLogsDisplayed - logsDisplayedLimitIncrementation)
         else { return }
         
-        LogsTableVC.logsDisplayedLimit += LogsTableVC.logsDisplayedLimitIncrementation
-        reloadTable()
+        isLoadingMoreLogs = true
+            logsDisplayedLimit += logsDisplayedLimitIncrementation
+
+            DispatchQueue.main.async { [weak self] in
+                self?.reloadTable()
+                self?.isLoadingMoreLogs = false
+            }
     }
     
     // MARK: - Setup Elements
