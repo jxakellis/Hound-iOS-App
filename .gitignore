@@ -1,3 +1,6 @@
+#custom hound
+all_swift_sources.txt
+
 # macOS system files
 .DS_Store
 .AppleDouble
