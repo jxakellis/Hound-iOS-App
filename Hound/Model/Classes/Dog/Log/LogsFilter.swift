@@ -13,7 +13,7 @@ class LogsFilter: NSObject, NSCopying {
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {
-        let copy = LogsFilter(dogManager: dogManager)
+        let copy = LogsFilter(availableDogManager: availableDogManager)
         copy.searchText = self.searchText
         copy.filteredDogsUUIDs = self.filteredDogsUUIDs
         copy.filteredLogActionActionTypeIds = self.filteredLogActionActionTypeIds
