@@ -62,13 +62,19 @@ final class HoundLabel: UILabel, HoundUIProtocol, HoundDynamicBorder, HoundDynam
         didSet { setNeedsDisplay(); invalidateIntrinsicContentSize() }
     }
     
+    var customTextInsets: UIEdgeInsets = UIEdgeInsets(
+        top: ConstraintConstant.Spacing.contentTightIntraVert,
+        left: ConstraintConstant.Spacing.contentIntraHori,
+        bottom: ConstraintConstant.Spacing.contentTightIntraVert,
+        right: ConstraintConstant.Spacing.contentIntraHori) {
+            didSet {
+                textInsets = shouldInsetText ? customTextInsets : .zero
+                updatePlaceholderLabel()
+            }
+        }
     var shouldInsetText: Bool = false {
         didSet {
-            textInsets = shouldInsetText ? UIEdgeInsets(
-                top: ConstraintConstant.Spacing.contentTightIntraVert,
-                left: ConstraintConstant.Spacing.contentIntraHori,
-                bottom: ConstraintConstant.Spacing.contentTightIntraVert,
-                right: ConstraintConstant.Spacing.contentIntraHori) : .zero
+            textInsets = shouldInsetText ? customTextInsets : .zero
             updatePlaceholderLabel()
         }
     }

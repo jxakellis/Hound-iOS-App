@@ -330,9 +330,8 @@ final class LogsVC: HoundViewController,
         // don't use .maxY because this adds height + safe area inset, but logsTableVC already accounts for safe area inset, so that offsets it too much
         let exportButtonBottom = exportLogsButton.convert(exportLogsButton.bounds, to: view).height
         
-        logsTableViewController.tableView.contentInset.top = exportLogsButton.isHidden
-        ? Constant.Constraint.Spacing.absoluteVertInset
-        : (exportButtonBottom + Constant.Constraint.Spacing.absoluteVertInset)
+        logsTableViewController.tableView.contentInset.top = exportButtonBottom + Constant.Constraint.Spacing.absoluteVertInset
+        logsTableViewController.tableView.contentOffset.y = -view.safeAreaInsets.top - logsTableViewController.tableView.contentInset.top
         logsTableViewController.tableView.contentInset.bottom = Constant.Constraint.Spacing.absoluteVertInset
     }
     

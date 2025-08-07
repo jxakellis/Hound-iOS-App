@@ -17,7 +17,17 @@ protocol LogsTableVCDelegate: AnyObject {
 }
 
 // UI VERIFIED 6/25/25
-final class LogsTableVC: HoundTableViewController {
+final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
+    
+    // MARK: - LogTVCDelegate
+    
+    func logTVCNeedsHeightUpdate(_ cell: LogTVC) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        DispatchQueue.main.async {
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+        }
+    }
     
     // MARK: - UIScrollViewDelegate
     
@@ -80,7 +90,7 @@ final class LogsTableVC: HoundTableViewController {
     
     /// Track if we need to refresh data when view appears
     private var tableViewDataSourceHasBeenUpdated: Bool = false
-
+    
     /// Allows temporarily disabling table reloads when setDogManager is called.
     private var allowReloadTable: Bool = true
     
@@ -269,7 +279,7 @@ final class LogsTableVC: HoundTableViewController {
             return HoundTableViewCell()
         }
         
-        cell.setup(parentDogName: dog.dogName, log: log)
+        cell.setup(delegate: self, dogName: dog.dogName, log: log, sort: logsSort, filter: logsFilter)
         
         // Reset rounding before applying new corners
         cell.containerView.roundCorners(setCorners: .none)
@@ -311,17 +321,17 @@ final class LogsTableVC: HoundTableViewController {
             }
             
             let previousLogs = self.allLogsGroupedByDate
-
+            
             self.dogManager.findDog(dogUUID: dogUUID)?
                 .dogLogs.removeLog(logUUID: log.logUUID)
-
+            
             self.allowReloadTable = false
             self.setDogManager(
                 sender: Sender(origin: self, localized: self),
                 dogManager: self.dogManager
             )
             self.allowReloadTable = true
-
+            
             let newLogs = self.allLogsGroupedByDate
             self.tableView.isUserInteractionEnabled = !newLogs.isEmpty
             
@@ -332,7 +342,7 @@ final class LogsTableVC: HoundTableViewController {
                     aboveLogCell?.containerView.roundCorners(addCorners: .bottom)
                 }
             }
-
+            
             self.tableView.beginUpdates()
             if previousLogs[indexPath.section].count == 1 {
                 self.tableView.deleteSections([indexPath.section], with: .automatic)
@@ -341,7 +351,7 @@ final class LogsTableVC: HoundTableViewController {
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
             }
             self.tableView.endUpdates()
-
+            
             UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
                 self.view.setNeedsLayout()
                 self.view.layoutIfNeeded()
@@ -404,12 +414,12 @@ final class LogsTableVC: HoundTableViewController {
         else { return }
         
         isLoadingMoreLogs = true
-            logsDisplayedLimit += logsDisplayedLimitIncrementation
-
-            DispatchQueue.main.async { [weak self] in
-                self?.reloadTable()
-                self?.isLoadingMoreLogs = false
-            }
+        logsDisplayedLimit += logsDisplayedLimitIncrementation
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.reloadTable()
+            self?.isLoadingMoreLogs = false
+        }
     }
     
     // MARK: - Setup Elements

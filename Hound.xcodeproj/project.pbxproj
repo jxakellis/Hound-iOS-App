@@ -178,6 +178,9 @@
 		A2BAA06E27D6ED720041F3C5 /* UserInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA06D27D6ED720041F3C5 /* UserInformation.swift */; };
 		A2BAA07027D6ED8B0041F3C5 /* UserConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA06F27D6ED8B0041F3C5 /* UserConfiguration.swift */; };
 		A2BAA07227D6EDA20041F3C5 /* LocalConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAA07127D6EDA20041F3C5 /* LocalConfiguration.swift */; };
+		A2BAFC032E444E3F004C3983 /* LogInfoBubbleCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC022E444E38004C3983 /* LogInfoBubbleCVC.swift */; };
+		A2BAFC052E4460AA004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC042E44609F004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift */; };
+		A2BAFC072E446764004C3983 /* HoundIntrinsicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC062E44675E004C3983 /* HoundIntrinsicCollectionView.swift */; };
 		A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */; };
 		A2C1FEB928D55CC9005C21D3 /* CompletionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */; };
 		A2C2951C2E08CA45008F1054 /* NSCoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */; };
@@ -437,6 +440,9 @@
 		A2BAA06D27D6ED720041F3C5 /* UserInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformation.swift; sourceTree = "<group>"; };
 		A2BAA06F27D6ED8B0041F3C5 /* UserConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfiguration.swift; sourceTree = "<group>"; };
 		A2BAA07127D6EDA20041F3C5 /* LocalConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalConfiguration.swift; sourceTree = "<group>"; };
+		A2BAFC022E444E38004C3983 /* LogInfoBubbleCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInfoBubbleCVC.swift; sourceTree = "<group>"; };
+		A2BAFC042E44609F004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundLeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		A2BAFC062E44675E004C3983 /* HoundIntrinsicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundIntrinsicCollectionView.swift; sourceTree = "<group>"; };
 		A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionTracker.swift; sourceTree = "<group>"; };
 		A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoderExtension.swift; sourceTree = "<group>"; };
@@ -795,6 +801,8 @@
 				A2B57EEC2A74B93100013A1B /* HoundImageView.swift */,
 				A2C2951E2E0B8760008F1054 /* HoundIntroductionView.swift */,
 				A24F1325264064D70023BB84 /* HoundLabel.swift */,
+				A2BAFC062E44675E004C3983 /* HoundIntrinsicCollectionView.swift */,
+				A2BAFC042E44609F004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift */,
 				A2FAB3F52E1858E500E85392 /* HoundPawButton.swift */,
 				A28E59C22DFCFB2B0069E687 /* HoundProgressView.swift */,
 				A28E59BC2DF3A3C80069E687 /* HoundScrollView.swift */,
@@ -1011,6 +1019,7 @@
 				A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */,
 				A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */,
 				A2173DAD2B095CE90000C08A /* LogTVC.swift */,
+				A2BAFC022E444E38004C3983 /* LogInfoBubbleCVC.swift */,
 				A2A284822B0C4D1000ACC5C0 /* LogsFilterVC.swift */,
 				A2E525A02E41923200C3D45C /* LogsSortVC.swift */,
 			);
@@ -1539,6 +1548,7 @@
 				A28E59BF2DFCF6400069E687 /* HoundDatePicker.swift in Sources */,
 				A2588BA52930877000B0ACB2 /* SettingsNotifsCategoriesLogTVC.swift in Sources */,
 				A2588BAB29308AC200B0ACB2 /* SettingsNotifsAlarmsSnoozeLengthTVC.swift in Sources */,
+				A2BAFC072E446764004C3983 /* HoundIntrinsicCollectionView.swift in Sources */,
 				A23DB63627CDBE2C00A3F470 /* DogsRequest.swift in Sources */,
 				A2AA5CD727FE47F500FD0134 /* Dog.swift in Sources */,
 				A2B00F9C27FA376000C6126E /* ServerFamilyIntroductionVC.swift in Sources */,
@@ -1549,6 +1559,7 @@
 				A26FA13C27F513B100546306 /* HoundTextField.swift in Sources */,
 				A2FAB4142E1E11FE00E85392 /* DogsAddTriggerFixedTimeView.swift in Sources */,
 				A2FAB4182E1E122C00E85392 /* DogsAddTriggerTimeDelayView.swift in Sources */,
+				A2BAFC052E4460AA004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				A2DAC4522DD5855D0053EB09 /* TriggersRequest.swift in Sources */,
 				A226736225CDC36800904032 /* StringExtension.swift in Sources */,
 				A250FEBB2B735107005409FD /* PreviousReminderCustomActionName.swift in Sources */,
@@ -1562,6 +1573,7 @@
 				A21AAF1A2DECD53B0077C89D /* LogActionType.swift in Sources */,
 				A218EA3227F6A5D90051159C /* NotificationPermissionsManager.swift in Sources */,
 				A2D7A25E2B672B2C00EB7D10 /* SubscriptionCancellationReason.swift in Sources */,
+				A2BAFC032E444E3F004C3983 /* LogInfoBubbleCVC.swift in Sources */,
 				A20EEB0E2E31A33200958592 /* HoundDropDownManager.swift in Sources */,
 				A233519027FB7BAB00CDF1BF /* ClassConstant.swift in Sources */,
 				A23953322B7805A600098CED /* UUIDExtension.swift in Sources */,
