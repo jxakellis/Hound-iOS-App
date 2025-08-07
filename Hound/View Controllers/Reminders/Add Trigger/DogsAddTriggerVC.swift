@@ -279,15 +279,15 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         NSLayoutConstraint.activate([
             saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
             saveButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
-            saveButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            saveButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
+            saveButton.createHeightMultiplier(Constant.Constraint.Button.largeCircleHeightMultiplier, relativeToWidthOf: view),
+            saveButton.createMaxHeight(Constant.Constraint.Button.largeCircleMaxHeight),
             saveButton.createSquareAspectRatio()
         ])
         NSLayoutConstraint.activate([
             backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
             backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteCircleHoriInset),
-            backButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            backButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
+            backButton.createHeightMultiplier(Constant.Constraint.Button.largeCircleHeightMultiplier, relativeToWidthOf: view),
+            backButton.createMaxHeight(Constant.Constraint.Button.largeCircleMaxHeight),
             backButton.createSquareAspectRatio()
         ])
     }

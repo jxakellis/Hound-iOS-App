@@ -86,6 +86,8 @@ extension UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.font = Constant.Visual.Font.badgeLabel
+        label.minimumScaleFactor = 0.0
+        label.adjustsFontSizeToFitWidth = true
         
         label.backgroundColor = UIColor.houndYellow
         

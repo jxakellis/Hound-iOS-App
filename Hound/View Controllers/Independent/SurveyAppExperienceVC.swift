@@ -312,8 +312,8 @@ class SurveyAppExperienceVC: HoundScrollViewController, UITextViewDelegate {
         // Make all stars equal size and square
         for starButton in orderedStarButtons {
             NSLayoutConstraint.activate([
-                starButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier * 1.5, relativeToWidthOf: view),
-                starButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight * 1.5),
+                starButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier * 1.5, relativeToWidthOf: view),
+                starButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight * 1.5),
                 starButton.createSquareAspectRatio()
             ])
         }

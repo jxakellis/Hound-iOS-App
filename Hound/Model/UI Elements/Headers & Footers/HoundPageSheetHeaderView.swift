@@ -111,8 +111,8 @@ final class HoundPageSheetHeaderView: HoundView {
             make.bottom.lessThanOrEqualTo(self.snp.bottom)
             make.leading.equalTo(pageHeaderLabel.snp.trailing).offset(Constant.Constraint.Spacing.contentTightIntraHori)
             make.trailing.equalTo(self.snp.trailing).inset(Constant.Constraint.Spacing.absoluteCircleHoriInset)
-            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Button.miniCircleHeightMultiplier)
-            make.height.lessThanOrEqualTo(Constant.Constraint.Button.miniCircleMaxHeight)
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Button.circleHeightMultiplier)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.circleMaxHeight)
             make.width.equalTo(backButton.snp.height)
         }
         

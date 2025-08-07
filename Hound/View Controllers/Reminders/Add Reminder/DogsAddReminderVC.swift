@@ -352,8 +352,8 @@ final class DogsAddReminderVC: HoundScrollViewController {
         NSLayoutConstraint.activate([
             saveReminderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
             saveReminderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
-            saveReminderButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            saveReminderButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
+            saveReminderButton.createHeightMultiplier(Constant.Constraint.Button.largeCircleHeightMultiplier, relativeToWidthOf: view),
+            saveReminderButton.createMaxHeight(Constant.Constraint.Button.largeCircleMaxHeight),
             saveReminderButton.createSquareAspectRatio()
         ])
         
@@ -361,8 +361,8 @@ final class DogsAddReminderVC: HoundScrollViewController {
         NSLayoutConstraint.activate([
             backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
             backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteCircleHoriInset),
-            backButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            backButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
+            backButton.createHeightMultiplier(Constant.Constraint.Button.largeCircleHeightMultiplier, relativeToWidthOf: view),
+            backButton.createMaxHeight(Constant.Constraint.Button.largeCircleMaxHeight),
             backButton.createSquareAspectRatio()
         ])
     }

@@ -250,8 +250,8 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         }
         
         triggerResultIndicatorImageView.snp.makeConstraints { make in
-            make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.miniCircleHeightMultiplier / 1.5).priority(.high)
-            make.height.lessThanOrEqualTo(Constant.Constraint.Button.miniCircleMaxHeight / 1.5)
+            make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.circleHeightMultiplier / 1.5).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.circleMaxHeight / 1.5)
             make.width.equalTo(triggerResultIndicatorImageView.snp.height)
         }
         

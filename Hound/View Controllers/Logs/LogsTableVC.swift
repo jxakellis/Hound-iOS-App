@@ -16,17 +16,12 @@ protocol LogsTableVCDelegate: AnyObject {
     func updateFilterLogsButton()
 }
 
-// UI VERIFIED 6/25/25
 final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
     
     // MARK: - LogTVCDelegate
     
-    func logTVCNeedsHeightUpdate(_ cell: LogTVC) {
-        guard let indexPath = tableView.indexPath(for: cell) else { return }
-        DispatchQueue.main.async {
-            self.tableView.beginUpdates()
-            self.tableView.endUpdates()
-        }
+    func didUpdateLogLikes(dogUUID: UUID, log: Log) {
+        // TODO update dog manager n stuff
     }
     
     // MARK: - UIScrollViewDelegate
@@ -195,13 +190,25 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
         }
     }
     
-    /// Compute allLogsGroupedByDate and reload table view
+    private func refreshVisibleCells() {
+        for cell in tableView.visibleCells {
+            guard let indexPath = tableView.indexPath(for: cell),
+                  let logCell = cell as? LogTVC else { continue }
+            let (dogUUID, log) = allLogsGroupedByDate[indexPath.section][indexPath.row]
+            guard let dog = dogManager.findDog(dogUUID: dogUUID) else { continue }
+            logCell.setup(delegate: self, dogName: dog.dogName, dogUUID: dogUUID, log: log, sort: logsSort, filter: logsFilter)
+        }
+    }
+    
     private func reloadTable() {
         // Avoid recomputation if no logs
         allLogsGroupedByDate = dogManager.allLogsGroupedByDate(filter: logsFilter, sort: logsSort, limit: logsDisplayedLimit)
         tableView.isUserInteractionEnabled = !allLogsGroupedByDate.isEmpty
         guard allowReloadTable else { return }
         tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.refreshVisibleCells()
+        }
     }
     
     func scrollToTop(animated: Bool) {
@@ -279,7 +286,7 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
             return HoundTableViewCell()
         }
         
-        cell.setup(delegate: self, dogName: dog.dogName, log: log, sort: logsSort, filter: logsFilter)
+        cell.setup(delegate: self, dogName: dog.dogName, dogUUID: dogUUID, log: log, sort: logsSort, filter: logsFilter)
         
         // Reset rounding before applying new corners
         cell.containerView.roundCorners(setCorners: .none)

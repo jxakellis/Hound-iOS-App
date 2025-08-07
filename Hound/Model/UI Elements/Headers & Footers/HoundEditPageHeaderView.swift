@@ -98,16 +98,16 @@ final class HoundEditPageHeaderView: HoundView {
         leadingButton.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)
             make.leading.equalTo(self.snp.leading).offset(Constant.Constraint.Spacing.absoluteCircleHoriInset)
-            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Button.miniCircleHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(Constant.Constraint.Button.miniCircleMaxHeight)
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Button.circleHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.circleMaxHeight)
             make.width.equalTo(leadingButton.snp.height)
         }
         
         trailingButton.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)
             make.trailing.equalTo(self.snp.trailing).inset(Constant.Constraint.Spacing.absoluteCircleHoriInset)
-            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Button.miniCircleHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(Constant.Constraint.Button.miniCircleMaxHeight)
+            make.height.equalTo(self.snp.width).multipliedBy(Constant.Constraint.Button.circleHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.circleMaxHeight)
             make.width.equalTo(trailingButton.snp.height)
         }
         

@@ -9,6 +9,10 @@
 import SnapKit
 import UIKit
 
+protocol LogTVCDelegate: AnyObject {
+    func didUpdateLogLikes(dogUUID: UUID, log: Log)
+}
+
 final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     // MARK: - UICollectionViewDataSource
@@ -109,8 +113,39 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         return stack
     }()
     
-    private var lastKnownCollectionViewHeight: CGFloat = 0
-    private var infoBubbleCollectionViewHeight: Constraint?
+    private lazy var likeButton: HoundButton = {
+        let button = HoundButton(type: .system)
+        // TODO UI make this a better color
+        button.tintColor = .systemGray2
+        
+        let action = UIAction { [weak self] _  in
+            guard let self = self else { return }
+            guard let dogUUID = self.dogUUID, let log = self.log else { return }
+            guard let userId = UserInformation.userId else { return }
+            
+            let currentlyLiked = log.likedByUserIds.contains(userId)
+            log.setLogLike(!currentlyLiked)
+            delegate?.didUpdateLogLikes(dogUUID: dogUUID, log: log)
+            updateLikeButtonBadge(animated: true)
+            
+            button.isEnabled = false
+            LogsRequest.update(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, log: log) { responseStatus, _ in
+                button.isEnabled = true
+                // if success response or no response, then its fine and acceptable (offline mode can handle it)
+                guard responseStatus == .failureResponse else {
+                    return
+                }
+                
+                // undo the like b/c it failed
+                log.setLogLike(currentlyLiked)
+                self.delegate?.didUpdateLogLikes(dogUUID: dogUUID, log: log)
+                self.updateLikeButtonBadge(animated: true)
+            }
+        }
+        
+        button.addAction(action, for: .touchUpInside)
+        return button
+    }()
     
     private lazy var infoBubbleCollectionView: UICollectionView = {
         let layout = HoundLeftAlignedCollectionViewFlowLayout()
@@ -125,6 +160,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         collectionView.isScrollEnabled = false
         collectionView.dataSource = self
         collectionView.delegate = self
+        
         return collectionView
     }()
     
@@ -135,37 +171,47 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
     private var infoItems: [String] = []
     
     private weak var delegate: LogTVCDelegate?
+    private var dogUUID: UUID?
+    private var log: Log?
     
     // MARK: - Setup
     
     /// Configure the cell’s labels and adjust dynamic constraints based on the provided Log
-    func setup(delegate: LogTVCDelegate, dogName: String, log: Log, sort: LogsSort, filter: LogsFilter) {
-        // TODO the relativity of all of these log displays need to be diff, b/c depending upon sort mode, the today/yesterday for each header for the logs grouped that are on the same day change
+    func setup(delegate: LogTVCDelegate, dogName: String, dogUUID: UUID, log: Log, sort: LogsSort, filter: LogsFilter) {
         self.delegate = delegate
+        self.dogUUID = dogUUID
+        self.log = log
+        
+        // depending on the different sort methods, the logs displayed will be grouped and displayed by different dates, thus affecting the headers (e.g. you have a group "Today" of logs but that could be Today for start date, or created date, etc...
+        // thus if times are relative, e.g. 8:50AM, they need to be relative to this header
+        let cellGroupedByDate = sort.sortField.date(log)
+        
+        func convertDateToRelative(_ convert: Date) -> String {
+            if Calendar.user.isDate(convert, inSameDayAs: cellGroupedByDate) {
+                // date is same day as the header for this grouping of logs in the table
+                // e.g. both may 15th, so we can simply display 8:50AM
+                return convert.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
+            }
+            else {
+                // date is a different day/month and potentially year from the header
+                // e.g. this grouping is for may 15th but this date is from may 25th
+                let cellGroupedByDateYear = Calendar.user.component(.year, from: cellGroupedByDate)
+                let currentYear = Calendar.user.component(.year, from: Date())
+                return convert.houndFormatted(.template(cellGroupedByDateYear == currentYear ? "MMMd" : "MMMdyy"), displayTimeZone: UserConfiguration.timeZone)
+            }
+        }
+        
         logActionIconLabel.text = log.logActionType.emoji
         
-        // Pad label so it lines up with other labels
         dogNameLabel.text = dogName
         
         logActionTextLabel.text = log.logActionType.convertToReadableName(customActionName: log.logCustomActionName, includeMatchingEmoji: false)
         
         // e.g., “7:53 AM”
-        logStartToEndDateLabel.text = log.logStartDate.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
+        logStartToEndDateLabel.text = convertDateToRelative(log.logStartDate)
         
         if let logEndDate = log.logEndDate {
-            let endString: String
-            // dont use inSameDayAs, b/c take alarm at 11:59PM to 12:01AM, then we would show 11:59PM - Aug 5 (assuming 11:59PM on Aug 4)
-            if log.logStartDate.distance(to: logEndDate) < 60 * 60 * 24 {
-                // Same day: no need for date information
-                endString = logEndDate.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
-            }
-            else {
-                // Different day: show month + day (and year if not current)
-                let logEndYear = Calendar.user.component(.year, from: logEndDate)
-                let currentYear = Calendar.user.component(.year, from: Date())
-                endString = logEndDate.houndFormatted(.template(logEndYear == currentYear ? "MMMd" : "MMMdyy"), displayTimeZone: UserConfiguration.timeZone)
-            }
-            logStartToEndDateLabel.text = logStartToEndDateLabel.text?.appending(" - \(endString)")
+            logStartToEndDateLabel.text = logStartToEndDateLabel.text?.appending(" - \(convertDateToRelative(logEndDate))")
         }
         
         logDurationLabel.text = {
@@ -175,13 +221,15 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
             return log.logStartDate.distance(to: logEndDate).readable(capitalizeWords: false, abbreviationLevel: .short, maxComponents: 2, enforceSequentialComponents: true)
         }()
         
+        updateLikeButtonBadge(animated: false)
+        
         infoItems = []
         if sort.sortField == .createdDate || filter.timeRangeField == .createdDate {
-            let dateString = log.logCreated .houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
+            let dateString = convertDateToRelative(log.logCreated)
             infoItems.append("Created: \(dateString)")
         }
         if sort.sortField == .modifiedDate || filter.timeRangeField == .modifiedDate {
-            let dateString = LogsSortField.modifiedDate.date(log).houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
+            let dateString = convertDateToRelative(log.logLastModified ?? log.logCreated)
             infoItems.append("Modified: \(dateString)")
         }
         if let unitType = log.logUnitType, let numUnits = log.logNumberOfLogUnits, let unit = unitType.pluralReadableValueWithNumUnits(logNumberOfLogUnits: numUnits) {
@@ -193,6 +241,23 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         }
         
         remakeInfoBubbleConstraints()
+        
+        remakeLikeButtonConstraints()
+    }
+    
+    // MARK: - Functions
+    
+    private func updateLikeButtonBadge(animated: Bool) {
+        UIView.animate(withDuration: animated ? Constant.Visual.Animation.selectSingleElement : 0.0) {
+            if let userId = UserInformation.userId, self.log?.likedByUserIds.contains(userId) == true {
+                self.likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            }
+            else {
+                self.likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            }
+            self.likeButton.badgeValue = self.log?.likedByUserIds.count
+            self.likeButton.badgeVisible = self.log?.likedByUserIds.isEmpty == false
+        }
     }
     
     // MARK: - Setup Elements
@@ -202,30 +267,46 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         contentView.addSubview(containerView)
         containerView.addSubview(topStack)
         containerView.addSubview(infoBubbleCollectionView)
+        containerView.addSubview(likeButton)
+    }
+    
+    private func remakeLikeButtonConstraints() {
+        let shouldBeInStack = infoItems.isEmpty && logDurationLabel.text == nil
+
+        likeButton.snp.remakeConstraints { make in
+            if shouldBeInStack {
+                // TODO TEST this might become funky for big screen sizes and overlap with stuff
+                make.centerY.equalTo(logActionLogDurationStack.snp.centerY)
+            }
+            else {
+                make.top.greaterThanOrEqualTo(topStack.snp.bottom).offset(Constant.Constraint.Spacing.contentTightIntraVert)
+                make.leading.equalTo(infoBubbleCollectionView.snp.trailing).offset(Constant.Constraint.Spacing.contentIntraHori)
+            }
+            make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.contentIntraVert)
+            make.trailing.equalTo(containerView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
+            
+            make.height.equalTo(contentView.snp.width).multipliedBy(Constant.Constraint.Button.tinyHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.tinyMaxHeight)
+            make.width.equalTo(likeButton.snp.height)
+        }
     }
     
     private func remakeInfoBubbleConstraints() {
         // topStack can conflict with infoBubbleCollectionView before its remade
         infoBubbleCollectionView.snp.removeConstraints()
         
-        topStack.snp.remakeConstraints { make in
-            make.top.equalTo(containerView.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)
-            make.leading.trailing.equalTo(containerView).inset(Constant.Constraint.Spacing.absoluteHoriInset)
-
-            if infoItems.isEmpty {
-                make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.contentIntraVert)
-            }
-        }
-
         infoBubbleCollectionView.isHidden = infoItems.isEmpty
+        
+        infoBubbleCollectionView.snp.makeConstraints { make in
+            make.leading.equalTo(containerView).inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
 
         guard !infoItems.isEmpty else {
             return
         }
 
-        infoBubbleCollectionView.snp.remakeConstraints { make in
+        infoBubbleCollectionView.snp.makeConstraints { make in
             make.top.equalTo(topStack.snp.bottom).offset(Constant.Constraint.Spacing.contentIntraVert)
-            make.leading.trailing.equalTo(containerView).inset(Constant.Constraint.Spacing.absoluteHoriInset)
             make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.contentIntraVert)
         }
     }
@@ -240,7 +321,14 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
             make.horizontalEdges.equalTo(contentView.snp.horizontalEdges).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
         
+        topStack.snp.makeConstraints { make in
+            make.top.equalTo(containerView.snp.top).offset(Constant.Constraint.Spacing.contentIntraVert)
+            make.leading.trailing.equalTo(containerView).inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
+        
         remakeInfoBubbleConstraints()
+        
+        remakeLikeButtonConstraints()
     }
     
 }

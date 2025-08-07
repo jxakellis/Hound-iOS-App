@@ -683,8 +683,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         NSLayoutConstraint.activate([
             dogIconButton.topAnchor.constraint(equalTo: editPageHeaderView.bottomAnchor),
             dogIconButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteCircleHoriInset),
-            dogIconButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            dogIconButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
+            dogIconButton.createHeightMultiplier(Constant.Constraint.Button.largeCircleHeightMultiplier, relativeToWidthOf: view),
+            dogIconButton.createMaxHeight(Constant.Constraint.Button.largeCircleMaxHeight),
             dogIconButton.createSquareAspectRatio()
         ])
         
@@ -718,8 +718,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         NSLayoutConstraint.activate([
             saveDogButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
             saveDogButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
-            saveDogButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            saveDogButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
+            saveDogButton.createHeightMultiplier(Constant.Constraint.Button.largeCircleHeightMultiplier, relativeToWidthOf: view),
+            saveDogButton.createMaxHeight(Constant.Constraint.Button.largeCircleMaxHeight),
             saveDogButton.createSquareAspectRatio()
         ])
         
@@ -727,8 +727,8 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         NSLayoutConstraint.activate([
             backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
             backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteCircleHoriInset),
-            backButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            backButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
+            backButton.createHeightMultiplier(Constant.Constraint.Button.largeCircleHeightMultiplier, relativeToWidthOf: view),
+            backButton.createMaxHeight(Constant.Constraint.Button.largeCircleMaxHeight),
             backButton.createSquareAspectRatio()
         ])
     }

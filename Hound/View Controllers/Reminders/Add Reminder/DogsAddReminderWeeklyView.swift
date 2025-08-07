@@ -289,8 +289,8 @@ final class DogsAddReminderWeeklyView: HoundView {
         weekdayButtons.forEach { button in
             NSLayoutConstraint.activate([
                 button.createSquareAspectRatio(),
-                button.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: self),
-                button.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight)
+                button.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: self),
+                button.createMaxHeight(Constant.Constraint.Button.circleMaxHeight)
             ])
         }
         

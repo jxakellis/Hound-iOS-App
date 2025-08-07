@@ -45,12 +45,16 @@ public enum ConstraintConstant {
     }
     enum Button {
         // MARK: Full Size Circle Button
-        static let circleHeightMultiplier: CGFloat = 100.0 / screenWidth
-        static let circleMaxHeight: CGFloat = Self.circleHeightMultiplier * screenWidth * maxScaleFactor
+        static let largeCircleHeightMultiplier: CGFloat = 100.0 / screenWidth
+        static let largeCircleMaxHeight: CGFloat = Self.largeCircleHeightMultiplier * screenWidth * maxScaleFactor
         
         // MARK: Mini Circle Button
-        static let miniCircleHeightMultiplier: CGFloat = Self.circleHeightMultiplier / 1.8
-        static let miniCircleMaxHeight: CGFloat = Self.circleMaxHeight / 1.8
+        static let circleHeightMultiplier: CGFloat = 55.0 / screenWidth
+        static let circleMaxHeight: CGFloat = Self.circleHeightMultiplier * screenWidth * maxScaleFactor
+        
+        // MARK: Tiny Button
+        static let tinyHeightMultiplier: CGFloat = 18.75 / screenWidth
+        static let tinyMaxHeight: CGFloat = Self.tinyHeightMultiplier * screenWidth * maxScaleFactor
         
         // MARK: Screen Width Circle Button
         static let wideHeightMultiplier: CGFloat = 60.0 / screenWidth

@@ -463,8 +463,8 @@ final class SettingsSubscriptionVC: HoundScrollViewController, UITableViewDelega
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Constant.Constraint.Spacing.absoluteVertInset),
             backButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
-            backButton.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-            backButton.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight),
+            backButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
+            backButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight),
             backButton.createSquareAspectRatio()
         ])
 

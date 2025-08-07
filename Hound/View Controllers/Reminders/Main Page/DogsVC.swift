@@ -570,8 +570,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         for button in [createNewDogButton, createNewReminderButton, createNewTriggerButton] {
             NSLayoutConstraint.activate([
                 button.createSquareAspectRatio(),
-                button.createHeightMultiplier(Constant.Constraint.Button.miniCircleHeightMultiplier, relativeToWidthOf: view),
-                button.createMaxHeight(Constant.Constraint.Button.miniCircleMaxHeight)
+                button.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
+                button.createMaxHeight(Constant.Constraint.Button.circleMaxHeight)
             ])
         }
         
@@ -597,8 +597,8 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
             createNewMenuButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constant.Constraint.Spacing.absoluteVertInset),
             createNewMenuButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteCircleHoriInset),
             createNewMenuButton.createSquareAspectRatio(),
-            createNewMenuButton.createHeightMultiplier(Constant.Constraint.Button.circleHeightMultiplier, relativeToWidthOf: view),
-            createNewMenuButton.createMaxHeight(Constant.Constraint.Button.circleMaxHeight)
+            createNewMenuButton.createHeightMultiplier(Constant.Constraint.Button.largeCircleHeightMultiplier, relativeToWidthOf: view),
+            createNewMenuButton.createMaxHeight(Constant.Constraint.Button.largeCircleMaxHeight)
         ])
         
         // screenDimmer

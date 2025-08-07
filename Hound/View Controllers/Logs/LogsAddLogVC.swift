@@ -1701,16 +1701,16 @@ final class LogsAddLogVC: HoundScrollViewController,
         saveLogButton.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset)
             make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).inset(Constant.Constraint.Spacing.absoluteCircleHoriInset)
-            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Button.circleHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(Constant.Constraint.Button.circleMaxHeight)
+            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Button.largeCircleHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.largeCircleMaxHeight)
             make.width.equalTo(saveLogButton.snp.height)
         }
         
         backButton.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset)
             make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(Constant.Constraint.Spacing.absoluteCircleHoriInset)
-            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Button.circleHeightMultiplier).priority(.high)
-            make.height.lessThanOrEqualTo(Constant.Constraint.Button.circleMaxHeight)
+            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Button.largeCircleHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Button.largeCircleMaxHeight)
             make.width.equalTo(backButton.snp.height)
         }
         
