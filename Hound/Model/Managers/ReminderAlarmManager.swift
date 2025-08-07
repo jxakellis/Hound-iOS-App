@@ -51,7 +51,7 @@ final class ReminderAlarmManager {
 
             guard let responseReminder = responseReminder else {
                 // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, tell the delegate as such.
-                delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), dogUUID: dogUUID, reminderUUID: reminder.reminderUUID)
+                delegate.didRemoveReminder(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, reminderUUID: reminder.reminderUUID)
                 return
             }
 
@@ -61,7 +61,7 @@ final class ReminderAlarmManager {
                 // We were able to retrieve the reminder and something was wrong with it. Something was disabled, the reminder was pushed back to the future, or it simply just has invalid timing components.
                 // MARK: IMPORTANT - Do not try to refresh DogManager as that can (and does) cause an infinite loop. The reminder can exist but for some reason have invalid data leading to a nil executionDate. If we refresh the DogManager, we could retrieve the same invalid reminder data which leads back to this statement (and thus starts the infinite loop)
 
-                self.delegate.didAddReminder(sender: Sender(origin: self, localized: self), dogUUID: dogUUID, reminder: responseReminder)
+                self.delegate.didAddReminder(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, reminder: responseReminder)
                 return
             }
 
@@ -148,7 +148,7 @@ final class ReminderAlarmManager {
             alarmAlertController.addAction(snoozeAlertAction)
             alarmAlertController.addAction(dismissAlertAction)
 
-            delegate.didAddReminder(sender: Sender(origin: self, localized: self), dogUUID: dogUUID, reminder: responseReminder)
+            delegate.didAddReminder(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, reminder: responseReminder)
             
             PresentationManager.enqueueAlert(alarmAlertController)
         }
@@ -185,7 +185,7 @@ final class ReminderAlarmManager {
                 return
             }
 
-            delegate.didAddReminder(sender: Sender(origin: self, localized: self), dogUUID: dogUUID, reminder: reminder)
+            delegate.didAddReminder(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, reminder: reminder)
         }
 
     }
@@ -200,7 +200,7 @@ final class ReminderAlarmManager {
                     return
                 }
 
-                delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), dogUUID: dogUUID, reminderUUID: reminder.reminderUUID)
+                delegate.didRemoveReminder(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, reminderUUID: reminder.reminderUUID)
             }
         }
         // Nest all the other cases inside this else statement as otherwise .oneTime alarms would make request with the above code then again down here.
@@ -214,7 +214,7 @@ final class ReminderAlarmManager {
                     return
                 }
 
-                delegate.didAddReminder(sender: Sender(origin: self, localized: self), dogUUID: dogUUID, reminder: reminder)
+                delegate.didAddReminder(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, reminder: reminder)
             }
         }
 
@@ -237,14 +237,14 @@ final class ReminderAlarmManager {
                     return
                 }
 
-                delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), dogUUID: dogUUID, reminderUUID: reminder.reminderUUID)
+                delegate.didRemoveReminder(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, reminderUUID: reminder.reminderUUID)
                 // create log on the server and then assign it the logUUID and then add it to the dog
                 LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, log: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
 
-                    delegate.didAddLog(sender: Sender(origin: self, localized: self), dogUUID: dogUUID, log: log, invokeDogTriggers: reminder.reminderIsTriggerResult == false)
+                    delegate.didAddLog(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, log: log, invokeDogTriggers: reminder.reminderIsTriggerResult == false)
                 }
             }
         }
@@ -259,14 +259,14 @@ final class ReminderAlarmManager {
                     return
                 }
 
-                delegate.didAddReminder(sender: Sender(origin: self, localized: self), dogUUID: dogUUID, reminder: reminder)
+                delegate.didAddReminder(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, reminder: reminder)
                 // we need to persist a log as well
                 LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, log: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
                         return
                     }
 
-                    delegate.didAddLog(sender: Sender(origin: self, localized: self), dogUUID: dogUUID, log: log, invokeDogTriggers: reminder.reminderIsTriggerResult == false)
+                    delegate.didAddLog(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, log: log, invokeDogTriggers: reminder.reminderIsTriggerResult == false)
                 }
             }
         }

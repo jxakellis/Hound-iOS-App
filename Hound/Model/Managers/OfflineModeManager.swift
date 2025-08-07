@@ -342,7 +342,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
             self.shouldGetDogManager = false
             
             if let dogManager = dogManager {
-                self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
+                self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: dogManager)
             }
             
             // Continue to sync more upon successful completion
@@ -381,7 +381,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 
                 // If the dog got added back into the dogManager, remove it again and then push the change to everything else
                 if let globalDogManager = DogManager.globalDogManager, globalDogManager.removeDog(dogUUID: deletedDog.dogUUID) == true {
-                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: globalDogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: globalDogManager)
                 }
                 
                 self.syncNextObject()
@@ -406,7 +406,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 
                 // If the dog got added back into the dogManager, remove it again and then push the change to everything else
                 if let globalDogManager = DogManager.globalDogManager, globalDogManager.findDog(dogUUID: deletedReminder.dogUUID)?.dogReminders.removeReminder(reminderUUID: deletedReminder.reminderUUID) == true {
-                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: globalDogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: globalDogManager)
                 }
                 
                 self.syncNextObject()
@@ -431,7 +431,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 
                 // If the dog got added back into the dogManager, remove it again and then push the change to everything else
                 if let globalDogManager = DogManager.globalDogManager, globalDogManager.findDog(dogUUID: deletedLog.dogUUID)?.dogLogs.removeLog(logUUID: deletedLog.logUUID) == true {
-                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: globalDogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: globalDogManager)
                 }
                 
                 self.syncNextObject()
@@ -456,7 +456,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
                 
                 // If the dog got added back into the dogManager, remove it again and then push the change to everything else
                 if let globalDogManager = DogManager.globalDogManager, globalDogManager.findDog(dogUUID: deletedTrigger.dogUUID)?.dogTriggers.removeTrigger(triggerUUID: deletedTrigger.triggerUUID) == true {
-                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: globalDogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: globalDogManager)
                 }
                 
                 self.syncNextObject()
@@ -830,7 +830,7 @@ final class OfflineModeManager: NSObject, NSCoding, UserDefaultPersistable {
         
         // We have finished syncing everything. Push an update to the MainTabBarVC with the update dogManager
         if let globalDogManager = DogManager.globalDogManager {
-            delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: globalDogManager)
+            delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: globalDogManager)
         }
         
         isSyncInProgress = false

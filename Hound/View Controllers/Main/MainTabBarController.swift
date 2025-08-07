@@ -68,20 +68,20 @@ final class MainTabBarController: HoundTabBarController,
         DogManager.globalDogManager = dogManager
         
         // If not coming from ServerSyncVC, initialize timers
-        if (sender.localized is ServerSyncVC) == false {
+        if (sender.lastLocation is ServerSyncVC) == false {
             ReminderTimingManager.initializeReminderTimers(dogManager: dogManager)
         }
         // Propagate to DogsVC if sender isn't DogsVC
-        if (sender.localized is DogsVC) == false {
+        if (sender.lastLocation is DogsVC) == false {
             dogsViewController.setDogManager(
-                sender: Sender(origin: sender, localized: self),
+                sender: Sender(source: sender, lastLocation: self),
                 dogManager: dogManager
             )
         }
         // Propagate to LogsVC if sender isn't LogsVC
-        if (sender.localized is LogsVC) == false {
+        if (sender.lastLocation is LogsVC) == false {
             logsViewController.setDogManager(
-                sender: Sender(origin: sender, localized: self),
+                sender: Sender(source: sender, lastLocation: self),
                 dogManager: dogManager
             )
         }
@@ -136,7 +136,7 @@ final class MainTabBarController: HoundTabBarController,
                 MainTabBarController.shouldSilentlyRefreshDogManager = false
                 guard let newDM = newDM else { return }
                 mainTBC.setDogManager(
-                    sender: Sender(origin: self, localized: self),
+                    sender: Sender(source: self, lastLocation: self),
                     dogManager: newDM
                 )
             }
@@ -183,10 +183,10 @@ final class MainTabBarController: HoundTabBarController,
         HoundLogger.lifecycle.notice("Version: \(AppVersion.current)")
         
         logsViewController.setup(delegate: self)
-        logsViewController.setDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
+        logsViewController.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: dogManager)
         
         dogsViewController.setup(delegate: self)
-        dogsViewController.setDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
+        dogsViewController.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: dogManager)
         
         settingsPagesTableViewController.setup(delegate: self)
         
@@ -207,7 +207,7 @@ final class MainTabBarController: HoundTabBarController,
                 MainTabBarController.shouldSilentlyRefreshDogManager = false
                 guard let newDM = newDM else { return }
                 self.setDogManager(
-                    sender: Sender(origin: self, localized: self),
+                    sender: Sender(source: self, lastLocation: self),
                     dogManager: newDM
                 )
             }

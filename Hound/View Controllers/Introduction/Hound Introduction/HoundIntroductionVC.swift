@@ -87,7 +87,7 @@ final class HoundIntroductionVC: HoundViewController,
             
             // Manually present MainTabBarController
             let mainTabBarController = MainTabBarController()
-            mainTabBarController.setDogManager(sender: Sender(origin: self, localized: self),
+            mainTabBarController.setDogManager(sender: Sender(source: self, lastLocation: self),
                                                dogManager: dogManager)
             PresentationManager.enqueueViewController(mainTabBarController)
             
@@ -110,7 +110,7 @@ final class HoundIntroductionVC: HoundViewController,
                     
                     // Manually present MainTabBarController
                     let mainTabBarController = MainTabBarController()
-                    mainTabBarController.setDogManager(sender: Sender(origin: self, localized: self),
+                    mainTabBarController.setDogManager(sender: Sender(source: self, lastLocation: self),
                                                        dogManager: self.dogManager)
                     PresentationManager.enqueueViewController(mainTabBarController)
                 }

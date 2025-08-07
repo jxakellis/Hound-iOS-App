@@ -115,7 +115,7 @@ final class RemindersIntroductionVC: HoundViewController {
                 PresentationManager.endFetchingInformationIndicator {
                     dog.dogReminders.addReminders(reminders: reminders)
                     dog.dogTriggers.addTriggers(dogTriggers: triggers)
-                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     self.dismiss(animated: true, completion: nil)
                 }
             } failedTaskCompletionHandler: {

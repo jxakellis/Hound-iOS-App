@@ -12,25 +12,25 @@ final class Sender: NSObject {
     
     // MARK: - Properties
 
-    let origin: AnyObject?
-    var localized: AnyObject?
+    let source: AnyObject?
+    var lastLocation: AnyObject?
     
     // MARK: - Main
 
-    init(origin: AnyObject, localized: AnyObject) {
-        if let sender = origin as? Sender {
-            self.origin = sender.origin
+    init(source: AnyObject, lastLocation: AnyObject) {
+        if let sender = source as? Sender {
+            self.source = sender.source
         }
         else {
-            self.origin = origin
+            self.source = source
         }
 
         // localized cannot be sender, however we can let it pass
-        if let sender = localized as? Sender {
-            self.localized = sender.localized
+        if let sender = lastLocation as? Sender {
+            self.lastLocation = sender.lastLocation
         }
         else {
-            self.localized = localized
+            self.lastLocation = lastLocation
         }
     }
 

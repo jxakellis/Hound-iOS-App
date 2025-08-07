@@ -183,7 +183,7 @@ final class ReminderTimingManager {
             
             guard let reminder = reminder else {
                 // If the response was successful but no reminder was returned, that means the reminder was deleted. Therefore, update the dogManager to indicate as such.
-                self.delegate.didRemoveReminder(sender: Sender(origin: self, localized: self), dogUUID: reminderTimer.dogUUID, reminderUUID: reminderTimer.reminder.reminderUUID)
+                self.delegate.didRemoveReminder(sender: Sender(source: self, lastLocation: self), dogUUID: reminderTimer.dogUUID, reminderUUID: reminderTimer.reminder.reminderUUID)
                 return
             }
 
@@ -195,7 +195,7 @@ final class ReminderTimingManager {
                     return
                 }
 
-                delegate.didAddReminder(sender: Sender(origin: self, localized: self), dogUUID: reminderTimer.dogUUID, reminder: reminder)
+                delegate.didAddReminder(sender: Sender(source: self, lastLocation: self), dogUUID: reminderTimer.dogUUID, reminder: reminder)
             }
         }
     }

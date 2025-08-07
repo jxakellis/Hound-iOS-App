@@ -105,7 +105,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                 guard let newDog = newDog else {
                     // If the response was successful but no dog was returned, that means the dog was deleted. Therefore, update the dogManager to indicate as such.
                     self.dogManager.removeDog(dogUUID: dogUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     return
                 }
                 
@@ -142,7 +142,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                     let dogReminders = self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders
                     dogReminders?.removeReminder(reminderUUID: reminder.reminderUUID)
                     
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     return
                 }
                 
@@ -179,7 +179,7 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
                     let dogTriggers = self.dogManager.findDog(dogUUID: dog.dogUUID)?.dogTriggers
                     dogTriggers?.removeTrigger(triggerUUID: trigger.triggerUUID)
                     
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     return
                 }
                 
@@ -421,18 +421,18 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
         // DogsAddDogVC
         // MainTabBarController
         
-        if !(sender.localized is DogsTableVC) {
-            dogsTableViewController.setDogManager(sender: Sender(origin: sender, localized: self), dogManager: dogManager)
+        if !(sender.lastLocation is DogsTableVC) {
+            dogsTableViewController.setDogManager(sender: Sender(source: sender, lastLocation: self), dogManager: dogManager)
         }
         
-        if (sender.localized is MainTabBarController) == true {
+        if (sender.lastLocation is MainTabBarController) == true {
             // main tab bar view controller could have performed a dog manager refresh, meaning the open modification page is invalid
 //            dogsAddDogViewController?.dismiss(animated: false)
 //            dogsAddReminderViewController?.dismiss(animated: false)
 //            dogsAddTriggerViewController?.dismiss(animated: false)
         }
-        if !(sender.localized is MainTabBarController) {
-            delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), dogManager: dogManager)
+        if !(sender.lastLocation is MainTabBarController) {
+            delegate?.didUpdateDogManager(sender: Sender(source: sender, lastLocation: self), dogManager: dogManager)
         }
         
         noDogsRecordedLabel.isHidden = !dogManager.dogs.isEmpty

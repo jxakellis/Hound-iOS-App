@@ -293,23 +293,15 @@ final class LogsVC: HoundViewController,
         filterLogsButton.isHidden = !familyHasAtLeastOneLog
         sortLogsButton.isHidden = !familyHasAtLeastOneLog
         
-        if (sender.localized is LogsTableVC) == false {
+        if (sender.lastLocation is LogsTableVC) == false {
             logsTableViewController.setDogManager(
-                sender: Sender(origin: sender, localized: self),
+                sender: Sender(source: sender, lastLocation: self),
                 dogManager: dogManager
             )
         }
-        if (sender.localized is MainTabBarController) == true {
-            //            if logsAddLogViewController?.viewIfLoaded?.window == nil {
-            //                // If add‐log VC isn’t currently visible, dismiss it when dog data changes
-            //                logsAddLogViewController?.dismiss(animated: true)
-            //            }
-            // Dismiss filter VC if data changes, so filters remain valid
-            //            logsFilterViewController?.dismiss(animated: true)
-        }
-        if (sender.localized is MainTabBarController) == false {
+        if (sender.lastLocation is MainTabBarController) == false {
             delegate?.didUpdateDogManager(
-                sender: Sender(origin: sender, localized: self),
+                sender: Sender(source: sender, lastLocation: self),
                 dogManager: dogManager
             )
         }

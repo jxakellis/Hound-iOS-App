@@ -18,7 +18,7 @@ final class SettingsPagesTableVC: HoundTableViewController, SettingsAccountVCDel
     // MARK: - SettingsAccountVCDelegate
     
     func didUpdateDogManager(sender: Sender, dogManager: DogManager) {
-        delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), dogManager: dogManager)
+        delegate?.didUpdateDogManager(sender: Sender(source: sender, lastLocation: self), dogManager: dogManager)
     }
     
     // MARK: - FamilyUpgradeIntroductionVCDelegate

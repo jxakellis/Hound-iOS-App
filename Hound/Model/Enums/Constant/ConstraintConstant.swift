@@ -53,6 +53,10 @@ public enum ConstraintConstant {
         static let circleMaxHeight: CGFloat = Self.circleHeightMultiplier * screenWidth * maxScaleFactor
         
         // MARK: Tiny Button
+        static let miniHeightMultiplier: CGFloat = 35.0 / screenWidth
+        static let miniMaxHeight: CGFloat = Self.tinyHeightMultiplier * screenWidth * maxScaleFactor
+        
+        // MARK: Tiny Button
         static let tinyHeightMultiplier: CGFloat = 18.75 / screenWidth
         static let tinyMaxHeight: CGFloat = Self.tinyHeightMultiplier * screenWidth * maxScaleFactor
         

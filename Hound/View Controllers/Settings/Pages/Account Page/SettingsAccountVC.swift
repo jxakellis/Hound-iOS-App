@@ -196,7 +196,7 @@ final class SettingsAccountVC: HoundScrollViewController {
                 }
                 
                 // successful query to fully redownload the dogManager, no need to mess with previousDogManagerSynchronization as that is automatically handled
-                self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
+                self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: dogManager)
             }
         }
     }

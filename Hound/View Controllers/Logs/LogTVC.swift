@@ -10,7 +10,7 @@ import SnapKit
 import UIKit
 
 protocol LogTVCDelegate: AnyObject {
-    func didUpdateLogLikes(dogUUID: UUID, log: Log)
+    func didUpdateLogLikes(sender: Sender, dogUUID: UUID, log: Log)
     func shouldShowLogLikes(log: Log)
 }
 
@@ -128,7 +128,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
             
             let currentlyLiked = log.likedByUserIds.contains(userId)
             log.setLogLike(!currentlyLiked)
-            delegate?.didUpdateLogLikes(dogUUID: dogUUID, log: log)
+            delegate?.didUpdateLogLikes(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, log: log)
             updateLikeButtonBadge(animated: true)
             
             button.isEnabled = false
@@ -141,7 +141,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
                 
                 // undo the like b/c it failed
                 log.setLogLike(currentlyLiked)
-                self.delegate?.didUpdateLogLikes(dogUUID: dogUUID, log: log)
+                self.delegate?.didUpdateLogLikes(sender: Sender(source: self, lastLocation: self), dogUUID: dogUUID, log: log)
                 self.updateLikeButtonBadge(animated: true)
             }
         }

@@ -247,7 +247,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                 self.dogManager?.removeDog(dogUUID: dogToUpdate.dogUUID)
                 
                 if let dogManager = self.dogManager {
-                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: dogManager)
                 }
                 
                 HapticsManager.notification(.warning)
@@ -362,7 +362,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                 guard numTasks > 0 else {
                     self.saveDogButton.isLoading = false
                     if let dogManager = self.dogManager {
-                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
+                        self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: dogManager)
                     }
                     HapticsManager.notification(.success)
                     self.dismiss(animated: true)
@@ -374,7 +374,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
                 } completedAllTasksCompletionHandler: {
                     self.saveDogButton.isLoading = false
                     if let dogManager = self.dogManager {
-                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
+                        self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: dogManager)
                     }
                     HapticsManager.notification(.success)
                     self.dismiss(animated: true)
@@ -432,7 +432,7 @@ final class DogsAddDogVC: HoundScrollViewController, UITextFieldDelegate, UIImag
         let completionTracker = CompletionTracker(numberOfTasks: numberOfTasks) {
             // everytime a task completes, update the dog manager so everything else updates
             if let dogManager = self.dogManager {
-                self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: dogManager)
+                self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: dogManager)
             }
         } completedAllTasksCompletionHandler: {
             // when everything completes, close the page

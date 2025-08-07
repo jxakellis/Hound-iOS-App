@@ -182,6 +182,7 @@
 		A2BAFC052E4460AA004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC042E44609F004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift */; };
 		A2BAFC072E446764004C3983 /* HoundIntrinsicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC062E44675E004C3983 /* HoundIntrinsicCollectionView.swift */; };
 		A2BAFC092E454E03004C3983 /* LogLikesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC082E454DFE004C3983 /* LogLikesVC.swift */; };
+		A2BAFC0C2E455979004C3983 /* LogLikesTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC0B2E455976004C3983 /* LogLikesTVC.swift */; };
 		A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */; };
 		A2C1FEB928D55CC9005C21D3 /* CompletionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */; };
 		A2C2951C2E08CA45008F1054 /* NSCoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */; };
@@ -445,6 +446,7 @@
 		A2BAFC042E44609F004C3983 /* HoundLeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundLeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		A2BAFC062E44675E004C3983 /* HoundIntrinsicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundIntrinsicCollectionView.swift; sourceTree = "<group>"; };
 		A2BAFC082E454DFE004C3983 /* LogLikesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLikesVC.swift; sourceTree = "<group>"; };
+		A2BAFC0B2E455976004C3983 /* LogLikesTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLikesTVC.swift; sourceTree = "<group>"; };
 		A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionTracker.swift; sourceTree = "<group>"; };
 		A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoderExtension.swift; sourceTree = "<group>"; };
@@ -1017,16 +1019,25 @@
 		A2B9DAE7262B2DD500A47D57 /* Logs */ = {
 			isa = PBXGroup;
 			children = (
+				A2BAFC0A2E455962004C3983 /* Log Likes */,
 				A26A7584263CFF8C0026DE34 /* LogsAddLogVC.swift */,
 				A2B9DAEC262B2E0A00A47D57 /* LogsVC.swift */,
 				A2B9DAF0262B2F2D00A47D57 /* LogsTableVC.swift */,
 				A2173DAD2B095CE90000C08A /* LogTVC.swift */,
 				A2BAFC022E444E38004C3983 /* LogInfoBubbleCVC.swift */,
 				A2A284822B0C4D1000ACC5C0 /* LogsFilterVC.swift */,
-				A2BAFC082E454DFE004C3983 /* LogLikesVC.swift */,
 				A2E525A02E41923200C3D45C /* LogsSortVC.swift */,
 			);
 			path = Logs;
+			sourceTree = "<group>";
+		};
+		A2BAFC0A2E455962004C3983 /* Log Likes */ = {
+			isa = PBXGroup;
+			children = (
+				A2BAFC0B2E455976004C3983 /* LogLikesTVC.swift */,
+				A2BAFC082E454DFE004C3983 /* LogLikesVC.swift */,
+			);
+			path = "Log Likes";
 			sourceTree = "<group>";
 		};
 		A2C295242E0B9FB9008F1054 /* Introduction */ = {
@@ -1533,6 +1544,7 @@
 				A249619327E3A75E006CFDCC /* DogsAddDogReminderTVC.swift in Sources */,
 				A233519927FC946C00CDF1BF /* FamilyMember.swift in Sources */,
 				A2E66CA125534A880068CCA6 /* DogsVC.swift in Sources */,
+				A2BAFC0C2E455979004C3983 /* LogLikesTVC.swift in Sources */,
 				A2DF1ABD28865E4A00FE9E3A /* AlertRequest.swift in Sources */,
 				A2101E5A2A68C5C900A65396 /* HoundButton.swift in Sources */,
 				A20C8E422E389278000837DA /* TimeZoneManager.swift in Sources */,

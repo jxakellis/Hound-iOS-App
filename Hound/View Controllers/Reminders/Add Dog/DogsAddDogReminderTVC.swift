@@ -134,7 +134,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         reminder.reminderIsEnabled = reminderIsEnabledSwitch.isOn
         updateIndicators()
         
-        delegate?.didUpdateReminderIsEnabled(sender: Sender(origin: self, localized: self), reminderUUID: reminder.reminderUUID, reminderIsEnabled: reminderIsEnabledSwitch.isOn)
+        delegate?.didUpdateReminderIsEnabled(sender: Sender(source: self, lastLocation: self), reminderUUID: reminder.reminderUUID, reminderIsEnabled: reminderIsEnabledSwitch.isOn)
     }
     
     // MARK: - Properties

@@ -137,14 +137,14 @@ final class DogsAddReminderVC: HoundScrollViewController {
         guard let reminderToUpdateDogUUID = reminderToUpdateDogUUID else {
             if reminderToUpdate == nil {
                 delegate?.didAddReminder(
-                    sender: Sender(origin: self, localized: self),
+                    sender: Sender(source: self, lastLocation: self),
                     dogUUID: nil,
                     reminder: reminder
                 )
             }
             else {
                 delegate?.didUpdateReminder(
-                    sender: Sender(origin: self, localized: self),
+                    sender: Sender(source: self, lastLocation: self),
                     dogUUID: nil,
                     reminder: reminder
                 )
@@ -166,14 +166,14 @@ final class DogsAddReminderVC: HoundScrollViewController {
             
             if self.reminderToUpdate != nil {
                 self.delegate?.didUpdateReminder(
-                    sender: Sender(origin: self, localized: self),
+                    sender: Sender(source: self, lastLocation: self),
                     dogUUID: reminderToUpdateDogUUID,
                     reminder: reminder
                 )
             }
             else {
                 self.delegate?.didAddReminder(
-                    sender: Sender(origin: self, localized: self),
+                    sender: Sender(source: self, lastLocation: self),
                     dogUUID: reminderToUpdateDogUUID,
                     reminder: reminder
                 )
@@ -206,7 +206,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
         // If no dogUUID, notify delegate locally
         guard let reminderToUpdateDogUUID = reminderToUpdateDogUUID else {
             delegate?.didAddReminder(
-                sender: Sender(origin: self, localized: self),
+                sender: Sender(source: self, lastLocation: self),
                 dogUUID: nil,
                 reminder: duplicateReminder
             )
@@ -230,7 +230,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
             guard responseStatus != .failureResponse else { return }
             
             self.delegate?.didAddReminder(
-                sender: Sender(origin: self, localized: self),
+                sender: Sender(source: self, lastLocation: self),
                 dogUUID: reminderToUpdateDogUUID,
                 reminder: duplicateReminder
             )
@@ -243,7 +243,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
         guard let reminderToUpdate = reminderToUpdate else { return }
         guard let reminderToUpdateDogUUID = reminderToUpdateDogUUID else {
             delegate?.didRemoveReminder(
-                sender: Sender(origin: self, localized: self),
+                sender: Sender(source: self, lastLocation: self),
                 dogUUID: nil,
                 reminderUUID: reminderToUpdate.reminderUUID
             )
@@ -276,7 +276,7 @@ final class DogsAddReminderVC: HoundScrollViewController {
                 guard responseStatus != .failureResponse else { return }
                 
                 self.delegate?.didRemoveReminder(
-                    sender: Sender(origin: self, localized: self),
+                    sender: Sender(source: self, lastLocation: self),
                     dogUUID: reminderToUpdateDogUUID,
                     reminderUUID: reminderToUpdate.reminderUUID
                 )

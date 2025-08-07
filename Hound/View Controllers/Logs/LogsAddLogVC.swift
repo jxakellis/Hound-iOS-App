@@ -649,7 +649,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                     .dogLogs.removeLog(logUUID: logToUpdate.logUUID)
                 
                 self.delegate?.didUpdateDogManager(
-                    sender: Sender(origin: self, localized: self),
+                    sender: Sender(source: self, lastLocation: self),
                     dogManager: self.dogManager
                 )
                 
@@ -1399,7 +1399,7 @@ final class LogsAddLogVC: HoundScrollViewController,
         ) {
             // Each time a task completes, update the dog manager so everything else updates
             self.delegate?.didUpdateDogManager(
-                sender: Sender(origin: self, localized: self),
+                sender: Sender(source: self, lastLocation: self),
                 dogManager: self.dogManager
             )
         } completedAllTasksCompletionHandler: {
@@ -1419,7 +1419,7 @@ final class LogsAddLogVC: HoundScrollViewController,
                         return
                     }
                     dog.dogReminders.addReminders(reminders: reminders)
-                    self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                 }
             }
             
@@ -1541,7 +1541,7 @@ final class LogsAddLogVC: HoundScrollViewController,
             self.dogManager.findDog(dogUUID: dogUUIDToUpdate)?
                 .dogLogs.addLog(log: logToUpdate, invokeDogTriggers: false)
             self.delegate?.didUpdateDogManager(
-                sender: Sender(origin: self, localized: self),
+                sender: Sender(source: self, lastLocation: self),
                 dogManager: self.dogManager
             )
             

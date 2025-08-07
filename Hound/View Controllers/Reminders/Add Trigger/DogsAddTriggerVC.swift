@@ -127,10 +127,10 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         
         guard shouldPersistChangesToServer, let dog = dog else {
             if triggerToUpdate == nil {
-                delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), dogUUID: nil, trigger: trigger)
+                delegate?.didAddTrigger(sender: Sender(source: self, lastLocation: self), dogUUID: nil, trigger: trigger)
             }
             else {
-                delegate?.didUpdateTrigger(sender: Sender(origin: self, localized: self), dogUUID: nil, trigger: trigger)
+                delegate?.didUpdateTrigger(sender: Sender(source: self, lastLocation: self), dogUUID: nil, trigger: trigger)
             }
             HapticsManager.notification(.success)
             self.dismiss(animated: true)
@@ -150,10 +150,10 @@ final class DogsAddTriggerVC: HoundScrollViewController {
             guard status != .failureResponse else { return }
             
             if self.triggerToUpdate != nil {
-                self.delegate?.didUpdateTrigger(sender: Sender(origin: self, localized: self), dogUUID: dog.dogUUID, trigger: trigger)
+                self.delegate?.didUpdateTrigger(sender: Sender(source: self, lastLocation: self), dogUUID: dog.dogUUID, trigger: trigger)
             }
             else {
-                self.delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), dogUUID: dog.dogUUID, trigger: trigger)
+                self.delegate?.didAddTrigger(sender: Sender(source: self, lastLocation: self), dogUUID: dog.dogUUID, trigger: trigger)
             }
             
             HapticsManager.notification(.success)
@@ -176,7 +176,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         }
         
         guard shouldPersistChangesToServer, let dog = dog else {
-            delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), dogUUID: nil, trigger: duplicateTrigger)
+            delegate?.didAddTrigger(sender: Sender(source: self, lastLocation: self), dogUUID: nil, trigger: duplicateTrigger)
             HapticsManager.notification(.success)
             self.dismiss(animated: true)
             return
@@ -192,7 +192,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
             self.saveButton.isLoading = false
             
             guard status != .failureResponse else { return }
-            self.delegate?.didAddTrigger(sender: Sender(origin: self, localized: self), dogUUID: dog.dogUUID, trigger: duplicateTrigger)
+            self.delegate?.didAddTrigger(sender: Sender(source: self, lastLocation: self), dogUUID: dog.dogUUID, trigger: duplicateTrigger)
             HapticsManager.notification(.success)
             self.dismiss(animated: true)
         }
@@ -206,7 +206,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
         }
         
         guard shouldPersistChangesToServer, let dog = dog else {
-            delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), dogUUID: nil, triggerUUID: triggerToUpdate.triggerUUID)
+            delegate?.didRemoveTrigger(sender: Sender(source: self, lastLocation: self), dogUUID: nil, triggerUUID: triggerToUpdate.triggerUUID)
             HapticsManager.notification(.warning)
             self.dismiss(animated: true)
             return
@@ -218,7 +218,7 @@ final class DogsAddTriggerVC: HoundScrollViewController {
             TriggersRequest.delete(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dog.dogUUID, triggerUUIDs: [triggerToUpdate.triggerUUID]) { status, _ in
                 self.view.isUserInteractionEnabled = true
                 guard status != .failureResponse else { return }
-                self.delegate?.didRemoveTrigger(sender: Sender(origin: self, localized: self), dogUUID: dog.dogUUID, triggerUUID: triggerToUpdate.triggerUUID)
+                self.delegate?.didRemoveTrigger(sender: Sender(source: self, lastLocation: self), dogUUID: dog.dogUUID, triggerUUID: triggerToUpdate.triggerUUID)
                 HapticsManager.notification(.warning)
                 self.dismiss(animated: true)
             }

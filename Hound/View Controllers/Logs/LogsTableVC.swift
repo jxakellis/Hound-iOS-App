@@ -20,12 +20,14 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
     
     // MARK: - LogTVCDelegate
     
-    func didUpdateLogLikes(dogUUID: UUID, log: Log) {
-        // TODO update dog manager n stuff
+    func didUpdateLogLikes(sender: Sender, dogUUID: UUID, log: Log) {
+        self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.findLog(logUUID: log.logUUID)?.setLogLikes(log.likedByUserIds)
+        self.setDogManager(sender: sender, dogManager: dogManager)
     }
     
     func shouldShowLogLikes(log: Log) {
         let vc = LogLikesVC()
+        vc.setup(log: log)
         PresentationManager.enqueueViewController(vc)
     }
     
@@ -114,11 +116,12 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
         self.dogManager = dogManager
         logsFilter.apply(availableDogManager: dogManager)
         
-        if (sender.localized is LogsTableVC) == true {
-            delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), dogManager: dogManager)
+        if sender.source is LogsTableVC || sender.source is LogTVC {
+            delegate?.didUpdateDogManager(sender: Sender(source: sender, lastLocation: self), dogManager: dogManager)
         }
-        
-        reloadTable()
+        if !(sender.lastLocation is LogTVC) {
+            reloadTable()
+        }
         
         delegate?.updateFilterLogsButton()
     }
@@ -190,7 +193,7 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
                 }
                 
                 self.setDogManager(
-                    sender: Sender(origin: self, localized: self),
+                    sender: Sender(source: self, lastLocation: self),
                     dogManager: newDogManager
                 )
             }
@@ -341,7 +344,7 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
             
             self.allowReloadTable = false
             self.setDogManager(
-                sender: Sender(origin: self, localized: self),
+                sender: Sender(source: self, lastLocation: self),
                 dogManager: self.dogManager
             )
             self.allowReloadTable = true
@@ -393,7 +396,7 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
                     // Log was deleted on server; update local manager
                     self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.removeLog(logUUID: log.logUUID)
                     self.setDogManager(
-                        sender: Sender(origin: self, localized: self),
+                        sender: Sender(source: self, lastLocation: self),
                         dogManager: self.dogManager
                     )
                     return

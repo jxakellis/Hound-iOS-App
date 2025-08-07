@@ -48,14 +48,14 @@ final class DogsTableVC: HoundTableViewController {
         // DogsAddDogReminderTVC
         // DogTVC
         // DogsVC
-        if !(sender.localized is DogsVC) {
-            delegate?.didUpdateDogManager(sender: Sender(origin: sender, localized: self), dogManager: dogManager)
+        if !(sender.lastLocation is DogsVC) {
+            delegate?.didUpdateDogManager(sender: Sender(source: sender, lastLocation: self), dogManager: dogManager)
         }
-        if !(sender.localized is DogsReminderTVC) && !(sender.origin is DogsTableVC) {
+        if !(sender.lastLocation is DogsReminderTVC) && !(sender.source is DogsTableVC) {
             // source could be anything and could not be in view so no animation
             self.tableView.reloadData()
         }
-        if sender.localized is DogsReminderTVC {
+        if sender.lastLocation is DogsReminderTVC {
             self.reloadVisibleCellsNextAlarmLabels()
         }
         
@@ -150,7 +150,7 @@ final class DogsTableVC: HoundTableViewController {
                     }
                 }
                 
-                self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: newDogManager)
+                self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: newDogManager)
                 // manually reload table as the self sender doesn't do that
                 // whole page is changing so no animation
                 self.tableView.reloadData()
@@ -192,7 +192,7 @@ final class DogsTableVC: HoundTableViewController {
                         return
                     }
                     self.dogManager.removeDog(dogUUID: dogUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     self.tableView.deleteSections([section], with: .automatic)
                     
                 }
@@ -257,7 +257,7 @@ final class DogsTableVC: HoundTableViewController {
                         }
                     }
                     dog.dogReminders.removeReminder(reminderUUID: reminder.reminderUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 }
                 
@@ -391,7 +391,7 @@ final class DogsTableVC: HoundTableViewController {
                         }
                     }
                     self.dogManager.dogs[dogSection].dogReminders.removeReminder(reminderUUID: reminder.reminderUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
                     //                    UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
@@ -401,7 +401,7 @@ final class DogsTableVC: HoundTableViewController {
                 }
                 else {
                     self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.removeReminder(reminderUUID: reminder.reminderUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     self.tableView.reloadData()
                 }
                 
@@ -411,7 +411,7 @@ final class DogsTableVC: HoundTableViewController {
                     }
                     
                     let triggerReminders = self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: true)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     
                     guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {
                         return
@@ -423,7 +423,7 @@ final class DogsTableVC: HoundTableViewController {
                             return
                         }
                         self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: triggerReminders)
-                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                        self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     }
                 }
             }
@@ -439,7 +439,7 @@ final class DogsTableVC: HoundTableViewController {
                 }
                 
                 self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminder(reminder: reminder)
-                self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                 
                 LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, log: log) { responseStatusLogCreate, _ in
                     guard responseStatusLogCreate != .failureResponse else {
@@ -447,7 +447,7 @@ final class DogsTableVC: HoundTableViewController {
                     }
                     
                     let triggerReminders = self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: true)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     
                     guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {
                         return
@@ -459,7 +459,7 @@ final class DogsTableVC: HoundTableViewController {
                             return
                         }
                         self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: triggerReminders)
-                        self.delegate?.didUpdateDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                        self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     }
                 }
             }
@@ -479,7 +479,7 @@ final class DogsTableVC: HoundTableViewController {
             }
             
             self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminder(reminder: reminder)
-            self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+            self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
         }
     }
     
@@ -523,7 +523,7 @@ final class DogsTableVC: HoundTableViewController {
             }
             
             self.dogManager.findDog(dogUUID: dog.dogUUID)?.dogReminders.addReminder(reminder: reminder)
-            self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+            self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
             
             // find log that is incredibly close the time where the reminder was skipped, once found, then we delete it.
             guard let logToRemove = self.findLogFromSkippedReminder(dog: dog, reminder: reminder) else {
@@ -537,7 +537,7 @@ final class DogsTableVC: HoundTableViewController {
                 }
                 
                 self.dogManager.findDog(dogUUID: dog.dogUUID)?.dogLogs.removeLog(logUUID: logToRemove.logUUID)
-                self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
             }
             
         }
@@ -639,7 +639,7 @@ final class DogsTableVC: HoundTableViewController {
                     }
                     
                     self.dogManager.removeDog(dogUUID: dog.dogUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     self.tableView.deleteSections([indexPath.section], with: .automatic)
                     UIView.animate(withDuration: Constant.Visual.Animation.moveMultipleElements) {
                         self.view.setNeedsLayout()
@@ -672,7 +672,7 @@ final class DogsTableVC: HoundTableViewController {
                         }
                     }
                     dog.dogReminders.removeReminder(reminderUUID: reminder.reminderUUID)
-                    self.setDogManager(sender: Sender(origin: self, localized: self), dogManager: self.dogManager)
+                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 }
                 
