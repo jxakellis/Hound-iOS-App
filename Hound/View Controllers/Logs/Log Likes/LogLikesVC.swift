@@ -31,7 +31,7 @@ final class LogLikesVC: HoundScrollViewController, UITableViewDelegate, UITableV
         tableView.separatorStyle = .none
         
         tableView.emptyStateEnabled = true
-        tableView.emptyStateMessage = "No one has liked this log...."
+        tableView.emptyStateMessage = "No one has liked this log..."
         
         return tableView
     }()

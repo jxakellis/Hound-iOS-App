@@ -13,7 +13,7 @@ class LogsFilter: NSObject, NSCopying {
     // MARK: - NSCopying
     
     func copy(with zone: NSZone? = nil) -> Any {
-        let copy = LogsFilter(availableDogManager: availableDogManager)
+        let copy = LogsFilter(dogManagerForDogUUIDs: dogManagerForDogUUIDs)
         copy.searchText = self.searchText
         copy.filteredDogsUUIDs = self.filteredDogsUUIDs
         copy.filteredLogActionActionTypeIds = self.filteredLogActionActionTypeIds
@@ -34,36 +34,75 @@ class LogsFilter: NSObject, NSCopying {
         
         // DONT check availableDogManager
         return self.filteredDogsUUIDs == object.filteredDogsUUIDs &&
-            self.searchText == object.searchText &&
-            self.filteredDogsUUIDs == object.filteredDogsUUIDs &&
-            self.filteredLogActionActionTypeIds == object.filteredLogActionActionTypeIds &&
-            self.filteredFamilyMemberUserIds == object.filteredFamilyMemberUserIds &&
-            self.timeRangeField == object.timeRangeField &&
-            self.timeRangeFromDate == object.timeRangeFromDate &&
-            self.timeRangeToDate == object.timeRangeToDate &&
-            self.onlyShowMyLikes == object.onlyShowMyLikes
+        self.searchText == object.searchText &&
+        self.filteredDogsUUIDs == object.filteredDogsUUIDs &&
+        self.filteredLogActionActionTypeIds == object.filteredLogActionActionTypeIds &&
+        self.filteredFamilyMemberUserIds == object.filteredFamilyMemberUserIds &&
+        self.timeRangeField == object.timeRangeField &&
+        self.timeRangeFromDate == object.timeRangeFromDate &&
+        self.timeRangeToDate == object.timeRangeToDate &&
+        self.onlyShowMyLikes == object.onlyShowMyLikes
     }
     
     /// Text used to broadly search through logs. If empty, no search text is applied
-    private(set) var searchText: String = ""
+    var searchText: String = ""
     
-    private(set) var availableDogManager: DogManager = DogManager()
-    private(set) var filteredDogsUUIDs: Set<UUID> = []
+    var dogManagerForDogUUIDs: DogManager = DogManager()
     
-    private(set) var filteredLogActionActionTypeIds: Set<Int> = []
+    var filteredDogsUUIDs: Set<UUID> = []
     
-    private(set) var filteredFamilyMemberUserIds: Set<String> = []
-
-    private(set) var timeRangeField: LogsDateType?
-    private(set) var timeRangeFromDate: Date?
-    private(set) var timeRangeToDate: Date?
-    private(set) var onlyShowMyLikes: Bool = false
+    var filteredLogActionActionTypeIds: Set<Int> = []
     
-    var isFromDateEnabled: Bool {
-        return timeRangeFromDate != nil
+    var filteredFamilyMemberUserIds: Set<String> = []
+    
+    var timeRangeField: LogsDateType?
+    private static var defaultTimeRangeFromDate: Date = Calendar.user.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+    private static var defaultTimeRangeToDate: Date = Calendar.user.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+    private(set) var timeRangeFromDate: Date = LogsFilter.defaultTimeRangeFromDate
+    func setTimeRangeFromDate(_ date: Date) {
+        self.timeRangeFromDate = date
+        if date > timeRangeToDate {
+            timeRangeToDate = date
+        }
     }
-    var isToDateEnabled: Bool {
-        return timeRangeToDate != nil
+    
+    private(set) var timeRangeToDate: Date = LogsFilter.defaultTimeRangeToDate
+    func setTimeRangeToDate(_ date: Date) {
+        self.timeRangeToDate = date
+        if date < timeRangeFromDate {
+            timeRangeFromDate = date
+        }
+    }
+    
+    var onlyShowMyLikes: Bool = false
+    
+    // MARK: - Main
+    
+    init(dogManagerForDogUUIDs: DogManager) {
+        super.init()
+        self.dogManagerForDogUUIDs = dogManagerForDogUUIDs
+    }
+    
+    // MARK: - Computed Properties
+    
+    var availableTimeRangeFields: [LogsDateType] {
+        return LogsDateType.allCases
+    }
+    
+    var availableDogs: [Dog] {
+        return dogManagerForDogUUIDs.dogs
+    }
+    
+    var availableLogActions: [LogActionType] {
+        return GlobalTypes.shared.logActionTypes
+    }
+    
+    var availableFamilyMembers: [FamilyMember] {
+        return FamilyInformation.familyMembers
+    }
+    
+    var isTimeRangeEnabled: Bool {
+        return timeRangeField != nil
     }
     
     var hasActiveFilter: Bool {
@@ -76,105 +115,21 @@ class LogsFilter: NSObject, NSCopying {
         + filteredLogActionActionTypeIds.count
         + filteredFamilyMemberUserIds.count
         + (onlyShowMyLikes ? 1 : 0)
-        + (isFromDateEnabled ? 1 : 0)
-        + (isToDateEnabled ? 1 : 0)
+        + (isTimeRangeEnabled ? 1 : 0)
         
         return num == 0 ? nil : num
-    }
-    
-    // MARK: - Main
-    
-    init(availableDogManager: DogManager) {
-        super.init()
-        apply(availableDogManager: availableDogManager)
-    }
-    
-    // MARK: - Computed Properties
-    
-    var availableTimeRangeFields: [LogsDateType] {
-        return LogsDateType.allCases
-    }
-    
-    var availableDogs: [Dog] {
-        return availableDogManager.dogs
-    }
-    
-    var availableLogActions: [LogActionType] {
-        return GlobalTypes.shared.logActionTypes
-    }
-    
-    var availableFamilyMembers: [FamilyMember] {
-        return FamilyInformation.familyMembers
     }
     
     // MARK: - Functions
     
     func reset() {
-        apply(filterDogs: [])
-        apply(filterLogActions: [])
-        apply(filterFamilyMembers: [])
-        apply(onlyShowMyLikes: false)
-        apply(searchText: "")
-        apply(timeRangeField: LogsDateType.defaultDateType)
-        apply(timeRangeFromDate: nil)
-        apply(timeRangeToDate: nil)
+        filteredDogsUUIDs = Set()
+        filteredLogActionActionTypeIds = Set()
+        filteredFamilyMemberUserIds = Set()
+        onlyShowMyLikes = false
+        searchText = ""
+        timeRangeField = nil
+        timeRangeFromDate = LogsFilter.defaultTimeRangeFromDate
+        timeRangeToDate = LogsFilter.defaultTimeRangeToDate
     }
-    
-    func apply(availableDogManager: DogManager) {
-        self.availableDogManager = availableDogManager
-    }
-    
-    // filteredDogsUUIDs
-    func apply(filterDogs: [Dog]) {
-        filteredDogsUUIDs = Set(filterDogs.map({ $0.dogUUID }))
-    }
-    func add(filterDogUUID: UUID) {
-        filteredDogsUUIDs.insert(filterDogUUID)
-    }
-    func remove(filterDogUUID: UUID) {
-        filteredDogsUUIDs.remove(filterDogUUID)
-    }
-    
-    // filteredLogActionActionTypeIds
-    func apply(filterLogActions: [LogActionType]) {
-        filteredLogActionActionTypeIds = Set(filterLogActions.map({ $0.logActionTypeId }))
-    }
-    func add(logActionTypeId: Int) {
-        filteredLogActionActionTypeIds.insert(logActionTypeId)
-    }
-    func remove(logActionTypeId: Int) {
-        filteredLogActionActionTypeIds.remove(logActionTypeId)
-    }
-    
-    // filteredFamilyMemberUserIds
-    func apply(filterFamilyMembers: [FamilyMember]) {
-        filteredFamilyMemberUserIds = Set(filterFamilyMembers.map({ $0.userId }))
-    }
-    func add(userId: String) {
-        filteredFamilyMemberUserIds.insert(userId)
-    }
-    func remove(userId: String) {
-        filteredFamilyMemberUserIds.remove(userId)
-    }
-
-    func apply(onlyShowMyLikes: Bool) {
-        self.onlyShowMyLikes = onlyShowMyLikes
-    }
-    
-    // searchText
-    func apply(searchText: String) {
-        self.searchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-    
-    // timeRangeField, timeRangeFromDate, timeRangeToDate
-    func apply(timeRangeField: LogsDateType?) {
-        self.timeRangeField = timeRangeField
-    }
-    func apply(timeRangeFromDate: Date?) {
-        self.timeRangeFromDate = timeRangeFromDate
-    }
-    func apply(timeRangeToDate: Date?) {
-        self.timeRangeToDate = timeRangeToDate
-    }
-    
 }

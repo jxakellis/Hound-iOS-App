@@ -72,7 +72,7 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
         }
     }
     
-    private var storedLogsFilter: LogsFilter = LogsFilter(availableDogManager: DogManager())
+    private var storedLogsFilter: LogsFilter = LogsFilter(dogManagerForDogUUIDs: DogManager())
     var logsFilter: LogsFilter {
         get {
             storedLogsFilter
@@ -114,7 +114,7 @@ final class LogsTableVC: HoundTableViewController, LogTVCDelegate {
     /// Update dogManager and refresh UI accordingly
     func setDogManager(sender: Sender, dogManager: DogManager) {
         self.dogManager = dogManager
-        logsFilter.apply(availableDogManager: dogManager)
+        logsFilter.dogManagerForDogUUIDs = dogManager
         
         if sender.source is LogsTableVC || sender.source is LogTVC {
             delegate?.didUpdateDogManager(sender: Sender(source: sender, lastLocation: self), dogManager: dogManager)

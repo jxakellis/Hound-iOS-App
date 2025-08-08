@@ -6,6 +6,7 @@
 //  Copyright © 2023 Jonathan Xakellis. All rights reserved.
 //
 
+import SnapKit
 import UIKit
 
 protocol LogsFilterDelegate: AnyObject {
@@ -67,13 +68,6 @@ class LogsFilterVC: HoundScrollViewController,
         return label
     }()
     
-    //    private let timeRangeFieldHeaderLabel: HoundLabel = {
-    //        let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
-    //        label.text = "Date to Filter"
-    //        label.font = Constant.Visual.Font.primaryRegularLabel
-    //        return label
-    //    }()
-    
     private lazy var timeRangeFieldLabel: HoundLabel = {
         let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
         label.font = Constant.Visual.Font.primaryRegularLabel
@@ -93,48 +87,48 @@ class LogsFilterVC: HoundScrollViewController,
         return label
     }()
     
-    private let timeRangeFromHeaderLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 335, compressionResistancePriority: 335)
-        label.text = "From"
-        label.font = Constant.Visual.Font.primaryRegularLabel
-        return label
-    }()
-    
-    private lazy var fromDatePicker: HoundDatePicker = {
-        let picker = HoundDatePicker(huggingPriority: 330, compressionResistancePriority: 330)
+    private lazy var timeRangeFromDatePicker: HoundDatePicker = {
+        let picker = HoundDatePicker()
         picker.datePickerMode = .dateAndTime
         picker.minuteInterval = Constant.Development.minuteInterval
-        picker.preferredDatePickerStyle = .compact
         picker.addTarget(self, action: #selector(didChangeFromDate(_:)), for: .valueChanged)
         return picker
     }()
     
-    private lazy var fromDateSwitch: HoundSwitch = {
-        let uiSwitch = HoundSwitch(huggingPriority: 325, compressionResistancePriority: 325)
-        uiSwitch.addTarget(self, action: #selector(didToggleFromDate), for: .valueChanged)
-        return uiSwitch
-    }()
-    
     private let timeRangeToHeaderLabel: HoundLabel = {
-        let label = HoundLabel(huggingPriority: 320, compressionResistancePriority: 320)
+        let label = HoundLabel(huggingPriority: 300, compressionResistancePriority: 300)
         label.text = "to"
         label.font = Constant.Visual.Font.primaryRegularLabel
         return label
     }()
     
-    private lazy var toDatePicker: HoundDatePicker = {
-        let picker = HoundDatePicker(huggingPriority: 310, compressionResistancePriority: 310)
+    private lazy var timeRangeToDatePicker: HoundDatePicker = {
+        let picker = HoundDatePicker()
         picker.datePickerMode = .dateAndTime
         picker.minuteInterval = Constant.Development.minuteInterval
-        picker.preferredDatePickerStyle = .compact
         picker.addTarget(self, action: #selector(didChangeToDate(_:)), for: .valueChanged)
         return picker
     }()
     
-    private lazy var toDateSwitch: HoundSwitch = {
-        let uiSwitch = HoundSwitch(huggingPriority: 305, compressionResistancePriority: 305)
-        uiSwitch.addTarget(self, action: #selector(didToggleToDate), for: .valueChanged)
-        return uiSwitch
+    private lazy var timeRangeDateStack: HoundStackView = {
+        let stack = HoundStackView()
+        stack.addArrangedSubview(timeRangeFromDatePicker)
+        stack.addArrangedSubview(timeRangeToHeaderLabel)
+        stack.addArrangedSubview(timeRangeToDatePicker)
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        return stack
+    }()
+    
+    private lazy var timeRangeStack: HoundStackView = {
+        let stack = HoundStackView()
+        stack.addArrangedSubview(timeRangeSectionLabel)
+        stack.addArrangedSubview(timeRangeFieldLabel)
+        stack.addArrangedSubview(timeRangeDateStack)
+        stack.axis = .vertical
+        stack.spacing = Constant.Constraint.Spacing.contentIntraVert
+        return stack
     }()
     
     private let onlyShowMyLikesSectionLabel: HoundLabel = {
@@ -258,8 +252,6 @@ class LogsFilterVC: HoundScrollViewController,
         
         button.applyStyle(.labelBorder)
         
-        button.shouldDismissParentViewController = true
-        
         button.addTarget(self, action: #selector(didTapResetFilter), for: .touchUpInside)
         
         return button
@@ -275,8 +267,6 @@ class LogsFilterVC: HoundScrollViewController,
         button.backgroundColor = UIColor.systemBlue
         
         button.shouldRoundCorners = true
-        
-        button.shouldDismissParentViewController = true
         
         button.addTarget(self, action: #selector(didTapApplyFilter), for: .touchUpInside)
         
@@ -298,40 +288,25 @@ class LogsFilterVC: HoundScrollViewController,
     }
     
     @objc private func didChangeFromDate(_ sender: UIDatePicker) {
-        filter?.apply(timeRangeFromDate: sender.date)
-        if sender.date > toDatePicker.date {
-            toDatePicker.setDate(sender.date, animated: true)
-            filter?.apply(timeRangeToDate: toDateSwitch.isOn ? sender.date : nil)
-        }
-        fromDateSwitch.setOn(true, animated: true)
+        guard let filter = filter else { return }
+        filter.setTimeRangeFromDate(sender.date)
+        // timeRangeFromDate could have overwritten timeRangeToDate, so timeRangeToDate could have been rewritten
+        timeRangeToDatePicker.setDate(filter.timeRangeToDate, animated: true)
     }
     
     @objc private func didChangeToDate(_ sender: UIDatePicker) {
-        filter?.apply(timeRangeToDate: sender.date)
-        if sender.date < fromDatePicker.date {
-            fromDatePicker.setDate(sender.date, animated: true)
-            filter?.apply(timeRangeFromDate: fromDateSwitch.isOn ? sender.date : nil)
-        }
-        toDateSwitch.setOn(true, animated: true)
-    }
-    
-    // TODO add additional logic. when a date type is selected, then flip both of these switches on. if date type is deselected, then flip them off
-    @objc private func didToggleFromDate(_ sender: HoundSwitch) {
-        filter?.apply(timeRangeFromDate: sender.isOn ? fromDatePicker.date : nil)
-        fromDatePicker.isEnabled = sender.isOn
-    }
-    
-    @objc private func didToggleToDate(_ sender: HoundSwitch) {
-        filter?.apply(timeRangeToDate: sender.isOn ? toDatePicker.date : nil)
-        toDatePicker.isEnabled = sender.isOn
+        guard let filter = filter else { return }
+        filter.setTimeRangeToDate(sender.date)
+        // timeRangeToDate could have overwritten timeRangeFromDate, so timeRangeFromDate could have been rewritten
+        timeRangeFromDatePicker.setDate(filter.timeRangeFromDate, animated: true)
     }
     
     @objc private func didToggleOnlyShowMyLikes(_ sender: HoundSwitch) {
-        filter?.apply(onlyShowMyLikes: sender.isOn)
+        filter?.onlyShowMyLikes = sender.isOn
     }
     
     @objc private func didChangeSearchText(_ sender: UITextField) {
-        filter?.apply(searchText: sender.text ?? "")
+        filter?.searchText = sender.text ?? ""
     }
     
     @objc private func didTapResetFilter(_ sender: Any) {
@@ -339,12 +314,14 @@ class LogsFilterVC: HoundScrollViewController,
         if let filter = filter {
             delegate?.didUpdateLogsFilter(logsFilter: filter)
         }
+        self.dismiss(animated: true)
     }
     
     @objc private func didTapApplyFilter(_ sender: Any) {
         guard let filter = filter else { return }
-        // TODO add error message to time range label if none is selected but time range enabled
+        
         delegate?.didUpdateLogsFilter(logsFilter: filter)
+        self.dismiss(animated: true)
     }
     
     // MARK: - Properties
@@ -376,20 +353,6 @@ class LogsFilterVC: HoundScrollViewController,
         self.eligibleForGlobalPresenter = true
         
         self.presentationController?.delegate = self
-        
-        updateDynamicUIElements()
-    }
-    
-    private var didSetupCustomSubviews: Bool = false
-    
-    override func viewIsAppearing(_ animated: Bool) {
-        super.viewIsAppearing(animated)
-        
-        guard didSetupCustomSubviews == false else { return }
-        
-        didSetupCustomSubviews = true
-        
-        updateDynamicUIElements()
     }
     
     // MARK: - Setup
@@ -398,25 +361,42 @@ class LogsFilterVC: HoundScrollViewController,
         self.delegate = delegate
         self.filter = (filter.copy() as? LogsFilter) ?? filter
         self.initialFilter = (filter.copy() as? LogsFilter) ?? self.initialFilter
-        updateDynamicUIElements()
+        
+        updateTimeRangeField(animated: false)
+        
+        timeRangeFromDatePicker.setDate(filter.timeRangeFromDate, animated: false)
+        timeRangeToDatePicker.setDate(filter.timeRangeToDate, animated: false)
+        
+        searchTextField.text = filter.searchText
+        onlyShowMyLikesSwitch.setOn(filter.onlyShowMyLikes, animated: false)
+        
+        updateFilterDogText()
+        updateFilterLogActionsText()
+        updateFilterFamilyMembersText()
     }
     
     // MARK: - Functions
     
-    private func updateDynamicUIElements() {
-        if let filter = filter {
-            searchTextField.text = filter.searchText
-        }
+    private func updateTimeRangeField(animated: Bool) {
+        guard let filter = filter else { return }
+        timeRangeFieldLabel.text = filter.timeRangeField?.readableValue
+        let isHidden = filter.timeRangeField == nil
         
-        if let filter = filter {
-            onlyShowMyLikesSwitch.setOn(filter.onlyShowMyLikes, animated: false)
-        }
+        guard timeRangeDateStack.isHidden != isHidden else { return }
+        timeRangeDateStack.isHidden = isHidden
+        remakeTimeRangeDateConstraints()
         
+        UIView.animate(withDuration: isHidden ? Constant.Visual.Animation.hideMultipleElements : Constant.Visual.Animation.showMultipleElements) {
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+        }
+    }
+    private func updateFilterDogText() {
         if let filter = filter, filter.filteredDogsUUIDs.count >= 1 {
             filterDogsLabel.text = {
                 if filter.filteredDogsUUIDs.count == 1, let dogUUID = filter.filteredDogsUUIDs.first {
                     // The user only has one dog selected to filter by
-                    return filter.availableDogManager.findDog(dogUUID: dogUUID)?.dogName ?? Constant.Visual.Text.unknownName
+                    return filter.dogManagerForDogUUIDs.findDog(dogUUID: dogUUID)?.dogName ?? Constant.Visual.Text.unknownName
                 }
                 else if filter.filteredDogsUUIDs.count > 1 && filter.filteredDogsUUIDs.count < filter.availableDogs.count {
                     // The user has multiple, but not all, dogs selected to filter by
@@ -431,7 +411,8 @@ class LogsFilterVC: HoundScrollViewController,
             // The user has no dogs selected to filter by, so we interpret this as including all dogs in the filter
             filterDogsLabel.text = nil
         }
-        
+    }
+    private func updateFilterLogActionsText() {
         if let filter = filter, filter.filteredLogActionActionTypeIds.count >= 1 {
             filterLogActionsSectionLabel.text = {
                 if filter.filteredLogActionActionTypeIds.count == 1, let logActionTypeId = filter.filteredLogActionActionTypeIds.first {
@@ -451,7 +432,8 @@ class LogsFilterVC: HoundScrollViewController,
             // The user has no log actions selected to filter by, so we interpret this as including all log actions in the filter
             filterLogActionsSectionLabel.text = nil
         }
-        
+    }
+    private func updateFilterFamilyMembersText() {
         if let filter = filter, filter.filteredFamilyMemberUserIds.count >= 1 {
             filterFamilyMembersLabel.text = {
                 if filter.filteredFamilyMemberUserIds.count == 1, let userId = filter.filteredFamilyMemberUserIds.first {
@@ -471,44 +453,6 @@ class LogsFilterVC: HoundScrollViewController,
             // The user has no family member selected to filter by, so we interpret this as including all family members in the filter
             filterFamilyMembersLabel.text = nil
         }
-        
-        if let filter = filter {
-            let calendar = Calendar.user
-            let now = Date()
-            
-            var fromDate: Date?
-            var toDate: Date?
-            
-            if filter.timeRangeFromDate == nil && filter.timeRangeToDate == nil {
-                fromDate = calendar.date(byAdding: .day, value: -1, to: now)
-                toDate = calendar.date(byAdding: .day, value: 1, to: now)
-            }
-            else if let from = filter.timeRangeFromDate, filter.timeRangeToDate == nil {
-                fromDate = from
-                toDate = calendar.date(byAdding: .day, value: 1, to: from)
-            }
-            else if let to = filter.timeRangeToDate, filter.timeRangeFromDate == nil {
-                toDate = to
-                fromDate = calendar.date(byAdding: .day, value: -1, to: to)
-            }
-            else {
-                fromDate = filter.timeRangeFromDate
-                toDate = filter.timeRangeToDate
-            }
-            
-            timeRangeFieldLabel.text = filter.timeRangeField?.readableValue
-            
-            fromDatePicker.setDate(fromDate ?? now, animated: false)
-            toDatePicker.setDate(toDate ?? now, animated: false)
-            
-            fromDateSwitch.setOn(filter.isFromDateEnabled, animated: false)
-            fromDatePicker.isEnabled = filter.isFromDateEnabled
-            toDateSwitch.setOn(filter.isToDateEnabled, animated: false)
-            toDatePicker.isEnabled = filter.isToDateEnabled
-        }
-        
-        self.view.setNeedsLayout()
-        self.view.layoutIfNeeded()
     }
     
     // MARK: - Drop Down
@@ -603,8 +547,8 @@ class LogsFilterVC: HoundScrollViewController,
         case .filterTimeRange:
             guard !cell.isCustomSelected else {
                 cell.setCustomSelected(false)
-                filter.apply(timeRangeField: nil)
-                updateDynamicUIElements()
+                filter.timeRangeField = nil
+                updateTimeRangeField(animated: true)
                 return
             }
             
@@ -617,18 +561,22 @@ class LogsFilterVC: HoundScrollViewController,
             cell.setCustomSelected(true)
             
             let type = filter.availableTimeRangeFields[indexPath.row]
-            filter.apply(timeRangeField: type)
+            filter.timeRangeField = type
+            updateTimeRangeField(animated: true)
+            
             dropDown.hideDropDown(animated: true)
         case .filterDogs:
             let dogSelected = filter.availableDogs[indexPath.row]
             let beforeSelectNumberOfDogsSelected = filter.availableDogs.count
             if cell.isCustomSelected == true {
-                filter.remove(filterDogUUID: dogSelected.dogUUID)
+                filter.filteredDogsUUIDs.remove(dogSelected.dogUUID)
             }
             else {
-                filter.add(filterDogUUID: dogSelected.dogUUID)
+                filter.filteredDogsUUIDs.insert(dogSelected.dogUUID)
             }
             cell.setCustomSelected(!cell.isCustomSelected)
+            updateFilterDogText()
+            
             if beforeSelectNumberOfDogsSelected == 0 || filter.filteredDogsUUIDs.count == filter.availableDogs.count {
                 dropDown.hideDropDown(animated: true)
             }
@@ -636,12 +584,15 @@ class LogsFilterVC: HoundScrollViewController,
             let selectedLogAction = filter.availableLogActions[indexPath.row]
             let beforeSelectNumberOfLogActionsSelected = filter.availableLogActions.count
             if cell.isCustomSelected == true {
-                filter.remove(logActionTypeId: selectedLogAction.logActionTypeId)
+                filter.filteredLogActionActionTypeIds.remove(selectedLogAction.logActionTypeId)
             }
             else {
-                filter.add(logActionTypeId: selectedLogAction.logActionTypeId)
+                filter.filteredLogActionActionTypeIds.insert(selectedLogAction.logActionTypeId)
             }
+            
             cell.setCustomSelected(!cell.isCustomSelected)
+            updateFilterLogActionsText()
+            
             if beforeSelectNumberOfLogActionsSelected == 0 || filter.filteredLogActionActionTypeIds.count == filter.availableLogActions.count {
                 dropDown.hideDropDown(animated: true)
             }
@@ -649,17 +600,18 @@ class LogsFilterVC: HoundScrollViewController,
             let familyMemberSelected = filter.availableFamilyMembers[indexPath.row]
             let beforeSelectNumberOfFamilyMembersSelected = filter.availableFamilyMembers.count
             if cell.isCustomSelected == true {
-                filter.remove(userId: familyMemberSelected.userId)
+                filter.filteredFamilyMemberUserIds.remove(familyMemberSelected.userId)
             }
             else {
-                filter.add(userId: familyMemberSelected.userId)
+                filter.filteredFamilyMemberUserIds.insert(familyMemberSelected.userId)
             }
             cell.setCustomSelected(!cell.isCustomSelected)
+            updateFilterFamilyMembersText()
+            
             if beforeSelectNumberOfFamilyMembersSelected == 0 || filter.filteredFamilyMemberUserIds.count == filter.availableFamilyMembers.count {
                 dropDown.hideDropDown(animated: true)
             }
         }
-        updateDynamicUIElements()
     }
     
     func firstSelectedIndexPath(identifier: any HoundDropDownType) -> IndexPath? {
@@ -705,18 +657,7 @@ class LogsFilterVC: HoundScrollViewController,
         super.addSubViews()
         containerView.addSubview(pageHeaderView)
         
-        containerView.addSubview(timeRangeSectionLabel)
-        
-        //        containerView.addSubview(timeRangeFieldHeaderLabel)
-        containerView.addSubview(timeRangeFieldLabel)
-        
-        containerView.addSubview(timeRangeFromHeaderLabel)
-        containerView.addSubview(fromDatePicker)
-        containerView.addSubview(fromDateSwitch)
-        
-        containerView.addSubview(timeRangeToHeaderLabel)
-        containerView.addSubview(toDatePicker)
-        containerView.addSubview(toDateSwitch)
+        containerView.addSubview(timeRangeStack)
         
         containerView.addSubview(onlyShowMyLikesSectionLabel)
         containerView.addSubview(onlyShowMyLikesSwitch)
@@ -742,6 +683,22 @@ class LogsFilterVC: HoundScrollViewController,
         view.addGestureRecognizer(didTapScreenGesture)
     }
     
+    private func remakeTimeRangeDateConstraints() {
+        timeRangeFromDatePicker.snp.remakeConstraints { make in
+            if !timeRangeDateStack.isHidden && !timeRangeFromDatePicker.isHidden {
+                make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.segmentedHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.segmentedMaxHeight)
+            }
+        }
+        
+        timeRangeToDatePicker.snp.remakeConstraints { make in
+            if !timeRangeDateStack.isHidden && !timeRangeToDatePicker.isHidden {
+                make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.segmentedHeightMultiplier).priority(.high)
+                make.height.lessThanOrEqualTo(Constant.Constraint.Input.segmentedMaxHeight)
+            }
+        }
+    }
+    
     override func setupConstraints() {
         super.setupConstraints()
         
@@ -752,80 +709,24 @@ class LogsFilterVC: HoundScrollViewController,
             pageHeaderView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
-        // timeRangeSectionLabel
-        NSLayoutConstraint.activate([
-            timeRangeSectionLabel.topAnchor.constraint(equalTo: pageHeaderView.bottomAnchor, constant: Constant.Constraint.Spacing.contentTallIntraVert),
-            timeRangeSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeSectionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeSectionLabel.createMaxHeight(Constant.Constraint.Text.sectionLabelMaxHeight),
-            timeRangeSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view)
-        ])
+        timeRangeStack.snp.makeConstraints { make in
+            make.top.equalTo(pageHeaderView.snp.bottom).offset(Constant.Constraint.Spacing.contentTallIntraVert)
+            make.leading.trailing.equalTo(containerView).inset(Constant.Constraint.Spacing.absoluteHoriInset)
+        }
+        timeRangeSectionLabel.snp.makeConstraints { make in
+            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Text.sectionLabelHeightMultipler).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Text.sectionLabelMaxHeight)
+        }
+        timeRangeFieldLabel.snp.makeConstraints { make in
+            make.height.equalTo(view.snp.width).multipliedBy(Constant.Constraint.Input.textFieldHeightMultiplier).priority(.high)
+            make.height.lessThanOrEqualTo(Constant.Constraint.Input.textFieldMaxHeight)
+        }
         
-        //        // timeRangeFieldHeaderLabel
-        //        NSLayoutConstraint.activate([
-        //            timeRangeFieldHeaderLabel.topAnchor.constraint(equalTo: timeRangeSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-        //            timeRangeFieldHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-        //            timeRangeFieldHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
-        //        ])
-        
-        // timeRangeFieldLabel
-        NSLayoutConstraint.activate([
-            timeRangeFieldLabel.topAnchor.constraint(equalTo: timeRangeSectionLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            timeRangeFieldLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeFieldLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeFieldLabel.createHeightMultiplier(Constant.Constraint.Input.textFieldHeightMultiplier, relativeToWidthOf: view),
-            timeRangeFieldLabel.createMaxHeight(Constant.Constraint.Input.textFieldMaxHeight)
-        ])
-        
-        // timeRangeFromHeaderLabel
-        NSLayoutConstraint.activate([
-            timeRangeFromHeaderLabel.topAnchor.constraint(equalTo: timeRangeFieldLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            timeRangeFromHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeFromHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
-        ])
-        
-        // fromDatePicker
-        NSLayoutConstraint.activate([
-            fromDatePicker.topAnchor.constraint(equalTo: timeRangeFromHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            fromDatePicker.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            fromDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: fromDateSwitch.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
-            fromDatePicker.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
-            fromDatePicker.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight),
-            fromDatePicker.createAspectRatio(2.75 * 2)
-        ])
-        
-        // fromDateSwitch
-        NSLayoutConstraint.activate([
-            fromDateSwitch.centerYAnchor.constraint(equalTo: fromDatePicker.centerYAnchor),
-            fromDateSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
-        ])
-        
-        // timeRangeToHeaderLabel
-        NSLayoutConstraint.activate([
-            timeRangeToHeaderLabel.topAnchor.constraint(equalTo: fromDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            timeRangeToHeaderLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            timeRangeToHeaderLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset)
-        ])
-        
-        // toDatePicker
-        NSLayoutConstraint.activate([
-            toDatePicker.topAnchor.constraint(equalTo: timeRangeToHeaderLabel.bottomAnchor, constant: Constant.Constraint.Spacing.contentIntraVert),
-            toDatePicker.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
-            toDatePicker.trailingAnchor.constraint(lessThanOrEqualTo: toDateSwitch.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
-            toDatePicker.createHeightMultiplier(Constant.Constraint.Input.segmentedHeightMultiplier, relativeToWidthOf: view),
-            toDatePicker.createMaxHeight(Constant.Constraint.Input.segmentedMaxHeight),
-            toDatePicker.createAspectRatio(2.75 * 2)
-        ])
-        
-        // toDateSwitch
-        NSLayoutConstraint.activate([
-            toDateSwitch.centerYAnchor.constraint(equalTo: toDatePicker.centerYAnchor),
-            toDateSwitch.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constant.Constraint.Spacing.absoluteHoriInset * 2.0)
-        ])
+        remakeTimeRangeDateConstraints()
         
         // onlyShowMyLikesSectionLabel
         NSLayoutConstraint.activate([
-            onlyShowMyLikesSectionLabel.topAnchor.constraint(equalTo: toDatePicker.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
+            onlyShowMyLikesSectionLabel.topAnchor.constraint(equalTo: timeRangeStack.bottomAnchor, constant: Constant.Constraint.Spacing.contentSectionVert),
             onlyShowMyLikesSectionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constant.Constraint.Spacing.absoluteHoriInset),
             onlyShowMyLikesSectionLabel.trailingAnchor.constraint(lessThanOrEqualTo: onlyShowMyLikesSwitch.leadingAnchor, constant: -Constant.Constraint.Spacing.contentIntraHori),
             onlyShowMyLikesSectionLabel.createHeightMultiplier(Constant.Constraint.Text.sectionLabelHeightMultipler, relativeToWidthOf: view),

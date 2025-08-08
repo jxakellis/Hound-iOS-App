@@ -173,11 +173,8 @@ final class DogManager: NSObject, NSCoding, NSCopying {
             }
 
             if let timeRangeField = filter.timeRangeField {
-                if filter.isFromDateEnabled, let fromDate = filter.timeRangeFromDate,
-                   timeRangeField.dateForDateType(log) <= fromDate { return false }
-
-                if filter.isToDateEnabled, let toDate = filter.timeRangeToDate,
-                   timeRangeField.dateForDateType(log) >= toDate { return false }
+                if timeRangeField.dateForDateType(log) < filter.timeRangeFromDate { return false }
+                if timeRangeField.dateForDateType(log) > filter.timeRangeToDate { return false }
             }
         
             if filter.searchText.isEmpty == false && log.matchesSearchText(filter.searchText) == false {
