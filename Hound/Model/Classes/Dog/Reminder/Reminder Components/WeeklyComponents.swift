@@ -108,6 +108,24 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         }
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? WeeklyComponents else {
+            return false
+        }
+        if zonedSunday != other.zonedSunday { return false }
+        if zonedMonday != other.zonedMonday { return false }
+        if zonedTuesday != other.zonedTuesday { return false }
+        if zonedWednesday != other.zonedWednesday { return false }
+        if zonedThursday != other.zonedThursday { return false }
+        if zonedFriday != other.zonedFriday { return false }
+        if zonedSaturday != other.zonedSaturday { return false }
+        if zonedHour != other.zonedHour { return false }
+        if zonedMinute != other.zonedMinute { return false }
+        if isSkipping != other.isSkipping { return false }
+        if skippedDate != other.skippedDate { return false }
+        return true
+    }
+    
     // MARK: - Properties
     
     private var zonedSunday: Bool = true
@@ -391,24 +409,6 @@ final class WeeklyComponents: NSObject, NSCoding, NSCopying {
         return dates.sorted { d1, d2 in
             return d1 < d2
         }
-    }
-    
-    // MARK: - Compare
-    
-    /// Returns true if all stored properties are equivalent
-    func isSame(as other: WeeklyComponents) -> Bool {
-        if zonedSunday != other.zonedSunday { return false }
-        if zonedMonday != other.zonedMonday { return false }
-        if zonedTuesday != other.zonedTuesday { return false }
-        if zonedWednesday != other.zonedWednesday { return false }
-        if zonedThursday != other.zonedThursday { return false }
-        if zonedFriday != other.zonedFriday { return false }
-        if zonedSaturday != other.zonedSaturday { return false }
-        if zonedHour != other.zonedHour { return false }
-        if zonedMinute != other.zonedMinute { return false }
-        if isSkipping != other.isSkipping { return false }
-        if skippedDate != other.skippedDate { return false }
-        return true
     }
     
     // MARK: - Request

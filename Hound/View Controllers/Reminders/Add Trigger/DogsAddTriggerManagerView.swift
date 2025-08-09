@@ -308,7 +308,7 @@ final class DogsAddTriggerManagerView: HoundView,
             return false
         }
         
-        return !initialTrigger.isSame(as: newTrigger)
+        return initialTrigger != newTrigger
     }
     
     // MARK: - Function
@@ -539,7 +539,7 @@ final class DogsAddTriggerManagerView: HoundView,
         case .reminderResult:
             let item = availableReminderResults[indexPath.row]
             cell.label.text = item.readableName
-            let selected = selectedReminderResult?.isSame(as: item) ?? false
+            let selected = selectedReminderResult == item
             cell.setCustomSelected(selected, animated: false)
         case .triggerType:
             let type = availableTriggerTypes[indexPath.row]
@@ -689,13 +689,13 @@ final class DogsAddTriggerManagerView: HoundView,
             switch type {
             case .logReactions:
                 if let idx = selectedLogReactions
-                    .compactMap({ reaction in availableLogReactions.firstIndex(where: { $0.isSame(as: reaction)}) })
+                    .compactMap({ reaction in availableLogReactions.firstIndex(where: { $0 == reaction}) })
                     .min() {
                     return IndexPath(row: idx, section: 0)
                 }
             case .reminderResult:
                 if let result = selectedReminderResult,
-                   let idx = availableReminderResults.firstIndex(where: { $0.isSame(as: result) }) {
+                   let idx = availableReminderResults.firstIndex(where: { $0 == result }) {
                     return IndexPath(row: idx, section: 0)
                 }
             case .triggerType:

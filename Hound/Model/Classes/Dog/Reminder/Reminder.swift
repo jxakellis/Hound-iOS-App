@@ -151,6 +151,40 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? Reminder else { return false }
+        if reminderId != other.reminderId { return false }
+ else if reminderUUID != other.reminderUUID { return false }
+ else if reminderCreated != other.reminderCreated { return false }
+ else if reminderCreatedBy != other.reminderCreatedBy { return false }
+ else if reminderLastModified != other.reminderLastModified { return false }
+ else if reminderLastModifiedBy != other.reminderLastModifiedBy { return false }
+ else if reminderActionTypeId != other.reminderActionTypeId { return false }
+ else if reminderCustomActionName != other.reminderCustomActionName { return false }
+ else if reminderType != other.reminderType { return false }
+ else if reminderExecutionBasis != other.reminderExecutionBasis { return false }
+ else if reminderIsEnabled != other.reminderIsEnabled { return false }
+ else if Set(reminderRecipientUserIds) != Set(other.reminderRecipientUserIds) { return false }
+ else if reminderIsTriggerResult != other.reminderIsTriggerResult { return false }
+ else if reminderTimeZone != other.reminderTimeZone { return false }
+        
+        // known at this point that the reminderTypes are the same
+        switch reminderType {
+        case .countdown:
+            if countdownComponents != other.countdownComponents { return false }
+        case .weekly:
+            if weeklyComponents != other.weeklyComponents { return false }
+        case .monthly:
+            if monthlyComponents != other.monthlyComponents { return false }
+        case .oneTime:
+            if oneTimeComponents != other.oneTimeComponents { return false }
+        }
+        
+        if snoozeComponents != other.snoozeComponents { return false }
+        
+        return true
+    }
+    
     // MARK: - Comparable
     
     static func < (lhs: Reminder, rhs: Reminder) -> Bool {
@@ -257,10 +291,10 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
     
     /// The reminderId given to this log from the Hound database
     var reminderId: Int?
-
+    
     /// The UUID of this reminder that is generated locally upon creation. Useful in identifying the reminder before/in the process of creating it
     var reminderUUID: UUID = UUID()
-
+    
     private(set) var reminderCreated: Date = Date()
     private(set) var reminderCreatedBy: String = Constant.Class.Log.defaultUserId
     private(set) var reminderLastModified: Date?
@@ -355,7 +389,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         offlineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
-
+        
         self.reminderId = reminderId ?? self.reminderId
         self.reminderUUID = reminderUUID ?? self.reminderUUID
         self.reminderCreated = reminderCreated ?? self.reminderCreated
@@ -370,7 +404,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         self.reminderIsEnabled = reminderIsEnabled ?? self.reminderIsEnabled
         self.reminderRecipientUserIds = reminderRecipientUserIds ?? self.reminderRecipientUserIds
         self.reminderTimeZone = reminderTimeZone ?? self.reminderTimeZone
-
+        
         self.countdownComponents = countdownComponents ?? self.countdownComponents
         self.weeklyComponents = weeklyComponents ?? self.weeklyComponents
         self.monthlyComponents = monthlyComponents ?? self.monthlyComponents
@@ -386,7 +420,7 @@ final class Reminder: NSObject, NSCoding, NSCopying, Comparable {
         let reminderUUID: UUID? = UUID.fromString(UUIDString: fromBody[Constant.Key.reminderUUID.rawValue] as? String)
         let reminderCreated: Date? = (fromBody[Constant.Key.reminderCreated.rawValue] as? String)?.formatISO8601IntoDate()
         let reminderIsDeleted: Bool? = fromBody[Constant.Key.reminderIsDeleted.rawValue] as? Bool
-
+        
         guard let reminderId = reminderId, let reminderUUID = reminderUUID, let reminderCreated = reminderCreated, let reminderIsDeleted = reminderIsDeleted else {
             return nil
         }
@@ -603,80 +637,6 @@ extension Reminder {
         duplicate.resetForNextAlarm()
         
         return duplicate
-    }
-    
-    // MARK: - Compare
-    
-    /// Returns true if all the server synced properties for the reminder are the same. This includes all the base properties here (yes the reminderId too) and the reminder components for the corresponding reminderActionTypeId
-    func isSame(as other: Reminder) -> Bool {
-        if reminderId != other.reminderId {
-            return false
-        }
-        else if reminderUUID != other.reminderUUID {
-            return false
-        }
-        else if reminderCreated != other.reminderCreated {
-            return false
-        }
-        else if reminderCreatedBy != other.reminderCreatedBy {
-            return false
-        }
-        else if reminderLastModified != other.reminderLastModified {
-            return false
-        }
-        else if reminderLastModifiedBy != other.reminderLastModifiedBy {
-            return false
-        }
-        else if reminderActionTypeId != other.reminderActionTypeId {
-            return false
-        }
-        else if reminderCustomActionName != other.reminderCustomActionName {
-            return false
-        }
-        else if reminderType != other.reminderType {
-            return false
-        }
-        else if reminderExecutionBasis != other.reminderExecutionBasis {
-            return false
-        }
-        else if reminderIsEnabled != other.reminderIsEnabled {
-            return false
-        }
-        else if Set(reminderRecipientUserIds) != Set(other.reminderRecipientUserIds) {
-            return false
-        }
-        else if reminderIsTriggerResult != other.reminderIsTriggerResult {
-            return false
-        }
-        else if reminderTimeZone != other.reminderTimeZone {
-            return false
-        }
-        
-        // known at this point that the reminderTypes are the same
-        switch reminderType {
-        case .countdown:
-            if !countdownComponents.isSame(as: other.countdownComponents) {
-                return false
-            }
-        case .weekly:
-            if !weeklyComponents.isSame(as: other.weeklyComponents) {
-                return false
-            }
-        case .monthly:
-            if !monthlyComponents.isSame(as: other.monthlyComponents) {
-                return false
-            }
-        case .oneTime:
-            if !oneTimeComponents.isSame(as: other.oneTimeComponents) {
-                return false
-            }
-        }
-        
-        if !snoozeComponents.isSame(as: other.snoozeComponents) {
-            return false
-        }
-        
-        return true
     }
     
     // MARK: - Request

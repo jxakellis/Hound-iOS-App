@@ -9,7 +9,25 @@
 import SnapKit
 import UIKit
 
-final class DogsAddDogTriggerTVC: HoundTableViewCell {
+final class DogsAddDogTriggerTVC: HoundTableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    // MARK: - UICollectionViewDataSource
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return infoItems.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LogInfoBubbleCVC.reuseIdentifier, for: indexPath) as? LogInfoBubbleCVC else {
+            return UICollectionViewCell()
+        }
+        cell.setup(text: infoItems[indexPath.item])
+        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        let inset = layout?.sectionInset ?? .zero
+        let maxWidth = collectionView.bounds.width - inset.left - inset.right
+        cell.setMaxWidth(maxWidth)
+        return cell
+    }
     
     // MARK: - Elements
     
@@ -59,9 +77,27 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
         return imageView
     }()
     
+    private lazy var infoBubbleCollectionView: UICollectionView = {
+        let layout = HoundLeftAlignedCollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = Constant.Constraint.Spacing.contentIntraHori
+        layout.minimumLineSpacing = Constant.Constraint.Spacing.contentIntraVert
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        
+        let collectionView = HoundIntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.register(LogInfoBubbleCVC.self, forCellWithReuseIdentifier: LogInfoBubbleCVC.reuseIdentifier)
+        collectionView.isScrollEnabled = false
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        
+        return collectionView
+    }()
+    
     // MARK: - Properties
     
     static let reuseIdentifier = "DogsAddDogTriggerTVC"
+    
+    private var infoItems: [String] = []
     
     // MARK: - Setup
     
@@ -114,6 +150,36 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
             )
             return message
         }()
+        
+        let previousInfoItems = infoItems
+        infoItems = []
+        
+        let weekAgo = Calendar.user.date(byAdding: .weekOfYear, value: -1, to: Date()) ?? Date()
+        let recent = trigger.triggerActivations.map({ $0.activationDate }).filter({ $0 >= weekAgo }).sorted()
+        
+        if let last = recent.last {
+            let timeString = last.houndFormatted(.formatStyle(date: .omitted, time: .shortened), displayTimeZone: UserConfiguration.timeZone)
+            let text: String
+            if Calendar.user.isDateInToday(last) {
+                text = "Last activated at \(timeString)"
+            }
+            else if Calendar.user.isDateInYesterday(last) {
+                text = "Last activated yesterday at \(timeString)"
+            }
+            else {
+                let day = last.houndFormatted(.template("EEEE"), displayTimeZone: UserConfiguration.timeZone)
+                text = "Last activated \(day) at \(timeString)"
+            }
+            infoItems.append(text)
+            if recent.count > 1 {
+                infoItems.append("Activated \(recent.count) times in the past week")
+            }
+        }
+        if previousInfoItems != infoItems {
+            infoBubbleCollectionView.reloadData()
+            remakeInfoBubbleConstraints()
+            findParentTableViewAndRelayoutCells()
+        }
     }
     
     // MARK: - Setup Elements
@@ -127,7 +193,31 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
         contentView.addSubview(containerView)
         
         containerView.addSubview(labelStack)
+        containerView.addSubview(infoBubbleCollectionView)
         containerView.addSubview(chevronImageView)
+    }
+    
+    private func remakeInfoBubbleConstraints() {
+        labelStack.snp.removeConstraints()
+        infoBubbleCollectionView.snp.removeConstraints()
+        infoBubbleCollectionView.isHidden = infoItems.isEmpty
+        
+        labelStack.snp.makeConstraints { make in
+            make.top.equalTo(containerView.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)
+            make.leading.equalTo(containerView.snp.leading).offset(Constant.Constraint.Spacing.contentIntraHori)
+            if infoItems.isEmpty {
+                make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset)
+            }
+        }
+        
+        if !infoItems.isEmpty {
+            infoBubbleCollectionView.snp.makeConstraints { make in
+                make.top.equalTo(labelStack.snp.bottom).offset(Constant.Constraint.Spacing.contentIntraVert)
+                make.leading.equalTo(containerView.snp.leading).offset(Constant.Constraint.Spacing.absoluteHoriInset)
+                make.trailing.equalTo(containerView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
+                make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset)
+            }
+        }
     }
     
     override func setupConstraints() {
@@ -141,11 +231,7 @@ final class DogsAddDogTriggerTVC: HoundTableViewCell {
             make.trailing.equalTo(contentView.snp.trailing).inset(Constant.Constraint.Spacing.absoluteHoriInset)
         }
         
-        labelStack.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.top).offset(Constant.Constraint.Spacing.absoluteVertInset)
-            make.leading.equalTo(containerView.snp.leading).offset(Constant.Constraint.Spacing.contentIntraHori)
-            make.bottom.equalTo(containerView.snp.bottom).inset(Constant.Constraint.Spacing.absoluteVertInset)
-        }
+        remakeInfoBubbleConstraints()
         
         chevronImageView.snp.makeConstraints { make in
             make.leading.equalTo(labelStack.snp.trailing).offset(Constant.Constraint.Spacing.contentIntraHori)

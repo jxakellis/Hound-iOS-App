@@ -493,19 +493,19 @@ final class DogsAddReminderManagerView: HoundView,
         // If you were 5 minutes in to a 1 hour countdown but then change it to 30 minutes, you would want to be 0 minutes into the new timer and not 5 minutes in like previously.
         switch reminder.reminderType {
         case .oneTime:
-            if !reminder.oneTimeComponents.isSame(as: reminderToUpdate.oneTimeComponents) {
+            if reminder.oneTimeComponents != reminderToUpdate.oneTimeComponents {
                 reminder.resetForNextAlarm()
             }
         case .countdown:
-            if !reminder.countdownComponents.isSame(as: reminderToUpdate.countdownComponents) {
+            if reminder.countdownComponents != reminderToUpdate.countdownComponents {
                 reminder.resetForNextAlarm()
             }
         case .weekly:
-            if !reminder.weeklyComponents.isSame(as: reminderToUpdate.weeklyComponents) {
+            if reminder.weeklyComponents != reminderToUpdate.weeklyComponents {
                 reminder.resetForNextAlarm()
             }
         case .monthly:
-            if !reminder.monthlyComponents.isSame(as: reminderToUpdate.monthlyComponents) {
+            if reminder.monthlyComponents != reminderToUpdate.monthlyComponents {
                 reminder.resetForNextAlarm()
             }
         }
@@ -525,7 +525,7 @@ final class DogsAddReminderManagerView: HoundView,
             return false
         }
         
-        return !initialReminder.isSame(as: newReminder)
+        return initialReminder != newReminder
     }
     
     // MARK: - Setup

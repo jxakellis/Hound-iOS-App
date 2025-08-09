@@ -20,10 +20,10 @@ final class LogUnitType: NSObject, Comparable, NSCoding {
     }
     
     override func isEqual(_ object: Any?) -> Bool {
-        guard let object = object as? LogUnitType else {
+        guard let other = object as? LogUnitType else {
             return false
         }
-        return object.logUnitTypeId == self.logUnitTypeId
+        return other.logUnitTypeId == self.logUnitTypeId
     }
     
     // MARK: - NSCoding

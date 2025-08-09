@@ -410,21 +410,36 @@ final class DogsTableVC: HoundTableViewController {
                         return
                     }
                     
-                    let triggerReminders = self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: true)
+                    let result = self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: true)
                     self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     
-                    guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {
+                    guard let result = result else {
                         return
                     }
                     
-                    // silently try to create trigger reminders
-                    RemindersRequest.create(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, reminders: triggerReminders) { responseStatus, _ in
-                        guard responseStatus != .failureResponse else {
-                            return
+                    let createdReminders = result.0
+                    let activatedTriggers = result.1
+                    
+                    if !createdReminders.isEmpty {
+                        // silently try to create trigger reminders
+                        RemindersRequest.create(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, reminders: createdReminders) { responseStatus, _ in
+                            guard responseStatus != .failureResponse else {
+                                return
+                            }
+                            self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: createdReminders)
+                            self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                         }
-                        self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: triggerReminders)
-                        self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     }
+                    if !activatedTriggers.isEmpty {
+                        TriggersRequest.update(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, dogTriggers: activatedTriggers) { responseStatus, _ in
+                            guard responseStatus != .failureResponse else {
+                                return
+                            }
+                            self.dogManager.findDog(dogUUID: dogUUID)?.dogTriggers.addTriggers(dogTriggers: activatedTriggers)
+                            self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
+                        }
+                    }
+                    
                 }
             }
         }
@@ -438,27 +453,32 @@ final class DogsTableVC: HoundTableViewController {
                     return
                 }
                 
-                self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminder(reminder: reminder)
+                let result = self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: true)
                 self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                 
-                LogsRequest.create(errorAlert: .automaticallyAlertOnlyForFailure, dogUUID: dogUUID, log: log) { responseStatusLogCreate, _ in
-                    guard responseStatusLogCreate != .failureResponse else {
-                        return
-                    }
-                    
-                    let triggerReminders = self.dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: true)
-                    self.setDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
-                    
-                    guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {
-                        return
-                    }
-                    
+                guard let result = result else {
+                    return
+                }
+                
+                let createdReminders = result.0
+                let activatedTriggers = result.1
+                
+                if !createdReminders.isEmpty {
                     // silently try to create trigger reminders
-                    RemindersRequest.create(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, reminders: triggerReminders) { responseStatus, _ in
+                    RemindersRequest.create(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, reminders: createdReminders) { responseStatus, _ in
                         guard responseStatus != .failureResponse else {
                             return
                         }
-                        self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: triggerReminders)
+                        self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: createdReminders)
+                        self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
+                    }
+                }
+                if !activatedTriggers.isEmpty {
+                    TriggersRequest.update(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, dogTriggers: activatedTriggers) { responseStatus, _ in
+                        guard responseStatus != .failureResponse else {
+                            return
+                        }
+                        self.dogManager.findDog(dogUUID: dogUUID)?.dogTriggers.addTriggers(dogTriggers: activatedTriggers)
                         self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
                     }
                 }

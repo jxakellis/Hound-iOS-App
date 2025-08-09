@@ -20,10 +20,10 @@ final class LogActionType: NSObject, Comparable, NSCoding {
     }
     
     override func isEqual(_ object: Any?) -> Bool {
-        guard let object = object as? LogActionType else {
+        guard let other = object as? LogActionType else {
             return false
         }
-        return object.logActionTypeId == self.logActionTypeId
+        return other.logActionTypeId == self.logActionTypeId
     }
     
     // MARK: - NSCoding

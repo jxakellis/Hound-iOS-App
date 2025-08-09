@@ -32,6 +32,13 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
         aCoder.encode(oneTimeDate, forKey: Constant.Key.oneTimeDate.rawValue)
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? OneTimeComponents else {
+            return false
+        }
+        return oneTimeDate == other.oneTimeDate
+    }
+    
     // MARK: - Properties
     
     func readableDayOfYear(displayTimeZone: TimeZone? = nil) -> String {
@@ -73,13 +80,6 @@ final class OneTimeComponents: NSObject, NSCoding, NSCopying {
         let oneTimeDate: Date? = (fromBody[Constant.Key.oneTimeDate.rawValue] as? String)?.formatISO8601IntoDate() ?? componentToOverride?.oneTimeDate
         
         self.init(oneTimeDate: oneTimeDate)
-    }
-    
-    // MARK: - Compare
-    
-    /// Returns true if the stored date matches another one-time component
-    func isSame(as other: OneTimeComponents) -> Bool {
-        return oneTimeDate == other.oneTimeDate
     }
     
     // MARK: - Request

@@ -73,7 +73,7 @@ class LogsFilterVC: HoundScrollViewController,
         label.font = Constant.Visual.Font.primaryRegularLabel
         label.applyStyle(.thinGrayBorder)
         label.shouldInsetText = true
-        label.placeholder = "Select a date to use..."
+        label.placeholder = "Select a date to filter by..."
         
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(

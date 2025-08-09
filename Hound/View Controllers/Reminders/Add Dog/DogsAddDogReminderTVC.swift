@@ -192,7 +192,7 @@ final class DogsAddDogReminderTVC: HoundTableViewCell {
         }
         
         if hasMadeChange {
-            updateTableViewHeight()
+            findParentTableViewAndRelayoutCells()
         }
     }
     

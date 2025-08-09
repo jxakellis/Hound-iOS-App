@@ -277,7 +277,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         
         if logDurationChange || infoItemsChanged {
             // cell's height changed so table view needs to relay it out to give it the proper vertical space it needs
-            updateTableViewHeight()
+            findParentTableViewAndRelayoutCells()
         }
     }
     

@@ -8,8 +8,6 @@
 
 import UIKit
 
-// TODO AUTOMATIONS triggers should track their last activations. it should be an array of dates that exist on the object. this is similar to how logs have an array of liked by user ids, etc. it will need to encode/decode this locally when persisted/copied/decoded, and also be able to send it to the server when it updates. this activation value should only be updated when the trigger is activated, creating a reminder. this is trickty however as we dont want api calls in doglogmanager. instead probably return the triggers that got activated from createTriggerResultReminder and we can somehow update the trigger from there with its new activation dates. be thoughtful. further, then we want a little info bubble at the button of trigger tvc inside triggermanagerview. it should basically say last activated at 8:50PM or 3:50PM yesterday etc. this should only search a week back though, if not activated in the last week then show no info bubble. if >1 activations in the last week, then we have a second info bubble that says actived x times in te past week
-
 enum TriggerType: String, CaseIterable {
     
     init?(rawValue: String) {
@@ -58,6 +56,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         
         copy.triggerManualCondition = self.triggerManualCondition
         copy.triggerAlarmCreatedCondition = self.triggerAlarmCreatedCondition
+        copy.triggerActivations = self.triggerActivations.compactMap({ $0.copy() as? TriggerActivation })
         copy.offlineModeComponents = self.offlineModeComponents.copy() as? OfflineModeComponents ?? OfflineModeComponents()
         
         return copy
@@ -81,6 +80,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         
         let triggerManualCondition = aDecoder.decodeOptionalBool(forKey: Constant.Key.triggerManualCondition.rawValue) ?? Constant.Class.Trigger.defaultTriggerManualCondition
         let triggerAlarmCreatedCondition = aDecoder.decodeOptionalBool(forKey: Constant.Key.triggerAlarmCreatedCondition.rawValue) ?? Constant.Class.Trigger.defaultTriggerAlarmCreatedCondition
+        let triggerActivations: [TriggerActivation]? = aDecoder.decodeOptionalObject(forKey: Constant.Key.triggerActivations.rawValue)
         let offlineModeComponents: OfflineModeComponents? = aDecoder.decodeOptionalObject(forKey: Constant.Key.offlineModeComponents.rawValue)
         
         self.init(
@@ -97,6 +97,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             triggerFixedTimeComponents: triggerFixedTimeComponents,
             triggerManualCondition: triggerManualCondition,
             triggerAlarmCreatedCondition: triggerAlarmCreatedCondition,
+            triggerActivations: triggerActivations,
             offlineModeComponents: offlineModeComponents
         )
     }
@@ -124,7 +125,29 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         
         aCoder.encode(triggerManualCondition, forKey: Constant.Key.triggerManualCondition.rawValue)
         aCoder.encode(triggerAlarmCreatedCondition, forKey: Constant.Key.triggerAlarmCreatedCondition.rawValue)
+        aCoder.encode(triggerActivations, forKey: Constant.Key.triggerActivations.rawValue)
         aCoder.encode(offlineModeComponents, forKey: Constant.Key.offlineModeComponents.rawValue)
+    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? Trigger else {
+            return false
+        }
+        if triggerId != other.triggerId { return false }
+        if triggerUUID != other.triggerUUID { return false }
+        if triggerCreated != other.triggerCreated { return false }
+        if triggerCreatedBy != other.triggerCreatedBy { return false }
+        if triggerLastModified != other.triggerLastModified { return false }
+        if triggerLastModifiedBy != other.triggerLastModifiedBy { return false }
+        if triggerLogReactions != other.triggerLogReactions { return false }
+        if triggerReminderResult != other.triggerReminderResult { return false }
+        if triggerType != other.triggerType { return false }
+        if timeDelayComponents != other.timeDelayComponents { return false }
+        if fixedTimeComponents != other.fixedTimeComponents { return false }
+        if triggerManualCondition != other.triggerManualCondition { return false }
+        if triggerAlarmCreatedCondition != other.triggerAlarmCreatedCondition { return false }
+        if triggerActivations != other.triggerActivations { return false }
+        return true
     }
     
     // MARK: - Comparable
@@ -204,12 +227,12 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     
     /// The UUID of this dynamic log that is generated locally upon creation. Useful in identifying the dynamic log before/in the process of creating it
     var triggerUUID: UUID = UUID()
-
+    
     private(set) var triggerCreated: Date = Date()
     private(set) var triggerCreatedBy: String = Constant.Class.Log.defaultUserId
     private(set) var triggerLastModified: Date?
     private(set) var triggerLastModifiedBy: String?
-
+    
     private(set) var triggerLogReactions: [TriggerLogReaction] = [] {
         didSet {
             triggerLogReactions.sort { lhs, rhs in
@@ -247,6 +270,9 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
     /// If true, the trigger will be activated by logs that were automatically created by an alarm
     var triggerAlarmCreatedCondition: Bool = Constant.Class.Trigger.defaultTriggerAlarmCreatedCondition
     
+    /// Tracks dates when this trigger was last activated
+    private(set) var triggerActivations: [TriggerActivation] = []
+    
     /// Components that are used to track an object to determine whether it was synced with the Hound server and whether it needs to be when the device comes back online
     private(set) var offlineModeComponents: OfflineModeComponents = OfflineModeComponents()
     
@@ -266,6 +292,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         triggerFixedTimeComponents: TriggerFixedTimeComponents? = nil,
         triggerManualCondition: Bool? = nil,
         triggerAlarmCreatedCondition: Bool? = nil,
+        triggerActivations: [TriggerActivation]? = nil,
         offlineModeComponents: OfflineModeComponents? = nil
     ) {
         super.init()
@@ -282,6 +309,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         self.fixedTimeComponents = triggerFixedTimeComponents ?? self.fixedTimeComponents
         self.triggerManualCondition = triggerManualCondition ?? self.triggerManualCondition
         self.triggerAlarmCreatedCondition = triggerAlarmCreatedCondition ?? self.triggerAlarmCreatedCondition
+        self.triggerActivations = triggerActivations ?? self.triggerActivations
         self.offlineModeComponents = offlineModeComponents ?? self.offlineModeComponents
     }
     
@@ -292,11 +320,11 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         let triggerUUID = UUID.fromString(UUIDString: fromBody[Constant.Key.triggerUUID.rawValue] as? String)
         let triggerCreated = (fromBody[Constant.Key.triggerCreated.rawValue] as? String)?.formatISO8601IntoDate()
         let triggerIsDeleted = fromBody[Constant.Key.triggerIsDeleted.rawValue] as? Bool
-
+        
         guard let triggerId = triggerId, let triggerUUID = triggerUUID, let triggerCreated = triggerCreated, let triggerIsDeleted = triggerIsDeleted else {
             return nil
         }
-
+        
         guard triggerIsDeleted == false else {
             return nil
         }
@@ -319,6 +347,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
                 triggerFixedTimeComponents: triggerToOverride.fixedTimeComponents,
                 triggerManualCondition: triggerToOverride.triggerManualCondition,
                 triggerAlarmCreatedCondition: triggerToOverride.triggerAlarmCreatedCondition,
+                triggerActivations: triggerToOverride.triggerActivations,
                 offlineModeComponents: triggerToOverride.offlineModeComponents
             )
             return
@@ -356,6 +385,11 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         
         let triggerManualCondition = fromBody[Constant.Key.triggerManualCondition.rawValue] as? Bool ?? triggerToOverride?.triggerManualCondition
         let triggerAlarmCreatedCondition = fromBody[Constant.Key.triggerAlarmCreatedCondition.rawValue] as? Bool ?? triggerToOverride?.triggerAlarmCreatedCondition
+        let activationsBody = fromBody[Constant.Key.triggerActivations.rawValue] as? [JSONResponseBody]
+        let triggerActivations = activationsBody?.compactMap { body -> TriggerActivation? in
+            guard let date = (body[Constant.Key.activationDate.rawValue] as? String)?.formatISO8601IntoDate() else { return nil }
+            return TriggerActivation(activationDate: date)
+        } ?? triggerToOverride?.triggerActivations
         
         self.init(
             triggerId: triggerId,
@@ -371,11 +405,17 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             triggerFixedTimeComponents: triggerFixedTimeComponents,
             triggerManualCondition: triggerManualCondition,
             triggerAlarmCreatedCondition: triggerAlarmCreatedCondition,
+            triggerActivations: triggerActivations,
             offlineModeComponents: nil
         )
     }
     
     // MARK: - Functions
+    
+    /// Append an activation date when this trigger is activated
+    func recordActivation(on date: Date = Date()) {
+        triggerActivations.append(TriggerActivation(activationDate: date))
+    }
     
     func readableTime() -> String {
         switch triggerType {
@@ -430,6 +470,8 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
             return nil
         }
         
+        recordActivation(on: currentDate)
+        
         return Reminder(
             reminderActionTypeId: triggerReminderResult.reminderActionTypeId,
             reminderCustomActionName: triggerReminderResult.reminderCustomActionName,
@@ -461,29 +503,7 @@ final class Trigger: NSObject, NSCoding, NSCopying, Comparable {
         }
         body[Constant.Key.triggerManualCondition.rawValue] = .bool(triggerManualCondition)
         body[Constant.Key.triggerAlarmCreatedCondition.rawValue] = .bool(triggerAlarmCreatedCondition)
+        body[Constant.Key.triggerActivations.rawValue] = .array(triggerActivations.map { .object($0.createBody()) })
         return body
-    }
-    
-    // MARK: - Compare
-    
-    /// Returns true if all server-synced properties are identical to another trigger
-    func isSame(as other: Trigger) -> Bool {
-        if triggerId != other.triggerId { return false }
-        if triggerUUID != other.triggerUUID { return false }
-        if triggerCreated != other.triggerCreated { return false }
-        if triggerCreatedBy != other.triggerCreatedBy { return false }
-        if triggerLastModified != other.triggerLastModified { return false }
-        if triggerLastModifiedBy != other.triggerLastModifiedBy { return false }
-        if triggerLogReactions.count != other.triggerLogReactions.count { return false }
-        for (a, b) in zip(triggerLogReactions, other.triggerLogReactions) where !a.isSame(as: b) {
-            return false
-        }
-        if !triggerReminderResult.isSame(as: other.triggerReminderResult) { return false }
-        if triggerType != other.triggerType { return false }
-        if !timeDelayComponents.isSame(as: other.timeDelayComponents) { return false }
-        if !fixedTimeComponents.isSame(as: other.fixedTimeComponents) { return false }
-        if triggerManualCondition != other.triggerManualCondition { return false }
-        if triggerAlarmCreatedCondition != other.triggerAlarmCreatedCondition { return false }
-        return true
     }
 }

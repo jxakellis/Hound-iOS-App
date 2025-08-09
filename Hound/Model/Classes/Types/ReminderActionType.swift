@@ -20,10 +20,10 @@ final class ReminderActionType: NSObject, Comparable, NSCoding {
     }
     
     override func isEqual(_ object: Any?) -> Bool {
-        guard let object = object as? ReminderActionType else {
+        guard let other = object as? ReminderActionType else {
             return false
         }
-        return object.reminderActionTypeId == self.reminderActionTypeId
+        return other.reminderActionTypeId == self.reminderActionTypeId
     }
     
     // MARK: - NSCoding

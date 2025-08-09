@@ -29,6 +29,13 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying {
         aCoder.encode(executionInterval, forKey: Constant.Key.countdownExecutionInterval.rawValue)
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? CountdownComponents else {
+            return false
+        }
+        return executionInterval == other.executionInterval
+    }
+    
     // MARK: - Properties
     
     var readableTimeOfDay: String {
@@ -58,14 +65,7 @@ final class CountdownComponents: NSObject, NSCoding, NSCopying {
         
         self.init(executionInterval: countdownExecutionInterval)
     }
-    
-    // MARK: - Compare
-    
-    /// Returns true if all stored properties are equivalent
-    func isSame(as other: CountdownComponents) -> Bool {
-        return executionInterval == other.executionInterval
-    }
-    
+
     // MARK: - Request
     
     func createBody() -> JSONRequestBody {

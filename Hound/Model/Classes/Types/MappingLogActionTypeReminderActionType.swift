@@ -17,10 +17,10 @@ final class MappingLogActionTypeReminderActionType: NSObject, Comparable, NSCodi
     }
     
     override func isEqual(_ object: Any?) -> Bool {
-        guard let object = object as? MappingLogActionTypeReminderActionType else {
+        guard let other = object as? MappingLogActionTypeReminderActionType else {
             return false
         }
-        return object.mappingId == self.mappingId
+        return other.mappingId == self.mappingId
     }
     
     // MARK: - NSCoding

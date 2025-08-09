@@ -36,6 +36,15 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
         aCoder.encode(reminderCustomActionName, forKey: Constant.Key.reminderCustomActionName.rawValue)
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? TriggerReminderResult else {
+            return false
+        }
+        if reminderActionTypeId != other.reminderActionTypeId { return false }
+        if reminderCustomActionName != other.reminderCustomActionName { return false }
+        return true
+    }
+    
     // MARK: - Properties
 
     private(set) var reminderActionTypeId: Int = Constant.Class.Reminder.defaultReminderActionTypeId
@@ -69,14 +78,4 @@ final class TriggerReminderResult: NSObject, NSCoding, NSCopying {
         return body
         
     }
-    
-    // MARK: - Compare
-    
-    /// Returns true if all server-synced properties are identical to another trigger
-    func isSame(as other: TriggerReminderResult) -> Bool {
-        if reminderActionTypeId != other.reminderActionTypeId { return false }
-        if reminderCustomActionName != other.reminderCustomActionName { return false }
-        return true
-    }
-    
 }

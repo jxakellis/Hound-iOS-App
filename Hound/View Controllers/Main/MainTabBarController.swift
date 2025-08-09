@@ -28,20 +28,33 @@ final class MainTabBarController: HoundTabBarController,
     // MARK: - ReminderAlarmManagerDelegate
     
     func didAddLog(sender: Sender, dogUUID: UUID, log: Log, invokeDogTriggers: Bool) {
-        let triggerReminders = dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: invokeDogTriggers)
+        let result = dogManager.findDog(dogUUID: dogUUID)?.dogLogs.addLog(log: log, invokeDogTriggers: invokeDogTriggers)
         setDogManager(sender: sender, dogManager: dogManager)
-        
-        guard let triggerReminders = triggerReminders, !triggerReminders.isEmpty else {
-            return
-        }
-        
-        // silently try to create trigger reminders
-        RemindersRequest.create(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, reminders: triggerReminders) { responseStatus, _ in
-            guard responseStatus != .failureResponse else {
-                return
+
+        guard let result = result else { return }
+        let triggerReminders = result.0
+        let activatedTriggers = result.1
+
+        if !triggerReminders.isEmpty {
+            // silently try to create trigger reminders
+            RemindersRequest.create(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, reminders: triggerReminders) { responseStatus, _ in
+                guard responseStatus != .failureResponse else {
+                    return
+                }
+                self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: triggerReminders)
+                self.setDogManager(sender: sender, dogManager: self.dogManager)
             }
-            self.dogManager.findDog(dogUUID: dogUUID)?.dogReminders.addReminders(reminders: triggerReminders)
-            self.setDogManager(sender: sender, dogManager: self.dogManager)
+        }
+
+        if !activatedTriggers.isEmpty {
+            TriggersRequest.update(errorAlert: .automaticallyAlertForNone, dogUUID: dogUUID, dogTriggers: activatedTriggers) { responseStatus, _ in
+                guard responseStatus != .failureResponse else {
+                    return
+                }
+                // need to update triggers w/ new activation dates
+                self.dogManager.findDog(dogUUID: dogUUID)?.dogTriggers.addTriggers(dogTriggers: activatedTriggers)
+                self.setDogManager(sender: sender, dogManager: self.dogManager)
+            }
         }
     }
     

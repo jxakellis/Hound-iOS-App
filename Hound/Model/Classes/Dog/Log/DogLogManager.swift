@@ -52,7 +52,7 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
     init(logs: [Log] = [], parentDog: Dog?) {
         self.parentDog = parentDog
         super.init()
-        addLogs(logs: logs, invokeDogTriggers: false)
+        _ = addLogs(logs: logs, invokeDogTriggers: false)
     }
     
     /// Provide an array of dictionary literal of log properties to instantiate dogLogs. Provide a logManager to have the dogLogs add themselves into, update themselves in, or delete themselves from.
@@ -76,25 +76,25 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
             }
             
             if let log = Log(fromBody: fromBody, logToOverride: findLog(logUUID: logUUID)) {
-                addLog(log: log, invokeDogTriggers: false)
+                _ = addLog(log: log, invokeDogTriggers: false)
             }
         }
     }
-
+    
     // MARK: - Functions
-
+    
     /// finds and returns the reference of a log matching the given logUUID
     func findLog(logUUID: UUID) -> Log? {
         dogLogs.first(where: { $0.logUUID == logUUID })
     }
-
+    
     private func invalidateSortedCaches() {
         sortedDogLogsCreated = nil
         sortedDogLogsModified = nil
         sortedDogLogsStart = nil
         sortedDogLogsEnd = nil
     }
-
+    
     func sortedDogLogs(dateType: LogsDateType, sortDirection: LogsSortDirection) -> [Log] {
         let ascendingLogs: [Log]
         switch dateType {
@@ -119,25 +119,27 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
             }
             ascendingLogs = sortedDogLogsEnd ?? []
         }
-
+        
         return sortDirection == .ascending ? ascendingLogs : Array(ascendingLogs.reversed())
     }
     
     /// Adds a log to the dogLogs array and sorts. If invokeDogTriggers is true, it will the dog to see if any triggers are activated (and if so, generate reminders from them and return those reminders)
     @discardableResult
-    func addLog(log: Log, invokeDogTriggers: Bool) -> [Reminder] {
+    func addLog(log: Log, invokeDogTriggers: Bool) -> ([Reminder], [Trigger]) {
         removeLog(logUUID: log.logUUID)
         
         dogLogs.append(log)
         invalidateSortedCaches()
         
         var generatedReminders: [Reminder] = []
+        var activatedTriggers: [Trigger] = []
         if invokeDogTriggers {
             if let dog = parentDog {
                 let triggers = dog.dogTriggers.matchingActivatedTriggers(log: log)
                 for trigger in triggers {
                     if let reminder = trigger.createTriggerResultReminder(afterLog: log) {
                         generatedReminders.append(reminder)
+                        activatedTriggers.append(trigger)
                     }
                 }
             }
@@ -146,18 +148,19 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
             }
         }
         
-        return generatedReminders
+        return (generatedReminders, activatedTriggers)
     }
     
     /// Adds a log to the dogLogs array and sorts. If invokeDogTriggers is true, it will the dog to see if any triggers are activated (and if so, generate reminders from them and return those reminders)
     @discardableResult
-    func addLogs(logs: [Log], invokeDogTriggers: Bool) -> [Reminder] {
+    func addLogs(logs: [Log], invokeDogTriggers: Bool) -> ([Reminder], [Trigger]) {
         removeLogs(logUUIDs: logs.map { $0.logUUID })
         
         dogLogs.append(contentsOf: logs)
         invalidateSortedCaches()
         
         var generatedReminders: [Reminder] = []
+        var activatedTriggers: [Trigger] = []
         if invokeDogTriggers {
             if let dog = parentDog {
                 for log in logs {
@@ -165,13 +168,14 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
                     for trigger in triggers {
                         if let reminder = trigger.createTriggerResultReminder(afterLog: log) {
                             generatedReminders.append(reminder)
+                            activatedTriggers.append(trigger)
                         }
                     }
                 }
             }
         }
         
-        return generatedReminders
+        return (generatedReminders, activatedTriggers)
     }
     
     @discardableResult func removeLog(logUUID: UUID) -> Bool {
@@ -181,34 +185,34 @@ final class DogLogManager: NSObject, NSCoding, NSCopying {
             guard log.logUUID == logUUID else {
                 return false
             }
-
+            
             didRemoveObject = true
             return true
         }
-
+        
         if didRemoveObject {
             invalidateSortedCaches()
         }
-
+        
         return didRemoveObject
     }
-
+    
     @discardableResult func removeLogs(logUUIDs: [UUID]) -> Bool {
         var didRemoveObject = false
-
+        
         dogLogs.removeAll { l in
             guard logUUIDs.contains(l.logUUID) else {
                 return false
             }
-
+            
             didRemoveObject = true
             return true
         }
-
+        
         if didRemoveObject {
             invalidateSortedCaches()
         }
-
+        
         return didRemoveObject
     }
 }

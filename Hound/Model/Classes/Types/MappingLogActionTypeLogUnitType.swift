@@ -17,10 +17,10 @@ final class MappingLogActionTypeLogUnitType: NSObject, Comparable, NSCoding {
     }
     
     override func isEqual(_ object: Any?) -> Bool {
-        guard let object = object as? MappingLogActionTypeLogUnitType else {
+        guard let other = object as? MappingLogActionTypeLogUnitType else {
             return false
         }
-        return object.mappingId == self.mappingId
+        return other.mappingId == self.mappingId
     }
     
     // MARK: - NSCoding

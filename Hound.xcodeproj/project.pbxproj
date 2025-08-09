@@ -183,6 +183,7 @@
 		A2BAFC072E446764004C3983 /* HoundIntrinsicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC062E44675E004C3983 /* HoundIntrinsicCollectionView.swift */; };
 		A2BAFC092E454E03004C3983 /* LogLikesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC082E454DFE004C3983 /* LogLikesVC.swift */; };
 		A2BAFC0C2E455979004C3983 /* LogLikesTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC0B2E455976004C3983 /* LogLikesTVC.swift */; };
+		A2BAFC0E2E46CE6C004C3983 /* TriggerActivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAFC0D2E46CE69004C3983 /* TriggerActivation.swift */; };
 		A2BD897C2669A8D200E7BBE5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */; };
 		A2C1FEB928D55CC9005C21D3 /* CompletionTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */; };
 		A2C2951C2E08CA45008F1054 /* NSCoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */; };
@@ -447,6 +448,7 @@
 		A2BAFC062E44675E004C3983 /* HoundIntrinsicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoundIntrinsicCollectionView.swift; sourceTree = "<group>"; };
 		A2BAFC082E454DFE004C3983 /* LogLikesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLikesVC.swift; sourceTree = "<group>"; };
 		A2BAFC0B2E455976004C3983 /* LogLikesTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLikesTVC.swift; sourceTree = "<group>"; };
+		A2BAFC0D2E46CE69004C3983 /* TriggerActivation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerActivation.swift; sourceTree = "<group>"; };
 		A2BD897B2669A8D200E7BBE5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		A2C1FEB828D55CC9005C21D3 /* CompletionTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionTracker.swift; sourceTree = "<group>"; };
 		A2C2951B2E08CA41008F1054 /* NSCoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoderExtension.swift; sourceTree = "<group>"; };
@@ -1085,6 +1087,7 @@
 			children = (
 				A2DAC44F2DD583090053EB09 /* DogTriggerManager.swift */,
 				A2DAC44D2DD572C40053EB09 /* Trigger.swift */,
+				A2BAFC0D2E46CE69004C3983 /* TriggerActivation.swift */,
 				A20C8E392E370BE9000837DA /* TriggerFixedTimeComponents.swift */,
 				A20C8E3B2E370D4C000837DA /* TriggerTimeDelayComponents.swift */,
 				A2FAB4212E20CC5E00E85392 /* TriggerLogReaction.swift */,
@@ -1554,6 +1557,7 @@
 				A20EEB102E31AE9C00958592 /* HoundDropDownType.swift in Sources */,
 				A2173DAA2B07E64D0000C08A /* TimeQuickSelect.swift in Sources */,
 				A2B565F627E825690091CA25 /* ReminderAlarmManager.swift in Sources */,
+				A2BAFC0E2E46CE6C004C3983 /* TriggerActivation.swift in Sources */,
 				A2D8A8E52A73656700D53A43 /* NotificationNameExtension.swift in Sources */,
 				A2FAB4202E20B50B00E85392 /* DogsAddDogTriggerTVC.swift in Sources */,
 				A2FAB3FC2E1B09DA00E85392 /* HoundDynamicCorners.swift in Sources */,

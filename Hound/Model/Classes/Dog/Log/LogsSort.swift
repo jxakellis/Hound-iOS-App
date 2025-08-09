@@ -77,11 +77,11 @@ final class LogsSort: NSObject, NSCopying {
     // MARK: - Equatable
     
     override func isEqual(_ object: Any?) -> Bool {
-        guard let object = object as? LogsSort else {
+        guard let other = object as? LogsSort else {
             return false
         }
         
-        return self.dateType == object.dateType && self.sortDirection == object.sortDirection
+        return self.dateType == other.dateType && self.sortDirection == other.sortDirection
     }
     
     // MARK: - Properties

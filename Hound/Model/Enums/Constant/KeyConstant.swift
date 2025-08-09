@@ -202,7 +202,7 @@ public enum KeyConstant: String {
     case isDefault
     case allowsCustom
     
-    // MARK: Reminder Trigger
+    // MARK: Trigger
     case triggerId
     case triggerUUID
     case triggerLogReactions
@@ -221,7 +221,11 @@ public enum KeyConstant: String {
     case triggerCreatedBy
     case triggerLastModified
     case triggerLastModifiedBy
+    case triggerActivations
     case triggerIsDeleted
+    
+    // MARK: - Trigger Activation
+    case activationDate
     
     // MARK: Snooze Components
 

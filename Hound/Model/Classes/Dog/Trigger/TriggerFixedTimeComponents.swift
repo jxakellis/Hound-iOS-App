@@ -76,6 +76,18 @@ final class TriggerFixedTimeComponents: NSObject, NSCoding, NSCopying {
         aCoder.encode(triggerFixedTimeHour, forKey: Constant.Key.triggerFixedTimeHour.rawValue)
         aCoder.encode(triggerFixedTimeMinute, forKey: Constant.Key.triggerFixedTimeMinute.rawValue)
     }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? TriggerFixedTimeComponents else {
+            return false
+        }
+        if triggerFixedTimeType != other.triggerFixedTimeType { return false }
+        if triggerFixedTimeTypeAmount != other.triggerFixedTimeTypeAmount { return false }
+        if triggerFixedTimeHour != other.triggerFixedTimeHour { return false }
+        if triggerFixedTimeMinute != other.triggerFixedTimeMinute { return false }
+        return true
+    }
+    
     // MARK: - Properties
     
     /// triggerFixedTimeType isn't used currently. leave as its default of .day
@@ -207,16 +219,5 @@ final class TriggerFixedTimeComponents: NSObject, NSCoding, NSCopying {
         body[Constant.Key.triggerFixedTimeHour.rawValue] = .int(triggerFixedTimeHour)
         body[Constant.Key.triggerFixedTimeMinute.rawValue] = .int(triggerFixedTimeMinute)
         return body
-    }
-    
-    // MARK: - Compare
-    
-    /// Returns true if all server-synced properties are identical to another trigger
-    func isSame(as other: TriggerFixedTimeComponents) -> Bool {
-        if triggerFixedTimeType != other.triggerFixedTimeType { return false }
-        if triggerFixedTimeTypeAmount != other.triggerFixedTimeTypeAmount { return false }
-        if triggerFixedTimeHour != other.triggerFixedTimeHour { return false }
-        if triggerFixedTimeMinute != other.triggerFixedTimeMinute { return false }
-        return true
     }
 }

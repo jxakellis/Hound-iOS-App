@@ -34,6 +34,13 @@ final class SnoozeComponents: NSObject, NSCoding, NSCopying {
         }
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? SnoozeComponents else {
+            return false
+        }
+        return executionInterval == other.executionInterval
+    }
+    
     // MARK: - Properties
     
     /// Interval at which a snooze should be last for reminder. If this value isn't nil, then the reminder is snoozing.
@@ -72,13 +79,6 @@ final class SnoozeComponents: NSObject, NSCoding, NSCopying {
         let snoozeExecutionInterval: Double? = fromBody[Constant.Key.snoozeExecutionInterval.rawValue] as? Double ?? componentToOverride?.executionInterval
         
         self.init(executionInterval: snoozeExecutionInterval)
-    }
-    
-    // MARK: - Compare
-    
-    /// Returns true if all stored properties are equivalent
-    func isSame(as other: SnoozeComponents) -> Bool {
-        return executionInterval == other.executionInterval
     }
     
     // MARK: - Request

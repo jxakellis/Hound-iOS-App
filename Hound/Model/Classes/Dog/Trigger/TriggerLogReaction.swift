@@ -56,6 +56,15 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
         self.init(logActionTypeId: logActionTypeId, logCustomActionName: logCustomActionName)
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? TriggerLogReaction else {
+            return false
+        }
+        if logActionTypeId != other.logActionTypeId { return false }
+        if logCustomActionName != other.logCustomActionName { return false }
+        return true
+    }
+    
     // MARK: - Functions
     
     func readableName(includeMatchingEmoji: Bool) -> String {
@@ -69,14 +78,4 @@ final class TriggerLogReaction: NSObject, NSCoding, NSCopying {
         return body
         
     }
-    
-    // MARK: - Compare
-    
-    /// Returns true if all server-synced properties are identical to another trigger
-    func isSame(as other: TriggerLogReaction) -> Bool {
-        if logActionTypeId != other.logActionTypeId { return false }
-        if logCustomActionName != other.logCustomActionName { return false }
-        return true
-    }
-    
 }

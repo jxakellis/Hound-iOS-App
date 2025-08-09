@@ -96,7 +96,7 @@ class HoundTableViewCell: UITableViewCell, HoundUIProtocol, HoundUIKitProtocol {
     }
     
     /// Recalculates the cell's height within its containing table view.
-    func updateTableViewHeight() {
+    func findParentTableViewAndRelayoutCells() {
         setNeedsLayout()
         layoutIfNeeded()
         DispatchQueue.main.async { [weak self] in

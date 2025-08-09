@@ -80,7 +80,7 @@ final class DogsAddDogTriggersView: HoundView, UITableViewDataSource, UITableVie
             }
             
             // if any of the corresponding triggers are different, then return true to indicate that a trigger has been updated
-            if !initialTrigger.isSame(as: currentTrigger) {
+            if initialTrigger != currentTrigger {
                 return true
             }
         }

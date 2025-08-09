@@ -42,6 +42,16 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
         }
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? MonthlyComponents else {
+            return false
+        }
+        return zonedDay == other.zonedDay &&
+        zonedHour == other.zonedHour &&
+        zonedMinute == other.zonedMinute &&
+        skippedDate == other.skippedDate
+    }
+    
     // MARK: - Properties
     
     /// User-selected day of month in the source time zone (1-31).
@@ -244,14 +254,5 @@ final class MonthlyComponents: NSObject, NSCoding, NSCopying {
         body[Constant.Key.monthlyZonedMinute.rawValue] = .int(zonedMinute)
         body[Constant.Key.monthlySkippedDate.rawValue] = .string(skippedDate?.ISO8601FormatWithFractionalSeconds())
         return body
-    }
-    
-    // MARK: - Compare
-    
-    func isSame(as other: MonthlyComponents) -> Bool {
-        zonedDay == other.zonedDay &&
-        zonedHour == other.zonedHour &&
-        zonedMinute == other.zonedMinute &&
-        skippedDate == other.skippedDate
     }
 }

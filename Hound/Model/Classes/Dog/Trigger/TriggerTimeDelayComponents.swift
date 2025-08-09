@@ -35,6 +35,14 @@ final class TriggerTimeDelayComponents: NSObject, NSCoding, NSCopying {
         aCoder.encode(triggerTimeDelay, forKey: Constant.Key.triggerTimeDelay.rawValue)
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? TriggerTimeDelayComponents else {
+            return false
+        }
+        if triggerTimeDelay != other.triggerTimeDelay { return false }
+        return true
+    }
+    
     // MARK: - Properties
     
     private(set) var triggerTimeDelay: Double = Constant.Class.Trigger.defaultTriggerTimeDelay
@@ -74,13 +82,5 @@ final class TriggerTimeDelayComponents: NSObject, NSCoding, NSCopying {
         var body: JSONRequestBody = [:]
         body[Constant.Key.triggerTimeDelay.rawValue] = .double(triggerTimeDelay)
         return body
-    }
-    
-    // MARK: - Compare
-    
-    /// Returns true if all server-synced properties are identical to another trigger
-    func isSame(as other: TriggerTimeDelayComponents) -> Bool {
-        if triggerTimeDelay != other.triggerTimeDelay { return false }
-        return true
     }
 }

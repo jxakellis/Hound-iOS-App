@@ -28,20 +28,20 @@ class LogsFilter: NSObject, NSCopying {
     // MARK: - Equatable
     
     override func isEqual(_ object: Any?) -> Bool {
-        guard let object = object as? LogsFilter else {
+        guard let other = object as? LogsFilter else {
             return false
         }
         
         // DONT check availableDogManager
-        return self.filteredDogsUUIDs == object.filteredDogsUUIDs &&
-        self.searchText == object.searchText &&
-        self.filteredDogsUUIDs == object.filteredDogsUUIDs &&
-        self.filteredLogActionActionTypeIds == object.filteredLogActionActionTypeIds &&
-        self.filteredFamilyMemberUserIds == object.filteredFamilyMemberUserIds &&
-        self.timeRangeField == object.timeRangeField &&
-        self.timeRangeFromDate == object.timeRangeFromDate &&
-        self.timeRangeToDate == object.timeRangeToDate &&
-        self.onlyShowMyLikes == object.onlyShowMyLikes
+        return self.filteredDogsUUIDs == other.filteredDogsUUIDs &&
+        self.searchText == other.searchText &&
+        self.filteredDogsUUIDs == other.filteredDogsUUIDs &&
+        self.filteredLogActionActionTypeIds == other.filteredLogActionActionTypeIds &&
+        self.filteredFamilyMemberUserIds == other.filteredFamilyMemberUserIds &&
+        self.timeRangeField == other.timeRangeField &&
+        self.timeRangeFromDate == other.timeRangeFromDate &&
+        self.timeRangeToDate == other.timeRangeToDate &&
+        self.onlyShowMyLikes == other.onlyShowMyLikes
     }
     
     /// Text used to broadly search through logs. If empty, no search text is applied

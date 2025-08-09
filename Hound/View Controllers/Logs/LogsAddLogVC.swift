@@ -1482,14 +1482,25 @@ final class LogsAddLogVC: HoundScrollViewController,
                     logCustomActionName: logToAdd.logCustomActionName
                 )
                 
-                let reminders = self.dogManager.findDog(dogUUID: selectedDogUUID)?
-                    .dogLogs.addLog(log: logToAdd, invokeDogTriggers: true)
-                if let reminders = reminders, !reminders.isEmpty {
-                    if triggerRemindersByDogUUID[selectedDogUUID] != nil {
-                        triggerRemindersByDogUUID[selectedDogUUID]! += reminders // swiftlint:disable:this force_unwrapping
+                if let result = self.dogManager.findDog(dogUUID: selectedDogUUID)?.dogLogs.addLog(log: logToAdd, invokeDogTriggers: true) {
+                    let reminders = result.0
+                    let activatedTriggers = result.1
+                    if !reminders.isEmpty {
+                        if triggerRemindersByDogUUID[selectedDogUUID] != nil {
+                            triggerRemindersByDogUUID[selectedDogUUID]! += reminders // swiftlint:disable:this force_unwrapping
+                        }
+                        else {
+                            triggerRemindersByDogUUID[selectedDogUUID] = reminders
+                        }
                     }
-                    else {
-                        triggerRemindersByDogUUID[selectedDogUUID] = reminders
+                    if !activatedTriggers.isEmpty {
+                        TriggersRequest.update(errorAlert: .automaticallyAlertForNone, dogUUID: selectedDogUUID, dogTriggers: activatedTriggers) { responseStatus, _ in
+                            guard responseStatus != .failureResponse else {
+                                return
+                            }
+                            self.dogManager.findDog(dogUUID: selectedDogUUID)?.dogTriggers.addTriggers(dogTriggers: activatedTriggers)
+                            self.delegate?.didUpdateDogManager(sender: Sender(source: self, lastLocation: self), dogManager: self.dogManager)
+                        }
                     }
                 }
                 
