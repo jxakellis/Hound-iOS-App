@@ -514,7 +514,9 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
     
     private func openCreateNewMenu() {
-        UIView.animate(withDuration: Constant.Visual.Animation.showMultipleElements) {
+        guard isViewLoaded else { return }
+        UIView.animate(withDuration: Constant.Visual.Animation.showMultipleElements) { [weak self] in
+            guard let self = self else { return }
             self.createNewMenuButton.transform = CGAffineTransform(rotationAngle: -.pi / 4)
             self.createNewMenuButton.tintColor = UIColor.systemRed
             
@@ -529,7 +531,9 @@ final class DogsVC: HoundViewController, DogsAddDogVCDelegate, DogsTableVCDelega
     }
     
     @objc private func closeCreateNewMenu() {
-        UIView.animate(withDuration: Constant.Visual.Animation.hideMultipleElements) {
+        guard isViewLoaded else { return }
+        UIView.animate(withDuration: Constant.Visual.Animation.hideMultipleElements) { [weak self] in
+            guard let self = self else { return }
             self.createNewMenuButton.transform = .identity
             self.createNewMenuButton.tintColor = UIColor.systemBlue
             

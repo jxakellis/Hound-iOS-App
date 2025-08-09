@@ -46,7 +46,7 @@ public enum DevelopmentConstant {
     static let developmentDatabaseTestUserId: String? = isProductionDatabase ? nil : nil // "3314e13ce7fab539591cfa2d5c8e4a29105befdd9bc3398bbe457ef30448aa0c"
 
     /// If testing the development of Hound with its development database, then use this user identifier for a test account.
-    static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : "001473.77422360ac5b4f8aabf48f816149efe8.1644"
+    static let developmentDatabaseTestUserIdentifier: String? = isProductionDatabase ? nil : nil // "001473.77422360ac5b4f8aabf48f816149efe8.1644"
 
     /// All Hound servers, development or producton, support HTTPS only
     private static let urlScheme: String = isProductionAWSServer ? "https://" : "http://"

@@ -295,6 +295,7 @@ final class LogTVC: HoundTableViewCell, UICollectionViewDataSource, UICollection
         }
         
         UIView.transition(with: likeButton, duration: duration, options: .transitionCrossDissolve) {
+            // TODO FIX the animation is weird. it should really be red beforehand if we r highlighting it.
             self.likeButton.setImage(isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart"), for: .normal)
             self.likeButton.setImage(isLiked ? UIImage(systemName: "heart") : UIImage(systemName: "heart.fill"), for: .selected)
             self.likeButton.tintColor = isLiked ? .systemRed : .systemGray2
